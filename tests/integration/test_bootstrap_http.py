@@ -4,8 +4,15 @@ import urllib.error
 import urllib.request
 
 from x2server.bootstrap.http_server import BootstrapHTTPServer
-from x2server.bootstrap.models import BootstrapConfig, GameEndpoint
-from x2server.bootstrap.service import BootstrapService
+from x2server.bootstrap.models import (
+    BootstrapConfig,
+    GameEndpoint,
+    RecoveredBootstrapContract,
+    RecoveredServerAddressConfig,
+    RecoveredWebGameConfig,
+    ServerAddressEntry,
+)
+from x2server.bootstrap.service import BootstrapService, RecoveredBootstrapService
 
 
 def make_server(port: int = 29000) -> BootstrapHTTPServer:
@@ -84,6 +91,40 @@ def test_bootstrap_consumes_post_body_before_responding() -> None:
         url = f"http://{server.bound_host}:{server.bound_port}/webgameconfig"
         normal = await asyncio.to_thread(request, url, "POST", b'{"ignored":true}')
         assert normal[0] == 200
+        await server.stop()
+
+    asyncio.run(scenario())
+
+
+def test_recovered_contract_is_served_over_local_http() -> None:
+    async def scenario() -> None:
+        local_http = "http://127.0.0.1:18080"
+        contract = RecoveredBootstrapContract(
+            RecoveredWebGameConfig(
+                service_app_id="x2-local-compat",
+                pbs_server=local_http,
+                login_server=local_http,
+                account_server=local_http,
+                esweb_server=local_http,
+                lb_pbs_server=(local_http,),
+                lb_login_server=(local_http,),
+                lb_esweb_server=(local_http,),
+                area_id="local",
+            ),
+            RecoveredServerAddressConfig((ServerAddressEntry("127.0.0.1", 32123),)),
+        )
+        server = BootstrapHTTPServer(
+            "127.0.0.1", 0, RecoveredBootstrapService(contract)
+        )
+        await server.start()
+        base = f"http://{server.bound_host}:{server.bound_port}"
+        connect_info = await asyncio.to_thread(request, base + "/apply/connectInfo")
+        address = await asyncio.to_thread(request, base + "/apply/address")
+        assert connect_info[0] == 200
+        assert address[0] == 200
+        assert RecoveredWebGameConfig.from_json_bytes(connect_info[2]).area_id == "local"
+        endpoint = RecoveredServerAddressConfig.from_json_bytes(address[2]).endpoints[0]
+        assert (endpoint.host, endpoint.port) == ("127.0.0.1", 32123)
         await server.stop()
 
     asyncio.run(scenario())

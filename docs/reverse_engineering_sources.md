@@ -12,7 +12,9 @@
 | 16 MiB packet limit | TEMPORARY_COMPAT | 6 | `src/x2server/config/settings.py` | local defensive default, not original behavior |
 | WebGameConfig failure blocks startup | CONFIRMED | 5 | `../phase5_output/business/webgameconfig_analysis.md` | non-200/error retries or exits; empty 200 stalls |
 | WebGameConfig uses POST with 3-second timeout | CONFIRMED | 5 | `../phase5_output/business/webgameconfig_analysis.md` and xrefs | `LoadWebGameConfig` coroutine behavior |
-| Official WebGameConfig body schema/path | UNKNOWN | 7 | `docs/bootstrap.md` | not recovered in Phase 5 evidence |
+| WebGameConfig minimal body schema/path | CONFIRMED | 8 | `docs/bootstrap_contract.md` | `result` response, `/apply/connectInfo`, confirmed fields and assignments |
+| Server-address response to TCP endpoint | CONFIRMED | 8 | `docs/bootstrap_contract.md` | `/apply/address` `result.data[].ip/port` reaches `SocketTcp.SetConnectEndPoint` |
+| Retired production base URL and safe local routing | UNKNOWN | 8 | `docs/bootstrap_contract.md` | effective packaged GameConfig row not recovered |
 | Synthetic bootstrap JSON shape | TEMPORARY_COMPAT | 7 | `src/x2server/bootstrap/models.py` | local development model, not an official capture |
 
 Large inputs are intentionally not copied. See `reverse_data/README.md` for the external dependency index.

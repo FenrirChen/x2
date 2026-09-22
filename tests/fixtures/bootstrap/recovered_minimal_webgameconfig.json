@@ -1,0 +1,19 @@
+{
+  "result": {
+    "accountServer": "http://127.0.0.1:18080",
+    "areaId": "local",
+    "eswebServer": "http://127.0.0.1:18080",
+    "lbEswebServer": [
+      "http://127.0.0.1:18080"
+    ],
+    "lbLoginServer": [
+      "http://127.0.0.1:18080"
+    ],
+    "lbPbsServer": [
+      "http://127.0.0.1:18080"
+    ],
+    "loginServer": "http://127.0.0.1:18080",
+    "pbsServer": "http://127.0.0.1:18080",
+    "serviceAppId": "x2-local-compat"
+  }
+}

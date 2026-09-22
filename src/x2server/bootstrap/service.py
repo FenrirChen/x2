@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from urllib.parse import urlsplit
 
-from .models import BootstrapConfig
+from .models import BootstrapConfig, RecoveredBootstrapContract
 
 
 @dataclass(frozen=True, slots=True)
@@ -41,3 +41,31 @@ class BootstrapService:
             )
         return HTTPResponse(200, "application/json; charset=utf-8", self.config.to_json_bytes())
 
+
+class RecoveredBootstrapService:
+    """Serve the two HTTP responses recovered from static client evidence."""
+
+    CONNECT_INFO_PATH = "/apply/connectInfo"
+    SERVER_ADDRESS_PATH = "/apply/address"
+
+    def __init__(self, contract: RecoveredBootstrapContract) -> None:
+        self.contract = contract
+
+    def respond(self, method: str, target: str) -> HTTPResponse:
+        """Route only the confirmed POST endpoints."""
+        path = urlsplit(target).path
+        if path not in (self.CONNECT_INFO_PATH, self.SERVER_ADDRESS_PATH):
+            return HTTPResponse(404, "application/json; charset=utf-8", b'{"error":"not_found"}\n')
+        if method.upper() != "POST":
+            return HTTPResponse(
+                405,
+                "application/json; charset=utf-8",
+                b'{"error":"method_not_allowed"}\n',
+                (("Allow", "POST"),),
+            )
+        body = (
+            self.contract.web_config.to_json_bytes()
+            if path == self.CONNECT_INFO_PATH
+            else self.contract.server_addresses.to_json_bytes()
+        )
+        return HTTPResponse(200, "application/json; charset=utf-8", body)

@@ -13,7 +13,16 @@ Confirmed request behavior:
 
 ## Recovery status
 
-The official request path, response field names, envelope, required fields and server-address mapping were **not recovered** in Phase 5. They remain **UNKNOWN**. Therefore M3 is **Partial**.
+Phase 8 recovered the minimal static contract: `/apply/connectInfo` returns a
+`result` object containing the service URL set, and `/apply/address` returns
+`result.data[]` endpoint records. The selected record's `ip` and `port` reach
+`SocketTcp.SetConnectEndPoint`. See `docs/bootstrap_contract.md` for the evidence
+map and `minimal_webgameconfig_contract.json` for the strict machine-readable
+contract.
+
+M3 remains **Partial** because the original client has not accepted the local
+response in a controlled run. The effective packaged base URL and safe local
+routing/TLS behavior remain UNKNOWN.
 
 The committed JSON model is `TEMPORARY_COMPAT`: a strong, non-empty local development format that proves configuration, HTTP lifecycle and endpoint advertisement. It is not claimed to be acceptable to the original client and is not an official capture.
 
@@ -33,9 +42,17 @@ The committed JSON model is `TEMPORARY_COMPAT`: a strong, non-empty local develo
 
 The default `/webgameconfig` path is also `TEMPORARY_COMPAT`, not recovered original behavior.
 
+The synthetic model remains available for HTTP transport regression tests. It
+is separate from the recovered compatibility model and must not be sent to the
+original client as though it were the recovered contract.
+
 ## Components
 
 - `BootstrapConfig` validates and serializes the synthetic model.
+- `RecoveredWebGameConfig` implements the confirmed `/apply/connectInfo` subset.
+- `RecoveredServerAddressConfig` implements the confirmed `/apply/address`
+  endpoint list.
+- `RecoveredBootstrapService` serves both recovered routes.
 - `BootstrapService` owns the fixed route and explicit 200/404/405 behavior.
 - `BootstrapHTTPServer` wraps standard-library `ThreadingHTTPServer`; it defaults to localhost, owns its thread and supports async start/stop.
 - The HTTP handler never reads arbitrary files, returns tracebacks or embeds authentication data.
@@ -60,4 +77,7 @@ Tests start the service on an ephemeral localhost port, POST the fixed endpoint,
 
 ## First Contact use
 
-Before the original client can be started, targeted evidence or controlled routing must identify the real request path and accepted body structure. Replace or adapt the synthetic model only after recording evidence and tests. The bootstrap service must remain separate from TCP Login behavior even if both run in one process.
+The response contract is now statically closed, but the original client must not
+be started until the selected `GameConfig.txt` base URL and HTTP/TLS behavior are
+known and a localhost-only redirect is proven. The bootstrap service remains
+separate from TCP Login behavior even when both run in one process.

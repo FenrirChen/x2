@@ -1,0 +1,13 @@
+{
+  "result": {
+    "data": [
+      {
+        "des": "local compatibility endpoint",
+        "ip": "127.0.0.1",
+        "port": 29000,
+        "weight": 0,
+        "zid": 1
+      }
+    ]
+  }
+}

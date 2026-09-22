@@ -6,6 +6,7 @@
 | M1 Protocol Core | Offline byte-level protocol round trip | PackInt, CRC32, protobuf, framing, stream decoder, registry, inspector and passing tests | Done |
 | M2 TCP Connection | Accept and manage client TCP connections | asyncio listener, lifecycle, limits, heartbeat boundary and integration tests | Done |
 | M3 WebGameConfig Bootstrap | Supply startup configuration | local HTTP bootstrap fixture and documented routing | Partial |
+| FC First Contact | Reach the compatibility TCP server from the original X2 2.4 client | original client reaches local TCP and at least one real frame decodes | Not Started |
 | M4 Login Decode | Decode client login request | captured/local fixture decoded without business response | Not Started |
 | M5 Minimal Login Response | Produce minimum accepted snapshot | evidence-labelled response fixture accepted by controlled client test | Not Started |
 | M6 Lobby | Enter and maintain lobby state | required snapshot/push messages identified and served | Not Started |

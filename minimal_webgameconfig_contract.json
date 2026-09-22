@@ -1,0 +1,107 @@
+{
+  "status": "CONFIRMED_MINIMAL_STATIC_CONTRACT",
+  "request": {
+    "connect_info": {
+      "body_encoding": "application/x-www-form-urlencoded",
+      "body_fields": [
+        "packageName",
+        "fromCH",
+        "adChannel",
+        "adSubChannel",
+        "lebianVersion"
+      ],
+      "headers": "UNITYWEBREQUEST_POST_DEFAULTS",
+      "method": "POST",
+      "path": "/apply/connectInfo",
+      "timeout_seconds": 3,
+      "url_source": "GameConfig.Login_Url + /apply/connectInfo"
+    },
+    "server_address": {
+      "body_encoding": "application/x-www-form-urlencoded",
+      "body_fields": [
+        "clientType",
+        "timestamp",
+        "sign"
+      ],
+      "headers": "UNITYWEBREQUEST_POST_DEFAULTS",
+      "method": "POST",
+      "path": "/apply/address",
+      "sign_transform": "MD5(clientType + timestamp + GameConst.Server_Key)",
+      "timeout_seconds": 30,
+      "url_source": "GameConfig.Login_Url + /apply/address"
+    }
+  },
+  "response": {
+    "connect_info": {
+      "format": "JSON",
+      "shape": {
+        "result": {
+          "accountServer": "string",
+          "areaId": "string",
+          "eswebServer": "string",
+          "lbEswebServer": [
+            "string"
+          ],
+          "lbLoginServer": [
+            "string"
+          ],
+          "lbPbsServer": [
+            "string"
+          ],
+          "loginServer": "string",
+          "pbsServer": "string",
+          "serviceAppId": "string"
+        }
+      }
+    },
+    "server_address": {
+      "format": "JSON",
+      "shape": {
+        "result": {
+          "data": [
+            {
+              "des": "string_optional_for_tcp",
+              "ip": "string",
+              "port": "integer_or_integer_string",
+              "weight": "integer_or_integer_string_optional_default_0",
+              "zid": "integer_or_integer_string_optional_default_1"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "required_fields": [
+    "connect_info.result",
+    "connect_info.result.serviceAppId",
+    "connect_info.result.pbsServer",
+    "connect_info.result.loginServer",
+    "connect_info.result.accountServer",
+    "connect_info.result.eswebServer",
+    "connect_info.result.lbPbsServer",
+    "connect_info.result.lbLoginServer",
+    "connect_info.result.lbEswebServer",
+    "connect_info.result.areaId",
+    "server_address.result",
+    "server_address.result.data",
+    "server_address.result.data[0].ip",
+    "server_address.result.data[0].port"
+  ],
+  "optional_fields": [
+    "server_address.result.data[].weight",
+    "server_address.result.data[].zid",
+    "server_address.result.data[].des"
+  ],
+  "unknown_fields": [
+    "exact retired production base URL",
+    "custom HTTP headers beyond UnityWebRequest.Post defaults",
+    "server-side validation rules for address request sign",
+    "operational meaning and accepted value domain of areaId",
+    "multi-endpoint weight selection semantics beyond observed sort and first-item use"
+  ],
+  "tcp_endpoint_mapping": {
+    "host": "server_address.result.data[0].ip -> ServerIPModule.IPData.ip -> MarsNetManager.SetIP -> MarsNet.SetConnect -> SocketTcp.SetConnectEndPoint",
+    "port": "server_address.result.data[0].port -> ServerIPModule.IPData.port -> MarsNetManager.SetIP -> MarsNet.SetConnect -> SocketTcp.SetConnectEndPoint",
+    "selection_note": "A one-entry data list removes unresolved multi-endpoint ordering ambiguity."
+  }
+}

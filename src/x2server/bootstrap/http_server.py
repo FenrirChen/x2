@@ -7,13 +7,15 @@ import logging
 import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
-from .service import BootstrapService, HTTPResponse
+from .service import BootstrapService, HTTPResponse, RecoveredBootstrapService
 
 LOGGER = logging.getLogger("x2.bootstrap.http")
 MAX_REQUEST_BODY = 64 * 1024
 
 
-def _handler_for(service: BootstrapService) -> type[BaseHTTPRequestHandler]:
+def _handler_for(
+    service: BootstrapService | RecoveredBootstrapService,
+) -> type[BaseHTTPRequestHandler]:
     class Handler(BaseHTTPRequestHandler):
         server_version = "X2Bootstrap/0.1"
         sys_version = ""
@@ -74,7 +76,12 @@ def _handler_for(service: BootstrapService) -> type[BaseHTTPRequestHandler]:
 class BootstrapHTTPServer:
     """Start and stop a fixed-route ThreadingHTTPServer without blocking asyncio."""
 
-    def __init__(self, host: str, port: int, service: BootstrapService) -> None:
+    def __init__(
+        self,
+        host: str,
+        port: int,
+        service: BootstrapService | RecoveredBootstrapService,
+    ) -> None:
         self.host = host
         self.port = port
         self.service = service
