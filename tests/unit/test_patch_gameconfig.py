@@ -58,6 +58,21 @@ def test_patch_rejects_missing_original_url() -> None:
         patch_gameconfig.patch_plaintext(b'{"configs": []}' + b" " * 1)
 
 
+def test_local_account_profile_changes_only_two_row_zero_fields() -> None:
+    plaintext = padded_config()
+    before = json.loads(plaintext)
+    patched = patch_gameconfig.patch_plaintext(plaintext, local_account=True)
+    after = json.loads(patched)
+    patch_gameconfig.validate_only_login_url_changed(before, after, local_account=True)
+    assert len(patched) == len(plaintext)
+    assert after["configs"][0]["packageType"] == "testpackage"
+    assert after["configs"][0]["client_Type"] == "product"
+    assert after["configs"][1:] == before["configs"][1:]
+    after["configs"][0]["client_Type"] = "test"
+    with pytest.raises(patch_gameconfig.PatchError, match="outside"):
+        patch_gameconfig.validate_only_login_url_changed(before, after, local_account=True)
+
+
 def test_neutralize_legacy_v1_signature_names_preserves_payloads(tmp_path: Path) -> None:
     apk = tmp_path / "sample.apk"
     payloads = {

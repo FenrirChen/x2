@@ -95,13 +95,20 @@ def effective_row(config: dict[str, Any]) -> dict[str, Any]:
     return row
 
 
-def patch_plaintext(plaintext: bytes) -> bytes:
+def patch_plaintext(plaintext: bytes, *, local_account: bool = False) -> bytes:
     old = OLD_LOGIN_URL.encode("utf-8")
     new = NEW_LOGIN_URL.encode("utf-8")
     if plaintext.count(old) != 1:
         raise PatchError("expected exactly one row-0 Login_Url occurrence")
     patched = plaintext.replace(old, new, 1)
-    # Preserve the exact encrypted length and every JSON value. JSON permits trailing
+    if local_account:
+        config = json.loads(patched.decode("utf-8"))
+        row = effective_row(config)
+        if row.get("packageType") != "product":
+            raise PatchError("local-account profile requires original packageType=product")
+        row["packageType"] = "testpackage"
+        patched = json.dumps(config, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+    # Preserve the exact encrypted length and every unselected JSON value. JSON permits trailing
     # whitespace, so this compensates for the shorter development URL without editing
     # the packaged padding field or changing the length-derived AES key.
     patched += b" " * (len(plaintext) - len(patched))
@@ -110,7 +117,9 @@ def patch_plaintext(plaintext: bytes) -> bytes:
     return patched
 
 
-def validate_only_login_url_changed(before: dict[str, Any], after: dict[str, Any]) -> None:
+def validate_only_login_url_changed(
+    before: dict[str, Any], after: dict[str, Any], *, local_account: bool = False
+) -> None:
     before_copy = json.loads(json.dumps(before, ensure_ascii=False))
     after_copy = json.loads(json.dumps(after, ensure_ascii=False))
     old_row = effective_row(before_copy)
@@ -120,8 +129,12 @@ def validate_only_login_url_changed(before: dict[str, Any], after: dict[str, Any
     if new_row.get("Login_Url") != NEW_LOGIN_URL:
         raise PatchError(f"patched Login_Url was not applied: {new_row.get('Login_Url')!r}")
     old_row["Login_Url"] = NEW_LOGIN_URL
+    if local_account:
+        if old_row.get("packageType") != "product":
+            raise PatchError("unexpected original packageType")
+        old_row["packageType"] = "testpackage"
     if before_copy != after_copy:
-        raise PatchError("a parsed GameConfig value other than row-0 Login_Url changed")
+        raise PatchError("a parsed GameConfig value outside the selected patch profile changed")
 
 
 def read_asset(apk: Path) -> tuple[bytes, zipfile.ZipInfo, int]:
@@ -252,6 +265,7 @@ def build_revival_apk(
     patched_asset: Path | None = None,
     openssl: str | None = None,
     verify_reference_hash: bool = True,
+    local_account: bool = False,
 ) -> tuple[str, str]:
     reference_hash = sha256_file(reference_apk)
     if verify_reference_hash and reference_hash != REFERENCE_SHA256:
@@ -266,12 +280,14 @@ def build_revival_apk(
         raise PatchError("no-change GameConfig round-trip is not byte-identical")
     print("round-trip: byte-identical")
 
-    patched_plaintext = patch_plaintext(plaintext)
+    patched_plaintext = patch_plaintext(plaintext, local_account=local_account)
     patched_encrypted = crypt_asset(patched_plaintext, decrypt=False, openssl=openssl)
     _, after = decode_asset(patched_encrypted, openssl=openssl)
-    validate_only_login_url_changed(before, after)
+    validate_only_login_url_changed(before, after, local_account=local_account)
     print(f"new Login_Url: {effective_row(after)['Login_Url']}")
-    print("semantic verification: only row-0 Login_Url changed")
+    print("semantic verification: only selected row-0 profile fields changed")
+    if local_account:
+        print("local-account profile: packageType=testpackage; client_Type unchanged")
 
     if patched_asset is not None:
         patched_asset.parent.mkdir(parents=True, exist_ok=True)
@@ -287,6 +303,8 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("output_apk", type=Path)
     parser.add_argument("--patched-asset", type=Path)
     parser.add_argument("--openssl", help="path to the OpenSSL executable")
+    parser.add_argument("--local-account", action="store_true",
+                        help="v0.2: select the existing testpackage account login path")
     parser.add_argument(
         "--allow-nonreference-hash",
         action="store_true",
@@ -304,6 +322,7 @@ def main(argv: list[str] | None = None) -> int:
             patched_asset=args.patched_asset,
             openssl=args.openssl,
             verify_reference_hash=not args.allow_nonreference_hash,
+            local_account=args.local_account,
         )
     except (OSError, PatchError, zipfile.BadZipFile) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
