@@ -15,6 +15,13 @@ class Settings:
 
     max_packet_size: int = DEFAULT_MAX_PACKET_SIZE
     log_level: str = "INFO"
+    tcp_host: str = "127.0.0.1"
+    tcp_port: int = 0
+    read_timeout: float = 30.0
+    write_timeout: float = 10.0
+    idle_timeout: float = 120.0
+    max_connections: int = 128
+    read_chunk_size: int = 64 * 1024
 
     @classmethod
     def from_environment(cls) -> Settings:
@@ -22,5 +29,21 @@ class Settings:
         max_packet_size = int(os.getenv("X2_MAX_PACKET_SIZE", str(DEFAULT_MAX_PACKET_SIZE)))
         if max_packet_size <= 0:
             raise ValueError("X2_MAX_PACKET_SIZE must be positive")
-        return cls(max_packet_size=max_packet_size, log_level=os.getenv("X2_LOG_LEVEL", "INFO"))
+        tcp_port = int(os.getenv("X2_TCP_PORT", "0"))
+        if not 0 <= tcp_port <= 65535:
+            raise ValueError("X2_TCP_PORT must be between 0 and 65535")
+        max_connections = int(os.getenv("X2_MAX_CONNECTIONS", "128"))
+        if max_connections <= 0:
+            raise ValueError("X2_MAX_CONNECTIONS must be positive")
+        return cls(
+            max_packet_size=max_packet_size,
+            log_level=os.getenv("X2_LOG_LEVEL", "INFO"),
+            tcp_host=os.getenv("X2_TCP_HOST", "127.0.0.1"),
+            tcp_port=tcp_port,
+            read_timeout=float(os.getenv("X2_READ_TIMEOUT", "30")),
+            write_timeout=float(os.getenv("X2_WRITE_TIMEOUT", "10")),
+            idle_timeout=float(os.getenv("X2_IDLE_TIMEOUT", "120")),
+            max_connections=max_connections,
+            read_chunk_size=int(os.getenv("X2_READ_CHUNK_SIZE", str(64 * 1024))),
+        )
 

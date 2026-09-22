@@ -9,6 +9,7 @@ class _ContextDefaults(logging.Filter):
     def filter(self, record: logging.LogRecord) -> bool:
         for name, default in (
             ("connection_id", "-"),
+            ("peer", "-"),
             ("message_id", "-"),
             ("message_name", "-"),
             ("request_id", "-"),
@@ -25,7 +26,8 @@ def configure_logging(level: str = "INFO") -> None:
     handler.setFormatter(
         logging.Formatter(
             "%(asctime)s %(levelname)s %(name)s "
-            "connection=%(connection_id)s message=%(message_id)s/%(message_name)s "
+            "connection=%(connection_id)s peer=%(peer)s "
+            "message=%(message_id)s/%(message_name)s "
             "request=%(request_id)s %(message)s"
         )
     )
