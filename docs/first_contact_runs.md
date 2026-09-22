@@ -38,3 +38,21 @@ Next: provision an isolated emulator/VM, record its hostname override and
 ```
 
 No Phase 9 run ID was allocated because the client launch gate did not pass.
+
+## Phase 10
+
+```text
+Run: NONE
+Goal: provision disposable Android lab and pass Gate C
+Environment: X2-Recovery-Lab, API 27 Google APIs x86, emulator 37.1.11
+Change: installed official user-local SDK/image and created restricted-network AVD
+Observed: emulator exits before ADB because installed HAXM is unsupported;
+          WHPX/current hypervisor driver is unavailable
+FC level: Not Started (below FC0)
+Conclusion: USER_APPROVAL_REQUIRED for a Windows virtualization component change
+Next: enable WHPX/Hyper-V or install the official current emulator hypervisor
+      driver with explicit administrator approval, then resume at AVD boot
+```
+
+No APK was installed or launched. No First Contact run ID, credentials, device
+identifiers or client packets were produced.
