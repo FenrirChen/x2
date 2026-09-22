@@ -8,6 +8,7 @@ import pytest
 from x2server.bootstrap.models import (
     BootstrapConfigError,
     RecoveredBootstrapContract,
+    RecoveredControlInfo,
     RecoveredServerAddressConfig,
     RecoveredWebGameConfig,
     ServerAddressEntry,
@@ -62,6 +63,15 @@ def test_recovered_endpoint_maps_ip_and_port_without_transformation() -> None:
     assert decoded.to_dict()["result"]["data"][0]["port"] == 29000
 
 
+def test_control_info_minimal_response_round_trip() -> None:
+    config = RecoveredControlInfo()
+
+    decoded = RecoveredControlInfo.from_json_bytes(config.to_json_bytes())
+
+    assert decoded == config
+    assert decoded.to_dict() == {"giftCode": "", "update": ""}
+
+
 def test_unknown_fields_remain_optional() -> None:
     raw = json.loads(fixture("recovered_minimal_webgameconfig.json"))
     raw["unrelatedEnvelopeField"] = {"future": True}
@@ -101,18 +111,21 @@ def test_address_contract_rejects_empty_endpoint_list() -> None:
         RecoveredServerAddressConfig.from_json_bytes(b'{"result":{"data":[]}}')
 
 
-def test_recovered_service_routes_both_confirmed_posts() -> None:
+def test_recovered_service_routes_confirmed_posts() -> None:
     service = RecoveredBootstrapService(recovered_contract())
 
     connect_info = service.respond("POST", "/apply/connectInfo")
     address = service.respond("POST", "/apply/address?ignored=query")
+    control_info = service.respond("POST", "/apply/controlInfo")
 
     assert connect_info.status == 200
     assert address.status == 200
+    assert control_info.status == 200
     assert RecoveredWebGameConfig.from_json_bytes(connect_info.body).area_id == "local"
     assert RecoveredServerAddressConfig.from_json_bytes(address.body).endpoints[0] == (
         ServerAddressEntry("127.0.0.1", 29000, description="local compatibility endpoint")
     )
+    assert RecoveredControlInfo.from_json_bytes(control_info.body) == RecoveredControlInfo()
 
 
 def test_recovered_service_rejects_unconfirmed_route_and_method() -> None:

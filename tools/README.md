@@ -6,6 +6,12 @@ Local-only utilities. They must not connect to remote endpoints or log credentia
 - `generate_synthetic_fixtures.py`: deterministically rebuilds credential-free fixtures used by tests.
 - `first_contact_preflight.py`: performs read-only, fail-closed routing, listener,
   runtime, Git and externally enforced isolation checks before an original-client run.
+- `patch_gameconfig.py`: verifies the immutable Reference APK, performs a
+  byte-identical GameConfig round-trip, changes only row 0 `Login_Url`, and
+  emits a separate unsigned Revival APK.
+- `first_contact_runner.py`: runs the two recovered bootstrap endpoints and TCP
+  observer for one bounded experiment, redacts Login values, sends no response,
+  and stops at `FC5-LOGIN`.
 
 ```powershell
 python tools\generate_synthetic_fixtures.py

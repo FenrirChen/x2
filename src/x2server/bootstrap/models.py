@@ -280,6 +280,35 @@ class RecoveredServerAddressConfig:
 
 
 @dataclass(frozen=True, slots=True)
+class RecoveredControlInfo:
+    """Minimal root object consumed by ``AppMainImpl._controlInfo``."""
+
+    gift_code: str = ""
+    update: str = ""
+
+    def __post_init__(self) -> None:
+        if any(char in value for value in (self.gift_code, self.update) for char in "\r\n\x00"):
+            raise BootstrapConfigError("control-info strings must be single-line")
+
+    def to_dict(self) -> dict[str, str]:
+        return {"giftCode": self.gift_code, "update": self.update}
+
+    def to_json_bytes(self) -> bytes:
+        return (json.dumps(self.to_dict(), ensure_ascii=False, sort_keys=True) + "\n").encode(
+            "utf-8"
+        )
+
+    @classmethod
+    def from_json_bytes(cls, body: bytes) -> RecoveredControlInfo:
+        raw = _load_json_object(body, "recovered control-info response")
+        gift_code = raw.get("giftCode")
+        update = raw.get("update")
+        if not isinstance(gift_code, str) or not isinstance(update, str):
+            raise BootstrapConfigError("giftCode and update must be strings")
+        return cls(gift_code, update)
+
+
+@dataclass(frozen=True, slots=True)
 class RecoveredBootstrapContract:
     """The two confirmed HTTP responses required before game TCP connection."""
 

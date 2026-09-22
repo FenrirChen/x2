@@ -11,6 +11,8 @@ runtime/*
 !runtime/.gitkeep
 
 *.apk
+*.jks
+*.keystore
 *.so
 *.dll
 *.bank
@@ -26,5 +28,6 @@ coverage.xml
 .coverage
 htmlcov/
 build/
+revival_client/logs/
 dist/
 *.egg-info/

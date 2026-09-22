@@ -8,6 +8,7 @@ from x2server.bootstrap.models import (
     BootstrapConfig,
     GameEndpoint,
     RecoveredBootstrapContract,
+    RecoveredControlInfo,
     RecoveredServerAddressConfig,
     RecoveredWebGameConfig,
     ServerAddressEntry,
@@ -120,11 +121,14 @@ def test_recovered_contract_is_served_over_local_http() -> None:
         base = f"http://{server.bound_host}:{server.bound_port}"
         connect_info = await asyncio.to_thread(request, base + "/apply/connectInfo")
         address = await asyncio.to_thread(request, base + "/apply/address")
+        control_info = await asyncio.to_thread(request, base + "/apply/controlInfo")
         assert connect_info[0] == 200
         assert address[0] == 200
+        assert control_info[0] == 200
         assert RecoveredWebGameConfig.from_json_bytes(connect_info[2]).area_id == "local"
         endpoint = RecoveredServerAddressConfig.from_json_bytes(address[2]).endpoints[0]
         assert (endpoint.host, endpoint.port) == ("127.0.0.1", 32123)
+        assert RecoveredControlInfo.from_json_bytes(control_info[2]) == RecoveredControlInfo()
         await server.stop()
 
     asyncio.run(scenario())

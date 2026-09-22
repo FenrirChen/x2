@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from urllib.parse import urlsplit
 
-from .models import BootstrapConfig, RecoveredBootstrapContract
+from .models import BootstrapConfig, RecoveredBootstrapContract, RecoveredControlInfo
 
 
 @dataclass(frozen=True, slots=True)
@@ -47,14 +47,24 @@ class RecoveredBootstrapService:
 
     CONNECT_INFO_PATH = "/apply/connectInfo"
     SERVER_ADDRESS_PATH = "/apply/address"
+    CONTROL_INFO_PATH = "/apply/controlInfo"
 
-    def __init__(self, contract: RecoveredBootstrapContract) -> None:
+    def __init__(
+        self,
+        contract: RecoveredBootstrapContract,
+        control_info: RecoveredControlInfo | None = None,
+    ) -> None:
         self.contract = contract
+        self.control_info = control_info or RecoveredControlInfo()
 
     def respond(self, method: str, target: str) -> HTTPResponse:
         """Route only the confirmed POST endpoints."""
         path = urlsplit(target).path
-        if path not in (self.CONNECT_INFO_PATH, self.SERVER_ADDRESS_PATH):
+        if path not in (
+            self.CONNECT_INFO_PATH,
+            self.SERVER_ADDRESS_PATH,
+            self.CONTROL_INFO_PATH,
+        ):
             return HTTPResponse(404, "application/json; charset=utf-8", b'{"error":"not_found"}\n')
         if method.upper() != "POST":
             return HTTPResponse(
@@ -63,9 +73,10 @@ class RecoveredBootstrapService:
                 b'{"error":"method_not_allowed"}\n',
                 (("Allow", "POST"),),
             )
-        body = (
-            self.contract.web_config.to_json_bytes()
-            if path == self.CONNECT_INFO_PATH
-            else self.contract.server_addresses.to_json_bytes()
-        )
+        if path == self.CONNECT_INFO_PATH:
+            body = self.contract.web_config.to_json_bytes()
+        elif path == self.SERVER_ADDRESS_PATH:
+            body = self.contract.server_addresses.to_json_bytes()
+        else:
+            body = self.control_info.to_json_bytes()
         return HTTPResponse(200, "application/json; charset=utf-8", body)
