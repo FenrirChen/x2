@@ -23,7 +23,7 @@ dev = [
 where = ["src"]
 
 [tool.pytest.ini_options]
-addopts = "-ra"
+addopts = "-ra -p no:cacheprovider"
 testpaths = ["tests"]
 pythonpath = ["src"]
 
@@ -39,4 +39,3 @@ python_version = "3.12"
 strict = true
 files = ["src", "tools"]
 exclude = ["tests/fixtures"]
-

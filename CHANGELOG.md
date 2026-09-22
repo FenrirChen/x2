@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Resolved the packaged GameConfig row and HTTP bootstrap base for
+  `com.siva.project.x2` from targeted static evidence.
+- Added fail-closed, read-only First Contact preflight checks and routing docs.
 - Recovered and implemented the minimal two-stage X2 bootstrap contract from
   static client evidence.
 - Added offline fixtures and tests for WebGameConfig and server-address mapping.

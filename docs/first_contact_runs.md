@@ -19,3 +19,22 @@ Next: recover the effective local GameConfig row and prove an isolated redirect
 ```
 
 No credentials, device identifiers, packets, or runtime logs were collected.
+
+## Phase 9
+
+```text
+Run: NONE
+Goal: Gate C preflight
+Environment: static host workspace only; no isolated Android guest available
+Hypothesis: a guest-local hostname override plus deny-by-default egress can
+            safely route the packaged HTTP base to local services
+Change: added a read-only, fail-closed preflight; no system networking changed
+Observed: packaged GameConfig and HTTP port 80 are resolved, but no enforceable
+          isolation evidence or guest-reachable listeners exist
+FC level: Not Started (below FC0)
+Conclusion: Gate C Partial; do not launch the APK
+Next: provision an isolated emulator/VM, record its hostname override and
+      firewall evidence, then rerun preflight
+```
+
+No Phase 9 run ID was allocated because the client launch gate did not pass.
