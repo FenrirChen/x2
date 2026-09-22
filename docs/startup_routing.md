@@ -1,5 +1,12 @@
 # Startup routing
 
+> Historical routing design below. Since Phase 11, use the separately signed
+> Revival APK with patched `Login_Url=http://10.0.2.2:18080`, not hosts/proxy
+> redirection. Phase 12 has observed `/apply/controlInfo` before connectInfo;
+> see [current startup report](phase12_stable_startup.md) and
+> [lab commands](../tools/android/README.md). The old "Current status" section
+> below records the earlier environment, not the current one.
+
 ## Confirmed data flow
 
 ```text

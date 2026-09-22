@@ -7,6 +7,12 @@ client facts.
 
 ## Two-stage contract
 
+Phase 11/12 addition: before these stages, the client requests
+`POST /apply/controlInfo`. Its root response has string fields `giftCode` and
+`update`; the minimal compatibility response is `{"giftCode":"","update":""}`.
+This response has now been served with HTTP 200 to the real Revival client.
+This does not prove completion of connectInfo/address or channel authentication.
+
 | Stage | Request | Response | Evidence |
 |---|---|---|---|
 | Connect info | `POST {Login_Url}/apply/connectInfo`, form fields `packageName`, `fromCH`, `adChannel`, `adSubChannel`, `lebianVersion`, 3 s timeout | JSON `result` object | CONFIRMED |

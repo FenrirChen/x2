@@ -1,0 +1,93 @@
+[
+  {
+    "run": "host01",
+    "evidencePath": "runtime/phase12/host01/result.json",
+    "startedAt": "2026-09-22T22:21:29.987446+08:00",
+    "finishedAt": "2026-09-22T22:22:52.387766+08:00",
+    "apkSha256": "b6a95c274cd61a91d2c4ab1ea448a300669bbc91861e989c1593da8dd071f98f",
+    "glesVersion": "131072",
+    "bootstrapReached": true,
+    "awake": true,
+    "mainProcessAlive": true,
+    "memory16gbError": false,
+    "shaderPlatformError": true,
+    "prelaunchHashTimeout": false,
+    "artifactSha256": {
+      "logcat.log": "b923c15777feb318bc12ac7853a669236302d97a2725a111fb55b077345e0d35",
+      "screen.png": "f66e32b8a2cd82b340fa5a39341d7436f23e5a6055c6170c711b0fa9948e0e84",
+      "ui.xml": "591a6ef43e8374a59a39964200e744cd2520d58236cad8516d19822e61965ae8"
+    }
+  },
+  {
+    "run": "gles01",
+    "evidencePath": "runtime/phase12/gles01/result.json",
+    "startedAt": "2026-09-22T22:24:51.818629+08:00",
+    "finishedAt": "2026-09-22T22:26:14.705552+08:00",
+    "apkSha256": "b6a95c274cd61a91d2c4ab1ea448a300669bbc91861e989c1593da8dd071f98f",
+    "glesVersion": "196609",
+    "bootstrapReached": true,
+    "awake": true,
+    "mainProcessAlive": true,
+    "memory16gbError": false,
+    "shaderPlatformError": false,
+    "prelaunchHashTimeout": false,
+    "artifactSha256": {
+      "logcat.log": "f5c6af4a164dd177d241a40695ac856f3c55490f743176d81dbe0613965d9f92",
+      "screen.png": "2d67eca0bd067acd49167c1be8028ba70c92b6f7fa59f9b77c93171a80dfa7a0",
+      "ui.xml": "591a6ef43e8374a59a39964200e744cd2520d58236cad8516d19822e61965ae8"
+    }
+  },
+  {
+    "run": "gles02",
+    "evidencePath": "runtime/phase12/gles02/probe/result.json",
+    "startedAt": "2026-09-22T22:28:05.081424+08:00",
+    "finishedAt": "2026-09-22T22:28:37.134623+08:00",
+    "apkSha256": null,
+    "glesVersion": null,
+    "bootstrapReached": false,
+    "awake": null,
+    "mainProcessAlive": null,
+    "memory16gbError": null,
+    "shaderPlatformError": null,
+    "prelaunchHashTimeout": true,
+    "artifactSha256": {}
+  },
+  {
+    "run": "gles03",
+    "evidencePath": "runtime/phase12/gles03/probe/result.json",
+    "startedAt": "2026-09-22T22:32:17.990474+08:00",
+    "finishedAt": "2026-09-22T22:35:15.725281+08:00",
+    "apkSha256": "b6a95c274cd61a91d2c4ab1ea448a300669bbc91861e989c1593da8dd071f98f",
+    "glesVersion": "196609",
+    "bootstrapReached": true,
+    "awake": true,
+    "mainProcessAlive": true,
+    "memory16gbError": false,
+    "shaderPlatformError": false,
+    "prelaunchHashTimeout": false,
+    "artifactSha256": {
+      "logcat.log": "e43fc5774257923b88e991fdce98586a386b2b1a5b9dee64da99733bfc9dd872",
+      "screen.png": "82f2429c854614eeaad9b2ee1dbea079ce3c4170aec315bb3e0a8f9746d46bec",
+      "ui.xml": "591a6ef43e8374a59a39964200e744cd2520d58236cad8516d19822e61965ae8"
+    }
+  },
+  {
+    "run": "gles04",
+    "evidencePath": "runtime/phase12/gles04/probe/result.json",
+    "startedAt": "2026-09-22T22:36:19.458157+08:00",
+    "finishedAt": "2026-09-22T22:37:54.777813+08:00",
+    "apkSha256": "b6a95c274cd61a91d2c4ab1ea448a300669bbc91861e989c1593da8dd071f98f",
+    "glesVersion": "196609",
+    "bootstrapReached": true,
+    "awake": true,
+    "mainProcessAlive": true,
+    "memory16gbError": false,
+    "shaderPlatformError": false,
+    "prelaunchHashTimeout": false,
+    "artifactSha256": {
+      "logcat.log": "4bf2c3155d66ff3a9dde45647afaa4cdb33655e7b74babd0b4ec9f042cbebc03",
+      "screen.png": "831b9c22b6ee94580f094a6cc9cbbf21829027c5a297e4497e5cd9279b17cebe",
+      "ui.xml": "591a6ef43e8374a59a39964200e744cd2520d58236cad8516d19822e61965ae8"
+    }
+  }
+]

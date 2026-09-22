@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Preserved the Phase 11 Revival client patch and controlInfo work as a Git baseline.
+- Added a hash-checked startup probe, cold-boot launcher and per-run local evidence.
+- Identified GLES version declaration as a graphics compatibility issue; enabling
+  GLESDynamicVersion with host GPU restores the loading screen without changing APKs.
+
 - Resolved the packaged GameConfig row and HTTP bootstrap base for
   `com.siva.project.x2` from targeted static evidence.
 - Added fail-closed, read-only First Contact preflight checks and routing docs.

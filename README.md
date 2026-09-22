@@ -2,7 +2,9 @@
 
 这是面向《解神者：X2》简体中文 Android 2.4 客户端的数字保存与协议兼容研究工程。项目目标是在不依赖原运营服务的前提下，逐步建立可验证、可维护的兼容后端。
 
-本项目**不是**完整复活版、官方服务器、破解工具或在线服务。目前已完成工作区、协议核心和 TCP 连接层，并静态恢复了最小 bootstrap 合同；尚未完成原客户端 First Contact、登录处理、玩家数据库或游戏业务。
+本项目目前已完成协议核心、TCP 连接层、最小 Bootstrap 和独立 Revival v0.1 APK。Phase 12 已通过三次实验入口冷启动验收，通过 GLES 配置修正恢复游戏加载画面并到达本地 `/apply/controlInfo`；尚未完成 TCP First Contact、登录处理、玩家数据库或游戏业务。
+
+最新实验与进度以 [Phase 12 报告](docs/phase12_stable_startup.md) 为准。根目录早期 README、Phase 10 与早期导流文档包含历史状态，不应据此重做已完成工作。
 
 ## 来源客户端
 
@@ -16,8 +18,10 @@
 - M0 Workspace：Done
 - M1 Protocol Core：Done
 - M2 TCP Connection：Done
-- M3 WebGameConfig Bootstrap：Partial（最小静态合同已恢复，原客户端尚未验证）
-- FC First Contact：Not Started（HTTP 路由已恢复，但隔离测试环境尚未闭环）
+- M3 WebGameConfig Bootstrap：Partial（controlInfo 已有真实请求；connectInfo/address 尚未验证）
+- Revival v0.1：已构建、签名、安装；Reference APK 保持原样。
+- Startup：Phase 12 实验入口验收通过，三次冷启动显示正常加载画面并到达 controlInfo。
+- FC First Contact：尚未收到真实 TCP frame。
 - M4 及以后：Not Started
 
 协议实现覆盖 PackInt、protobuf wire 基础、请求/响应头、CRC32、packet framing、增量流解析、消息注册及离线 synthetic fixture。证据强度使用 `CONFIRMED`、`INFERRED`、`TEMPORARY_COMPAT` 明确区分。
@@ -60,4 +64,4 @@ python tools\packet_inspector.py tests\fixtures\synthetic_guide_request.bin --di
 
 ## 已知限制
 
-当前没有真实官方抓包。fixture 均由已恢复协议规范或静态客户端证据在本地构造。尚未验证真实客户端互操作，也未实现 Login 业务、战斗签名语义或持久化。TCP listener 默认只监听 localhost；有效 `GameConfig` 行、HTTP 基址、bootstrap 字段与路径已恢复，但本地安全导流仍需隔离 Android 环境验证。
+当前没有真实官方抓包。协议 fixture 均由已恢复协议规范或静态客户端证据在本地构造。Revival 客户端已请求本地 controlInfo，服务返回 HTTP 200，但 connectInfo/address 和 TCP 互操作尚未验证；未实现 Login、战斗签名语义或持久化。阶段一观察服务仅监听 localhost，使用 ADB 直接进入 Unity 的实验入口，尚不代表图标启动、渠道登录或完整游戏可玩。
