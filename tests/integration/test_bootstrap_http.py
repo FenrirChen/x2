@@ -14,6 +14,8 @@ from x2server.bootstrap.models import (
     ServerAddressEntry,
 )
 from x2server.bootstrap.service import BootstrapService, RecoveredBootstrapService
+from x2server.bootstrap.local_identity import LocalIdentityService
+from x2server.config.settings import Settings
 
 
 def make_server(port: int = 29000) -> BootstrapHTTPServer:
@@ -23,6 +25,24 @@ def make_server(port: int = 29000) -> BootstrapHTTPServer:
         client_version="2.4",
     )
     return BootstrapHTTPServer("127.0.0.1", 0, BootstrapService(config))
+
+
+def test_local_identity_receives_form_body_over_http() -> None:
+    async def scenario() -> None:
+        service = LocalIdentityService(
+            RecoveredBootstrapContract.local(Settings(), game_server_port=29000),
+            account="lab", password="local")
+        server = BootstrapHTTPServer("127.0.0.1", 0, service)
+        await server.start()
+        try:
+            url = f"http://{server.bound_host}:{server.bound_port}/loginwithpw"
+            status, _, body = await asyncio.to_thread(
+                request, url, "POST", b"account=lab&password=local")
+            assert status == 200
+            assert json.loads(body)["code"] == "ok"
+        finally:
+            await server.stop()
+    asyncio.run(scenario())
 
 
 def request(

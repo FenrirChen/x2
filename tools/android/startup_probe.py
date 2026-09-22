@@ -62,8 +62,8 @@ class Observer(RecoveredBootstrapService):
         )))
         self.hits: list[dict[str, Any]] = []
 
-    def respond(self, method: str, target: str) -> HTTPResponse:
-        response = super().respond(method, target)
+    def respond(self, method: str, target: str, body: bytes = b"") -> HTTPResponse:
+        response = super().respond(method, target, body)
         self.hits.append({"method": method, "path": target.split("?", 1)[0],
                           "status": response.status})
         return response

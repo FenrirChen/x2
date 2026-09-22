@@ -51,7 +51,8 @@ def _handler_for(
                 return HTTPResponse(
                     413, "application/json; charset=utf-8", b'{"error":"request_too_large"}\n'
                 )
-            if length and len(self.rfile.read(length)) != length:
+            self.request_body = self.rfile.read(length) if length else b""
+            if len(self.request_body) != length:
                 return HTTPResponse(
                     400, "application/json; charset=utf-8", b'{"error":"truncated_request"}\n'
                 )
@@ -61,14 +62,16 @@ def _handler_for(
             if error := self._consume_request_body():
                 self._send(error)
                 return
-            self._send(service.respond("POST", self.path))
+            self._send(service.respond("POST", self.path, self.request_body))
 
         def do_GET(self) -> None:  # noqa: N802 - BaseHTTPRequestHandler API
             self._send(service.respond("GET", self.path))
 
         def log_message(self, format: str, *args: object) -> None:
-            # Never include request bodies or authentication data.
-            LOGGER.info("bootstrap request from %s: %s", self.client_address[0], format % args)
+            # BaseHTTPRequestHandler's default request line includes query strings.
+            # Log only the route; credentials and tokens must never enter this log.
+            LOGGER.info("bootstrap request from %s: %s %s", self.client_address[0],
+                        self.command, self.path.split("?", 1)[0])
 
     return Handler
 
