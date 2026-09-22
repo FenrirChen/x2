@@ -1,0 +1,2 @@
+"""Non-secret service configuration."""
+
