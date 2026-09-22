@@ -10,6 +10,9 @@
 | Core message IDs | CONFIRMED | 5 | `../phase5_output/protocol/message_registry.csv` | `ERequestTypes` constants |
 | Selected protobuf schemas | CONFIRMED | 5 | `../phase5_output/protocol/message_schemas.json` | Serialize/Deserialize methods |
 | 16 MiB packet limit | TEMPORARY_COMPAT | 6 | `src/x2server/config/settings.py` | local defensive default, not original behavior |
+| WebGameConfig failure blocks startup | CONFIRMED | 5 | `../phase5_output/business/webgameconfig_analysis.md` | non-200/error retries or exits; empty 200 stalls |
+| WebGameConfig uses POST with 3-second timeout | CONFIRMED | 5 | `../phase5_output/business/webgameconfig_analysis.md` and xrefs | `LoadWebGameConfig` coroutine behavior |
+| Official WebGameConfig body schema/path | UNKNOWN | 7 | `docs/bootstrap.md` | not recovered in Phase 5 evidence |
+| Synthetic bootstrap JSON shape | TEMPORARY_COMPAT | 7 | `src/x2server/bootstrap/models.py` | local development model, not an official capture |
 
 Large inputs are intentionally not copied. See `reverse_data/README.md` for the external dependency index.
-

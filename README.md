@@ -15,7 +15,9 @@
 
 - M0 Workspace：Done
 - M1 Protocol Core：Done
-- M2 及以后：Not Started
+- M2 TCP Connection：Done
+- M3 WebGameConfig Bootstrap：Partial（HTTP 基础完成，官方 body/path 仍未知）
+- M4 及以后：Not Started
 
 协议实现覆盖 PackInt、protobuf wire 基础、请求/响应头、CRC32、packet framing、增量流解析、消息注册及离线 synthetic fixture。证据强度使用 `CONFIRMED`、`INFERRED`、`TEMPORARY_COMPAT` 明确区分。
 
@@ -56,5 +58,4 @@ python tools\packet_inspector.py tests\fixtures\synthetic_guide_request.bin --di
 
 ## 已知限制
 
-当前没有真实官方抓包。fixture 均由已恢复协议规范本地生成。尚未验证真实客户端互操作，也未实现 Login 业务、TCP server、Web bootstrap、战斗签名语义或持久化。
-
+当前没有真实官方抓包。fixture 均由已恢复协议规范本地生成。尚未验证真实客户端互操作，也未实现 Login 业务、战斗签名语义或持久化。TCP listener 已具备，但默认只监听 localhost；bootstrap 的官方响应字段与准确路径仍为 UNKNOWN。

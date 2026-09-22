@@ -1,0 +1,2 @@
+"""Development WebGameConfig/bootstrap boundary."""
+
