@@ -1,0 +1,28 @@
+{
+  "source": {
+    "apk_entry": "assets/42c44a368fc3544296d1e717a485b306.ab",
+    "logical_name": "GameConfig",
+    "filename_rule": "md5(GameConfigx2).hexdigest() + .ab",
+    "status": "CONFIRMED"
+  },
+  "selection": {
+    "package_name": "com.siva.project.x2",
+    "row_index": 0,
+    "selection_field": "packageName",
+    "status": "CONFIRMED"
+  },
+  "effective_row": {
+    "packageName": [
+      "com.siva.project.x2",
+      "com.dianhun.X2project",
+      "com.siva.project.x2.bilibili"
+    ],
+    "client_Type": "product",
+    "packageType": "product",
+    "gameServerName": "TAP_BiliBili_Server",
+    "TalkingDataKey": "A704174DD62B4DC58952108B49A515C8",
+    "Login_Url": "http://ssl-x2zh1login-release.17m3.com",
+    "language": "CN",
+    "status": "CONFIRMED"
+  }
+}

@@ -17,7 +17,7 @@
 - M1 Protocol Core：Done
 - M2 TCP Connection：Done
 - M3 WebGameConfig Bootstrap：Partial（最小静态合同已恢复，原客户端尚未验证）
-- FC First Contact：Not Started（本地安全路由/TLS 尚未闭环）
+- FC First Contact：Not Started（HTTP 路由已恢复，但隔离测试环境尚未闭环）
 - M4 及以后：Not Started
 
 协议实现覆盖 PackInt、protobuf wire 基础、请求/响应头、CRC32、packet framing、增量流解析、消息注册及离线 synthetic fixture。证据强度使用 `CONFIRMED`、`INFERRED`、`TEMPORARY_COMPAT` 明确区分。
@@ -60,4 +60,4 @@ python tools\packet_inspector.py tests\fixtures\synthetic_guide_request.bin --di
 
 ## 已知限制
 
-当前没有真实官方抓包。fixture 均由已恢复协议规范或静态客户端证据在本地构造。尚未验证真实客户端互操作，也未实现 Login 业务、战斗签名语义或持久化。TCP listener 默认只监听 localhost；bootstrap 字段与路径已恢复，但有效 `GameConfig.txt` 基址及本地安全导流仍为 UNKNOWN。
+当前没有真实官方抓包。fixture 均由已恢复协议规范或静态客户端证据在本地构造。尚未验证真实客户端互操作，也未实现 Login 业务、战斗签名语义或持久化。TCP listener 默认只监听 localhost；有效 `GameConfig` 行、HTTP 基址、bootstrap 字段与路径已恢复，但本地安全导流仍需隔离 Android 环境验证。

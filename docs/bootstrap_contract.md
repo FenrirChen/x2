@@ -1,6 +1,6 @@
-# Phase 8 bootstrap contract
+# X2 2.4 bootstrap contract
 
-Status: **Gate A Done (static contract closure)**. The shapes below are built
+Status: **Gate A/B Done (static contract closure)**. The shapes below are built
 from X2 2.4 IL2CPP evidence, not retired-service traffic. Concrete localhost
 values are `TEMPORARY_COMPAT`; field names and parser edges marked CONFIRMED are
 client facts.
@@ -12,11 +12,14 @@ client facts.
 | Connect info | `POST {Login_Url}/apply/connectInfo`, form fields `packageName`, `fromCH`, `adChannel`, `adSubChannel`, `lebianVersion`, 3 s timeout | JSON `result` object | CONFIRMED |
 | Server address | `POST {Login_Url}/apply/address`, form fields `clientType`, `timestamp`, `sign`, 30 s timeout | JSON `result.data[]` | CONFIRMED |
 
-`Login_Url` is a field in the selected local `GameConfig.txt` row. Despite its
-name it is an HTTP base URL. `AppConfig.LoadGameConfigSuccess` constructs
+`Login_Url` is a field in the selected local `GameConfig.txt` row. Phase 9
+resolved the effective value for `com.siva.project.x2` as
+`http://ssl-x2zh1login-release.17m3.com`. Despite its name it is an HTTP base
+URL. `AppConfig.LoadGameConfigSuccess` constructs
 `ServerConfigUrl = Login_Url + "/apply/connectInfo"` and
-`Server_Url = Login_Url + "/apply/address"`. The retired production base URL
-value is UNKNOWN.
+`Server_Url = Login_Url + "/apply/address"`. The selected base has no path,
+uses implicit port 80, and the endpoints are literal leading-slash suffixes.
+TLS is **Not Applicable** for this effective row.
 
 Both requests use `UnityWebRequest.Post(url, Dictionary<string,string>)`.
 Therefore form encoding is CONFIRMED. No custom request-header setter is present
@@ -111,13 +114,12 @@ HTTP response bytes
 
 ## Remaining unknowns
 
-- Exact retired production `Login_Url` and any historical environment routing.
 - The local-routing mechanism needed to make the unmodified APK reach a local
-  base URL. The APK has not been patched.
-- Whether TLS/certificate behavior applies to the selected packaged
-  `GameConfig.txt` row; its effective row value is not yet recovered.
+  port-80 service has not been deployed in an isolated Android guest. The APK
+  has not been patched.
 - Multi-entry weight ordering beyond the observed sort-then-first-item path.
 - Full operational semantics of `areaId`, service URLs, and address `zid`.
 
 These unknowns do not prevent construction and offline testing of the minimal
-two-response contract, but the routing/TLS unknown prevents a safe Gate B run.
+two-response contract, but missing deny-by-default guest isolation prevents a
+safe First Contact run.

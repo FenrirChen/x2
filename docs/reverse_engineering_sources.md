@@ -14,7 +14,9 @@
 | WebGameConfig uses POST with 3-second timeout | CONFIRMED | 5 | `../phase5_output/business/webgameconfig_analysis.md` and xrefs | `LoadWebGameConfig` coroutine behavior |
 | WebGameConfig minimal body schema/path | CONFIRMED | 8 | `docs/bootstrap_contract.md` | `result` response, `/apply/connectInfo`, confirmed fields and assignments |
 | Server-address response to TCP endpoint | CONFIRMED | 8 | `docs/bootstrap_contract.md` | `/apply/address` `result.data[].ip/port` reaches `SocketTcp.SetConnectEndPoint` |
-| Retired production base URL and safe local routing | UNKNOWN | 8 | `docs/bootstrap_contract.md` | effective packaged GameConfig row not recovered |
+| Effective packaged GameConfig row and base URL | CONFIRMED | 9 | `docs/gameconfig_resolution.md`, `reverse_data/effective_gameconfig.json` | hashed APK entry, GameStream decode and package-name selector |
+| Effective startup transport is HTTP | CONFIRMED | 9 | `docs/startup_routing.md` | selected `Login_Url` has `http` scheme and implicit port 80 |
+| Safe local routing | UNKNOWN | 9 | `docs/startup_routing.md` | design exists; isolated guest and deny-by-default evidence are unavailable |
 | Synthetic bootstrap JSON shape | TEMPORARY_COMPAT | 7 | `src/x2server/bootstrap/models.py` | local development model, not an official capture |
 
 Large inputs are intentionally not copied. See `reverse_data/README.md` for the external dependency index.
