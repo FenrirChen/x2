@@ -82,10 +82,12 @@ The implementation therefore supplies a reliable fixed-route localhost HTTP laye
 
 `BootstrapService` returns 200 only for POST to its configured path, 405 for the wrong method and 404 for unknown paths. `BootstrapHTTPServer` wraps standard-library `ThreadingHTTPServer`, binds localhost by default and supports async start/stop. It cannot read arbitrary files, does not return tracebacks and contains no token. Integration requests explicitly disable host proxy settings to guarantee offline localhost traffic.
 
+The HTTP transport drains and discards bounded POST bodies before responding. This avoids intermittent Windows connection resets caused by closing sockets with unread inbound bytes; request content is neither parsed nor logged.
+
 ## 8. Verification
 
 ```text
-pytest: 101 passed, 0 failed
+pytest: 102 passed, 0 failed
 ruff: unavailable
 mypy: unavailable
 ```
@@ -114,4 +116,3 @@ Phase 7 work remains on `feat/network-bootstrap` and is not merged into `main`.
 **B** — TCP infrastructure is complete and locally tested; bootstrap HTTP lifecycle is complete, but the original client's accepted WebGameConfig structure remains a key unknown. The remaining work before controlled First Contact is targeted routing and evidence capture, not more speculative server business logic.
 
 The next-phase procedure is documented in `docs/first_contact_plan.md`. Phase 7 did not start the APK, connect a retired service, capture credentials, implement Login or add a database.
-

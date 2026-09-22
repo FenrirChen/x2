@@ -17,8 +17,11 @@ def make_server(port: int = 29000) -> BootstrapHTTPServer:
     return BootstrapHTTPServer("127.0.0.1", 0, BootstrapService(config))
 
 
-def request(url: str, method: str = "POST") -> tuple[int, str, bytes]:
-    req = urllib.request.Request(url, data=b"{}" if method == "POST" else None, method=method)
+def request(
+    url: str, method: str = "POST", body: bytes | None = None
+) -> tuple[int, str, bytes]:
+    request_body = (b"{}" if body is None else body) if method == "POST" else None
+    req = urllib.request.Request(url, data=request_body, method=method)
     # Integration traffic must stay on localhost even when the host environment defines a proxy.
     opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
     try:
@@ -69,6 +72,18 @@ def test_bootstrap_service_can_restart_cleanly() -> None:
         await server.stop()
         await server.start()
         assert server.bound_port > 0
+        await server.stop()
+
+    asyncio.run(scenario())
+
+
+def test_bootstrap_consumes_post_body_before_responding() -> None:
+    async def scenario() -> None:
+        server = make_server()
+        await server.start()
+        url = f"http://{server.bound_host}:{server.bound_port}/webgameconfig"
+        normal = await asyncio.to_thread(request, url, "POST", b'{"ignored":true}')
+        assert normal[0] == 200
         await server.stop()
 
     asyncio.run(scenario())

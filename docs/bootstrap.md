@@ -40,6 +40,8 @@ The default `/webgameconfig` path is also `TEMPORARY_COMPAT`, not recovered orig
 - `BootstrapHTTPServer` wraps standard-library `ThreadingHTTPServer`; it defaults to localhost, owns its thread and supports async start/stop.
 - The HTTP handler never reads arbitrary files, returns tracebacks or embeds authentication data.
 
+The HTTP transport consumes and discards request bodies up to 64 KiB without parsing or logging them. This prevents unread POST bytes from causing a Windows connection reset while bounding input; larger declared bodies receive 413.
+
 The standard library was chosen because this is one fixed development endpoint; a web framework would add dependencies without solving the missing official schema.
 
 ## Configuration
@@ -59,4 +61,3 @@ Tests start the service on an ephemeral localhost port, POST the fixed endpoint,
 ## First Contact use
 
 Before the original client can be started, targeted evidence or controlled routing must identify the real request path and accepted body structure. Replace or adapt the synthetic model only after recording evidence and tests. The bootstrap service must remain separate from TCP Login behavior even if both run in one process.
-

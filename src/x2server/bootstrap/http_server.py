@@ -10,6 +10,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from .service import BootstrapService, HTTPResponse
 
 LOGGER = logging.getLogger("x2.bootstrap.http")
+MAX_REQUEST_BODY = 64 * 1024
 
 
 def _handler_for(service: BootstrapService) -> type[BaseHTTPRequestHandler]:
@@ -27,7 +28,37 @@ def _handler_for(service: BootstrapService) -> type[BaseHTTPRequestHandler]:
             self.end_headers()
             self.wfile.write(response.body)
 
+        def _consume_request_body(self) -> HTTPResponse | None:
+            """Drain a small POST body without parsing or logging its contents.
+
+            Leaving inbound bytes unread can make Windows close the socket with a reset,
+            causing the client to lose an otherwise valid response.
+            """
+            raw_length = self.headers.get("Content-Length", "0")
+            try:
+                length = int(raw_length)
+            except ValueError:
+                return HTTPResponse(
+                    400, "application/json; charset=utf-8", b'{"error":"bad_content_length"}\n'
+                )
+            if length < 0:
+                return HTTPResponse(
+                    400, "application/json; charset=utf-8", b'{"error":"bad_content_length"}\n'
+                )
+            if length > MAX_REQUEST_BODY:
+                return HTTPResponse(
+                    413, "application/json; charset=utf-8", b'{"error":"request_too_large"}\n'
+                )
+            if length and len(self.rfile.read(length)) != length:
+                return HTTPResponse(
+                    400, "application/json; charset=utf-8", b'{"error":"truncated_request"}\n'
+                )
+            return None
+
         def do_POST(self) -> None:  # noqa: N802 - BaseHTTPRequestHandler API
+            if error := self._consume_request_body():
+                self._send(error)
+                return
             self._send(service.respond("POST", self.path))
 
         def do_GET(self) -> None:  # noqa: N802 - BaseHTTPRequestHandler API
@@ -89,4 +120,3 @@ class BootstrapHTTPServer:
             await asyncio.to_thread(thread.join, 2.0)
             if thread.is_alive():
                 raise RuntimeError("bootstrap HTTP thread failed to stop")
-
