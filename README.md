@@ -1,10 +1,11 @@
 # X2 Revive Server
 
+
 这是面向《解神者：X2》简体中文 Android 2.4 客户端的数字保存与协议兼容研究工程。项目目标是在不依赖原运营服务的前提下，逐步建立可验证、可维护的兼容后端。
 
-本项目目前已完成协议核心、TCP 连接层、最小 Bootstrap 和独立 Revival v0.1 APK。Phase 12 已通过三次实验入口冷启动验收，通过 GLES 配置修正恢复游戏加载画面并到达本地 `/apply/controlInfo`；尚未完成 TCP First Contact、登录处理、玩家数据库或游戏业务。
+本项目已完成协议核心、TCP 连接层、最小 Bootstrap、稳定实验入口启动和 Revival v0.2。Phase 13 已两次解析真实客户端 C2L_Login（54），CRC/protobuf 校验通过，并核实本地身份 token；尚未实现 L2C_Login、玩家数据库或游戏业务。
 
-最新实验与进度以 [Phase 12 报告](docs/phase12_stable_startup.md) 为准。根目录早期 README、Phase 10 与早期导流文档包含历史状态，不应据此重做已完成工作。
+最新实验与进度以 [Phase 13 报告](docs/phase13_first_contact.md) 为准。根目录早期 README、Phase 10 与早期导流文档包含历史状态，不应据此重做已完成工作。
 
 ## 来源客户端
 
@@ -18,11 +19,11 @@
 - M0 Workspace：Done
 - M1 Protocol Core：Done
 - M2 TCP Connection：Done
-- M3 WebGameConfig Bootstrap：Partial（controlInfo 已有真实请求；connectInfo/address 尚未验证）
-- Revival v0.1：已构建、签名、安装；Reference APK 保持原样。
+- M3 WebGameConfig Bootstrap：Partial（controlInfo/connectInfo 已验证；Account 路径经 httpLogin 返回 TCP 地址，address 未实机验证）
+- Revival v0.2：已构建、沿用原开发签名覆盖安装；Reference APK 保持原样。
 - Startup：Phase 12 实验入口验收通过，三次冷启动显示正常加载画面并到达 controlInfo。
-- FC First Contact：尚未收到真实 TCP frame。
-- M4 及以后：Not Started
+- FC First Contact / M4 Login Decode：两次真实消息 54 解码通过，身份匹配；未发送业务回复。
+- M5 及以后：Not Started
 
 协议实现覆盖 PackInt、protobuf wire 基础、请求/响应头、CRC32、packet framing、增量流解析、消息注册及离线 synthetic fixture。证据强度使用 `CONFIRMED`、`INFERRED`、`TEMPORARY_COMPAT` 明确区分。
 

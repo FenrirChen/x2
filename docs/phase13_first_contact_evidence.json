@@ -1,0 +1,80 @@
+{
+  "initial": {
+    "control_info": true,
+    "connect_info": true,
+    "address": false,
+    "tcp_connected": true,
+    "frame_decoded": true,
+    "first_message_id": 54,
+    "first_message_name": "C2L_Login",
+    "crc": "valid",
+    "protobuf": "decoded",
+    "field_metadata": {
+      "id": {
+        "present": true,
+        "type": "int"
+      },
+      "token": {
+        "present": true,
+        "type": "str",
+        "length": 43
+      },
+      "deviceid": {
+        "present": true,
+        "type": "str",
+        "length": 32
+      },
+      "connectType": {
+        "present": true,
+        "type": "int"
+      },
+      "submitInfo": {
+        "present": true,
+        "type": "bytes",
+        "length": 122
+      }
+    },
+    "highest_fc": "FC5-LOGIN",
+    "error": null
+  },
+  "repeat": {
+    "control_info": false,
+    "connect_info": false,
+    "address": false,
+    "tcp_connected": true,
+    "frame_decoded": true,
+    "first_message_id": 54,
+    "first_message_name": "C2L_Login",
+    "crc": "valid",
+    "protobuf": "decoded",
+    "body_sha256": "0469bbc17fb503445717b6adf04166c79fc7c6f7bc4a5f9bf275e446f9db8454",
+    "local_identity_valid": true,
+    "field_metadata": {
+      "id": {
+        "present": true,
+        "type": "int"
+      },
+      "token": {
+        "present": true,
+        "type": "str",
+        "length": 43
+      },
+      "deviceid": {
+        "present": true,
+        "type": "str",
+        "length": 32
+      },
+      "connectType": {
+        "present": true,
+        "type": "int"
+      },
+      "submitInfo": {
+        "present": true,
+        "type": "bytes",
+        "length": 122
+      }
+    },
+    "highest_fc": "FC5-LOGIN",
+    "error": null
+  }
+}

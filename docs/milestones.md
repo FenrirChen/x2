@@ -7,8 +7,8 @@
 | M2 TCP Connection | Accept and manage client TCP connections | asyncio listener, lifecycle, limits, heartbeat boundary and integration tests | Done |
 | M3 WebGameConfig Bootstrap | Supply startup configuration | local HTTP bootstrap fixture and documented routing | Partial |
 | Startup / Phase 12 | Stable Revival client lab startup | Three independent cold boots with host GPU + GLESDynamicVersion; normal loading image, Awake, live process and controlInfo HTTP 200 | Done for internal Activity / existing lab data; launcher icon and login not covered |
-| FC First Contact | Reach the compatibility TCP server from the original X2 2.4 client | original client reaches local TCP and at least one real frame decodes | Not Started |
-| M4 Login Decode | Decode client login request | captured/local fixture decoded without business response | Not Started |
+| FC First Contact | Reach the compatibility TCP server from the original X2 2.4 client | Revival v0.2 reaches local TCP and a real frame decodes | Done: two C2L_Login frames, Phase 13 |
+| M4 Login Decode | Decode client login request | real request decoded without business response | Done: CRC/protobuf and local identity verified; redacted evidence committed |
 | M5 Minimal Login Response | Produce minimum accepted snapshot | evidence-labelled response fixture accepted by controlled client test | Not Started |
 | M6 Lobby | Enter and maintain lobby state | required snapshot/push messages identified and served | Not Started |
 | M7 Guide | Persist early guide progression | groups and steps resume deterministically | Not Started |
@@ -18,7 +18,7 @@
 | M11 Checkout | Settle first mission and rewards | checkout, RewardData and ItemUpdate remain consistent | Not Started |
 | M12 Persistence | Durable player state | schema, migrations, restart and rollback tests | Not Started |
 
-Current progress/evidence: [Phase 12](phase12_stable_startup.md). Implementation
+Current progress/evidence: [Phase 13](phase13_first_contact.md). Implementation
 order after real TCP contact is minimal Login together with player persistence,
 then the first playable mission/checkout chain. Persistence should begin with
 the first player snapshot rather than waiting until all game services exist.
