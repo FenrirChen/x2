@@ -83,3 +83,33 @@ CORE_SCHEMAS = {
     )
 }
 
+# CONFIRMED: MessageReflector registers PlayerDataProto as 1000, independently
+# of its generated get_PID() returning 0. BaseInfo Serialize RVA 0x30A1348.
+BASE_INFO = ProtoSchema("BaseInfoProto", (
+    ProtoField(1, "Id", FieldKind.INT64),
+    ProtoField(2, "NickName", FieldKind.STRING),
+    ProtoField(3, "Level", FieldKind.INT32),
+    ProtoField(4, "Crystal", FieldKind.INT32),
+    ProtoField(5, "Gold", FieldKind.INT32),
+    ProtoField(6, "Exp", FieldKind.INT32),
+    ProtoField(8, "Show", FieldKind.INT32),
+))
+PLAYER_DATA = ProtoSchema("PlayerDataProto", (ProtoField(1, "BaseInfo", FieldKind.MESSAGE),))
+STRING_PAIR = ProtoSchema("KeyValuePair_String_String", (
+    ProtoField(1, "key", FieldKind.STRING), ProtoField(2, "val", FieldKind.STRING)))
+CORE_SCHEMAS[PLAYER_DATA.name] = PLAYER_DATA
+RECONNECT = ProtoSchema("C2L_ReConnect", (
+    ProtoField(1, "id", FieldKind.INT64), ProtoField(2, "token", FieldKind.STRING),
+    ProtoField(3, "deviceid", FieldKind.STRING), ProtoField(4, "submitInfo", FieldKind.MESSAGE),
+    ProtoField(5, "submitInfo163", FieldKind.MESSAGE)))
+for schema in (
+    RECONNECT,
+    ProtoSchema("L2C_ReConnect", (ProtoField(1, "code", FieldKind.ENUM),
+        ProtoField(2, "id", FieldKind.INT64), ProtoField(3, "fightDataProfile", FieldKind.MESSAGE),
+        ProtoField(4, "serverTime", FieldKind.INT32))),
+    ProtoSchema("C2L_ServerTableConfig", ()),
+    ProtoSchema("L2C_ServerTableConfig", (ProtoField(1, "code", FieldKind.ENUM),
+        ProtoField(2, "keyVal", FieldKind.MESSAGE, repeated=True))),
+):
+    CORE_SCHEMAS[schema.name] = schema
+

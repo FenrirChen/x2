@@ -64,6 +64,11 @@ CORE_MESSAGE_REGISTRY = MessageRegistry(
     (
         MessageEntry("C2L_Login", 54, Direction.CLIENT_TO_SERVER),
         MessageEntry("L2C_Login", 79, Direction.SERVER_TO_CLIENT),
+        MessageEntry("PlayerDataProto", 1000, Direction.SERVER_TO_CLIENT),
+        MessageEntry("C2L_ReConnect", 337, Direction.CLIENT_TO_SERVER),
+        MessageEntry("L2C_ReConnect", 338, Direction.SERVER_TO_CLIENT),
+        MessageEntry("C2L_ServerTableConfig", 945, Direction.CLIENT_TO_SERVER),
+        MessageEntry("L2C_ServerTableConfig", 946, Direction.SERVER_TO_CLIENT),
         MessageEntry("C2L_FightData", 126, Direction.CLIENT_TO_SERVER),
         MessageEntry("L2C_FightData", 130, Direction.SERVER_TO_CLIENT),
         MessageEntry("C2L_CheckoutMainMission", 150, Direction.CLIENT_TO_SERVER),

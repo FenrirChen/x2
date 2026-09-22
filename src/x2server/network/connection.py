@@ -105,11 +105,14 @@ class X2Connection:
         header = ResponseHeader(
             request_id=request_id,
             session_id=self.session.session_id,
+            data_version=response.data_version,
         )
         packet = ProtocolCodec().encode(response.message_name, response.values, header)
         self.writer.write(packet)
         async with asyncio.timeout(self.settings.write_timeout):
             await self.writer.drain()
+        for push in response.pushes:
+            await self.send_response(push, 0)
 
     async def close(self) -> None:
         """Idempotently close the stream and release server ownership."""
@@ -123,4 +126,3 @@ class X2Connection:
             pass
         self._on_closed(self.connection_id)
         LOGGER.info("connection closed", extra=self._extra())
-

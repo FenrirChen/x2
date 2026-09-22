@@ -1,0 +1,100 @@
+import asyncio
+import json
+from urllib.parse import urlencode
+
+from x2server.bootstrap.local_identity import LocalIdentityService
+from x2server.bootstrap.models import RecoveredBootstrapContract
+from x2server.config.settings import Settings
+from x2server.messages.core import CORE_SCHEMAS, BASE_INFO, PLAYER_DATA, STRING_PAIR
+from x2server.network.dispatcher import Dispatcher
+from x2server.network.server import X2TCPServer
+from x2server.player.login import LoginService
+from x2server.player.store import PlayerStore
+from x2server.protocol.codec import ProtocolCodec
+from x2server.protocol.framing import PacketStreamDecoder
+from x2server.protocol.headers import RequestHeader, ResponseHeader
+
+
+def identity_and_token():
+    identity = LocalIdentityService(RecoveredBootstrapContract.local(Settings(), game_server_port=29000),
+                                    account="lab", password="local")
+    def post(path, values):
+        return json.loads(identity.respond("POST", path, urlencode(values).encode()).body)
+    account = post("/loginwithpw", {"account": "lab", "password": "local"})
+    game = post("/apply/httpLogin", {"accountid": "lab", "token": account["token"], "logintype": "GAME"})
+    return identity, game["token"]
+
+
+def test_login_push_heartbeat_reconnect_and_authentication(tmp_path):
+    async def scenario():
+        identity, token = identity_and_token()
+        store = PlayerStore(tmp_path / "player.db")
+        service = LoginService(identity, store)
+        server = X2TCPServer(Settings(tcp_port=0), Dispatcher({"C2L_Login": service.login,
+            "C2L_ReConnect": service.reconnect, "C2L_ServerTableConfig": service.server_config}))
+        await server.start()
+        writers = []
+
+        async def connect():
+            reader, writer = await asyncio.open_connection(server.bound_host, server.bound_port)
+            writers.append(writer)
+            return reader, writer
+
+        async def read(reader, count):
+            decoder = PacketStreamDecoder(ResponseHeader)
+            packets = []
+            while len(packets) < count:
+                data = await asyncio.wait_for(reader.read(4096), 2)
+                assert data
+                packets.extend(decoder.feed(data))
+            assert len(packets) == count
+            return packets
+
+        def send(writer, name, values, request_id=1, session=""):
+            writer.write(ProtocolCodec().encode(name, values, RequestHeader(request_id=request_id, session_id=session)))
+
+        try:
+            reader, writer = await connect()
+            send(writer, "C2L_Login", {"id": 1, "token": "wrong"})
+            assert await asyncio.wait_for(reader.read(1), 2) == b""
+            assert store.db.execute("SELECT COUNT(*) FROM players").fetchone()[0] == 0
+
+            reader, writer = await connect()
+            send(writer, "C2L_Login", {"id": 1, "token": token}, request_id=7)
+            login, push = await read(reader, 2)
+            values = CORE_SCHEMAS["L2C_Login"].decode(login.body)
+            assert values["code"] == 10 and values["isCreateRole"] is True
+            assert login.header.request_id == 7 and login.header.session_id
+            assert push.message_id == 1000 and push.header.request_id == 0
+            assert push.header.data_version == 1
+            base = BASE_INFO.decode(PLAYER_DATA.decode(push.body)["BaseInfo"])
+            assert base["Id"] == 1 and base["NickName"] == store.get(1)["snapshot"]["nickname"]
+            session = login.header.session_id
+            writer.write(b"\0\0")
+            send(writer, "C2L_ServerTableConfig", {}, 8, "")
+            config, = await read(reader, 1)
+            assert config.message_id == 946 and config.header.request_id == 8
+            assert config.header.session_id == session
+            config_values = CORE_SCHEMAS["L2C_ServerTableConfig"].decode(config.body)
+            assert STRING_PAIR.decode(config_values["keyVal"][0]) == {"key": "PowerBuyNum", "val": "120"}
+            writer.close()
+            await writer.wait_closed()
+
+            reader, writer = await connect()
+            send(writer, "C2L_ReConnect", {"id": 1, "token": token}, 9, session)
+            reconnect, = await read(reader, 1)
+            assert CORE_SCHEMAS["L2C_ReConnect"].decode(reconnect.body)["code"] == 10
+            assert store.get(1)["login_count"] == 1
+            send(writer, "C2L_ServerTableConfig", {}, 10, "spoofed")
+            assert await asyncio.wait_for(reader.read(1), 2) == b""
+
+            # Recreating identity invalidates old tokens; player data remains durable.
+            replacement, _ = identity_and_token()
+            assert not replacement.validates_game_identity(1, token)
+        finally:
+            for writer in writers:
+                writer.close()
+                await writer.wait_closed()
+            await server.stop()
+            store.close()
+    asyncio.run(scenario())

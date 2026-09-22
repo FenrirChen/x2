@@ -114,6 +114,10 @@ class PacketStreamDecoder:
                 break
             packet_bytes = bytes(self._buffer[:packet_end])
             del self._buffer[:packet_end]
+            # MarsNet.tick is one zero byte (cctor 0x3E4E024); its decoder
+            # consumes zero-length frames without a header/message (0x3E4E584).
+            if total_length == 0:
+                continue
             packets.append(
                 decode_packet(
                     packet_bytes,

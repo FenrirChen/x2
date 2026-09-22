@@ -32,6 +32,8 @@ class OutboundMessage:
 
     message_name: str
     values: Mapping[str, Any]
+    data_version: int = 0
+    pushes: tuple[OutboundMessage, ...] = ()
 
 
 Handler: TypeAlias = Callable[
@@ -90,4 +92,3 @@ class Dispatcher:
             return DispatchOutcome(DispatchStatus.UNIMPLEMENTED, entry.name)
         response = await handler(context, packet)
         return DispatchOutcome(DispatchStatus.HANDLED, entry.name, response)
-

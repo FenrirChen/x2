@@ -14,6 +14,15 @@ def request_header() -> RequestHeader:
     return RequestHeader(request_id=7, session_id="synthetic-session", ack_data_version=3, unit_id=42)
 
 
+def test_heartbeats_coalesced_with_fragmented_message():
+    decoder = PacketStreamDecoder(RequestHeader)
+    packet = encode_packet(request_header(), 374, b"abc")
+    assert decoder.feed(b"\0\0" + packet[:4]) == []
+    packets = decoder.feed(packet[4:] + b"\0" + packet)
+    assert [item.message_id for item in packets] == [374, 374]
+    assert decoder.buffered_bytes == 0
+
+
 def test_request_packet_round_trip_and_lengths() -> None:
     body = b"\x08\xa3\xa4\x01\x10\x02"
     encoded = encode_packet(request_header(), 374, body)

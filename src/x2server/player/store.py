@@ -1,0 +1,67 @@
+"""SQLite player storage. Initial values are explicit local compatibility defaults."""
+from __future__ import annotations
+
+import json
+import sqlite3
+from pathlib import Path
+from typing import Any
+
+
+class PlayerStore:
+    def __init__(self, path: Path) -> None:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        self.db = sqlite3.connect(path)
+        self.db.row_factory = sqlite3.Row
+        version = self.db.execute("PRAGMA user_version").fetchone()[0]
+        if version not in (0, 1):
+            self.db.close()
+            raise ValueError("unsupported player database version")
+        with self.db:
+            self.db.execute("""CREATE TABLE IF NOT EXISTS players (
+                id INTEGER PRIMARY KEY, account TEXT NOT NULL UNIQUE,
+                created_at INTEGER NOT NULL, login_count INTEGER NOT NULL DEFAULT 0,
+                snapshot TEXT NOT NULL, revision INTEGER NOT NULL DEFAULT 1)""")
+            self.db.execute("PRAGMA user_version=1")
+
+    def login(self, account: str, player_id: int, now: int) -> dict[str, Any]:
+        """Create once and increment atomically; never replace an existing snapshot."""
+        with self.db:
+            self.db.execute("INSERT OR IGNORE INTO players VALUES (?, ?, ?, 0, ?, 1)",
+                            (player_id, account, now, json.dumps({"nickname": "Revival", "level": 1,
+                                "gold": 0, "crystal": 0, "exp": 0, "show": 1003})))
+            row = self.db.execute("SELECT * FROM players WHERE id=?", (player_id,)).fetchone()
+            if row is None or row["account"] != account:
+                raise ValueError("player/account identity conflict")
+            self.db.execute("UPDATE players SET login_count=login_count+1 WHERE id=?", (player_id,))
+            return self.get(player_id)
+
+    def get(self, player_id: int) -> dict[str, Any]:
+        row = self.db.execute("SELECT * FROM players WHERE id=?", (player_id,)).fetchone()
+        if row is None:
+            raise KeyError(player_id)
+        result = dict(row)
+        result["snapshot"] = json.loads(result["snapshot"])
+        return result
+
+    def close(self) -> None:
+        self.db.close()
+
+    def save_snapshot(
+        self, player_id: int, snapshot: dict[str, Any], expected_revision: int
+    ) -> int:
+        """Optimistic update; conflicting writes roll back instead of losing progress."""
+        if not isinstance(snapshot.get("nickname"), str) or not snapshot["nickname"]:
+            raise ValueError("nickname must be nonempty")
+        if type(snapshot.get("level")) is not int or snapshot["level"] < 1:
+            raise ValueError("level must be positive")
+        for name in ("gold", "crystal", "exp", "show"):
+            if name in snapshot and (type(snapshot[name]) is not int or snapshot[name] < 0):
+                raise ValueError(f"{name} must be a nonnegative integer")
+        encoded = json.dumps(snapshot, ensure_ascii=False, allow_nan=False, sort_keys=True)
+        with self.db:
+            cursor = self.db.execute(
+                "UPDATE players SET snapshot=?, revision=revision+1 WHERE id=? AND revision=?",
+                (encoded, player_id, expected_revision))
+            if cursor.rowcount != 1:
+                raise ValueError("player revision conflict")
+        return expected_revision + 1
