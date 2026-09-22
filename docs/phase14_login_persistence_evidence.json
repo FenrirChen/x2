@@ -1,0 +1,51 @@
+{
+  "phase": 14,
+  "stage": 3,
+  "date": "2026-09-22",
+  "probe": "probe06",
+  "scope": "minimal_login_and_base_snapshot_only",
+  "client_unchanged": true,
+  "tests_passed": 141,
+  "database": {
+    "player_id": 1,
+    "login_count": 5,
+    "revision": 1
+  },
+  "authenticated_login_count": 1,
+  "authenticated_reconnect_count": 1,
+  "configuration_response_count": 2,
+  "server_protocol_error_count": 0,
+  "client_null_reference_count_in_capture": 0,
+  "client_graphics_warning_present": true,
+  "unimplemented_message_ids": [
+    432,
+    576,
+    669,
+    715,
+    776,
+    782,
+    805,
+    999
+  ],
+  "visible_result": "opening cinematic; playable lobby not verified",
+  "artifacts": {
+    "probe06-server.log": {
+      "path": "runtime/phase14/probe06-server.log",
+      "sha256": "444f572cbd94840a09eb9b95bf38dce56cdb1886500a83515d4b2c73fbffb1f7"
+    },
+    "probe06-logcat.log": {
+      "path": "runtime/phase14/probe06-logcat.log",
+      "sha256": "4d89eafeb98ddea5e28434ade3d70cf0870951a52d4433366d695306f1c637a6"
+    },
+    "probe06-after.png": {
+      "path": "runtime/phase14/probe06-after.png",
+      "sha256": "734e1982603495e8c75eab620da55dddeaba29fe116d234cdd2a0a7cad0f5bf4"
+    }
+  },
+  "notes": [
+    "Raw artifacts remain ignored locally. No tokens or device IDs are included.",
+    "Probe05 server expired before login; probe06 reused the same database.",
+    "Remaining unimplemented lobby calls cause request timeouts and reconnects."
+  ],
+  "implementation_commit": "e1fb06e"
+}

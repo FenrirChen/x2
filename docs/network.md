@@ -1,5 +1,7 @@
 # M2 network boundary
 
+> Phase 14 update: the local game runner now installs authenticated Login/ReConnect/config handlers, sends base-player pushes, and consumes zero-length heartbeat frames. The M2-only behavior below is historical; see [Phase 14](phase14_login_persistence.md).
+
 ## Call path
 
 ```text
