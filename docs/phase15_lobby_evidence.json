@@ -1,0 +1,87 @@
+{
+  "phase": 15,
+  "implementation_commit": "c949714",
+  "captured_local": "2026-09-23T12:53:45.512681",
+  "observation_seconds": 161,
+  "tests_passed": 143,
+  "visible_emulator": true,
+  "client_apk_unchanged": true,
+  "database": {
+    "player_id": 1,
+    "login_count": 9,
+    "revision": 2,
+    "main_chapter": 1,
+    "main_section": 1,
+    "backup": "runtime/phase15/before-lobby.sqlite3"
+  },
+  "server": {
+    "connections_opened": 1,
+    "connections_closed": 0,
+    "reconnects": 0,
+    "protocol_errors": 0,
+    "unknown_messages": 0,
+    "button_click_acks": 1,
+    "handled_query_names": [
+      "C2L_AccountBuffAutoStop",
+      "C2L_AccountBuffData",
+      "C2L_ButtonClick",
+      "C2L_EntryidStatus",
+      "C2L_EquipAll",
+      "C2L_GameTask",
+      "C2L_MoonEquip",
+      "C2L_NoticPushInfo",
+      "C2L_QueryActivity",
+      "C2L_QueryActivityDrawInfo",
+      "C2L_QueryCollectionAward",
+      "C2L_QueryDivination",
+      "C2L_QueryIllustrationData",
+      "C2L_QueryItemLimitTime",
+      "C2L_QueryMission",
+      "C2L_QueryNotic",
+      "C2L_QueryReturnInfo",
+      "C2L_QuerySharedMessage",
+      "C2L_QuerySimpleActivity",
+      "C2L_QueryStarPrivilegeInfo",
+      "C2L_QueryStarPrivilegeReward",
+      "C2L_QueryTelInfo",
+      "C2L_QueryWorldBossOpenTime",
+      "C2L_ReceiveGiftRew",
+      "C2L_SeasonIcon",
+      "C2L_SystemInfo"
+    ]
+  },
+  "client_null_reference_count": 0,
+  "verified_ui": [
+    "lobby",
+    "empty bag",
+    "return to lobby"
+  ],
+  "remaining": [
+    "Hero ownership and Mobility snapshots",
+    "Online HTTP services/chat",
+    "Full guide progression",
+    "Gameplay and rewards"
+  ],
+  "artifacts": {
+    "probe05-server-snapshot.log": {
+      "path": "runtime/phase15/probe05-server-snapshot.log",
+      "sha256": "6d44fe1c4f03a39741c19cc8b9faa4d093e1eb2f5872678d16d7e7af26648ac4"
+    },
+    "probe05-final-logcat.log": {
+      "path": "runtime/phase15/probe05-final-logcat.log",
+      "sha256": "73fe02f07bc740c6f3f179e88224c3f773ce2de0e8e250d507de3b58a28164fb"
+    },
+    "probe05-lobby.png": {
+      "path": "runtime/phase15/probe05-lobby.png",
+      "sha256": "f4acf8adada025605d047c26d6400ea85f37165ecdc848871038630db39fefaa"
+    },
+    "probe05-bag.png": {
+      "path": "runtime/phase15/probe05-bag.png",
+      "sha256": "ded080e6204e47742fc39c1b2997f4908cd06ca42f912b2696bc3bfe59267024"
+    },
+    "probe05-final.png": {
+      "path": "runtime/phase15/probe05-final.png",
+      "sha256": "5c1de14fb7a168bd1f92757544cfedc8c041d1ee65e41e57d75aa19854eced22"
+    }
+  }
+}

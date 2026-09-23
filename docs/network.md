@@ -51,3 +51,8 @@ No message body or token is logged. Context includes connection ID, peer, messag
 
 All socket tests use automated localhost clients and synthetic frames. They cover clean connect/close, response correlation, fragmentation, concatenation, partial packets, bad CRC isolation, malformed/oversized lengths, incomplete EOF and graceful shutdown. No original client or retired service is used.
 
+# Phase 15 update
+
+See [Phase 15](phase15_lobby_account_state.md) for the explicit local lobby query
+contracts, account-state fixture and remaining HTTP dependencies. Unregistered
+messages still receive no fabricated success response.

@@ -2,9 +2,9 @@
 
 这是面向《解神者：X2》简体中文 Android 2.4 客户端的数字保存与协议兼容研究工程。项目目标是在不依赖原运营服务的前提下，逐步建立可验证、可维护的兼容后端。
 
-本项目已完成协议核心、TCP 连接层、最小 Bootstrap、稳定实验入口启动和 Revival v0.2。Phase 14 已实现最小 L2C_Login、基础玩家快照推送和 SQLite 存档，实机已进入开场画面；尚未实现可操作大厅及战斗业务。
+本项目已完成协议核心、TCP 连接层、最小 Bootstrap、稳定实验入口启动和 Revival v0.2。Phase 15 已通过测试账号主线进度跳过开场战斗，进入可见模拟器中的大厅并打开空背包；英雄、体力及战斗业务仍待补齐。
 
-最新实验与进度以 [Phase 14 报告](docs/phase14_login_persistence.md) 为准。根目录早期 README、Phase 10 与早期导流文档包含历史状态，不应据此重做已完成工作。
+最新实验与进度以 [Phase 15 报告](docs/phase15_lobby_account_state.md) 为准。早期文档包含历史状态，不应据此重做已完成工作。
 
 ## 来源客户端
 
@@ -24,7 +24,7 @@
 - FC First Contact / M4 Login Decode：真实消息 54 解码通过，身份匹配。
 - M5 最小登录：已实现并实机接受基础快照；含心跳、配置确认及重连。
 - 玩家持久化：SQLite 基础存档已实现，重启恢复/冲突回滚测试通过；玩法状态尚未建立。
-- M6 大厅：初始化依赖已定位，尚未通过可操作大厅验收。
+- M6 大厅：已进入大厅并打开空背包；26 对初始化/查询/点击消息已恢复，完整英雄与业务状态仍未验收。
 
 协议实现覆盖 PackInt、protobuf wire 基础、请求/响应头、CRC32、packet framing、增量流解析、消息注册及离线 synthetic fixture。证据强度使用 `CONFIRMED`、`INFERRED`、`TEMPORARY_COMPAT` 明确区分。
 

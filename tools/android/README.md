@@ -1,5 +1,15 @@
 # Android lab tools
 
+## Visible development window (Phase 15)
+
+Run `./tools/android/open_lab_window.ps1` from the repository root to open the
+existing API 30 AVD with a visible window. Defaults match this local lab; paths
+can be supplied as parameters. No `-no-window` argument is used, and the window
+remains open for manual testing. This only starts Android; run the local game
+server separately and use the installed internal Unity activity as documented
+in the Phase 15 report. The historical startup probe below still runs headless
+and closes its own emulator on completion.
+
 These utilities inspect the disposable X2 Android lab. They do not download an
 SDK, install drivers, modify hosts/firewall settings, install an APK, or start
 the client.
