@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from x2server.messages.lobby import LOBBY_IDS
 from x2server.messages.chat import CHAT_IDS
+from x2server.messages.economy import ECONOMY_IDS
 
 from dataclasses import dataclass
 from enum import Enum
@@ -66,7 +67,7 @@ class MessageRegistry:
 CORE_MESSAGE_REGISTRY = MessageRegistry(
     (
         MessageEntry("C2L_Login", 54, Direction.CLIENT_TO_SERVER),
-        *(entry for name, request_id, response_id in (*LOBBY_IDS, *CHAT_IDS) for entry in (
+        *(entry for name, request_id, response_id in (*LOBBY_IDS, *CHAT_IDS, *ECONOMY_IDS) for entry in (
             MessageEntry("C2L_" + name, request_id, Direction.CLIENT_TO_SERVER),
             MessageEntry("L2C_" + name, response_id, Direction.SERVER_TO_CLIENT))),
         MessageEntry("L2C_Login", 79, Direction.SERVER_TO_CLIENT),
@@ -92,6 +93,8 @@ CORE_MESSAGE_REGISTRY = MessageRegistry(
         MessageEntry("C2L_GuideStep", 374, Direction.CLIENT_TO_SERVER),
         MessageEntry("L2C_GuideStep", 375, Direction.SERVER_TO_CLIENT),
         MessageEntry("L2C_ItemUpdate", 553, Direction.SERVER_TO_CLIENT),
+        MessageEntry("C2L_DailyAndWeekTask", 681, Direction.CLIENT_TO_SERVER),
+        MessageEntry("L2C_TaskUpdate", 558, Direction.SERVER_TO_CLIENT),
         MessageEntry("L2C_ItemAll", 555, Direction.SERVER_TO_CLIENT),
         MessageEntry("C2L_ItemAll", 556, Direction.CLIENT_TO_SERVER),
         MessageEntry("C2L_CheckoutMainMissionSign", 887, Direction.CLIENT_TO_SERVER),

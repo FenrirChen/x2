@@ -1,9 +1,4 @@
-"""Bounded first-battle practice service; economy/progression remain separate.
-
-Entry probes and their practice receipts are free. They never mutate player
-level, inventory, chapter completion or mobility. Sessions are server-generated
-and persisted, so retransmitting an identical request cannot mint another run.
-"""
+"""Bounded first battle; optional confirmed fixed rewards, no invented drops."""
 import hashlib
 import logging
 import secrets
@@ -13,14 +8,16 @@ import uuid
 from x2server.messages.battle import BATTLE_SCHEMAS, CHECKOUT, DROP_DATA, PROFILE_HERO, HERO_SKILL, HERO_ATTR, FIGHT_HERO, FIGHT_DATA, FIGHT_PROFILE
 from x2server.network.dispatcher import OutboundMessage
 from x2server.protocol.errors import ProtocolError
+from .economy import UnresolvedEconomy
 
 
 class BattleService:
     # Canonical SectionTable: tutorial and the first selectable main story.
     SECTIONS = {2110001: (2010000, 2210001), 2110801: (2010100, 2210801)}
 
-    def __init__(self, store):
+    def __init__(self, store, economy=None):
         self.store = store
+        self.economy = economy
         with store.db:
             store.db.execute("""CREATE TABLE IF NOT EXISTS battle_entries (
                 player_id INTEGER NOT NULL, request_key TEXT NOT NULL, uuid TEXT NOT NULL,
@@ -51,7 +48,7 @@ class BattleService:
         return OutboundMessage("L2C_FightKillInfo", {"code": 10 if accepted else 13})
 
     async def checkout(self, context, packet):
-        """Close a local free-entry probe; never grant rewards or progression.
+        """Close a bounded run; economy and receipt commit atomically when enabled.
 
         This is a single-account compatibility receipt, not replay verification.
         The latest bounded entry is the only candidate and expires in one hour.
@@ -77,11 +74,18 @@ class BattleService:
         entry = BATTLE_SCHEMAS["L2C_FightData"].decode(row["response"])
         if FIGHT_DATA.decode(entry["data"])["missionId"] != section:
             return reject
-        digest = hashlib.sha256(raw).hexdigest()
+        if self.economy:
+            run = self.store.db.execute("SELECT * FROM economy_runs WHERE uuid=?", (row["uuid"],)).fetchone()
+            if not run or run["player_id"] != player_id or run["session_id"] != context.session.session_id:
+                return reject  # Old practice entries cannot acquire rewards retroactively.
+        digest = hashlib.sha256(packet.body if self.economy else raw).hexdigest()
         cached = self.store.db.execute("SELECT request_hash, response FROM battle_receipts WHERE uuid=?", (row["uuid"],)).fetchone()
         schema = BATTLE_SCHEMAS["L2C_CheckoutMainMission"]
         if cached:
-            return OutboundMessage("L2C_CheckoutMainMission", schema.decode(cached["response"])) if cached["request_hash"] == digest else reject
+            return OutboundMessage("L2C_CheckoutMainMission", schema.decode(cached["response"]),
+                pushes=self.economy.pushes(player_id) if self.economy else ()) if cached["request_hash"] == digest else reject
+        if self.economy and self.store.db.execute("SELECT 1 FROM economy_checkouts WHERE player_id=? AND digest=?", (player_id, digest)).fetchone():
+            return reject  # A previous run's full checkout must not settle a new run.
         snapshot = self.store.get(player_id)["snapshot"]
         heroes = snapshot.get("heroes", [])
         values = {"result": 10, "success": request.get("success", False), "rewardData": b"",
@@ -91,10 +95,18 @@ class BattleService:
             "heroFavorExp": [0] * len(heroes), "heroAddFavorExp": [0] * len(heroes),
             "heroFavorLevel": [0] * len(heroes), "heroFullLevel": [False] * len(heroes),
             "favorFullLevel": [False] * len(heroes), "fightTimeLength": request.get("fightTime", 0)}
-        with self.store.db:
-            self.store.db.execute("INSERT INTO battle_receipts VALUES (?,?,?,?)",
-                (row["uuid"], digest, int(time.time()), schema.encode(values)))
-        return OutboundMessage("L2C_CheckoutMainMission", values)
+        try:
+            with self.store.db:
+                if self.economy:
+                    self.store.db.execute("INSERT INTO economy_checkouts VALUES (?,?,?)", (player_id, digest, row["uuid"]))
+                    values["rewardData"] = self.economy.settle(player_id, row["uuid"], section, request.get("success", False))
+                    values["roleExp"] = self.store.get(player_id)["snapshot"].get("exp", 0)
+                self.store.db.execute("INSERT INTO battle_receipts VALUES (?,?,?,?)",
+                    (row["uuid"], digest, int(time.time()), schema.encode(values)))
+        except UnresolvedEconomy:
+            return reject
+        return OutboundMessage("L2C_CheckoutMainMission", values,
+            pushes=self.economy.pushes(player_id) if self.economy else ())
 
     async def drop_data(self, context, packet):
         if context.session.player_id is None:
@@ -166,4 +178,7 @@ class BattleService:
         with self.store.db:
             self.store.db.execute("INSERT INTO battle_entries VALUES (?,?,?,?,?)", (player["id"], key,
                 values["uuid"], int(time.time()), BATTLE_SCHEMAS["L2C_FightData"].encode(values)))
+            if self.economy:
+                self.store.db.execute("INSERT INTO economy_runs(uuid,player_id,session_id,section_id) VALUES (?,?,?,?)",
+                    (values["uuid"], player["id"], context.session.session_id, section))
         return OutboundMessage("L2C_FightData", values)

@@ -16,9 +16,10 @@ LOGGER = logging.getLogger("x2.login")
 
 
 class LoginService:
-    def __init__(self, identity: LocalIdentityService, store: PlayerStore) -> None:
+    def __init__(self, identity: LocalIdentityService, store: PlayerStore, economy=None) -> None:
         self.identity = identity
         self.store = store
+        self.economy = economy
 
     async def login(self, context: DispatchContext, packet: DecodedPacket) -> OutboundMessage:
         values = C2L_LOGIN.decode(packet.body)
@@ -36,6 +37,13 @@ class LoginService:
                      "rechargeNoticeAll", "equipAll", "taskDaily", "taskWeekly", "taskChallenge", "limitTaskChallenge"):
             result[name] = b""
         result["heroAll"] = encode_hero_all(player["snapshot"])
+        if self.economy:
+            from x2server.messages.economy import ECONOMY_SCHEMAS
+            from x2server.messages.lobby import LOBBY_SCHEMAS
+            self.economy.record_event(player["id"], "login:initial", 5)
+            result["itemAll"] = ECONOMY_SCHEMAS["L2C_ItemAll"].encode(self.economy.inventory_values(player["id"]))
+            for name, kind in (("taskDaily", 1), ("taskWeekly", 2)):
+                result[name] = LOBBY_SCHEMAS["L2C_GameTask"].encode(self.economy.task_values(player["id"], kind))
         LOGGER.info("authenticated login response prepared player=%s login_count=%s",
                     player["id"], player["login_count"])
         push = self.snapshot_push(player)
@@ -48,6 +56,9 @@ class LoginService:
             "Level": snapshot["level"], "Show": snapshot.get("show", 1003),
             "Gold": snapshot.get("gold", 0), "Crystal": snapshot.get("crystal", 0),
             "Exp": snapshot.get("exp", 0),
+            "HeroExp": snapshot.get("hero_exp", 0),
+            "DailyActivity": snapshot.get("daily_activity", 0),
+            "WeekActivity": snapshot.get("week_activity", 0),
             "MainChapter": snapshot.get("main_chapter", 0),
             "MainSection": snapshot.get("main_section", 0)})
         values = {"BaseInfo": base}

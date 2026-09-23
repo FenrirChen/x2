@@ -1,0 +1,45 @@
+"""2.4 economy messages. Evidence and deliberate gaps: docs/phase19_economy.md."""
+from x2server.protocol.protobuf import FieldKind as K, ProtoField as F, ProtoSchema as S
+
+
+def ints(name, fields):
+    return S(name, tuple(F(n, field, K.INT32) for n, field in enumerate(fields.split(), 1)))
+
+
+ITEM = S("ItemData", (F(1, "id", K.INT32), F(2, "num", K.INT32),
+    F(3, "locked", K.BOOL), F(4, "dayGet", K.INT32)))
+REWARD_ITEM = S("RewardItem", (F(1, "itemId", K.INT32), F(2, "itemNum", K.INT32), F(3, "transform", K.BOOL)))
+REWARD = S("RewardData", (F(1, "rewardItem", K.MESSAGE, repeated=True),
+    F(2, "rewardEquip", K.MESSAGE, repeated=True), F(3, "transformHero", K.MESSAGE, repeated=True)))
+TASK = ints("TaskData", "taskId taskStatus taskProgress taskRefreshTime finishTimes stage activityId difficulty")
+FINISH_REQUEST = ints("ReqFinishTaskData", "taskId type activityId")
+FINISH_RESULT = S("RspFinishTaskData", (F(1, "code", K.ENUM), F(2, "taskId", K.INT32),
+    F(3, "rewardData", K.MESSAGE), F(4, "type", K.ENUM), F(5, "nextTask", K.MESSAGE), F(6, "activityId", K.INT32)))
+ECONOMY_IDS = (("ShopGoods", 221, 225), ("RefreshShop", 220, 224),
+    ("BuyGoods", 219, 222), ("QueryGoodsInfo", 301, 302),
+    ("FinishGameTask", 350, 353), ("FinishGameTaskAsync", 814, 815), ("PickTreasureBox", 310, 314))
+ECONOMY_SCHEMAS = {s.name: s for s in (
+    S("C2L_ItemAll", ()),
+    S("L2C_ItemAll", (F(1, "items", K.MESSAGE, repeated=True),)),
+    S("L2C_ItemUpdate", (F(1, "code", K.ENUM), F(2, "items", K.MESSAGE, repeated=True))),
+    ints("C2L_ShopGoods", "shopId"), ints("C2L_RefreshShop", "shopId"),
+    ints("C2L_BuyGoods", "shopId goodsId buyNum"), ints("C2L_QueryGoodsInfo", "goodsId"),
+    ints("L2C_QueryGoodsInfo", "code shopId goodsId price originalPrice hasBuyTimes canBuyTimes itemNum currencyType"),
+    S("L2C_BuyGoods", (F(1, "code", K.ENUM), F(2, "itemId", K.INT32), F(3, "itemNum", K.INT32),
+        F(4, "goodsId", K.INT32), F(5, "price", K.INT32), F(6, "originalPrice", K.INT32),
+        F(7, "hasBuyTimes", K.INT32), F(8, "rewardData", K.MESSAGE), F(9, "buyNum", K.INT32),
+        F(10, "changeItemID", K.INT32), F(11, "shopId", K.INT32))),
+    ints("C2L_DailyAndWeekTask", "type"),
+    S("C2L_FinishGameTask", (F(1, "data", K.MESSAGE, repeated=True),)),
+    S("L2C_FinishGameTask", (F(1, "data", K.MESSAGE, repeated=True),)),
+    ints("C2L_FinishGameTaskAsync", "taskId type"),
+    S("L2C_FinishGameTaskAsync", (F(1, "data", K.MESSAGE),)),
+    S("L2C_TaskUpdate", (F(1, "type", K.ENUM), F(2, "taskList", K.MESSAGE, repeated=True))),
+    ints("C2L_PickTreasureBox", "boxId type param activityId"),
+    S("L2C_PickTreasureBox", (F(1, "code", K.ENUM), F(2, "boxId", K.INT32), F(3, "type", K.ENUM),
+        F(4, "rewardData", K.MESSAGE), F(5, "param", K.INT32), F(6, "activityId", K.INT32))),
+)}
+for name in ("L2C_ShopGoods", "L2C_RefreshShop"):
+    ECONOMY_SCHEMAS[name] = S(name, (F(1, "code", K.ENUM), F(2, "shopId", K.INT32),
+        F(3, "NextRefreshTime", K.INT64), F(4, "RefreshTimes", K.INT32),
+        F(5, "RefreshPrice", K.INT32), F(6, "goods", K.MESSAGE, repeated=True)))

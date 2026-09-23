@@ -18,6 +18,7 @@ from x2server.player.lobby import LobbyService
 from x2server.player.hero import HeroService
 from x2server.player.chat import SilentChatService
 from x2server.player.battle import BattleService
+from x2server.player.economy import EconomyService
 
 
 async def run(database: Path, seconds: float) -> None:
@@ -29,10 +30,11 @@ async def run(database: Path, seconds: float) -> None:
         RecoveredServerAddressConfig((ServerAddressEntry("10.0.2.2", 29000),)))
     identity = LocalIdentityService(contract, account=os.environ["X2_LOCAL_ACCOUNT"], password=os.environ["X2_LOCAL_PASSWORD"])
     store = PlayerStore(database)
-    login = LoginService(identity, store)
+    economy = EconomyService(store)
+    login = LoginService(identity, store, economy)
     http = BootstrapHTTPServer("127.0.0.1", 18080, identity)
     tcp = X2TCPServer(Settings(tcp_host="127.0.0.1", tcp_port=29000, read_timeout=120),
-        Dispatcher({**LobbyService().handlers(), **BattleService(store).handlers(), "C2L_HeroAll": HeroService(store).query_all,
+        Dispatcher({**LobbyService().handlers(), **economy.handlers(), **BattleService(store, economy).handlers(), "C2L_HeroAll": HeroService(store).query_all,
                     "C2L_Login": login.login, "C2L_ReConnect": login.reconnect,
                     "C2L_ServerTableConfig": login.server_config}))
     chat = X2TCPServer(Settings(tcp_host="127.0.0.1", tcp_port=29001, read_timeout=120),
