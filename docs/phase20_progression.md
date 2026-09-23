@@ -36,3 +36,15 @@ UpHeroSkill 131/132；请求 `0x38D2478`、响应 `0x3902034`。`HeroSkillDetail
 - 19:44:15 收到 2110802 `success=False` 实战结算；`battle_costs` 为 amount=6/refunded=1，体力恢复 149，金币 980/晶石 30/经验 12/主线 2110801 不变。**失败退款已实战确认**；成功后的连续小节推进仍待完整验收。
 
 完整限制以 `../NEED.md` 为准。不要重做 Bootstrap、签名、全量 APK/Bundle 扫描；不要清数据、初始化新账号、降回备份或启动 Google AVD 替代 MuMu。
+
+## 第二小节普通角色不移动/无伤害修复
+
+用户实测第二小节技能和普攻有动画，摇杆不改变坐标，攻击不造成伤害。失败退款成立，但该次实战不能算关卡可玩验收。
+
+定点证据：`ChapterModule.ConvertHeroAttrAdd` (`0x16C37B0`) 即使收到 null 也构造非 null 空列表。`Unit.InitProperty` (`0x1CCA05C–0x1CCA080`) 在玩家 `mOtherAttrs` 非 null 时跳过 `AddBaseProperty`。因此只有 `heroAttrCount` 的攻防血蓝摘要不足以初始化真实战斗属性，普通角色没有基础移速和攻击属性；剧情试用角色不证明此路径正确。
+
+修复通过 `FightHero.attrAdd` **字段 9** 下发确认的 19 个原始基础属性。标签 `0x4a` 在 `0x35108F8`，嵌套 `HeroAttrAdd` 序列化 `0x351A610` 为 attrId=1/int32、attrValue=2/int64。`AddOtherAttributes` (`0x1C18030`) 经 AttribType 查表添加属性。
+
+`IndexInfo` 19 行把 PlayerAttrib 字段映射到 AttribType ID，例如 Damage→162=60、Defense→163=40、HPMax→164=600、SPMax→165=3000、MoveSpeed→188=550，COR 为 12/4/120。**下发原始值**，PropertyUpdate (`0x1C228A0` 起) 会查 PlayerStage/PlayerLevelBonus 施加成长；不能将成长后的 75/46/752 再当原始值发送。取证输出 `analysis/progression/battle_base_1003.json`，可用同目录 `export_battle_base.py` 复现；`inspect_battle_base.py` 核对 AddBaseProperty 使用的名称。
+
+修复后仍 **163 passed**，测试追加检查真实入场包包含上述属性而非仅摘要。部署日志改为 `runtime/phase20/server03.err.log`，MuMu 已重启，客户端不改版、存档不重置。**已请求用户重新验证移动与伤害，收到结果前不称实战修复通过。**

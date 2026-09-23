@@ -1,0 +1,255 @@
+{
+  "hero_id": 1003,
+  "sources": {
+    "PlayerAttrib": {
+      "source": "assets/bin/Data/1e3805e55669ff94d90568f68e2219a7",
+      "record_count": 1182,
+      "fields": [
+        "ID",
+        "Profession",
+        "Origin",
+        "ProfEnum",
+        "OriginNum",
+        "Level",
+        "DefaultStage",
+        "ExchangeChip",
+        "Compensate",
+        "IsOpen",
+        "ChipPropID",
+        "UnLockedItemID",
+        "WeapenId",
+        "RelicExp",
+        "HPMax",
+        "HPCount",
+        "SPMax",
+        "Damage",
+        "Defense",
+        "MoveSpeed",
+        "HPMaxCOR",
+        "SPMaxCOR",
+        "DamageCOR",
+        "DefenseCOR",
+        "Critical",
+        "CriticalDamage",
+        "PhysicalRist",
+        "IceRist",
+        "FireRiset",
+        "LightningRist",
+        "PoisonRist",
+        "SkillAbility",
+        "SuperArmor",
+        "WeakArmor",
+        "WeakArmorIncRate",
+        "DamageCoefficient",
+        "DamageUPCoefficient",
+        "DefenseCoefficient",
+        "Duration",
+        "BloodMoonParam",
+        "PrayBouns"
+      ]
+    },
+    "IndexInfo": {
+      "source": "assets/bin/Data/9453ee7c45a00184e9c8a1a0338ec456",
+      "record_count": 19,
+      "fields": [
+        "ID",
+        "AttreName",
+        "AttrID"
+      ]
+    },
+    "AttribType": {
+      "source": "assets/bin/Data/cf31d55fe8b94f641abe4e3aaa2a7d8b",
+      "record_count": 119,
+      "fields": [
+        "AttribId",
+        "NameId",
+        "DataBaseType",
+        "OrderIndex",
+        "NameEnu",
+        "DataType",
+        "MutexGroup",
+        "ShowIdex",
+        "AbilityRate",
+        "ValueMax",
+        "ValueMin",
+        "Icon",
+        "IfNotice",
+        "IfNoticeMain"
+      ]
+    }
+  },
+  "attributes": [
+    {
+      "name": "HPMax",
+      "attrId": 164,
+      "attrValue": 600,
+      "runtime_enum": {
+        "value": 64,
+        "enum": "E_HERO_HP"
+      }
+    },
+    {
+      "name": "SPMax",
+      "attrId": 165,
+      "attrValue": 3000,
+      "runtime_enum": {
+        "value": 65,
+        "enum": "E_HERO_SP"
+      }
+    },
+    {
+      "name": "Damage",
+      "attrId": 162,
+      "attrValue": 60,
+      "runtime_enum": {
+        "value": 62,
+        "enum": "E_HERO_ATK"
+      }
+    },
+    {
+      "name": "Defense",
+      "attrId": 163,
+      "attrValue": 40,
+      "runtime_enum": {
+        "value": 63,
+        "enum": "E_HERO_DEF"
+      }
+    },
+    {
+      "name": "HPMaxCOR",
+      "attrId": 172,
+      "attrValue": 120,
+      "runtime_enum": {
+        "value": 72,
+        "enum": "E_HERO_HP_Dlt"
+      }
+    },
+    {
+      "name": "SPMaxCOR",
+      "attrId": 173,
+      "attrValue": 0,
+      "runtime_enum": {
+        "value": 73,
+        "enum": "E_HERO_SP_Dlt"
+      }
+    },
+    {
+      "name": "DamageCOR",
+      "attrId": 170,
+      "attrValue": 12,
+      "runtime_enum": {
+        "value": 70,
+        "enum": "E_HERO_ATK_Dlt"
+      }
+    },
+    {
+      "name": "DefenseCOR",
+      "attrId": 171,
+      "attrValue": 4,
+      "runtime_enum": {
+        "value": 71,
+        "enum": "E_HERO_DEF_Dlt"
+      }
+    },
+    {
+      "name": "Critical",
+      "attrId": 105,
+      "attrValue": 50,
+      "runtime_enum": {
+        "value": 5,
+        "enum": "E_HERO_CRI"
+      }
+    },
+    {
+      "name": "CriticalDamage",
+      "attrId": 113,
+      "attrValue": 0,
+      "runtime_enum": {
+        "value": 13,
+        "enum": "E_CRI_Dmg"
+      }
+    },
+    {
+      "name": "PhysicalRist",
+      "attrId": 121,
+      "attrValue": 0,
+      "runtime_enum": {
+        "value": 21,
+        "enum": "E_SR_Phy"
+      }
+    },
+    {
+      "name": "IceRist",
+      "attrId": 124,
+      "attrValue": 0,
+      "runtime_enum": {
+        "value": 24,
+        "enum": "E_SR_Ice"
+      }
+    },
+    {
+      "name": "FireRiset",
+      "attrId": 127,
+      "attrValue": 0,
+      "runtime_enum": {
+        "value": 27,
+        "enum": "E_SR_Fire"
+      }
+    },
+    {
+      "name": "LightningRist",
+      "attrId": 130,
+      "attrValue": 0,
+      "runtime_enum": {
+        "value": 30,
+        "enum": "E_SR_Ele"
+      }
+    },
+    {
+      "name": "PoisonRist",
+      "attrId": 133,
+      "attrValue": 0,
+      "runtime_enum": {
+        "value": 33,
+        "enum": "E_DR_A_Pre"
+      }
+    },
+    {
+      "name": "MoveSpeed",
+      "attrId": 188,
+      "attrValue": 550,
+      "runtime_enum": {
+        "value": 88,
+        "enum": "E_Hero_MV"
+      }
+    },
+    {
+      "name": "SuperArmor",
+      "attrId": 178,
+      "attrValue": 0,
+      "runtime_enum": {
+        "value": 78,
+        "enum": "E_SAR"
+      }
+    },
+    {
+      "name": "WeakArmor",
+      "attrId": 179,
+      "attrValue": 0,
+      "runtime_enum": {
+        "value": 79,
+        "enum": "E_WAR"
+      }
+    },
+    {
+      "name": "WeakArmorIncRate",
+      "attrId": 180,
+      "attrValue": 0,
+      "runtime_enum": {
+        "value": 80,
+        "enum": "E_WARP"
+      }
+    }
+  ],
+  "evidence": "Unit.InitProperty 0x1CCA05C skips AddBaseProperty for non-null mOtherAttrs; ConvertHeroAttrAdd 0x16C37B0 always returns a list; IndexInfo maps raw PlayerAttrib fields to AttribType IDs. PropertyUpdate applies level/stage, so send raw base values, not grown totals."
+}

@@ -5,7 +5,7 @@ import secrets
 import time
 import uuid
 
-from x2server.messages.battle import BATTLE_SCHEMAS, CHECKOUT, DROP_DATA, PROFILE_HERO, HERO_SKILL, HERO_ATTR, FIGHT_HERO, FIGHT_DATA, FIGHT_PROFILE
+from x2server.messages.battle import BATTLE_SCHEMAS, CHECKOUT, DROP_DATA, PROFILE_HERO, HERO_SKILL, HERO_ATTR, HERO_ATTR_ADD, FIGHT_HERO, FIGHT_DATA, FIGHT_PROFILE
 from x2server.network.dispatcher import OutboundMessage
 from x2server.protocol.errors import ProtocolError
 from .economy import UnresolvedEconomy
@@ -167,11 +167,15 @@ class BattleService:
                                       (player["id"], key)).fetchone()
         if cached:
             return OutboundMessage("L2C_FightData", BATTLE_SCHEMAS["L2C_FightData"].decode(cached[0]))
-        from .progression import hero_attributes, hero_skills
+        from .progression import hero_attributes, hero_skills, catalog
         attrs = HERO_ATTR.encode(hero_attributes(hero))
         skills = [HERO_SKILL.encode(s) for s in hero_skills(hero)]
         hero_values = {k:v for k,v in hero.items() if k in ("id", "state", "level", "star", "exp")}
-        fight_hero = FIGHT_HERO.encode({**hero_values, "heroGodEquip": b"", "heroSkill": skills, "heroAttrCount": attrs})
+        # Non-null mOtherAttrs suppresses the client's AddBaseProperty fallback.
+        # Raw wrappers are mandatory; PropertyUpdate applies level/stage itself.
+        base = [HERO_ATTR_ADD.encode({"attrId":r["attrId"], "attrValue":r["attrValue"]})
+            for r in catalog()["battle_base_1003"]["attributes"]]
+        fight_hero = FIGHT_HERO.encode({**hero_values, "heroGodEquip": b"", "heroSkill": skills, "heroAttrCount": attrs, "attrAdd":base})
         data = FIGHT_DATA.encode({"fightHeros": [fight_hero], "missionId": section, "dropData": b"", "CRIDmg": 15000})
         profile = FIGHT_PROFILE.encode({"missionId": section, "chapterId": chapter, "layer": 0,
             "sceneId": scene, "randomSeed": secrets.randbelow(2**30), "isProfileValid": False})

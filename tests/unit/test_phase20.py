@@ -10,7 +10,7 @@ from x2server.player.task_calendar import BEIJING, task_period
 from x2server.player.progression import ProgressionService, hero_attributes
 from x2server.player.economy import EconomyService
 from x2server.player.battle import BattleService
-from x2server.messages.battle import CHECKOUT, FIGHT_DATA, FIGHT_HERO, HERO_ATTR
+from x2server.messages.battle import CHECKOUT, FIGHT_DATA, FIGHT_HERO, HERO_ATTR, HERO_ATTR_ADD
 from x2server.messages.economy import TASK
 
 
@@ -125,6 +125,14 @@ def test_hero_level_star_skill_costs_retries_and_battle_attributes(env):
     entry = asyncio.run(battle.enter(ctx,packet(request(),20)))
     hero = FIGHT_HERO.decode(FIGHT_DATA.decode(entry.values["data"])["fightHeros"][0])
     assert HERO_ATTR.decode(hero["heroAttrCount"]) == hero_attributes(store.get(1)["snapshot"]["heroes"][0])
+    raw = {r["attrId"]:r.get("attrValue",0) for r in map(HERO_ATTR_ADD.decode,hero["attrAdd"])}
+    # The ordinary-player path skips local AddBaseProperty even for an empty
+    # converted list. Summary totals alone produce zero movement and damage.
+    assert raw[188] == 550
+    assert (raw[162],raw[163],raw[164],raw[165]) == (60,40,600,3000)
+    assert (raw[170],raw[171],raw[172]) == (12,4,120)
+    assert raw[105] == 50
+    assert len(raw) == 19
 
 
 def test_growth_receipt_failure_rolls_back_cost_and_hero(env):

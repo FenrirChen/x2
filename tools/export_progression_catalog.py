@@ -14,6 +14,8 @@ def export():
             rows = [r for r in rows if r["skill_id"] in (10030, 10031, 10032, 10033, 10035)]
         data[key] = rows
     data["provenance"] = "CONFIRMED_CLIENT_STATIC costs; Revival transactional rules are documented separately"
+    base = ROOT / "analysis/progression/battle_base_1003.json"
+    data["battle_base_1003"] = json.loads(base.read_text(encoding="utf-8"))
     path = ROOT / "src/x2server/data/progression_catalog.json"
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print({k: len(v) for k, v in data.items() if isinstance(v, list)})
