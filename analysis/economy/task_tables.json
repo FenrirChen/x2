@@ -1,0 +1,3290 @@
+{
+  "sources": {
+    "DailyTask": {
+      "source": "assets/bin/Data/e6d80a2256e2cd4498e5f4df42a60a5b",
+      "count": 40,
+      "decoded": 40,
+      "fields": [
+        "DailyTaskID",
+        "TaskName",
+        "TaskDescribe",
+        "TaskConditionID",
+        "AcceptLevel",
+        "LastTask",
+        "RefreshCycle",
+        "GiftGroup",
+        "GiftGroupSeason",
+        "JumpID",
+        "IsUse",
+        "BattlepassExp"
+      ]
+    },
+    "TaskCondition": {
+      "file": "phase3_output/raw_tables/TaskCondition__3ee9401d542d7bf43b6b6786500040ed.bin",
+      "count": 1728
+    },
+    "TaskControl": {
+      "source": "assets/bin/Data/ed2d8be6f9f17924c9f2532627d10336",
+      "count": 1,
+      "decoded": 1,
+      "fields": [
+        "ID",
+        "DailyRefresh",
+        "WeeklyRefresh",
+        "DailyActiveValueNumber",
+        "DailyGiftGroup",
+        "DailyGiftGroupSeason",
+        "WeeklyActiveValueNumber",
+        "WeeklyGiftGroup",
+        "CompleteAchievementNumber",
+        "CompleteAchievementNumberGiftGroup",
+        "ChallengeTaskGroupID",
+        "ChallengeTaskGiftGroup",
+        "ActivityActiveValueNumber",
+        "ActivityGiftGroup",
+        "BpActiveValueNumber",
+        "BpGiftGroup",
+        "CompleteBpAchievementNumber",
+        "CompleteBpAchievementNumberGiftGroup"
+      ]
+    },
+    "Gift": {
+      "source": "assets/bin/Data/97f907f95af754641b60175964616b99",
+      "count": 10930,
+      "decoded": 10930,
+      "fields": [
+        "GiftGroup",
+        "AwardType",
+        "Probability",
+        "GiftValue",
+        "Num",
+        "GiftShow",
+        "ItemNum",
+        "EquibNum"
+      ]
+    },
+    "Item": {
+      "file": "phase3_output/raw_tables/Item__e49ddfae661db9147b8823552f01df41.bin",
+      "count": 3026
+    }
+  },
+  "cycle_counts": {
+    "E_Day": 26,
+    "E_Week": 14
+  },
+  "control": {
+    "ID": 5,
+    "DailyRefresh": 5,
+    "WeeklyRefresh": 5,
+    "DailyActiveValueNumber": [
+      20,
+      40,
+      60,
+      80,
+      100
+    ],
+    "DailyGiftGroup": [
+      760001,
+      760002,
+      760003,
+      760004,
+      760005
+    ],
+    "DailyGiftGroupSeason": [
+      760016,
+      760017,
+      760018,
+      760019,
+      760020
+    ],
+    "WeeklyActiveValueNumber": [
+      30,
+      60,
+      90,
+      120,
+      150
+    ],
+    "WeeklyGiftGroup": [
+      760010,
+      760011,
+      760012,
+      760013,
+      760014
+    ],
+    "CompleteAchievementNumber": [
+      10,
+      20,
+      30,
+      50,
+      80,
+      120,
+      160,
+      200,
+      250,
+      300,
+      350,
+      400,
+      450,
+      500,
+      550
+    ],
+    "CompleteAchievementNumberGiftGroup": [
+      760081,
+      760082,
+      760083,
+      760084,
+      760085,
+      760086,
+      760087,
+      760088,
+      760089,
+      760090,
+      760091,
+      760092,
+      760093,
+      760094,
+      760095
+    ],
+    "ChallengeTaskGroupID": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "ChallengeTaskGiftGroup": [
+      760101,
+      760102,
+      760103,
+      760104,
+      760105,
+      760106,
+      760107,
+      760108,
+      760109,
+      760110
+    ],
+    "ActivityActiveValueNumber": [
+      5,
+      10,
+      15,
+      20,
+      25
+    ],
+    "ActivityGiftGroup": [
+      776131,
+      776132,
+      776133,
+      776134,
+      776135
+    ],
+    "BpActiveValueNumber": [
+      30,
+      60,
+      90,
+      120,
+      150
+    ],
+    "BpGiftGroup": [
+      797124,
+      797125,
+      797126,
+      797127,
+      797128
+    ],
+    "CompleteBpAchievementNumber": [
+      5,
+      10,
+      20,
+      40,
+      60
+    ],
+    "CompleteBpAchievementNumberGiftGroup": [
+      797134,
+      797135,
+      797136,
+      797137,
+      797138
+    ]
+  },
+  "records": [
+    {
+      "source_table": "DailyTask",
+      "source_id": 630001,
+      "cycle": "E_Day",
+      "name": "勤奋的一天",
+      "description": "今日累计消耗 120 点因果",
+      "accept_level": 1,
+      "predecessor": null,
+      "condition_id": 600900,
+      "condition": {
+        "TaskConditionID": 600900,
+        "CompleteType": {
+          "value": 10,
+          "enum": "E_ConsumePowerToday"
+        },
+        "CompleteValue1": [
+          900
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": 120
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760201,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237910,
+              "name": "日活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 20,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 1200,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237907,
+              "name": "神格经验",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 500,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": {
+        "target_table": "Gift",
+        "target_id": 797101,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237910,
+              "name": "日活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 20,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 1200,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237907,
+              "name": "神格经验",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 500,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1291001,
+              "name": "凭证经验",
+              "type": "E_Consumable",
+              "status": "RESOLVED"
+            },
+            "count": 300,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "battlepass_exp": 300,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630002,
+      "cycle": "E_Day",
+      "name": "现世复刻",
+      "description": "通关【现世复刻】任意关卡 1 次",
+      "accept_level": 12,
+      "predecessor": null,
+      "condition_id": 600371,
+      "condition": {
+        "TaskConditionID": 600371,
+        "CompleteType": {
+          "value": 3,
+          "enum": "E_CustomsPass"
+        },
+        "CompleteValue1": [
+          2110851,
+          2110852,
+          2110853,
+          2110854,
+          2110855,
+          2110856,
+          2110857,
+          2110858,
+          2110859,
+          2110860,
+          2110151,
+          2110152,
+          2110153,
+          2110154,
+          2110155,
+          2110156,
+          2110157,
+          2110158,
+          2110159,
+          2110160,
+          2110251,
+          2110252,
+          2110253,
+          2110254,
+          2110255,
+          2110256,
+          2110257,
+          2110258,
+          2110259,
+          2110260,
+          2110351,
+          2110352,
+          2110353,
+          2110354,
+          2110355,
+          2110356,
+          2110357,
+          2110358,
+          2110359,
+          2110360,
+          2110451,
+          2110452,
+          2110453,
+          2110454,
+          2110455,
+          2110456,
+          2110457,
+          2110458,
+          2110459,
+          2110460,
+          2110551,
+          2110552,
+          2110553,
+          2110554,
+          2110555,
+          2110556,
+          2110557,
+          2110558,
+          2110559,
+          2110560,
+          2110651,
+          2110652,
+          2110653,
+          2110654,
+          2110655,
+          2110656,
+          2110657,
+          2110658,
+          2110659,
+          2110660,
+          2110751,
+          2110752,
+          2110753,
+          2110754,
+          2110755,
+          2110756,
+          2110757,
+          2110758,
+          2110759,
+          2110760,
+          2110951,
+          2110952,
+          2110953,
+          2110954,
+          2110955,
+          2110956,
+          2110957,
+          2110958,
+          2110959,
+          2110960,
+          2111151,
+          2111152,
+          2111153,
+          2111154,
+          2111155,
+          2111156,
+          2111157,
+          2111158,
+          2111159,
+          2111160
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": 1
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760202,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237910,
+              "name": "日活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 15,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 1200,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237912,
+              "name": "月钻",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 25,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": {
+        "target_table": "Gift",
+        "target_id": 797102,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237910,
+              "name": "日活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 15,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 1200,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237912,
+              "name": "月钻",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 25,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1291001,
+              "name": "凭证经验",
+              "type": "E_Consumable",
+              "status": "RESOLVED"
+            },
+            "count": 240,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "battlepass_exp": 240,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630003,
+      "cycle": "E_Day",
+      "name": "兽主强化",
+      "description": "强化 1 次兽主",
+      "accept_level": 1,
+      "predecessor": null,
+      "condition_id": 601200,
+      "condition": {
+        "TaskConditionID": 601200,
+        "CompleteType": {
+          "value": 12,
+          "enum": "E_UpgradeEquipment"
+        },
+        "CompleteValue1": [
+          0
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": 1
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760203,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237910,
+              "name": "日活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 5,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 800,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237906,
+              "name": "兽魂",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 100,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": null,
+      "battlepass_exp": null,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630004,
+      "cycle": "E_Day",
+      "name": "资源战",
+      "description": "通关【资源战】任意关卡 1 次",
+      "accept_level": 11,
+      "predecessor": null,
+      "condition_id": 600372,
+      "condition": {
+        "TaskConditionID": 600372,
+        "CompleteType": {
+          "value": 3,
+          "enum": "E_CustomsPass"
+        },
+        "CompleteValue1": [
+          2130101,
+          2130102,
+          2130103,
+          2130104,
+          2130105,
+          2130201,
+          2130202,
+          2130203,
+          2130204,
+          2130205,
+          2132001,
+          2132002,
+          2132003,
+          2132004,
+          2132005,
+          2132101,
+          2132102,
+          2132103,
+          2132104,
+          2132105
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": 1
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760204,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237910,
+              "name": "日活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 10,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 800,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237922,
+              "name": "生物电源",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 5,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": null,
+      "battlepass_exp": null,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630005,
+      "cycle": "E_Day",
+      "name": "再临试炼",
+      "description": "通关【再临试炼】任意关卡 1 次",
+      "accept_level": 16,
+      "predecessor": null,
+      "condition_id": 600373,
+      "condition": {
+        "TaskConditionID": 600373,
+        "CompleteType": {
+          "value": 3,
+          "enum": "E_CustomsPass"
+        },
+        "CompleteValue1": [
+          2131301,
+          2131302,
+          2131303,
+          2131304,
+          2130501,
+          2130502,
+          2130503,
+          2130601,
+          2130602,
+          2130603,
+          2130701,
+          2130702,
+          2130703,
+          2131201,
+          2131202,
+          2131203
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": 1
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760205,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237910,
+              "name": "日活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 10,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 800,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237918,
+              "name": "蚀之勋章",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 10,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": null,
+      "battlepass_exp": null,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630006,
+      "cycle": "E_Day",
+      "name": "奇迹祈神",
+      "description": "通过任意奇迹进行 1 次祈神",
+      "accept_level": 25,
+      "predecessor": null,
+      "condition_id": 604801,
+      "condition": {
+        "TaskConditionID": 604801,
+        "CompleteType": {
+          "value": 48,
+          "enum": "E_BaseBless"
+        },
+        "CompleteValue1": [
+          0
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": 1
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760206,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237910,
+              "name": "日活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 5,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 800,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237840,
+              "name": "祈神符",
+              "type": "E_Common",
+              "status": "RESOLVED"
+            },
+            "count": 1,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": null,
+      "battlepass_exp": null,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630007,
+      "cycle": "E_Day",
+      "name": "时空之门",
+      "description": "通过时空之门进行 1 次遗迹探险",
+      "accept_level": 19,
+      "predecessor": null,
+      "condition_id": 601600,
+      "condition": {
+        "TaskConditionID": 601600,
+        "CompleteType": {
+          "value": 16,
+          "enum": "E_HeroAdventure"
+        },
+        "CompleteValue1": [
+          0
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": 1
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760207,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237910,
+              "name": "日活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 5,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 1000,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237907,
+              "name": "神格经验",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 500,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": null,
+      "battlepass_exp": null,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630008,
+      "cycle": "E_Day",
+      "name": "光之密室中的训练",
+      "description": "在光之密室中进行 1 次神格训练",
+      "accept_level": 19,
+      "predecessor": null,
+      "condition_id": 601700,
+      "condition": {
+        "TaskConditionID": 601700,
+        "CompleteType": {
+          "value": 17,
+          "enum": "E_HeroTrain"
+        },
+        "CompleteValue1": [
+          0
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": 1
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760208,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237910,
+              "name": "日活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 5,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 1000,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237907,
+              "name": "神格经验",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 500,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": null,
+      "battlepass_exp": null,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630009,
+      "cycle": "E_Day",
+      "name": "时序之门",
+      "description": "前往【时序之门】参与击杀 1 次任意蚀兽",
+      "accept_level": 17,
+      "predecessor": null,
+      "condition_id": 600375,
+      "condition": {
+        "TaskConditionID": 600375,
+        "CompleteType": {
+          "value": 87,
+          "enum": "E_CustomsEntry"
+        },
+        "CompleteValue1": [
+          2140101,
+          2140102,
+          2140103,
+          2140104,
+          2140105,
+          2140106,
+          2140107,
+          2140108
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": 1
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760209,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237910,
+              "name": "日活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 10,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 1200,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237918,
+              "name": "蚀之勋章",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 10,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": null,
+      "battlepass_exp": null,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630010,
+      "cycle": "E_Day",
+      "name": "友好相处",
+      "description": "与任意神格点击交互 1 次",
+      "accept_level": 1,
+      "predecessor": null,
+      "condition_id": 601900,
+      "condition": {
+        "TaskConditionID": 601900,
+        "CompleteType": {
+          "value": 19,
+          "enum": "E_HeroInteractive"
+        },
+        "CompleteValue1": [
+          0
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": 1
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760210,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237910,
+              "name": "日活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 5,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 800,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1203001,
+              "name": "迷你礼物盒",
+              "type": "E_Gift",
+              "status": "RESOLVED"
+            },
+            "count": 1,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": null,
+      "battlepass_exp": null,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630015,
+      "cycle": "E_Day",
+      "name": "白夜补给",
+      "description": "在【白夜补给】道具商店中任意购买 1 次商品",
+      "accept_level": 5,
+      "predecessor": null,
+      "condition_id": 602401,
+      "condition": {
+        "TaskConditionID": 602401,
+        "CompleteType": {
+          "value": 24,
+          "enum": "E_BuyGood"
+        },
+        "CompleteValue1": [
+          0
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": 1
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760215,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237910,
+              "name": "日活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 10,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 1000,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237907,
+              "name": "神格经验",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 500,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": {
+        "target_table": "Gift",
+        "target_id": 797103,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237910,
+              "name": "日活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 10,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 1000,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237907,
+              "name": "神格经验",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 500,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1291001,
+              "name": "凭证经验",
+              "type": "E_Consumable",
+              "status": "RESOLVED"
+            },
+            "count": 240,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "battlepass_exp": 240,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630016,
+      "cycle": "E_Day",
+      "name": "神格升级",
+      "description": "升级 1 次神格",
+      "accept_level": 1,
+      "predecessor": null,
+      "condition_id": 600600,
+      "condition": {
+        "TaskConditionID": 600600,
+        "CompleteType": {
+          "value": 7,
+          "enum": "E_HeroLevelUp"
+        },
+        "CompleteValue1": [
+          0
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": 1
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760216,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237910,
+              "name": "日活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 5,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 1000,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237907,
+              "name": "神格经验",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 500,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": null,
+      "battlepass_exp": null,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630017,
+      "cycle": "E_Day",
+      "name": "我还能肝",
+      "description": "购买 1 次因果",
+      "accept_level": 1,
+      "predecessor": null,
+      "condition_id": 600700,
+      "condition": {
+        "TaskConditionID": 600700,
+        "CompleteType": {
+          "value": 8,
+          "enum": "E_BuyPower"
+        },
+        "CompleteValue1": [
+          900
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": 1
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760217,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237910,
+              "name": "日活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 15,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 1000,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237907,
+              "name": "神格经验",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 500,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": null,
+      "battlepass_exp": null,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630018,
+      "cycle": "E_Day",
+      "name": "还没花够",
+      "description": "购买 1 次金币",
+      "accept_level": 5,
+      "predecessor": null,
+      "condition_id": 600800,
+      "condition": {
+        "TaskConditionID": 600800,
+        "CompleteType": {
+          "value": 9,
+          "enum": "E_BuyGold"
+        },
+        "CompleteValue1": [
+          901
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": 1
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760218,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237910,
+              "name": "日活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 10,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 1200,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237907,
+              "name": "神格经验",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 500,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": null,
+      "battlepass_exp": null,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630019,
+      "cycle": "E_Day",
+      "name": "崭新的一天",
+      "description": "今日登陆游戏",
+      "accept_level": 1,
+      "predecessor": null,
+      "condition_id": 600400,
+      "condition": {
+        "TaskConditionID": 600400,
+        "CompleteType": {
+          "value": 5,
+          "enum": "E_SignInGame"
+        },
+        "CompleteValue1": [
+          0
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": 1
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760219,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237910,
+              "name": "日活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 10,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 800,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237907,
+              "name": "神格经验",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 500,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": null,
+      "battlepass_exp": null,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630020,
+      "cycle": "E_Day",
+      "name": "杀戮盛宴",
+      "description": "今日击杀怪物数量达到 100 只",
+      "accept_level": 1,
+      "predecessor": null,
+      "condition_id": 600000,
+      "condition": {
+        "TaskConditionID": 600000,
+        "CompleteType": {
+          "value": 1,
+          "enum": "E_KillMonster"
+        },
+        "CompleteValue1": [
+          0
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": 100
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760220,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237910,
+              "name": "日活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 10,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 1200,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237907,
+              "name": "神格经验",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 500,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": null,
+      "battlepass_exp": null,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630021,
+      "cycle": "E_Day",
+      "name": "因果补给",
+      "description": "今日12:00-24:00在线",
+      "accept_level": 1,
+      "predecessor": null,
+      "condition_id": 600601,
+      "condition": {
+        "TaskConditionID": 600601,
+        "CompleteType": {
+          "value": 6,
+          "enum": "E_AppointTimeOnLine"
+        },
+        "CompleteValue1": [
+          12
+        ],
+        "CompleteValue2": [
+          24
+        ],
+        "CompleteNum": 1
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760221,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237900,
+              "name": "因果",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 60,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": null,
+      "battlepass_exp": null,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630022,
+      "cycle": "E_Day",
+      "name": "因果补给",
+      "description": "今日18:00-24:00在线",
+      "accept_level": 1,
+      "predecessor": null,
+      "condition_id": 600602,
+      "condition": {
+        "TaskConditionID": 600602,
+        "CompleteType": {
+          "value": 6,
+          "enum": "E_AppointTimeOnLine"
+        },
+        "CompleteValue1": [
+          18
+        ],
+        "CompleteValue2": [
+          24
+        ],
+        "CompleteNum": 1
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760222,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237900,
+              "name": "因果",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 60,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": null,
+      "battlepass_exp": null,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630023,
+      "cycle": "E_Day",
+      "name": "友情点滴",
+      "description": "赠送好友 1 次友情点",
+      "accept_level": 13,
+      "predecessor": null,
+      "condition_id": 607101,
+      "condition": {
+        "TaskConditionID": 607101,
+        "CompleteType": {
+          "value": 71,
+          "enum": "E_GiveFriendCoin"
+        },
+        "CompleteValue1": [
+          0
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": 1
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760223,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237910,
+              "name": "日活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 10,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 1000,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237917,
+              "name": "友情点",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 100,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": {
+        "target_table": "Gift",
+        "target_id": 797104,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237910,
+              "name": "日活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 10,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 1000,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237917,
+              "name": "友情点",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 100,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1291001,
+              "name": "凭证经验",
+              "type": "E_Consumable",
+              "status": "RESOLVED"
+            },
+            "count": 150,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "battlepass_exp": 150,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630024,
+      "cycle": "E_Day",
+      "name": "心愿任务",
+      "description": "通过终端完成 1 次心愿任务",
+      "accept_level": 20,
+      "predecessor": null,
+      "condition_id": 607201,
+      "condition": {
+        "TaskConditionID": 607201,
+        "CompleteType": {
+          "value": 72,
+          "enum": "E_FavorabilityDailyTask"
+        },
+        "CompleteValue1": [
+          0
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": 1
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760224,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237910,
+              "name": "日活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 10,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 1200,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1283001,
+              "name": "夕颜曜石",
+              "type": "E_Common",
+              "status": "RESOLVED"
+            },
+            "count": 1,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": null,
+      "battlepass_exp": null,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630025,
+      "cycle": "E_Day",
+      "name": "日月盈仄I",
+      "description": "挑战【影域潜流】任意活动关卡 3 次",
+      "accept_level": 17,
+      "predecessor": null,
+      "condition_id": 600381,
+      "condition": {
+        "TaskConditionID": 600381,
+        "CompleteType": {
+          "value": 3,
+          "enum": "E_CustomsPass"
+        },
+        "CompleteValue1": [
+          2160101,
+          2160102,
+          2160103,
+          2160104,
+          2160105
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": 3
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760225,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237910,
+              "name": "日活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 15,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 1500,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237989,
+              "name": "影域瓶盖",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 30,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": null,
+      "battlepass_exp": null,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630026,
+      "cycle": "E_Day",
+      "name": "日月盈仄II",
+      "description": "前往影域交易所兑换 1 次商品",
+      "accept_level": 17,
+      "predecessor": null,
+      "condition_id": 602421,
+      "condition": {
+        "TaskConditionID": 602421,
+        "CompleteType": {
+          "value": 24,
+          "enum": "E_BuyGood"
+        },
+        "CompleteValue1": [
+          0
+        ],
+        "CompleteValue2": [
+          891,
+          892,
+          893,
+          894
+        ],
+        "CompleteNum": 1
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760226,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237910,
+              "name": "日活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 5,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 1000,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237989,
+              "name": "影域瓶盖",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 20,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": null,
+      "battlepass_exp": null,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630027,
+      "cycle": "E_Day",
+      "name": "浮士德的炼金实验室I",
+      "description": "在【浮士德的炼金实验室】中完成 1 次交易",
+      "accept_level": 19,
+      "predecessor": null,
+      "condition_id": 607501,
+      "condition": {
+        "TaskConditionID": 607501,
+        "CompleteType": {
+          "value": 75,
+          "enum": "E_AlchemyDealTask"
+        },
+        "CompleteValue1": [
+          0
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": 1
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760227,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237910,
+              "name": "日活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 5,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 800,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237907,
+              "name": "神格经验",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 500,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": null,
+      "battlepass_exp": null,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630028,
+      "cycle": "E_Day",
+      "name": "浮士德的炼金实验室II",
+      "description": "在【浮士德的炼金实验室】中完成 1 次任务",
+      "accept_level": 19,
+      "predecessor": null,
+      "condition_id": 607601,
+      "condition": {
+        "TaskConditionID": 607601,
+        "CompleteType": {
+          "value": 76,
+          "enum": "E_AlchemyQuestTask"
+        },
+        "CompleteValue1": [
+          0
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": 1
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760228,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237910,
+              "name": "日活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 5,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 1200,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237907,
+              "name": "神格经验",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 500,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": null,
+      "battlepass_exp": null,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630040,
+      "cycle": "E_Day",
+      "name": "日月盈仄I",
+      "description": "挑战【影域潜流】任意活动关卡 3 次",
+      "accept_level": 17,
+      "predecessor": null,
+      "condition_id": 600382,
+      "condition": {
+        "TaskConditionID": 600382,
+        "CompleteType": {
+          "value": 3,
+          "enum": "E_CustomsPass"
+        },
+        "CompleteValue1": [
+          2160111,
+          2160112,
+          2160113,
+          2160114,
+          2160115
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": 3
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760229,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237910,
+              "name": "日活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 15,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 1500,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237989,
+              "name": "影域瓶盖",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 30,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": null,
+      "battlepass_exp": null,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630041,
+      "cycle": "E_Day",
+      "name": "日月盈仄II",
+      "description": "前往影域交易所兑换 1 次商品",
+      "accept_level": 17,
+      "predecessor": null,
+      "condition_id": 602422,
+      "condition": {
+        "TaskConditionID": 602422,
+        "CompleteType": {
+          "value": 24,
+          "enum": "E_BuyGood"
+        },
+        "CompleteValue1": [
+          0
+        ],
+        "CompleteValue2": [
+          887,
+          888,
+          889,
+          890
+        ],
+        "CompleteNum": 1
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760230,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237910,
+              "name": "日活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 5,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 1000,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237989,
+              "name": "影域瓶盖",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 20,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": null,
+      "battlepass_exp": null,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630101,
+      "cycle": "E_Week",
+      "name": "我很努力",
+      "description": "本周累计击杀 1000 只怪物",
+      "accept_level": 1,
+      "predecessor": null,
+      "condition_id": 610201,
+      "condition": {
+        "TaskConditionID": 610201,
+        "CompleteType": {
+          "value": 2,
+          "enum": "E_KillMonsterType"
+        },
+        "CompleteValue1": [
+          2
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": 1000
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760301,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237911,
+              "name": "周活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 30,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 2000,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237907,
+              "name": "神格经验",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 1000,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": null,
+      "battlepass_exp": null,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630102,
+      "cycle": "E_Week",
+      "name": "精英的覆灭",
+      "description": "本周累计击杀 100 只精英怪物",
+      "accept_level": 1,
+      "predecessor": null,
+      "condition_id": 610202,
+      "condition": {
+        "TaskConditionID": 610202,
+        "CompleteType": {
+          "value": 2,
+          "enum": "E_KillMonsterType"
+        },
+        "CompleteValue1": [
+          3
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": 100
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760302,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237911,
+              "name": "周活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 30,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 3000,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237907,
+              "name": "神格经验",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 1000,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": null,
+      "battlepass_exp": null,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630103,
+      "cycle": "E_Week",
+      "name": "资源战",
+      "description": "通关【资源战】任意关卡 5 次",
+      "accept_level": 11,
+      "predecessor": null,
+      "condition_id": 610301,
+      "condition": {
+        "TaskConditionID": 610301,
+        "CompleteType": {
+          "value": 3,
+          "enum": "E_CustomsPass"
+        },
+        "CompleteValue1": [
+          2130101,
+          2130102,
+          2130103,
+          2130104,
+          2130105,
+          2130201,
+          2130202,
+          2130203,
+          2130204,
+          2130205,
+          2132001,
+          2132002,
+          2132003,
+          2132004,
+          2132005,
+          2132101,
+          2132102,
+          2132103,
+          2132104,
+          2132105
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": 5
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760303,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237911,
+              "name": "周活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 15,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 2000,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237907,
+              "name": "神格经验",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 1000,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": null,
+      "battlepass_exp": null,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630104,
+      "cycle": "E_Week",
+      "name": "再临试炼",
+      "description": "通关【再临试炼】任意关卡 5 次",
+      "accept_level": 16,
+      "predecessor": null,
+      "condition_id": 610302,
+      "condition": {
+        "TaskConditionID": 610302,
+        "CompleteType": {
+          "value": 3,
+          "enum": "E_CustomsPass"
+        },
+        "CompleteValue1": [
+          2131301,
+          2131302,
+          2131303,
+          2131304,
+          2130501,
+          2130502,
+          2130503,
+          2130601,
+          2130602,
+          2130603,
+          2130701,
+          2130702,
+          2130703,
+          2131201,
+          2131202,
+          2131203
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": 5
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760304,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237911,
+              "name": "周活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 15,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 2000,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237918,
+              "name": "蚀之勋章",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 25,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": null,
+      "battlepass_exp": null,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630105,
+      "cycle": "E_Week",
+      "name": "神格升级",
+      "description": "升级 5 次神格",
+      "accept_level": 1,
+      "predecessor": null,
+      "condition_id": 610701,
+      "condition": {
+        "TaskConditionID": 610701,
+        "CompleteType": {
+          "value": 7,
+          "enum": "E_HeroLevelUp"
+        },
+        "CompleteValue1": [
+          0
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": 5
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760305,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237911,
+              "name": "周活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 10,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 1500,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237907,
+              "name": "神格经验",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 1000,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": null,
+      "battlepass_exp": null,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630106,
+      "cycle": "E_Week",
+      "name": "兽主强化",
+      "description": "强化 5 次兽主",
+      "accept_level": 1,
+      "predecessor": null,
+      "condition_id": 611201,
+      "condition": {
+        "TaskConditionID": 611201,
+        "CompleteType": {
+          "value": 12,
+          "enum": "E_UpgradeEquipment"
+        },
+        "CompleteValue1": [
+          0
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": 5
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760306,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237911,
+              "name": "周活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 10,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 1500,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237906,
+              "name": "兽魂",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 500,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": null,
+      "battlepass_exp": null,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630107,
+      "cycle": "E_Week",
+      "name": "探险指令",
+      "description": "通过时空之门进行 10 次探险",
+      "accept_level": 19,
+      "predecessor": null,
+      "condition_id": 611601,
+      "condition": {
+        "TaskConditionID": 611601,
+        "CompleteType": {
+          "value": 16,
+          "enum": "E_HeroAdventure"
+        },
+        "CompleteValue1": [
+          0
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": 10
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760307,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237911,
+              "name": "周活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 10,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 1500,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237907,
+              "name": "神格经验",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 1000,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": null,
+      "battlepass_exp": null,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630108,
+      "cycle": "E_Week",
+      "name": "光之密室中的训练",
+      "description": "在光之密室中进行 10 次训练",
+      "accept_level": 19,
+      "predecessor": null,
+      "condition_id": 611701,
+      "condition": {
+        "TaskConditionID": 611701,
+        "CompleteType": {
+          "value": 17,
+          "enum": "E_HeroTrain"
+        },
+        "CompleteValue1": [
+          0
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": 10
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760308,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237911,
+              "name": "周活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 10,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 1500,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237907,
+              "name": "神格经验",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 1000,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": null,
+      "battlepass_exp": null,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630109,
+      "cycle": "E_Week",
+      "name": "心愿任务",
+      "description": "通过终端完成 12 次心愿任务",
+      "accept_level": 20,
+      "predecessor": null,
+      "condition_id": 607202,
+      "condition": {
+        "TaskConditionID": 607202,
+        "CompleteType": {
+          "value": 72,
+          "enum": "E_FavorabilityDailyTask"
+        },
+        "CompleteValue1": [
+          0
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": 12
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760309,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237911,
+              "name": "周活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 15,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 2000,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1283002,
+              "name": "朝颜雾晶",
+              "type": "E_Common",
+              "status": "RESOLVED"
+            },
+            "count": 1,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": null,
+      "battlepass_exp": null,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630110,
+      "cycle": "E_Week",
+      "name": "乌洛波罗斯",
+      "description": "通关 1 次【乌洛波罗斯】",
+      "accept_level": 22,
+      "predecessor": null,
+      "condition_id": 610303,
+      "condition": {
+        "TaskConditionID": 610303,
+        "CompleteType": {
+          "value": 3,
+          "enum": "E_CustomsPass"
+        },
+        "CompleteValue1": [
+          2110191,
+          2110192,
+          2110193,
+          2110194,
+          2110291,
+          2110292,
+          2110293,
+          2110294
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": 1
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760310,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237911,
+              "name": "周活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 15,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 2000,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237907,
+              "name": "神格经验",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 1000,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": null,
+      "battlepass_exp": null,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630111,
+      "cycle": "E_Week",
+      "name": "时序之门",
+      "description": "前往【时序之门】参与击杀 3 次任意蚀兽",
+      "accept_level": 17,
+      "predecessor": null,
+      "condition_id": 610304,
+      "condition": {
+        "TaskConditionID": 610304,
+        "CompleteType": {
+          "value": 3,
+          "enum": "E_CustomsPass"
+        },
+        "CompleteValue1": [
+          2140101,
+          2140102,
+          2140103,
+          2140104,
+          2140105,
+          2140106,
+          2140107,
+          2140108
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": 3
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760311,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237911,
+              "name": "周活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 15,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 2000,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237918,
+              "name": "蚀之勋章",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 25,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": null,
+      "battlepass_exp": null,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630112,
+      "cycle": "E_Week",
+      "name": "奇迹祈神",
+      "description": "通过【以太的奇迹位面】的任意奇迹，进行 7 次祈神",
+      "accept_level": 25,
+      "predecessor": null,
+      "condition_id": 604802,
+      "condition": {
+        "TaskConditionID": 604802,
+        "CompleteType": {
+          "value": 48,
+          "enum": "E_BaseBless"
+        },
+        "CompleteValue1": [
+          0
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": 7
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760312,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237911,
+              "name": "周活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 10,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 2000,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237840,
+              "name": "祈神符",
+              "type": "E_Common",
+              "status": "RESOLVED"
+            },
+            "count": 1,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": null,
+      "battlepass_exp": null,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630113,
+      "cycle": "E_Week",
+      "name": "浮士德的炼金实验室I",
+      "description": "在【浮士德的炼金实验室】中完成 15 次交易",
+      "accept_level": 19,
+      "predecessor": null,
+      "condition_id": 617501,
+      "condition": {
+        "TaskConditionID": 617501,
+        "CompleteType": {
+          "value": 75,
+          "enum": "E_AlchemyDealTask"
+        },
+        "CompleteValue1": [
+          0
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": 15
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760313,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237911,
+              "name": "周活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 15,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 1500,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237907,
+              "name": "神格经验",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 1000,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": null,
+      "battlepass_exp": null,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    },
+    {
+      "source_table": "DailyTask",
+      "source_id": 630114,
+      "cycle": "E_Week",
+      "name": "浮士德的炼金实验室II",
+      "description": "在【浮士德的炼金实验室】中完成 5 次任务",
+      "accept_level": 19,
+      "predecessor": null,
+      "condition_id": 617601,
+      "condition": {
+        "TaskConditionID": 617601,
+        "CompleteType": {
+          "value": 76,
+          "enum": "E_AlchemyQuestTask"
+        },
+        "CompleteValue1": [
+          0
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": 5
+      },
+      "reward": {
+        "target_table": "Gift",
+        "target_id": 760314,
+        "award_type": "E_material",
+        "entries": [
+          {
+            "item": {
+              "item_id": 1237911,
+              "name": "周活跃度",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 15,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237901,
+              "name": "金币",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 1500,
+            "weight_or_probability": null
+          },
+          {
+            "item": {
+              "item_id": 1237907,
+              "name": "神格经验",
+              "type": "E_Currency",
+              "status": "RESOLVED"
+            },
+            "count": 1000,
+            "weight_or_probability": null
+          }
+        ],
+        "status": "RESOLVED"
+      },
+      "season_reward": null,
+      "battlepass_exp": null,
+      "confidence": "CONFIRMED_CLIENT_STATIC"
+    }
+  ],
+  "other_task_tables": {
+    "TaskEndlessWeek": {
+      "source": "assets/bin/Data/a8b9629e99e4b39459bd15ff7e991ae3",
+      "count": 54,
+      "decoded": 54,
+      "fields": [
+        "EndlessWeekTaskID",
+        "TaskName",
+        "TaskDescribe",
+        "TaskConditionID",
+        "TaskConditionType",
+        "AcceptLevel",
+        "LastTask",
+        "NextTask",
+        "ChapterId",
+        "ResetType",
+        "VomLimit",
+        "GiftGroup",
+        "OrderIndex",
+        "IsShowRate"
+      ]
+    },
+    "TaskChapter": {
+      "source": "assets/bin/Data/ac12ba9b27907064fb6c3aa0daa5d7f8",
+      "count": 260,
+      "decoded": 260,
+      "fields": [
+        "ChapterTaskID",
+        "TaskDescribe",
+        "TaskConditionID",
+        "TaskConditionType",
+        "AcceptLevel",
+        "LastTask",
+        "NextTask",
+        "ChapterId",
+        "CompletionLimit",
+        "DPPoint",
+        "GiftGroup",
+        "JumpID",
+        "IfNotice"
+      ]
+    },
+    "TaskHappy": {
+      "source": "assets/bin/Data/993617543d3573f43ba4b23bba8ceee4",
+      "count": 42,
+      "decoded": 42,
+      "fields": [
+        "TaskID",
+        "TaskName",
+        "TaskDescribe",
+        "TaskConditionID",
+        "TaskGroupID",
+        "GiftGroup",
+        "IntegralAward",
+        "JumpID",
+        "IsUse"
+      ]
+    },
+    "TaskSeven": {
+      "source": "assets/bin/Data/d802988eecb6c53419263a34a28c3431",
+      "count": 75,
+      "decoded": 75,
+      "fields": [
+        "TaskID",
+        "TaskName",
+        "TaskDescribe",
+        "TaskConditionID",
+        "TaskGroupID",
+        "GiftGroup",
+        "IntegralAward",
+        "JumpID",
+        "IsUse",
+        "ActivityID"
+      ]
+    },
+    "ActivityTask": {
+      "source": "assets/bin/Data/f318c1c7f39e73e44b083fc1bae4a657",
+      "count": 314,
+      "decoded": 314,
+      "fields": [
+        "ChallengeTaskID",
+        "TaskName",
+        "TaskDescribe",
+        "TaskConditionID",
+        "LastTask",
+        "ShowLevel",
+        "TaskGroupID",
+        "GiftGroup",
+        "JumpID",
+        "IsUse",
+        "ActivityID"
+      ]
+    },
+    "FavorabilityDailyTask": {
+      "source": "assets/bin/Data/daec0a4dfd11b714086d310142fe4b22",
+      "count": 351,
+      "decoded": 351,
+      "fields": [
+        "TaskID",
+        "TaskCondition",
+        "HeroID",
+        "FavorabilityGift",
+        "GiftGroup",
+        "TaskDescribe",
+        "TargetDescribe",
+        "CompleteDescribe",
+        "JumpID",
+        "CompleteDialogueID"
+      ]
+    },
+    "TaskConditionLine": {
+      "source": "assets/bin/Data/1510c6aef8f5ed841956ca11d84948ae",
+      "count": 139,
+      "decoded": 139,
+      "fields": [
+        "AchievementConditionID",
+        "CompleteType",
+        "CompleteValue1",
+        "CompleteValue2",
+        "CompleteNum"
+      ]
+    }
+  }
+}
