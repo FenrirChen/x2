@@ -48,3 +48,7 @@ UpHeroSkill 131/132；请求 `0x38D2478`、响应 `0x3902034`。`HeroSkillDetail
 `IndexInfo` 19 行把 PlayerAttrib 字段映射到 AttribType ID，例如 Damage→162=60、Defense→163=40、HPMax→164=600、SPMax→165=3000、MoveSpeed→188=550，COR 为 12/4/120。**下发原始值**，PropertyUpdate (`0x1C228A0` 起) 会查 PlayerStage/PlayerLevelBonus 施加成长；不能将成长后的 75/46/752 再当原始值发送。取证输出 `analysis/progression/battle_base_1003.json`，可用同目录 `export_battle_base.py` 复现；`inspect_battle_base.py` 核对 AddBaseProperty 使用的名称。
 
 修复后仍 **163 passed**，测试追加检查真实入场包包含上述属性而非仅摘要。部署日志改为 `runtime/phase20/server03.err.log`，MuMu 已重启，客户端不改版、存档不重置。**已请求用户重新验证移动与伤害，收到结果前不称实战修复通过。**
+
+后续实战日志：19:58:48 第二小节 2110802 `success=True`，19:58:55 自动请求第三小节 2110803，19:59:00 收到第三小节掉落配置请求。已确认第二节成功结算与连续推进；第三、四节和最终页面仍在验证中，移动/伤害的直接体验仍以用户反馈为准。
+
+20:00:36 第三小节 2110803 也成功结算，主线持久化到 2110803；两件兽主 1240002/1240004 各 1 进入待发账本，其余固定奖励到账。用户还完成实机升星（1003 stage 1→2）与任务领取。20:01 读取的存档为账号 60、英雄 level=2/star=2、金币 12340、晶石 90、账号经验 36、神格经验 1240、日活跃 15、体力 137。余额仅为当时观察，不可据此回写；第四小节尚未验收，仍等待用户对移动/伤害体验的直接反馈。
