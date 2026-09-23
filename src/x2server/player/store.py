@@ -57,6 +57,25 @@ class PlayerStore:
         for name in ("gold", "crystal", "exp", "show", "main_chapter", "main_section"):
             if name in snapshot and (type(snapshot[name]) is not int or snapshot[name] < 0):
                 raise ValueError(f"{name} must be a nonnegative integer")
+        if "mobility" in snapshot:
+            mobility = snapshot["mobility"]
+            if not isinstance(mobility, dict) or type(mobility.get("power")) is not int or mobility["power"] < 0:
+                raise ValueError("mobility power must be a nonnegative integer")
+            for name in ("shop_power_fetch_time", "section_power_fetch_time", "dbp_next_refresh_time"):
+                if name in mobility and (type(mobility[name]) is not int or mobility[name] < 0):
+                    raise ValueError(f"mobility {name} must be a nonnegative integer")
+        if "heroes" in snapshot:
+            heroes = snapshot["heroes"]
+            if not isinstance(heroes, list):
+                raise ValueError("heroes must be a list")
+            ids = set()
+            for hero in heroes:
+                if not isinstance(hero, dict) or any(type(hero.get(name)) is not int or hero[name] < minimum
+                        for name, minimum in (("id", 1), ("state", 0), ("level", 1), ("star", 0))):
+                    raise ValueError("hero identity, state, level and star must be nonnegative integers")
+                if hero["id"] in ids:
+                    raise ValueError("duplicate hero id")
+                ids.add(hero["id"])
         encoded = json.dumps(snapshot, ensure_ascii=False, allow_nan=False, sort_keys=True)
         with self.db:
             cursor = self.db.execute(

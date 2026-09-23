@@ -98,10 +98,29 @@ BASE_INFO = ProtoSchema("BaseInfoProto", (
     ProtoField(33, "MainChapter", FieldKind.INT32),
     ProtoField(34, "MainSection", FieldKind.INT32),
 ))
-PLAYER_DATA = ProtoSchema("PlayerDataProto", (ProtoField(1, "BaseInfo", FieldKind.MESSAGE),))
+MOBILITY = ProtoSchema("MobilityProto", (
+    ProtoField(1, "Power", FieldKind.INT32),
+    ProtoField(2, "ShopPowerFetchTime", FieldKind.INT32),
+    ProtoField(3, "SectionPowerFetchTime", FieldKind.INT32),
+    ProtoField(4, "DBPNextRefreshTime", FieldKind.INT32),
+))
+PLAYER_DATA = ProtoSchema("PlayerDataProto", (
+    ProtoField(1, "BaseInfo", FieldKind.MESSAGE),
+    ProtoField(2, "Mobility", FieldKind.MESSAGE),
+))
+HERO_DATA = ProtoSchema("HeroData", (
+    ProtoField(1, "id", FieldKind.INT32),
+    ProtoField(2, "state", FieldKind.INT32),
+    ProtoField(3, "level", FieldKind.INT32),
+    ProtoField(4, "star", FieldKind.INT32),
+    ProtoField(7, "exp", FieldKind.INT32),
+))
+HERO_ALL = ProtoSchema("L2C_HeroAll", (ProtoField(1, "heros", FieldKind.MESSAGE, repeated=True),))
 STRING_PAIR = ProtoSchema("KeyValuePair_String_String", (
     ProtoField(1, "key", FieldKind.STRING), ProtoField(2, "val", FieldKind.STRING)))
 CORE_SCHEMAS[PLAYER_DATA.name] = PLAYER_DATA
+CORE_SCHEMAS[HERO_ALL.name] = HERO_ALL
+CORE_SCHEMAS["C2L_HeroAll"] = ProtoSchema("C2L_HeroAll", ())
 RECONNECT = ProtoSchema("C2L_ReConnect", (
     ProtoField(1, "id", FieldKind.INT64), ProtoField(2, "token", FieldKind.STRING),
     ProtoField(3, "deviceid", FieldKind.STRING), ProtoField(4, "submitInfo", FieldKind.MESSAGE),

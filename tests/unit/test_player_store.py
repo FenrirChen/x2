@@ -34,3 +34,20 @@ def test_future_database_version_is_not_overwritten(tmp_path):
         PlayerStore(path)
     with sqlite3.connect(path) as db:
         assert db.execute("PRAGMA user_version").fetchone()[0] == 99
+
+
+def test_hero_mobility_snapshot_survives_restart(tmp_path):
+    path = tmp_path / "player.db"
+    store = PlayerStore(path)
+    player = store.login("lab", 1, 100)
+    saved = dict(player["snapshot"], level=60,
+        heroes=[{"id": 1003, "state": 2, "level": 1, "star": 1}],
+        mobility={"power": 149})
+    store.save_snapshot(1, saved, player["revision"])
+    store.close()
+    store = PlayerStore(path)
+    try:
+        assert store.login("lab", 1, 200)["snapshot"] == saved
+        assert store.get(1)["login_count"] == 2
+    finally:
+        store.close()

@@ -69,6 +69,8 @@ CORE_MESSAGE_REGISTRY = MessageRegistry(
             MessageEntry("C2L_" + name, request_id, Direction.CLIENT_TO_SERVER),
             MessageEntry("L2C_" + name, response_id, Direction.SERVER_TO_CLIENT))),
         MessageEntry("L2C_Login", 79, Direction.SERVER_TO_CLIENT),
+        MessageEntry("C2L_HeroAll", 546, Direction.CLIENT_TO_SERVER),
+        MessageEntry("L2C_HeroAll", 547, Direction.SERVER_TO_CLIENT),
         MessageEntry("PlayerDataProto", 1000, Direction.SERVER_TO_CLIENT),
         MessageEntry("C2L_ReConnect", 337, Direction.CLIENT_TO_SERVER),
         MessageEntry("L2C_ReConnect", 338, Direction.SERVER_TO_CLIENT),

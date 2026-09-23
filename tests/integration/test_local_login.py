@@ -5,10 +5,11 @@ from urllib.parse import urlencode
 from x2server.bootstrap.local_identity import LocalIdentityService
 from x2server.bootstrap.models import RecoveredBootstrapContract
 from x2server.config.settings import Settings
-from x2server.messages.core import CORE_SCHEMAS, BASE_INFO, PLAYER_DATA, STRING_PAIR
+from x2server.messages.core import CORE_SCHEMAS, BASE_INFO, PLAYER_DATA, MOBILITY, HERO_ALL, HERO_DATA, STRING_PAIR
 from x2server.network.dispatcher import Dispatcher
 from x2server.network.server import X2TCPServer
 from x2server.player.login import LoginService
+from x2server.player.hero import HeroService
 from x2server.player.lobby import LobbyService
 from x2server.messages.lobby import LOBBY_IDS
 from x2server.player.store import PlayerStore
@@ -32,7 +33,8 @@ def test_login_push_heartbeat_reconnect_and_authentication(tmp_path):
         identity, token = identity_and_token()
         store = PlayerStore(tmp_path / "player.db")
         service = LoginService(identity, store)
-        server = X2TCPServer(Settings(tcp_port=0), Dispatcher({**LobbyService().handlers(), "C2L_Login": service.login,
+        server = X2TCPServer(Settings(tcp_port=0), Dispatcher({**LobbyService().handlers(),
+            "C2L_HeroAll": HeroService(store).query_all, "C2L_Login": service.login,
             "C2L_ReConnect": service.reconnect, "C2L_ServerTableConfig": service.server_config}))
         await server.start()
         writers = []
@@ -110,6 +112,29 @@ def test_login_push_heartbeat_reconnect_and_authentication(tmp_path):
             assert store.get(1)["login_count"] == 1
             send(writer, "C2L_ServerTableConfig", {}, 10, "spoofed")
             assert await asyncio.wait_for(reader.read(1), 2) == b""
+
+            current = store.get(1)
+            saved = dict(current["snapshot"], level=60, main_chapter=2010000,
+                main_section=2110001, heroes=[{"id": 1003, "state": 2, "level": 1, "star": 1}],
+                mobility={"power": 149})
+            store.save_snapshot(1, saved, current["revision"])
+            reader, writer = await connect()
+            send(writer, "C2L_Login", {"id": 1, "token": token}, 11)
+            login, push = await read(reader, 2)
+            login_values = CORE_SCHEMAS["L2C_Login"].decode(login.body)
+            hero = HERO_DATA.decode(HERO_ALL.decode(login_values["heroAll"])["heros"][0])
+            assert hero["id"] == 1003 and hero["state"] == 2
+            player_data = PLAYER_DATA.decode(push.body)
+            assert MOBILITY.decode(player_data["Mobility"])["Power"] == 149
+            base = BASE_INFO.decode(player_data["BaseInfo"])
+            assert (base["Level"], base["MainChapter"], base["MainSection"]) == (60, 2010000, 2110001)
+            send(writer, "C2L_HeroAll", {}, 12, login.header.session_id)
+            reply, = await read(reader, 1)
+            assert reply.message_id == 547 and reply.header.request_id == 12
+            assert HERO_ALL.decode(reply.body) == HERO_ALL.decode(login_values["heroAll"])
+            writer.close()
+            await writer.wait_closed()
+            assert store.get(1)["snapshot"] == saved
 
             # Recreating identity invalidates old tokens; player data remains durable.
             replacement, _ = identity_and_token()

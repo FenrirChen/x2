@@ -15,6 +15,7 @@ from x2server.network.server import X2TCPServer
 from x2server.player.store import PlayerStore
 from x2server.player.login import LoginService
 from x2server.player.lobby import LobbyService
+from x2server.player.hero import HeroService
 
 
 async def run(database: Path, seconds: float) -> None:
@@ -29,7 +30,8 @@ async def run(database: Path, seconds: float) -> None:
     login = LoginService(identity, store)
     http = BootstrapHTTPServer("127.0.0.1", 18080, identity)
     tcp = X2TCPServer(Settings(tcp_host="127.0.0.1", tcp_port=29000, read_timeout=120),
-        Dispatcher({**LobbyService().handlers(), "C2L_Login": login.login, "C2L_ReConnect": login.reconnect,
+        Dispatcher({**LobbyService().handlers(), "C2L_HeroAll": HeroService(store).query_all,
+                    "C2L_Login": login.login, "C2L_ReConnect": login.reconnect,
                     "C2L_ServerTableConfig": login.server_config}))
     try:
         await http.start()

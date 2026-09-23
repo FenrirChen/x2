@@ -5,11 +5,12 @@ import time
 from typing import Any
 
 from x2server.bootstrap.local_identity import LocalIdentityService
-from x2server.messages.core import C2L_LOGIN, BASE_INFO, RECONNECT, STRING_PAIR
+from x2server.messages.core import C2L_LOGIN, BASE_INFO, MOBILITY, RECONNECT, STRING_PAIR
 from x2server.network.dispatcher import DispatchContext, OutboundMessage
 from x2server.protocol.errors import ProtocolError
 from x2server.protocol.types import DecodedPacket
 from .store import PlayerStore
+from .hero import encode_hero_all
 
 LOGGER = logging.getLogger("x2.login")
 
@@ -31,9 +32,10 @@ class LoginService:
                   "startDataVersion": 0, "serverTime": now, "isCreateRole": player["login_count"] == 1,
                   "logicCode": 0, "sgroupId": "1"}
         # Explicit empty collections for the first controlled compatibility probe.
-        for name in ("heroAll", "itemAll", "noticeAll", "cardPool", "heroSkinAll", "growthBase",
+        for name in ("itemAll", "noticeAll", "cardPool", "heroSkinAll", "growthBase",
                      "rechargeNoticeAll", "equipAll", "taskDaily", "taskWeekly", "taskChallenge", "limitTaskChallenge"):
             result[name] = b""
+        result["heroAll"] = encode_hero_all(player["snapshot"])
         LOGGER.info("authenticated login response prepared player=%s login_count=%s",
                     player["id"], player["login_count"])
         push = self.snapshot_push(player)
@@ -48,7 +50,16 @@ class LoginService:
             "Exp": snapshot.get("exp", 0),
             "MainChapter": snapshot.get("main_chapter", 0),
             "MainSection": snapshot.get("main_section", 0)})
-        return OutboundMessage("PlayerDataProto", {"BaseInfo": base}, data_version=1)
+        values = {"BaseInfo": base}
+        if "mobility" in snapshot:
+            mobility = snapshot["mobility"]
+            values["Mobility"] = MOBILITY.encode({
+                "Power": mobility["power"],
+                "ShopPowerFetchTime": mobility.get("shop_power_fetch_time", 0),
+                "SectionPowerFetchTime": mobility.get("section_power_fetch_time", 0),
+                "DBPNextRefreshTime": mobility.get("dbp_next_refresh_time", 0),
+            })
+        return OutboundMessage("PlayerDataProto", values, data_version=1)
 
     async def reconnect(self, context: DispatchContext, packet: DecodedPacket) -> OutboundMessage:
         values = RECONNECT.decode(packet.body)

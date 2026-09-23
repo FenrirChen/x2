@@ -1,0 +1,24 @@
+"""Persisted hero read model for login and HeroAll query."""
+
+from x2server.messages.core import HERO_ALL, HERO_DATA
+from x2server.network.dispatcher import DispatchContext, OutboundMessage
+from x2server.protocol.errors import ProtocolError
+from x2server.protocol.types import DecodedPacket
+
+from .store import PlayerStore
+
+
+def encode_hero_all(snapshot: dict) -> bytes:
+    return HERO_ALL.encode({"heros": [HERO_DATA.encode(hero) for hero in snapshot.get("heroes", [])]})
+
+
+class HeroService:
+    def __init__(self, store: PlayerStore) -> None:
+        self.store = store
+
+    async def query_all(self, context: DispatchContext, packet: DecodedPacket) -> OutboundMessage:
+        if context.session.player_id is None:
+            raise ProtocolError("hero query requested before login")
+        snapshot = self.store.get(context.session.player_id)["snapshot"]
+        return OutboundMessage("L2C_HeroAll", {"heros": [HERO_DATA.encode(hero)
+            for hero in snapshot.get("heroes", [])]})
