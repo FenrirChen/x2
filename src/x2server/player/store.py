@@ -54,7 +54,7 @@ class PlayerStore:
             raise ValueError("nickname must be nonempty")
         if type(snapshot.get("level")) is not int or snapshot["level"] < 1:
             raise ValueError("level must be positive")
-        for name in ("gold", "crystal", "exp", "show"):
+        for name in ("gold", "crystal", "exp", "show", "main_chapter", "main_section"):
             if name in snapshot and (type(snapshot[name]) is not int or snapshot[name] < 0):
                 raise ValueError(f"{name} must be a nonnegative integer")
         encoded = json.dumps(snapshot, ensure_ascii=False, allow_nan=False, sort_keys=True)

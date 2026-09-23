@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from x2server.messages.lobby import LOBBY_IDS
+
 from dataclasses import dataclass
 from enum import Enum
 
@@ -63,6 +65,9 @@ class MessageRegistry:
 CORE_MESSAGE_REGISTRY = MessageRegistry(
     (
         MessageEntry("C2L_Login", 54, Direction.CLIENT_TO_SERVER),
+        *(entry for name, request_id, response_id in LOBBY_IDS for entry in (
+            MessageEntry("C2L_" + name, request_id, Direction.CLIENT_TO_SERVER),
+            MessageEntry("L2C_" + name, response_id, Direction.SERVER_TO_CLIENT))),
         MessageEntry("L2C_Login", 79, Direction.SERVER_TO_CLIENT),
         MessageEntry("PlayerDataProto", 1000, Direction.SERVER_TO_CLIENT),
         MessageEntry("C2L_ReConnect", 337, Direction.CLIENT_TO_SERVER),

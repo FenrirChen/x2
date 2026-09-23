@@ -45,7 +45,9 @@ class LoginService:
         base = BASE_INFO.encode({"Id": player["id"], "NickName": snapshot["nickname"],
             "Level": snapshot["level"], "Show": snapshot.get("show", 1003),
             "Gold": snapshot.get("gold", 0), "Crystal": snapshot.get("crystal", 0),
-            "Exp": snapshot.get("exp", 0)})
+            "Exp": snapshot.get("exp", 0),
+            "MainChapter": snapshot.get("main_chapter", 0),
+            "MainSection": snapshot.get("main_section", 0)})
         return OutboundMessage("PlayerDataProto", {"BaseInfo": base}, data_version=1)
 
     async def reconnect(self, context: DispatchContext, packet: DecodedPacket) -> OutboundMessage:

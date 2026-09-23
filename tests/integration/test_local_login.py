@@ -9,6 +9,8 @@ from x2server.messages.core import CORE_SCHEMAS, BASE_INFO, PLAYER_DATA, STRING_
 from x2server.network.dispatcher import Dispatcher
 from x2server.network.server import X2TCPServer
 from x2server.player.login import LoginService
+from x2server.player.lobby import LobbyService
+from x2server.messages.lobby import LOBBY_IDS
 from x2server.player.store import PlayerStore
 from x2server.protocol.codec import ProtocolCodec
 from x2server.protocol.framing import PacketStreamDecoder
@@ -30,7 +32,7 @@ def test_login_push_heartbeat_reconnect_and_authentication(tmp_path):
         identity, token = identity_and_token()
         store = PlayerStore(tmp_path / "player.db")
         service = LoginService(identity, store)
-        server = X2TCPServer(Settings(tcp_port=0), Dispatcher({"C2L_Login": service.login,
+        server = X2TCPServer(Settings(tcp_port=0), Dispatcher({**LobbyService().handlers(), "C2L_Login": service.login,
             "C2L_ReConnect": service.reconnect, "C2L_ServerTableConfig": service.server_config}))
         await server.start()
         writers = []
@@ -55,6 +57,9 @@ def test_login_push_heartbeat_reconnect_and_authentication(tmp_path):
 
         try:
             reader, writer = await connect()
+            send(writer, "C2L_SystemInfo", {})
+            assert await asyncio.wait_for(reader.read(1), 2) == b""
+            reader, writer = await connect()
             send(writer, "C2L_Login", {"id": 1, "token": "wrong"})
             assert await asyncio.wait_for(reader.read(1), 2) == b""
             assert store.db.execute("SELECT COUNT(*) FROM players").fetchone()[0] == 0
@@ -77,6 +82,24 @@ def test_login_push_heartbeat_reconnect_and_authentication(tmp_path):
             assert config.header.session_id == session
             config_values = CORE_SCHEMAS["L2C_ServerTableConfig"].decode(config.body)
             assert STRING_PAIR.decode(config_values["keyVal"][0]) == {"key": "PowerBuyNum", "val": "120"}
+            before_queries = store.get(1)
+            for index, (name, _, response_id) in enumerate(LOBBY_IDS, 100):
+                request = {"type": 3, "chapterId": 1} if name == "GameTask" else {}
+                if name == "ReceiveGiftRew":
+                    request = {"type": 2}
+                if name == "AccountBuffData":
+                    request = {"buffId": [1, 2]}
+                send(writer, "C2L_" + name, request, index, session)
+                reply, = await read(reader, 1)
+                assert reply.message_id == response_id and reply.header.request_id == index
+                decoded = CORE_SCHEMAS["L2C_" + name].decode(reply.body)
+                if name == "GameTask":
+                    assert decoded["type"] == 3 and decoded["chapterId"] == 1
+                if name == "ReceiveGiftRew":
+                    assert decoded["code"] == 13 and "rewardData" not in decoded
+                if name == "AccountBuffData":
+                    assert decoded["buffId"] == [1, 2]
+            assert store.get(1) == before_queries  # Queries/denied gifts cannot grant anything.
             writer.close()
             await writer.wait_closed()
 

@@ -1,0 +1,51 @@
+"""Explicit local empty-state queries; no purchases, rewards or progression mutations."""
+import logging
+import time
+
+from x2server.messages.lobby import LOBBY_IDS, LOBBY_SCHEMAS
+from x2server.network.dispatcher import DispatchContext, OutboundMessage
+from x2server.protocol.errors import ProtocolError
+from x2server.protocol.registry import CORE_MESSAGE_REGISTRY
+from x2server.protocol.types import DecodedPacket
+
+
+class LobbyService:
+    def handlers(self):
+        return {"C2L_" + name: self.query for name, _, _ in LOBBY_IDS}
+
+    async def query(self, context: DispatchContext, packet: DecodedPacket) -> OutboundMessage:
+        if context.session.player_id is None:
+            raise ProtocolError("lobby query requested before login")
+        name = CORE_MESSAGE_REGISTRY.name_for(packet.message_id)
+        request = LOBBY_SCHEMAS[name].decode(packet.body)
+        # These describe a dedicated local account with no online activities.
+        states = {
+            "C2L_QueryTelInfo": {"code": 10, "telNumber": "", "lastBindTime": 0},
+            "C2L_SeasonIcon": {"code": 10, "putOnHeadIcon": 0, "putOnSceneIcon": 0},
+            "C2L_QueryItemLimitTime": {"code": 10},
+            "C2L_QueryDivination": {"id": 0, "blessing": b"", "checkIn": 0, "lastDivinationTime": 0, "validDate": 0},
+            "C2L_QueryNotic": {"code": 10, "version": 0},
+            "C2L_NoticPushInfo": {"code": 10},
+            "C2L_QueryReturnInfo": {"code": 10, "hasReturn": False, "hasReciveReward": False, "hasDraw": False},
+            "C2L_SystemInfo": {"code": 10, "serverTime": int(time.time())},
+            "C2L_GameTask": {"code": 10, "type": request.get("type", 0), "chapterId": request.get("chapterId", 0)},
+            "C2L_EntryidStatus": {"code": 10},
+            "C2L_EquipAll": {},
+            "C2L_QueryMission": {},
+            "C2L_QueryCollectionAward": {},
+            "C2L_QueryActivity": {"code": 10},
+            "C2L_QueryWorldBossOpenTime": {"code": 208},  # E_ACTIVITY_REAL_NOT_OPEN
+            "C2L_QueryActivityDrawInfo": {"code": 10},
+            "C2L_QueryStarPrivilegeReward": {"code": 10},
+            "C2L_QueryStarPrivilegeInfo": {"code": 10, "id": 0, "buyTime": 0},
+            "C2L_QueryIllustrationData": {"code": 10},
+            "C2L_AccountBuffAutoStop": {"code": 10},  # No active local buffs to stop.
+            "C2L_ReceiveGiftRew": {"code": 13, "type": request.get("type", 0)},  # Unsupported grant: E_ERROR_OPT.
+            "C2L_MoonEquip": {"code": 10},
+            "C2L_QuerySimpleActivity": {"code": 208},
+            "C2L_QuerySharedMessage": {"code": 10},
+            "C2L_AccountBuffData": {"code": 10, "buffId": request.get("buffId", [])},
+            "C2L_ButtonClick": {"code": 10},  # Acknowledge telemetry only; no guide/reward mutation.
+        }
+        logging.getLogger("x2.lobby").info("local empty-state query %s", name)
+        return OutboundMessage(name.replace("C2L_", "L2C_", 1), states[name])
