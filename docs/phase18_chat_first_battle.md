@@ -28,16 +28,23 @@
 ## Remaining work / current probe
 
 - FightDropData **264/266** was requested during battle; its missing response
-  triggered a **main game** reconnect. The new build explicitly returns unsupported
-  code 13; no authoritative drop ledger exists and drops are not verified.
+  triggered a **main game** reconnect. Returning unsupported code 13 produced a
+  modal error in server04. The follow-up implements an explicit empty server-drop
+  pool for bounded practice entries only, reusing the entry identity; ordinary
+  drops, reward rules and scripted client-side loot are not verified.
 - Skipping the post-combat story sent CheckoutMainMissionSign **887** and
   FightKillInfo **316**. Added a local practice receipt for 887 -> 152, with
   duplicate-result replay and rejection of conflicting submissions. It closes
   the latest matching entry within one hour, trusting the local completion claim;
   it does not verify combat replay, grant rewards or advance the chapter.
-  Kill/task accounting 316 -> 318 explicitly returns unsupported code 13.
-  These responses are deployed in server04 but **client settlement UI validation
-  is pending another user-played battle**. Do not report it as verified yet.
+  Kill report 316 -> 318 acknowledges matching practice-entry telemetry only;
+  it does not update tasks or grant rewards.
+  These responses were verified in server06 after a second user-played battle:
+  at 16:18:15 the successful receipt was accepted, followed by QueryMission and
+  AccountBuffData. The client displayed a star-map transition, attempted the next
+  section **2110802**, and returned to the chapter page after that unsupported
+  entry was rejected. Hall navigation then succeeded. This validates a practice
+  receipt and exit from this section, **not a full chapter/reward result screen**.
   There is no L2C_CheckoutMainMissionSign; the existing result message is 152.
 - CollegeModule.RefreshTrainRedDot still throws during hall initialization at
   level 60 because the recovered growth-base snapshot is incomplete.
@@ -51,10 +58,16 @@
 
 - `runtime/phase18/server03.err.log`, `cold-fight-later.png`, `playfield.png`,
   `move-skill.png`, `user-completed.png`, `checkout.png` retain local evidence.
+- Final validation: `server06.err.log`, `user-finish06.png`, `result06.png`,
+  `after-result06.png`, `final-hall.png`. No further game reconnect was logged
+  between entry at 16:15:33 and receipt at 16:18:15. Empty drop query returned
+  successfully at 16:15:52; no authoritative loot distribution is claimed.
 - SQLite backup: `runtime/phase18/before-battle.sqlite3`, created before the
   battle table. Never overwrite. Active DB remains `runtime/phase14/player.sqlite3`.
 - Player remains level 60, power 149. No APK replacement, data wipe or Reference
   modification. Visible emulator remains available for manual play.
+- After returning to the hall, the entire player snapshot matched the pre-battle
+  backup; one practice receipt was stored. Level 60 / power 149 were also visible.
 - Tests: **147 passed**, including chat framing/heartbeat, entry replay and
   practice receipt replay/conflict protection with unchanged player snapshot.
 - Phase 17 records an earlier failed startup attempt; its "no changes" statement

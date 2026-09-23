@@ -1,6 +1,6 @@
-"""Bounded first-battle compatibility service; rewards/checkout remain separate.
+"""Bounded first-battle practice service; economy/progression remain separate.
 
-Entry probes are free until checkout is supported. They never mutate player
+Entry probes and their practice receipts are free. They never mutate player
 level, inventory, chapter completion or mobility. Sessions are server-generated
 and persisted, so retransmitting an identical request cannot mint another run.
 """
@@ -10,7 +10,7 @@ import secrets
 import time
 import uuid
 
-from x2server.messages.battle import BATTLE_SCHEMAS, CHECKOUT, PROFILE_HERO, HERO_SKILL, HERO_ATTR, FIGHT_HERO, FIGHT_DATA, FIGHT_PROFILE
+from x2server.messages.battle import BATTLE_SCHEMAS, CHECKOUT, DROP_DATA, PROFILE_HERO, HERO_SKILL, HERO_ATTR, FIGHT_HERO, FIGHT_DATA, FIGHT_PROFILE
 from x2server.network.dispatcher import OutboundMessage
 from x2server.protocol.errors import ProtocolError
 
@@ -39,8 +39,16 @@ class BattleService:
     async def kill_info(self, context, packet):
         if context.session.player_id is None:
             raise ProtocolError("kill info before login")
-        # Task/kill reward accounting is not implemented.
-        return OutboundMessage("L2C_FightKillInfo", {"code": 13})
+        request = BATTLE_SCHEMAS["C2L_FightKillInfo"].decode(packet.body)
+        section = request.get("sectionId", 0)
+        row = self.store.db.execute("SELECT response, created_at FROM battle_entries WHERE player_id=? ORDER BY rowid DESC LIMIT 1",
+                                    (context.session.player_id,)).fetchone()
+        accepted = bool(row and int(time.time()) - row["created_at"] <= 3600
+            and FIGHT_DATA.decode(BATTLE_SCHEMAS["L2C_FightData"].decode(row["response"])["data"])["missionId"] == section)
+        # Receipt of practice telemetry only; no tasks or rewards are updated.
+        logging.getLogger("x2.battle").info("practice kill report section=%s accepted=%s digest=%s",
+            section, accepted, hashlib.sha256(packet.body).hexdigest())
+        return OutboundMessage("L2C_FightKillInfo", {"code": 10 if accepted else 13})
 
     async def checkout(self, context, packet):
         """Close a local free-entry probe; never grant rewards or progression.
@@ -92,10 +100,23 @@ class BattleService:
         if context.session.player_id is None:
             raise ProtocolError("battle drop requested before login")
         request = BATTLE_SCHEMAS["C2L_FightDropData"].decode(packet.body)
-        logging.getLogger("x2.battle").info("unsupported drop query section=%s", request.get("missionId", 0))
-        # No authoritative drop ledger exists yet. Respond explicitly rather
-        # than leave a request pending until the game reconnects, or invent loot.
-        return OutboundMessage("L2C_FightDropData", {"result": 13})
+        section = request.get("missionId", 0)
+        reject = OutboundMessage("L2C_FightDropData", {"result": 13})
+        if (section not in self.SECTIONS or request.get("chapterId") != self.SECTIONS[section][0]
+                or request.get("expertMode")):
+            return reject
+        row = self.store.db.execute("SELECT response, created_at FROM battle_entries WHERE player_id=? ORDER BY rowid DESC LIMIT 1",
+                                    (context.session.player_id,)).fetchone()
+        if not row or int(time.time()) - row["created_at"] > 3600:
+            return reject
+        entry = BATTLE_SCHEMAS["L2C_FightData"].decode(row["response"])
+        if FIGHT_DATA.decode(entry["data"])["missionId"] != section:
+            return reject
+        # Explicit local practice rule: no server drops. The receiver constructs
+        # its list before decoding, so an empty repeated field remains valid.
+        logging.getLogger("x2.battle").info("practice empty drop query section=%s", section)
+        return OutboundMessage("L2C_FightDropData", {"result": 10, "uuid": entry["uuid"],
+            "sign": entry["sign"], "data": DROP_DATA.encode({"missionId": section})})
 
     async def clear_profile(self, context, packet):
         if context.session.player_id is None:

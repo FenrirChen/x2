@@ -2,7 +2,7 @@ import asyncio
 
 import pytest
 
-from x2server.messages.battle import CHECKOUT, PROFILE_HERO, FIGHT_DATA, FIGHT_HERO, HERO_ATTR
+from x2server.messages.battle import CHECKOUT, DROP_DATA, PROFILE_HERO, FIGHT_DATA, FIGHT_HERO, HERO_ATTR
 from x2server.network.dispatcher import DispatchContext
 from x2server.network.session import SessionState
 from x2server.player.battle import BattleService
@@ -43,6 +43,15 @@ def test_entry_replay_persistence_and_no_economy_changes(tmp_path):
     service = BattleService(store)
     assert asyncio.run(service.enter(context, packet(request()))).values == first.values
     assert store.db.execute("SELECT COUNT(*) FROM battle_entries").fetchone()[0] == 1
+    drop_packet = packet({"missionId": 2110801, "chapterId": 2010100}, name="C2L_FightDropData")
+    drops = asyncio.run(service.drop_data(context, drop_packet))
+    assert drops.values["result"] == 10
+    assert DROP_DATA.decode(drops.values["data"]) == {"missionId": 2110801}
+    assert asyncio.run(service.drop_data(context, drop_packet)).values == drops.values
+    kill = packet({"sectionId": 2110801}, name="C2L_FightKillInfo")
+    assert asyncio.run(service.kill_info(context, kill)).values == {"code": 10}
+    invalid_kill = packet({"sectionId": 999}, name="C2L_FightKillInfo")
+    assert asyncio.run(service.kill_info(context, invalid_kill)).values == {"code": 13}
     for key, value in (("missionId", 999), ("sceneId", 2210001), ("chapter", 2010000),
                        ("expertMode", True), ("checkGm", True), ("isFromProfile", True),
                        ("heros", []), ("heros", [PROFILE_HERO.encode({"heroId": 1004})])):
