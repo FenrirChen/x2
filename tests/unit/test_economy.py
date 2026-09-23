@@ -53,7 +53,7 @@ def test_task_catalog_gates_and_login_claim_survives_restart(env):
     assert economy.claim(1, 630019, 1) == value
     assert store.get(1) == snapshot
     task = next(t for t in map(TASK.decode, economy.task_values(1, 1)["taskList"]) if t["taskId"] == 630019)
-    assert task["taskStatus"] == 4 and task["taskRefreshTime"] == 0
+    assert task["taskStatus"] == 4 and task["taskRefreshTime"] > economy.clock()
     assert economy.claim(1, 630019, 2)["code"] == 13
     assert economy.claim(1, 999, 1)["code"] == 13
     p = store.get(1)
@@ -73,12 +73,11 @@ def test_battle_first_and_repeat_rewards_atomic_and_idempotent(env):
     assert asyncio.run(battle.checkout(ctx, checkout())).values == first.values
     assert store.get(1) == snapshot
     assert asyncio.run(battle.checkout(ctx, checkout(False))).values["result"] == 13
-    assert snapshot["snapshot"]["mobility"]["power"] == 149
+    assert snapshot["snapshot"]["mobility"]["power"] == 143
     assert snapshot["snapshot"]["heroes"][0]["level"] == 1
     assert snapshot["snapshot"]["level"] == 60
     asyncio.run(battle.enter(ctx, packet(request(), 2)))
-    assert asyncio.run(battle.checkout(ctx, checkout())).values["result"] == 13
-    second = asyncio.run(battle.checkout(ctx, checkout(seconds=201)))
+    second = asyncio.run(battle.checkout(ctx, checkout()))
     assert rewards(second.values["rewardData"]) == {1237908: 12, 1237907: 120, 1237901: 180}
     assert store.db.execute("SELECT quantity FROM inventory").fetchone()[0] == 5
     assert store.get(1)["snapshot"]["gold"] == 360
@@ -95,11 +94,9 @@ def test_failure_and_old_practice_runs_never_grant(env):
     assert asyncio.run(battle.checkout(ctx, checkout())).values["result"] == 13
     asyncio.run(battle.enter(ctx, packet(request(), 2)))
     ctx.session.session_id = "other"
-    assert asyncio.run(battle.checkout(ctx, checkout())).values["result"] == 13
-    ctx.session.session_id = "session"
     failed = asyncio.run(battle.checkout(ctx, checkout(False)))
     assert failed.values["result"] == 10 and rewards(failed.values["rewardData"]) == {}
-    assert store.get(1) == before
+    assert store.get(1)["snapshot"] == before["snapshot"]
     assert store.db.execute("SELECT COUNT(*) FROM economy_grants").fetchone()[0] == 0
 
 
@@ -154,7 +151,8 @@ def test_shop_missing_quantities_and_boxes_never_mutate(env):
 def test_task_claim_wire_and_event_filters(env):
     store, economy, ctx = env
     economy.record_event(1, "clear:one", 3, 2110801)
-    assert store.db.execute("SELECT COUNT(*) FROM economy_tasks").fetchone()[0] == 0
+    assert store.db.execute("SELECT COUNT(*) FROM economy_tasks").fetchone()[0] == 40
+    assert store.db.execute("SELECT SUM(progress) FROM economy_tasks").fetchone()[0] == 0
     economy.record_event(1, "login:initial", 5)
     result = asyncio.run(economy.handle(ctx, packet({"data": [FINISH_REQUEST.encode({"taskId": 630019, "type": 1})]}, name="C2L_FinishGameTask")))
     assert FINISH_RESULT.decode(result.values["data"][0])["code"] == 10

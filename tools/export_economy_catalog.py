@@ -11,7 +11,13 @@ from targeted_probe import data as extra
 
 def export():
     audit = json.loads((ROOT / "analysis/economy/task_tables.json").read_text(encoding="utf-8"))
-    sections = [s for s in base["SectionTable"] if s["SectionID"] in (2110001, 2110801, 2110802, 2110803, 2110804)]
+    by_id = {s["SectionID"]: s for s in base["SectionTable"]}
+    sections, seen = [], set()
+    next_id = 2110001
+    while next_id in by_id and next_id not in seen:
+        seen.add(next_id)
+        sections.append(by_id[next_id])
+        next_id = by_id[next_id].get("NextSectionID", 0)
     tasks = extra["DailyTask"]
     control = extra["TaskControl"][0]
     groups = set(control["DailyGiftGroup"] + control["WeeklyGiftGroup"])
@@ -24,7 +30,9 @@ def export():
     needed_items = {i for g in gifts for i in g.get("GiftValue", [])}
     candidates = [i for i in base["Item"] if i.get("QuickBuyID")]
     needed_items.update(i["ItemID"] for i in candidates)
-    # Material metadata permits a separate local shop/drop configuration later.
+    # Confirmed progression material metadata; no synthetic shop/drop rules.
+    materials = json.loads((ROOT / "analysis/progression/material_links.json").read_text(encoding="utf-8"))
+    needed_items.update(r["material_item_id"] for r in materials["rows"])
     needed_items.update(range(1237900, 1237930))
     catalog = {"provenance": "CONFIRMED_CLIENT_STATIC; runtime policies are separate",
         "sections": sections, "tasks": tasks, "task_conditions": {

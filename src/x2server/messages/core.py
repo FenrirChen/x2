@@ -9,6 +9,7 @@ from x2server.messages.lobby import LOBBY_SCHEMAS
 from x2server.messages.chat import CHAT_SCHEMAS
 from x2server.messages.battle import BATTLE_SCHEMAS
 from x2server.messages.economy import ECONOMY_SCHEMAS
+from x2server.messages.progression import PROGRESSION_SCHEMAS
 
 C2L_LOGIN = ProtoSchema(
     "C2L_Login",
@@ -90,6 +91,7 @@ CORE_SCHEMAS.update(LOBBY_SCHEMAS)
 CORE_SCHEMAS.update(CHAT_SCHEMAS)
 CORE_SCHEMAS.update(BATTLE_SCHEMAS)
 CORE_SCHEMAS.update(ECONOMY_SCHEMAS)
+CORE_SCHEMAS.update(PROGRESSION_SCHEMAS)
 
 # CONFIRMED: MessageReflector registers PlayerDataProto as 1000, independently
 # of its generated get_PID() returning 0. BaseInfo Serialize RVA 0x30A1348.
@@ -124,6 +126,7 @@ HERO_DATA = ProtoSchema("HeroData", (
     ProtoField(4, "star", FieldKind.INT32),
     ProtoField(5, "godEquip", FieldKind.MESSAGE),
     ProtoField(7, "exp", FieldKind.INT32),
+    ProtoField(8, "heroSkills", FieldKind.MESSAGE, repeated=True),
 ))
 HERO_ALL = ProtoSchema("L2C_HeroAll", (ProtoField(1, "heros", FieldKind.MESSAGE, repeated=True),))
 STRING_PAIR = ProtoSchema("KeyValuePair_String_String", (

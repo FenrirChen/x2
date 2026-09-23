@@ -40,7 +40,8 @@ class LoginService:
         if self.economy:
             from x2server.messages.economy import ECONOMY_SCHEMAS
             from x2server.messages.lobby import LOBBY_SCHEMAS
-            self.economy.record_event(player["id"], "login:initial", 5)
+            self.economy.login_event(player["id"])
+            player = self.store.get(player["id"])
             result["itemAll"] = ECONOMY_SCHEMAS["L2C_ItemAll"].encode(self.economy.inventory_values(player["id"]))
             for name, kind in (("taskDaily", 1), ("taskWeekly", 2)):
                 result[name] = LOBBY_SCHEMAS["L2C_GameTask"].encode(self.economy.task_values(player["id"], kind))

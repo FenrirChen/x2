@@ -11,7 +11,10 @@ from .store import PlayerStore
 def encode_hero_data(hero: dict) -> bytes:
     # TEMPORARY_COMPAT: the client initializes GoldEquipAttr for every owned hero.
     # An empty nested object represents no equipped god item; omitting it throws.
-    return HERO_DATA.encode({**hero, "godEquip": b""})
+    from .progression import hero_skills
+    from x2server.messages.battle import HERO_SKILL
+    values = {k:v for k,v in hero.items() if k in ("id", "state", "level", "star", "exp")}
+    return HERO_DATA.encode({**values, "godEquip": b"", "heroSkills": [HERO_SKILL.encode(s) for s in hero_skills(hero)]})
 
 
 def encode_hero_all(snapshot: dict) -> bytes:

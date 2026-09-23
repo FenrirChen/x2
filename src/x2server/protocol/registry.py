@@ -67,6 +67,12 @@ class MessageRegistry:
 CORE_MESSAGE_REGISTRY = MessageRegistry(
     (
         MessageEntry("C2L_Login", 54, Direction.CLIENT_TO_SERVER),
+        MessageEntry("C2L_HeroOpt", 109, Direction.CLIENT_TO_SERVER),
+        MessageEntry("L2C_HeroOpt", 110, Direction.SERVER_TO_CLIENT),
+        MessageEntry("C2L_UpHeroSkill", 131, Direction.CLIENT_TO_SERVER),
+        MessageEntry("L2C_UpHeroSkill", 132, Direction.SERVER_TO_CLIENT),
+        MessageEntry("L2C_HeroUpdate", 549, Direction.SERVER_TO_CLIENT),
+        MessageEntry("L2C_UpdatePlayerLevel", 508, Direction.SERVER_TO_CLIENT),
         *(entry for name, request_id, response_id in (*LOBBY_IDS, *CHAT_IDS, *ECONOMY_IDS) for entry in (
             MessageEntry("C2L_" + name, request_id, Direction.CLIENT_TO_SERVER),
             MessageEntry("L2C_" + name, response_id, Direction.SERVER_TO_CLIENT))),

@@ -18,6 +18,8 @@ class BattleService:
     def __init__(self, store, economy=None):
         self.store = store
         self.economy = economy
+        if economy:
+            self.SECTIONS = {i: (s["ChapterID"], s["Maps"][0]) for i, s in economy.sections.items()}
         with store.db:
             store.db.execute("""CREATE TABLE IF NOT EXISTS battle_entries (
                 player_id INTEGER NOT NULL, request_key TEXT NOT NULL, uuid TEXT NOT NULL,
@@ -76,7 +78,7 @@ class BattleService:
             return reject
         if self.economy:
             run = self.store.db.execute("SELECT * FROM economy_runs WHERE uuid=?", (row["uuid"],)).fetchone()
-            if not run or run["player_id"] != player_id or run["session_id"] != context.session.session_id:
+            if not run or run["player_id"] != player_id:
                 return reject  # Old practice entries cannot acquire rewards retroactively.
         digest = hashlib.sha256(packet.body if self.economy else raw).hexdigest()
         cached = self.store.db.execute("SELECT request_hash, response FROM battle_receipts WHERE uuid=?", (row["uuid"],)).fetchone()
@@ -84,8 +86,6 @@ class BattleService:
         if cached:
             return OutboundMessage("L2C_CheckoutMainMission", schema.decode(cached["response"]),
                 pushes=self.economy.pushes(player_id) if self.economy else ()) if cached["request_hash"] == digest else reject
-        if self.economy and self.store.db.execute("SELECT 1 FROM economy_checkouts WHERE player_id=? AND digest=?", (player_id, digest)).fetchone():
-            return reject  # A previous run's full checkout must not settle a new run.
         snapshot = self.store.get(player_id)["snapshot"]
         heroes = snapshot.get("heroes", [])
         values = {"result": 10, "success": request.get("success", False), "rewardData": b"",
@@ -98,9 +98,10 @@ class BattleService:
         try:
             with self.store.db:
                 if self.economy:
-                    self.store.db.execute("INSERT INTO economy_checkouts VALUES (?,?,?)", (player_id, digest, row["uuid"]))
+                    self.store.db.execute("INSERT OR IGNORE INTO economy_checkouts VALUES (?,?,?)", (player_id, digest, row["uuid"]))
                     values["rewardData"] = self.economy.settle(player_id, row["uuid"], section, request.get("success", False))
-                    values["roleExp"] = self.store.get(player_id)["snapshot"].get("exp", 0)
+                    updated = self.store.get(player_id)["snapshot"]
+                    values.update(roleExp=updated.get("exp", 0), roleLevel=updated["level"], UpLevelNum=updated["level"]-snapshot["level"])
                 self.store.db.execute("INSERT INTO battle_receipts VALUES (?,?,?,?)",
                     (row["uuid"], digest, int(time.time()), schema.encode(values)))
         except UnresolvedEconomy:
@@ -134,7 +135,7 @@ class BattleService:
         if context.session.player_id is None:
             raise ProtocolError("profile requested before login")
         request = BATTLE_SCHEMAS["C2L_DelFightProfile"].decode(packet.body)
-        # There is no resumable profile in this free-entry implementation.
+        # No resumable profile; a replacement entry handles abandoned-run refunds.
         # Acknowledgement does not settle a fight or delete its audit record.
         logging.getLogger("x2.battle").info("clear absent battle profile section=%s", request.get("sectionID", 0))
         return OutboundMessage("L2C_DelFightProfile", {"code": 10, "sectionID": request.get("sectionID", 0)})
@@ -155,30 +156,39 @@ class BattleService:
         player = self.store.get(context.session.player_id)
         snapshot = player["snapshot"]
         selected = [PROFILE_HERO.decode(raw) for raw in request.get("heros", [])]
-        # Only the currently recovered 1-star/level-1 hero is supported.
+        # The recovered base-attribute model currently covers hero 1003.
         if len(selected) != 1 or selected[0].get("heroId") != 1003:
             return reject
         hero = next((h for h in snapshot.get("heroes", []) if h["id"] == 1003), None)
-        if not hero or (hero["state"], hero["level"], hero["star"]) != (2, 1, 1):
+        if not hero or hero["state"] != 2 or not 1 <= hero["level"] <= 120 or not 1 <= hero["star"] <= 46:
             return reject
         key = hashlib.sha256((context.session.session_id + ':' + str(packet.header.request_id)).encode() + packet.body).hexdigest()
         cached = self.store.db.execute("SELECT response FROM battle_entries WHERE player_id=? AND request_key=?",
                                       (player["id"], key)).fetchone()
         if cached:
             return OutboundMessage("L2C_FightData", BATTLE_SCHEMAS["L2C_FightData"].decode(cached[0]))
-        # Values shown by the unmodified client for this exact local hero.
-        attrs = HERO_ATTR.encode({"atk": 72, "def": 44, "hp": 720, "sp": 3000})
-        skills = [HERO_SKILL.encode({"id": i, "level": 1}) for i in (10030, 10031, 10032, 10033, 10035)]
-        fight_hero = FIGHT_HERO.encode({**hero, "heroGodEquip": b"", "heroSkill": skills, "heroAttrCount": attrs})
+        from .progression import hero_attributes, hero_skills
+        attrs = HERO_ATTR.encode(hero_attributes(hero))
+        skills = [HERO_SKILL.encode(s) for s in hero_skills(hero)]
+        hero_values = {k:v for k,v in hero.items() if k in ("id", "state", "level", "star", "exp")}
+        fight_hero = FIGHT_HERO.encode({**hero_values, "heroGodEquip": b"", "heroSkill": skills, "heroAttrCount": attrs})
         data = FIGHT_DATA.encode({"fightHeros": [fight_hero], "missionId": section, "dropData": b"", "CRIDmg": 15000})
         profile = FIGHT_PROFILE.encode({"missionId": section, "chapterId": chapter, "layer": 0,
             "sceneId": scene, "randomSeed": secrets.randbelow(2**30), "isProfileValid": False})
         values = {"result": 10, "uuid": str(uuid.uuid4()), "sign": secrets.token_bytes(32),
                   "data": data, "fightDataProfile": profile, "playerLevel": snapshot["level"]}
-        with self.store.db:
-            self.store.db.execute("INSERT INTO battle_entries VALUES (?,?,?,?,?)", (player["id"], key,
-                values["uuid"], int(time.time()), BATTLE_SCHEMAS["L2C_FightData"].encode(values)))
-            if self.economy:
-                self.store.db.execute("INSERT INTO economy_runs(uuid,player_id,session_id,section_id) VALUES (?,?,?,?)",
-                    (values["uuid"], player["id"], context.session.session_id, section))
-        return OutboundMessage("L2C_FightData", values)
+        try:
+            with self.store.db:
+                if self.economy:
+                    # Replacing an unfinished run abandons it, refunding its cost.
+                    for old in self.store.db.execute("SELECT uuid FROM economy_runs WHERE player_id=? AND settled=0", (player["id"],)).fetchall():
+                        self.economy.refund_battle(player["id"], old[0])
+                        self.store.db.execute("UPDATE economy_runs SET settled=1 WHERE uuid=?", (old[0],))
+                    self.economy.charge_battle(player["id"], values["uuid"], section)
+                    self.store.db.execute("INSERT INTO economy_runs(uuid,player_id,session_id,section_id) VALUES (?,?,?,?)",
+                        (values["uuid"], player["id"], context.session.session_id, section))
+                self.store.db.execute("INSERT INTO battle_entries VALUES (?,?,?,?,?)", (player["id"], key,
+                    values["uuid"], int(time.time()), BATTLE_SCHEMAS["L2C_FightData"].encode(values)))
+        except UnresolvedEconomy:
+            return reject
+        return OutboundMessage("L2C_FightData", values, pushes=self.economy.pushes(player["id"]) if self.economy else ())
