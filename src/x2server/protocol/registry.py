@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from x2server.messages.lobby import LOBBY_IDS
+from x2server.messages.chat import CHAT_IDS
 
 from dataclasses import dataclass
 from enum import Enum
@@ -65,7 +66,7 @@ class MessageRegistry:
 CORE_MESSAGE_REGISTRY = MessageRegistry(
     (
         MessageEntry("C2L_Login", 54, Direction.CLIENT_TO_SERVER),
-        *(entry for name, request_id, response_id in LOBBY_IDS for entry in (
+        *(entry for name, request_id, response_id in (*LOBBY_IDS, *CHAT_IDS) for entry in (
             MessageEntry("C2L_" + name, request_id, Direction.CLIENT_TO_SERVER),
             MessageEntry("L2C_" + name, response_id, Direction.SERVER_TO_CLIENT))),
         MessageEntry("L2C_Login", 79, Direction.SERVER_TO_CLIENT),
@@ -77,6 +78,8 @@ CORE_MESSAGE_REGISTRY = MessageRegistry(
         MessageEntry("C2L_ServerTableConfig", 945, Direction.CLIENT_TO_SERVER),
         MessageEntry("L2C_ServerTableConfig", 946, Direction.SERVER_TO_CLIENT),
         MessageEntry("C2L_FightData", 126, Direction.CLIENT_TO_SERVER),
+        MessageEntry("C2L_DelFightProfile", 399, Direction.CLIENT_TO_SERVER),
+        MessageEntry("L2C_DelFightProfile", 398, Direction.SERVER_TO_CLIENT),
         MessageEntry("L2C_FightData", 130, Direction.SERVER_TO_CLIENT),
         MessageEntry("C2L_CheckoutMainMission", 150, Direction.CLIENT_TO_SERVER),
         MessageEntry("C2L_PrepareMainMission", 151, Direction.CLIENT_TO_SERVER),
@@ -84,6 +87,8 @@ CORE_MESSAGE_REGISTRY = MessageRegistry(
         MessageEntry("L2C_PrepareMainMission", 153, Direction.SERVER_TO_CLIENT),
         MessageEntry("C2L_FightDropData", 264, Direction.CLIENT_TO_SERVER),
         MessageEntry("L2C_FightDropData", 266, Direction.SERVER_TO_CLIENT),
+        MessageEntry("C2L_FightKillInfo", 316, Direction.CLIENT_TO_SERVER),
+        MessageEntry("L2C_FightKillInfo", 318, Direction.SERVER_TO_CLIENT),
         MessageEntry("C2L_GuideStep", 374, Direction.CLIENT_TO_SERVER),
         MessageEntry("L2C_GuideStep", 375, Direction.SERVER_TO_CLIENT),
         MessageEntry("L2C_ItemUpdate", 553, Direction.SERVER_TO_CLIENT),

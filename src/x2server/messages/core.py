@@ -6,6 +6,8 @@ schemas are required by a later milestone. This file defines no handlers.
 
 from x2server.protocol.protobuf import FieldKind, ProtoField, ProtoSchema
 from x2server.messages.lobby import LOBBY_SCHEMAS
+from x2server.messages.chat import CHAT_SCHEMAS
+from x2server.messages.battle import BATTLE_SCHEMAS
 
 C2L_LOGIN = ProtoSchema(
     "C2L_Login",
@@ -84,6 +86,8 @@ CORE_SCHEMAS = {
     )
 }
 CORE_SCHEMAS.update(LOBBY_SCHEMAS)
+CORE_SCHEMAS.update(CHAT_SCHEMAS)
+CORE_SCHEMAS.update(BATTLE_SCHEMAS)
 
 # CONFIRMED: MessageReflector registers PlayerDataProto as 1000, independently
 # of its generated get_PID() returning 0. BaseInfo Serialize RVA 0x30A1348.
@@ -113,6 +117,7 @@ HERO_DATA = ProtoSchema("HeroData", (
     ProtoField(2, "state", FieldKind.INT32),
     ProtoField(3, "level", FieldKind.INT32),
     ProtoField(4, "star", FieldKind.INT32),
+    ProtoField(5, "godEquip", FieldKind.MESSAGE),
     ProtoField(7, "exp", FieldKind.INT32),
 ))
 HERO_ALL = ProtoSchema("L2C_HeroAll", (ProtoField(1, "heros", FieldKind.MESSAGE, repeated=True),))

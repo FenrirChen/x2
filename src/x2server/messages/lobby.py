@@ -15,6 +15,8 @@ LOBBY_IDS = (
     ("MoonEquip", 964, 965), ("QuerySimpleActivity", 986, 987),
     ("QuerySharedMessage", 653, 654), ("AccountBuffData", 865, 866),
     ("ButtonClick", 376, 377),
+    ("CheckFightProfile", 447, 448), ("CommercialShopGoods", 523, 524),
+    ("QueryGiftPackage", 531, 532),
 )
 LOBBY_SCHEMAS = {
     "C2L_" + name: ProtoSchema("C2L_" + name,
@@ -28,6 +30,9 @@ for name, fields in {
     "QuerySimpleActivity": (F(1, "id", K.INT32),),
     "AccountBuffData": (F(1, "buffId", K.INT32, repeated=True),),
     "ButtonClick": (F(1, "buttonId", K.INT32),),
+    "CheckFightProfile": (F(1, "profileType", K.ENUM), F(2, "checkID", K.INT32)),
+    "CommercialShopGoods": (F(1, "shopType", K.ENUM),),
+    "QueryGiftPackage": (F(1, "playerID", K.INT64),),
 }.items():
     LOBBY_SCHEMAS["C2L_" + name] = ProtoSchema("C2L_" + name, fields)
 for name, fields in {
@@ -63,5 +68,12 @@ for name, fields in {
     "ReceiveGiftRew": (F(1, "code", K.ENUM), F(2, "type", K.INT32), F(3, "rewardData", K.MESSAGE)),
     "MoonEquip": (F(1, "code", K.ENUM), F(2, "moonEquip", K.MESSAGE, repeated=True), F(3, "moonEquipBarNormal", K.MESSAGE, repeated=True), F(4, "moonEquipBarSpecial", K.MESSAGE, repeated=True)),
     "QuerySimpleActivity": (F(1, "code", K.ENUM), F(2, "totalProgress", K.INT32), F(3, "subProgress", K.MESSAGE, repeated=True), F(4, "mainRewards", K.INT32, repeated=True), F(5, "extraRewards", K.INT32, repeated=True), F(6, "unlockInfo", K.INT32, repeated=True), F(7, "LevelOpenTime", K.INT64)),
+    "CheckFightProfile": (F(1, "code", K.ENUM), F(2, "isProfileExist", K.BOOL),
+                          F(3, "sectionId", K.INT32), F(4, "layer", K.INT32),
+                          F(5, "heroIds", K.INT32, repeated=True), F(6, "weeklyId", K.INT32),
+                          F(7, "currentWeek", K.INT32), F(8, "isProfileValid", K.BOOL)),
+    "CommercialShopGoods": (F(1, "code", K.ENUM), F(2, "goods", K.MESSAGE, repeated=True),
+                            F(3, "shopType", K.ENUM)),
+    "QueryGiftPackage": (F(1, "code", K.ENUM), F(2, "datas", K.MESSAGE, repeated=True)),
 }.items():
     LOBBY_SCHEMAS["L2C_" + name] = ProtoSchema("L2C_" + name, fields)

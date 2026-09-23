@@ -34,12 +34,17 @@ class LocalIdentityService(RecoveredBootstrapService):
         self._expire = self._start + 3600
 
     @staticmethod
-    def _json(value: dict[str, object], status: int = 200) -> HTTPResponse:
+    def _json(value: dict[str, object] | list[dict[str, object]], status: int = 200) -> HTTPResponse:
         return HTTPResponse(status, "application/json; charset=utf-8",
                             (json.dumps(value) + "\n").encode("utf-8"))
 
     def respond(self, method: str, target: str, body: bytes = b"") -> HTTPResponse:
         path = urlsplit(target).path
+        if path == "/apply/chatNode" and method.upper() == "POST":
+            # ChatModule.GetChatServers parses a list of ChannelInfo, with a
+            # second JSON-encoded list in channel; Connect splits entry on ':'.
+            return self._json([{"channel": json.dumps([{"channel": 1, "free": 1, "limit": 1}]),
+                               "entry": "10.0.2.2:29001", "nodeType": "local", "token": ""}])
         if path not in ("/login", "/loginwithpw", "/apply/httpLogin"):
             return super().respond(method, target, body)
         if method.upper() != "POST":

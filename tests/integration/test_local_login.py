@@ -124,6 +124,7 @@ def test_login_push_heartbeat_reconnect_and_authentication(tmp_path):
             login_values = CORE_SCHEMAS["L2C_Login"].decode(login.body)
             hero = HERO_DATA.decode(HERO_ALL.decode(login_values["heroAll"])["heros"][0])
             assert hero["id"] == 1003 and hero["state"] == 2
+            assert hero["godEquip"] == b""  # Client requires a present no-equipment object.
             player_data = PLAYER_DATA.decode(push.body)
             assert MOBILITY.decode(player_data["Mobility"])["Power"] == 149
             base = BASE_INFO.decode(player_data["BaseInfo"])

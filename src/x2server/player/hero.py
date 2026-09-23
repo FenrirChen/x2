@@ -8,8 +8,14 @@ from x2server.protocol.types import DecodedPacket
 from .store import PlayerStore
 
 
+def encode_hero_data(hero: dict) -> bytes:
+    # TEMPORARY_COMPAT: the client initializes GoldEquipAttr for every owned hero.
+    # An empty nested object represents no equipped god item; omitting it throws.
+    return HERO_DATA.encode({**hero, "godEquip": b""})
+
+
 def encode_hero_all(snapshot: dict) -> bytes:
-    return HERO_ALL.encode({"heros": [HERO_DATA.encode(hero) for hero in snapshot.get("heroes", [])]})
+    return HERO_ALL.encode({"heros": [encode_hero_data(hero) for hero in snapshot.get("heroes", [])]})
 
 
 class HeroService:
@@ -20,5 +26,5 @@ class HeroService:
         if context.session.player_id is None:
             raise ProtocolError("hero query requested before login")
         snapshot = self.store.get(context.session.player_id)["snapshot"]
-        return OutboundMessage("L2C_HeroAll", {"heros": [HERO_DATA.encode(hero)
+        return OutboundMessage("L2C_HeroAll", {"heros": [encode_hero_data(hero)
             for hero in snapshot.get("heroes", [])]})

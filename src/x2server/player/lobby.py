@@ -46,6 +46,10 @@ class LobbyService:
             "C2L_QuerySharedMessage": {"code": 10},
             "C2L_AccountBuffData": {"code": 10, "buffId": request.get("buffId", [])},
             "C2L_ButtonClick": {"code": 10},  # Acknowledge telemetry only; no guide/reward mutation.
+            "C2L_CheckFightProfile": {"code": 10, "isProfileExist": False,
+                                      "isProfileValid": False},  # No saved battle profile.
+            "C2L_CommercialShopGoods": {"code": 10, "shopType": request.get("shopType", 0)},
+            "C2L_QueryGiftPackage": {"code": 10},  # No local gift packages.
         }
         logging.getLogger("x2.lobby").info("local empty-state query %s", name)
         return OutboundMessage(name.replace("C2L_", "L2C_", 1), states[name])

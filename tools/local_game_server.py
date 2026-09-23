@@ -16,6 +16,8 @@ from x2server.player.store import PlayerStore
 from x2server.player.login import LoginService
 from x2server.player.lobby import LobbyService
 from x2server.player.hero import HeroService
+from x2server.player.chat import SilentChatService
+from x2server.player.battle import BattleService
 
 
 async def run(database: Path, seconds: float) -> None:
@@ -30,15 +32,19 @@ async def run(database: Path, seconds: float) -> None:
     login = LoginService(identity, store)
     http = BootstrapHTTPServer("127.0.0.1", 18080, identity)
     tcp = X2TCPServer(Settings(tcp_host="127.0.0.1", tcp_port=29000, read_timeout=120),
-        Dispatcher({**LobbyService().handlers(), "C2L_HeroAll": HeroService(store).query_all,
+        Dispatcher({**LobbyService().handlers(), **BattleService(store).handlers(), "C2L_HeroAll": HeroService(store).query_all,
                     "C2L_Login": login.login, "C2L_ReConnect": login.reconnect,
                     "C2L_ServerTableConfig": login.server_config}))
+    chat = X2TCPServer(Settings(tcp_host="127.0.0.1", tcp_port=29001, read_timeout=120),
+                       Dispatcher(SilentChatService().handlers()))
     try:
         await http.start()
         await tcp.start()
+        await chat.start()
         logging.getLogger("x2.local").info("local services ready; HTTP 127.0.0.1:18080 TCP 127.0.0.1:29000")
         await asyncio.sleep(seconds)
     finally:
+        await chat.stop()
         await tcp.stop()
         await http.stop()
         store.close()
