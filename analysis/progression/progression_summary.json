@@ -1,0 +1,588 @@
+{
+  "table_sources": {
+    "RoleExp": {
+      "source": "phase3_output/raw_tables/RoleExp__e5e6471e3e1ce034785246440f2beb02.bin",
+      "record_count": 120,
+      "fields": [
+        "RoleLevel",
+        "ExpLevel",
+        "ExpSum",
+        "PowerNum",
+        "GiftID"
+      ]
+    },
+    "PlayerLevelBonus": {
+      "source": "assets/bin/Data/6ff329a03e7cc8e4189402fb0b01ecb4",
+      "record_count": 120,
+      "fields": [
+        "HeroLevel",
+        "HeroExp",
+        "ExpSum",
+        "DamageLevelBonus",
+        "DefenseLevelBonus",
+        "HPMaxLevelBonus",
+        "SPMaxLevelBonus"
+      ]
+    },
+    "PlayerStage": {
+      "source": "assets/bin/Data/5daa56e072ff154479a3c72f84470d7e",
+      "record_count": 46,
+      "fields": [
+        "HeroStage",
+        "ChipNum",
+        "UniversalChip",
+        "DamageStageBonus",
+        "DefenseStageBonus",
+        "HPMaxStageBonus",
+        "SPMaxStageBonus",
+        "BigStarNum",
+        "BigStarMax",
+        "SmallStarNum",
+        "SmallStarMax",
+        "RelicID"
+      ]
+    },
+    "PlayerAttrib": {
+      "source": "assets/bin/Data/1e3805e55669ff94d90568f68e2219a7",
+      "record_count": 1182,
+      "fields": [
+        "ID",
+        "Profession",
+        "Origin",
+        "ProfEnum",
+        "OriginNum",
+        "Level",
+        "DefaultStage",
+        "ExchangeChip",
+        "Compensate",
+        "IsOpen",
+        "ChipPropID",
+        "UnLockedItemID",
+        "WeapenId",
+        "RelicExp",
+        "HPMax",
+        "HPCount",
+        "SPMax",
+        "Damage",
+        "Defense",
+        "MoveSpeed",
+        "HPMaxCOR",
+        "SPMaxCOR",
+        "DamageCOR",
+        "DefenseCOR",
+        "Critical",
+        "CriticalDamage",
+        "PhysicalRist",
+        "IceRist",
+        "FireRiset",
+        "LightningRist",
+        "PoisonRist",
+        "SkillAbility",
+        "SuperArmor",
+        "WeakArmor",
+        "WeakArmorIncRate",
+        "DamageCoefficient",
+        "DamageUPCoefficient",
+        "DefenseCoefficient",
+        "Duration",
+        "BloodMoonParam",
+        "PrayBouns"
+      ]
+    },
+    "ArtifactBase": {
+      "source": "phase3_output/raw_tables/ArtifactBase__810d774cf33b0e349a5507fa7588b32d.bin",
+      "record_count": 40,
+      "fields": [
+        "ArtifactID",
+        "NameID",
+        "ArtifactDesc",
+        "ArtifactDetail",
+        "FuseLevel",
+        "ArtifactDrawing",
+        "Effect",
+        "ArtifactIcon",
+        "ArtifactAttr1",
+        "AttrValue1",
+        "ArtifactAttr2",
+        "AttrValue2",
+        "ArtifactAttr3",
+        "AttrValue3",
+        "SeniorAttr1",
+        "SenAttrValue1",
+        "SeniorAttr2",
+        "SenAttrValue2"
+      ]
+    },
+    "ArtifactFuse": {
+      "source": "assets/bin/Data/c338962ae8f5e1148aa9badc4f13d966",
+      "record_count": 28,
+      "fields": [
+        "FuseID",
+        "ProfEnum",
+        "HeroStage",
+        "AttrRate",
+        "MaxAttrRate",
+        "AdvancedItem",
+        "AdvancedItemNum",
+        "FuseValue",
+        "AdvancedConsume",
+        "FuseItem",
+        "FuseItemNum",
+        "FuseConsume",
+        "HoleIsOpen"
+      ]
+    },
+    "EquibBase": {
+      "source": "phase3_output/raw_tables/EquibBase__92f5b9b03d582384daf4ab179249bade.bin",
+      "record_count": 126,
+      "fields": [
+        "EquibId",
+        "EquibPart",
+        "EquibSuit",
+        "MainAttrType",
+        "MainAttrChance",
+        "MinorAttrType",
+        "MinorAttrChance"
+      ]
+    },
+    "EquibAttrib": {
+      "source": "phase3_output/raw_tables/EquibAttrib__aa046b4e1959ef44fa9e276a50f7ca0c.bin",
+      "record_count": 384,
+      "fields": [
+        "EquibRare",
+        "AttribSRC",
+        "AttrType",
+        "ValueSec",
+        "ChanceSec"
+      ]
+    },
+    "EquibAttribBD": {
+      "source": "assets/bin/Data/25bbc1b89b510194c99a5c3c5f8137dc",
+      "record_count": 66,
+      "fields": [
+        "AttrbdID",
+        "EquibQuality",
+        "EquibLevel",
+        "MainAttr",
+        "MinorAttrNum",
+        "MinorAttrType",
+        "MinorAttrValue",
+        "MinorAttrStreNum",
+        "MinorAttrStreValue"
+      ]
+    },
+    "EquibExp": {
+      "source": "phase3_output/raw_tables/EquibExp__9db2cbbed1076f441b9ac66591d5f5bc.bin",
+      "record_count": 16,
+      "fields": [
+        "EquibLevel",
+        "NeedExp",
+        "SumExp",
+        "LossExp",
+        "NeedGlod",
+        "SumGold",
+        "IsEvent"
+      ]
+    },
+    "EquibStage": {
+      "source": "phase3_output/raw_tables/EquibStage__339e556f4c0f7f146b9436a53fcaf6b1.bin",
+      "record_count": 6,
+      "fields": [
+        "Stage",
+        "MinorListMin",
+        "MinorListMax",
+        "EquibSeniorChip",
+        "Exp",
+        "EquibValue",
+        "ExpBonus",
+        "GoldBonus"
+      ]
+    },
+    "EquibSuit": {
+      "source": "assets/bin/Data/c5bbfdf9eae360a4ebbb13ced97b8422",
+      "record_count": 20,
+      "fields": [
+        "SuitId",
+        "NameID",
+        "SuitIcon",
+        "AttribType1",
+        "Value1",
+        "PassiveID",
+        "SuitAttr1ID",
+        "SuitAttr2ID",
+        "CombatSuitAttr2ID",
+        "BuffID",
+        "IsOpen"
+      ]
+    },
+    "SkillBase": {
+      "source": "phase3_output/raw_tables/SkillBase__da3a5c88a96162a49bb37f0a3d858091.bin",
+      "record_count": 1333,
+      "fields": [
+        "ID",
+        "NameID",
+        "DescID",
+        "DiscProfile",
+        "SkillType",
+        "SkillTypeDec",
+        "SkillType2",
+        "SkillType2Dec",
+        "SkillType3",
+        "SkillType3Dec",
+        "SkillTypeDesc2",
+        "SkillMapID",
+        "Pos",
+        "SkillUnlockType",
+        "SkillUnlock",
+        "ChangeAcitonGroup",
+        "PassiveID",
+        "ConsumeID",
+        "OperateType",
+        "OperateParamete1",
+        "OperateParamete2",
+        "CastDistanceMax",
+        "Icon",
+        "IconEffect",
+        "RollPrefab",
+        "BuffID",
+        "DamageID",
+        "EndActionID",
+        "SkillCD",
+        "CDShare",
+        "Consume",
+        "ConsumeRecover",
+        "HitConsume",
+        "HitConsumeMax",
+        "HitConsumeMaxAll",
+        "SkillUpID",
+        "NextSkillID",
+        "FollowTime",
+        "LastSkillID",
+        "SkillNum",
+        "VariableNum",
+        "SkillProperty",
+        "SkillAera",
+        "FairySkillType",
+        "ChildSkill",
+        "SkillEffectA",
+        "AttribType",
+        "ValueA",
+        "SkillEffectB",
+        "ValueB",
+        "SkillEffectC",
+        "ValueC",
+        "SkillEffectD",
+        "ValueD",
+        "SelfEffect",
+        "TargetEfect",
+        "BubbleID"
+      ]
+    },
+    "SkillLevel": {
+      "source": "phase3_output/raw_tables/SkillLevel__e7113cb17bb4c92459295953a8d9dc32.bin",
+      "record_count": 2155,
+      "fields": [
+        "SkillID",
+        "Level",
+        "SKillGrowCond",
+        "GrowCond",
+        "Item",
+        "ItemNum",
+        "GoldConsume",
+        "PreSkillID",
+        "PreSkillLevel"
+      ]
+    },
+    "UnitBase": {
+      "source": "phase3_output/raw_tables/UnitBase__5c993e6912a40e541be49a4f5ed7abd7.bin",
+      "record_count": 1912,
+      "fields": [
+        "ID",
+        "Name",
+        "Desc",
+        "NameTitle",
+        "NameEnglish",
+        "Icon",
+        "DC",
+        "AttackTime",
+        "AttackDistance",
+        "ManorArea",
+        "WarningArea",
+        "VisionArea",
+        "HitRangeRe",
+        "ActionFileID",
+        "AIBehaviac",
+        "HatredWeight",
+        "Prefab",
+        "PrefabRadius",
+        "ShowPrefab",
+        "UnitType",
+        "UnitTag",
+        "SKill",
+        "SkillChance",
+        "AttackUpDec",
+        "Skill1UpDec",
+        "Skill2UpDec",
+        "Skill3UpDec",
+        "WeaponEffect",
+        "WeaponPickupEffect",
+        "EndureMaterial",
+        "NoChangeMaterial",
+        "CanBaoBai",
+        "FlashWhiteParams",
+        "DeadWithParent",
+        "Property",
+        "HaloScale",
+        "BornBubbleID",
+        "DeadBubbleID",
+        "PreloadSummonedID",
+        "PreloadEffect",
+        "XPEffect",
+        "ButtonEvent",
+        "AutoEvent",
+        "EventCameraAction",
+        "EventNotice",
+        "BehaviorManager",
+        "PassiveList",
+        "AppearanceList",
+        "Expression",
+        "TowerHp",
+        "DisplayName",
+        "PurifyProgress"
+      ]
+    },
+    "Item": {
+      "source": "phase3_output/raw_tables/Item__e49ddfae661db9147b8823552f01df41.bin",
+      "record_count": 3026,
+      "fields": [
+        "ItemID",
+        "NameID",
+        "DescID",
+        "HistoryID",
+        "ItemUseScence",
+        "ItemType",
+        "ItemQuality",
+        "PileCount",
+        "ItemValue",
+        "AddADCGroup",
+        "IMQualityLevel",
+        "DropLimit",
+        "DropLimitParam",
+        "NeedLevel",
+        "ItemShow",
+        "Used",
+        "Purchased",
+        "Gain",
+        "Composed",
+        "Recover",
+        "FunctionEff",
+        "EffData",
+        "Return",
+        "Icon",
+        "EffectIcon",
+        "Model",
+        "Effect",
+        "IfShowName",
+        "DropSound",
+        "PickSound",
+        "QuickBuyID"
+      ]
+    },
+    "FunctionOpen": {
+      "source": "phase3_output/raw_tables/FunctionOpen__1b9954217ea8b6f44b8a31c89cf9edd7.bin",
+      "record_count": 84,
+      "fields": [
+        "ID",
+        "FunctionType",
+        "ChineseNameID",
+        "OpenLevel",
+        "OpenStory",
+        "Show",
+        "GuideId",
+        "Value1",
+        "ButtonShow"
+      ]
+    },
+    "GodHole": {
+      "source": "assets/bin/Data/4dca65be7636983478eebce9294d1c4f",
+      "record_count": 35,
+      "fields": [
+        "HeroID",
+        "HoleNum",
+        "SkillID",
+        "ItemID",
+        "Cost"
+      ]
+    },
+    "JewelBase": {
+      "source": "assets/bin/Data/7ff84de059bfbd74c889797c784b3962",
+      "record_count": 115,
+      "fields": [
+        "JewelID",
+        "Type",
+        "TypeID",
+        "JewelType",
+        "StarLevel",
+        "JewelEffect1",
+        "EffectValue1",
+        "JewelEffect2",
+        "JewelInfo",
+        "DustValue",
+        "SenDustValue",
+        "JewelDrawing",
+        "PaintingBg",
+        "PaintingPosition",
+        "PaintingBgPosition",
+        "PaintingScale",
+        "EnglishNameID",
+        "DetailDescID",
+        "WishDescID",
+        "WishColor",
+        "TypeIcon"
+      ]
+    },
+    "Gift": {
+      "source": "assets/bin/Data/97f907f95af754641b60175964616b99",
+      "record_count": 10930,
+      "fields": [
+        "GiftGroup",
+        "AwardType",
+        "Probability",
+        "GiftValue",
+        "Num",
+        "GiftShow",
+        "ItemNum",
+        "EquibNum"
+      ]
+    },
+    "Language": {
+      "source": "phase3_output/raw_tables/Language__844762d28a77f85408b631eb3f0186bc.bin",
+      "record_count": 28996,
+      "fields": [
+        "Key",
+        "Chinese",
+        "ChineseFT",
+        "LanguageKor",
+        "LanguageJpn"
+      ]
+    },
+    "LanguageUI": {
+      "source": "phase3_output/raw_tables/LanguageUI__bf39f9c839b67204eadd3371ec9025c9.bin",
+      "record_count": 6277,
+      "fields": [
+        "Key",
+        "Chinese",
+        "ChineseFT",
+        "LanguageKor",
+        "LanguageJPN"
+      ]
+    }
+  },
+  "missing_tables": [],
+  "counts": {
+    "RoleExp": 120,
+    "PlayerLevelBonus": 120,
+    "PlayerStage": 46,
+    "PlayerAttrib": 1182,
+    "ArtifactBase": 40,
+    "ArtifactFuse": 28,
+    "EquibBase": 126,
+    "EquibAttrib": 384,
+    "EquibAttribBD": 66,
+    "EquibExp": 16,
+    "EquibStage": 6,
+    "EquibSuit": 20,
+    "SkillBase": 1333,
+    "SkillLevel": 2155,
+    "UnitBase": 1912,
+    "Item": 3026,
+    "FunctionOpen": 84,
+    "GodHole": 35,
+    "JewelBase": 115,
+    "Gift": 10930,
+    "Language": 28996,
+    "LanguageUI": 6277
+  },
+  "systems": {
+    "player_level": {
+      "status": "PARTIAL",
+      "static_rule": "120 RoleExp rows, next-level ExpLevel, cumulative ExpSum, power cap, Gift and FunctionOpen references",
+      "runtime_state": "account level and experience",
+      "server_only": "overflow and actual grant timing",
+      "revival_ready": false
+    },
+    "hero_level": {
+      "status": "PARTIAL",
+      "static_rule": "120 PlayerLevelBonus rows, HeroExp currency and level attribute bonuses",
+      "runtime_state": "HeroData.level/exp and currency balance",
+      "server_only": "server validation and cap behavior",
+      "revival_ready": false
+    },
+    "hero_star": {
+      "status": "PARTIAL",
+      "static_rule": "46 PlayerStage rows, chip costs, universal option, star display and attributes",
+      "runtime_state": "HeroData.star and chip balances",
+      "server_only": "fragment choice and transition validation",
+      "revival_ready": false
+    },
+    "hero_breakthrough": {
+      "status": "NOT_FOUND",
+      "static_rule": "no independent hero limit-break table or operation in targeted index",
+      "runtime_state": null,
+      "server_only": "unknown",
+      "revival_ready": false
+    },
+    "weapon_level": {
+      "status": "PARTIAL",
+      "static_rule": "hero-bound ArtifactBase and ArtifactFuse level-up ingredients and gold by profession",
+      "runtime_state": "HeroGodEquip level/star",
+      "server_only": "exact rank transition and attribute computation",
+      "revival_ready": false
+    },
+    "weapon_star_break": {
+      "status": "PARTIAL",
+      "static_rule": "ArtifactFuse fusion costs and HeroStage gates",
+      "runtime_state": "HeroGodEquip star",
+      "server_only": "transition validation",
+      "revival_ready": false
+    },
+    "equipment_enhancement": {
+      "status": "PARTIAL",
+      "static_rule": "EquibExp 0–15 and quality/attribute tables",
+      "runtime_state": "HeroEquip id/typeId/level/exp/star/param",
+      "server_only": "instance rolls and feed formula",
+      "revival_ready": false
+    },
+    "equipment_star_quality": {
+      "status": "PARTIAL",
+      "static_rule": "EquibStage 1–6 and quality presets",
+      "runtime_state": "HeroEquip.star/param",
+      "server_only": "star operation and instance generation",
+      "revival_ready": false
+    },
+    "skill_upgrade": {
+      "status": "PARTIAL",
+      "static_rule": "SkillLevel 2155 rows with hero-level gates, materials, prerequisites; GoldConsume zero",
+      "runtime_state": "HeroData.heroSkills",
+      "server_only": "upgrade validation and unlock state",
+      "revival_ready": false
+    },
+    "attribute_growth": {
+      "status": "PARTIAL",
+      "static_rule": "HeroModule.GetBaseAttr confirms base*(1+stage_bonus/1000)*(1+level_bonus/1000)+COR for damage, defense and HP, truncated to int; Artifact/Equib modifiers are additional",
+      "runtime_state": "hero level/star and equip instance",
+      "server_only": "full equipment stacking and dynamic rolls",
+      "revival_ready": false
+    }
+  },
+  "material_item_links": {
+    "resolved": 112,
+    "unresolved": 0
+  },
+  "adjacent_tables": [
+    "GodHole",
+    "JewelBase",
+    "EquibSuit",
+    "FunctionOpen"
+  ]
+}

@@ -1,0 +1,727 @@
+{
+  "sources": {
+    "Item": {
+      "source": "phase3_output/raw_tables/Item__e49ddfae661db9147b8823552f01df41.bin",
+      "record_count": 3026,
+      "fields": [
+        "ItemID",
+        "NameID",
+        "DescID",
+        "HistoryID",
+        "ItemUseScence",
+        "ItemType",
+        "ItemQuality",
+        "PileCount",
+        "ItemValue",
+        "AddADCGroup",
+        "IMQualityLevel",
+        "DropLimit",
+        "DropLimitParam",
+        "NeedLevel",
+        "ItemShow",
+        "Used",
+        "Purchased",
+        "Gain",
+        "Composed",
+        "Recover",
+        "FunctionEff",
+        "EffData",
+        "Return",
+        "Icon",
+        "EffectIcon",
+        "Model",
+        "Effect",
+        "IfShowName",
+        "DropSound",
+        "PickSound",
+        "QuickBuyID"
+      ]
+    },
+    "Language": {
+      "source": "phase3_output/raw_tables/Language__844762d28a77f85408b631eb3f0186bc.bin",
+      "record_count": 28996,
+      "fields": [
+        "Key",
+        "Chinese",
+        "ChineseFT",
+        "LanguageKor",
+        "LanguageJpn"
+      ]
+    }
+  },
+  "rows": [
+    {
+      "material_item_id": 1201000,
+      "material_name": "万能神格碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201003,
+      "material_name": "贝黑莫斯碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201004,
+      "material_name": "浮士德碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201005,
+      "material_name": "雅典娜碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201006,
+      "material_name": "流云碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201007,
+      "material_name": "忒提丝碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201008,
+      "material_name": "莉莉丝碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201009,
+      "material_name": "瓦尔基里碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201010,
+      "material_name": "涂山初玖碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201011,
+      "material_name": "阿斯莫德碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201012,
+      "material_name": "托尔碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201013,
+      "material_name": "卡恩斯碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201014,
+      "material_name": "少姜碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201015,
+      "material_name": "长庚碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201016,
+      "material_name": "赛特碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201017,
+      "material_name": "阿努比斯碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201018,
+      "material_name": "贝斯特碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201019,
+      "material_name": "伊南娜碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201020,
+      "material_name": "少昊碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201021,
+      "material_name": "孟章碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201022,
+      "material_name": "源氏碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201023,
+      "material_name": "木花石长姬碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201024,
+      "material_name": "霍德尔碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201025,
+      "material_name": "月读碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201026,
+      "material_name": "天照碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201027,
+      "material_name": "精卫碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201028,
+      "material_name": "月羲九碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201029,
+      "material_name": "伊邪那美碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201030,
+      "material_name": "伊邪纳岐碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201031,
+      "material_name": "监兵碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201032,
+      "material_name": "共工碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201033,
+      "material_name": "海拉碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201034,
+      "material_name": "陵光碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201035,
+      "material_name": "奥西里斯碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201036,
+      "material_name": "吉尔达碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201039,
+      "material_name": "斩念源氏碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201040,
+      "material_name": "微风莉莉丝碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201197,
+      "material_name": "计都碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201198,
+      "material_name": "伊瑞绮嘉拉碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1201199,
+      "material_name": "奈芙蒂斯碎片",
+      "item_type": "E_Chip",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1202080,
+      "material_name": "神权拓本·空白",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1202081,
+      "material_name": "神权拓本·剑柄",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1202082,
+      "material_name": "神权拓本·圣杯",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1202083,
+      "material_name": "神权拓本·星币",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1202084,
+      "material_name": "神权拓本·权杖",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1202086,
+      "material_name": "高级神权拓本·剑柄",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1202087,
+      "material_name": "高级神权拓本·圣杯",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1202088,
+      "material_name": "高级神权拓本·星币",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1202089,
+      "material_name": "高级神权拓本·权杖",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1206003,
+      "material_name": "日月之轨·贝黑莫斯",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1206005,
+      "material_name": "日月之轨·雅典娜",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1206008,
+      "material_name": "日月之轨·莉莉丝",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1206009,
+      "material_name": "日月之轨·瓦尔基里",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1206010,
+      "material_name": "日月之轨·涂山初玖",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1206012,
+      "material_name": "日月之轨·托尔",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1206013,
+      "material_name": "日月之轨·卡恩斯",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1206014,
+      "material_name": "日月之轨·少姜",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1206015,
+      "material_name": "日月之轨·长庚",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1206016,
+      "material_name": "日月之轨·赛特",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1206017,
+      "material_name": "日月之轨·阿努比斯",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1206018,
+      "material_name": "日月之轨·贝斯特",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1206019,
+      "material_name": "日月之轨·伊南娜",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1206020,
+      "material_name": "日月之轨·少昊",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1206021,
+      "material_name": "日月之轨·孟章",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1206022,
+      "material_name": "日月之轨·源氏",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1206023,
+      "material_name": "日月之轨·木花石长姬",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1206024,
+      "material_name": "日月之轨·霍德尔",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1206025,
+      "material_name": "日月之轨·月读",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1206026,
+      "material_name": "日月之轨·天照",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1206027,
+      "material_name": "日月之轨·精卫",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1206028,
+      "material_name": "日月之轨·月羲九",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1206029,
+      "material_name": "日月之轨·伊邪那美",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1206030,
+      "material_name": "日月之轨·伊邪纳岐",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1206031,
+      "material_name": "日月之轨·监兵",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1206032,
+      "material_name": "日月之轨·共工",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1206033,
+      "material_name": "日月之轨·海拉",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1206034,
+      "material_name": "日月之轨·陵光",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1206035,
+      "material_name": "日月之轨·奥西里斯",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1206036,
+      "material_name": "日月之轨·吉尔达",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1206039,
+      "material_name": "日月之轨·斩念源氏",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1206040,
+      "material_name": "日月之轨·微风莉莉丝",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1206197,
+      "material_name": "日月之轨·计都",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1206199,
+      "material_name": "日月之轨·奈芙蒂斯",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1237901,
+      "material_name": "金币",
+      "item_type": "E_Currency",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1237907,
+      "material_name": "神格经验",
+      "item_type": "E_Currency",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1238047,
+      "material_name": "空粒子",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1238048,
+      "material_name": "铜粒子",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1238049,
+      "material_name": "银粒子",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1238050,
+      "material_name": "金粒子",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1238051,
+      "material_name": "水晶粒子",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1238052,
+      "material_name": "铜剑柄",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1238053,
+      "material_name": "铜杖座",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1238054,
+      "material_name": "铜杯座",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1238055,
+      "material_name": "铜星尘",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1238056,
+      "material_name": "银剑柄",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1238057,
+      "material_name": "银杖座",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1238058,
+      "material_name": "银杯座",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1238059,
+      "material_name": "银星尘",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1238060,
+      "material_name": "金剑柄",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1238061,
+      "material_name": "金杖座",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1238062,
+      "material_name": "金杯座",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1238063,
+      "material_name": "金星尘",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1238064,
+      "material_name": "水晶剑柄",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1238065,
+      "material_name": "水晶杖座",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1238066,
+      "material_name": "水晶杯座",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1238067,
+      "material_name": "水晶星尘",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1238100,
+      "material_name": "1★灵魂石",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1238101,
+      "material_name": "2★灵魂石",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1238102,
+      "material_name": "3★灵魂石",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1238103,
+      "material_name": "4★灵魂石",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1238104,
+      "material_name": "5★灵魂石",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "material_item_id": 1238105,
+      "material_name": "6★灵魂石",
+      "item_type": "E_Common",
+      "confidence": "CONFIRMED"
+    }
+  ],
+  "unresolved_item_ids": []
+}

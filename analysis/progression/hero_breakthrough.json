@@ -1,0 +1,6 @@
+{
+  "status": "NOT_FOUND",
+  "evidence": "No separate hero limit-break table or protocol operation located in targeted canonical progression index. PlayerStage is star progression; PlayerLevelBonus has no stage cap field.",
+  "distinct_from_star": true,
+  "confidence": "PARTIAL"
+}

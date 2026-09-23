@@ -1,0 +1,1765 @@
+{
+  "sources": {
+    "PlayerAttrib": {
+      "source": "assets/bin/Data/1e3805e55669ff94d90568f68e2219a7",
+      "record_count": 1182,
+      "fields": [
+        "ID",
+        "Profession",
+        "Origin",
+        "ProfEnum",
+        "OriginNum",
+        "Level",
+        "DefaultStage",
+        "ExchangeChip",
+        "Compensate",
+        "IsOpen",
+        "ChipPropID",
+        "UnLockedItemID",
+        "WeapenId",
+        "RelicExp",
+        "HPMax",
+        "HPCount",
+        "SPMax",
+        "Damage",
+        "Defense",
+        "MoveSpeed",
+        "HPMaxCOR",
+        "SPMaxCOR",
+        "DamageCOR",
+        "DefenseCOR",
+        "Critical",
+        "CriticalDamage",
+        "PhysicalRist",
+        "IceRist",
+        "FireRiset",
+        "LightningRist",
+        "PoisonRist",
+        "SkillAbility",
+        "SuperArmor",
+        "WeakArmor",
+        "WeakArmorIncRate",
+        "DamageCoefficient",
+        "DamageUPCoefficient",
+        "DefenseCoefficient",
+        "Duration",
+        "BloodMoonParam",
+        "PrayBouns"
+      ]
+    },
+    "PlayerStage": {
+      "source": "assets/bin/Data/5daa56e072ff154479a3c72f84470d7e",
+      "record_count": 46,
+      "fields": [
+        "HeroStage",
+        "ChipNum",
+        "UniversalChip",
+        "DamageStageBonus",
+        "DefenseStageBonus",
+        "HPMaxStageBonus",
+        "SPMaxStageBonus",
+        "BigStarNum",
+        "BigStarMax",
+        "SmallStarNum",
+        "SmallStarMax",
+        "RelicID"
+      ]
+    },
+    "Item": {
+      "source": "phase3_output/raw_tables/Item__e49ddfae661db9147b8823552f01df41.bin",
+      "record_count": 3026,
+      "fields": [
+        "ItemID",
+        "NameID",
+        "DescID",
+        "HistoryID",
+        "ItemUseScence",
+        "ItemType",
+        "ItemQuality",
+        "PileCount",
+        "ItemValue",
+        "AddADCGroup",
+        "IMQualityLevel",
+        "DropLimit",
+        "DropLimitParam",
+        "NeedLevel",
+        "ItemShow",
+        "Used",
+        "Purchased",
+        "Gain",
+        "Composed",
+        "Recover",
+        "FunctionEff",
+        "EffData",
+        "Return",
+        "Icon",
+        "EffectIcon",
+        "Model",
+        "Effect",
+        "IfShowName",
+        "DropSound",
+        "PickSound",
+        "QuickBuyID"
+      ]
+    },
+    "Language": {
+      "source": "phase3_output/raw_tables/Language__844762d28a77f85408b631eb3f0186bc.bin",
+      "record_count": 28996,
+      "fields": [
+        "Key",
+        "Chinese",
+        "ChineseFT",
+        "LanguageKor",
+        "LanguageJpn"
+      ]
+    }
+  },
+  "protocol_evidence": "C2L_HeroOpt OPT_UPSTAR=2 carries upstarConsumeItemId; HeroStarUP.OnClickUpLevel RVA 0x1927868 calls PlayerStageManager.GetItem then HeroModule.UpStar.",
+  "hero_1003_default_stage": 1,
+  "rows": [
+    {
+      "source_table": "PlayerStage",
+      "source_id": 1,
+      "star": 1,
+      "next_star": 2,
+      "big_star": 1,
+      "small_star": 0,
+      "fragment_count_field": 10,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 10
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 0,
+        "DefenseStageBonus": 0,
+        "HPMaxStageBonus": 0,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        0
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 2,
+      "star": 2,
+      "next_star": 3,
+      "big_star": 1,
+      "small_star": 1,
+      "fragment_count_field": 10,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 10
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 76,
+        "DefenseStageBonus": 96,
+        "HPMaxStageBonus": 57,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        0
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 3,
+      "star": 3,
+      "next_star": 4,
+      "big_star": 2,
+      "small_star": 0,
+      "fragment_count_field": 10,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 10
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 161,
+        "DefenseStageBonus": 201,
+        "HPMaxStageBonus": 120,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        0
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 4,
+      "star": 4,
+      "next_star": 5,
+      "big_star": 2,
+      "small_star": 1,
+      "fragment_count_field": 25,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 25
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 334,
+        "DefenseStageBonus": 417,
+        "HPMaxStageBonus": 250,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        0
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 5,
+      "star": 5,
+      "next_star": 6,
+      "big_star": 3,
+      "small_star": 0,
+      "fragment_count_field": 25,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 25
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 526,
+        "DefenseStageBonus": 657,
+        "HPMaxStageBonus": 394,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        0
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 6,
+      "star": 6,
+      "next_star": 7,
+      "big_star": 3,
+      "small_star": 1,
+      "fragment_count_field": 40,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 40
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 771,
+        "DefenseStageBonus": 964,
+        "HPMaxStageBonus": 578,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        0
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 7,
+      "star": 7,
+      "next_star": 8,
+      "big_star": 3,
+      "small_star": 2,
+      "fragment_count_field": 40,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 40
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 1017,
+        "DefenseStageBonus": 1272,
+        "HPMaxStageBonus": 763,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        0
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 8,
+      "star": 8,
+      "next_star": 9,
+      "big_star": 4,
+      "small_star": 0,
+      "fragment_count_field": 40,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 40
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 1286,
+        "DefenseStageBonus": 1608,
+        "HPMaxStageBonus": 964,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        0
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 9,
+      "star": 9,
+      "next_star": 10,
+      "big_star": 4,
+      "small_star": 1,
+      "fragment_count_field": 60,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 60
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 1609,
+        "DefenseStageBonus": 2011,
+        "HPMaxStageBonus": 1206,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        0
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 10,
+      "star": 10,
+      "next_star": 11,
+      "big_star": 4,
+      "small_star": 2,
+      "fragment_count_field": 60,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 60
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 1931,
+        "DefenseStageBonus": 2414,
+        "HPMaxStageBonus": 1448,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        0
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 11,
+      "star": 11,
+      "next_star": 12,
+      "big_star": 5,
+      "small_star": 0,
+      "fragment_count_field": 60,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 60
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 2289,
+        "DefenseStageBonus": 2861,
+        "HPMaxStageBonus": 1716,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        0
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 12,
+      "star": 12,
+      "next_star": 13,
+      "big_star": 5,
+      "small_star": 0,
+      "fragment_count_field": 9,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 9
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 2392,
+        "DefenseStageBonus": 2861,
+        "HPMaxStageBonus": 1716,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        0
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 13,
+      "star": 13,
+      "next_star": 14,
+      "big_star": 5,
+      "small_star": 0,
+      "fragment_count_field": 9,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 9
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 2392,
+        "DefenseStageBonus": 2990,
+        "HPMaxStageBonus": 1716,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        0
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 14,
+      "star": 14,
+      "next_star": 15,
+      "big_star": 5,
+      "small_star": 0,
+      "fragment_count_field": 9,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 9
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 2392,
+        "DefenseStageBonus": 2990,
+        "HPMaxStageBonus": 1793,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        0
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 15,
+      "star": 15,
+      "next_star": 16,
+      "big_star": 5,
+      "small_star": 0,
+      "fragment_count_field": 9,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 9
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 2495,
+        "DefenseStageBonus": 3119,
+        "HPMaxStageBonus": 1870,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        0
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 16,
+      "star": 16,
+      "next_star": 17,
+      "big_star": 5,
+      "small_star": 1,
+      "fragment_count_field": 9,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 9
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 2495,
+        "DefenseStageBonus": 3119,
+        "HPMaxStageBonus": 1870,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        248011
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 17,
+      "star": 17,
+      "next_star": 18,
+      "big_star": 5,
+      "small_star": 1,
+      "fragment_count_field": 9,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 9
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 2598,
+        "DefenseStageBonus": 3119,
+        "HPMaxStageBonus": 1870,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        248011
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 18,
+      "star": 18,
+      "next_star": 19,
+      "big_star": 5,
+      "small_star": 1,
+      "fragment_count_field": 9,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 9
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 2598,
+        "DefenseStageBonus": 3248,
+        "HPMaxStageBonus": 1870,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        248011
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 19,
+      "star": 19,
+      "next_star": 20,
+      "big_star": 5,
+      "small_star": 1,
+      "fragment_count_field": 9,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 9
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 2598,
+        "DefenseStageBonus": 3248,
+        "HPMaxStageBonus": 1947,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        248011
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 20,
+      "star": 20,
+      "next_star": 21,
+      "big_star": 5,
+      "small_star": 1,
+      "fragment_count_field": 9,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 9
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 2703,
+        "DefenseStageBonus": 3379,
+        "HPMaxStageBonus": 2027,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        248011
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 21,
+      "star": 21,
+      "next_star": 22,
+      "big_star": 5,
+      "small_star": 2,
+      "fragment_count_field": 9,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 9
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 2703,
+        "DefenseStageBonus": 3379,
+        "HPMaxStageBonus": 2027,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        248011,
+        248014
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 22,
+      "star": 22,
+      "next_star": 23,
+      "big_star": 5,
+      "small_star": 2,
+      "fragment_count_field": 9,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 9
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 2806,
+        "DefenseStageBonus": 3379,
+        "HPMaxStageBonus": 2027,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        248011,
+        248014
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 23,
+      "star": 23,
+      "next_star": 24,
+      "big_star": 5,
+      "small_star": 2,
+      "fragment_count_field": 9,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 9
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 2806,
+        "DefenseStageBonus": 3508,
+        "HPMaxStageBonus": 2027,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        248011,
+        248014
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 24,
+      "star": 24,
+      "next_star": 25,
+      "big_star": 5,
+      "small_star": 2,
+      "fragment_count_field": 9,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 9
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 2806,
+        "DefenseStageBonus": 3508,
+        "HPMaxStageBonus": 2104,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        248011,
+        248014
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 25,
+      "star": 25,
+      "next_star": 26,
+      "big_star": 5,
+      "small_star": 2,
+      "fragment_count_field": 9,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 9
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 2909,
+        "DefenseStageBonus": 3637,
+        "HPMaxStageBonus": 2181,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        248011,
+        248014
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 26,
+      "star": 26,
+      "next_star": 27,
+      "big_star": 5,
+      "small_star": 3,
+      "fragment_count_field": 9,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 9
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 2909,
+        "DefenseStageBonus": 3637,
+        "HPMaxStageBonus": 2181,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        248011,
+        248012,
+        248014
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 27,
+      "star": 27,
+      "next_star": 28,
+      "big_star": 5,
+      "small_star": 3,
+      "fragment_count_field": 9,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 9
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 3012,
+        "DefenseStageBonus": 3637,
+        "HPMaxStageBonus": 2181,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        248011,
+        248012,
+        248014
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 28,
+      "star": 28,
+      "next_star": 29,
+      "big_star": 5,
+      "small_star": 3,
+      "fragment_count_field": 9,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 9
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 3012,
+        "DefenseStageBonus": 3766,
+        "HPMaxStageBonus": 2181,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        248011,
+        248012,
+        248014
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 29,
+      "star": 29,
+      "next_star": 30,
+      "big_star": 5,
+      "small_star": 3,
+      "fragment_count_field": 9,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 9
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 3012,
+        "DefenseStageBonus": 3766,
+        "HPMaxStageBonus": 2258,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        248011,
+        248012,
+        248014
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 30,
+      "star": 30,
+      "next_star": 31,
+      "big_star": 5,
+      "small_star": 3,
+      "fragment_count_field": 9,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 9
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 3118,
+        "DefenseStageBonus": 3898,
+        "HPMaxStageBonus": 2338,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        248011,
+        248012,
+        248014
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 31,
+      "star": 31,
+      "next_star": 32,
+      "big_star": 5,
+      "small_star": 4,
+      "fragment_count_field": 9,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 9
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 3118,
+        "DefenseStageBonus": 3898,
+        "HPMaxStageBonus": 2338,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        248011,
+        248012,
+        248014,
+        248015
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 32,
+      "star": 32,
+      "next_star": 33,
+      "big_star": 5,
+      "small_star": 4,
+      "fragment_count_field": 9,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 9
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 3221,
+        "DefenseStageBonus": 3898,
+        "HPMaxStageBonus": 2338,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        248011,
+        248012,
+        248014,
+        248015
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 33,
+      "star": 33,
+      "next_star": 34,
+      "big_star": 5,
+      "small_star": 4,
+      "fragment_count_field": 9,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 9
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 3221,
+        "DefenseStageBonus": 4027,
+        "HPMaxStageBonus": 2338,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        248011,
+        248012,
+        248014,
+        248015
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 34,
+      "star": 34,
+      "next_star": 35,
+      "big_star": 5,
+      "small_star": 4,
+      "fragment_count_field": 9,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 9
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 3221,
+        "DefenseStageBonus": 4027,
+        "HPMaxStageBonus": 2416,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        248011,
+        248012,
+        248014,
+        248015
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 35,
+      "star": 35,
+      "next_star": 36,
+      "big_star": 5,
+      "small_star": 4,
+      "fragment_count_field": 9,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 9
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 3324,
+        "DefenseStageBonus": 4156,
+        "HPMaxStageBonus": 2494,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        248011,
+        248012,
+        248014,
+        248015
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 36,
+      "star": 36,
+      "next_star": 37,
+      "big_star": 5,
+      "small_star": 5,
+      "fragment_count_field": 9,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 9
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 3324,
+        "DefenseStageBonus": 4156,
+        "HPMaxStageBonus": 2494,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        248011,
+        248012,
+        248013,
+        248014,
+        248015
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 37,
+      "star": 37,
+      "next_star": 38,
+      "big_star": 5,
+      "small_star": 5,
+      "fragment_count_field": 9,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 9
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 3427,
+        "DefenseStageBonus": 4156,
+        "HPMaxStageBonus": 2494,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        248011,
+        248012,
+        248013,
+        248014,
+        248015
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 38,
+      "star": 38,
+      "next_star": 39,
+      "big_star": 5,
+      "small_star": 5,
+      "fragment_count_field": 9,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 9
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 3427,
+        "DefenseStageBonus": 4285,
+        "HPMaxStageBonus": 2494,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        248011,
+        248012,
+        248013,
+        248014,
+        248015
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 39,
+      "star": 39,
+      "next_star": 40,
+      "big_star": 5,
+      "small_star": 5,
+      "fragment_count_field": 9,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 9
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 3427,
+        "DefenseStageBonus": 4285,
+        "HPMaxStageBonus": 2572,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        248011,
+        248012,
+        248013,
+        248014,
+        248015
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 40,
+      "star": 40,
+      "next_star": 41,
+      "big_star": 5,
+      "small_star": 5,
+      "fragment_count_field": 9,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 9
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 3533,
+        "DefenseStageBonus": 4416,
+        "HPMaxStageBonus": 2650,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        248011,
+        248012,
+        248013,
+        248014,
+        248015
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 41,
+      "star": 41,
+      "next_star": 42,
+      "big_star": 5,
+      "small_star": 6,
+      "fragment_count_field": 9,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 9
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 3533,
+        "DefenseStageBonus": 4416,
+        "HPMaxStageBonus": 2650,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        248011,
+        248012,
+        248013,
+        248014,
+        248015,
+        248016
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 42,
+      "star": 42,
+      "next_star": 43,
+      "big_star": 5,
+      "small_star": 6,
+      "fragment_count_field": 18,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 18
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 3626,
+        "DefenseStageBonus": 4416,
+        "HPMaxStageBonus": 2650,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        248011,
+        248012,
+        248013,
+        248014,
+        248015,
+        248016
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 43,
+      "star": 43,
+      "next_star": 44,
+      "big_star": 5,
+      "small_star": 6,
+      "fragment_count_field": 18,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 18
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 3626,
+        "DefenseStageBonus": 4532,
+        "HPMaxStageBonus": 2650,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        248011,
+        248012,
+        248013,
+        248014,
+        248015,
+        248016
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 44,
+      "star": 44,
+      "next_star": 45,
+      "big_star": 5,
+      "small_star": 6,
+      "fragment_count_field": 18,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 18
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 3626,
+        "DefenseStageBonus": 4532,
+        "HPMaxStageBonus": 2720,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        248011,
+        248012,
+        248013,
+        248014,
+        248015,
+        248016
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 45,
+      "star": 45,
+      "next_star": 46,
+      "big_star": 5,
+      "small_star": 6,
+      "fragment_count_field": 18,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 18
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 3812,
+        "DefenseStageBonus": 4765,
+        "HPMaxStageBonus": 2860,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        248011,
+        248012,
+        248013,
+        248014,
+        248015,
+        248016
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "PlayerStage",
+      "source_id": 46,
+      "star": 46,
+      "big_star": 6,
+      "small_star": 0,
+      "fragment_count_field": 18,
+      "specific_fragment_for_hero_1003": {
+        "material_item_id": 1201003,
+        "material_name": "贝黑莫斯碎片",
+        "item_type": "E_Chip",
+        "confidence": "CONFIRMED"
+      },
+      "universal_fragment_option": [
+        {
+          "material_item_id": 1201000,
+          "material_name": "万能神格碎片",
+          "item_type": "E_Chip",
+          "confidence": "CONFIRMED",
+          "material_num": 18
+        }
+      ],
+      "attribute_bonus": {
+        "DamageStageBonus": 4000,
+        "DefenseStageBonus": 5000,
+        "HPMaxStageBonus": 3000,
+        "SPMaxStageBonus": 0
+      },
+      "relic_ids": [
+        248011,
+        248012,
+        248013,
+        248014,
+        248015,
+        248016
+      ],
+      "confidence": "PARTIAL"
+    }
+  ],
+  "caveat": "ChipNum is the stage-row fragment quantity; exact choice between specific and universal fragments, terminal-row cost, and any other server checks need validation. No independent gold field is present."
+}

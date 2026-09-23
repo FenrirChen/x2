@@ -1,0 +1,1276 @@
+{
+  "sources": {
+    "PlayerAttrib": {
+      "source": "assets/bin/Data/1e3805e55669ff94d90568f68e2219a7",
+      "record_count": 1182,
+      "fields": [
+        "ID",
+        "Profession",
+        "Origin",
+        "ProfEnum",
+        "OriginNum",
+        "Level",
+        "DefaultStage",
+        "ExchangeChip",
+        "Compensate",
+        "IsOpen",
+        "ChipPropID",
+        "UnLockedItemID",
+        "WeapenId",
+        "RelicExp",
+        "HPMax",
+        "HPCount",
+        "SPMax",
+        "Damage",
+        "Defense",
+        "MoveSpeed",
+        "HPMaxCOR",
+        "SPMaxCOR",
+        "DamageCOR",
+        "DefenseCOR",
+        "Critical",
+        "CriticalDamage",
+        "PhysicalRist",
+        "IceRist",
+        "FireRiset",
+        "LightningRist",
+        "PoisonRist",
+        "SkillAbility",
+        "SuperArmor",
+        "WeakArmor",
+        "WeakArmorIncRate",
+        "DamageCoefficient",
+        "DamageUPCoefficient",
+        "DefenseCoefficient",
+        "Duration",
+        "BloodMoonParam",
+        "PrayBouns"
+      ]
+    },
+    "ArtifactBase": {
+      "source": "phase3_output/raw_tables/ArtifactBase__810d774cf33b0e349a5507fa7588b32d.bin",
+      "record_count": 40,
+      "fields": [
+        "ArtifactID",
+        "NameID",
+        "ArtifactDesc",
+        "ArtifactDetail",
+        "FuseLevel",
+        "ArtifactDrawing",
+        "Effect",
+        "ArtifactIcon",
+        "ArtifactAttr1",
+        "AttrValue1",
+        "ArtifactAttr2",
+        "AttrValue2",
+        "ArtifactAttr3",
+        "AttrValue3",
+        "SeniorAttr1",
+        "SenAttrValue1",
+        "SeniorAttr2",
+        "SenAttrValue2"
+      ]
+    },
+    "ArtifactFuse": {
+      "source": "assets/bin/Data/c338962ae8f5e1148aa9badc4f13d966",
+      "record_count": 28,
+      "fields": [
+        "FuseID",
+        "ProfEnum",
+        "HeroStage",
+        "AttrRate",
+        "MaxAttrRate",
+        "AdvancedItem",
+        "AdvancedItemNum",
+        "FuseValue",
+        "AdvancedConsume",
+        "FuseItem",
+        "FuseItemNum",
+        "FuseConsume",
+        "HoleIsOpen"
+      ]
+    },
+    "Item": {
+      "source": "phase3_output/raw_tables/Item__e49ddfae661db9147b8823552f01df41.bin",
+      "record_count": 3026,
+      "fields": [
+        "ItemID",
+        "NameID",
+        "DescID",
+        "HistoryID",
+        "ItemUseScence",
+        "ItemType",
+        "ItemQuality",
+        "PileCount",
+        "ItemValue",
+        "AddADCGroup",
+        "IMQualityLevel",
+        "DropLimit",
+        "DropLimitParam",
+        "NeedLevel",
+        "ItemShow",
+        "Used",
+        "Purchased",
+        "Gain",
+        "Composed",
+        "Recover",
+        "FunctionEff",
+        "EffData",
+        "Return",
+        "Icon",
+        "EffectIcon",
+        "Model",
+        "Effect",
+        "IfShowName",
+        "DropSound",
+        "PickSound",
+        "QuickBuyID"
+      ]
+    },
+    "Language": {
+      "source": "phase3_output/raw_tables/Language__844762d28a77f85408b631eb3f0186bc.bin",
+      "record_count": 28996,
+      "fields": [
+        "Key",
+        "Chinese",
+        "ChineseFT",
+        "LanguageKor",
+        "LanguageJpn"
+      ]
+    }
+  },
+  "hero_1003_weapon": {
+    "source_table": "PlayerAttrib/ArtifactBase",
+    "source_id": 1503,
+    "hero_id": 1003,
+    "profession": 303,
+    "name": "绯红之刃",
+    "fuse_levels": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "base_attributes": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 24,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 22,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 182
+    },
+    "senior_attributes": {
+      "SeniorAttr1": 101,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 125,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        480,
+        720
+      ]
+    },
+    "confidence": "CONFIRMED"
+  },
+  "rows": [
+    {
+      "source_table": "ArtifactFuse",
+      "source_id": "301:0",
+      "profession": 301,
+      "rank": 0,
+      "required_hero_stage": 1,
+      "level_up_materials": [],
+      "level_up_gold_cost": 0,
+      "fuse_materials": [],
+      "fuse_gold_cost": 20000,
+      "attribute_rate": 0,
+      "max_attribute_rate": 0,
+      "jewel_hole_state": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "ArtifactFuse",
+      "source_id": "301:1",
+      "profession": 301,
+      "rank": 1,
+      "required_hero_stage": 3,
+      "level_up_materials": [
+        {
+          "material_item_id": 1238100,
+          "material_name": "1★灵魂石",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 6
+        }
+      ],
+      "level_up_gold_cost": 1000,
+      "fuse_materials": [
+        {
+          "material_item_id": 1238047,
+          "material_name": "空粒子",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 12
+        }
+      ],
+      "fuse_gold_cost": 50000,
+      "attribute_rate": 1000,
+      "max_attribute_rate": 2000,
+      "jewel_hole_state": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        2
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "ArtifactFuse",
+      "source_id": "301:2",
+      "profession": 301,
+      "rank": 2,
+      "required_hero_stage": 5,
+      "level_up_materials": [
+        {
+          "material_item_id": 1238101,
+          "material_name": "2★灵魂石",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 6
+        }
+      ],
+      "level_up_gold_cost": 3000,
+      "fuse_materials": [
+        {
+          "material_item_id": 1238048,
+          "material_name": "铜粒子",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 12
+        },
+        {
+          "material_item_id": 1238054,
+          "material_name": "铜杯座",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 12
+        }
+      ],
+      "fuse_gold_cost": 100000,
+      "attribute_rate": 2500,
+      "max_attribute_rate": 4000,
+      "jewel_hole_state": [
+        1,
+        1,
+        0,
+        0,
+        0,
+        2
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "ArtifactFuse",
+      "source_id": "301:3",
+      "profession": 301,
+      "rank": 3,
+      "required_hero_stage": 8,
+      "level_up_materials": [
+        {
+          "material_item_id": 1238102,
+          "material_name": "3★灵魂石",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 6
+        }
+      ],
+      "level_up_gold_cost": 12000,
+      "fuse_materials": [
+        {
+          "material_item_id": 1238049,
+          "material_name": "银粒子",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 18
+        },
+        {
+          "material_item_id": 1238058,
+          "material_name": "银杯座",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 18
+        }
+      ],
+      "fuse_gold_cost": 200000,
+      "attribute_rate": 5600,
+      "max_attribute_rate": 8000,
+      "jewel_hole_state": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        2
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "ArtifactFuse",
+      "source_id": "301:4",
+      "profession": 301,
+      "rank": 4,
+      "required_hero_stage": 11,
+      "level_up_materials": [
+        {
+          "material_item_id": 1238103,
+          "material_name": "4★灵魂石",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 6
+        }
+      ],
+      "level_up_gold_cost": 20000,
+      "fuse_materials": [
+        {
+          "material_item_id": 1238050,
+          "material_name": "金粒子",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 24
+        },
+        {
+          "material_item_id": 1238062,
+          "material_name": "金杯座",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 24
+        }
+      ],
+      "fuse_gold_cost": 320000,
+      "attribute_rate": 9000,
+      "max_attribute_rate": 14000,
+      "jewel_hole_state": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        2
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "ArtifactFuse",
+      "source_id": "301:5",
+      "profession": 301,
+      "rank": 5,
+      "required_hero_stage": 46,
+      "level_up_materials": [
+        {
+          "material_item_id": 1238104,
+          "material_name": "5★灵魂石",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 6
+        }
+      ],
+      "level_up_gold_cost": 24000,
+      "fuse_materials": [
+        {
+          "material_item_id": 1238051,
+          "material_name": "水晶粒子",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 30
+        },
+        {
+          "material_item_id": 1238066,
+          "material_name": "水晶杯座",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 30
+        }
+      ],
+      "fuse_gold_cost": 480000,
+      "attribute_rate": 15500,
+      "max_attribute_rate": 23000,
+      "jewel_hole_state": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        2
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "ArtifactFuse",
+      "source_id": "301:6",
+      "profession": 301,
+      "rank": 6,
+      "required_hero_stage": null,
+      "level_up_materials": [
+        {
+          "material_item_id": 1238105,
+          "material_name": "6★灵魂石",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 6
+        }
+      ],
+      "level_up_gold_cost": 30000,
+      "fuse_materials": [],
+      "fuse_gold_cost": 0,
+      "attribute_rate": 25000,
+      "max_attribute_rate": 36000,
+      "jewel_hole_state": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        2
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "ArtifactFuse",
+      "source_id": "302:0",
+      "profession": 302,
+      "rank": 0,
+      "required_hero_stage": 1,
+      "level_up_materials": [],
+      "level_up_gold_cost": 0,
+      "fuse_materials": [],
+      "fuse_gold_cost": 20000,
+      "attribute_rate": 0,
+      "max_attribute_rate": 0,
+      "jewel_hole_state": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "ArtifactFuse",
+      "source_id": "302:1",
+      "profession": 302,
+      "rank": 1,
+      "required_hero_stage": 3,
+      "level_up_materials": [
+        {
+          "material_item_id": 1238100,
+          "material_name": "1★灵魂石",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 6
+        }
+      ],
+      "level_up_gold_cost": 1000,
+      "fuse_materials": [
+        {
+          "material_item_id": 1238047,
+          "material_name": "空粒子",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 12
+        }
+      ],
+      "fuse_gold_cost": 50000,
+      "attribute_rate": 1000,
+      "max_attribute_rate": 2000,
+      "jewel_hole_state": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        2
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "ArtifactFuse",
+      "source_id": "302:2",
+      "profession": 302,
+      "rank": 2,
+      "required_hero_stage": 5,
+      "level_up_materials": [
+        {
+          "material_item_id": 1238101,
+          "material_name": "2★灵魂石",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 6
+        }
+      ],
+      "level_up_gold_cost": 3000,
+      "fuse_materials": [
+        {
+          "material_item_id": 1238048,
+          "material_name": "铜粒子",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 12
+        },
+        {
+          "material_item_id": 1238053,
+          "material_name": "铜杖座",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 12
+        }
+      ],
+      "fuse_gold_cost": 100000,
+      "attribute_rate": 2500,
+      "max_attribute_rate": 4000,
+      "jewel_hole_state": [
+        1,
+        1,
+        0,
+        0,
+        0,
+        2
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "ArtifactFuse",
+      "source_id": "302:3",
+      "profession": 302,
+      "rank": 3,
+      "required_hero_stage": 8,
+      "level_up_materials": [
+        {
+          "material_item_id": 1238102,
+          "material_name": "3★灵魂石",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 6
+        }
+      ],
+      "level_up_gold_cost": 12000,
+      "fuse_materials": [
+        {
+          "material_item_id": 1238049,
+          "material_name": "银粒子",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 18
+        },
+        {
+          "material_item_id": 1238057,
+          "material_name": "银杖座",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 18
+        }
+      ],
+      "fuse_gold_cost": 200000,
+      "attribute_rate": 5600,
+      "max_attribute_rate": 8000,
+      "jewel_hole_state": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        2
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "ArtifactFuse",
+      "source_id": "302:4",
+      "profession": 302,
+      "rank": 4,
+      "required_hero_stage": 11,
+      "level_up_materials": [
+        {
+          "material_item_id": 1238103,
+          "material_name": "4★灵魂石",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 6
+        }
+      ],
+      "level_up_gold_cost": 20000,
+      "fuse_materials": [
+        {
+          "material_item_id": 1238050,
+          "material_name": "金粒子",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 24
+        },
+        {
+          "material_item_id": 1238061,
+          "material_name": "金杖座",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 24
+        }
+      ],
+      "fuse_gold_cost": 320000,
+      "attribute_rate": 9000,
+      "max_attribute_rate": 14000,
+      "jewel_hole_state": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        2
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "ArtifactFuse",
+      "source_id": "302:5",
+      "profession": 302,
+      "rank": 5,
+      "required_hero_stage": 46,
+      "level_up_materials": [
+        {
+          "material_item_id": 1238104,
+          "material_name": "5★灵魂石",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 6
+        }
+      ],
+      "level_up_gold_cost": 24000,
+      "fuse_materials": [
+        {
+          "material_item_id": 1238051,
+          "material_name": "水晶粒子",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 30
+        },
+        {
+          "material_item_id": 1238065,
+          "material_name": "水晶杖座",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 30
+        }
+      ],
+      "fuse_gold_cost": 480000,
+      "attribute_rate": 15500,
+      "max_attribute_rate": 23000,
+      "jewel_hole_state": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        2
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "ArtifactFuse",
+      "source_id": "302:6",
+      "profession": 302,
+      "rank": 6,
+      "required_hero_stage": null,
+      "level_up_materials": [
+        {
+          "material_item_id": 1238105,
+          "material_name": "6★灵魂石",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 6
+        }
+      ],
+      "level_up_gold_cost": 30000,
+      "fuse_materials": [],
+      "fuse_gold_cost": 0,
+      "attribute_rate": 25000,
+      "max_attribute_rate": 36000,
+      "jewel_hole_state": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        2
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "ArtifactFuse",
+      "source_id": "303:0",
+      "profession": 303,
+      "rank": 0,
+      "required_hero_stage": 1,
+      "level_up_materials": [],
+      "level_up_gold_cost": 0,
+      "fuse_materials": [],
+      "fuse_gold_cost": 20000,
+      "attribute_rate": 0,
+      "max_attribute_rate": 0,
+      "jewel_hole_state": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "ArtifactFuse",
+      "source_id": "303:1",
+      "profession": 303,
+      "rank": 1,
+      "required_hero_stage": 3,
+      "level_up_materials": [
+        {
+          "material_item_id": 1238100,
+          "material_name": "1★灵魂石",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 6
+        }
+      ],
+      "level_up_gold_cost": 1000,
+      "fuse_materials": [
+        {
+          "material_item_id": 1238047,
+          "material_name": "空粒子",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 12
+        }
+      ],
+      "fuse_gold_cost": 50000,
+      "attribute_rate": 1000,
+      "max_attribute_rate": 2000,
+      "jewel_hole_state": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        2
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "ArtifactFuse",
+      "source_id": "303:2",
+      "profession": 303,
+      "rank": 2,
+      "required_hero_stage": 5,
+      "level_up_materials": [
+        {
+          "material_item_id": 1238101,
+          "material_name": "2★灵魂石",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 6
+        }
+      ],
+      "level_up_gold_cost": 3000,
+      "fuse_materials": [
+        {
+          "material_item_id": 1238048,
+          "material_name": "铜粒子",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 12
+        },
+        {
+          "material_item_id": 1238052,
+          "material_name": "铜剑柄",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 12
+        }
+      ],
+      "fuse_gold_cost": 100000,
+      "attribute_rate": 2500,
+      "max_attribute_rate": 4000,
+      "jewel_hole_state": [
+        1,
+        1,
+        0,
+        0,
+        0,
+        2
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "ArtifactFuse",
+      "source_id": "303:3",
+      "profession": 303,
+      "rank": 3,
+      "required_hero_stage": 8,
+      "level_up_materials": [
+        {
+          "material_item_id": 1238102,
+          "material_name": "3★灵魂石",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 6
+        }
+      ],
+      "level_up_gold_cost": 12000,
+      "fuse_materials": [
+        {
+          "material_item_id": 1238049,
+          "material_name": "银粒子",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 18
+        },
+        {
+          "material_item_id": 1238056,
+          "material_name": "银剑柄",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 18
+        }
+      ],
+      "fuse_gold_cost": 200000,
+      "attribute_rate": 5600,
+      "max_attribute_rate": 8000,
+      "jewel_hole_state": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        2
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "ArtifactFuse",
+      "source_id": "303:4",
+      "profession": 303,
+      "rank": 4,
+      "required_hero_stage": 11,
+      "level_up_materials": [
+        {
+          "material_item_id": 1238103,
+          "material_name": "4★灵魂石",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 6
+        }
+      ],
+      "level_up_gold_cost": 20000,
+      "fuse_materials": [
+        {
+          "material_item_id": 1238050,
+          "material_name": "金粒子",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 24
+        },
+        {
+          "material_item_id": 1238060,
+          "material_name": "金剑柄",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 24
+        }
+      ],
+      "fuse_gold_cost": 320000,
+      "attribute_rate": 9000,
+      "max_attribute_rate": 14000,
+      "jewel_hole_state": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        2
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "ArtifactFuse",
+      "source_id": "303:5",
+      "profession": 303,
+      "rank": 5,
+      "required_hero_stage": 46,
+      "level_up_materials": [
+        {
+          "material_item_id": 1238104,
+          "material_name": "5★灵魂石",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 6
+        }
+      ],
+      "level_up_gold_cost": 24000,
+      "fuse_materials": [
+        {
+          "material_item_id": 1238051,
+          "material_name": "水晶粒子",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 30
+        },
+        {
+          "material_item_id": 1238064,
+          "material_name": "水晶剑柄",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 30
+        }
+      ],
+      "fuse_gold_cost": 480000,
+      "attribute_rate": 15500,
+      "max_attribute_rate": 23000,
+      "jewel_hole_state": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        2
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "ArtifactFuse",
+      "source_id": "303:6",
+      "profession": 303,
+      "rank": 6,
+      "required_hero_stage": null,
+      "level_up_materials": [
+        {
+          "material_item_id": 1238105,
+          "material_name": "6★灵魂石",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 6
+        }
+      ],
+      "level_up_gold_cost": 30000,
+      "fuse_materials": [],
+      "fuse_gold_cost": 0,
+      "attribute_rate": 25000,
+      "max_attribute_rate": 36000,
+      "jewel_hole_state": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        2
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "ArtifactFuse",
+      "source_id": "304:0",
+      "profession": 304,
+      "rank": 0,
+      "required_hero_stage": 1,
+      "level_up_materials": [],
+      "level_up_gold_cost": 0,
+      "fuse_materials": [],
+      "fuse_gold_cost": 20000,
+      "attribute_rate": 0,
+      "max_attribute_rate": 0,
+      "jewel_hole_state": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "ArtifactFuse",
+      "source_id": "304:1",
+      "profession": 304,
+      "rank": 1,
+      "required_hero_stage": 3,
+      "level_up_materials": [
+        {
+          "material_item_id": 1238100,
+          "material_name": "1★灵魂石",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 6
+        }
+      ],
+      "level_up_gold_cost": 1000,
+      "fuse_materials": [
+        {
+          "material_item_id": 1238047,
+          "material_name": "空粒子",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 12
+        }
+      ],
+      "fuse_gold_cost": 50000,
+      "attribute_rate": 1000,
+      "max_attribute_rate": 2000,
+      "jewel_hole_state": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        2
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "ArtifactFuse",
+      "source_id": "304:2",
+      "profession": 304,
+      "rank": 2,
+      "required_hero_stage": 5,
+      "level_up_materials": [
+        {
+          "material_item_id": 1238101,
+          "material_name": "2★灵魂石",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 6
+        }
+      ],
+      "level_up_gold_cost": 3000,
+      "fuse_materials": [
+        {
+          "material_item_id": 1238048,
+          "material_name": "铜粒子",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 12
+        },
+        {
+          "material_item_id": 1238055,
+          "material_name": "铜星尘",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 12
+        }
+      ],
+      "fuse_gold_cost": 100000,
+      "attribute_rate": 2500,
+      "max_attribute_rate": 4000,
+      "jewel_hole_state": [
+        1,
+        1,
+        0,
+        0,
+        0,
+        2
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "ArtifactFuse",
+      "source_id": "304:3",
+      "profession": 304,
+      "rank": 3,
+      "required_hero_stage": 8,
+      "level_up_materials": [
+        {
+          "material_item_id": 1238102,
+          "material_name": "3★灵魂石",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 6
+        }
+      ],
+      "level_up_gold_cost": 12000,
+      "fuse_materials": [
+        {
+          "material_item_id": 1238049,
+          "material_name": "银粒子",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 18
+        },
+        {
+          "material_item_id": 1238059,
+          "material_name": "银星尘",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 18
+        }
+      ],
+      "fuse_gold_cost": 200000,
+      "attribute_rate": 5600,
+      "max_attribute_rate": 8000,
+      "jewel_hole_state": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        2
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "ArtifactFuse",
+      "source_id": "304:4",
+      "profession": 304,
+      "rank": 4,
+      "required_hero_stage": 11,
+      "level_up_materials": [
+        {
+          "material_item_id": 1238103,
+          "material_name": "4★灵魂石",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 6
+        }
+      ],
+      "level_up_gold_cost": 20000,
+      "fuse_materials": [
+        {
+          "material_item_id": 1238050,
+          "material_name": "金粒子",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 24
+        },
+        {
+          "material_item_id": 1238063,
+          "material_name": "金星尘",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 24
+        }
+      ],
+      "fuse_gold_cost": 320000,
+      "attribute_rate": 9000,
+      "max_attribute_rate": 14000,
+      "jewel_hole_state": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        2
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "ArtifactFuse",
+      "source_id": "304:5",
+      "profession": 304,
+      "rank": 5,
+      "required_hero_stage": 46,
+      "level_up_materials": [
+        {
+          "material_item_id": 1238104,
+          "material_name": "5★灵魂石",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 6
+        }
+      ],
+      "level_up_gold_cost": 24000,
+      "fuse_materials": [
+        {
+          "material_item_id": 1238051,
+          "material_name": "水晶粒子",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 30
+        },
+        {
+          "material_item_id": 1238067,
+          "material_name": "水晶星尘",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 30
+        }
+      ],
+      "fuse_gold_cost": 480000,
+      "attribute_rate": 15500,
+      "max_attribute_rate": 23000,
+      "jewel_hole_state": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        2
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "ArtifactFuse",
+      "source_id": "304:6",
+      "profession": 304,
+      "rank": 6,
+      "required_hero_stage": null,
+      "level_up_materials": [
+        {
+          "material_item_id": 1238105,
+          "material_name": "6★灵魂石",
+          "item_type": "E_Common",
+          "confidence": "CONFIRMED",
+          "material_num": 6
+        }
+      ],
+      "level_up_gold_cost": 30000,
+      "fuse_materials": [],
+      "fuse_gold_cost": 0,
+      "attribute_rate": 25000,
+      "max_attribute_rate": 36000,
+      "jewel_hole_state": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        2
+      ],
+      "confidence": "PARTIAL"
+    }
+  ],
+  "client_operations": [
+    "ArtifactOpt.JO_LevelUP=0",
+    "ArtifactOpt.JO_Fuse=1"
+  ],
+  "caveat": "Weapon is hero-bound Artifact. ArtifactFuse gives profession/stage-specific level-up and fusion ingredients; exact rank transition and attribute arithmetic need server or further handler evidence."
+}

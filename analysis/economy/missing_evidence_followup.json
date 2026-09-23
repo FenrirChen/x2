@@ -1,0 +1,150 @@
+{
+  "scope": "NEED.md targeted static evidence, 2026-09-23",
+  "status_vocabulary": ["CONFIRMED", "PARTIAL", "LIKELY_SERVER_ONLY", "USER_CAN_DEFINE", "UNRESOLVED"],
+  "items": [
+    {
+      "name": "GoodsID → ItemID",
+      "need_entry": "商店商品内容",
+      "status": "PARTIAL",
+      "evidence": "ShopID→GroupID→GoodsID static path exists; 17 Item.QuickBuyID reverse links, including 2001501→1237913, 2006901→1237925, 1933001/2/3→1281001/2/3; 1900101 has no reverse link. L2C_Goods.itemId is sent in shop responses; ShopGoodsGroup has no ItemID.",
+      "client_static_available": true,
+      "runtime_response_required": true,
+      "likely_server_only": true,
+      "user_can_define": true,
+      "recommended_action": "Seek successful historical L2C_ShopGoods responses; preserve 17 reverse links as hints, not complete catalog; do not infer nearby IDs."
+    },
+    {
+      "name": "GoodsID → Num",
+      "need_entry": "商店商品内容",
+      "status": "LIKELY_SERVER_ONLY",
+      "evidence": "ShopGoodsGroup has no Num. L2C_Goods.num and L2C_BuyGoods.itemNum are response fields; no quantity for any of six targeted GoodsID in extracted tables.",
+      "client_static_available": false,
+      "runtime_response_required": true,
+      "likely_server_only": true,
+      "user_can_define": true,
+      "recommended_action": "Require a successful shop response or label any Revival quantity as a compatibility rule; never assume one."
+    },
+    {
+      "name": "随机店抽取与上架",
+      "need_entry": "商店商品内容",
+      "status": "LIKELY_SERVER_ONLY",
+      "evidence": "Static group, condition and season-group references exist; L2C_ShopGoods and L2C_RefreshShop carry the actual listed goods. No complete selection algorithm was established in client static data.",
+      "client_static_available": true,
+      "runtime_response_required": true,
+      "likely_server_only": true,
+      "user_can_define": true,
+      "recommended_action": "Collect historical snapshots across refreshes; otherwise keep shop unavailable or explicitly define a Revival catalog and selection policy."
+    },
+    {
+      "name": "商店限购/刷新",
+      "status": "PARTIAL",
+      "evidence": "Limited is E_Day/E_Week without a count; L2C_Goods carries canBuyTimes/hasBuyTimes, shop responses carry NextRefreshTime/RefreshTimes/RefreshPrice. ShopGoodsGroup.RefreshInterval is a purchase-count price tier threshold in ShopModule.GetInterval/CalNumPrice, not a time unit. ShopConfig.ShopRefreshTime=[5,18] lacks proven time-zone semantics.",
+      "client_static_available": true,
+      "runtime_response_required": true,
+      "likely_server_only": true,
+      "user_can_define": true,
+      "recommended_action": "Use response samples to recover quota and reset behavior; define any Revival time zone and schedule explicitly as compatibility rules."
+    },
+    {
+      "name": "DropValueID → DropClass/Item",
+      "need_entry": "随机/怪物掉落",
+      "status": "LIKELY_SERVER_ONLY",
+      "evidence": "10610001, 10610801 and 10630101 occur only as Section.DropValueID in extracted tables; 341 distinct DropValueID have no numeric overlap with DropProp.DropClass, DropBase.ID or Gift.GiftGroup. Runtime FightDataProfile.DropValues is populated; DropItemManager.AddDropItem passes its dropGroup parameter, not Section.DropValueID, to DropPropManager.GetItem.",
+      "client_static_available": false,
+      "runtime_response_required": true,
+      "likely_server_only": true,
+      "user_can_define": true,
+      "recommended_action": "Require battle profile and settlement samples linked to a Section; do not invent mapping or probabilities."
+    },
+    {
+      "name": "日/周重置",
+      "status": "USER_CAN_DEFINE",
+      "evidence": "TaskControl ID=5 has DailyRefresh=5 and WeeklyRefresh=5. Static code inspected does not prove unit, time zone, week boundary or cross-period semantics; client displays server task snapshots.",
+      "client_static_available": true,
+      "runtime_response_required": true,
+      "likely_server_only": true,
+      "user_can_define": true,
+      "recommended_action": "Specify Revival time zone and reset boundaries as compatibility rules only; do not call value 5 an official hour or weekday."
+    },
+    {
+      "name": "活跃宝箱",
+      "status": "PARTIAL",
+      "evidence": "TaskControl daily thresholds 20/40/60/80/100 and gift groups 760001–760005, seasonal 760016–760020; weekly thresholds 30/60/90/120/150 and gift groups 760010–760014. TreasureBoxData boxId/pickStatus/activityId used for both types; pickStatus 1=ready UI, 2=opened UI, other=closed UI. Claim request sends UI index as boxId. Seasonal daily gift preview checks activity 55. Actual index base and grant need response samples.",
+      "client_static_available": true,
+      "runtime_response_required": true,
+      "likely_server_only": false,
+      "user_can_define": true,
+      "recommended_action": "Get nonempty daily/weekly boxList and claim receipts to confirm boxId indexing, state transition and actual reward."
+    },
+    {
+      "name": "任务业务事件",
+      "status": "PARTIAL",
+      "evidence": "Forty task definitions and condition targets are static; successful enhancement, training, expedition, friend and alchemy operations are not all bound to progress events.",
+      "client_static_available": true,
+      "runtime_response_required": false,
+      "likely_server_only": false,
+      "user_can_define": true,
+      "recommended_action": "Count only verified successful operations; targeted handler tracing is worthwhile for events planned for implementation."
+    },
+    {
+      "name": "击杀任务",
+      "status": "PARTIAL",
+      "evidence": "FightKillInfo carries unit/count telemetry, but class mapping, duplicate handling and binding to verified battle settlement are unproven.",
+      "client_static_available": true,
+      "runtime_response_required": true,
+      "likely_server_only": true,
+      "user_can_define": true,
+      "recommended_action": "Do not count unverified reports; trace FightKillInfo through battle receipt and define a trusted Revival accounting rule if needed."
+    },
+    {
+      "name": "战斗体力",
+      "status": "PARTIAL",
+      "evidence": "Section.ManualValue=6 is static; first clear, story chaining, failed battle and exit charge/refund timing are not confirmed.",
+      "client_static_available": true,
+      "runtime_response_required": true,
+      "likely_server_only": true,
+      "user_can_define": true,
+      "recommended_action": "Keep current admission rule until historical enter/settle/exit responses or explicit Revival charge/refund policy is available."
+    },
+    {
+      "name": "经验升级",
+      "status": "PARTIAL",
+      "evidence": "Gift experience quantities are known and resource accounting exists; player/hero threshold, cap and hero upgrade operation are not fully connected to protocol handlers.",
+      "client_static_available": true,
+      "runtime_response_required": false,
+      "likely_server_only": false,
+      "user_can_define": true,
+      "recommended_action": "Target experience table fields and upgrade handlers before enabling automatic level changes."
+    },
+    {
+      "name": "装备实例与特殊货币奖励",
+      "status": "PARTIAL",
+      "evidence": "Some Gift entries resolve to equipment or extra-currency ItemID; instance property generation and destination currency sync are missing.",
+      "client_static_available": true,
+      "runtime_response_required": true,
+      "likely_server_only": true,
+      "user_can_define": true,
+      "recommended_action": "Seek grant response examples and continue atomic refusal of rewards whose target is unknown; never guess equipment rolls."
+    },
+    {
+      "name": "战斗校验",
+      "status": "PARTIAL",
+      "evidence": "Revival has run UUID, session, settlement digest and durable receipt; official battleFile/sign validation and cross-session continuation are not recovered.",
+      "client_static_available": true,
+      "runtime_response_required": true,
+      "likely_server_only": true,
+      "user_can_define": true,
+      "recommended_action": "Keep current local run trust boundary; trace only the missing protocol paths needed for stronger validation."
+    },
+    {
+      "name": "后续关卡准入",
+      "status": "PARTIAL",
+      "evidence": "Sections 2110802–2110804 have static fixed rewards; story chaining, admission and complete reward flow remain unverified.",
+      "client_static_available": true,
+      "runtime_response_required": true,
+      "likely_server_only": false,
+      "user_can_define": true,
+      "recommended_action": "Preserve current two-section scope until progression and reward chain is verified or explicitly defined as Revival compatibility."
+    }
+  ]
+}

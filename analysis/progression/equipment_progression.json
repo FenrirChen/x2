@@ -1,0 +1,514 @@
+{
+  "sources": {
+    "EquibBase": {
+      "source": "phase3_output/raw_tables/EquibBase__92f5b9b03d582384daf4ab179249bade.bin",
+      "record_count": 126,
+      "fields": [
+        "EquibId",
+        "EquibPart",
+        "EquibSuit",
+        "MainAttrType",
+        "MainAttrChance",
+        "MinorAttrType",
+        "MinorAttrChance"
+      ]
+    },
+    "EquibExp": {
+      "source": "phase3_output/raw_tables/EquibExp__9db2cbbed1076f441b9ac66591d5f5bc.bin",
+      "record_count": 16,
+      "fields": [
+        "EquibLevel",
+        "NeedExp",
+        "SumExp",
+        "LossExp",
+        "NeedGlod",
+        "SumGold",
+        "IsEvent"
+      ]
+    },
+    "EquibStage": {
+      "source": "phase3_output/raw_tables/EquibStage__339e556f4c0f7f146b9436a53fcaf6b1.bin",
+      "record_count": 6,
+      "fields": [
+        "Stage",
+        "MinorListMin",
+        "MinorListMax",
+        "EquibSeniorChip",
+        "Exp",
+        "EquibValue",
+        "ExpBonus",
+        "GoldBonus"
+      ]
+    },
+    "EquibAttrib": {
+      "source": "phase3_output/raw_tables/EquibAttrib__aa046b4e1959ef44fa9e276a50f7ca0c.bin",
+      "record_count": 384,
+      "fields": [
+        "EquibRare",
+        "AttribSRC",
+        "AttrType",
+        "ValueSec",
+        "ChanceSec"
+      ]
+    },
+    "EquibAttribBD": {
+      "source": "assets/bin/Data/25bbc1b89b510194c99a5c3c5f8137dc",
+      "record_count": 66,
+      "fields": [
+        "AttrbdID",
+        "EquibQuality",
+        "EquibLevel",
+        "MainAttr",
+        "MinorAttrNum",
+        "MinorAttrType",
+        "MinorAttrValue",
+        "MinorAttrStreNum",
+        "MinorAttrStreValue"
+      ]
+    },
+    "EquibSuit": {
+      "source": "assets/bin/Data/c5bbfdf9eae360a4ebbb13ced97b8422",
+      "record_count": 20,
+      "fields": [
+        "SuitId",
+        "NameID",
+        "SuitIcon",
+        "AttribType1",
+        "Value1",
+        "PassiveID",
+        "SuitAttr1ID",
+        "SuitAttr2ID",
+        "CombatSuitAttr2ID",
+        "BuffID",
+        "IsOpen"
+      ]
+    },
+    "Item": {
+      "source": "phase3_output/raw_tables/Item__e49ddfae661db9147b8823552f01df41.bin",
+      "record_count": 3026,
+      "fields": [
+        "ItemID",
+        "NameID",
+        "DescID",
+        "HistoryID",
+        "ItemUseScence",
+        "ItemType",
+        "ItemQuality",
+        "PileCount",
+        "ItemValue",
+        "AddADCGroup",
+        "IMQualityLevel",
+        "DropLimit",
+        "DropLimitParam",
+        "NeedLevel",
+        "ItemShow",
+        "Used",
+        "Purchased",
+        "Gain",
+        "Composed",
+        "Recover",
+        "FunctionEff",
+        "EffData",
+        "Return",
+        "Icon",
+        "EffectIcon",
+        "Model",
+        "Effect",
+        "IfShowName",
+        "DropSound",
+        "PickSound",
+        "QuickBuyID"
+      ]
+    },
+    "Language": {
+      "source": "phase3_output/raw_tables/Language__844762d28a77f85408b631eb3f0186bc.bin",
+      "record_count": 28996,
+      "fields": [
+        "Key",
+        "Chinese",
+        "ChineseFT",
+        "LanguageKor",
+        "LanguageJpn"
+      ]
+    }
+  },
+  "example": {
+    "source_table": "EquibBase",
+    "source_id": 1240001,
+    "material_item_id": 1240001,
+    "material_name": "奇美拉·一",
+    "item_type": "E_Equip",
+    "confidence": "CONFIRMED",
+    "position": 1,
+    "suit_id": 400,
+    "main_attribute_candidates": [
+      100
+    ],
+    "minor_attribute_candidates": [
+      100,
+      102,
+      104,
+      101,
+      103,
+      108,
+      105,
+      113,
+      121,
+      124,
+      127,
+      130,
+      122,
+      125,
+      128,
+      131
+    ]
+  },
+  "level_rows": [
+    {
+      "source_table": "EquibExp",
+      "source_id": 0,
+      "level": 0,
+      "next_level": 1,
+      "exp_required": 30,
+      "cumulative_exp": 0,
+      "gold_cost": 500,
+      "cumulative_gold": 0,
+      "event_flag": 0,
+      "loss_exp": 0,
+      "unknown_field_8": null,
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "EquibExp",
+      "source_id": 1,
+      "level": 1,
+      "next_level": 2,
+      "exp_required": 50,
+      "cumulative_exp": 30,
+      "gold_cost": 800,
+      "cumulative_gold": 500,
+      "event_flag": 0,
+      "loss_exp": 0,
+      "unknown_field_8": null,
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "EquibExp",
+      "source_id": 2,
+      "level": 2,
+      "next_level": 3,
+      "exp_required": 70,
+      "cumulative_exp": 80,
+      "gold_cost": 1000,
+      "cumulative_gold": 1300,
+      "event_flag": 0,
+      "loss_exp": 0,
+      "unknown_field_8": null,
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "EquibExp",
+      "source_id": 3,
+      "level": 3,
+      "next_level": 4,
+      "exp_required": 90,
+      "cumulative_exp": 150,
+      "gold_cost": 1500,
+      "cumulative_gold": 2300,
+      "event_flag": 1,
+      "loss_exp": 0,
+      "unknown_field_8": null,
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "EquibExp",
+      "source_id": 4,
+      "level": 4,
+      "next_level": 5,
+      "exp_required": 120,
+      "cumulative_exp": 240,
+      "gold_cost": 2200,
+      "cumulative_gold": 3800,
+      "event_flag": 0,
+      "loss_exp": 0,
+      "unknown_field_8": null,
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "EquibExp",
+      "source_id": 5,
+      "level": 5,
+      "next_level": 6,
+      "exp_required": 170,
+      "cumulative_exp": 360,
+      "gold_cost": 3000,
+      "cumulative_gold": 6000,
+      "event_flag": 0,
+      "loss_exp": 0,
+      "unknown_field_8": null,
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "EquibExp",
+      "source_id": 6,
+      "level": 6,
+      "next_level": 7,
+      "exp_required": 200,
+      "cumulative_exp": 530,
+      "gold_cost": 4000,
+      "cumulative_gold": 9000,
+      "event_flag": 1,
+      "loss_exp": 0,
+      "unknown_field_8": null,
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "EquibExp",
+      "source_id": 7,
+      "level": 7,
+      "next_level": 8,
+      "exp_required": 260,
+      "cumulative_exp": 730,
+      "gold_cost": 5200,
+      "cumulative_gold": 13000,
+      "event_flag": 0,
+      "loss_exp": 0,
+      "unknown_field_8": null,
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "EquibExp",
+      "source_id": 8,
+      "level": 8,
+      "next_level": 9,
+      "exp_required": 360,
+      "cumulative_exp": 990,
+      "gold_cost": 6500,
+      "cumulative_gold": 18200,
+      "event_flag": 0,
+      "loss_exp": 0,
+      "unknown_field_8": null,
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "EquibExp",
+      "source_id": 9,
+      "level": 9,
+      "next_level": 10,
+      "exp_required": 430,
+      "cumulative_exp": 1350,
+      "gold_cost": 8000,
+      "cumulative_gold": 24700,
+      "event_flag": 1,
+      "loss_exp": 0,
+      "unknown_field_8": null,
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "EquibExp",
+      "source_id": 10,
+      "level": 10,
+      "next_level": 11,
+      "exp_required": 510,
+      "cumulative_exp": 1780,
+      "gold_cost": 9800,
+      "cumulative_gold": 32700,
+      "event_flag": 0,
+      "loss_exp": 500,
+      "unknown_field_8": [
+        400
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "EquibExp",
+      "source_id": 11,
+      "level": 11,
+      "next_level": 12,
+      "exp_required": 600,
+      "cumulative_exp": 2290,
+      "gold_cost": 12000,
+      "cumulative_gold": 42500,
+      "event_flag": 0,
+      "loss_exp": 500,
+      "unknown_field_8": [
+        400
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "EquibExp",
+      "source_id": 12,
+      "level": 12,
+      "next_level": 13,
+      "exp_required": 720,
+      "cumulative_exp": 2890,
+      "gold_cost": 15000,
+      "cumulative_gold": 54500,
+      "event_flag": 1,
+      "loss_exp": 500,
+      "unknown_field_8": [
+        400
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "EquibExp",
+      "source_id": 13,
+      "level": 13,
+      "next_level": 14,
+      "exp_required": 850,
+      "cumulative_exp": 3610,
+      "gold_cost": 20000,
+      "cumulative_gold": 69500,
+      "event_flag": 0,
+      "loss_exp": 500,
+      "unknown_field_8": [
+        400
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "EquibExp",
+      "source_id": 14,
+      "level": 14,
+      "next_level": 15,
+      "exp_required": 1030,
+      "cumulative_exp": 4460,
+      "gold_cost": 30000,
+      "cumulative_gold": 89500,
+      "event_flag": 0,
+      "loss_exp": 500,
+      "unknown_field_8": [
+        400
+      ],
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "EquibExp",
+      "source_id": 15,
+      "level": 15,
+      "cumulative_exp": 5490,
+      "cumulative_gold": 119500,
+      "event_flag": 1,
+      "loss_exp": 500,
+      "unknown_field_8": [
+        400
+      ],
+      "confidence": "PARTIAL"
+    }
+  ],
+  "stage_rows": [
+    {
+      "source_table": "EquibStage",
+      "source_id": 1,
+      "Stage": 1,
+      "MinorListMin": 1,
+      "MinorListMax": 1,
+      "Exp": 10,
+      "EquibValue": 800,
+      "ExpBonus": 1000,
+      "GoldBonus": 1000,
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "EquibStage",
+      "source_id": 2,
+      "Stage": 2,
+      "MinorListMin": 2,
+      "MinorListMax": 2,
+      "Exp": 14,
+      "EquibValue": 1200,
+      "ExpBonus": 1200,
+      "GoldBonus": 1200,
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "EquibStage",
+      "source_id": 3,
+      "Stage": 3,
+      "MinorListMin": 3,
+      "MinorListMax": 3,
+      "Exp": 20,
+      "EquibValue": 1680,
+      "ExpBonus": 1500,
+      "GoldBonus": 1500,
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "EquibStage",
+      "source_id": 4,
+      "Stage": 4,
+      "MinorListMin": 3,
+      "MinorListMax": 4,
+      "Exp": 35,
+      "EquibValue": 2800,
+      "ExpBonus": 1800,
+      "GoldBonus": 1800,
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "EquibStage",
+      "source_id": 5,
+      "Stage": 5,
+      "MinorListMin": 4,
+      "MinorListMax": 5,
+      "EquibSeniorChip": [
+        100,
+        1
+      ],
+      "Exp": 55,
+      "EquibValue": 3600,
+      "ExpBonus": 2100,
+      "GoldBonus": 2100,
+      "confidence": "PARTIAL"
+    },
+    {
+      "source_table": "EquibStage",
+      "source_id": 6,
+      "Stage": 6,
+      "MinorListMin": 4,
+      "MinorListMax": 5,
+      "EquibSeniorChip": [
+        1000,
+        2
+      ],
+      "Exp": 75,
+      "EquibValue": 5000,
+      "ExpBonus": 3000,
+      "GoldBonus": 3000,
+      "confidence": "PARTIAL"
+    }
+  ],
+  "quality_preset_count": 66,
+  "quality_preset_levels": {
+    "1": [
+      0
+    ],
+    "2": [
+      0
+    ],
+    "3": [
+      0
+    ],
+    "4": [
+      0
+    ],
+    "5": [
+      0
+    ],
+    "6": [
+      0,
+      15
+    ]
+  },
+  "runtime_state": [
+    "HeroEquip.id",
+    "typeId",
+    "level",
+    "exp",
+    "star",
+    "param"
+  ],
+  "caveat": "Equib is equipment/兽主 by Item.E_Equip and suit/position schema. Attribute candidate weights and quality presets are static, but actual instance rolls and upgrade feed formula are not proven."
+}
