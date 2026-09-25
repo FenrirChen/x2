@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import os
 from collections.abc import Callable
 from time import monotonic
 from typing import Any
@@ -82,11 +83,24 @@ class X2Connection:
                     break
                 self.last_activity_at = monotonic()
                 for packet in self.decoder.feed(data):
+                    LOGGER.info("request received body_bytes=%s", len(packet.body),
+                                extra=self._extra(packet.message_id, "-", packet.header.request_id))
+                    if os.getenv("X2_BATTLE_PROBE") == "1" and packet.message_id in (126, 150, 264, 316, 323, 399, 887):
+                        LOGGER.info("battle probe body=%s", packet.body.hex(),
+                                    extra=self._extra(packet.message_id, "battle-probe", packet.header.request_id))
+                    if packet.message_id == 143:
+                        LOGGER.info("artifact request body=%s", packet.body.hex(),
+                                    extra=self._extra(packet.message_id, "C2L_Artifact", packet.header.request_id))
                     self.session.record_request(
                         packet.header.request_id, packet.header.session_id
                     )
                     context = DispatchContext(self.connection_id, self.peer, self.session)
                     outcome = await self.dispatcher.dispatch(context, packet)
+                    LOGGER.info("handler status=%s response=%s code=%s pushes=%s", outcome.status.value,
+                                outcome.response.message_name if outcome.response else "-",
+                                outcome.response.values.get("code", outcome.response.values.get("result", "-")) if outcome.response else "-",
+                                ",".join(p.message_name for p in outcome.response.pushes) if outcome.response else "-",
+                                extra=self._extra(packet.message_id, outcome.message_name or "-", packet.header.request_id))
                     if outcome.response is not None:
                         await self.send_response(outcome.response, packet.header.request_id)
         except TimeoutError:
@@ -102,12 +116,16 @@ class X2Connection:
         """Encode a registered response, write it and await transport backpressure."""
         if self.closed:
             raise ConnectionError("cannot send on a closed connection")
+        for push in response.before_response:
+            await self.send_response(push, 0)
         header = ResponseHeader(
             request_id=request_id,
             session_id=self.session.session_id,
             data_version=response.data_version,
         )
         packet = ProtocolCodec().encode(response.message_name, response.values, header)
+        LOGGER.info("response sent code=%s bytes=%s", response.values.get("code", response.values.get("result", "-")), len(packet),
+                    extra=self._extra(response.message_name, response.message_name, request_id))
         self.writer.write(packet)
         async with asyncio.timeout(self.settings.write_timeout):
             await self.writer.drain()

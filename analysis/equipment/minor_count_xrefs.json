@@ -1,0 +1,153 @@
+{
+ "minor_count_rule": {
+  "EquibStage (keyed Stage=star 1-6)": {
+   "1": {
+    "MinorListMin": 1,
+    "MinorListMax": 1,
+    "EquibValue": 800
+   },
+   "2": {
+    "MinorListMin": 2,
+    "MinorListMax": 2,
+    "EquibValue": 1200
+   },
+   "3": {
+    "MinorListMin": 3,
+    "MinorListMax": 3,
+    "EquibValue": 1680
+   },
+   "4": {
+    "MinorListMin": 3,
+    "MinorListMax": 4,
+    "EquibValue": 2800
+   },
+   "5": {
+    "MinorListMin": 4,
+    "MinorListMax": 5,
+    "EquibValue": 3600
+   },
+   "6": {
+    "MinorListMin": 4,
+    "MinorListMax": 5,
+    "EquibValue": 5000
+   }
+  },
+  "EquibAttribBD (EquibQuality=star)": {
+   "1": {
+    "rows": 5,
+    "MinorAttrNum_values": [
+     1
+    ]
+   },
+   "2": {
+    "rows": 3,
+    "MinorAttrNum_values": [
+     2
+    ]
+   },
+   "3": {
+    "rows": 3,
+    "MinorAttrNum_values": [
+     3
+    ]
+   },
+   "4": {
+    "rows": 9,
+    "MinorAttrNum_values": [
+     3,
+     4
+    ]
+   },
+   "5": {
+    "rows": 8,
+    "MinorAttrNum_values": [
+     4,
+     5
+    ]
+   },
+   "6": {
+    "rows": 31,
+    "MinorAttrNum_values": [
+     4,
+     5
+    ]
+   }
+  },
+  "consistency_check": [
+   {
+    "star": 1,
+    "EquibStage_Min": 1,
+    "EquibStage_Max": 1,
+    "AttribBD_MinorAttrNum_values": [
+     1
+    ],
+    "attribBD_within_stage_range": true
+   },
+   {
+    "star": 2,
+    "EquibStage_Min": 2,
+    "EquibStage_Max": 2,
+    "AttribBD_MinorAttrNum_values": [
+     2
+    ],
+    "attribBD_within_stage_range": true
+   },
+   {
+    "star": 3,
+    "EquibStage_Min": 3,
+    "EquibStage_Max": 3,
+    "AttribBD_MinorAttrNum_values": [
+     3
+    ],
+    "attribBD_within_stage_range": true
+   },
+   {
+    "star": 4,
+    "EquibStage_Min": 3,
+    "EquibStage_Max": 4,
+    "AttribBD_MinorAttrNum_values": [
+     3,
+     4
+    ],
+    "attribBD_within_stage_range": true
+   },
+   {
+    "star": 5,
+    "EquibStage_Min": 4,
+    "EquibStage_Max": 5,
+    "AttribBD_MinorAttrNum_values": [
+     4,
+     5
+    ],
+    "attribBD_within_stage_range": true
+   },
+   {
+    "star": 6,
+    "EquibStage_Min": 4,
+    "EquibStage_Max": 5,
+    "AttribBD_MinorAttrNum_values": [
+     4,
+     5
+    ],
+    "attribBD_within_stage_range": true
+   }
+  ],
+  "verdict": "REFINED 2026-09-25: 允许范围（Star→[MinorListMin, MinorListMax]，AttribBD 行值落在范围内）为 A 级；'初始=MinorListMin'降级为兼容假设——MinorListMin 客户端 0 读者，初始条数 = 所选 EquibAttribBD 行 MinorAttrNum（A，GM opt=15），掉落路径选行规则 SERVER_ONLY_UNKNOWN。见 affix_count_models.json / minor_list_min_xrefs.json"
+ },
+ "xrefs": {
+  "EquibStageManager.GetItem (7 BL sites)": {
+   "LogicX2.DropItemManager.JudgeDropItem": "battle drop gate — reads star/quality-keyed EquibStage (EquibValue) for drop value/quality computation (A)",
+   "LogicX2.DropItemManager.SetCurItemValueTotal": "drop value accumulation (A)",
+   "EquipStrengthWnd.CheckSubAttruib/SetStrengthInfo": "affix count gates (A)",
+   "BagDecomposePage.RefreshCurrency": "decompose value display (A)",
+   "CollegePurifyOptTab.RefreshContent": "college purify UI (A)"
+  }
+ },
+ "equib_attribBD_xrefs": {
+  "EquibAttribBDManager.GetItem (2 BL sites)": [
+   "GMMainPage.GetEquip",
+   "GMMainPage.OnMailGetEquipBtnClick"
+  ],
+  "note": "GM gives (equipId, attrbdId) to the server; AttribBD rows carry MinorAttrNum + MinorAttrType[5]/Value[5] pools + StreNum/StreValue — the official roll inputs"
+ }
+}

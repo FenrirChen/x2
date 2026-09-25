@@ -1,0 +1,42 @@
+{
+ "enum ItemEItemUseScence": {
+  "E_Maze": 0,
+  "E_Outside": 1,
+  "E_Alchemy": 2
+ },
+ "item_table_distribution": {
+  "E_Outside": 2261,
+  "E_Alchemy": 81,
+  "unset": 684
+ },
+ "consumers": [
+  {
+   "method": "FightModule.SetCheckout_BattleItem",
+   "rva": "0x1442894",
+   "reads": "Item.ItemUseScence @ +0x20 (0x1442AB0)",
+   "semantics": "checkout filter: source==ItemSource.FIGHT(1) required (0x1442AA4); E_Outside(1) -> C2L_CheckoutMainMission.outsideItems; E_Maze(0) -> mazeItems with eNum = StatsManager.getItemData[id] clamp+LogError if bag.num > recorded (0x1442AD0-0x1442BE8); E_Alchemy(2)/unset -> dropped; entry gate: on failed battle only section types with bit in 0x80840000 (E_ShuangHanBattle=11, E_ActivityBattle=15) still emit lists"
+  },
+  {
+   "method": "FightItemBag.GetPersistentItemsList",
+   "rva": "0x1E51A54",
+   "reads": "Item.ItemUseScence @ +0x20 (0x1E51BAC: cmp w8,#1)",
+   "semantics": "E_Outside only; no source filter; no eNum; used as helper (no direct BL callers)"
+  },
+  {
+   "method": "other ItemManager.GetItem callers",
+   "status": "UNSCANNED for +0x20 loads",
+   "note": "the two known consumers cover both checkout lists; exhaustive +0x20 xref left open (inlining)"
+  }
+ ],
+ "data": {
+  "maze_items_examples": {
+   "1101021": "E_MazeCurrency",
+   "1237903": "E_MazeCurrency(EffData=[903])"
+  },
+  "outside_items_examples": {
+   "1237901": "E_Currency(EffData=[901]) gold",
+   "1240001": "E_Equip (兽主)",
+   "1209162": "随机兽主 display item"
+  }
+ }
+}

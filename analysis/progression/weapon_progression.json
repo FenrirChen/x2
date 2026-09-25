@@ -193,6 +193,7 @@
       "profession": 301,
       "rank": 0,
       "required_hero_stage": 1,
+      "fuse_value": 100,
       "level_up_materials": [],
       "level_up_gold_cost": 0,
       "fuse_materials": [],
@@ -215,6 +216,7 @@
       "profession": 301,
       "rank": 1,
       "required_hero_stage": 3,
+      "fuse_value": 10,
       "level_up_materials": [
         {
           "material_item_id": 1238100,
@@ -253,6 +255,7 @@
       "profession": 301,
       "rank": 2,
       "required_hero_stage": 5,
+      "fuse_value": 10,
       "level_up_materials": [
         {
           "material_item_id": 1238101,
@@ -298,6 +301,7 @@
       "profession": 301,
       "rank": 3,
       "required_hero_stage": 8,
+      "fuse_value": 5,
       "level_up_materials": [
         {
           "material_item_id": 1238102,
@@ -343,6 +347,7 @@
       "profession": 301,
       "rank": 4,
       "required_hero_stage": 11,
+      "fuse_value": 5,
       "level_up_materials": [
         {
           "material_item_id": 1238103,
@@ -388,6 +393,7 @@
       "profession": 301,
       "rank": 5,
       "required_hero_stage": 46,
+      "fuse_value": 5,
       "level_up_materials": [
         {
           "material_item_id": 1238104,
@@ -433,6 +439,7 @@
       "profession": 301,
       "rank": 6,
       "required_hero_stage": null,
+      "fuse_value": 5,
       "level_up_materials": [
         {
           "material_item_id": 1238105,
@@ -463,6 +470,7 @@
       "profession": 302,
       "rank": 0,
       "required_hero_stage": 1,
+      "fuse_value": 100,
       "level_up_materials": [],
       "level_up_gold_cost": 0,
       "fuse_materials": [],
@@ -485,6 +493,7 @@
       "profession": 302,
       "rank": 1,
       "required_hero_stage": 3,
+      "fuse_value": 10,
       "level_up_materials": [
         {
           "material_item_id": 1238100,
@@ -523,6 +532,7 @@
       "profession": 302,
       "rank": 2,
       "required_hero_stage": 5,
+      "fuse_value": 10,
       "level_up_materials": [
         {
           "material_item_id": 1238101,
@@ -568,6 +578,7 @@
       "profession": 302,
       "rank": 3,
       "required_hero_stage": 8,
+      "fuse_value": 5,
       "level_up_materials": [
         {
           "material_item_id": 1238102,
@@ -613,6 +624,7 @@
       "profession": 302,
       "rank": 4,
       "required_hero_stage": 11,
+      "fuse_value": 5,
       "level_up_materials": [
         {
           "material_item_id": 1238103,
@@ -658,6 +670,7 @@
       "profession": 302,
       "rank": 5,
       "required_hero_stage": 46,
+      "fuse_value": 5,
       "level_up_materials": [
         {
           "material_item_id": 1238104,
@@ -703,6 +716,7 @@
       "profession": 302,
       "rank": 6,
       "required_hero_stage": null,
+      "fuse_value": 5,
       "level_up_materials": [
         {
           "material_item_id": 1238105,
@@ -733,6 +747,7 @@
       "profession": 303,
       "rank": 0,
       "required_hero_stage": 1,
+      "fuse_value": 100,
       "level_up_materials": [],
       "level_up_gold_cost": 0,
       "fuse_materials": [],
@@ -755,6 +770,7 @@
       "profession": 303,
       "rank": 1,
       "required_hero_stage": 3,
+      "fuse_value": 10,
       "level_up_materials": [
         {
           "material_item_id": 1238100,
@@ -793,6 +809,7 @@
       "profession": 303,
       "rank": 2,
       "required_hero_stage": 5,
+      "fuse_value": 10,
       "level_up_materials": [
         {
           "material_item_id": 1238101,
@@ -838,6 +855,7 @@
       "profession": 303,
       "rank": 3,
       "required_hero_stage": 8,
+      "fuse_value": 5,
       "level_up_materials": [
         {
           "material_item_id": 1238102,
@@ -883,6 +901,7 @@
       "profession": 303,
       "rank": 4,
       "required_hero_stage": 11,
+      "fuse_value": 5,
       "level_up_materials": [
         {
           "material_item_id": 1238103,
@@ -928,6 +947,7 @@
       "profession": 303,
       "rank": 5,
       "required_hero_stage": 46,
+      "fuse_value": 5,
       "level_up_materials": [
         {
           "material_item_id": 1238104,
@@ -973,6 +993,7 @@
       "profession": 303,
       "rank": 6,
       "required_hero_stage": null,
+      "fuse_value": 5,
       "level_up_materials": [
         {
           "material_item_id": 1238105,
@@ -1003,6 +1024,7 @@
       "profession": 304,
       "rank": 0,
       "required_hero_stage": 1,
+      "fuse_value": 100,
       "level_up_materials": [],
       "level_up_gold_cost": 0,
       "fuse_materials": [],
@@ -1025,6 +1047,7 @@
       "profession": 304,
       "rank": 1,
       "required_hero_stage": 3,
+      "fuse_value": 10,
       "level_up_materials": [
         {
           "material_item_id": 1238100,
@@ -1063,6 +1086,7 @@
       "profession": 304,
       "rank": 2,
       "required_hero_stage": 5,
+      "fuse_value": 10,
       "level_up_materials": [
         {
           "material_item_id": 1238101,
@@ -1108,6 +1132,7 @@
       "profession": 304,
       "rank": 3,
       "required_hero_stage": 8,
+      "fuse_value": 5,
       "level_up_materials": [
         {
           "material_item_id": 1238102,
@@ -1153,6 +1178,7 @@
       "profession": 304,
       "rank": 4,
       "required_hero_stage": 11,
+      "fuse_value": 5,
       "level_up_materials": [
         {
           "material_item_id": 1238103,
@@ -1198,6 +1224,7 @@
       "profession": 304,
       "rank": 5,
       "required_hero_stage": 46,
+      "fuse_value": 5,
       "level_up_materials": [
         {
           "material_item_id": 1238104,
@@ -1243,6 +1270,7 @@
       "profession": 304,
       "rank": 6,
       "required_hero_stage": null,
+      "fuse_value": 5,
       "level_up_materials": [
         {
           "material_item_id": 1238105,

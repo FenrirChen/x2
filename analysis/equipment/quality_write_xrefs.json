@@ -1,0 +1,52 @@
+{
+ "generated": "2026-09-25",
+ "method": "full-binary BL scan (184,213 methods, 1,167,430 edges) -> analysis/equipment/callgraph_bl.json; ARM64 disasm via tools/analysis/disassemble_drop_methods.py",
+ "FightItemData.Quality": {
+  "field": "LogicX2.FightItemData.quality // 0x34 (SmartInt)",
+  "set_Quality_RVA": "0x1E53480",
+  "writers": [
+   {
+    "method": "LogicX2.FightItemBag$$AddToArray",
+    "rva": "0x1E52A0C",
+    "caller_of_writer": "LogicX2.FightItemBag$$AddItem (0x1E46DAC) and AddRelicItem",
+    "source_value": "AddItem(int id, int quality=-1, int num=1, int silverCount=-1, bool show=true, bool recover=false, ItemSource source=FIGHT) parameter w2",
+    "condition": "always on successful insert"
+   },
+   {
+    "method": "FightBagModule$$InitItemList",
+    "rva": "see callgraph_bl.json",
+    "source_value": "persisted battle-save profile (PlayerDbDataProto.FightPackProfileProto.quality / DropItemProto.quality)",
+    "condition": "battle recovery from save"
+   }
+  ],
+  "quality_constant_writers_upstream": [
+   {"method": "TriggerActions$$ChangeItem (0x1BF29F8)", "quality_arg": -1, "note": "no star"},
+   {"method": "ElementComposeModule$$InitData (0x14B63C0)", "quality_arg": -1},
+   {"method": "ElementComposeModule$$OnElementCompose (0x14B8794/0x14B8BB0)", "quality_arg": -1}
+  ],
+  "quality_from_drop_item": [
+   {"method": "LogicX2.DropItem$$PickItem (0x1E46D64)", "quality_source": "DropItem.mQuality (0x2C)"},
+   {"method": "LogicX2.DropItem$$<SetAutoLoot>b__50_0 (0x1E47E00)", "quality_source": "DropItem.mQuality (0x2C)"}
+  ],
+  "quality_from_recovery": [
+   {"method": "LogicX2.LogicBattle$$RecoverBattleData (0x18F7F7C)", "quality_source": "saved profile field (w24 loaded from profile record)"}
+  ],
+  "quality_from_grant": [
+   {"method": "LogicX2.LogicBattle$$OnGetItem (0x18FA9DC)", "quality_source": "caller argument (w2); used by non-battle grant paths"}
+  ]
+ },
+ "DropItem.mQuality (0x2C) writer": {
+  "method": "LogicX2.DropItem$$Init",
+  "rva": "0x1E46798",
+  "rule": "mQuality = (qualityArg != -1) ? qualityArg : Item.ItemQuality; signature Init(int id, Vector3 pos, int logicID, Vector2 destPos, int quality=-1, int num=1, int itemValue=0, int addADCGroup=0, int silverDropTime=-1, bool needCalc=true)",
+  "initdrop_call_site": "0x1E49414 passes ItemStruct.quality (loaded 0x1E49370: ldr w19,[x24,#0x18])",
+  "fallback_semantics": "quality==-1 -> the Item row's own ItemQuality (static). For 1240xxx part-level rows ItemQuality=E_Unsure(7) so identify path always assigns before Init."
+ },
+ "ItemStruct.quality (0x18) writer": {
+  "method": "LogicX2.DropItemManager$$InitDrop",
+  "rva": "0x1E48D18 (str w0, [x23, #0x18])",
+  "source_value": "return of LogicX2.DropItemManager$$IdentifyItem(item, level, dropProp) at 0x1E48D14",
+  "condition": "ItemStruct.needIdentify != 0, which DropItemManager$$AddItems (0x1E4B114-0x1E4B47C) sets iff Item.ItemQuality == ItemEItemQuality.E_Unsure (7)",
+  "default": "AddItems initializes ItemStruct.quality = -1 (0x1E4B058-0x1E4B060)"
+ }
+}

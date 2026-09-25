@@ -1,0 +1,19 @@
+{
+ "generated": "2026-09-25",
+ "field": "EquibAttribBD.MinorAttrNum // 0x28 (66 行)",
+ "client_consumers": "无（EquibAttribBDManager.GetItem 仅 GM UI 两处调用，见 equib_attrib_bd_lookup_xrefs.json）",
+ "server_role": "官方装备工厂（GM opt=15 证据）以 AttrbdID 行为构建规格：MinorAttrNum = 该行初始副词条数；EquibQuality = 星级；MinorAttrType/Value = 词条池；MinorAttrStreNum/StreValue = 每词条强化增量",
+ "rows_by_quality": {
+  "1": {"rows": ["11000000", "11000001-03", "11000100", "16160001"], "MinorAttrNum": [1], "base_row_matches_MinorListMin": true},
+  "2": {"rows": ["12000000", "12000001", "12000100", "16160002"], "MinorAttrNum": [2], "base_row_matches_MinorListMin": true},
+  "3": {"rows": ["13000000", "13000001", "13000100", "16160003"], "MinorAttrNum": [3], "base_row_matches_MinorListMin": true},
+  "4": {"rows": ["14000000", "14000001", "14000100", "14000101", "14000102", "14000103", "14000104", "14000105", "14000106", "16160004"],
+        "MinorAttrNum": [3, 4], "note": "base/变体行=3(=Min)，14000100=4(=Max)"},
+  "5": {"rows": ["15000000", "15000100", "15000101-106", "16160005"],
+        "MinorAttrNum": [4, 5], "note": "15000000=4(=Min)，15000100 及变体=5(=Max)"},
+  "6": {"rows": ["16000000", "16000100", "16000101-106", "16151100-122", "16160006"],
+        "MinorAttrNum": [4, 5], "note": "16000000=4(=Min)，16000100+变体=5(=Max)；16151100-122 赛季行 4 或 5，含非零 StreNum/StreValue"}
+ },
+ "data_sources": "full_tables/equibattribbd.json (66 rows)",
+ "verdict": "MinorAttrNum = 行级'初始词条数'常量；同星多行 = 多个构建规格档（Min 档 / Max 档 / 赛季档），选择发生在服务器（掉落路径的行选择官方规则未知）"
+}

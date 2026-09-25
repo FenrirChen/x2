@@ -16,10 +16,17 @@ DROP_DATA = S("FightDropData", (F(1, "dropValues", K.INT32, repeated=True), F(2,
 FIGHT_PROFILE = S("FightDataProfile", (F(1, "missionId", K.INT32), F(2, "layer", K.INT32),
     F(7, "chapterId", K.INT32), F(10, "randomSeed", K.INT32), F(13, "sceneId", K.INT32),
     F(20, "isProfileValid", K.BOOL)))
+OUTSIDE_ITEM = S("ItemDataP", (F(1, "id", K.INT32), F(2, "num", K.INT32),
+    F(3, "quality", K.INT32), F(4, "eNum", K.INT32)))
 CHECKOUT = S("C2L_CheckoutMainMission", (F(1, "chapterId", K.INT32), F(2, "sectionId", K.INT32),
-    F(4, "success", K.BOOL), F(6, "expertMode", K.BOOL), F(8, "checkGm", K.BOOL),
-    F(9, "fightTime", K.INT32), F(10, "heros", K.MESSAGE, repeated=True)))
+    F(3, "outsideItems", K.MESSAGE, repeated=True), F(4, "success", K.BOOL),
+    F(6, "expertMode", K.BOOL), F(8, "checkGm", K.BOOL),
+    F(9, "fightTime", K.INT32), F(10, "heros", K.MESSAGE, repeated=True),
+    F(22, "killMonster", K.MESSAGE), F(30, "npcEventOnNumber", K.MESSAGE, repeated=True)))
 BATTLE_SCHEMAS = {
+    "C2L_SecSweep": S("C2L_SecSweep", (F(1, "sectionId", K.INT32), F(2, "sweepCount", K.INT32))),
+    "L2C_SecSweep": S("L2C_SecSweep", (F(1, "code", K.ENUM), F(2, "sectionId", K.INT32),
+        F(3, "sweepCount", K.INT32), F(4, "rewardData", K.MESSAGE))),
     "C2L_CheckoutMainMission": CHECKOUT,
     "C2L_CheckoutMainMissionSign": S("C2L_CheckoutMainMissionSign", (
         F(1, "checkout", K.MESSAGE), F(2, "battleFileBytes", K.BYTES),

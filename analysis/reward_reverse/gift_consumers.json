@@ -1,0 +1,62 @@
+{
+ "class": "Example.Gift {GiftGroup, AwardType:GiftEAwardType, Probability[], GiftValue[], Num[], GiftShow[], ItemNum, EquibNum}",
+ "enum GiftEAwardType": {
+  "E_None": 0,
+  "E_material": 1,
+  "E_Random": 2,
+  "E_RandomInterval": 3,
+  "E_Pick": 4,
+  "E_BlindBox": 5
+ },
+ "GiftManager.GetItem callers (33 BL sites, all display/preview/UI)": [
+  "AcceptTaskNode.InitRewardNode",
+  "AchievementUI.InitAchievement/RefreshOverView",
+  "BagChoosePage.OnOpen",
+  "BattlePassAchievement.InitAchievement/RefreshOverView",
+  "BuffInfo.DropItemByBuff",
+  "ExchangeItemNode.Refresh",
+  "CollegeCustomerDetil.Refresh x2",
+  "DailyGiftNode.RefreshItem",
+  "GMMainPage.OnItemGetBtnClick",
+  "GameAPI.GetItemNumByGiftID",
+  "GameAPI.GetShowItemNumByGiftID x2",
+  "GiftBoxDetail.CheckPreviewBtnShow/OnPreviewBtnClick",
+  "ItemComposePage.OnOpen",
+  "GlobalFun.GetItemByGiftGroup",
+  "GlobalFun.GetItemNumByGiftGroup",
+  "MailModule.ReceiveAttachment",
+  "MoonNpcEquip.Refresh x2",
+  "MoonPresigePage.DetailNode.RefreshNode",
+  "MoonTaskNode.InitRewardNode",
+  "PowerItemUse.BTN_SelectItem",
+  "MissionManager.AddMissionMsg",
+  "QuestCollectItem.SetParam",
+  "RespondersItemNode.InitRewardNode",
+  "RespondersModule.GetRewardList",
+  "RookieSignUI.InitView",
+  "StarChartStoryRecall.ChapterItem.RefreshCommonItem"
+ ],
+ "battle_or_checkout_consumers": "NONE — no FightModule/LogicBattle/StatsManager path calls GiftManager",
+ "account_buff_gift_chain": [
+  "GodSoonModule.GetAllSectionDropItemByAllBuff (0x13E34E4)",
+  "-> BuffInfo.DropItemByBuff (0x14E4B4C): GiftManager.GetItem per gift id, copies contents (no RNG)",
+  "-> callers: ChapterInfoView.ShowDropItem / AnniversaryTowerSectionView.ShowDropItem / BattlePassTab.ShowDropItem",
+  "-> ALL UI PREVIEW (关卡详情的 buff 加成掉落预览)"
+ ],
+ "native_random_resolver": {
+  "GlobalFun.GetItemByGiftGroup(Random,group) 0x18D26FC": [
+   "g = GiftManager.Instance.GetItem(group)",
+   "if g.AwardType == E_material(1): return g.GiftValue            // fixed: whole list",
+   "result = new List<int>()",
+   "idx = GlobalFun.GetProbability(mRandom, g.Probability)          // single weighted pick",
+   "result.Add(g.GiftValue[idx])",
+   "return result"
+  ],
+  "direct_BL_callers": 0,
+  "interpretation": "resolver EXISTS natively (same GetProbability primitive as drops) but has no direct native caller in 2.4 — likely invoked from the missing ILRuntime hotfix assembly or via delegates; actual granting never depends on it because checkout rewards arrive pre-resolved"
+ },
+ "section_reward_fields": {
+  "FirVReward(0x110)/VReward(0x120)/MopReward(0x128)": "no native settlement-path reader found; settlement rewards arrive as server-resolved RewardData (L2C_CheckoutMainMission.rewardData / L2C_SecSweep.rewardData); table fields feed UI preview chains",
+  "confidence": "B (protocol-level settled; per-field offset xref blocked by GetItem inlining)"
+ }
+}

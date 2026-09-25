@@ -53,7 +53,7 @@ def test_entry_replay_persistence_and_no_economy_changes(tmp_path):
     invalid_kill = packet({"sectionId": 999}, name="C2L_FightKillInfo")
     assert asyncio.run(service.kill_info(context, invalid_kill)).values == {"code": 13}
     for key, value in (("missionId", 999), ("sceneId", 2210001), ("chapter", 2010000),
-                       ("expertMode", True), ("checkGm", True), ("isFromProfile", True),
+                       ("checkGm", True), ("isFromProfile", True),
                        ("heros", []), ("heros", [PROFILE_HERO.encode({"heroId": 1004})])):
         invalid = request()
         invalid[key] = value

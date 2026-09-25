@@ -94,6 +94,7 @@ fuse_rows = []
 for r in data['ArtifactFuse']:
     fuse_rows.append({'source_table': 'ArtifactFuse', 'source_id': f"{r.get('ProfEnum')}:{r.get('FuseID', 0)}",
                       'profession': r.get('ProfEnum'), 'rank': r.get('FuseID', 0), 'required_hero_stage': r.get('HeroStage'),
+                      'fuse_value': r.get('FuseValue', 0),
                       'level_up_materials': materials(r.get('AdvancedItem', []), r.get('AdvancedItemNum', [])),
                       'level_up_gold_cost': r.get('AdvancedConsume', 0),
                       'fuse_materials': materials(r.get('FuseItem', []), r.get('FuseItemNum', [])),

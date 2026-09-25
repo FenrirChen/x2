@@ -1,0 +1,33 @@
+{
+ "generated": "2026-09-25",
+ "EquibAttribBDManager$$GetItem(int attrbdid) RVA": "0x1CAEE8C",
+ "all_callers": [
+  {"method": "GMMainPage$$GetEquip", "site": "0x13A20A4", "role": "GM 发装备：校验 attrbdId 存在后随 C2L_Cheat{opt=15} 发送"},
+  {"method": "GMMainPage$$OnMailGetEquipBtnClick", "site": "callgraph", "role": "GM 邮件发装备，同上"}
+ ],
+ "gameplay_consumers": [],
+ "minor_attr_num_xrefs": "0 direct native readers outside GM 校验（GetItem 返回行后仅判空）——MinorAttrNum 是服务器侧生成输入",
+ "lookup_keys": {
+  "EquibAttribBDManager.GetItem": "(attrbdid) 单键 —— AttrbdID",
+  "EquibStageManager.GetItem(int stage)": "(star/quality) 单键 —— Stage",
+  "EquibBaseManager.GetItem(int equibid)": "(TypeId) 单键 —— EquibId",
+  "EquibExpManager.GetItem(int equiblevel)": "(level) 单键",
+  "EquibAttribManager.GetItem(int equibrare, int attribsrc, int attrtype)": "三键（另一张表，非 AttribBD）"
+ },
+ "why_same_star_multiple_rows": {
+  "row_anatomy": "AttrbdID = [QQ][SSS][NNN]：QQ=星级(11..16)，SSS=系列，NNN=变体",
+  "groups": {
+   "base_row_QQ000000": "MinorAttrNum == EquibStage.MinorListMin（1/2/3/3/4/4），池为空（全 0）",
+   "max_row_QQ000100": "MinorAttrNum == EquibStage.MinorListMax；仅 4/5/6★ 有（14000100=4、15000100=5、16000100=5）",
+   "filled_variants_QQ000101+": "4★ 行 14000102/104/106 Num=3（池填 3 类型）；5★/6★ 行 15000101-106 / 16000101-106 Num=5（池填 5）；StreNum/StreValue=0",
+   "seasonal_6star_161511xx": "Num=4 或 5，含非零 StreNum/StreValue（如 [16,22,6,22,79]）——赛季/活动规格",
+   "helpers": "10000000（无 quality）、16160001..06（无 quality）"
+  },
+  "conclusion": "同一星级多行不是因为条数随机，而是 AttrbdID 是'构建规格'选择键：行同时决定 Star(EquibQuality) + 初始条数(MinorAttrNum) + 词条池(类型/数值) + 强化增量；服务器按 attrbdId 取行构建（GM 协议为直接证据）"
+ },
+ "gm_cheat_protocol": {
+  "method": "GMMainPage$$GetEquip(int num, string equipId, string attrbdStr) 0x13A1F1C",
+  "flow": "TryParse equipId → EquibBaseManager.GetItem 必须存在；TryParse attrbdId → EquibAttribBDManager.GetItem 必须存在；C2L_Cheat{opt=0xF(15), values=[equipId, attrbdId]} 经 MarsNetManager 发送 × max(num,1)",
+  "implication": "官方服务器装备工厂以 (EquibId, AttrbdID) 为输入；Star 与 TypeId 是两个独立输入，Star=行内 EquibQuality，初始条数=行内 MinorAttrNum"
+ }
+}

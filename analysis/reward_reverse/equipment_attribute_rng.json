@@ -1,0 +1,15 @@
+{
+ "verdict": "SERVER_GENERATED (client receives finished EquipParam)",
+ "evidence": [
+  "EquipParam{At1..At6,Av1..Av6,Lock1..Lock6} travels inside HeroEquip over the wire (RewardData/HeroEquipProto)",
+  "no native attribute-roll routine writes EquipParam on the client; client EquipmentService-equivalents only display/merge (L2C_EquipUpdate handler merges by Id)",
+  "strengthen-time bonus events (+3/6/9/12/15) are a SEPARATE path: client sends C2L_EquipStrengthen(115), server rolls and returns level+params — same server-side RNG domain"
+ ],
+ "official_parameters_available": {
+  "main_attr": "EquibBase.MainAttrType[] weighted by MainAttrChance[]",
+  "minor_attr": "EquibBase.MinorAttrType[] weighted by MinorAttrChance[]; values from EquibAttribBD per quality+level",
+  "locks": "EquipParam.Lock1..6 (unlock states, client-visible)"
+ },
+ "resolved_2026_09_25": "initial minor affix COUNT rule recovered (A): = EquibStage[Star].MinorListMin (1/2/3/3/4/4), cap MinorListMax; two tables (EquibStage/EquibAttribBD.MinorAttrNum) agree",
+ "unknown": "value roll distribution within EquibAttribBD ranges; whether 4/5/6★ initial count can hit MinorListMax (AttribBD rows 14000100/15000000/16000000/16151100 carry =Max); star distribution within the drop band"
+}

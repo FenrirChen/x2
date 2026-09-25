@@ -1,0 +1,22 @@
+{
+  "source": "dump.cs Example.DropProp offsets cross-checked against libil2cpp.so ARM64 loads",
+  "target": "DropItemManager.GetDropItemByGroup 0x1E4845C..0x1E48B0C",
+  "fields": [
+    {"field": "DropClass", "offset": "0x10", "instruction": "0x1E48624 LDR W21,[X21,#0x10]", "role": "push root group ID onto processing stack"},
+    {"field": "IsADC", "offset": "0x14", "instruction": "0x1E48940 LDR W9,[X21,#0x14]", "role": "equals 1 dispatches AddMetaLoot"},
+    {"field": "Group", "offset": "0x18", "instruction": "0x1E4B614 LDR W26,[X23,#0x18]", "role": "AddMetaLoot searches same Group and CheckItem queries TableMgr.mDCTable"},
+    {"field": "Level", "offset": "0x1C", "instruction": "0x1E4B5B4 LDR W24,[X23,#0x1C]", "role": "AddMetaLoot chooses level-adjusted group"},
+    {"field": "Picks", "offset": "0x20", "instruction": "0x1E484FC LDR W8,[X21,#0x20]; 0x1E486FC LDR W8,[X21,#0x20]; 0x1E4896C LDR W8,[X21,#0x20]", "role": "sign dispatches deterministic multiplicity; positive value is roll count"},
+    {"field": "NoDrop", "offset": "0x34", "instruction": "0x1E4893C LDR W8,[X21,#0x34]; 0x1E489BC LDR W8,[X21,#0x34]", "role": "added to roll range then compared as empty interval"},
+    {"field": "ItemList", "offset": "0x38", "instruction": "0x1E48878 LDR X23,[X21,#0x38]; 0x1E48A14 List<int>.get_Item(selectedIndex)", "role": "candidate IDs; item range chooses AddItems, otherwise DropProp stack"},
+    {"field": "Prob", "offset": "0x40", "instruction": "0x1E48704 LDR X23,[X21,#0x40]; 0x1E489E4 LDR X2,[X21,#0x40]", "role": "positive: weight list; negative: per-index repetition count"},
+    {"field": "LegendaryCv/EpicCv/RareCv/UncommonCv", "offset": "0x24..0x30", "instruction": null, "role": "not read directly by target; downstream quality handling separate"},
+    {"field": "IsMaze/Related/IsActivity", "offset": "0x48/0x4C/0x50", "instruction": null, "role": "not read directly by target"}
+  ],
+  "downstream_fields": [
+    {"field": "SectionTable.DroopLimit", "offset": "0xA0", "instruction": "0x1E4C068 LDR X22,[X22,#0xA0]", "role": "ADC eligibility"},
+    {"field": "TableMgr.mDCTable", "offset": "0x60", "instruction": "0x1E4C09C LDR X23,[X23,#0x60]", "role": "ADC candidate Item list by Group"},
+    {"field": "Item.ItemValue", "offset": "0x30", "instruction": "0x1E4C2EC LDR W23,[X23,#0x30]", "role": "ADC candidate weight = integer 10000 / ItemValue"},
+    {"field": "DropItemManager.ItemStruct.num", "offset": "0x14", "instruction": "0x1E4B0B8-0x1E4B0BC MOV 1; STR [X19,#0x14]", "role": "one direct AddItems occurrence yields one unit"}
+  ]
+}

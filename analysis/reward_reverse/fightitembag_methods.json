@@ -1,0 +1,63 @@
+{
+ "class": "LogicX2.FightItemBag (TypeDefIndex 5185)",
+ "fields": {
+  "mItemList": "FightItemData[] (0x10) — battle item slots; FightItemData{id,num,quality,source:ItemSource,isFirstGet}",
+  "mMoney": "Dictionary<int,SmartInt> (0x18) — in-battle currency buckets (901/903/907…); NOT account gold",
+  "mTrueMoney": "Dictionary<int,SmartInt> (0x20) — 'true currency' bucket (GetTrueCurrency default 901)",
+  "RelicItem": "List<int> (0x30) — roguelite relic ids (local only)",
+  "TowerItem": "List<int> (0x38) — tower-mode items (local only)",
+  "TowerLib": "List<int> (0x40) — tower library",
+  "ConsumeSilver": "int (0x48) — silver(903) spent counter",
+  "PickupSilver": "int (0x4C) — silver(903) picked counter",
+  "GainRate": "float (0x58) — drop gain rate buff",
+  "CostRate": "float (0x5C) — cost rate buff",
+  "profileDropItems": "List<ProfileDropItem> (0x60) — telemetry snapshot for C2L_FightDropData",
+  "moneyGet": "GetMoneyInGame (0x68)",
+  "mItemDayNumCache": "Dictionary<int,int> (0x98, on DropItemManager) — per-item daily drop counts for Item.DropLimit"
+ },
+ "key_methods": {
+  "AddItem(id,quality,num,silverCount,show,recover,source=1)": {
+   "rva": "0x1E46DAC",
+   "notes": "source default = ItemSource.FIGHT(1); routes 901/903/907-type ids into money buckets (constants 0x385/0x387/0x38B); real items into mItemList"
+  },
+  "AddGold(num, itemID=903)": {
+   "rva": "0x1E526CC",
+   "callers": [
+    "LogicBattle.OnCreatTowerUnit/OnDestroyTowerUnit/OnUpdateTowerUnit/RecoverBattleData",
+    "TowerDefenseSpawner.BeginSpawn",
+    "Unit.CheckHPSubRes x2",
+    "Unit.UseSkill",
+    "TowerDefenseModuleNeo.AddTowerMaxNum",
+    "TriggerActions.SilverOpera"
+   ],
+   "notes": "writes mMoney[itemID] only; NO account conversion inside"
+  },
+  "AddTrueCurrency(CurrencyID,num)": {
+   "rva": "0x1E52574"
+  },
+  "GetTrueCurrency(ID=901)": {
+   "rva": "0x1E516B4"
+  },
+  "GetCurrentItems()": {
+   "rva": "0x1E51784",
+   "returns": "List<ProfileDropItem> — full bag telemetry for C2L_FightDropData"
+  },
+  "GetPersistentItemsList()": {
+   "rva": "0x1E51A54",
+   "pseudocode": [
+    "result = new List<ItemDataP>()",
+    "bag = LogicBattle.Current.FightItemBag",
+    "foreach (FightItemData it in bag.mItemList):",
+    "    if it == null: continue",
+    "    info = ItemManager.GetItem(it.ID)",
+    "    if info == null: continue",
+    "    if (int)info.ItemUseScence != 1 /*E_Outside*/: continue",
+    "    result.Add(new ItemDataP{ id=it.ID, num=it.Num, quality=it.Quality })  // eNum left 0",
+    "_ = Gold;  // dead read, return value discarded (0x1E51C18 restores list pointer)",
+    "return result"
+   ],
+   "note": "no source==FIGHT filter here, no maze branch; the authoritative checkout filter is SetCheckout_BattleItem"
+  },
+  "Clear()/DeleteItemByIndex/UseItemByID": "battle-local lifetime only"
+ }
+}

@@ -34,6 +34,7 @@ class OutboundMessage:
     values: Mapping[str, Any]
     data_version: int = 0
     pushes: tuple[OutboundMessage, ...] = ()
+    before_response: tuple[OutboundMessage, ...] = ()
 
 
 Handler: TypeAlias = Callable[

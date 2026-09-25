@@ -11,21 +11,25 @@ from x2server.protocol.errors import ProtocolError
 from x2server.protocol.types import DecodedPacket
 from .store import PlayerStore
 from .hero import encode_hero_all
+from .server_clock import ServerClock
 
 LOGGER = logging.getLogger("x2.login")
 
 
 class LoginService:
-    def __init__(self, identity: LocalIdentityService, store: PlayerStore, economy=None) -> None:
+    def __init__(self, identity: LocalIdentityService, store: PlayerStore, economy=None, equipment=None, wish=None, clock=None) -> None:
         self.identity = identity
         self.store = store
         self.economy = economy
+        self.equipment = equipment
+        self.wish = wish
+        self.clock = clock or ServerClock()
 
     async def login(self, context: DispatchContext, packet: DecodedPacket) -> OutboundMessage:
         values = C2L_LOGIN.decode(packet.body)
         if not self.identity.validates_game_identity(values.get("id", 0), values.get("token", "")):
             raise ProtocolError("local login authentication failed")
-        now = int(time.time())
+        now = self.clock.now()
         player = self.store.login(self.identity.account, values["id"], now)
         context.session.session_id = secrets.token_urlsafe(24)
         context.session.player_id = player["id"]
@@ -37,6 +41,12 @@ class LoginService:
                      "rechargeNoticeAll", "equipAll", "taskDaily", "taskWeekly", "taskChallenge", "limitTaskChallenge"):
             result[name] = b""
         result["heroAll"] = encode_hero_all(player["snapshot"])
+        if self.equipment:
+            from x2server.messages.lobby import LOBBY_SCHEMAS
+            result["equipAll"] = LOBBY_SCHEMAS["L2C_EquipAll"].encode(self.equipment.values(player["id"]))
+        if self.wish:
+            from x2server.messages.wish import WISH_SCHEMAS
+            result["cardPool"] = WISH_SCHEMAS["L2C_CardPool"].encode(self.wish.values(player["id"]))
         if self.economy:
             from x2server.messages.economy import ECONOMY_SCHEMAS
             from x2server.messages.lobby import LOBBY_SCHEMAS
@@ -53,10 +63,14 @@ class LoginService:
     @staticmethod
     def snapshot_push(player: dict[str, Any]) -> OutboundMessage:
         snapshot = player["snapshot"]
+        owned_ids = [hero["id"] for hero in snapshot.get("heroes", []) if hero.get("state") == 2]
+        selected = snapshot.get("show")
+        show = selected if selected in owned_ids else owned_ids[0] if owned_ids else 0
         base = BASE_INFO.encode({"Id": player["id"], "NickName": snapshot["nickname"],
-            "Level": snapshot["level"], "Show": snapshot.get("show", 1003),
+            "Level": snapshot["level"], "Show": show,
             "Gold": snapshot.get("gold", 0), "Crystal": snapshot.get("crystal", 0),
             "Exp": snapshot.get("exp", 0),
+            "EquipExp": snapshot.get("equip_exp", 0),
             "HeroExp": snapshot.get("hero_exp", 0),
             "DailyActivity": snapshot.get("daily_activity", 0),
             "WeekActivity": snapshot.get("week_activity", 0),
@@ -88,7 +102,7 @@ class LoginService:
             context.session.session_id = secrets.token_urlsafe(24)
         LOGGER.info("authenticated reconnect player=%s", player["id"])
         return OutboundMessage("L2C_ReConnect", {"code": 10, "id": player["id"],
-            "serverTime": int(time.time())})
+            "serverTime": self.clock.now()})
 
     async def server_config(self, context: DispatchContext, packet: DecodedPacket) -> OutboundMessage:
         if context.session.player_id is None:

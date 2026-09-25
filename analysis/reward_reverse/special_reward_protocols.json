@@ -1,0 +1,34 @@
+{
+ "note": "send-channel facts from analysis/protocol/protocol_catalog.json (fixed build)",
+ "reward_related_c2l_with_send": {
+  "PickTreasureBox": 310,
+  "FlipPickTreasureBox": 1073,
+  "GetCollectionAward": 588,
+  "QueryTowerReward": 927,
+  "ReceiveTowerReward": 929,
+  "QueryBattlePassInfo": 935,
+  "ReceiveBattlePass": 941,
+  "SignBattlePass": 949,
+  "BuyBattlePassLevel": 939,
+  "BattlePassLevelReceiveReward": 1059,
+  "RaceSectionGetReward": 1106,
+  "SecSweep": 1027,
+  "WorldBossSearch": 407,
+  "WorldBossOpenSearchChest": 409,
+  "QueryWorldBossInfo": 415,
+  "WorldBossAct": 417,
+  "WorldBossLetter": 419,
+  "WorldBossQuestSelect": 471,
+  "QueryWorldBossOpenTime": 679,
+  "WorldBossSelectHero": 701,
+  "ActivityMissionData": 858,
+  "QueryActivityMissionRecord": 618,
+  "ActivityMissionRecordSave": 620
+ },
+ "delivery": {
+  "settlement_rewards": "L2C_CheckoutMainMission(152).rewardData / L2C_SecSweep(1028).rewardData",
+  "new_equips": "inside RewardData.rewardEquip; subsequent changes via L2C_EquipUpdate(536); full list L2C_EquipAll(555)",
+  "item_changes": "L2C_ItemUpdate(553)",
+  "task_progress": "L2C_TaskUpdate(558)"
+ }
+}

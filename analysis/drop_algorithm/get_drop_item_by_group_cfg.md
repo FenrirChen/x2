@@ -1,0 +1,555 @@
+# GetDropItemByGroup 完整 ARM64 CFG
+
+目标实际属于 `LogicX2.DropItemManager`，不是 `DropPropManager`。
+`dump.cs` RVA/VA `0x1e4845c`；函数字节范围 `0x1e4845c..0x1e48b0c`；428 条指令、113 个 basic blocks。
+
+分块按所有条件/无条件跳转目标与后继指令机械生成；BL 视作调用，不切块。下表每块的最后一条指令给出边。异常/空指针辅助调用视为外部调用。
+
+| Block | Instructions | Last instruction | Outgoing edges |
+|---|---:|---|---|
+| `0x1e4845c..0x1e48494` | 14 | `tbnz w8, #0, #0x1e484ac` | `0x1e484ac`, `0x1e48494` |
+| `0x1e48494..0x1e484ac` | 6 | `strb w8, [x20, #0x1db]` | `0x1e484ac` |
+| `0x1e484ac..0x1e484bc` | 4 | `cbnz x22, #0x1e484c0` | `0x1e484c0`, `0x1e484bc` |
+| `0x1e484bc..0x1e484c0` | 1 | `bl #0x3f564f0` | `0x1e484c0` |
+| `0x1e484c0..0x1e484dc` | 7 | `cbnz x22, #0x1e484e0` | `0x1e484e0`, `0x1e484dc` |
+| `0x1e484dc..0x1e484e0` | 1 | `bl #0x3f564f0` | `0x1e484e0` |
+| `0x1e484e0..0x1e484f8` | 6 | `cbnz x21, #0x1e484fc` | `0x1e484fc`, `0x1e484f8` |
+| `0x1e484f8..0x1e484fc` | 1 | `bl #0x3f564f0` | `0x1e484fc` |
+| `0x1e484fc..0x1e48514` | 6 | `tbz w8, #0x1f, #0x1e48618` | `0x1e48618`, `0x1e48514` |
+| `0x1e48514..0x1e48528` | 5 | `b #0x1e4852c` | `0x1e4852c` |
+| `0x1e48528..0x1e4852c` | 1 | `add w22, w22, #1` | `0x1e4852c` |
+| `0x1e4852c..0x1e48530` | 1 | `cbnz x23, #0x1e48534` | `0x1e48534`, `0x1e48530` |
+| `0x1e48530..0x1e48534` | 1 | `bl #0x3f564f0` | `0x1e48534` |
+| `0x1e48534..0x1e48550` | 7 | `b.ge #0x1e48618` | `0x1e48618`, `0x1e48550` |
+| `0x1e48550..0x1e48558` | 2 | `b #0x1e485b8` | `0x1e485b8` |
+| `0x1e48558..0x1e48574` | 7 | `b #0x1e485b8` | `0x1e485b8` |
+| `0x1e48574..0x1e48578` | 1 | `cbnz x23, #0x1e4857c` | `0x1e4857c`, `0x1e48578` |
+| `0x1e48578..0x1e4857c` | 1 | `bl #0x3f564f0` | `0x1e4857c` |
+| `0x1e4857c..0x1e48594` | 6 | `b.lt #0x1e485ec` | `0x1e485ec`, `0x1e48594` |
+| `0x1e48594..0x1e48598` | 1 | `cbnz x23, #0x1e4859c` | `0x1e4859c`, `0x1e48598` |
+| `0x1e48598..0x1e4859c` | 1 | `bl #0x3f564f0` | `0x1e4859c` |
+| `0x1e4859c..0x1e485b8` | 7 | `b.ge #0x1e485ec` | `0x1e485ec`, `0x1e485b8` |
+| `0x1e485b8..0x1e485bc` | 1 | `cbnz x21, #0x1e485c0` | `0x1e485c0`, `0x1e485bc` |
+| `0x1e485bc..0x1e485c0` | 1 | `bl #0x3f564f0` | `0x1e485c0` |
+| `0x1e485c0..0x1e485c8` | 2 | `cbnz x24, #0x1e485cc` | `0x1e485cc`, `0x1e485c8` |
+| `0x1e485c8..0x1e485cc` | 1 | `bl #0x3f564f0` | `0x1e485cc` |
+| `0x1e485cc..0x1e485e8` | 7 | `b.lt #0x1e48574` | `0x1e48574`, `0x1e485e8` |
+| `0x1e485e8..0x1e485ec` | 1 | `b #0x1e48528` | `0x1e48528` |
+| `0x1e485ec..0x1e485f4` | 2 | `cbnz x23, #0x1e485f8` | `0x1e485f8`, `0x1e485f4` |
+| `0x1e485f4..0x1e485f8` | 1 | `bl #0x3f564f0` | `0x1e485f8` |
+| `0x1e485f8..0x1e48610` | 6 | `cbnz x24, #0x1e48558` | `0x1e48558`, `0x1e48610` |
+| `0x1e48610..0x1e48618` | 2 | `b #0x1e48558` | `0x1e48558` |
+| `0x1e48618..0x1e48620` | 2 | `cbnz x21, #0x1e48624` | `0x1e48624`, `0x1e48620` |
+| `0x1e48620..0x1e48624` | 1 | `bl #0x3f564f0` | `0x1e48624` |
+| `0x1e48624..0x1e4862c` | 2 | `cbnz x22, #0x1e48630` | `0x1e48630`, `0x1e4862c` |
+| `0x1e4862c..0x1e48630` | 1 | `bl #0x3f564f0` | `0x1e48630` |
+| `0x1e48630..0x1e48664` | 13 | `b #0x1e48abc` | `0x1e48abc` |
+| `0x1e48664..0x1e48684` | 8 | `b #0x1e48abc` | `0x1e48abc` |
+| `0x1e48684..0x1e4868c` | 2 | `cbnz x21, #0x1e48690` | `0x1e48690`, `0x1e4868c` |
+| `0x1e4868c..0x1e48690` | 1 | `bl #0x3f564f0` | `0x1e48690` |
+| `0x1e48690..0x1e486bc` | 11 | `tbz w9, #0, #0x1e486cc` | `0x1e486cc`, `0x1e486bc` |
+| `0x1e486bc..0x1e486c4` | 2 | `cbnz w9, #0x1e486cc` | `0x1e486cc`, `0x1e486c4` |
+| `0x1e486c4..0x1e486cc` | 2 | `bl #0x3f3f378` | `0x1e486cc` |
+| `0x1e486cc..0x1e486e0` | 5 | `cbnz x21, #0x1e486e4` | `0x1e486e4`, `0x1e486e0` |
+| `0x1e486e0..0x1e486e4` | 1 | `bl #0x3f564f0` | `0x1e486e4` |
+| `0x1e486e4..0x1e486fc` | 6 | `cbz x21, #0x1e487a4` | `0x1e487a4`, `0x1e486fc` |
+| `0x1e486fc..0x1e48704` | 2 | `tbnz w8, #0x1f, #0x1e4886c` | `0x1e4886c`, `0x1e48704` |
+| `0x1e48704..0x1e4870c` | 2 | `cbnz x23, #0x1e48710` | `0x1e48710`, `0x1e4870c` |
+| `0x1e4870c..0x1e48710` | 1 | `bl #0x3f564f0` | `0x1e48710` |
+| `0x1e48710..0x1e48748` | 14 | `b #0x1e4874c` | `0x1e4874c` |
+| `0x1e48748..0x1e4874c` | 1 | `add w20, w0, w20` | `0x1e4874c` |
+| `0x1e4874c..0x1e48760` | 5 | `tbz w8, #0, #0x1e48928` | `0x1e48928`, `0x1e48760` |
+| `0x1e48760..0x1e48770` | 4 | `b #0x1e48748` | `0x1e48748` |
+| `0x1e48770..0x1e48794` | 9 | `cbz x23, #0x1e4893c` | `0x1e4893c`, `0x1e48794` |
+| `0x1e48794..0x1e487a4` | 4 | `b #0x1e4893c` | `0x1e4893c` |
+| `0x1e487a4..0x1e487b8` | 5 | `tbz w8, #0, #0x1e487d0` | `0x1e487d0`, `0x1e487b8` |
+| `0x1e487b8..0x1e487c0` | 2 | `cbnz w8, #0x1e487d0` | `0x1e487d0`, `0x1e487c0` |
+| `0x1e487c0..0x1e487d0` | 4 | `ldr x0, [x8]` | `0x1e487d0` |
+| `0x1e487d0..0x1e48820` | 20 | `cbnz x23, #0x1e48824` | `0x1e48824`, `0x1e48820` |
+| `0x1e48820..0x1e48824` | 1 | `bl #0x3f564f0` | `0x1e48824` |
+| `0x1e48824..0x1e48828` | 1 | `cbz x22, #0x1e48848` | `0x1e48848`, `0x1e48828` |
+| `0x1e48828..0x1e4883c` | 5 | `cbnz x0, #0x1e48848` | `0x1e48848`, `0x1e4883c` |
+| `0x1e4883c..0x1e48848` | 3 | `bl #0x3f563d4` | `0x1e48848` |
+| `0x1e48848..0x1e48850` | 2 | `cbnz w8, #0x1e4885c` | `0x1e4885c`, `0x1e48850` |
+| `0x1e48850..0x1e4885c` | 3 | `bl #0x3f563d4` | `0x1e4885c` |
+| `0x1e4885c..0x1e48864` | 2 | `cbnz x21, #0x1e48664` | `0x1e48664`, `0x1e48864` |
+| `0x1e48864..0x1e4886c` | 2 | `b #0x1e48664` | `0x1e48664` |
+| `0x1e4886c..0x1e48874` | 2 | `b #0x1e48878` | `0x1e48878` |
+| `0x1e48874..0x1e48878` | 1 | `add w22, w22, #1` | `0x1e48878` |
+| `0x1e48878..0x1e48880` | 2 | `cbnz x23, #0x1e48884` | `0x1e48884`, `0x1e48880` |
+| `0x1e48880..0x1e48884` | 1 | `bl #0x3f564f0` | `0x1e48884` |
+| `0x1e48884..0x1e4889c` | 6 | `b.lt #0x1e488fc` | `0x1e488fc`, `0x1e4889c` |
+| `0x1e4889c..0x1e488a0` | 1 | `b #0x1e48abc` | `0x1e48abc` |
+| `0x1e488a0..0x1e488b4` | 5 | `b #0x1e488fc` | `0x1e488fc` |
+| `0x1e488b4..0x1e488bc` | 2 | `cbnz x23, #0x1e488c0` | `0x1e488c0`, `0x1e488bc` |
+| `0x1e488bc..0x1e488c0` | 1 | `bl #0x3f564f0` | `0x1e488c0` |
+| `0x1e488c0..0x1e488d8` | 6 | `b.lt #0x1e488fc` | `0x1e488fc`, `0x1e488d8` |
+| `0x1e488d8..0x1e488e0` | 2 | `cbnz x23, #0x1e488e4` | `0x1e488e4`, `0x1e488e0` |
+| `0x1e488e0..0x1e488e4` | 1 | `bl #0x3f564f0` | `0x1e488e4` |
+| `0x1e488e4..0x1e488fc` | 6 | `b.le #0x1e488a0` | `0x1e488a0`, `0x1e488fc` |
+| `0x1e488fc..0x1e48904` | 2 | `cbnz x23, #0x1e48908` | `0x1e48908`, `0x1e48904` |
+| `0x1e48904..0x1e48908` | 1 | `bl #0x3f564f0` | `0x1e48908` |
+| `0x1e48908..0x1e48924` | 7 | `b.lt #0x1e488b4` | `0x1e488b4`, `0x1e48924` |
+| `0x1e48924..0x1e48928` | 1 | `b #0x1e48874` | `0x1e48874` |
+| `0x1e48928..0x1e4893c` | 5 | `bl #0x209f4ec` | `0x1e4893c` |
+| `0x1e4893c..0x1e48954` | 6 | `b.ne #0x1e4896c` | `0x1e4896c`, `0x1e48954` |
+| `0x1e48954..0x1e4896c` | 6 | `b #0x1e48abc` | `0x1e48abc` |
+| `0x1e4896c..0x1e4897c` | 4 | `b.le #0x1e48abc` | `0x1e48abc`, `0x1e4897c` |
+| `0x1e4897c..0x1e48990` | 5 | `cbnz x22, #0x1e48994` | `0x1e48994`, `0x1e48990` |
+| `0x1e48990..0x1e48994` | 1 | `bl #0x3f564f0` | `0x1e48994` |
+| `0x1e48994..0x1e4899c` | 2 | `cbnz x22, #0x1e489a0` | `0x1e489a0`, `0x1e4899c` |
+| `0x1e4899c..0x1e489a0` | 1 | `bl #0x3f564f0` | `0x1e489a0` |
+| `0x1e489a0..0x1e489c8` | 10 | `b.lt #0x1e48aac` | `0x1e48aac`, `0x1e489c8` |
+| `0x1e489c8..0x1e489dc` | 5 | `cbnz x22, #0x1e489e0` | `0x1e489e0`, `0x1e489dc` |
+| `0x1e489dc..0x1e489e0` | 1 | `bl #0x3f564f0` | `0x1e489e0` |
+| `0x1e489e0..0x1e48a04` | 9 | `cbnz x24, #0x1e48a08` | `0x1e48a08`, `0x1e48a04` |
+| `0x1e48a04..0x1e48a08` | 1 | `bl #0x3f564f0` | `0x1e48a08` |
+| `0x1e48a08..0x1e48a20` | 6 | `b.lt #0x1e48a44` | `0x1e48a44`, `0x1e48a20` |
+| `0x1e48a20..0x1e48a28` | 2 | `cbnz x24, #0x1e48a2c` | `0x1e48a2c`, `0x1e48a28` |
+| `0x1e48a28..0x1e48a2c` | 1 | `bl #0x3f564f0` | `0x1e48a2c` |
+| `0x1e48a2c..0x1e48a44` | 6 | `b.le #0x1e48a8c` | `0x1e48a8c`, `0x1e48a44` |
+| `0x1e48a44..0x1e48a50` | 3 | `cbnz x25, #0x1e48a54` | `0x1e48a54`, `0x1e48a50` |
+| `0x1e48a50..0x1e48a54` | 1 | `bl #0x3f564f0` | `0x1e48a54` |
+| `0x1e48a54..0x1e48a6c` | 6 | `cbnz x24, #0x1e48a70` | `0x1e48a70`, `0x1e48a6c` |
+| `0x1e48a6c..0x1e48a70` | 1 | `bl #0x3f564f0` | `0x1e48a70` |
+| `0x1e48a70..0x1e48a8c` | 7 | `b #0x1e48a9c` | `0x1e48a9c` |
+| `0x1e48a8c..0x1e48a9c` | 4 | `bl #0x1e4aff8` | `0x1e48a9c` |
+| `0x1e48a9c..0x1e48aac` | 4 | `ldr w23, [sp, #0x14]` | `0x1e48aac` |
+| `0x1e48aac..0x1e48abc` | 4 | `b.lt #0x1e4897c` | `0x1e4897c`, `0x1e48abc` |
+| `0x1e48abc..0x1e48ac4` | 2 | `cbnz x21, #0x1e48ac8` | `0x1e48ac8`, `0x1e48ac4` |
+| `0x1e48ac4..0x1e48ac8` | 1 | `bl #0x3f564f0` | `0x1e48ac8` |
+| `0x1e48ac8..0x1e48ae0` | 6 | `cbnz w0, #0x1e48684` | `0x1e48684`, `0x1e48ae0` |
+| `0x1e48ae0..0x1e48b0c` | 11 | `ret ` | return |
+
+## 全指令（含调用目标）
+
+```text
+0x1e4845c  stp      x28, x27, [sp, #-0x60]!
+0x1e48460  stp      x26, x25, [sp, #0x10]
+0x1e48464  stp      x24, x23, [sp, #0x20]
+0x1e48468  stp      x22, x21, [sp, #0x30]
+0x1e4846c  stp      x20, x19, [sp, #0x40]
+0x1e48470  stp      x29, x30, [sp, #0x50]
+0x1e48474  add      x29, sp, #0x50
+0x1e48478  sub      sp, sp, #0x50
+0x1e4847c  adrp     x20, #0x557a000
+0x1e48480  ldrb     w8, [x20, #0x1db]
+0x1e48484  mov      x21, x1
+0x1e48488  mov      x19, x0
+0x1e4848c  str      w2, [sp, #0x10]
+0x1e48490  tbnz     w8, #0, #0x1e484ac
+0x1e48494  adrp     x8, #0x52da000
+0x1e48498  ldr      x8, [x8, #0x318]
+0x1e4849c  ldr      w0, [x8]
+0x1e484a0  bl       #0x3f2aed0
+0x1e484a4  mov      w8, #1
+0x1e484a8  strb     w8, [x20, #0x1db]
+0x1e484ac  stp      xzr, xzr, [sp, #0x38]
+0x1e484b0  str      xzr, [sp, #0x30]
+0x1e484b4  ldr      x22, [x19, #0x28]
+0x1e484b8  cbnz     x22, #0x1e484c0
+0x1e484bc  bl       #0x3f564f0
+0x1e484c0  adrp     x8, #0x5201000
+0x1e484c4  ldr      x8, [x8, #0x808]
+0x1e484c8  mov      x0, x22
+0x1e484cc  ldr      x1, [x8]
+0x1e484d0  bl       #0x35c3564 ; System.Collections.Generic.Stack<int>$$Clear
+0x1e484d4  ldr      x22, [x19, #0x30]
+0x1e484d8  cbnz     x22, #0x1e484e0
+0x1e484dc  bl       #0x3f564f0
+0x1e484e0  adrp     x8, #0x5268000
+0x1e484e4  ldr      x8, [x8, #0xdd0]
+0x1e484e8  mov      x0, x22
+0x1e484ec  ldr      x1, [x8]
+0x1e484f0  bl       #0x3d4fb64 ; System.Collections.Generic.List<FutureErrorCallback>$$Clear
+0x1e484f4  cbnz     x21, #0x1e484fc
+0x1e484f8  bl       #0x3f564f0
+0x1e484fc  ldr      w8, [x21, #0x20]
+0x1e48500  mov      w26, #0x130000
+0x1e48504  mov      w27, #0xf0000
+0x1e48508  movk     w26, #0xd61f
+0x1e4850c  movk     w27, #0x4241
+0x1e48510  tbz      w8, #0x1f, #0x1e48618
+0x1e48514  adrp     x28, #0x52e6000
+0x1e48518  ldr      x23, [x21, #0x38]
+0x1e4851c  ldr      x28, [x28, #0x7b0]
+0x1e48520  mov      w22, wzr
+0x1e48524  b        #0x1e4852c
+0x1e48528  add      w22, w22, #1
+0x1e4852c  cbnz     x23, #0x1e48534
+0x1e48530  bl       #0x3f564f0
+0x1e48534  adrp     x8, #0x5300000
+0x1e48538  ldr      x8, [x8, #0xfa8]
+0x1e4853c  mov      x0, x23
+0x1e48540  ldr      x1, [x8]
+0x1e48544  bl       #0x3d473f8 ; System.Collections.Generic.List<int>$$get_Count
+0x1e48548  cmp      w22, w0
+0x1e4854c  b.ge     #0x1e48618
+0x1e48550  mov      w20, #-1
+0x1e48554  b        #0x1e485b8
+0x1e48558  adrp     x8, #0x52b5000
+0x1e4855c  ldr      x8, [x8, #0x928]
+0x1e48560  mov      x0, x24
+0x1e48564  mov      w1, w25
+0x1e48568  ldr      x2, [x8]
+0x1e4856c  bl       #0x35c37a4 ; System.Collections.Generic.Stack<int>$$Push
+0x1e48570  b        #0x1e485b8
+0x1e48574  cbnz     x23, #0x1e4857c
+0x1e48578  bl       #0x3f564f0
+0x1e4857c  ldr      x2, [x28]
+0x1e48580  mov      x0, x23
+0x1e48584  mov      w1, w22
+0x1e48588  bl       #0x3d47400 ; System.Collections.Generic.List<int>$$get_Item
+0x1e4858c  cmp      w0, w27
+0x1e48590  b.lt     #0x1e485ec
+0x1e48594  cbnz     x23, #0x1e4859c
+0x1e48598  bl       #0x3f564f0
+0x1e4859c  ldr      x2, [x28]
+0x1e485a0  mov      x0, x23
+0x1e485a4  mov      w1, w22
+0x1e485a8  bl       #0x3d47400 ; System.Collections.Generic.List<int>$$get_Item
+0x1e485ac  add      w8, w26, #1
+0x1e485b0  cmp      w0, w8
+0x1e485b4  b.ge     #0x1e485ec
+0x1e485b8  cbnz     x21, #0x1e485c0
+0x1e485bc  bl       #0x3f564f0
+0x1e485c0  ldr      x24, [x21, #0x40]
+0x1e485c4  cbnz     x24, #0x1e485cc
+0x1e485c8  bl       #0x3f564f0
+0x1e485cc  ldr      x2, [x28]
+0x1e485d0  mov      x0, x24
+0x1e485d4  mov      w1, w22
+0x1e485d8  bl       #0x3d47400 ; System.Collections.Generic.List<int>$$get_Item
+0x1e485dc  add      w20, w20, #1
+0x1e485e0  cmp      w20, w0
+0x1e485e4  b.lt     #0x1e48574
+0x1e485e8  b        #0x1e48528
+0x1e485ec  ldr      x24, [x19, #0x28]
+0x1e485f0  cbnz     x23, #0x1e485f8
+0x1e485f4  bl       #0x3f564f0
+0x1e485f8  ldr      x2, [x28]
+0x1e485fc  mov      x0, x23
+0x1e48600  mov      w1, w22
+0x1e48604  bl       #0x3d47400 ; System.Collections.Generic.List<int>$$get_Item
+0x1e48608  mov      w25, w0
+0x1e4860c  cbnz     x24, #0x1e48558
+0x1e48610  bl       #0x3f564f0
+0x1e48614  b        #0x1e48558
+0x1e48618  ldr      x22, [x19, #0x28]
+0x1e4861c  cbnz     x21, #0x1e48624
+0x1e48620  bl       #0x3f564f0
+0x1e48624  ldr      w21, [x21, #0x10]
+0x1e48628  cbnz     x22, #0x1e48630
+0x1e4862c  bl       #0x3f564f0
+0x1e48630  adrp     x8, #0x52b5000
+0x1e48634  ldr      x8, [x8, #0x928]
+0x1e48638  mov      x0, x22
+0x1e4863c  mov      w1, w21
+0x1e48640  ldr      x2, [x8]
+0x1e48644  bl       #0x35c37a4 ; System.Collections.Generic.Stack<int>$$Push
+0x1e48648  adrp     x24, #0x524b000
+0x1e4864c  adrp     x28, #0x52e6000
+0x1e48650  adrp     x25, #0x5300000
+0x1e48654  ldr      x24, [x24, #0x60]
+0x1e48658  ldr      x28, [x28, #0x7b0]
+0x1e4865c  ldr      x25, [x25, #0xfa8]
+0x1e48660  b        #0x1e48abc
+0x1e48664  adrp     x8, #0x52de000
+0x1e48668  ldr      x8, [x8, #0xe68]
+0x1e4866c  mov      x3, xzr
+0x1e48670  mov      x0, x21
+0x1e48674  mov      x2, x23
+0x1e48678  ldr      x1, [x8]
+0x1e4867c  bl       #0x1e41f9c ; LogicX2.Debug.DelegateWithParamskeyword$$Invoke
+0x1e48680  b        #0x1e48abc
+0x1e48684  ldr      x21, [x19, #0x28]
+0x1e48688  cbnz     x21, #0x1e48690
+0x1e4868c  bl       #0x3f564f0
+0x1e48690  adrp     x8, #0x5272000
+0x1e48694  ldr      x8, [x8, #0x548]
+0x1e48698  mov      x0, x21
+0x1e4869c  ldr      x1, [x8]
+0x1e486a0  bl       #0x35c36ac ; System.Collections.Generic.Stack<int>$$Pop
+0x1e486a4  adrp     x8, #0x524d000
+0x1e486a8  ldr      x8, [x8, #0x808]
+0x1e486ac  mov      w22, w0
+0x1e486b0  ldr      x8, [x8]
+0x1e486b4  ldrb     w9, [x8, #0x10a]
+0x1e486b8  tbz      w9, #0, #0x1e486cc
+0x1e486bc  ldr      w9, [x8, #0xbc]
+0x1e486c0  cbnz     w9, #0x1e486cc
+0x1e486c4  mov      x0, x8
+0x1e486c8  bl       #0x3f3f378
+0x1e486cc  mov      x0, xzr
+0x1e486d0  mov      x1, xzr
+0x1e486d4  bl       #0x1cae27c ; DropPropManager$$get_Instance
+0x1e486d8  mov      x21, x0
+0x1e486dc  cbnz     x21, #0x1e486e4
+0x1e486e0  bl       #0x3f564f0
+0x1e486e4  mov      x2, xzr
+0x1e486e8  mov      x0, x21
+0x1e486ec  mov      w1, w22
+0x1e486f0  bl       #0x1cae54c ; DropPropManager$$GetItem
+0x1e486f4  mov      x21, x0
+0x1e486f8  cbz      x21, #0x1e487a4
+0x1e486fc  ldr      w8, [x21, #0x20]
+0x1e48700  tbnz     w8, #0x1f, #0x1e4886c
+0x1e48704  ldr      x23, [x21, #0x40]
+0x1e48708  cbnz     x23, #0x1e48710
+0x1e4870c  bl       #0x3f564f0
+0x1e48710  adrp     x8, #0x5256000
+0x1e48714  ldr      x8, [x8, #0x428]
+0x1e48718  mov      x0, x23
+0x1e4871c  ldr      x1, [x8]
+0x1e48720  add      x8, sp, #0x18
+0x1e48724  bl       #0x3d46204 ; System.Collections.Generic.List<int>$$GetEnumerator
+0x1e48728  ldr      x8, [sp, #0x28]
+0x1e4872c  ldur     q0, [sp, #0x18]
+0x1e48730  adrp     x23, #0x52a4000
+0x1e48734  mov      w20, wzr
+0x1e48738  str      x8, [sp, #0x40]
+0x1e4873c  str      q0, [sp, #0x30]
+0x1e48740  ldr      x23, [x23, #0x998]
+0x1e48744  b        #0x1e4874c
+0x1e48748  add      w20, w0, w20
+0x1e4874c  ldr      x1, [x23]
+0x1e48750  add      x0, sp, #0x30
+0x1e48754  bl       #0x209f504
+0x1e48758  and      w8, w0, #1
+0x1e4875c  tbz      w8, #0, #0x1e48928
+0x1e48760  ldr      x1, [x24]
+0x1e48764  add      x0, sp, #0x30
+0x1e48768  bl       #0x209f5d0
+0x1e4876c  b        #0x1e48748
+0x1e48770  bl       #0x113fb30
+0x1e48774  ldr      x23, [x0]
+0x1e48778  bl       #0x113f710
+0x1e4877c  adrp     x8, #0x530e000
+0x1e48780  ldr      x8, [x8]
+0x1e48784  add      x0, sp, #0x30
+0x1e48788  ldr      x1, [x8]
+0x1e4878c  bl       #0x209f4ec
+0x1e48790  cbz      x23, #0x1e4893c
+0x1e48794  mov      x1, xzr
+0x1e48798  mov      x0, x23
+0x1e4879c  bl       #0x3f563d4
+0x1e487a0  b        #0x1e4893c
+0x1e487a4  adrp     x8, #0x52b9000
+0x1e487a8  ldr      x8, [x8, #0x898]
+0x1e487ac  ldr      x0, [x8]
+0x1e487b0  ldrb     w8, [x0, #0x10a]
+0x1e487b4  tbz      w8, #0, #0x1e487d0
+0x1e487b8  ldr      w8, [x0, #0xbc]
+0x1e487bc  cbnz     w8, #0x1e487d0
+0x1e487c0  bl       #0x3f3f378
+0x1e487c4  adrp     x8, #0x52b9000
+0x1e487c8  ldr      x8, [x8, #0x898]
+0x1e487cc  ldr      x0, [x8]
+0x1e487d0  ldr      x8, [x0, #0xa0]
+0x1e487d4  ldr      x21, [x8, #0x30]
+0x1e487d8  adrp     x8, #0x5228000
+0x1e487dc  ldr      x8, [x8, #0x560]
+0x1e487e0  ldr      x23, [x8]
+0x1e487e4  mov      x0, x23
+0x1e487e8  bl       #0x3f1f994
+0x1e487ec  mov      w1, #1
+0x1e487f0  mov      x0, x23
+0x1e487f4  bl       #0x3f69a40
+0x1e487f8  adrp     x8, #0x52e8000
+0x1e487fc  ldr      x8, [x8, #0xcc0]
+0x1e48800  mov      x23, x0
+0x1e48804  add      x1, sp, #0x18
+0x1e48808  str      w22, [sp, #0x18]
+0x1e4880c  ldr      x8, [x8]
+0x1e48810  mov      x0, x8
+0x1e48814  bl       #0x3f6448c
+0x1e48818  mov      x22, x0
+0x1e4881c  cbnz     x23, #0x1e48824
+0x1e48820  bl       #0x3f564f0
+0x1e48824  cbz      x22, #0x1e48848
+0x1e48828  ldr      x8, [x23]
+0x1e4882c  mov      x0, x22
+0x1e48830  ldr      x1, [x8, #0x30]
+0x1e48834  bl       #0x3f64744
+0x1e48838  cbnz     x0, #0x1e48848
+0x1e4883c  bl       #0x3f571fc
+0x1e48840  mov      x1, xzr
+0x1e48844  bl       #0x3f563d4
+0x1e48848  ldr      w8, [x23, #0x18]
+0x1e4884c  cbnz     w8, #0x1e4885c
+0x1e48850  bl       #0x3f570dc
+0x1e48854  mov      x1, xzr
+0x1e48858  bl       #0x3f563d4
+0x1e4885c  str      x22, [x23, #0x20]
+0x1e48860  cbnz     x21, #0x1e48664
+0x1e48864  bl       #0x3f564f0
+0x1e48868  b        #0x1e48664
+0x1e4886c  mov      w22, wzr
+0x1e48870  b        #0x1e48878
+0x1e48874  add      w22, w22, #1
+0x1e48878  ldr      x23, [x21, #0x38]
+0x1e4887c  cbnz     x23, #0x1e48884
+0x1e48880  bl       #0x3f564f0
+0x1e48884  ldr      x1, [x25]
+0x1e48888  mov      x0, x23
+0x1e4888c  bl       #0x3d473f8 ; System.Collections.Generic.List<int>$$get_Count
+0x1e48890  mov      w20, #-1
+0x1e48894  cmp      w22, w0
+0x1e48898  b.lt     #0x1e488fc
+0x1e4889c  b        #0x1e48abc
+0x1e488a0  mov      x0, x19
+0x1e488a4  mov      w1, w22
+0x1e488a8  mov      x2, x21
+0x1e488ac  bl       #0x1e4aff8 ; LogicX2.DropItemManager$$AddItems
+0x1e488b0  b        #0x1e488fc
+0x1e488b4  ldr      x23, [x21, #0x38]
+0x1e488b8  cbnz     x23, #0x1e488c0
+0x1e488bc  bl       #0x3f564f0
+0x1e488c0  ldr      x2, [x28]
+0x1e488c4  mov      x0, x23
+0x1e488c8  mov      w1, w22
+0x1e488cc  bl       #0x3d47400 ; System.Collections.Generic.List<int>$$get_Item
+0x1e488d0  cmp      w0, w27
+0x1e488d4  b.lt     #0x1e488fc
+0x1e488d8  ldr      x23, [x21, #0x38]
+0x1e488dc  cbnz     x23, #0x1e488e4
+0x1e488e0  bl       #0x3f564f0
+0x1e488e4  ldr      x2, [x28]
+0x1e488e8  mov      x0, x23
+0x1e488ec  mov      w1, w22
+0x1e488f0  bl       #0x3d47400 ; System.Collections.Generic.List<int>$$get_Item
+0x1e488f4  cmp      w0, w26
+0x1e488f8  b.le     #0x1e488a0
+0x1e488fc  ldr      x23, [x21, #0x40]
+0x1e48900  cbnz     x23, #0x1e48908
+0x1e48904  bl       #0x3f564f0
+0x1e48908  ldr      x2, [x28]
+0x1e4890c  mov      x0, x23
+0x1e48910  mov      w1, w22
+0x1e48914  bl       #0x3d47400 ; System.Collections.Generic.List<int>$$get_Item
+0x1e48918  add      w20, w20, #1
+0x1e4891c  cmp      w20, w0
+0x1e48920  b.lt     #0x1e488b4
+0x1e48924  b        #0x1e48874
+0x1e48928  adrp     x8, #0x530e000
+0x1e4892c  ldr      x8, [x8]
+0x1e48930  add      x0, sp, #0x30
+0x1e48934  ldr      x1, [x8]
+0x1e48938  bl       #0x209f4ec
+0x1e4893c  ldr      w8, [x21, #0x34]
+0x1e48940  ldr      w9, [x21, #0x14]
+0x1e48944  add      w23, w8, w20
+0x1e48948  str      w23, [sp, #0x14]
+0x1e4894c  cmp      w9, #1
+0x1e48950  b.ne     #0x1e4896c
+0x1e48954  ldr      w2, [sp, #0x10]
+0x1e48958  mov      x0, x19
+0x1e4895c  mov      w1, w22
+0x1e48960  mov      w3, w23
+0x1e48964  bl       #0x1e4b510 ; LogicX2.DropItemManager$$AddMetaLoot
+0x1e48968  b        #0x1e48abc
+0x1e4896c  ldr      w8, [x21, #0x20]
+0x1e48970  mov      w20, wzr
+0x1e48974  cmp      w8, #0
+0x1e48978  b.le     #0x1e48abc
+0x1e4897c  mov      x0, xzr
+0x1e48980  mov      x1, xzr
+0x1e48984  bl       #0x18d3144 ; LogicX2.LogicBattle$$get_Current
+0x1e48988  mov      x22, x0
+0x1e4898c  cbnz     x22, #0x1e48994
+0x1e48990  bl       #0x3f564f0
+0x1e48994  ldr      x22, [x22, #0x68]
+0x1e48998  cbnz     x22, #0x1e489a0
+0x1e4899c  bl       #0x3f564f0
+0x1e489a0  mov      w1, #-0x11010000
+0x1e489a4  mov      w2, wzr
+0x1e489a8  mov      x4, xzr
+0x1e489ac  movk     w1, #0x70
+0x1e489b0  mov      x0, x22
+0x1e489b4  mov      w3, w23
+0x1e489b8  bl       #0x3efd408 ; LogicX2.Random$$Range
+0x1e489bc  ldr      w8, [x21, #0x34]
+0x1e489c0  cmp      w0, w8
+0x1e489c4  b.lt     #0x1e48aac
+0x1e489c8  mov      x0, xzr
+0x1e489cc  mov      x1, xzr
+0x1e489d0  bl       #0x18d3144 ; LogicX2.LogicBattle$$get_Current
+0x1e489d4  mov      x22, x0
+0x1e489d8  cbnz     x22, #0x1e489e0
+0x1e489dc  bl       #0x3f564f0
+0x1e489e0  ldr      x1, [x22, #0x68]
+0x1e489e4  ldr      x2, [x21, #0x40]
+0x1e489e8  mov      x0, xzr
+0x1e489ec  mov      x3, xzr
+0x1e489f0  mov      x23, x25
+0x1e489f4  bl       #0x18d2830 ; LogicX2.GlobalFun$$GetProbability
+0x1e489f8  ldr      x24, [x21, #0x38]
+0x1e489fc  mov      w22, w0
+0x1e48a00  cbnz     x24, #0x1e48a08
+0x1e48a04  bl       #0x3f564f0
+0x1e48a08  ldr      x2, [x28]
+0x1e48a0c  mov      x0, x24
+0x1e48a10  mov      w1, w22
+0x1e48a14  bl       #0x3d47400 ; System.Collections.Generic.List<int>$$get_Item
+0x1e48a18  cmp      w0, w27
+0x1e48a1c  b.lt     #0x1e48a44
+0x1e48a20  ldr      x24, [x21, #0x38]
+0x1e48a24  cbnz     x24, #0x1e48a2c
+0x1e48a28  bl       #0x3f564f0
+0x1e48a2c  ldr      x2, [x28]
+0x1e48a30  mov      x0, x24
+0x1e48a34  mov      w1, w22
+0x1e48a38  bl       #0x3d47400 ; System.Collections.Generic.List<int>$$get_Item
+0x1e48a3c  cmp      w0, w26
+0x1e48a40  b.le     #0x1e48a8c
+0x1e48a44  ldr      x24, [x19, #0x28]
+0x1e48a48  ldr      x25, [x21, #0x38]
+0x1e48a4c  cbnz     x25, #0x1e48a54
+0x1e48a50  bl       #0x3f564f0
+0x1e48a54  ldr      x2, [x28]
+0x1e48a58  mov      x0, x25
+0x1e48a5c  mov      w1, w22
+0x1e48a60  bl       #0x3d47400 ; System.Collections.Generic.List<int>$$get_Item
+0x1e48a64  mov      w22, w0
+0x1e48a68  cbnz     x24, #0x1e48a70
+0x1e48a6c  bl       #0x3f564f0
+0x1e48a70  adrp     x8, #0x52b5000
+0x1e48a74  ldr      x8, [x8, #0x928]
+0x1e48a78  mov      x0, x24
+0x1e48a7c  mov      w1, w22
+0x1e48a80  ldr      x2, [x8]
+0x1e48a84  bl       #0x35c37a4 ; System.Collections.Generic.Stack<int>$$Push
+0x1e48a88  b        #0x1e48a9c
+0x1e48a8c  mov      x0, x19
+0x1e48a90  mov      w1, w22
+0x1e48a94  mov      x2, x21
+0x1e48a98  bl       #0x1e4aff8 ; LogicX2.DropItemManager$$AddItems
+0x1e48a9c  adrp     x24, #0x524b000
+0x1e48aa0  ldr      x24, [x24, #0x60]
+0x1e48aa4  mov      x25, x23
+0x1e48aa8  ldr      w23, [sp, #0x14]
+0x1e48aac  ldr      w8, [x21, #0x20]
+0x1e48ab0  add      w20, w20, #1
+0x1e48ab4  cmp      w20, w8
+0x1e48ab8  b.lt     #0x1e4897c
+0x1e48abc  ldr      x21, [x19, #0x28]
+0x1e48ac0  cbnz     x21, #0x1e48ac8
+0x1e48ac4  bl       #0x3f564f0
+0x1e48ac8  adrp     x8, #0x5265000
+0x1e48acc  ldr      x8, [x8, #0xa10]
+0x1e48ad0  mov      x0, x21
+0x1e48ad4  ldr      x1, [x8]
+0x1e48ad8  bl       #0x35c3870 ; System.Collections.Generic.Stack<int>$$get_Count
+0x1e48adc  cbnz     w0, #0x1e48684
+0x1e48ae0  mov      x0, x19
+0x1e48ae4  bl       #0x1e4bb80 ; LogicX2.DropItemManager$$CheckItemLimit
+0x1e48ae8  ldr      x0, [x19, #0x30]
+0x1e48aec  sub      sp, x29, #0x50
+0x1e48af0  ldp      x29, x30, [sp, #0x50]
+0x1e48af4  ldp      x20, x19, [sp, #0x40]
+0x1e48af8  ldp      x22, x21, [sp, #0x30]
+0x1e48afc  ldp      x24, x23, [sp, #0x20]
+0x1e48b00  ldp      x26, x25, [sp, #0x10]
+0x1e48b04  ldp      x28, x27, [sp], #0x60
+0x1e48b08  ret      
+```

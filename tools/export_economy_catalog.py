@@ -18,14 +18,19 @@ def export():
         seen.add(next_id)
         sections.append(by_id[next_id])
         next_id = by_id[next_id].get("NextSectionID", 0)
+    daily_ids = {section_id for dungeon in extra["DailyDungeon"]
+                 for section_id in dungeon.get("SectionID", [])}
+    daily_sections = [by_id[section_id] for section_id in sorted(daily_ids)
+                      if section_id in by_id and by_id[section_id].get("Type", {}).get("value") == 3]
     tasks = extra["DailyTask"]
     control = extra["TaskControl"][0]
     groups = set(control["DailyGiftGroup"] + control["WeeklyGiftGroup"])
     for task in tasks:
         groups.add(task["GiftGroup"])
-    for section in sections:
+    for section in sections + daily_sections:
         groups.update(section.get("FirVReward", []))
         groups.update(section.get("VReward", []))
+        groups.update(section.get("MopReward", []))
     gifts = [g for g in extra["Gift"] if g["GiftGroup"] in groups]
     needed_items = {i for g in gifts for i in g.get("GiftValue", [])}
     candidates = [i for i in base["Item"] if i.get("QuickBuyID")]
@@ -35,7 +40,7 @@ def export():
     needed_items.update(r["material_item_id"] for r in materials["rows"])
     needed_items.update(range(1237900, 1237930))
     catalog = {"provenance": "CONFIRMED_CLIENT_STATIC; runtime policies are separate",
-        "sections": sections, "tasks": tasks, "task_conditions": {
+        "sections": sections, "daily_sections": daily_sections, "tasks": tasks, "task_conditions": {
             str(t["source_id"]): t["condition"] for t in audit["records"]},
         "task_control": control, "gifts": gifts,
         "items": [i for i in base["Item"] if i["ItemID"] in needed_items],
@@ -43,7 +48,8 @@ def export():
     target = ROOT / "src/x2server/data/economy_catalog.json"
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(json.dumps(catalog, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print({"sections": len(sections), "tasks": len(tasks), "gifts": len(gifts), "items": len(catalog["items"])})
+    print({"sections": len(sections), "daily_sections": len(daily_sections),
+           "tasks": len(tasks), "gifts": len(gifts), "items": len(catalog["items"])})
 
 
 if __name__ == "__main__":

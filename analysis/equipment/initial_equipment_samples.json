@@ -1,0 +1,46 @@
+{
+ "note": "Only Revival-generated test instances exist in this repo (seed catalog/tests); they cannot prove official rules. No official HeroEquip samples are available (instances are server-built; none shipped inside the APK).",
+ "samples": [
+  {
+   "source": "REVIVAL_TEST_SEED (not official)",
+   "type_id": 1240001,
+   "star": 6,
+   "part": 1
+  },
+  {
+   "source": "REVIVAL_TEST_SEED (not official)",
+   "type_id": 1240002,
+   "star": 6,
+   "part": 2
+  },
+  {
+   "source": "REVIVAL_TEST_SEED (not official)",
+   "type_id": 1240003,
+   "star": 6,
+   "part": 3
+  },
+  {
+   "source": "REVIVAL_TEST_SEED (not official)",
+   "type_id": 1240004,
+   "star": 6,
+   "part": 4
+  },
+  {
+   "source": "REVIVAL_TEST_SEED (not official)",
+   "type_id": 1240005,
+   "star": 6,
+   "part": 5
+  },
+  {
+   "source": "REVIVAL_TEST_SEED (not official)",
+   "type_id": 1240006,
+   "star": 6,
+   "part": 6
+  }
+ ],
+ "official_sample_availability": "NONE_IN_CLIENT — HeroEquip instances never ship in the APK; battle drops only carry ItemDataP{id,num,quality}",
+ "quality_star_relation": {
+  "finding": "for equib drops the client indexes EquibStage with the item's QUALITY (JudgeDropItem path) — quality is the star carrier in the drop pipeline",
+  "grade": "B (strong reconstruction; exact DropBase threshold mapping to star unresolved)"
+ }
+}

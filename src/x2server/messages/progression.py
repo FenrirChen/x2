@@ -7,5 +7,7 @@ PROGRESSION_SCHEMAS = {s.name: s for s in (
     S("C2L_UpHeroSkill", (F(1,"heroId",K.INT32), F(2,"skillId",K.INT32), F(3,"uplevel",K.INT32))),
     S("L2C_UpHeroSkill", (F(1,"code",K.ENUM), F(2,"heroId",K.INT32), F(3,"skillId",K.INT32), F(4,"uplevel",K.INT32))),
     S("L2C_HeroUpdate", (F(1,"code",K.ENUM), F(2,"heros",K.MESSAGE,repeated=True))),
+    S("C2L_Artifact", (F(1,"opt",K.ENUM), F(2,"heroId",K.INT32), F(3,"jewelId",K.INT32), F(4,"holeId",K.INT32))),
+    S("L2C_Artifact", (F(1,"code",K.ENUM), F(2,"opt",K.ENUM), F(3,"heroId",K.INT32), F(4,"jewelId",K.INT32), F(5,"holeId",K.INT32))),
     S("L2C_UpdatePlayerLevel", (F(1,"beforeLevel",K.INT32), F(2,"afterLevel",K.INT32))),
 )}

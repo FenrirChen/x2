@@ -1,0 +1,13 @@
+{
+  "scope": "STATIC_CONDITIONAL_PROBABILITY_PRE_LIMIT",
+  "examples": [
+    {"drop_class": 1301102, "branch": "IsADC", "config": {"Picks": 1, "NoDrop": 88, "Prob": [12], "ItemList": [0]}, "deduction": "12/100 chance to pass the empty gate; final Item identity and probability require dynamic candidate context", "final_item_rate": null},
+    {"drop_class": 1309102, "branch": "normal", "config": {"Picks": 1, "NoDrop": 60, "Prob": [50, 49, 1], "ItemList": [1101031, 1101032, 1101033]}, "denominator": 160, "item_probabilities": {"1101031": "5/16", "1101032": "49/160", "1101033": "1/160"}, "empty_probability": "3/8"},
+    {"drop_class": 1309118, "branch": "normal", "config": {"Picks": 1, "NoDrop": 70, "Prob": [30], "ItemList": [1109011]}, "item_probabilities": {"1109011": "3/10"}},
+    {"drop_class": 1309116, "branch": "normal_repeated", "config": {"Picks": 5, "NoDrop": 30, "Prob": [70], "ItemList": [1101021]}, "expected_count": "7/2", "p_at_least_one": "99757/100000"},
+    {"drop_class": 1309010, "branch": "negative_picks", "config": {"Picks": -1, "Prob": [5, 1], "ItemList": [1101021, 1100001]}, "deterministic_counts": {"1101021": 5, "1100001": 1}},
+    {"drop_class": 1309024, "branch": "nested_adc", "config": {"Picks": 1, "NoDrop": 70, "Prob": [30], "ItemList": [1302601]}, "child_invocation_probability": "3/10", "child": {"DropClass": 1302601, "Picks": 5, "NoDrop": 40, "Prob": [60], "IsADC": 1}, "expected_dynamic_candidate_attempts": "9/10", "final_item_rate": null},
+    {"drop_class": 1309250, "branch": "normal", "config": {"Picks": 1, "NoDrop": 0, "Prob": [1], "ItemList": [1104048]}, "item_probability": "1"}
+  ],
+  "caveat": "The examples exclude downstream limits, contextual ADC eligibility and all server-side DropValueID logic."
+}

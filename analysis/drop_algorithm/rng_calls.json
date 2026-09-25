@@ -1,0 +1,22 @@
+{
+  "engine": "LogicX2.Random wrapping System.Random",
+  "range_signature": "int Range(uint mark, int min, int max)",
+  "range_implementation": {"rva": "0x3EFD408", "key_instruction": "0x3EFD474 BLR System.Random.Next(min,max)", "upper_bound": "exclusive", "confidence": "A"},
+  "normal_group_calls": [
+    {"site": "0x1E489B8", "call": "mRandom.Range(mark, 0, NoDrop + sum(Prob))", "purpose": "if result < NoDrop, this Pick emits nothing", "evidence": "0x1E4893C-0x1E48948 sum; 0x1E489A4-0x1E489C4 range and compare"},
+    {"site": "0x1E489F4", "call": "GlobalFun.GetProbability(mRandom, Prob)", "purpose": "weighted candidate index after nonempty gate", "evidence": "0x18D2880-0x18D2984 sums and subtracts Prob"},
+    {"site": "0x18D28EC", "call": "mRandom.Range(mark, 0, sum(Prob))", "purpose": "GetProbability's exclusive-range weighted roll", "evidence": "0x18D28D4-0x18D28F0"}
+  ],
+  "adc_calls": [
+    {"site": "0x1E4B768", "call": "mRandom.Range(mark, 0, NoDrop + sum(Prob))", "purpose": "ADC empty gate"},
+    {"site": "0x1E4B7AC", "call": "GlobalFun.GetProbability(mRandom, candidateWeights)", "purpose": "choose dynamically eligible Item"}
+  ],
+  "seed_chain": [
+    "LogicBattle.InitBattle RVA 0x18F3A18 receives in_initRandom4FightSeed.",
+    "0x18F41F8 InitSeed on mRandom4FightSeed (+0x70) with that seed (replay may restore recorded seed).",
+    "0x18F4220 Range(INT_MIN,INT_MAX) derives battle seed; 0x18F4244 InitSeed on mRandom (+0x68).",
+    "Random.InitSeed 0x3EFD3E4 constructs System.Random(seed); replay check/mark records calls when enabled."
+  ],
+  "determinism": "deterministic for identical seed, call order and replay state; not a fixed per-DropClass outcome",
+  "normalization": "No 100, 1000 or 10000 normalization in normal weighted selection. IsADC candidate weights use 10000 / Item.ItemValue in CheckItem at 0x1E4C308-0x1E4C314."
+}

@@ -1,6 +1,6 @@
 """Persisted hero read model for login and HeroAll query."""
 
-from x2server.messages.core import HERO_ALL, HERO_DATA
+from x2server.messages.core import HERO_ALL, HERO_DATA, HERO_GOD_EQUIP, INT_PAIR
 from x2server.network.dispatcher import DispatchContext, OutboundMessage
 from x2server.protocol.errors import ProtocolError
 from x2server.protocol.types import DecodedPacket
@@ -14,7 +14,15 @@ def encode_hero_data(hero: dict) -> bytes:
     from .progression import hero_skills
     from x2server.messages.battle import HERO_SKILL
     values = {k:v for k,v in hero.items() if k in ("id", "state", "level", "star", "exp")}
-    return HERO_DATA.encode({**values, "godEquip": b"", "heroSkills": [HERO_SKILL.encode(s) for s in hero_skills(hero)]})
+    artifact = hero.get("god_equip")
+    god_equip = HERO_GOD_EQUIP.encode({"id": artifact["id"], "level": artifact["level"],
+        "star": artifact["star"], "godEquipAttr": b"",
+        "jewel": [INT_PAIR.encode({"Key": int(slot), "Value": int(item)})
+                  for slot, item in sorted(artifact.get("jewels", {}).items(), key=lambda pair: int(pair[0]))]}) if artifact else b""
+    return HERO_DATA.encode({**values, "godEquip": god_equip,
+        "equips": [INT_PAIR.encode({"Key": e["position"], "Value": e["equip_id"]})
+                   for e in hero.get("equips", [])],
+        "heroSkills": [HERO_SKILL.encode(s) for s in hero_skills(hero)]})
 
 
 def encode_hero_all(snapshot: dict) -> bytes:

@@ -1,0 +1,28 @@
+{
+  "method_correction": "GetDropItemByGroup belongs to LogicX2.DropItemManager, not DropPropManager",
+  "target_rva": "0x1E4845C",
+  "xref_method": "full executable .text BL scan; indirect virtual calls cannot be excluded",
+  "direct_bl_call_sites": [
+    {"site": "0x1E4811C", "caller": "DropItemManager.DropItemByUnit", "route": "customGroup != -1"},
+    {"site": "0x1E48220", "caller": "DropItemManager.DropItemByUnit", "route": "UnitBase.DC list when customGroup == -1"},
+    {"site": "0x1E4CA4C", "caller": "DropItemManager.AddDropItem", "route": "explicit dropGroup"}
+  ],
+  "upstream_direct_bl": [
+    {"target": "DropItemByUnit", "site": "0x1C029B8", "caller": "Monster.EnterDead", "category": "monster/death; destructible subclass reachability not proved here"},
+    {"target": "DropItemByUnit", "site": "0x1BEFFBC", "caller": "TriggerActions.ItemDrop", "category": "scripted drop/action"},
+    {"target": "AddDropItem", "site": "0x1E54AC4", "caller": "FishTrigger.EndFishEvent", "category": "fishing"},
+    {"target": "AddDropItem", "site": "0x18DF468", "caller": "JinHuaUnit.TriggerDropItem", "category": "special unit"},
+    {"target": "AddDropItem", "site": "0x18EE940", "caller": "LieXiUnit.TriggerDropItem", "category": "special unit"},
+    {"target": "AddDropItem", "site": "0x1C101DC", "caller": "NPCUnit.TriggerDropItem", "category": "NPC/event"}
+  ],
+  "related_calls": [
+    {"site": "0x1E486F0", "caller": "GetDropItemByGroup", "target": "DropPropManager.GetItem", "role": "resolve nested DropClass from explicit stack"},
+    {"site": "0x1E48964", "caller": "GetDropItemByGroup", "target": "DropItemManager.AddMetaLoot", "role": "IsADC candidate generation"},
+    {"site": "0x1E488AC", "caller": "GetDropItemByGroup", "target": "DropItemManager.AddItems", "role": "negative Picks direct item"},
+    {"site": "0x1E48A98", "caller": "GetDropItemByGroup", "target": "DropItemManager.AddItems", "role": "positive Picks selected item"}
+  ],
+  "notes": [
+    "NPC chest and activity labels require their individual caller/config context; BL xref alone does not prove every subtype.",
+    "DropItemByUnit checks SectionTable and distinguishes an explicit customGroup from the UnitBase.DC list."
+  ]
+}

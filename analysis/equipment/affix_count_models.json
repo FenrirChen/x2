@@ -1,0 +1,66 @@
+{
+ "generated": "2026-09-25",
+ "question": "刚掉落的兽主初始副词条数由什么决定？（任务 PART B9 六模型逐判）",
+ "evidence_summary": [
+  "A: CheckSubAttruib(0x1C30CFC) 强制 GetAttrNum < EquibStage[Star].MinorListMax 才能在强化事件新增词条（合法范围上限）",
+  "A: GetAttrNum(0x1C30E28) = Av2..Av6 非零计数（初始'条数'的官方口径）",
+  "A: GMMainPage.GetEquip(0x13A1F1C) → C2L_Cheat{opt=15, values=[equipId, attrbdId]}：官方服务器装备工厂以 AttrbdID 行为构建规格",
+  "A: EquibAttribBD 行结构：行同时携带 EquibQuality(=Star)、MinorAttrNum(=该行初始条数)、MinorAttrType/Value(池)、StreNum/StreValue(强化增量)",
+  "B+: EquibAttribBD 每星 base 行(QQ000000)的 MinorAttrNum == EquibStage.MinorListMin（6/6 星一致）",
+  "A: EquibStage.MinorListMin 客户端 0 读者；MinorAttrNum 客户端 0 游玩消费（GM 校验除外）→ 条数决定在服务器",
+  "A: 客户端无任何本地 HeroEquip 构造；掉落只交出 (TypeId, num, quality=Star)"
+ ],
+ "models": [
+  {
+   "id": "MODEL 1",
+   "claim": "初始固定 = EquibStage.MinorListMin",
+   "verdict": "SUPPORTED",
+   "why": "AttribBD base 行（服务器工厂输入）MinorAttrNum 与 MinorListMin 六星一致；无任何反例；但 Min 无客户端读者，客户端代码不能单独证明，故不到 CONFIRMED"
+  },
+  {
+   "id": "MODEL 2",
+   "claim": "初始随机 ∈ [Min, Max]（连续 roll）",
+   "verdict": "UNSUPPORTED",
+   "why": "客户端无条数 RNG；条数是 AttrBD 行的常量字段（行内没有'条数范围'，只有确定值）；随机只能发生在'选行'层面"
+  },
+  {
+   "id": "MODEL 3",
+   "claim": "初始 = EquibAttribBD.MinorAttrNum（按行）",
+   "verdict": "CONFIRMED",
+   "why": "官方工厂输入就是 attrbdId（GM opt=15 A 级证据）；行的 MinorAttrNum 即初始条数"
+  },
+  {
+   "id": "MODEL 4",
+   "claim": "quality / attrbdId 决定 MinorAttrNum",
+   "verdict": "CONFIRMED",
+   "why": "attrbdId 直接选行 → 条数；quality 携带 Star → 服务器按 Star 选行（掉落路径）"
+  },
+  {
+   "id": "MODEL 5",
+   "claim": "Star + 某掉落档位共同决定",
+   "verdict": "PARTIAL",
+   "why": "'档位'实体已定位=AttrBD 行档（base/Max/赛季行）；掉落路径服务器按什么规则在 Min 档与 Max 档之间选择，官方规则未知（客户端无证据）"
+  },
+  {
+   "id": "MODEL 6",
+   "claim": "服务器完全独立决定（客户端只有约束）",
+   "verdict": "REJECTED (强形式)",
+   "why": "服务器并非无约束：Star 必须与 quality 一致（客户端已按 band 收敛）、条数受 [Min,Max] 约束（CheckSubAttruib 上限强制）、构建参数来自静态表；但'Min/Max 档选择'这一自由度的官方规则确实在服务器，客户端不可见（弱形式成立，见 MODEL 5）"
+  }
+ ],
+ "final_answer": {
+  "allowed_range": "Star S → [MinorListMin[S], MinorListMax[S]] = 1/2/3/[3,4]/[4,5]/[4,5]（A 级：客户端强化上限强制 + 双静态表一致）",
+  "deterministic_rule": "条数 = 所选 EquibAttribBD 行的 MinorAttrNum；每星存在 =Min 的 base 行与 =Max 的行；掉落路径官方选行规则 = SERVER_ONLY_UNKNOWN（B 级归纳：base 行=Min 为最一致假设）",
+  "probability": "官方选行概率 = SERVER_ONLY_UNKNOWN（客户端不可恢复）；Revival 兼容策略 = base 65% / max 35%（仅 4/5/6★，USER_DECISION，非官方概率）"
+ },
+ "revival_compatibility": {
+  "decision": "USER_DECISION 2026-09-25（docs/decisions/compatibility/equip_attribbd_tier_selection.md）",
+  "rule": "EquibAttribBD 选行：base/Min 档 65% / Max 档 35%；仅适用于存在两档的 4★/5★/6★；1★/2★/3★ 固定唯一档",
+  "status": "REVIVAL_COMPATIBILITY —— 非官方概率（官方选行概率客户端不可见）",
+  "unchanged_official_fact": "实际初始副词条数 = 所选 EquibAttribBD 行的 MinorAttrNum；条数合法性仍受 EquibStage[Star].MinorListMin..MinorListMax 约束",
+  "affects": [
+   "equipment_server_fix_plan.md FIX-E2",
+   "known_unknowns.md #3"
+  ]
+ }
+}

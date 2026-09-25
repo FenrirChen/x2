@@ -1,0 +1,23 @@
+{
+ "generated": "2026-09-25",
+ "field": "EquibStage.MinorListMax // 0x18 (静态 1/2/3/4/5/5)",
+ "readers": [
+  {
+   "method": "EquipStrengthWnd$$CheckSubAttruib",
+   "rva": "0x1C30CFC (read at 0x1C30E04)",
+   "logic": "exp=EquibExpManager.GetItem(equip.Level+1); if exp==null||exp.IsEvent!=1 return -1; stage=EquibStageManager.GetItem(equip.Star); return GetAttrNum(equip) >= stage.MinorListMax ? 1 : 0",
+   "meaning": "+3/6/9/12/15（EquibExp.IsEvent==1）事件节点：词条数 < Max 才允许新增一条 —— Max 是强化可达到的词条上限"
+  },
+  {
+   "method": "EquipStrengthWnd$$SetStrengthInfo",
+   "rva": "0x1C2EFA8 (read at 0x1C2EFD0 [x21+0x18])",
+   "meaning": "强化窗口显示当前词条数相对上限"
+  }
+ ],
+ "semantics": "MinorListMax = 该星级装备通过强化事件最终可拥有的副词条上限（同时约束初始生成：初始 ∈ [Min, Max]）",
+ "strengthen_interplay": {
+  "initial_below_max": "每次事件节点 +1 条（类型从池取），直到 = Max",
+  "initial_at_max": "永不新增（4★ 的 4 条 / 5★6★ 的 5 条初始件）"
+  },
+ "static_values": {"1": 1, "2": 2, "3": 3, "4": 4, "5": 5, "6": 5}
+}

@@ -1,0 +1,474 @@
+{
+ "generated_by": "tools/analysis/audit_persistence.py",
+ "db_version": "PRAGMA user_version=1",
+ "table_count": 24,
+ "tables": {
+  "battle_entries": {
+   "module": "src/x2server/player/battle.py",
+   "columns": [
+    {
+     "name": "player_id",
+     "type": "INTEGER",
+     "constraints": "NOT NULL, request_key TEXT NOT NULL, uuid TEXT NOT NULL"
+    },
+    {
+     "name": "created_at",
+     "type": "INTEGER",
+     "constraints": "NOT NULL, response BLOB NOT NULL"
+    }
+   ],
+   "primary_key": [
+    "player_id",
+    "request_key"
+   ],
+   "uniques": []
+  },
+  "battle_receipts": {
+   "module": "src/x2server/player/battle.py",
+   "columns": [
+    {
+     "name": "uuid",
+     "type": "TEXT",
+     "constraints": "PRIMARY KEY, request_hash TEXT NOT NULL"
+    },
+    {
+     "name": "created_at",
+     "type": "INTEGER",
+     "constraints": "NOT NULL, response BLOB NOT NULL"
+    }
+   ],
+   "primary_key": [
+    "uuid"
+   ],
+   "uniques": []
+  },
+  "economy_grants": {
+   "module": "src/x2server/player/economy.py",
+   "columns": [
+    {
+     "name": "player_id",
+     "type": "INTEGER",
+     "constraints": "NOT NULL, source TEXT NOT NULL, rewards TEXT NOT NULL"
+    },
+    {
+     "name": "created_at",
+     "type": "INTEGER",
+     "constraints": "NOT NULL, PRIMARY KEY(player_id, source)"
+    }
+   ],
+   "primary_key": [
+    "created_at"
+   ],
+   "uniques": []
+  },
+  "inventory": {
+   "module": "src/x2server/player/economy.py",
+   "columns": [
+    {
+     "name": "player_id",
+     "type": "INTEGER",
+     "constraints": "NOT NULL, item_id INTEGER NOT NULL, quantity INTEGER NOT NULL CHECK(quantity>=0)"
+    }
+   ],
+   "primary_key": [
+    "player_id",
+    "item_id"
+   ],
+   "uniques": []
+  },
+  "economy_tasks": {
+   "module": "src/x2server/player/economy.py",
+   "columns": [
+    {
+     "name": "player_id",
+     "type": "INTEGER",
+     "constraints": "NOT NULL, task_id INTEGER NOT NULL, progress INTEGER NOT NULL DEFAULT 0"
+    },
+    {
+     "name": "claimed",
+     "type": "INTEGER",
+     "constraints": "NOT NULL DEFAULT 0, PRIMARY KEY(player_id,task_id)"
+    }
+   ],
+   "primary_key": [
+    "claimed"
+   ],
+   "uniques": []
+  },
+  "economy_events": {
+   "module": "src/x2server/player/economy.py",
+   "columns": [
+    {
+     "name": "player_id",
+     "type": "INTEGER",
+     "constraints": "NOT NULL, event_key TEXT NOT NULL, PRIMARY KEY(player_id,event_key)"
+    }
+   ],
+   "primary_key": [
+    "player_id"
+   ],
+   "uniques": []
+  },
+  "battle_unresolved_rewards": {
+   "module": "src/x2server/player/economy.py",
+   "columns": [
+    {
+     "name": "uuid",
+     "type": "TEXT",
+     "constraints": "NOT NULL, player_id INTEGER NOT NULL, section_id INTEGER NOT NULL"
+    },
+    {
+     "name": "reward_group",
+     "type": "INTEGER",
+     "constraints": "NOT NULL, reason TEXT NOT NULL"
+    }
+   ],
+   "primary_key": [
+    "uuid",
+    "reward_group"
+   ],
+   "uniques": []
+  },
+  "economy_clears": {
+   "module": "src/x2server/player/economy.py",
+   "columns": [
+    {
+     "name": "player_id",
+     "type": "INTEGER",
+     "constraints": "NOT NULL, section_id INTEGER NOT NULL, first_uuid TEXT NOT NULL"
+    }
+   ],
+   "primary_key": [
+    "player_id",
+    "section_id"
+   ],
+   "uniques": []
+  },
+  "economy_runs": {
+   "module": "src/x2server/player/economy.py",
+   "columns": [
+    {
+     "name": "uuid",
+     "type": "TEXT",
+     "constraints": "PRIMARY KEY, player_id INTEGER NOT NULL, session_id TEXT NOT NULL"
+    },
+    {
+     "name": "section_id",
+     "type": "INTEGER",
+     "constraints": "NOT NULL, settled INTEGER NOT NULL DEFAULT 0"
+    }
+   ],
+   "primary_key": [
+    "uuid"
+   ],
+   "uniques": []
+  },
+  "economy_checkouts": {
+   "module": "src/x2server/player/economy.py",
+   "columns": [
+    {
+     "name": "player_id",
+     "type": "INTEGER",
+     "constraints": "NOT NULL, digest TEXT NOT NULL, uuid TEXT NOT NULL UNIQUE"
+    }
+   ],
+   "primary_key": [
+    "player_id",
+    "digest"
+   ],
+   "uniques": []
+  },
+  "task_periods": {
+   "module": "src/x2server/player/economy.py",
+   "columns": [
+    {
+     "name": "player_id",
+     "type": "INTEGER",
+     "constraints": "NOT NULL, kind INTEGER NOT NULL, start INTEGER NOT NULL, end INTEGER NOT NULL"
+    }
+   ],
+   "primary_key": [
+    "player_id",
+    "kind"
+   ],
+   "uniques": []
+  },
+  "task_history": {
+   "module": "src/x2server/player/economy.py",
+   "columns": [
+    {
+     "name": "player_id",
+     "type": "INTEGER",
+     "constraints": "NOT NULL, kind INTEGER NOT NULL, start INTEGER NOT NULL"
+    },
+    {
+     "name": "task_id",
+     "type": "INTEGER",
+     "constraints": "NOT NULL, progress INTEGER NOT NULL, claimed INTEGER NOT NULL"
+    }
+   ],
+   "primary_key": [
+    "player_id",
+    "kind",
+    "start",
+    "task_id"
+   ],
+   "uniques": []
+  },
+  "battle_costs": {
+   "module": "src/x2server/player/economy.py",
+   "columns": [
+    {
+     "name": "uuid",
+     "type": "TEXT",
+     "constraints": "PRIMARY KEY, player_id INTEGER NOT NULL, amount INTEGER NOT NULL"
+    },
+    {
+     "name": "refunded",
+     "type": "INTEGER",
+     "constraints": "NOT NULL DEFAULT 0"
+    }
+   ],
+   "primary_key": [
+    "uuid"
+   ],
+   "uniques": []
+  },
+  "pending_rewards": {
+   "module": "src/x2server/player/economy.py",
+   "columns": [
+    {
+     "name": "player_id",
+     "type": "INTEGER",
+     "constraints": "NOT NULL, source TEXT NOT NULL, item_id INTEGER NOT NULL"
+    },
+    {
+     "name": "quantity",
+     "type": "INTEGER",
+     "constraints": "NOT NULL, reason TEXT NOT NULL"
+    }
+   ],
+   "primary_key": [
+    "player_id",
+    "source",
+    "item_id"
+   ],
+   "uniques": []
+  },
+  "equipment_instances": {
+   "module": "src/x2server/player/equipment.py",
+   "columns": [
+    {
+     "name": "id",
+     "type": "INTEGER",
+     "constraints": "PRIMARY KEY AUTOINCREMENT, player_id INTEGER NOT NULL"
+    },
+    {
+     "name": "type_id",
+     "type": "INTEGER",
+     "constraints": "NOT NULL, level INTEGER NOT NULL DEFAULT 0"
+    },
+    {
+     "name": "exp",
+     "type": "INTEGER",
+     "constraints": "NOT NULL DEFAULT 0, star INTEGER NOT NULL"
+    },
+    {
+     "name": "param",
+     "type": "TEXT",
+     "constraints": "NOT NULL, marker TEXT NOT NULL"
+    }
+   ],
+   "primary_key": [
+    "id"
+   ],
+   "uniques": [
+    "player_id,type_id,marker"
+   ]
+  },
+  "equipment_enhancements": {
+   "module": "src/x2server/player/equipment.py",
+   "columns": [
+    {
+     "name": "player_id",
+     "type": "INTEGER",
+     "constraints": "NOT NULL, equip_id INTEGER NOT NULL"
+    },
+    {
+     "name": "level",
+     "type": "INTEGER",
+     "constraints": "NOT NULL, attribute_slot INTEGER NOT NULL, bonus INTEGER NOT NULL"
+    }
+   ],
+   "primary_key": [
+    "player_id",
+    "equip_id",
+    "level"
+   ],
+   "uniques": []
+  },
+  "progression_receipts": {
+   "module": "src/x2server/player/progression.py",
+   "columns": [
+    {
+     "name": "player_id",
+     "type": "INTEGER",
+     "constraints": "NOT NULL, request_key TEXT NOT NULL, response BLOB NOT NULL"
+    }
+   ],
+   "primary_key": [
+    "player_id",
+    "request_key"
+   ],
+   "uniques": []
+  },
+  "shop_purchase_counts": {
+   "module": "src/x2server/player/shop.py",
+   "columns": [
+    {
+     "name": "player_id",
+     "type": "INTEGER",
+     "constraints": "NOT NULL, goods_id INTEGER NOT NULL, quantity INTEGER NOT NULL"
+    }
+   ],
+   "primary_key": [
+    "player_id",
+    "goods_id"
+   ],
+   "uniques": []
+  },
+  "shop_receipts": {
+   "module": "src/x2server/player/shop.py",
+   "columns": [
+    {
+     "name": "request_key",
+     "type": "TEXT",
+     "constraints": "PRIMARY KEY, player_id INTEGER NOT NULL, response BLOB NOT NULL"
+    }
+   ],
+   "primary_key": [
+    "request_key"
+   ],
+   "uniques": []
+  },
+  "players": {
+   "module": "src/x2server/player/store.py",
+   "columns": [
+    {
+     "name": "id",
+     "type": "INTEGER",
+     "constraints": "PRIMARY KEY, account TEXT NOT NULL UNIQUE"
+    },
+    {
+     "name": "created_at",
+     "type": "INTEGER",
+     "constraints": "NOT NULL, login_count INTEGER NOT NULL DEFAULT 0"
+    },
+    {
+     "name": "snapshot",
+     "type": "TEXT",
+     "constraints": "NOT NULL, revision INTEGER NOT NULL DEFAULT 1"
+    }
+   ],
+   "primary_key": [
+    "id"
+   ],
+   "uniques": []
+  },
+  "wish_state": {
+   "module": "src/x2server/player/wish.py",
+   "columns": [
+    {
+     "name": "player_id",
+     "type": "INTEGER",
+     "constraints": "NOT NULL, pool_id INTEGER NOT NULL, total INTEGER NOT NULL DEFAULT 0"
+    },
+    {
+     "name": "singles",
+     "type": "INTEGER",
+     "constraints": "NOT NULL DEFAULT 0, tens INTEGER NOT NULL DEFAULT 0"
+    },
+    {
+     "name": "since_hero",
+     "type": "INTEGER",
+     "constraints": "NOT NULL DEFAULT 0"
+    },
+    {
+     "name": "since_top",
+     "type": "INTEGER",
+     "constraints": "NOT NULL DEFAULT 0"
+    },
+    {
+     "name": "first_three_star",
+     "type": "INTEGER",
+     "constraints": "NOT NULL DEFAULT 0"
+    },
+    {
+     "name": "since_featured",
+     "type": "INTEGER",
+     "constraints": "NOT NULL DEFAULT 0"
+    }
+   ],
+   "primary_key": [
+    "player_id",
+    "pool_id"
+   ],
+   "uniques": []
+  },
+  "wish_receipts": {
+   "module": "src/x2server/player/wish.py",
+   "columns": [
+    {
+     "name": "player_id",
+     "type": "INTEGER",
+     "constraints": "NOT NULL, request_key TEXT NOT NULL, response BLOB NOT NULL"
+    }
+   ],
+   "primary_key": [
+    "player_id",
+    "request_key"
+   ],
+   "uniques": []
+  },
+  "wish_last_result": {
+   "module": "src/x2server/player/wish.py",
+   "columns": [
+    {
+     "name": "player_id",
+     "type": "INTEGER",
+     "constraints": "NOT NULL, pool_id INTEGER NOT NULL, response BLOB NOT NULL"
+    }
+   ],
+   "primary_key": [
+    "player_id",
+    "pool_id"
+   ],
+   "uniques": []
+  },
+  "wish_pity": {
+   "module": "src/x2server/player/wish.py",
+   "columns": [
+    {
+     "name": "player_id",
+     "type": "INTEGER",
+     "constraints": "NOT NULL, category TEXT NOT NULL"
+    },
+    {
+     "name": "since_hero",
+     "type": "INTEGER",
+     "constraints": "NOT NULL DEFAULT 0, since_top INTEGER NOT NULL DEFAULT 0"
+    },
+    {
+     "name": "since_featured",
+     "type": "INTEGER",
+     "constraints": "NOT NULL DEFAULT 0"
+    }
+   ],
+   "primary_key": [
+    "player_id",
+    "category"
+   ],
+   "uniques": []
+  }
+ }
+}

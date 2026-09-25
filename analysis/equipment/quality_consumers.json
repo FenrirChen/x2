@@ -1,0 +1,26 @@
+{
+ "generated": "2026-09-25",
+ "FightItemData.Quality readers (get_Quality 0x1E519DC, 8 BL sites)": [
+  {"method": "FightBagWnd$$RefreshNode / FightBagWnd$$RefreshRight", "use": "battle bag UI display"},
+  {"method": "FightModule$$RefreshDropLimit", "use": "drop-limit UI"},
+  {"method": "FightModule$$SetCheckout_BattleItem (0x592420 dump.cs line)", "use": "copies quality into checkout ItemDataP (id,num,quality,eNum) for outsideItems when source==FIGHT and item usable outside (E_Outside)"},
+  {"method": "LogicX2.FightItemBag$$GetCurrentItems", "use": "profile snapshot"},
+  {"method": "LogicX2.FightItemBag$$GetItemNumByQuality / GetItemNumByQualityAndType", "use": "count by quality (mission statistics)"},
+  {"method": "LogicX2.FightItemBag$$GetPersistentItemsList", "use": "builds ItemDataP list persisted into battle save (quality round-trips through FightPackProfileProto)"}
+ ],
+ "quality_used_as_table_key (A)": [
+  {"site": "LogicX2.DropItemManager$$JudgeDropItem @ 0x1E49D90", "call": "EquibStageManager$$GetItem(item.quality)", "meaning": "star-keyed stage row for value budget"},
+  {"site": "LogicX2.DropItemManager$$SetCurItemValueTotal @ 0x1E4AF00", "call": "EquibStageManager$$GetItem(quality)", "meaning": "same on battle recovery"}
+ ],
+ "quality_never_used_as_key_for": [
+  "EquibAttribBDManager$$GetItem (keyed by attrbdId; only GM UI callers: GMMainPage$$GetEquip 0x13A20A4, GMMainPage$$OnMailGetEquipBtnClick)",
+  "EquibBaseManager$$GetItem (keyed by EquibId = HeroEquip.TypeId)"
+ ],
+ "item_equip_rows_static_check": {
+  "source": "analysis/drop_archaeology/full_tables/item.json (3,026 rows)",
+  "rows_1240000_1249999": 582,
+  "part_level_1240SSP": {"count": 108, "ItemType": "E_Equip(10)", "ItemQuality": "E_Unsure(7) -> needIdentify -> star rolled", "AddADCGroup": 5, "NeedLevel": 10, "ItemUseScence": "E_Outside(1)"},
+  "display_1245SSS": {"count": 120, "ItemType": "E_Equip(10)", "ItemQuality": "E_White(1)..E_Red(6) == star", "AddADCGroup": null, "NeedLevel": null}
+ },
+ "classification": "QUALITY_IS_STAR (inside the equipment drop pipeline): rolled 3..6 by IdentifyItem, band-clamped by SectionTable.DroopLimit3, carried verbatim through FightItemBag -> ItemDataP -> 887.outsideItems; display items carry fixed quality 1..6 == star"
+}

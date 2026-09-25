@@ -12,6 +12,7 @@ from x2server.player.economy import EconomyService
 from x2server.player.battle import BattleService
 from x2server.messages.battle import CHECKOUT, FIGHT_DATA, FIGHT_HERO, HERO_ATTR, HERO_ATTR_ADD
 from x2server.messages.economy import TASK
+from x2server.messages.core import HERO_DATA, HERO_GOD_EQUIP
 
 
 def ts(value):
@@ -133,6 +134,81 @@ def test_hero_level_star_skill_costs_retries_and_battle_attributes(env):
     assert (raw[170],raw[171],raw[172]) == (12,4,120)
     assert raw[105] == 50
     assert len(raw) == 19
+
+
+def test_artifact_unlock_persists_and_has_client_stage_fields(env):
+    store, economy, ctx = env
+    service = ProgressionService(store, economy)
+    request = {"opt": 0, "heroId": 1003, "jewelId": 0, "holeId": 0}
+    first = asyncio.run(service.handle(ctx, packet(request, 91, "C2L_Artifact")))
+    assert first.values["code"] == 10
+    assert first.message_name == "L2C_Artifact"
+    assert first.before_response[0].message_name == "L2C_HeroUpdate"
+    artifact = store.get(1)["snapshot"]["heroes"][0]["god_equip"]
+    assert (artifact["id"], artifact["level"], artifact["star"]) == (1503, 0, 1)
+    from x2server.player.hero import encode_hero_data
+    wire = HERO_DATA.decode(encode_hero_data(store.get(1)["snapshot"]["heroes"][0]))
+    assert HERO_GOD_EQUIP.decode(wire["godEquip"])["star"] == 1
+    assert asyncio.run(service.handle(ctx, packet(request, 91, "C2L_Artifact"))).values["code"] == 10
+    assert asyncio.run(service.handle(ctx, packet(request, 92, "C2L_Artifact"))).values["code"] == 13
+
+
+def test_fragment_synthesis_and_artifact_second_upgrade_use_static_costs(env):
+    store, economy, ctx = env
+    service = ProgressionService(store, economy)
+    with store.db:
+        economy._grant(1, "test", {1201008: 64, 1238100: 6, 1237901: 2000})
+        state = store.get(1)["snapshot"]
+        state["heroes"][0]["star"] = 3
+        economy.save_snapshot(1, state)
+    result = asyncio.run(service.handle(ctx, packet({"id": 1008, "opt": 0}, 12, "C2L_HeroOpt")))
+    assert result.values["code"] == 10
+    new_hero = next(h for h in store.get(1)["snapshot"]["heroes"] if h["id"] == 1008)
+    assert (new_hero["level"], new_hero["star"], new_hero["skills"][0]) == (1, 5, {"id": 10080, "level": 1})
+    assert store.db.execute("SELECT quantity FROM inventory WHERE item_id=1201008").fetchone()[0] == 0
+    req = {"opt": 0, "heroId": 1003, "jewelId": 0, "holeId": 0}
+    assert asyncio.run(service.handle(ctx, packet(req, 13, "C2L_Artifact"))).values["code"] == 10
+    assert asyncio.run(service.handle(ctx, packet(req, 14, "C2L_Artifact"))).values["code"] == 10
+    artifact = store.get(1)["snapshot"]["heroes"][0]["god_equip"]
+    assert (artifact["star"], artifact["level"], store.get(1)["snapshot"]["gold"]) == (1, 10, 1000)
+    assert store.db.execute("SELECT quantity FROM inventory WHERE item_id=1238100").fetchone()[0] == 0
+    assert asyncio.run(service.handle(ctx, packet({"opt": 0, "heroId": 1008}, 15, "C2L_Artifact"))).values["code"] == 10
+    with store.db:
+        economy._grant(1, "test-more-fragments", {1201008: 25})
+    assert asyncio.run(service.handle(ctx, packet({"id": 1008, "opt": 2,
+        "upstarConsumeItemId": 1201008}, 16, "C2L_HeroOpt"))).values["code"] == 10
+    assert next(h for h in store.get(1)["snapshot"]["heroes"] if h["id"] == 1008)["star"] == 6
+
+
+def test_artifact_progress_reaches_100_before_fusing(env):
+    store, economy, ctx = env
+    service = ProgressionService(store, economy)
+    with store.db:
+        economy._grant(1, "test", {1238100: 60, 1238047: 12, 1237901: 60_000})
+        state = store.get(1)["snapshot"]
+        state["heroes"][0]["star"] = 3
+        economy.save_snapshot(1, state)
+    req = {"opt": 0, "heroId": 1003}
+    assert asyncio.run(service.handle(ctx, packet(req, 20, "C2L_Artifact"))).values["code"] == 10
+    for request_id in range(21, 31):
+        assert asyncio.run(service.handle(ctx, packet(req, request_id, "C2L_Artifact"))).values["code"] == 10
+    assert store.get(1)["snapshot"]["heroes"][0]["god_equip"]["level"] == 100
+    assert asyncio.run(service.handle(ctx, packet(req, 31, "C2L_Artifact"))).values["code"] == 13
+    assert asyncio.run(service.handle(ctx, packet({"opt": 1, "heroId": 1003}, 32, "C2L_Artifact"))).values["code"] == 10
+    assert store.get(1)["snapshot"]["heroes"][0]["god_equip"]["star"] == 2
+
+
+def test_artifact_hero_stage_gates_fusion_only(env):
+    store, economy, ctx = env
+    service = ProgressionService(store, economy)
+    with store.db:
+        economy._grant(1, "test", {1238100: 60, 1238047: 12, 1237901: 60_000})
+    req = {"opt": 0, "heroId": 1003}
+    assert asyncio.run(service.handle(ctx, packet(req, 40, "C2L_Artifact"))).values["code"] == 10
+    for request_id in range(41, 51):
+        assert asyncio.run(service.handle(ctx, packet(req, request_id, "C2L_Artifact"))).values["code"] == 10
+    assert store.get(1)["snapshot"]["heroes"][0]["god_equip"]["level"] == 100
+    assert asyncio.run(service.handle(ctx, packet({"opt": 1, "heroId": 1003}, 51, "C2L_Artifact"))).values["code"] == 13
 
 
 def test_growth_receipt_failure_rolls_back_cost_and_hero(env):

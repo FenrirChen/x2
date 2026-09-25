@@ -1,0 +1,35 @@
+{
+ "HeroEquip (PlayerDbData)": {
+  "Id": 16,
+  "TypeId": 20,
+  "Level": 24,
+  "Exp": 28,
+  "Star": 32,
+  "Param": "EquipParam(0x28): At1..At6/Av1..Av6/Lock1..Lock6",
+  "LockState": 48,
+  "TimeSec": 52,
+  "SeasonId": 56
+ },
+ "RewardData": {
+  "rewardItem": "List<RewardItem{itemId,itemNum,transform}>",
+  "rewardEquip": "List<HeroEquip>",
+  "transformHero": "List<TransformHero{heroId,transform}>"
+ },
+ "instance_origin": {
+  "client_creation": "NONE FOUND — no HeroEquip.ctor symbol/callers; instances arrive via protobuf deserialize",
+  "server_assignment": "A/B-level: full instance (incl. Id, Star and random Param) arrives inside L2C_CheckoutMainMission.rewardData.rewardEquip / L2C_SecSweep / mail; L2C_EquipUpdate(536) pushes changes; L2C_EquipAll(555) full snapshot",
+  "verdict": "HeroEquip.id = SERVER_ASSIGNED; star = SERVER_ASSIGNED from drop context (battle ADC picks star within Section band; outsideItems.quality is the star carrier, B); star is NOT derived from TypeId (1240|SS|P has no star dimension; GM tool sends equipId and star/attrbd as separate inputs) — see docs/knowledge/equipment/equipment_id_star_mapping.md",
+  "initial_affix_rule": "A-level (2026-09-25): initial minor affix count = EquibStage[Star].MinorListMin (1/2/3/3/4/4), cap = MinorListMax; consistent with EquibAttribBD.MinorAttrNum"
+ },
+ "battle_drop_ride_along": {
+  "flow": "DropProp/兽主掉落 → FightItemBag.AddItem(source=FIGHT) → 1240xxx ItemUseScence=E_Outside → 887.outsideItems{id=1240xxx,num,quality} → SERVER converts to HeroEquip instance",
+  "quality_field": "bag ItemDataP.quality = FightItemData.Quality passthrough; for equib drops quality is the STAR CARRIER (drop pipeline indexes EquibStage with it, B)",
+  "eNum_field": "0 for outside items (only maze items carry StatsManager.getItemData counts)"
+ },
+ "static_roll_inputs": {
+  "EquibBase": "EquibPart/EquibSuit/MainAttrType[]+MainAttrChance[]/MinorAttrType[]+MinorAttrChance[]",
+  "EquibAttribBD": "quality+level → main attr values / minor attr counts and ranges",
+  "EquibStage": "star-related preset attrs/feeding",
+  "note": "these are the OFFICIAL parameter tables a server needs; the roll itself is server-side"
+ }
+}

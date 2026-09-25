@@ -19,7 +19,7 @@ the default. Reference APK is read-only and its known SHA-256 is checked.
 
 The local bootstrap must return `update=LEBIAN`; an empty selector does not advance
 the client's startup state. Local identity endpoints are opt-in lab compatibility,
-not official account authentication. See [Phase 13](../docs/phase13_first_contact.md).
+not official account authentication. See [Phase 13(../docs/history/2026-09-23_01_phase13_first_contact.md).
 
 Verified signed artifact: `build/X2_Eclipse_v2_4_Revival_v0.2-signed.apk`.
 SHA-256: `460dc657a8fb1b5410a4c0eaa5fac9433b45ecc54b7f3845afc626420946276d`.

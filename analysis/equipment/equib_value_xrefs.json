@@ -1,0 +1,23 @@
+{
+ "generated": "2026-09-25",
+ "field": "EquibStage.EquibValue // 0x2C (静态: 800/1200/1680/2800/3600/5000 for star 1-6)",
+ "all_read_sites": [
+  {
+   "method": "LogicX2.DropItemManager$$JudgeDropItem",
+   "site": "0x1E49DA4-0x1E49DC0",
+   "formula": "delta = (int)(EquibStage[quality].EquibValue * item.itemValue / 1000.0); delta *= item.num",
+   "purpose": "掉落价值扣减：与 BattleInfo.dropValues[addADCGroup] 组预算比较，超限拒绝掉落"
+  },
+  {
+   "method": "LogicX2.DropItemManager$$SetCurItemValueTotal",
+   "site": "0x1E4AF08-0x1E4AF24",
+   "formula": "同上（战斗恢复重放）",
+   "purpose": "价值记账"
+  }
+ ],
+ "readers_by_other_methods": [],
+ "verdict": "EquibValue 是每星掉落价值权重（预算消耗速率），不是概率、不是掉落筛选条件；它通过组预算间接限制每场高星装备数量",
+ "static_values": {"source": "full_tables/equibstage.json", "1": 800, "2": 1200, "3": 1680, "4": 2800, "5": 3600, "6": 5000},
+ "implied_costs_per_drop_1000": "ItemValue(1240xxx)=180..240 → 6★ 每件 900..1200 预算值，3★ 302..403",
+ "budget_source": "BattleInfo.dropValues (ctor 空 List，0x19A1C9C) — 填充方未在客户端找到（known unknown #2 精化：消费端已解）"
+}

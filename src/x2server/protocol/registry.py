@@ -72,6 +72,21 @@ CORE_MESSAGE_REGISTRY = MessageRegistry(
         MessageEntry("C2L_UpHeroSkill", 131, Direction.CLIENT_TO_SERVER),
         MessageEntry("L2C_UpHeroSkill", 132, Direction.SERVER_TO_CLIENT),
         MessageEntry("L2C_HeroUpdate", 549, Direction.SERVER_TO_CLIENT),
+        MessageEntry("C2L_Artifact", 143, Direction.CLIENT_TO_SERVER),
+        MessageEntry("L2C_Artifact", 146, Direction.SERVER_TO_CLIENT),
+        MessageEntry("C2L_DoEquip", 118, Direction.CLIENT_TO_SERVER),
+        MessageEntry("L2C_DoEquip", 120, Direction.SERVER_TO_CLIENT),
+        MessageEntry("C2L_DoUnEquip", 540, Direction.CLIENT_TO_SERVER),
+        MessageEntry("L2C_DoUnEquip", 541, Direction.SERVER_TO_CLIENT),
+        MessageEntry("L2C_EquipUpdate", 536, Direction.SERVER_TO_CLIENT),
+        MessageEntry("C2L_EquipStrengthen", 115, Direction.CLIENT_TO_SERVER),
+        MessageEntry("L2C_EquipStrengthen", 117, Direction.SERVER_TO_CLIENT),
+        MessageEntry("C2L_CardPool", 305, Direction.CLIENT_TO_SERVER),
+        MessageEntry("L2C_CardPool", 307, Direction.SERVER_TO_CLIENT),
+        MessageEntry("C2L_LuckDraw", 303, Direction.CLIENT_TO_SERVER),
+        MessageEntry("L2C_LuckDraw", 304, Direction.SERVER_TO_CLIENT),
+        MessageEntry("C2L_RequestDrawResult", 381, Direction.CLIENT_TO_SERVER),
+        MessageEntry("L2C_RequestDrawResult", 382, Direction.SERVER_TO_CLIENT),
         MessageEntry("L2C_UpdatePlayerLevel", 508, Direction.SERVER_TO_CLIENT),
         *(entry for name, request_id, response_id in (*LOBBY_IDS, *CHAT_IDS, *ECONOMY_IDS) for entry in (
             MessageEntry("C2L_" + name, request_id, Direction.CLIENT_TO_SERVER),
@@ -104,6 +119,8 @@ CORE_MESSAGE_REGISTRY = MessageRegistry(
         MessageEntry("L2C_ItemAll", 555, Direction.SERVER_TO_CLIENT),
         MessageEntry("C2L_ItemAll", 556, Direction.CLIENT_TO_SERVER),
         MessageEntry("C2L_CheckoutMainMissionSign", 887, Direction.CLIENT_TO_SERVER),
+        MessageEntry("C2L_SecSweep", 1027, Direction.CLIENT_TO_SERVER),
+        MessageEntry("L2C_SecSweep", 1028, Direction.SERVER_TO_CLIENT),
     )
 )
 

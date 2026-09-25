@@ -1,0 +1,16 @@
+{
+ "verdict": "CLIENT RESOLVER EXISTS; SERVER EXECUTES THE GRANT",
+ "algorithm": {
+  "fixed (E_material)": "GiftValue returned/used verbatim",
+  "E_Random/E_RandomInterval/E_Pick/E_BlindBox (in GetItemByGiftGroup)": "single weighted pick: idx = GetProbability(rng, Probability); result = GiftValue[idx]",
+  "GetProbability (0x18D2880)": "sum weights, Range(0,sum), subtract per entry — same primitive as drops",
+  "multi_pick_or_interval": "GetItemNumByGiftGroup returns List<int[]> (item,num pairs); not fully disassembled this round",
+  "num_field": "Gift.Num pairs with GiftValue; Num roll semantics for E_RandomInterval not confirmed"
+ },
+ "who_supplies_rng": "UNKNOWN for the orphaned resolver (no native caller); battle RNG is LogicBattle.mRandom for drops",
+ "grant_path": {
+  "checkout": "L2C_CheckoutMainMission.rewardData{rewardItem[itemId,itemNum,transform], rewardEquip[HeroEquip], transformHero[heroId,transform]}",
+  "sweep": "L2C_SecSweep.rewardData — server resolves MopReward gifts and returns final items",
+  "conclusion": "A-level: the client never rolls Gift for settlement; current Revival server granting from Gift tables = reconstructing what the official server did, NOT executing client logic"
+ }
+}

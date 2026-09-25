@@ -1,0 +1,23 @@
+{
+ "EquibStageManager.GetItem consumers (7)": {
+  "0x1E49D90": "LogicX2.DropItemManager.JudgeDropItem — equib drop value/quality path",
+  "0x1E4AF00": "LogicX2.DropItemManager.SetCurItemValueTotal",
+  "0x1C30DE8": "EquipStrengthWnd.CheckSubAttruib (affix gate)",
+  "0x1C2EFA8/0x1C2F354": "EquipStrengthWnd.SetStrengthInfo",
+  "0x19A5EF0": "BagDecomposePage.RefreshCurrency",
+  "0x1B0DA30": "CollegePurifyOptTab.RefreshContent"
+ },
+ "field_offsets": {
+  "EquibStage": {
+   "Stage": "0x10",
+   "MinorListMin": "0x14",
+   "MinorListMax": "0x18",
+   "EquibSeniorChip": "0x20",
+   "Exp": "0x28",
+   "EquibValue": "0x2C",
+   "ExpBonus": "0x30",
+   "GoldBonus": "0x34"
+  }
+ },
+ "semantics_verdict": "MinorListMax = 强化事件（+3/6/9/12/15）可补到的词条上限（A：CheckSubAttruib 比较 GetAttrNum < MinorListMax）。MinorListMin 客户端 0 读者（2026-09-25 全二进制 184,213 方法扫描）——它不是客户端执行的初始条数规则；初始条数 = 所选 EquibAttribBD 行 MinorAttrNum（行选择服务器侧），base 行(QQ000000)的 MinorAttrNum 与 MinorListMin 六星一致。见 minor_list_min_xrefs.json / affix_count_models.json"
+}

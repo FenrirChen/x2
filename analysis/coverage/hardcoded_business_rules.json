@@ -1,0 +1,484 @@
+{
+ "generated_by": "tools/analysis/audit_hardcodes.py",
+ "scan_roots": [
+  "src/x2server",
+  "tools"
+ ],
+ "hit_count": 64,
+ "classification_counts": {
+  "TEMP_COMPAT": 43,
+  "DATA_DRIVEN_DEFAULT": 13,
+  "SINGLE_SAMPLE_IMPLEMENTATION": 8
+ },
+ "hits": [
+  {
+   "file": "src/x2server/__init__.py",
+   "line": 1,
+   "kind": "MARKER:compat",
+   "text": "\"\"\"X2 protocol compatibility research package.\"\"\"",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "src/x2server/bootstrap/local_identity.py",
+   "line": 3,
+   "kind": "MARKER:temporary",
+   "text": "TEMPORARY_COMPAT: one configured development account, ephemeral tokens, no",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "src/x2server/bootstrap/models.py",
+   "line": 135,
+   "kind": "MARKER:compat",
+   "text": "Values supplied here are local compatibility values, not recovered official",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "src/x2server/bootstrap/models.py",
+   "line": 183,
+   "kind": "MARKER:compat",
+   "text": "\"\"\"Serialize a deterministic UTF-8 compatibility response.\"\"\"",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "src/x2server/bootstrap/models.py",
+   "line": 250,
+   "kind": "MARKER:compat",
+   "text": "\"\"\"Serialize a deterministic UTF-8 compatibility response.\"\"\"",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "src/x2server/bootstrap/models.py",
+   "line": 325,
+   "kind": "MARKER:compat",
+   "text": "\"\"\"Build local-only compatibility values from safe runtime settings.\"\"\"",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "src/x2server/bootstrap/models.py",
+   "line": 329,
+   "kind": "MARKER:compat",
+   "text": "service_app_id=\"x2-local-compat\",",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "src/x2server/config/settings.py",
+   "line": 8,
+   "kind": "MARKER:temporary",
+   "text": "# TEMPORARY_COMPAT: defensive local limit, not a recovered original constant.",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "src/x2server/player/battle.py",
+   "line": 116,
+   "kind": "MARKER:compat",
+   "text": "This is a single-account compatibility receipt, not replay verification.",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "src/x2server/player/battle_entry.py",
+   "line": 19,
+   "kind": "MARKER:compat",
+   "text": "\"\"\"Client-compatible entry rejection; reason remains server-side.\"\"\"",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "src/x2server/player/battle_entry.py",
+   "line": 43,
+   "kind": "MARKER:compat",
+   "text": "# Explicit Revival compatibility: the original weekly calendar and attempt",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "src/x2server/player/economy.py",
+   "line": 28,
+   "kind": "HARDCODED_ID:1237901",
+   "text": "CURRENCIES = {1237901: \"gold\", 1237902: \"crystal\", 1237906: \"equip_exp\", 1237907: \"hero_exp\",",
+   "classification": "DATA_DRIVEN_DEFAULT",
+   "note": "gold item id"
+  },
+  {
+   "file": "src/x2server/player/economy.py",
+   "line": 386,
+   "kind": "MARKER:compat",
+   "text": "\"RUNTIME_BATTLE_DROP\", \"SWEEP_REWARD\", \"EXTRA_DROP\", \"COMPAT_REWARD\")}",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "src/x2server/player/economy.py",
+   "line": 406,
+   "kind": "MARKER:compat",
+   "text": "compat = RewardCompatibilityPolicy.manual_gold(profile, run_uuid)",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "src/x2server/player/economy.py",
+   "line": 407,
+   "kind": "MARKER:compat",
+   "text": "if compat:",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "src/x2server/player/economy.py",
+   "line": 408,
+   "kind": "HARDCODED_ID:1237901",
+   "text": "grants = [g for g in grants if not (g.source == \"RUNTIME_BATTLE_DROP\" and g.item_id == 1237901)]",
+   "classification": "DATA_DRIVEN_DEFAULT",
+   "note": "gold item id"
+  },
+  {
+   "file": "src/x2server/player/economy.py",
+   "line": 409,
+   "kind": "MARKER:compat",
+   "text": "grants.append(compat)",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "src/x2server/player/economy.py",
+   "line": 414,
+   "kind": "MARKER:compat",
+   "text": "key = \"COMPAT_REWARD\" if grant.source == \"COMPAT_GOLD_DUNGEON\" else grant.source",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "src/x2server/player/hero.py",
+   "line": 12,
+   "kind": "MARKER:temporary",
+   "text": "# TEMPORARY_COMPAT: the client initializes GoldEquipAttr for every owned hero.",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "src/x2server/player/login.py",
+   "line": 39,
+   "kind": "MARKER:compat",
+   "text": "# Explicit empty collections for the first controlled compatibility probe.",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "src/x2server/player/progression.py",
+   "line": 118,
+   "kind": "MARKER:compat",
+   "text": "\"compat\": \"REVIVAL_COMPAT\"}",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "src/x2server/player/progression.py",
+   "line": 166,
+   "kind": "HARDCODED_ID:1237901",
+   "text": "costs[1237901] += row[\"level_up_gold_cost\"]",
+   "classification": "DATA_DRIVEN_DEFAULT",
+   "note": "gold item id"
+  },
+  {
+   "file": "src/x2server/player/progression.py",
+   "line": 176,
+   "kind": "HARDCODED_ID:1237901",
+   "text": "costs[1237901] += row[\"fuse_gold_cost\"]",
+   "classification": "DATA_DRIVEN_DEFAULT",
+   "note": "gold item id"
+  },
+  {
+   "file": "src/x2server/player/progression.py",
+   "line": 182,
+   "kind": "MARKER:compat",
+   "text": "\"compat\": \"REVIVAL_COMPAT\"}",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "src/x2server/player/progression.py",
+   "line": 191,
+   "kind": "HARDCODED_ID:1237907",
+   "text": "if not row[\"next_level\"] or hero[\"level\"] >= snapshot[\"level\"] or req.get(\"upstarConsumeItemId\",0) not in (0,1237907):",
+   "classification": "DATA_DRIVEN_DEFAULT",
+   "note": "god exp item id"
+  },
+  {
+   "file": "src/x2server/player/progression.py",
+   "line": 193,
+   "kind": "HARDCODED_ID:1237907",
+   "text": "costs[1237907] = row[\"exp_required\"]",
+   "classification": "SINGLE_SAMPLE_IMPLEMENTATION",
+   "note": "god exp item id"
+  },
+  {
+   "file": "src/x2server/player/progression.py",
+   "line": 227,
+   "kind": "HARDCODED_ID:1237901",
+   "text": "costs[1237901] += row[\"gold_cost\"]",
+   "classification": "DATA_DRIVEN_DEFAULT",
+   "note": "gold item id"
+  },
+  {
+   "file": "src/x2server/player/reward_system.py",
+   "line": 71,
+   "kind": "MARKER:compat",
+   "text": "\"source\": \"COMPAT_GOLD_DUNGEON\", \"official\": False,",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "src/x2server/player/reward_system.py",
+   "line": 78,
+   "kind": "MARKER:compat",
+   "text": "config = profile.get(\"compat_policy\")",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "src/x2server/player/reward_system.py",
+   "line": 81,
+   "kind": "MARKER:compat",
+   "text": "return RewardGrant(\"COMPAT_GOLD_DUNGEON\", profile[\"section_id\"], run_id,",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "src/x2server/player/shop.py",
+   "line": 25,
+   "kind": "MARKER:compat",
+   "text": "COMPAT_STOCK = 999999",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "src/x2server/player/shop.py",
+   "line": 67,
+   "kind": "MARKER:compat",
+   "text": "\"canBuyTimes\": self.COMPAT_STOCK, \"hasBuyTimes\": self._count(player_id, goods_id),",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "src/x2server/player/shop.py",
+   "line": 111,
+   "kind": "MARKER:compat",
+   "text": "or self._count(player_id, goods_id) + buy_num > self.COMPAT_STOCK):",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "src/x2server/player/store.py",
+   "line": 1,
+   "kind": "MARKER:compat",
+   "text": "\"\"\"SQLite player storage. Initial values are explicit local compatibility defaults.\"\"\"",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "src/x2server/player/wish.py",
+   "line": 216,
+   "kind": "MARKER:compat",
+   "text": "\"compat\": \"REVIVAL_COMPAT\"})",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "src/x2server/player/wish.py",
+   "line": 257,
+   "kind": "MARKER:compat",
+   "text": "# most recently drawn compatible pool if the client asks for a result.",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "src/x2server/protocol/protobuf.py",
+   "line": 170,
+   "kind": "MARKER:compat",
+   "text": "\"\"\"Decode known fields and safely skip protobuf-compatible unknown fields.\"\"\"",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "tools/dev/audit_daily_dungeon_coverage.py",
+   "line": 19,
+   "kind": "HARDCODED_ID:1237901",
+   "text": "currencies = {1237900, 1237901, 1237902, 1237906, 1237907, 1237908, 1237910, 1237911}",
+   "classification": "DATA_DRIVEN_DEFAULT",
+   "note": "gold item id"
+  },
+  {
+   "file": "tools/dev/audit_daily_dungeon_rewards.py",
+   "line": 20,
+   "kind": "HARDCODED_ID:1237901",
+   "text": "currencies = {1237900, 1237901, 1237902, 1237906, 1237907, 1237908, 1237910, 1237911}",
+   "classification": "DATA_DRIVEN_DEFAULT",
+   "note": "gold item id"
+  },
+  {
+   "file": "tools/dev/export_equipment_strengthen_catalog.py",
+   "line": 22,
+   "kind": "MARKER:compat",
+   "text": "\"interpretation\": \"AttribSRC 3 candidate range for compatibility strengthen events; random roll is REVIVAL_COMPAT\"},",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "tools/dev/probe_all_section_battles.py",
+   "line": 21,
+   "kind": "HARDCODED_ID:1003",
+   "text": "heroes=[{\"id\": 1003, \"state\": 2, \"level\": 1, \"star\": 1}])",
+   "classification": "SINGLE_SAMPLE_IMPLEMENTATION",
+   "note": "hero Behemoth (dev sample)"
+  },
+  {
+   "file": "tools/dev/render_daily_dungeon_reward_audit.py",
+   "line": 23,
+   "kind": "HARDCODED_ID:2130101",
+   "text": "\"\", \"## 2130101 四种奖励\", \"\",",
+   "classification": "SINGLE_SAMPLE_IMPLEMENTATION",
+   "note": "gold resource dungeon (dev sample)"
+  },
+  {
+   "file": "tools/dev/render_daily_dungeon_reward_audit.py",
+   "line": 26,
+   "kind": "MARKER:temporary",
+   "text": "\"- NORMAL_DROP：`DroopDisplay=[1237901]` 预览金币；`DropValueID=10630101`。官方金币数量与概率未解；Revival 临时规则在普通胜利结算追加金币 1。\",",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "tools/dev/render_daily_dungeon_reward_audit.py",
+   "line": 26,
+   "kind": "HARDCODED_ID:1237901",
+   "text": "\"- NORMAL_DROP：`DroopDisplay=[1237901]` 预览金币；`DropValueID=10630101`。官方金币数量与概率未解；Revival 临时规则在普通胜利结算追加金币 1。\",",
+   "classification": "DATA_DRIVEN_DEFAULT",
+   "note": "gold item id"
+  },
+  {
+   "file": "tools/dev/render_daily_dungeon_reward_audit.py",
+   "line": 29,
+   "kind": "HARDCODED_ID:2130101",
+   "text": "\"25 个 Dungeon 中，20 个有关联 E_Daily 的资源预览（1 个单一资源，19 个多资源），5 个只关联其他 SectionType。SectionTable 邻近的 `DroopDisplayProbability` 在资源本中仍是 ItemID 列表；`DroopLimit`/`DroopLimi",
+   "classification": "DATA_DRIVEN_DEFAULT",
+   "note": "gold resource dungeon (dev sample)"
+  },
+  {
+   "file": "tools/dev/render_daily_dungeon_reward_audit.py",
+   "line": 31,
+   "kind": "MARKER:temporary",
+   "text": "\"用户明确授权临时将普通胜利资源掉落数量设为 **1**，后续再替换为实际数据。实现只在每节 `DroopDisplay` 恰有一个可入账 ItemID 时使用该 ItemID ×1；不从名称、相邻 ID 或扫荡数值推算。4 个 Dungeon/20 个 Section 可完整执行此兼容规则，其余 16 个有预览但多候",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "tools/dev/render_daily_dungeon_reward_audit.py",
+   "line": 32,
+   "kind": "MARKER:compat",
+   "text": "\"固定奖励继续按各节 FirVReward/VReward 解析，`Gift.E_Random` 按客户端静态 `Probability` 抽取并与收据共同持久化；正常掉落单独由 `DailyDungeonRewardCatalog.compat_normal_drop` 决定。结算事务同时交付固定奖与临时掉落，重试读",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "tools/dev/render_daily_dungeon_reward_audit.py",
+   "line": 33,
+   "kind": "HARDCODED_ID:2130101",
+   "text": "\"更新服务后的实机请求实际为金币本第二关 `2130102`（非提问中指定的 2130101）。用户反馈正常；该 run 的 SQLite `economy_grants` 为金币 1、光辉 30、神格经验 120、解神者经验 12，结算与金币持久化得到双重核对。第二个不同 Dungeon 的奖励隔离、入账、推送及重登",
+   "classification": "SINGLE_SAMPLE_IMPLEMENTATION",
+   "note": "gold resource dungeon (dev sample)"
+  },
+  {
+   "file": "tools/dev/repair_phase20_state.py",
+   "line": 1,
+   "kind": "MARKER:compat",
+   "text": "\"\"\"One-time, guarded repair of the Phase 20 test player's earlier compat writes.\"\"\"",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "tools/dev/repair_phase20_state.py",
+   "line": 26,
+   "kind": "HARDCODED_ID:1003",
+   "text": "artifact = next(h for h in snapshot[\"heroes\"] if h[\"id\"] == 1003)[\"god_equip\"]",
+   "classification": "SINGLE_SAMPLE_IMPLEMENTATION",
+   "note": "hero Behemoth (dev sample)"
+  },
+  {
+   "file": "tools/dev/repair_phase20_state.py",
+   "line": 27,
+   "kind": "MARKER:compat",
+   "text": "if artifact != {\"compat\": \"REVIVAL_COMPAT\", \"id\": 1503, \"level\": 0, \"star\": 5}:",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "tools/dev/repair_phase20_state.py",
+   "line": 46,
+   "kind": "HARDCODED_ID:1237901",
+   "text": "delta[1237901] += row[\"level_up_gold_cost\"]",
+   "classification": "DATA_DRIVEN_DEFAULT",
+   "note": "gold item id"
+  },
+  {
+   "file": "tools/dev/repair_phase20_state.py",
+   "line": 50,
+   "kind": "HARDCODED_ID:1237901",
+   "text": "delta[1237901] -= ranks[1][\"level_up_gold_cost\"]",
+   "classification": "DATA_DRIVEN_DEFAULT",
+   "note": "gold item id"
+  },
+  {
+   "file": "tools/dev/repair_phase20_state.py",
+   "line": 61,
+   "kind": "HARDCODED_ID:1237901",
+   "text": "snapshot[\"gold\"] += delta.pop(1237901)",
+   "classification": "DATA_DRIVEN_DEFAULT",
+   "note": "gold item id"
+  },
+  {
+   "file": "tools/export_economy_catalog.py",
+   "line": 16,
+   "kind": "HARDCODED_ID:2110001",
+   "text": "next_id = 2110001",
+   "classification": "SINGLE_SAMPLE_IMPLEMENTATION",
+   "note": "main chapter/section seed (dev sample)"
+  },
+  {
+   "file": "tools/first_contact_preflight.py",
+   "line": 56,
+   "kind": "MARKER:placeholder",
+   "text": "\"\"\"Allow only the tracked placeholder in the runtime directory.\"\"\"",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "tools/first_contact_runner.py",
+   "line": 120,
+   "kind": "MARKER:compat",
+   "text": "service_app_id=\"x2-local-compat\",",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "tools/first_contact_runner.py",
+   "line": 183,
+   "kind": "MARKER:temporary",
+   "text": "parser.add_argument(\"--local-account\", action=\"store_true\", help=\"Use X2_LOCAL_ACCOUNT and X2_LOCAL_PASSWORD for the temporary local identity bridge\")",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "tools/local_game_server.py",
+   "line": 32,
+   "kind": "MARKER:compat",
+   "text": "RecoveredWebGameConfig(service_app_id=\"x2-local-compat\", pbs_server=guest_http,",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "tools/patch_wish_thumbnails.py",
+   "line": 1,
+   "kind": "MARKER:fallback",
+   "text": "\"\"\"Build a reversible IL2CPP thumbnail fallback for the confirmed X2 2.4 client.",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "tools/patch_wish_thumbnails.py",
+   "line": 4,
+   "kind": "MARKER:fallback",
+   "text": "pool covers are present, so the fallback loads a cover only when the original",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "tools/prepare_hero_mobility_account.py",
+   "line": 22,
+   "kind": "MARKER:placeholder",
+   "text": "raise ValueError(\"expected the Phase 15 placeholder chapter and section\")",
+   "classification": "TEMP_COMPAT"
+  },
+  {
+   "file": "tools/prepare_hero_mobility_account.py",
+   "line": 29,
+   "kind": "HARDCODED_ID:2010000",
+   "text": "main_chapter=2010000, main_section=2110001,",
+   "classification": "SINGLE_SAMPLE_IMPLEMENTATION",
+   "note": "main chapter (dev sample)"
+  },
+  {
+   "file": "tools/prepare_hero_mobility_account.py",
+   "line": 30,
+   "kind": "HARDCODED_ID:1003",
+   "text": "heroes=[{\"id\": 1003, \"state\": 2, \"level\": 1, \"star\": 1}],",
+   "classification": "SINGLE_SAMPLE_IMPLEMENTATION",
+   "note": "hero Behemoth (dev sample)"
+  }
+ ]
+}

@@ -1,0 +1,26 @@
+{
+ "HeroEquip.Star offset": "0x20 (PlayerDbData.HeroEquip)",
+ "readers": [
+  {
+   "method": "EquipStrengthWnd.CheckSubAttruib(HeroEquip)",
+   "rva": "0x1C30CFC",
+   "use": "star -> EquibStageManager.GetItem(star) -> MinorListMax gate for strengthen-added affixes (A)"
+  },
+  {
+   "method": "EquipStrengthWnd.SetStrengthInfo",
+   "rva": "0x1C2EDFC",
+   "use": "strength window display (GetAttrNum + EquibStage) (A)"
+  },
+  {
+   "method": "BagModule/BagMainPage/* (18 sites via EquibBaseManager.GetItem)",
+   "use": "TypeId -> EquibBase for part/suit/attrs — TypeId keys EquibBase, NOT star (A)"
+  }
+ ],
+ "writers": [
+  {
+   "finding": "NO local HeroEquip.Star assignment found anywhere",
+   "evidence": "GMMainPage.GetEquip (0x13A1F1C) validates (equipId vs EquibBase) and (star-key vs EquibAttribBD) then sends C2L_Cheat{opt=15, values=[equipId, attrbdId]} — the SERVER builds instances; no HeroEquip ctor exists client-side (A)"
+  }
+ ],
+ "conclusion": "client trusts wire Star; no Star=static(TypeId) derivation exists; Star and TypeId are independent inputs (GM sends both separately)"
+}

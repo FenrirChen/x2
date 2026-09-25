@@ -10,6 +10,8 @@ from x2server.messages.chat import CHAT_SCHEMAS
 from x2server.messages.battle import BATTLE_SCHEMAS
 from x2server.messages.economy import ECONOMY_SCHEMAS
 from x2server.messages.progression import PROGRESSION_SCHEMAS
+from x2server.messages.equipment import EQUIPMENT_SCHEMAS
+from x2server.messages.wish import WISH_SCHEMAS
 
 C2L_LOGIN = ProtoSchema(
     "C2L_Login",
@@ -92,6 +94,8 @@ CORE_SCHEMAS.update(CHAT_SCHEMAS)
 CORE_SCHEMAS.update(BATTLE_SCHEMAS)
 CORE_SCHEMAS.update(ECONOMY_SCHEMAS)
 CORE_SCHEMAS.update(PROGRESSION_SCHEMAS)
+CORE_SCHEMAS.update(EQUIPMENT_SCHEMAS)
+CORE_SCHEMAS.update(WISH_SCHEMAS)
 
 # CONFIRMED: MessageReflector registers PlayerDataProto as 1000, independently
 # of its generated get_PID() returning 0. BaseInfo Serialize RVA 0x30A1348.
@@ -102,6 +106,7 @@ BASE_INFO = ProtoSchema("BaseInfoProto", (
     ProtoField(4, "Crystal", FieldKind.INT32),
     ProtoField(5, "Gold", FieldKind.INT32),
     ProtoField(6, "Exp", FieldKind.INT32),
+    ProtoField(7, "EquipExp", FieldKind.INT32),
     ProtoField(8, "Show", FieldKind.INT32),
     ProtoField(14, "HeroExp", FieldKind.INT32),
     ProtoField(20, "DailyActivity", FieldKind.INT32),
@@ -125,8 +130,18 @@ HERO_DATA = ProtoSchema("HeroData", (
     ProtoField(3, "level", FieldKind.INT32),
     ProtoField(4, "star", FieldKind.INT32),
     ProtoField(5, "godEquip", FieldKind.MESSAGE),
+    ProtoField(6, "equips", FieldKind.MESSAGE, repeated=True),
     ProtoField(7, "exp", FieldKind.INT32),
     ProtoField(8, "heroSkills", FieldKind.MESSAGE, repeated=True),
+))
+INT_PAIR = ProtoSchema("KeyValuePair_Int32_Int32", (
+    ProtoField(1, "Key", FieldKind.INT32), ProtoField(2, "Value", FieldKind.INT32)))
+HERO_GOD_EQUIP = ProtoSchema("HeroGodEquip", (
+    ProtoField(1, "id", FieldKind.INT32),
+    ProtoField(2, "level", FieldKind.INT32),
+    ProtoField(3, "star", FieldKind.INT32),
+    ProtoField(4, "jewel", FieldKind.MESSAGE, repeated=True),
+    ProtoField(5, "godEquipAttr", FieldKind.MESSAGE),
 ))
 HERO_ALL = ProtoSchema("L2C_HeroAll", (ProtoField(1, "heros", FieldKind.MESSAGE, repeated=True),))
 STRING_PAIR = ProtoSchema("KeyValuePair_String_String", (

@@ -1,0 +1,19 @@
+{
+ "generated": "2026-09-25",
+ "field": "EquibStage.MinorListMin // 0x14",
+ "full_binary_scan": {
+  "method": "所有 184,213 个方法反汇编，在 EquibStageManager$$GetItem(0x1CB0124) 返回后 12 条指令窗口内扫描 ldr ... [x, #0x14]",
+  "result": "0 readers"
+ },
+ "all_EquibStage_GetItem_callers_and_fields_read": [
+  {"method": "LogicX2.DropItemManager$$JudgeDropItem 0x1E49D90", "reads": "0x2C EquibValue"},
+  {"method": "LogicX2.DropItemManager$$SetCurItemValueTotal 0x1E4AF00", "reads": "0x2C EquibValue"},
+  {"method": "EquipStrengthWnd$$CheckSubAttruib 0x1C30DE8", "reads": "0x18 MinorListMax"},
+  {"method": "EquipStrengthWnd$$SetStrengthInfo 0x1C2EFA8/0x1C2F354", "reads": "0x18 MinorListMax 等"},
+  {"method": "BagDecomposePage$$RefreshCurrency 0x19A5EF0", "reads": "0x28 Exp, 0x30 ExpBonus"},
+  {"method": "CollegePurifyOptTab$$RefreshContent 0x1B0DA30", "reads": "非 Min 字段（窗口扫描确认）"}
+ ],
+ "caveat": "理论上某调用方可长距持有行对象后读 0x14；但 6 个调用点上下文均已核对，无 Min 消费",
+ "conclusion": "MinorListMin 在客户端无任何运行时消费（无 UI、无强化、无 GM 读取）——它是静态数据一致性锚点/服务器输入，不是客户端强制的初始条数",
+ "implication": "'初始条数=MinorListMin' 不能由客户端代码直接证明；能证明的是 (a) 客户端强制 Max 上限（CheckSubAttruib），(b) EquibAttribBD 每星 base 行的 MinorAttrNum == MinorListMin（双表一致），(c) 官方服务器以 AttrbdID 行为构建规格（GM opt=15）"
+}

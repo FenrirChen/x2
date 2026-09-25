@@ -11,12 +11,19 @@ ITEM = S("ItemData", (F(1, "id", K.INT32), F(2, "num", K.INT32),
 REWARD_ITEM = S("RewardItem", (F(1, "itemId", K.INT32), F(2, "itemNum", K.INT32), F(3, "transform", K.BOOL)))
 REWARD = S("RewardData", (F(1, "rewardItem", K.MESSAGE, repeated=True),
     F(2, "rewardEquip", K.MESSAGE, repeated=True), F(3, "transformHero", K.MESSAGE, repeated=True)))
+GOODS = S("L2C_Goods", (F(1, "goodsId", K.INT32), F(2, "originalPrice", K.INT32),
+    F(3, "itemId", K.INT32), F(4, "num", K.INT32), F(5, "price", K.INT32),
+    F(6, "currencyType", K.INT32), F(7, "canBuyTimes", K.INT32),
+    F(8, "hasBuyTimes", K.INT32), F(9, "startTime", K.INT32),
+    F(10, "endTime", K.INT32), F(11, "goodsTag", K.INT32), F(12, "limited", K.INT32)))
 TASK = ints("TaskData", "taskId taskStatus taskProgress taskRefreshTime finishTimes stage activityId difficulty")
 FINISH_REQUEST = ints("ReqFinishTaskData", "taskId type activityId")
 FINISH_RESULT = S("RspFinishTaskData", (F(1, "code", K.ENUM), F(2, "taskId", K.INT32),
     F(3, "rewardData", K.MESSAGE), F(4, "type", K.ENUM), F(5, "nextTask", K.MESSAGE), F(6, "activityId", K.INT32)))
 ECONOMY_IDS = (("ShopGoods", 221, 225), ("RefreshShop", 220, 224),
     ("BuyGoods", 219, 222), ("QueryGoodsInfo", 301, 302),
+    ("QueryReCommendShop", 693, 694), ("PaymentStore", 451, 452),
+    ("RechargeInfo", 822, 823),
     ("FinishGameTask", 350, 353), ("FinishGameTaskAsync", 814, 815), ("PickTreasureBox", 310, 314))
 ECONOMY_SCHEMAS = {s.name: s for s in (
     S("C2L_ItemAll", ()),
@@ -24,6 +31,13 @@ ECONOMY_SCHEMAS = {s.name: s for s in (
     S("L2C_ItemUpdate", (F(1, "code", K.ENUM), F(2, "items", K.MESSAGE, repeated=True))),
     ints("C2L_ShopGoods", "shopId"), ints("C2L_RefreshShop", "shopId"),
     ints("C2L_BuyGoods", "shopId goodsId buyNum"), ints("C2L_QueryGoodsInfo", "goodsId"),
+    S("C2L_QueryReCommendShop", ()),
+    S("L2C_QueryReCommendShop", (F(1, "code", K.ENUM), F(2, "recommendTag", K.MESSAGE, repeated=True))),
+    S("C2L_PaymentStore", ()),
+    S("L2C_PaymentStore", (F(1, "code", K.ENUM), F(2, "product", K.MESSAGE, repeated=True))),
+    ints("C2L_RechargeInfo", "extra"),
+    S("L2C_RechargeInfo", (F(1, "code", K.ENUM), F(2, "totalRMB", K.INT32),
+        F(3, "orders", K.MESSAGE, repeated=True))),
     ints("L2C_QueryGoodsInfo", "code shopId goodsId price originalPrice hasBuyTimes canBuyTimes itemNum currencyType"),
     S("L2C_BuyGoods", (F(1, "code", K.ENUM), F(2, "itemId", K.INT32), F(3, "itemNum", K.INT32),
         F(4, "goodsId", K.INT32), F(5, "price", K.INT32), F(6, "originalPrice", K.INT32),

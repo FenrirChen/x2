@@ -1,0 +1,712 @@
+{
+  "summary": {
+    "dungeons": 25,
+    "fully_resolvable_static_fixed_reward": 12,
+    "special_type_dungeons": 5,
+    "random_gift_dungeons": 8,
+    "blocked_destination_dungeons": 5,
+    "linked_daily_sections": 141,
+    "entry_reward_resolvable_daily_sections": 110,
+    "entry_reward_blocked_daily_sections": 31,
+    "orphan_daily_sections": [
+      2139500,
+      2139600,
+      2139700,
+      2139800,
+      2139900,
+      2160491
+    ]
+  },
+  "dungeons": [
+    {
+      "dungeon_id": 2030100,
+      "section_count": 5,
+      "daily_section_count": 5,
+      "non_daily_sections": [],
+      "missing_sections": [],
+      "missing_maps": [],
+      "missing_manual_values": [],
+      "broken_next_links": [],
+      "fixed_reward_group_count": 6,
+      "missing_gifts": [],
+      "random_gift_groups": [],
+      "unknown_items": [],
+      "unsupported_destinations": [],
+      "static_fixed_reward_status": "RESOLVABLE",
+      "reasons": []
+    },
+    {
+      "dungeon_id": 2030200,
+      "section_count": 5,
+      "daily_section_count": 5,
+      "non_daily_sections": [],
+      "missing_sections": [],
+      "missing_maps": [],
+      "missing_manual_values": [],
+      "broken_next_links": [],
+      "fixed_reward_group_count": 20,
+      "missing_gifts": [],
+      "random_gift_groups": [
+        722012,
+        722013,
+        722015,
+        722016,
+        722017,
+        722018,
+        722019,
+        722020,
+        722021,
+        722022,
+        722023,
+        722024
+      ],
+      "unknown_items": [],
+      "unsupported_destinations": [],
+      "static_fixed_reward_status": "PARTIAL",
+      "reasons": [
+        "RANDOM_GIFT_RULE_UNRECOVERED"
+      ]
+    },
+    {
+      "dungeon_id": 2030500,
+      "section_count": 3,
+      "daily_section_count": 3,
+      "non_daily_sections": [],
+      "missing_sections": [],
+      "missing_maps": [],
+      "missing_manual_values": [],
+      "broken_next_links": [],
+      "fixed_reward_group_count": 15,
+      "missing_gifts": [],
+      "random_gift_groups": [
+        722151,
+        722152,
+        722153,
+        722154,
+        722155,
+        722156,
+        722157,
+        722158
+      ],
+      "unknown_items": [],
+      "unsupported_destinations": [
+        1237918
+      ],
+      "static_fixed_reward_status": "PARTIAL",
+      "reasons": [
+        "RANDOM_GIFT_RULE_UNRECOVERED",
+        "BLOCKED_REWARD_DESTINATION"
+      ]
+    },
+    {
+      "dungeon_id": 2030600,
+      "section_count": 3,
+      "daily_section_count": 3,
+      "non_daily_sections": [],
+      "missing_sections": [],
+      "missing_maps": [],
+      "missing_manual_values": [],
+      "broken_next_links": [],
+      "fixed_reward_group_count": 15,
+      "missing_gifts": [],
+      "random_gift_groups": [
+        722161,
+        722162,
+        722163,
+        722164,
+        722165,
+        722166,
+        722167,
+        722168
+      ],
+      "unknown_items": [],
+      "unsupported_destinations": [
+        1237918
+      ],
+      "static_fixed_reward_status": "PARTIAL",
+      "reasons": [
+        "RANDOM_GIFT_RULE_UNRECOVERED",
+        "BLOCKED_REWARD_DESTINATION"
+      ]
+    },
+    {
+      "dungeon_id": 2030700,
+      "section_count": 3,
+      "daily_section_count": 3,
+      "non_daily_sections": [],
+      "missing_sections": [],
+      "missing_maps": [],
+      "missing_manual_values": [],
+      "broken_next_links": [],
+      "fixed_reward_group_count": 15,
+      "missing_gifts": [],
+      "random_gift_groups": [
+        722171,
+        722172,
+        722173,
+        722174,
+        722175,
+        722176,
+        722177,
+        722178
+      ],
+      "unknown_items": [],
+      "unsupported_destinations": [
+        1237918
+      ],
+      "static_fixed_reward_status": "PARTIAL",
+      "reasons": [
+        "RANDOM_GIFT_RULE_UNRECOVERED",
+        "BLOCKED_REWARD_DESTINATION"
+      ]
+    },
+    {
+      "dungeon_id": 2031200,
+      "section_count": 3,
+      "daily_section_count": 3,
+      "non_daily_sections": [],
+      "missing_sections": [],
+      "missing_maps": [],
+      "missing_manual_values": [],
+      "broken_next_links": [],
+      "fixed_reward_group_count": 15,
+      "missing_gifts": [],
+      "random_gift_groups": [
+        722181,
+        722182,
+        722183,
+        722184,
+        722185,
+        722186,
+        722187,
+        722188
+      ],
+      "unknown_items": [],
+      "unsupported_destinations": [
+        1237918
+      ],
+      "static_fixed_reward_status": "PARTIAL",
+      "reasons": [
+        "RANDOM_GIFT_RULE_UNRECOVERED",
+        "BLOCKED_REWARD_DESTINATION"
+      ]
+    },
+    {
+      "dungeon_id": 2031300,
+      "section_count": 4,
+      "daily_section_count": 4,
+      "non_daily_sections": [],
+      "missing_sections": [],
+      "missing_maps": [],
+      "missing_manual_values": [],
+      "broken_next_links": [],
+      "fixed_reward_group_count": 20,
+      "missing_gifts": [],
+      "random_gift_groups": [
+        722191,
+        722192,
+        722193,
+        722194,
+        722195,
+        722196,
+        722197,
+        722198,
+        722199,
+        722200,
+        722201
+      ],
+      "unknown_items": [],
+      "unsupported_destinations": [
+        1237918
+      ],
+      "static_fixed_reward_status": "PARTIAL",
+      "reasons": [
+        "RANDOM_GIFT_RULE_UNRECOVERED",
+        "BLOCKED_REWARD_DESTINATION"
+      ]
+    },
+    {
+      "dungeon_id": 2032000,
+      "section_count": 5,
+      "daily_section_count": 5,
+      "non_daily_sections": [],
+      "missing_sections": [],
+      "missing_maps": [],
+      "missing_manual_values": [],
+      "broken_next_links": [],
+      "fixed_reward_group_count": 17,
+      "missing_gifts": [],
+      "random_gift_groups": [
+        722001,
+        722003,
+        722004,
+        722005,
+        722006,
+        722007,
+        722008,
+        722009,
+        722010
+      ],
+      "unknown_items": [],
+      "unsupported_destinations": [],
+      "static_fixed_reward_status": "PARTIAL",
+      "reasons": [
+        "RANDOM_GIFT_RULE_UNRECOVERED"
+      ]
+    },
+    {
+      "dungeon_id": 2032100,
+      "section_count": 5,
+      "daily_section_count": 5,
+      "non_daily_sections": [],
+      "missing_sections": [],
+      "missing_maps": [],
+      "missing_manual_values": [],
+      "broken_next_links": [],
+      "fixed_reward_group_count": 20,
+      "missing_gifts": [],
+      "random_gift_groups": [
+        722052,
+        722055,
+        722058,
+        722060,
+        722061,
+        722063,
+        722064
+      ],
+      "unknown_items": [],
+      "unsupported_destinations": [],
+      "static_fixed_reward_status": "PARTIAL",
+      "reasons": [
+        "RANDOM_GIFT_RULE_UNRECOVERED"
+      ]
+    },
+    {
+      "dungeon_id": 2032110,
+      "section_count": 5,
+      "daily_section_count": 5,
+      "non_daily_sections": [],
+      "missing_sections": [],
+      "missing_maps": [],
+      "missing_manual_values": [],
+      "broken_next_links": [],
+      "fixed_reward_group_count": 5,
+      "missing_gifts": [],
+      "random_gift_groups": [],
+      "unknown_items": [],
+      "unsupported_destinations": [],
+      "static_fixed_reward_status": "RESOLVABLE",
+      "reasons": []
+    },
+    {
+      "dungeon_id": 2032200,
+      "section_count": 7,
+      "daily_section_count": 0,
+      "non_daily_sections": [
+        {
+          "section_id": 2181001,
+          "section_type": 23
+        },
+        {
+          "section_id": 2181002,
+          "section_type": 23
+        },
+        {
+          "section_id": 2181003,
+          "section_type": 23
+        },
+        {
+          "section_id": 2181004,
+          "section_type": 23
+        },
+        {
+          "section_id": 2181005,
+          "section_type": 23
+        },
+        {
+          "section_id": 2181006,
+          "section_type": 23
+        },
+        {
+          "section_id": 2181007,
+          "section_type": 23
+        }
+      ],
+      "missing_sections": [],
+      "missing_maps": [],
+      "missing_manual_values": [],
+      "broken_next_links": [],
+      "fixed_reward_group_count": 0,
+      "missing_gifts": [],
+      "random_gift_groups": [],
+      "unknown_items": [],
+      "unsupported_destinations": [],
+      "static_fixed_reward_status": "PARTIAL",
+      "reasons": [
+        "NON_DAILY_SECTION_TYPE"
+      ]
+    },
+    {
+      "dungeon_id": 2033100,
+      "section_count": 10,
+      "daily_section_count": 10,
+      "non_daily_sections": [],
+      "missing_sections": [],
+      "missing_maps": [],
+      "missing_manual_values": [],
+      "broken_next_links": [],
+      "fixed_reward_group_count": 2,
+      "missing_gifts": [],
+      "random_gift_groups": [],
+      "unknown_items": [],
+      "unsupported_destinations": [],
+      "static_fixed_reward_status": "RESOLVABLE",
+      "reasons": []
+    },
+    {
+      "dungeon_id": 2033200,
+      "section_count": 10,
+      "daily_section_count": 10,
+      "non_daily_sections": [],
+      "missing_sections": [],
+      "missing_maps": [],
+      "missing_manual_values": [],
+      "broken_next_links": [],
+      "fixed_reward_group_count": 2,
+      "missing_gifts": [],
+      "random_gift_groups": [],
+      "unknown_items": [],
+      "unsupported_destinations": [],
+      "static_fixed_reward_status": "RESOLVABLE",
+      "reasons": []
+    },
+    {
+      "dungeon_id": 2033300,
+      "section_count": 10,
+      "daily_section_count": 10,
+      "non_daily_sections": [],
+      "missing_sections": [],
+      "missing_maps": [],
+      "missing_manual_values": [],
+      "broken_next_links": [],
+      "fixed_reward_group_count": 2,
+      "missing_gifts": [],
+      "random_gift_groups": [],
+      "unknown_items": [],
+      "unsupported_destinations": [],
+      "static_fixed_reward_status": "RESOLVABLE",
+      "reasons": []
+    },
+    {
+      "dungeon_id": 2033400,
+      "section_count": 10,
+      "daily_section_count": 10,
+      "non_daily_sections": [],
+      "missing_sections": [],
+      "missing_maps": [],
+      "missing_manual_values": [],
+      "broken_next_links": [],
+      "fixed_reward_group_count": 2,
+      "missing_gifts": [],
+      "random_gift_groups": [],
+      "unknown_items": [],
+      "unsupported_destinations": [],
+      "static_fixed_reward_status": "RESOLVABLE",
+      "reasons": []
+    },
+    {
+      "dungeon_id": 2033500,
+      "section_count": 10,
+      "daily_section_count": 10,
+      "non_daily_sections": [],
+      "missing_sections": [],
+      "missing_maps": [],
+      "missing_manual_values": [],
+      "broken_next_links": [],
+      "fixed_reward_group_count": 2,
+      "missing_gifts": [],
+      "random_gift_groups": [],
+      "unknown_items": [],
+      "unsupported_destinations": [],
+      "static_fixed_reward_status": "RESOLVABLE",
+      "reasons": []
+    },
+    {
+      "dungeon_id": 2033600,
+      "section_count": 10,
+      "daily_section_count": 10,
+      "non_daily_sections": [],
+      "missing_sections": [],
+      "missing_maps": [],
+      "missing_manual_values": [],
+      "broken_next_links": [],
+      "fixed_reward_group_count": 2,
+      "missing_gifts": [],
+      "random_gift_groups": [],
+      "unknown_items": [],
+      "unsupported_destinations": [],
+      "static_fixed_reward_status": "RESOLVABLE",
+      "reasons": []
+    },
+    {
+      "dungeon_id": 2033700,
+      "section_count": 10,
+      "daily_section_count": 10,
+      "non_daily_sections": [],
+      "missing_sections": [],
+      "missing_maps": [],
+      "missing_manual_values": [],
+      "broken_next_links": [],
+      "fixed_reward_group_count": 2,
+      "missing_gifts": [],
+      "random_gift_groups": [],
+      "unknown_items": [],
+      "unsupported_destinations": [],
+      "static_fixed_reward_status": "RESOLVABLE",
+      "reasons": []
+    },
+    {
+      "dungeon_id": 2033800,
+      "section_count": 10,
+      "daily_section_count": 10,
+      "non_daily_sections": [],
+      "missing_sections": [],
+      "missing_maps": [],
+      "missing_manual_values": [],
+      "broken_next_links": [],
+      "fixed_reward_group_count": 2,
+      "missing_gifts": [],
+      "random_gift_groups": [],
+      "unknown_items": [],
+      "unsupported_destinations": [],
+      "static_fixed_reward_status": "RESOLVABLE",
+      "reasons": []
+    },
+    {
+      "dungeon_id": 2033900,
+      "section_count": 10,
+      "daily_section_count": 10,
+      "non_daily_sections": [],
+      "missing_sections": [],
+      "missing_maps": [],
+      "missing_manual_values": [],
+      "broken_next_links": [],
+      "fixed_reward_group_count": 2,
+      "missing_gifts": [],
+      "random_gift_groups": [],
+      "unknown_items": [],
+      "unsupported_destinations": [],
+      "static_fixed_reward_status": "RESOLVABLE",
+      "reasons": []
+    },
+    {
+      "dungeon_id": 2034100,
+      "section_count": 10,
+      "daily_section_count": 10,
+      "non_daily_sections": [],
+      "missing_sections": [],
+      "missing_maps": [],
+      "missing_manual_values": [],
+      "broken_next_links": [],
+      "fixed_reward_group_count": 2,
+      "missing_gifts": [],
+      "random_gift_groups": [],
+      "unknown_items": [],
+      "unsupported_destinations": [],
+      "static_fixed_reward_status": "RESOLVABLE",
+      "reasons": []
+    },
+    {
+      "dungeon_id": 2039900,
+      "section_count": 1,
+      "daily_section_count": 0,
+      "non_daily_sections": [
+        {
+          "section_id": 2193001,
+          "section_type": 20
+        }
+      ],
+      "missing_sections": [],
+      "missing_maps": [],
+      "missing_manual_values": [],
+      "broken_next_links": [],
+      "fixed_reward_group_count": 0,
+      "missing_gifts": [],
+      "random_gift_groups": [],
+      "unknown_items": [],
+      "unsupported_destinations": [],
+      "static_fixed_reward_status": "PARTIAL",
+      "reasons": [
+        "NON_DAILY_SECTION_TYPE"
+      ]
+    },
+    {
+      "dungeon_id": 2060100,
+      "section_count": 5,
+      "daily_section_count": 0,
+      "non_daily_sections": [
+        {
+          "section_id": 2160101,
+          "section_type": 8
+        },
+        {
+          "section_id": 2160102,
+          "section_type": 8
+        },
+        {
+          "section_id": 2160103,
+          "section_type": 9
+        },
+        {
+          "section_id": 2160104,
+          "section_type": 9
+        },
+        {
+          "section_id": 2160105,
+          "section_type": 9
+        }
+      ],
+      "missing_sections": [],
+      "missing_maps": [],
+      "missing_manual_values": [],
+      "broken_next_links": [],
+      "fixed_reward_group_count": 0,
+      "missing_gifts": [],
+      "random_gift_groups": [],
+      "unknown_items": [],
+      "unsupported_destinations": [],
+      "static_fixed_reward_status": "PARTIAL",
+      "reasons": [
+        "NON_DAILY_SECTION_TYPE"
+      ]
+    },
+    {
+      "dungeon_id": 2060110,
+      "section_count": 5,
+      "daily_section_count": 0,
+      "non_daily_sections": [
+        {
+          "section_id": 2160111,
+          "section_type": 8
+        },
+        {
+          "section_id": 2160112,
+          "section_type": 8
+        },
+        {
+          "section_id": 2160113,
+          "section_type": 9
+        },
+        {
+          "section_id": 2160114,
+          "section_type": 9
+        },
+        {
+          "section_id": 2160115,
+          "section_type": 9
+        }
+      ],
+      "missing_sections": [],
+      "missing_maps": [],
+      "missing_manual_values": [],
+      "broken_next_links": [],
+      "fixed_reward_group_count": 0,
+      "missing_gifts": [],
+      "random_gift_groups": [],
+      "unknown_items": [],
+      "unsupported_destinations": [],
+      "static_fixed_reward_status": "PARTIAL",
+      "reasons": [
+        "NON_DAILY_SECTION_TYPE"
+      ]
+    },
+    {
+      "dungeon_id": 2060900,
+      "section_count": 17,
+      "daily_section_count": 0,
+      "non_daily_sections": [
+        {
+          "section_id": 2161301,
+          "section_type": 14
+        },
+        {
+          "section_id": 2161302,
+          "section_type": 14
+        },
+        {
+          "section_id": 2161303,
+          "section_type": 14
+        },
+        {
+          "section_id": 2161304,
+          "section_type": 14
+        },
+        {
+          "section_id": 2161305,
+          "section_type": 14
+        },
+        {
+          "section_id": 2161306,
+          "section_type": 14
+        },
+        {
+          "section_id": 2161307,
+          "section_type": 14
+        },
+        {
+          "section_id": 2161308,
+          "section_type": 14
+        },
+        {
+          "section_id": 2161309,
+          "section_type": 14
+        },
+        {
+          "section_id": 2161310,
+          "section_type": 14
+        },
+        {
+          "section_id": 2161311,
+          "section_type": 14
+        },
+        {
+          "section_id": 2161321,
+          "section_type": 14
+        },
+        {
+          "section_id": 2161322,
+          "section_type": 14
+        },
+        {
+          "section_id": 2161323,
+          "section_type": 14
+        },
+        {
+          "section_id": 2161324,
+          "section_type": 14
+        },
+        {
+          "section_id": 2161331,
+          "section_type": 14
+        },
+        {
+          "section_id": 2161332,
+          "section_type": 14
+        }
+      ],
+      "missing_sections": [],
+      "missing_maps": [],
+      "missing_manual_values": [],
+      "broken_next_links": [],
+      "fixed_reward_group_count": 0,
+      "missing_gifts": [],
+      "random_gift_groups": [],
+      "unknown_items": [],
+      "unsupported_destinations": [],
+      "static_fixed_reward_status": "PARTIAL",
+      "reasons": [
+        "NON_DAILY_SECTION_TYPE"
+      ]
+    }
+  ]
+}

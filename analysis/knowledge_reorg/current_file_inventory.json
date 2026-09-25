@@ -1,0 +1,6531 @@
+{
+ "generated": "2026-09-25 18:18",
+ "root": "x2_revive_workspace",
+ "file_count": 932,
+ "files": [
+  {
+   "path": ".gitignore",
+   "size": 302,
+   "mtime": "2026-09-22",
+   "category": "OTHER",
+   "likely_role": ""
+  },
+  {
+   "path": "CHANGELOG.md",
+   "size": 1178,
+   "mtime": "2026-09-22",
+   "category": "CURRENT_KNOWLEDGE",
+   "likely_role": "entry-doc"
+  },
+  {
+   "path": "LICENSE_NOTICE.md",
+   "size": 557,
+   "mtime": "2026-09-22",
+   "category": "CURRENT_KNOWLEDGE",
+   "likely_role": "entry-doc"
+  },
+  {
+   "path": "minimal_webgameconfig_contract.json",
+   "size": 3406,
+   "mtime": "2026-09-22",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "NEED.md",
+   "size": 4605,
+   "mtime": "2026-09-23",
+   "category": "CURRENT_KNOWLEDGE",
+   "likely_role": "entry-doc"
+  },
+  {
+   "path": "pyproject.toml",
+   "size": 924,
+   "mtime": "2026-09-23",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "README.md",
+   "size": 4366,
+   "mtime": "2026-09-23",
+   "category": "CURRENT_KNOWLEDGE",
+   "likely_role": "entry-doc"
+  },
+  {
+   "path": "analysis/battle/daily_dungeon_reward_audit.json",
+   "size": 240475,
+   "mtime": "2026-09-24",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/battle/decode_gold_probe.py",
+   "size": 3118,
+   "mtime": "2026-09-24",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/battle/section_type_catalog.json",
+   "size": 27275,
+   "mtime": "2026-09-25",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/coverage/build_runtime_coverage.py",
+   "size": 26745,
+   "mtime": "2026-09-24",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/coverage/daily_dungeon_coverage.json",
+   "size": 18280,
+   "mtime": "2026-09-24",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/coverage/hardcoded_business_rules.json",
+   "size": 16937,
+   "mtime": "2026-09-25",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/coverage/runtime_coverage.json",
+   "size": 236830,
+   "mtime": "2026-09-25",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/drop_algorithm/callers.json",
+   "size": 2216,
+   "mtime": "2026-09-25",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/drop_algorithm/field_accesses.json",
+   "size": 2568,
+   "mtime": "2026-09-25",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/drop_algorithm/get_drop_item_by_group_cfg.md",
+   "size": 24578,
+   "mtime": "2026-09-25",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/drop_algorithm/reconstructed_algorithm.json",
+   "size": 2665,
+   "mtime": "2026-09-25",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/drop_algorithm/rng_calls.json",
+   "size": 1867,
+   "mtime": "2026-09-25",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/drop_algorithm/sample_evaluations.json",
+   "size": 1761,
+   "mtime": "2026-09-25",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/economy/audit_probe.py",
+   "size": 2009,
+   "mtime": "2026-09-23",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/economy/build_audit.py",
+   "size": 7502,
+   "mtime": "2026-09-23",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/economy/drop_tables.json",
+   "size": 1451628,
+   "mtime": "2026-09-23",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/economy/missing_evidence_followup.json",
+   "size": 8850,
+   "mtime": "2026-09-23",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/economy/reward_links.json",
+   "size": 917915,
+   "mtime": "2026-09-23",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/economy/shop_tables.json",
+   "size": 913062,
+   "mtime": "2026-09-23",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/economy/static_xrefs.py",
+   "size": 2262,
+   "mtime": "2026-09-23",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/economy/targeted_probe.py",
+   "size": 2519,
+   "mtime": "2026-09-23",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/economy/task_tables.json",
+   "size": 84259,
+   "mtime": "2026-09-23",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/economy/trace_static_ids.py",
+   "size": 1980,
+   "mtime": "2026-09-23",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/persistence/sqlite_schema_catalog.json",
+   "size": 10705,
+   "mtime": "2026-09-25",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/persistence/state_lifecycle.json",
+   "size": 13292,
+   "mtime": "2026-09-25",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/progression/battle_base_1003.json",
+   "size": 5414,
+   "mtime": "2026-09-23",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/progression/build_progression.py",
+   "size": 16485,
+   "mtime": "2026-09-23",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/progression/equipment_progression.json",
+   "size": 11686,
+   "mtime": "2026-09-23",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/progression/equipment_seed_catalog.json",
+   "size": 19499,
+   "mtime": "2026-09-23",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/progression/equipment_strengthen_catalog.json",
+   "size": 18156,
+   "mtime": "2026-09-23",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/progression/export_battle_base.py",
+   "size": 1186,
+   "mtime": "2026-09-23",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/progression/hero_breakthrough.json",
+   "size": 288,
+   "mtime": "2026-09-23",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/progression/hero_level.json",
+   "size": 76426,
+   "mtime": "2026-09-23",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/progression/hero_star.json",
+   "size": 46683,
+   "mtime": "2026-09-23",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/progression/hero_unlock_catalog.json",
+   "size": 14805,
+   "mtime": "2026-09-23",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/progression/inspect_battle_base.py",
+   "size": 1699,
+   "mtime": "2026-09-23",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/progression/material_links.json",
+   "size": 19122,
+   "mtime": "2026-09-23",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/progression/player_level.json",
+   "size": 71598,
+   "mtime": "2026-09-23",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/progression/probe.py",
+   "size": 3428,
+   "mtime": "2026-09-23",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/progression/progression_summary.json",
+   "size": 15419,
+   "mtime": "2026-09-23",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/progression/skill_progression.json",
+   "size": 1464230,
+   "mtime": "2026-09-23",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/progression/weapon_progression.json",
+   "size": 31950,
+   "mtime": "2026-09-23",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/protocol/protocol_catalog.json",
+   "size": 349669,
+   "mtime": "2026-09-25",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/protocol/unhandled_high_value.json",
+   "size": 52722,
+   "mtime": "2026-09-25",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/reward/section_reward_catalog.json",
+   "size": 3647599,
+   "mtime": "2026-09-25",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/reward_reverse/equipment_attribute_rng.json",
+   "size": 1025,
+   "mtime": "2026-09-25",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/reward_reverse/equipment_instance_writers.json",
+   "size": 1701,
+   "mtime": "2026-09-25",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/reward_reverse/fightitembag_methods.json",
+   "size": 2902,
+   "mtime": "2026-09-25",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/reward_reverse/gift_consumers.json",
+   "size": 2960,
+   "mtime": "2026-09-25",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/reward_reverse/gift_random_algorithm.json",
+   "size": 1242,
+   "mtime": "2026-09-25",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/reward_reverse/item_use_scene_consumers.json",
+   "size": 1537,
+   "mtime": "2026-09-25",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/reward_reverse/special_reward_consumers.json",
+   "size": 2212,
+   "mtime": "2026-09-25",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/reward_reverse/special_reward_protocols.json",
+   "size": 1168,
+   "mtime": "2026-09-25",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/static_dictionary/id_namespaces.json",
+   "size": 4053,
+   "mtime": "2026-09-25",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/static_dictionary/reference_graph.json",
+   "size": 237787,
+   "mtime": "2026-09-25",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/static_dictionary/reverse_reference_index.json",
+   "size": 2645304,
+   "mtime": "2026-09-25",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/static_dictionary/tables.json",
+   "size": 625758,
+   "mtime": "2026-09-25",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "analysis/static_dictionary/table_domains.json",
+   "size": 8677,
+   "mtime": "2026-09-25",
+   "category": "DERIVED_EVIDENCE",
+   "likely_role": "script-generated-analysis"
+  },
+  {
+   "path": "docs/all_section_battle_recovery.md",
+   "size": 4071,
+   "mtime": "2026-09-24",
+   "category": "CURRENT_KNOWLEDGE",
+   "likely_role": "dev-facing-living-doc"
+  },
+  {
+   "path": "docs/android_lab.md",
+   "size": 2373,
+   "mtime": "2026-09-22",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/android_lab_audit.md",
+   "size": 1875,
+   "mtime": "2026-09-22",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/android_toolchain_manifest.md",
+   "size": 1494,
+   "mtime": "2026-09-22",
+   "category": "CURRENT_KNOWLEDGE",
+   "likely_role": "dev-facing-living-doc"
+  },
+  {
+   "path": "docs/architecture.md",
+   "size": 926,
+   "mtime": "2026-09-22",
+   "category": "CURRENT_KNOWLEDGE",
+   "likely_role": "dev-facing-living-doc"
+  },
+  {
+   "path": "docs/battle_variant_coverage.md",
+   "size": 6625,
+   "mtime": "2026-09-25",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/bootstrap.md",
+   "size": 4179,
+   "mtime": "2026-09-22",
+   "category": "CURRENT_KNOWLEDGE",
+   "likely_role": "dev-facing-living-doc"
+  },
+  {
+   "path": "docs/bootstrap_contract.md",
+   "size": 5567,
+   "mtime": "2026-09-22",
+   "category": "CURRENT_KNOWLEDGE",
+   "likely_role": "dev-facing-living-doc"
+  },
+  {
+   "path": "docs/client_economy_data_audit.md",
+   "size": 11765,
+   "mtime": "2026-09-23",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/client_progression_data_audit.md",
+   "size": 15632,
+   "mtime": "2026-09-23",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/client_static_table_dictionary.md",
+   "size": 27814,
+   "mtime": "2026-09-25",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/daily_dungeon_reward_audit.md",
+   "size": 8612,
+   "mtime": "2026-09-24",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/development.md",
+   "size": 900,
+   "mtime": "2026-09-22",
+   "category": "CURRENT_KNOWLEDGE",
+   "likely_role": "dev-facing-living-doc"
+  },
+  {
+   "path": "docs/drop_algorithm_reverse_engineering.md",
+   "size": 10137,
+   "mtime": "2026-09-25",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/economy_missing_evidence_followup.md",
+   "size": 12236,
+   "mtime": "2026-09-23",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/equipment_instance_generation.md",
+   "size": 3982,
+   "mtime": "2026-09-25",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/false_complete_audit.md",
+   "size": 10212,
+   "mtime": "2026-09-25",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/false_complete_elimination.md",
+   "size": 7447,
+   "mtime": "2026-09-25",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/fightitembag_persistence_boundary.md",
+   "size": 4888,
+   "mtime": "2026-09-25",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/first_contact_plan.md",
+   "size": 2760,
+   "mtime": "2026-09-22",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/first_contact_runs.md",
+   "size": 2308,
+   "mtime": "2026-09-22",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/gameconfig_resolution.md",
+   "size": 2790,
+   "mtime": "2026-09-22",
+   "category": "CURRENT_KNOWLEDGE",
+   "likely_role": "dev-facing-living-doc"
+  },
+  {
+   "path": "docs/gift_runtime_semantics.md",
+   "size": 4417,
+   "mtime": "2026-09-25",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/gold_dungeon_drop_clues.md",
+   "size": 6517,
+   "mtime": "2026-09-24",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/milestones.md",
+   "size": 2880,
+   "mtime": "2026-09-23",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "log-style"
+  },
+  {
+   "path": "docs/mumu_migration.md",
+   "size": 4976,
+   "mtime": "2026-09-23",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/network.md",
+   "size": 3026,
+   "mtime": "2026-09-23",
+   "category": "CURRENT_KNOWLEDGE",
+   "likely_role": "dev-facing-living-doc"
+  },
+  {
+   "path": "docs/persistence_relog_audit.md",
+   "size": 4759,
+   "mtime": "2026-09-25",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/phase10_android_lab_first_contact_report.md",
+   "size": 4492,
+   "mtime": "2026-09-22",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/phase11_revival_client_first_contact.md",
+   "size": 3867,
+   "mtime": "2026-09-22",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/phase12_stable_startup.md",
+   "size": 5798,
+   "mtime": "2026-09-22",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/phase12_startup_evidence.json",
+   "size": 3661,
+   "mtime": "2026-09-22",
+   "category": "RAW_EVIDENCE",
+   "likely_role": "runtime-observed-evidence"
+  },
+  {
+   "path": "docs/phase13_first_contact.md",
+   "size": 5190,
+   "mtime": "2026-09-22",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/phase13_first_contact_evidence.json",
+   "size": 1777,
+   "mtime": "2026-09-22",
+   "category": "RAW_EVIDENCE",
+   "likely_role": "runtime-observed-evidence"
+  },
+  {
+   "path": "docs/phase14_login_persistence.md",
+   "size": 6497,
+   "mtime": "2026-09-22",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/phase14_login_persistence_evidence.json",
+   "size": 1553,
+   "mtime": "2026-09-22",
+   "category": "RAW_EVIDENCE",
+   "likely_role": "runtime-observed-evidence"
+  },
+  {
+   "path": "docs/phase15_lobby_account_state.md",
+   "size": 5781,
+   "mtime": "2026-09-23",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/phase15_lobby_evidence.json",
+   "size": 2616,
+   "mtime": "2026-09-23",
+   "category": "RAW_EVIDENCE",
+   "likely_role": "runtime-observed-evidence"
+  },
+  {
+   "path": "docs/phase16_hero_mobility_mission.md",
+   "size": 2320,
+   "mtime": "2026-09-23",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/phase17_lobby_consistency_first_battle.md",
+   "size": 2638,
+   "mtime": "2026-09-23",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/phase18_chat_first_battle.md",
+   "size": 5072,
+   "mtime": "2026-09-23",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/phase19_economy.md",
+   "size": 3770,
+   "mtime": "2026-09-23",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/phase20_progression.md",
+   "size": 7742,
+   "mtime": "2026-09-23",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/phase6_m0_m1_report.md",
+   "size": 6069,
+   "mtime": "2026-09-22",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/phase7_m2_m3_report.md",
+   "size": 6241,
+   "mtime": "2026-09-22",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/phase8_bootstrap_first_contact_report.md",
+   "size": 3414,
+   "mtime": "2026-09-22",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/phase9_gameconfig_first_contact_report.md",
+   "size": 4918,
+   "mtime": "2026-09-22",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/phase_battle_entry_domain.md",
+   "size": 13253,
+   "mtime": "2026-09-24",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/phase_test_progression_inventory.md",
+   "size": 13680,
+   "mtime": "2026-09-24",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/phase_wish_draw.md",
+   "size": 5012,
+   "mtime": "2026-09-24",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/project_knowledge_index.md",
+   "size": 7823,
+   "mtime": "2026-09-25",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/protocol_spec.md",
+   "size": 1822,
+   "mtime": "2026-09-22",
+   "category": "CURRENT_KNOWLEDGE",
+   "likely_role": "dev-facing-living-doc"
+  },
+  {
+   "path": "docs/reverse_engineering_sources.md",
+   "size": 2573,
+   "mtime": "2026-09-22",
+   "category": "CURRENT_KNOWLEDGE",
+   "likely_role": "dev-facing-living-doc"
+  },
+  {
+   "path": "docs/reward_semantics_reverse_engineering.md",
+   "size": 8865,
+   "mtime": "2026-09-25",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/reward_system_server_fix_plan.md",
+   "size": 6222,
+   "mtime": "2026-09-25",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/runtime_backlog.md",
+   "size": 8645,
+   "mtime": "2026-09-25",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/runtime_coverage_matrix.md",
+   "size": 19766,
+   "mtime": "2026-09-25",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/runtime_coverage_static_reaudit.md",
+   "size": 14010,
+   "mtime": "2026-09-25",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/section_reward_coverage.md",
+   "size": 2524,
+   "mtime": "2026-09-25",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/section_reward_system.md",
+   "size": 4481,
+   "mtime": "2026-09-25",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/shop_recovery_from_workbook.md",
+   "size": 4368,
+   "mtime": "2026-09-24",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/special_reward_state_machines.md",
+   "size": 4715,
+   "mtime": "2026-09-25",
+   "category": "HISTORICAL_REPORT",
+   "likely_role": "phase-or-research-report"
+  },
+  {
+   "path": "docs/startup_routing.md",
+   "size": 2559,
+   "mtime": "2026-09-22",
+   "category": "CURRENT_KNOWLEDGE",
+   "likely_role": "dev-facing-living-doc"
+  },
+  {
+   "path": "docs/adr/0001-python-backend.md",
+   "size": 453,
+   "mtime": "2026-09-22",
+   "category": "CURRENT_KNOWLEDGE",
+   "likely_role": "decision-record"
+  },
+  {
+   "path": "docs/adr/0002-single-service-architecture.md",
+   "size": 432,
+   "mtime": "2026-09-22",
+   "category": "CURRENT_KNOWLEDGE",
+   "likely_role": "decision-record"
+  },
+  {
+   "path": "docs/adr/0003-protocol-layer-separation.md",
+   "size": 463,
+   "mtime": "2026-09-22",
+   "category": "CURRENT_KNOWLEDGE",
+   "likely_role": "decision-record"
+  },
+  {
+   "path": "docs/adr/0004-asyncio-network-boundary.md",
+   "size": 675,
+   "mtime": "2026-09-22",
+   "category": "CURRENT_KNOWLEDGE",
+   "likely_role": "decision-record"
+  },
+  {
+   "path": "docs/adr/0005-bootstrap-service.md",
+   "size": 859,
+   "mtime": "2026-09-22",
+   "category": "CURRENT_KNOWLEDGE",
+   "likely_role": "decision-record"
+  },
+  {
+   "path": "release/RELEASE_BUILD_REPORT.md",
+   "size": 5514,
+   "mtime": "2026-09-24",
+   "category": "RELEASE_ARTIFACT",
+   "likely_role": "release"
+  },
+  {
+   "path": "reverse_data/effective_gameconfig.json",
+   "size": 775,
+   "mtime": "2026-09-22",
+   "category": "OTHER",
+   "likely_role": ""
+  },
+  {
+   "path": "reverse_data/README.md",
+   "size": 977,
+   "mtime": "2026-09-22",
+   "category": "OTHER",
+   "likely_role": ""
+  },
+  {
+   "path": "revival_client/PATCHES.md",
+   "size": 1416,
+   "mtime": "2026-09-22",
+   "category": "OTHER",
+   "likely_role": ""
+  },
+  {
+   "path": "revival_client/README.md",
+   "size": 760,
+   "mtime": "2026-09-22",
+   "category": "OTHER",
+   "likely_role": ""
+  },
+  {
+   "path": "revival_client/build/.gitkeep",
+   "size": 1,
+   "mtime": "2026-09-22",
+   "category": "OTHER",
+   "likely_role": ""
+  },
+  {
+   "path": "revival_client/build/42c44a368fc3544296d1e717a485b306.ab",
+   "size": 1536,
+   "mtime": "2026-09-22",
+   "category": "OTHER",
+   "likely_role": ""
+  },
+  {
+   "path": "revival_client/build/emulator.stderr.log",
+   "size": 0,
+   "mtime": "2026-09-22",
+   "category": "OTHER",
+   "likely_role": ""
+  },
+  {
+   "path": "revival_client/build/emulator.stdout.log",
+   "size": 8260,
+   "mtime": "2026-09-22",
+   "category": "OTHER",
+   "likely_role": ""
+  },
+  {
+   "path": "revival_client/build/emulator_continue.stderr.log",
+   "size": 0,
+   "mtime": "2026-09-22",
+   "category": "OTHER",
+   "likely_role": ""
+  },
+  {
+   "path": "revival_client/build/emulator_continue.stdout.log",
+   "size": 8046,
+   "mtime": "2026-09-22",
+   "category": "OTHER",
+   "likely_role": ""
+  },
+  {
+   "path": "revival_client/build/emulator_controlinfo.stderr.log",
+   "size": 0,
+   "mtime": "2026-09-22",
+   "category": "OTHER",
+   "likely_role": ""
+  },
+  {
+   "path": "revival_client/build/emulator_controlinfo.stdout.log",
+   "size": 8158,
+   "mtime": "2026-09-22",
+   "category": "OTHER",
+   "likely_role": ""
+  },
+  {
+   "path": "revival_client/build/first_contact_controlinfo.json",
+   "size": 306,
+   "mtime": "2026-09-22",
+   "category": "OTHER",
+   "likely_role": ""
+  },
+  {
+   "path": "revival_client/build/first_contact_result.json",
+   "size": 280,
+   "mtime": "2026-09-22",
+   "category": "OTHER",
+   "likely_role": ""
+  },
+  {
+   "path": "revival_client/build/first_contact_result_run2.json",
+   "size": 280,
+   "mtime": "2026-09-22",
+   "category": "OTHER",
+   "likely_role": ""
+  },
+  {
+   "path": "revival_client/build/revival-debug.jks",
+   "size": 2812,
+   "mtime": "2026-09-22",
+   "category": "OTHER",
+   "likely_role": ""
+  },
+  {
+   "path": "revival_client/build/X2_Eclipse_v2_4_Revival_v0.1-unsigned.apk",
+   "size": 2144761791,
+   "mtime": "2026-09-22",
+   "category": "OTHER",
+   "likely_role": ""
+  },
+  {
+   "path": "revival_client/build/X2_Eclipse_v2_4_Revival_v0.1.apk",
+   "size": 2146143060,
+   "mtime": "2026-09-22",
+   "category": "OTHER",
+   "likely_role": ""
+  },
+  {
+   "path": "revival_client/build/X2_Eclipse_v2_4_Revival_v0.2-signed.apk",
+   "size": 2146142970,
+   "mtime": "2026-09-22",
+   "category": "OTHER",
+   "likely_role": ""
+  },
+  {
+   "path": "revival_client/build/X2_Eclipse_v2_4_Revival_v0.2-unsigned.apk",
+   "size": 2144761791,
+   "mtime": "2026-09-22",
+   "category": "OTHER",
+   "likely_role": ""
+  },
+  {
+   "path": "revival_client/build/X2_Eclipse_v2_4_Revival_v0.2.apk",
+   "size": 2100538452,
+   "mtime": "2026-09-22",
+   "category": "OTHER",
+   "likely_role": ""
+  },
+  {
+   "path": "revival_client/build/x2_phase11.png",
+   "size": 58973,
+   "mtime": "2026-09-22",
+   "category": "OTHER",
+   "likely_role": ""
+  },
+  {
+   "path": "runtime/.gitkeep",
+   "size": 1,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/baseinfo_serial.txt",
+   "size": 17520,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/battle-entry-v2.err.log",
+   "size": 43836,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/battle-entry-v2.out.log",
+   "size": 0,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/battle-entry.err.log",
+   "size": 40678,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/battle-entry.out.log",
+   "size": 0,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/daily-drop-final.err.log",
+   "size": 101819,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/daily-drop-final.out.log",
+   "size": 0,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/daily-drop.err.log",
+   "size": 1762,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/daily-drop.out.log",
+   "size": 0,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/daily-fixed-reward.err.log",
+   "size": 73262,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/daily-fixed-reward.out.log",
+   "size": 0,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/decoder_disasm.txt",
+   "size": 16488,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/four-fixes.err.log",
+   "size": 264517,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/four-fixes.out.log",
+   "size": 0,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/login_receive_disasm.txt",
+   "size": 47761,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/netsync_disasm.txt",
+   "size": 20719,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/push_disasm.txt",
+   "size": 33757,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/reflect_disasm.txt",
+   "size": 6972,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/serverconfig_disasm.txt",
+   "size": 36728,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/all-section-20260924/server.err.log",
+   "size": 144,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/all-section-20260924/server.out.log",
+   "size": 0,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/all-section-expert-20260924/server.err.log",
+   "size": 75787,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/all-section-expert-20260924/server.out.log",
+   "size": 0,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/all-section-final-20260924/server.err.log",
+   "size": 62764,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/all-section-final-20260924/server.out.log",
+   "size": 0,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/backups/before-all-section-20260924-205337.sqlite3",
+   "size": 376832,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/backups/before-artifact-20260923-201619.sqlite3",
+   "size": 139264,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/backups/before-artifact-stage-correction-20260923-202254.sqlite3",
+   "size": 139264,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/backups/before-battle-entry-20260924-091231.sqlite3",
+   "size": 331776,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/backups/before-daily-drop-20260924.sqlite3",
+   "size": 339968,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/backups/before-daily-fixed-reward-20260924-095733.sqlite3",
+   "size": 339968,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/backups/before-dev-stamina-9999-20260924-124307.sqlite3",
+   "size": 352256,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/backups/before-gold-shop-20260924-202225.sqlite3",
+   "size": 356352,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/backups/before-phase20-state-repair-20260923-211800-7879e3.sqlite3",
+   "size": 208896,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/backups/before-test-inventory-20260923-202521.sqlite3",
+   "size": 139264,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/backups/before-test-inventory-20260923-202747.sqlite3",
+   "size": 139264,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/backups/before-test-inventory-20260923-203110.sqlite3",
+   "size": 200704,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/backups/before-test-inventory-20260923-204505.sqlite3",
+   "size": 200704,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/backups/pre_wish_draw_20260923.sqlite3",
+   "size": 241664,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/backups/pre_wish_rotation_20260923.sqlite3",
+   "size": 266240,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/challenge-flag-20260924/server.err.log",
+   "size": 42948,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/challenge-flag-20260924/server.out.log",
+   "size": 0,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/dev-resume-20260924/server.err.log",
+   "size": 44772,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/dev-resume-20260924/server.out.log",
+   "size": 0,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/gold-probe-20260924/server.err.log",
+   "size": 40751,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/gold-probe-20260924/server.out.log",
+   "size": 0,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/gold-probe-fixed-20260924/server.err.log",
+   "size": 38842,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/gold-probe-fixed-20260924/server.out.log",
+   "size": 0,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/gold-probe-restart-20260924/server.err.log",
+   "size": 56945,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/gold-probe-restart-20260924/server.out.log",
+   "size": 0,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/gold-shop-20260924/server.err.log",
+   "size": 56771,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/gold-shop-20260924/server.out.log",
+   "size": 0,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/mumu/adb_probe.txt",
+   "size": 14,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/mumu/adb_probe_roundtrip.txt",
+   "size": 14,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/mumu/afterstart.png",
+   "size": 1187781,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/mumu/field.png",
+   "size": 1051022,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/mumu/launch01.png",
+   "size": 1226226,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/mumu/login01.png",
+   "size": 1231414,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/mumu/loginfilled.png",
+   "size": 1236950,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/mumu/relaunch.png",
+   "size": 1265807,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/mumu/relaunch2.png",
+   "size": 1238809,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase12/cold01-boot-tail.log",
+   "size": 3470,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase12/cold01-emulator.stderr.log",
+   "size": 0,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase12/cold01-emulator.stdout.log",
+   "size": 7793,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase12/cold01-logcat.log",
+   "size": 186485,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase12/cold01.png",
+   "size": 10608,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase12/gles01-emulator.stderr.log",
+   "size": 0,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase12/gles01-emulator.stdout.log",
+   "size": 8823,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase12/host01-emulator.stderr.log",
+   "size": 0,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase12/host01-emulator.stdout.log",
+   "size": 7968,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase12/gles01/logcat.log",
+   "size": 178034,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase12/gles01/result.json",
+   "size": 1286,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase12/gles01/screen.png",
+   "size": 2324742,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase12/gles01/ui.xml",
+   "size": 1754,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase12/gles02/emulator.stderr.log",
+   "size": 0,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase12/gles02/emulator.stdout.log",
+   "size": 7411,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase12/gles02/launch.json",
+   "size": 504,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase12/gles02/probe/result.json",
+   "size": 727,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase12/gles03/emulator.stderr.log",
+   "size": 0,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase12/gles03/emulator.stdout.log",
+   "size": 7412,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase12/gles03/launch.json",
+   "size": 504,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase12/gles03/probe/logcat.log",
+   "size": 177090,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase12/gles03/probe/result.json",
+   "size": 1432,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase12/gles03/probe/screen.png",
+   "size": 2277967,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase12/gles03/probe/ui.xml",
+   "size": 1754,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase12/gles04/emulator.stderr.log",
+   "size": 0,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase12/gles04/emulator.stdout.log",
+   "size": 7411,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase12/gles04/launch.json",
+   "size": 504,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase12/gles04/probe/logcat.log",
+   "size": 193040,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase12/gles04/probe/result.json",
+   "size": 1432,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase12/gles04/probe/screen.png",
+   "size": 2310990,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase12/gles04/probe/ui.xml",
+   "size": 1754,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase12/host01/logcat.log",
+   "size": 178716,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase12/host01/result.json",
+   "size": 1285,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase12/host01/screen.png",
+   "size": 10608,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase12/host01/ui.xml",
+   "size": 1754,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase13/account-contact-repeat.json",
+   "size": 857,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase13/account-contact.json",
+   "size": 736,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase13/account-filled.png",
+   "size": 2214494,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase13/account-logcat.log",
+   "size": 57536,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase13/account-screen-later.png",
+   "size": 2212275,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase13/account-screen.png",
+   "size": 2311699,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase13/account-server-repeat.log",
+   "size": 2016,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase13/account-server.log",
+   "size": 3062,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase13/baseline-emulator.stderr.log",
+   "size": 0,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase13/baseline-emulator.stdout.log",
+   "size": 6795,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase13/keyboard.png",
+   "size": 800966,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase13/lebian-contact.json",
+   "size": 305,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase13/lebian-logcat.log",
+   "size": 154531,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase13/lebian-server.log",
+   "size": 827,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase13/login-result.png",
+   "size": 2224138,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase13/signing.log",
+   "size": 50,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase14/before.png",
+   "size": 2229200,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase14/player.before-four-fixes.sqlite3",
+   "size": 319488,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase14/player.sqlite3",
+   "size": 385024,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase14/probe01-logcat.log",
+   "size": 8890,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase14/probe01-server.log",
+   "size": 2227,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase14/probe02-after.png",
+   "size": 737951,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase14/probe02-before.png",
+   "size": 2306968,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase14/probe02-logcat.log",
+   "size": 437566,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase14/probe02-ready.png",
+   "size": 2214534,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase14/probe02-server.log",
+   "size": 4835,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase14/probe03-logcat.log",
+   "size": 362241,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase14/probe03-ready.png",
+   "size": 2209364,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase14/probe03-server.log",
+   "size": 11082,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase14/probe04-after.png",
+   "size": 510199,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase14/probe04-logcat.log",
+   "size": 510135,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase14/probe04-ready.png",
+   "size": 2217202,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase14/probe04-server.log",
+   "size": 13925,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase14/probe05-after.png",
+   "size": 742300,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase14/probe05-logcat.log",
+   "size": 87081,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase14/probe05-login.png",
+   "size": 2225428,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase14/probe05-ready.png",
+   "size": 2296149,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase14/probe05-server.log",
+   "size": 878,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase14/probe06-after.png",
+   "size": 1272649,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase14/probe06-logcat.log",
+   "size": 382176,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase14/probe06-server.log",
+   "size": 4027,
+   "mtime": "2026-09-22",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/base-serialize.txt",
+   "size": 69651,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/before-lobby.sqlite3",
+   "size": 12288,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/C2L_AccountBuffAutoStop.txt",
+   "size": 15613,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/C2L_AccountBuffData.txt",
+   "size": 5027,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/C2L_ButtonClick.txt",
+   "size": 2714,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/C2L_EntryidStatus.txt",
+   "size": 15584,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/C2L_EquipAll.txt",
+   "size": 15569,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/C2L_GameTask.txt",
+   "size": 15614,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/C2L_MoonEquip.txt",
+   "size": 15599,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/C2L_NoticPushInfo.txt",
+   "size": 13399,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/C2L_QueryActivity.txt",
+   "size": 15596,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/C2L_QueryActivityDrawInfo.txt",
+   "size": 15620,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/C2L_QueryCollectionAward.txt",
+   "size": 15616,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/C2L_QueryDivination.txt",
+   "size": 13403,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/C2L_QueryIllustrationData.txt",
+   "size": 15619,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/C2L_QueryItemLimitTime.txt",
+   "size": 13414,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/C2L_QueryMission.txt",
+   "size": 15593,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/C2L_QueryNotic.txt",
+   "size": 13409,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/C2L_QueryReturnInfo.txt",
+   "size": 13405,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/C2L_QuerySimpleActivity.txt",
+   "size": 15621,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/C2L_QueryStarPrivilegeInfo.txt",
+   "size": 15623,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/C2L_QueryStarPrivilegeReward.txt",
+   "size": 15629,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/C2L_QueryTelInfo.txt",
+   "size": 13395,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/C2L_QueryWorldBossOpenTime.txt",
+   "size": 15620,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/C2L_ReceiveGiftRew.txt",
+   "size": 15614,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/C2L_SeasonIcon.txt",
+   "size": 13389,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/C2L_SystemInfo.txt",
+   "size": 13390,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/chat-init.txt",
+   "size": 18837,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/current_screen.png",
+   "size": 2155911,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/divination-callback.txt",
+   "size": 11017,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/heart-tick.txt",
+   "size": 7202,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/heartbeat.txt",
+   "size": 5652,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/hero-base-refresh.txt",
+   "size": 9824,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/hero-data.txt",
+   "size": 36621,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/hero-godequip-refresh.txt",
+   "size": 11577,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/hero-receive.txt",
+   "size": 5165,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/hero-refresh.txt",
+   "size": 36778,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/hero-serialize.txt",
+   "size": 39965,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/hero-unlock.txt",
+   "size": 2555,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/heroall.txt",
+   "size": 7635,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/hero_screen.png",
+   "size": 1203679,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/L2C_AccountBuffAutoStop.txt",
+   "size": 15762,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/L2C_AccountBuffData.txt",
+   "size": 9255,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/L2C_ButtonClick.txt",
+   "size": 3669,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/L2C_EntryidStatus.txt",
+   "size": 15779,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/L2C_EquipAll.txt",
+   "size": 15705,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/L2C_GameTask.txt",
+   "size": 15356,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/L2C_MoonEquip.txt",
+   "size": 15340,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/L2C_NoticPushInfo.txt",
+   "size": 13454,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/L2C_QueryActivity.txt",
+   "size": 15740,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/L2C_QueryActivityDrawInfo.txt",
+   "size": 15769,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/L2C_QueryCollectionAward.txt",
+   "size": 15747,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/L2C_QueryDivination.txt",
+   "size": 13372,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/L2C_QueryIllustrationData.txt",
+   "size": 15714,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/L2C_QueryItemLimitTime.txt",
+   "size": 13464,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/L2C_QueryMission.txt",
+   "size": 15490,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/L2C_QueryNotic.txt",
+   "size": 13373,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/L2C_QueryReturnInfo.txt",
+   "size": 13396,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/L2C_QuerySharedMessage.txt",
+   "size": 7210,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/L2C_QuerySimpleActivity.txt",
+   "size": 15382,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/L2C_QueryStarPrivilegeInfo.txt",
+   "size": 15646,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/L2C_QueryStarPrivilegeReward.txt",
+   "size": 15785,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/L2C_QueryTelInfo.txt",
+   "size": 13432,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/L2C_QueryWorldBossOpenTime.txt",
+   "size": 15652,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/L2C_ReceiveGiftRew.txt",
+   "size": 15544,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/L2C_SeasonIcon.txt",
+   "size": 13102,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/L2C_SystemInfo.txt",
+   "size": 13385,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/mainani.txt",
+   "size": 5153,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/mainhall-sync.txt",
+   "size": 14328,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/mission_screen.png",
+   "size": 1500658,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/mobility.txt",
+   "size": 4761,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/notic-callback.txt",
+   "size": 6874,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/probe01-server.log",
+   "size": 878,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/probe02-after.png",
+   "size": 1695858,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/probe02-logcat.log",
+   "size": 212567,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/probe02-server.log",
+   "size": 86087,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/probe03-after.png",
+   "size": 1721200,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/probe03-logcat.log",
+   "size": 102262,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/probe03-login.png",
+   "size": 2317629,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/probe03-ready.png",
+   "size": 2219234,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/probe03-server.log",
+   "size": 30936,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/probe04-after.png",
+   "size": 2116169,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/probe04-bag-logcat.log",
+   "size": 111491,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/probe04-bag.png",
+   "size": 1745209,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/probe04-logcat.log",
+   "size": 88029,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/probe04-ready.png",
+   "size": 2226699,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/probe04-server.log",
+   "size": 7709,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/probe05-bag.png",
+   "size": 1745209,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/probe05-final-logcat.log",
+   "size": 518783,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/probe05-final.png",
+   "size": 2087749,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/probe05-lobby.png",
+   "size": 2123385,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/probe05-ready.png",
+   "size": 2221833,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/probe05-server-snapshot.log",
+   "size": 6846,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/probe05-server.log",
+   "size": 10451,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/season-callback.txt",
+   "size": 11451,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase15/window-start.png",
+   "size": 2233742,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase16/before-hero-mobility.sqlite3",
+   "size": 12288,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase16/current_screen.png",
+   "size": 2161322,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase16/hero_screen.png",
+   "size": 1446905,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase16/mission_screen.png",
+   "size": 1588968,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase16/section_screen.png",
+   "size": 1859397,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase17/after-back.png",
+   "size": 1079568,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase17/battle-attempt.png",
+   "size": 1219835,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase17/chapter.png",
+   "size": 1859396,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase17/current.png",
+   "size": 2281614,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase17/hero-choice.png",
+   "size": 1057185,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase17/hero.png",
+   "size": 1446885,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase17/main.png",
+   "size": 1589652,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase17/overlap-retest.png",
+   "size": 1297135,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase17/return-hero.png",
+   "size": 2113937,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase17/return-main.png",
+   "size": 2119842,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase17/return-selector.png",
+   "size": 1297145,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase17/selector.png",
+   "size": 1219682,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase17/server-20260923-143500.err.log",
+   "size": 16137,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase17/server-20260923-143500.out.log",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase17/server-20260923-1442.err.log",
+   "size": 21329,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase17/server-20260923-1442.out.log",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase17/server-20260923-1457.err.log",
+   "size": 57667,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase17/server-20260923-1457.out.log",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase17/start-immediate.png",
+   "size": 1079568,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase17/team-confirm.png",
+   "size": 1057185,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase17/team-confirm2.png",
+   "size": 1057185,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/after-result06.png",
+   "size": 1859404,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/after-timeout.png",
+   "size": 915925,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/battle-ready.png",
+   "size": 2132639,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/battle01-later.png",
+   "size": 1610282,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/battle01.log",
+   "size": 5487,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/battle01.png",
+   "size": 1607869,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/before-battle.sqlite3",
+   "size": 12288,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/before.log",
+   "size": 2287315,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/before.png",
+   "size": 2136942,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/chapter.png",
+   "size": 1859384,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/chat-disasm.txt",
+   "size": 31938,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/chat-login.png",
+   "size": 2220287,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/chat-ui.log",
+   "size": 5234,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/checkout-receive.txt",
+   "size": 36814,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/checkout-send.txt",
+   "size": 33662,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/checkout.png",
+   "size": 2508355,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/cold-fight-later.png",
+   "size": 1494784,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/cold-fight.png",
+   "size": 1611265,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/cold-hall.png",
+   "size": 2127994,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/cold-login.png",
+   "size": 2282284,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/cold-login2.png",
+   "size": 2211811,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/cold-team.png",
+   "size": 1154617,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/college-disasm.txt",
+   "size": 8828,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/config.json",
+   "size": 13519,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/end-skip.png",
+   "size": 794193,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/fight-attempt.png",
+   "size": 913065,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/fight-convert.txt",
+   "size": 16774,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/fight-hero-serialize.txt",
+   "size": 33873,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/fight-receive.txt",
+   "size": 20185,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/final-hall.png",
+   "size": 2155887,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/growth-serialize.txt",
+   "size": 25786,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/hall04.png",
+   "size": 2163361,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/hero-choose.png",
+   "size": 1112945,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/hero-convert.txt",
+   "size": 51216,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/loadscene.txt",
+   "size": 8660,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/login06.png",
+   "size": 2216639,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/mission.png",
+   "size": 1584796,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/move-skill.png",
+   "size": 2740022,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/nested-return.png",
+   "size": 2234495,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/overlap.png",
+   "size": 2131876,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/playfield.png",
+   "size": 2690967,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/ready04.png",
+   "size": 983042,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/relogin04.png",
+   "size": 2220247,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/repro.log",
+   "size": 91,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/result06.png",
+   "size": 1617644,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/select.png",
+   "size": 1154568,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/server01.err.log",
+   "size": 10520,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/server01.out.log",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/server02.err.log",
+   "size": 11142,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/server02.out.log",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/server03.err.log",
+   "size": 73680,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/server03.out.log",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/server04.err.log",
+   "size": 10650,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/server04.out.log",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/server05.err.log",
+   "size": 878,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/server05.out.log",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/server06.err.log",
+   "size": 15586,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/server06.out.log",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/skip-dialog.png",
+   "size": 795309,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/ui-back.txt",
+   "size": 14122,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/user-completed.png",
+   "size": 1585824,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase18/user-finish06.png",
+   "size": 1555005,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase19/before-economy.sqlite3",
+   "size": 28672,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase19/chapter01.png",
+   "size": 1576705,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase19/claimed01.png",
+   "size": 1563467,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase19/hall01.png",
+   "size": 2159857,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase19/hall02.png",
+   "size": 2158747,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase19/login02.png",
+   "size": 2224825,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase19/login03.png",
+   "size": 2233952,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase19/mission01.png",
+   "size": 1859398,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase19/restart02.png",
+   "size": 752846,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase19/server01.err.log",
+   "size": 12114,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase19/server01.out.log",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase19/server02.err.log",
+   "size": 45419,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase19/server02.out.log",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase19/shop-refresh01.png",
+   "size": 1513458,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase19/shop01.png",
+   "size": 1776119,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase19/shop02.png",
+   "size": 1776119,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase19/start01.png",
+   "size": 757820,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase19/tasks01.png",
+   "size": 2133525,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase19/tasks02.png",
+   "size": 711164,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase19/tasks03.png",
+   "size": 1563467,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase19/team01.png",
+   "size": 1154713,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/after-single.png",
+   "size": 1176736,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/artifact-current.png",
+   "size": 296821,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/artifact-fix.err.log",
+   "size": 130155,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/artifact-fix.out.log",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/artifact-probe.err.log",
+   "size": 123337,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/artifact-probe.out.log",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/artifact-stage-fix.err.log",
+   "size": 346542,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/artifact-stage-fix.out.log",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/before-phase20.sqlite3",
+   "size": 90112,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/disasm.py",
+   "size": 790,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/equipment-followup.png",
+   "size": 542173,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/final-lobby.png",
+   "size": 1219229,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/growth-corrected-screen.png",
+   "size": 474183,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/growth-corrected-screen2.png",
+   "size": 651574,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/growth-corrected.err.log",
+   "size": 57175,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/growth-corrected.out.log",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/growth-final.err.log",
+   "size": 148377,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/growth-final.out.log",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/growth-followup.err.log",
+   "size": 67196,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/growth-followup.out.log",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/growth-followup2.err.log",
+   "size": 242,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/growth-followup2.out.log",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/growth-followup3.err.log",
+   "size": 312225,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/growth-followup3.out.log",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/hero-detail.png",
+   "size": 1039745,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/hero-level2.png",
+   "size": 849978,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/hero-list.png",
+   "size": 812455,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/hero-upgrade.png",
+   "size": 866853,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/jewel-missing-fixed.png",
+   "size": 1374321,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/jewel-missing-fixed2.png",
+   "size": 1401603,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/jewel-missing-selected.png",
+   "size": 214570,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/jewel-next-rotation.png",
+   "size": 1087992,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/jewel-next-selected.png",
+   "size": 1098874,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/jewel-probe.err.log",
+   "size": 98314,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/jewel-probe.out.log",
+   "size": 0,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/jewel_thumbnail_probe.sqlite3",
+   "size": 274432,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/jewel_thumbnail_probe_server.py",
+   "size": 490,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/libil2cpp-thumbcheck.so",
+   "size": 88855552,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/libil2cpp-thumbcomplete.so",
+   "size": 88855552,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/libil2cpp-thumbdirect.so",
+   "size": 88855552,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/libil2cpp-thumbfallback-final.so",
+   "size": 88855552,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/libil2cpp-thumbfallback-regenerated.so",
+   "size": 88855552,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/libil2cpp-thumbfallback.so",
+   "size": 88855552,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/libil2cpp-thumbtest.so",
+   "size": 88855552,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/limited-after-single.png",
+   "size": 993351,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/lobby-0924.png",
+   "size": 1197207,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/lobby.png",
+   "size": 1194095,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/now.png",
+   "size": 1241160,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/other-up-after-single.png",
+   "size": 1019285,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pre_banner_probe.sqlite3",
+   "size": 274432,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/relogin.png",
+   "size": 709386,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/restored-client.png",
+   "size": 1232117,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/restored-lobby.png",
+   "size": 1212991,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/schedule-first-limited.png",
+   "size": 991278,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/schedule-first-rotation.png",
+   "size": 1044979,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/schedule-first-up.png",
+   "size": 1172718,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/schedule-probe.err.log",
+   "size": 330,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/schedule-probe.out.log",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/schedule-shift.err.log",
+   "size": 53477,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/schedule-shift.out.log",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/schedule-shifted-client.png",
+   "size": 1185143,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/schedule-shifted-confirm.png",
+   "size": 511597,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/schedule_probe.sqlite3",
+   "size": 274432,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/schedule_probe_server.py",
+   "size": 992,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/server01.err.log",
+   "size": 15448,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/server01.out.log",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/server02.err.log",
+   "size": 12511,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/server02.out.log",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/server03.err.log",
+   "size": 48814,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/server03.out.log",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/single-confirm.png",
+   "size": 522096,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/single-result.png",
+   "size": 1048003,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/single-result2.png",
+   "size": 501738,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/start.png",
+   "size": 1234908,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/ten-after-hero.png",
+   "size": 829485,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/ten-confirm.png",
+   "size": 1206983,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/ten-confirm2.png",
+   "size": 521407,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/ten-probe-wish.png",
+   "size": 1026342,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/ten-probe.err.log",
+   "size": 230,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/ten-probe.out.log",
+   "size": 0,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/ten-probe2.err.log",
+   "size": 118355,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/ten-probe2.out.log",
+   "size": 0,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/ten-result-stage.png",
+   "size": 904494,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/ten_result_probe.sqlite3",
+   "size": 274432,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/ten_result_probe_server.py",
+   "size": 645,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/test-inventory.err.log",
+   "size": 214166,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/test-inventory.out.log",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/thumbdirect-wish.png",
+   "size": 1108078,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/thumbfallback-wish.png",
+   "size": 1096405,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/thumbfinal-wish.png",
+   "size": 1074164,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/thumbpatch-launch.png",
+   "size": 1242815,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/thumbpatch-wish.png",
+   "size": 957168,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-0924.png",
+   "size": 1053963,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-after-confirm.png",
+   "size": 1096343,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-after-single.png",
+   "size": 1013579,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-after-swipe.png",
+   "size": 195556,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-after-ten.png",
+   "size": 1001946,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-blank-selected.png",
+   "size": 1207767,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-clock-newcomer.png",
+   "size": 1045361,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-clock.err.log",
+   "size": 34758,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-clock.out.log",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-confirm2.png",
+   "size": 497852,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-draw.err.log",
+   "size": 39873,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-draw.out.log",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-entry.png",
+   "size": 471407,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-entry2.png",
+   "size": 308070,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-final-live.png",
+   "size": 1082456,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-final.err.log",
+   "size": 36050,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-final.out.log",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-lobby.png",
+   "size": 1171129,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-normal-item.png",
+   "size": 518178,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-normal-result.png",
+   "size": 192499,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-normal-tab.png",
+   "size": 1036061,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-normal.err.log",
+   "size": 37218,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-normal.out.log",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-pool-entry3.png",
+   "size": 1040141,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-pool-login.png",
+   "size": 1238385,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-pool-login2.png",
+   "size": 1182033,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-pool.err.log",
+   "size": 130882,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-pool.out.log",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-ready.err.log",
+   "size": 37248,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-ready.out.log",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-ready.png",
+   "size": 1022722,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-real-final.err.log",
+   "size": 33997,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-real-final.out.log",
+   "size": 0,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-real.err.log",
+   "size": 1756,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-real.out.log",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-real2.err.log",
+   "size": 35606,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-real2.out.log",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-real3.err.log",
+   "size": 164379,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-real3.out.log",
+   "size": 0,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-relaunch.png",
+   "size": 1265978,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-relaunch2.png",
+   "size": 1236915,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-reset-entry.png",
+   "size": 1062144,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-result2.png",
+   "size": 516429,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-rotation-before-start.png",
+   "size": 1019991,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-rotation.err.log",
+   "size": 36075,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-rotation.out.log",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-service-final.err.log",
+   "size": 74340,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-service-final.out.log",
+   "size": 0,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-single-before.png",
+   "size": 502834,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-single-fixed.png",
+   "size": 1039702,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-single-result.png",
+   "size": 1042402,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-ten-animation.png",
+   "size": 717583,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-ten-confirm.png",
+   "size": 487955,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-ten-final-result.png",
+   "size": 999396,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-ten-guarantee-result.png",
+   "size": 818116,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-ten-guarantee.png",
+   "size": 874453,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-ten-result.png",
+   "size": 672590,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/wish-two-pools.png",
+   "size": 1029231,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/bin/readelf.py",
+   "size": 92917,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/arm.py",
+   "size": 2154,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/arm64.py",
+   "size": 2428,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/arm64_const.py",
+   "size": 81768,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/arm_const.py",
+   "size": 17295,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/bpf.py",
+   "size": 1438,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/bpf_const.py",
+   "size": 2160,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/evm.py",
+   "size": 383,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/evm_const.py",
+   "size": 3292,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/m680x.py",
+   "size": 2065,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/m680x_const.py",
+   "size": 8885,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/m68k.py",
+   "size": 2438,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/m68k_const.py",
+   "size": 10489,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/mips.py",
+   "size": 1001,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/mips_const.py",
+   "size": 18592,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/mos65xx.py",
+   "size": 998,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/mos65xx_const.py",
+   "size": 3393,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/ppc.py",
+   "size": 1384,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/ppc_const.py",
+   "size": 45023,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/riscv.py",
+   "size": 1104,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/riscv_const.py",
+   "size": 10953,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/sh.py",
+   "size": 1478,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/sh_const.py",
+   "size": 7154,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/sparc.py",
+   "size": 1127,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/sparc_const.py",
+   "size": 9738,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/systemz.py",
+   "size": 1115,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/sysz_const.py",
+   "size": 56291,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/tms320c64x.py",
+   "size": 1672,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/tms320c64x_const.py",
+   "size": 7257,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/tricore.py",
+   "size": 1123,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/tricore_const.py",
+   "size": 12010,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/wasm.py",
+   "size": 1627,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/wasm_const.py",
+   "size": 5132,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/x86.py",
+   "size": 2816,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/x86_const.py",
+   "size": 45756,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/xcore.py",
+   "size": 1082,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/xcore_const.py",
+   "size": 3424,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/__init__.py",
+   "size": 43853,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/include/capstone/arm.h",
+   "size": 20872,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/include/capstone/arm64.h",
+   "size": 86980,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/include/capstone/bpf.h",
+   "size": 4308,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/include/capstone/capstone.h",
+   "size": 34908,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/include/capstone/evm.h",
+   "size": 4574,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/include/capstone/m680x.h",
+   "size": 12857,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/include/capstone/m68k.h",
+   "size": 14468,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/include/capstone/mips.h",
+   "size": 18000,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/include/capstone/mos65xx.h",
+   "size": 5991,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/include/capstone/platform.h",
+   "size": 4132,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/include/capstone/ppc.h",
+   "size": 40378,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/include/capstone/riscv.h",
+   "size": 13799,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/include/capstone/sh.h",
+   "size": 8238,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/include/capstone/sparc.h",
+   "size": 11817,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/include/capstone/systemz.h",
+   "size": 47232,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/include/capstone/tms320c64x.h",
+   "size": 8621,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/include/capstone/tricore.h",
+   "size": 13257,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/include/capstone/wasm.h",
+   "size": 6441,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/include/capstone/x86.h",
+   "size": 45041,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/include/capstone/xcore.h",
+   "size": 5154,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone/lib/capstone.dll",
+   "size": 7576576,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone-5.0.9.dist-info/INSTALLER",
+   "size": 4,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone-5.0.9.dist-info/LICENSE.TXT",
+   "size": 1718,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone-5.0.9.dist-info/METADATA",
+   "size": 3418,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone-5.0.9.dist-info/RECORD",
+   "size": 7177,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone-5.0.9.dist-info/REQUESTED",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone-5.0.9.dist-info/top_level.txt",
+   "size": 9,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/capstone-5.0.9.dist-info/WHEEL",
+   "size": 97,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/py.typed",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/__init__.py",
+   "size": 267,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/common/construct_utils.py",
+   "size": 5070,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/common/exceptions.py",
+   "size": 512,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/common/utils.py",
+   "size": 4660,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/common/__init__.py",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/construct/adapters.py",
+   "size": 19495,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/construct/core.py",
+   "size": 49248,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/construct/debug.py",
+   "size": 4304,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/construct/macros.py",
+   "size": 24996,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/construct/__init__.py",
+   "size": 5031,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/construct/lib/binary.py",
+   "size": 2780,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/construct/lib/bitstream.py",
+   "size": 2641,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/construct/lib/container.py",
+   "size": 5363,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/construct/lib/hex.py",
+   "size": 1368,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/construct/lib/__init__.py",
+   "size": 264,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/dwarf/abbrevtable.py",
+   "size": 3036,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/dwarf/aranges.py",
+   "size": 5559,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/dwarf/callframe.py",
+   "size": 32237,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/dwarf/compileunit.py",
+   "size": 11322,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/dwarf/constants.py",
+   "size": 6576,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/dwarf/datatype_cpp.py",
+   "size": 9497,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/dwarf/descriptions.py",
+   "size": 28705,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/dwarf/die.py",
+   "size": 16485,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/dwarf/dwarfinfo.py",
+   "size": 32693,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/dwarf/dwarf_expr.py",
+   "size": 11698,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/dwarf/dwarf_util.py",
+   "size": 3494,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/dwarf/enums.py",
+   "size": 22908,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/dwarf/lineprogram.py",
+   "size": 12528,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/dwarf/locationlists.py",
+   "size": 21017,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/dwarf/namelut.py",
+   "size": 7419,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/dwarf/ranges.py",
+   "size": 10778,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/dwarf/structs.py",
+   "size": 27067,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/dwarf/typeunit.py",
+   "size": 10776,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/dwarf/__init__.py",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/ehabi/constants.py",
+   "size": 32,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/ehabi/decoder.py",
+   "size": 12287,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/ehabi/ehabiinfo.py",
+   "size": 8859,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/ehabi/structs.py",
+   "size": 1417,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/ehabi/__init__.py",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/elf/constants.py",
+   "size": 4888,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/elf/descriptions.py",
+   "size": 33425,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/elf/dynamic.py",
+   "size": 15775,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/elf/elffile.py",
+   "size": 44966,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/elf/enums.py",
+   "size": 50544,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/elf/gnuversions.py",
+   "size": 9362,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/elf/hash.py",
+   "size": 9078,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/elf/notes.py",
+   "size": 3483,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/elf/relocation.py",
+   "size": 24376,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/elf/sections.py",
+   "size": 22016,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/elf/segments.py",
+   "size": 5536,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/elf/structs.py",
+   "size": 25390,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/elftools/elf/__init__.py",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/pyelftools-0.33.dist-info/INSTALLER",
+   "size": 4,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/pyelftools-0.33.dist-info/METADATA",
+   "size": 1003,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/pyelftools-0.33.dist-info/RECORD",
+   "size": 8097,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/pyelftools-0.33.dist-info/REQUESTED",
+   "size": 0,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/pyelftools-0.33.dist-info/top_level.txt",
+   "size": 9,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/pyelftools-0.33.dist-info/WHEEL",
+   "size": 91,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/phase20/pydeps/pyelftools-0.33.dist-info/licenses/LICENSE",
+   "size": 1534,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/shop-diagnostic-20260924/server.err.log",
+   "size": 62911,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/shop-diagnostic-20260924/server.out.log",
+   "size": 0,
+   "mtime": "2026-09-24",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/startup-help/after-login.png",
+   "size": 2131031,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/startup-help/before-crash.log",
+   "size": 19170,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/startup-help/before-logcat.log",
+   "size": 3001220,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/startup-help/cold-logcat.log",
+   "size": 805266,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/startup-help/cold-progress.png",
+   "size": 2219592,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/startup-help/cold-start.png",
+   "size": 2148042,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "runtime/startup-help/retry-logcat.log",
+   "size": 83917,
+   "mtime": "2026-09-23",
+   "category": "RUNTIME_DATA",
+   "likely_role": "runtime-active-or-logs"
+  },
+  {
+   "path": "src/x2server/__init__.py",
+   "size": 74,
+   "mtime": "2026-09-22",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/bootstrap/http_server.py",
+   "size": 5155,
+   "mtime": "2026-09-22",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/bootstrap/local_identity.py",
+   "size": 4354,
+   "mtime": "2026-09-23",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/bootstrap/models.py",
+   "size": 13331,
+   "mtime": "2026-09-22",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/bootstrap/service.py",
+   "size": 3046,
+   "mtime": "2026-09-22",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/bootstrap/__init__.py",
+   "size": 53,
+   "mtime": "2026-09-22",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/config/logging.py",
+   "size": 1172,
+   "mtime": "2026-09-22",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/config/settings.py",
+   "size": 3274,
+   "mtime": "2026-09-22",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/config/__init__.py",
+   "size": 41,
+   "mtime": "2026-09-22",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/data/battle_entry_catalog.json",
+   "size": 612213,
+   "mtime": "2026-09-24",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/data/battle_hero_base.json",
+   "size": 16956,
+   "mtime": "2026-09-24",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/data/battle_rewards_catalog.json",
+   "size": 184211,
+   "mtime": "2026-09-24",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/data/economy_catalog.json",
+   "size": 1358468,
+   "mtime": "2026-09-24",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/data/jewel_ids.json",
+   "size": 1385,
+   "mtime": "2026-09-24",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/data/progression_catalog.json",
+   "size": 267582,
+   "mtime": "2026-09-23",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/data/reward_items.json",
+   "size": 338355,
+   "mtime": "2026-09-25",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/data/wish_catalog.json",
+   "size": 279758,
+   "mtime": "2026-09-23",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/messages/battle.py",
+   "size": 4376,
+   "mtime": "2026-09-25",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/messages/chat.py",
+   "size": 602,
+   "mtime": "2026-09-23",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/messages/core.py",
+   "size": 6702,
+   "mtime": "2026-09-23",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/messages/economy.py",
+   "size": 4001,
+   "mtime": "2026-09-24",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/messages/equipment.py",
+   "size": 1400,
+   "mtime": "2026-09-23",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/messages/lobby.py",
+   "size": 6472,
+   "mtime": "2026-09-24",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/messages/progression.py",
+   "size": 1126,
+   "mtime": "2026-09-23",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/messages/README.md",
+   "size": 257,
+   "mtime": "2026-09-22",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/messages/wish.py",
+   "size": 1480,
+   "mtime": "2026-09-23",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/messages/__init__.py",
+   "size": 43,
+   "mtime": "2026-09-22",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/network/connection.py",
+   "size": 6723,
+   "mtime": "2026-09-24",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/network/dispatcher.py",
+   "size": 3066,
+   "mtime": "2026-09-23",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/network/server.py",
+   "size": 5073,
+   "mtime": "2026-09-22",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/network/session.py",
+   "size": 1380,
+   "mtime": "2026-09-22",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/network/__init__.py",
+   "size": 68,
+   "mtime": "2026-09-22",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/player/battle.py",
+   "size": 18191,
+   "mtime": "2026-09-25",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/player/battle_entry.py",
+   "size": 5416,
+   "mtime": "2026-09-24",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/player/chat.py",
+   "size": 1015,
+   "mtime": "2026-09-23",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/player/economy.py",
+   "size": 38038,
+   "mtime": "2026-09-25",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/player/equipment.py",
+   "size": 8591,
+   "mtime": "2026-09-23",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/player/hero.py",
+   "size": 2077,
+   "mtime": "2026-09-24",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/player/lobby.py",
+   "size": 3410,
+   "mtime": "2026-09-23",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/player/login.py",
+   "size": 6547,
+   "mtime": "2026-09-25",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/player/progression.py",
+   "size": 14997,
+   "mtime": "2026-09-25",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/player/reward_system.py",
+   "size": 6233,
+   "mtime": "2026-09-25",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/player/server_clock.py",
+   "size": 571,
+   "mtime": "2026-09-23",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/player/shop.py",
+   "size": 7885,
+   "mtime": "2026-09-24",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/player/store.py",
+   "size": 4588,
+   "mtime": "2026-09-25",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/player/task_calendar.py",
+   "size": 754,
+   "mtime": "2026-09-23",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/player/wish.py",
+   "size": 17160,
+   "mtime": "2026-09-24",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/player/__init__.py",
+   "size": 37,
+   "mtime": "2026-09-22",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/protocol/codec.py",
+   "size": 2906,
+   "mtime": "2026-09-22",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/protocol/crc.py",
+   "size": 290,
+   "mtime": "2026-09-22",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/protocol/errors.py",
+   "size": 745,
+   "mtime": "2026-09-22",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/protocol/framing.py",
+   "size": 5488,
+   "mtime": "2026-09-22",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/protocol/headers.py",
+   "size": 3329,
+   "mtime": "2026-09-22",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/protocol/packint.py",
+   "size": 2733,
+   "mtime": "2026-09-22",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/protocol/protobuf.py",
+   "size": 7120,
+   "mtime": "2026-09-22",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/protocol/registry.py",
+   "size": 6496,
+   "mtime": "2026-09-25",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/protocol/types.py",
+   "size": 574,
+   "mtime": "2026-09-22",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "src/x2server/protocol/__init__.py",
+   "size": 52,
+   "mtime": "2026-09-22",
+   "category": "TOOLING_CODE",
+   "likely_role": "server-source"
+  },
+  {
+   "path": "tests/__init__.py",
+   "size": 29,
+   "mtime": "2026-09-22",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/fixtures/README.md",
+   "size": 440,
+   "mtime": "2026-09-22",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/fixtures/synthetic_guide_request.bin",
+   "size": 41,
+   "mtime": "2026-09-22",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/fixtures/bootstrap/README.md",
+   "size": 728,
+   "mtime": "2026-09-22",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/fixtures/bootstrap/recovered_minimal_server_address.json",
+   "size": 193,
+   "mtime": "2026-09-22",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/fixtures/bootstrap/recovered_minimal_webgameconfig.json",
+   "size": 444,
+   "mtime": "2026-09-22",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/fixtures/bootstrap/synthetic_webgameconfig.json",
+   "size": 235,
+   "mtime": "2026-09-22",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/integration/README.md",
+   "size": 99,
+   "mtime": "2026-09-22",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/integration/test_bootstrap_http.py",
+   "size": 6046,
+   "mtime": "2026-09-22",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/integration/test_local_login.py",
+   "size": 7905,
+   "mtime": "2026-09-23",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/integration/test_silent_chat.py",
+   "size": 2809,
+   "mtime": "2026-09-23",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/integration/test_tcp_fragmentation.py",
+   "size": 1887,
+   "mtime": "2026-09-22",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/integration/test_tcp_multi_packet.py",
+   "size": 897,
+   "mtime": "2026-09-22",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/integration/test_tcp_protocol_errors.py",
+   "size": 2127,
+   "mtime": "2026-09-22",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/integration/test_tcp_server.py",
+   "size": 3393,
+   "mtime": "2026-09-22",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/integration/_network.py",
+   "size": 2393,
+   "mtime": "2026-09-22",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/integration/__init__.py",
+   "size": 41,
+   "mtime": "2026-09-22",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/unit/test_android_preflight.py",
+   "size": 2339,
+   "mtime": "2026-09-22",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/unit/test_audit_hardening.py",
+   "size": 5762,
+   "mtime": "2026-09-25",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/unit/test_battle.py",
+   "size": 4396,
+   "mtime": "2026-09-24",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/unit/test_battle_entry_domain.py",
+   "size": 23018,
+   "mtime": "2026-09-25",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/unit/test_bootstrap_models.py",
+   "size": 1705,
+   "mtime": "2026-09-22",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/unit/test_codec_roundtrip.py",
+   "size": 3174,
+   "mtime": "2026-09-22",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/unit/test_connection.py",
+   "size": 747,
+   "mtime": "2026-09-22",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/unit/test_crc.py",
+   "size": 221,
+   "mtime": "2026-09-22",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/unit/test_dispatcher.py",
+   "size": 1246,
+   "mtime": "2026-09-22",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/unit/test_drop_probability_analysis.py",
+   "size": 1792,
+   "mtime": "2026-09-25",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/unit/test_economy.py",
+   "size": 7998,
+   "mtime": "2026-09-23",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/unit/test_false_complete_elimination.py",
+   "size": 3510,
+   "mtime": "2026-09-25",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/unit/test_first_contact_preflight.py",
+   "size": 2607,
+   "mtime": "2026-09-22",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/unit/test_framing.py",
+   "size": 4484,
+   "mtime": "2026-09-22",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/unit/test_lobby_account.py",
+   "size": 1704,
+   "mtime": "2026-09-23",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/unit/test_local_identity.py",
+   "size": 1924,
+   "mtime": "2026-09-22",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/unit/test_packet_inspector.py",
+   "size": 870,
+   "mtime": "2026-09-22",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/unit/test_packint.py",
+   "size": 2065,
+   "mtime": "2026-09-22",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/unit/test_patch_gameconfig.py",
+   "size": 3832,
+   "mtime": "2026-09-22",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/unit/test_phase20.py",
+   "size": 13783,
+   "mtime": "2026-09-23",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/unit/test_player_store.py",
+   "size": 1885,
+   "mtime": "2026-09-23",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/unit/test_prepare_hero_mobility_account.py",
+   "size": 1212,
+   "mtime": "2026-09-23",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/unit/test_recovered_bootstrap.py",
+   "size": 4328,
+   "mtime": "2026-09-22",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/unit/test_registry.py",
+   "size": 1261,
+   "mtime": "2026-09-22",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/unit/test_reported_regressions.py",
+   "size": 4958,
+   "mtime": "2026-09-24",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/unit/test_section_reward_system.py",
+   "size": 8505,
+   "mtime": "2026-09-25",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/unit/test_seed_test_inventory.py",
+   "size": 4144,
+   "mtime": "2026-09-23",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/unit/test_session.py",
+   "size": 643,
+   "mtime": "2026-09-22",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/unit/test_shop.py",
+   "size": 3867,
+   "mtime": "2026-09-24",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/unit/test_startup_probe.py",
+   "size": 1425,
+   "mtime": "2026-09-22",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tests/unit/test_wish.py",
+   "size": 9900,
+   "mtime": "2026-09-24",
+   "category": "TEST_ARTIFACT",
+   "likely_role": "tests"
+  },
+  {
+   "path": "tools/export_battle_rewards.py",
+   "size": 1213,
+   "mtime": "2026-09-24",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/export_economy_catalog.py",
+   "size": 2875,
+   "mtime": "2026-09-24",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/export_progression_catalog.py",
+   "size": 1222,
+   "mtime": "2026-09-23",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/export_wish_catalog.py",
+   "size": 1915,
+   "mtime": "2026-09-23",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/first_contact_preflight.py",
+   "size": 6345,
+   "mtime": "2026-09-22",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/first_contact_runner.py",
+   "size": 7679,
+   "mtime": "2026-09-22",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/generate_synthetic_fixtures.py",
+   "size": 943,
+   "mtime": "2026-09-22",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/local_game_server.py",
+   "size": 3944,
+   "mtime": "2026-09-24",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/packet_inspector.py",
+   "size": 2900,
+   "mtime": "2026-09-22",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/patch_gameconfig.py",
+   "size": 14111,
+   "mtime": "2026-09-22",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/patch_wish_thumbnails.py",
+   "size": 5834,
+   "mtime": "2026-09-24",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/prepare_hero_mobility_account.py",
+   "size": 1769,
+   "mtime": "2026-09-23",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/prepare_lobby_account.py",
+   "size": 1628,
+   "mtime": "2026-09-23",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/README.md",
+   "size": 1290,
+   "mtime": "2026-09-22",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/analysis/audit_hardcodes.py",
+   "size": 5689,
+   "mtime": "2026-09-25",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/analysis/audit_persistence.py",
+   "size": 7853,
+   "mtime": "2026-09-25",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/analysis/build_coverage_reaudit.py",
+   "size": 7060,
+   "mtime": "2026-09-25",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/analysis/build_drop_cfg.py",
+   "size": 3789,
+   "mtime": "2026-09-25",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/analysis/build_protocol_catalog.py",
+   "size": 9854,
+   "mtime": "2026-09-25",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/analysis/build_reference_graph.py",
+   "size": 8887,
+   "mtime": "2026-09-25",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/analysis/build_reward_reverse.py",
+   "size": 15886,
+   "mtime": "2026-09-25",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/analysis/build_section_catalog.py",
+   "size": 6402,
+   "mtime": "2026-09-25",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/analysis/build_section_reward_catalog.py",
+   "size": 6395,
+   "mtime": "2026-09-25",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/analysis/build_table_dictionary.py",
+   "size": 11668,
+   "mtime": "2026-09-25",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/analysis/calculate_drop_probability.py",
+   "size": 6191,
+   "mtime": "2026-09-25",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/analysis/disassemble_drop_methods.py",
+   "size": 1748,
+   "mtime": "2026-09-25",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/analysis/_table_common.py",
+   "size": 6317,
+   "mtime": "2026-09-25",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/android/android_preflight.py",
+   "size": 8130,
+   "mtime": "2026-09-22",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/android/open_lab_window.ps1",
+   "size": 1038,
+   "mtime": "2026-09-23",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/android/README.md",
+   "size": 2550,
+   "mtime": "2026-09-23",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/android/run_startup_probe.ps1",
+   "size": 3812,
+   "mtime": "2026-09-22",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/android/startup_probe.py",
+   "size": 9101,
+   "mtime": "2026-09-22",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/dev/audit_daily_dungeon_coverage.py",
+   "size": 5945,
+   "mtime": "2026-09-24",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/dev/audit_daily_dungeon_rewards.py",
+   "size": 7231,
+   "mtime": "2026-09-24",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/dev/export_battle_entry_catalog.py",
+   "size": 2001,
+   "mtime": "2026-09-24",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/dev/export_equipment_seed_catalog.py",
+   "size": 2131,
+   "mtime": "2026-09-23",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/dev/export_equipment_strengthen_catalog.py",
+   "size": 1129,
+   "mtime": "2026-09-23",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/dev/export_hero_unlock_catalog.py",
+   "size": 1535,
+   "mtime": "2026-09-23",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/dev/probe_all_section_battles.py",
+   "size": 3641,
+   "mtime": "2026-09-24",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/dev/render_daily_dungeon_reward_audit.py",
+   "size": 4763,
+   "mtime": "2026-09-24",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/dev/repair_phase20_state.py",
+   "size": 5482,
+   "mtime": "2026-09-23",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  },
+  {
+   "path": "tools/dev/seed_test_inventory.py",
+   "size": 9607,
+   "mtime": "2026-09-23",
+   "category": "TOOLING",
+   "likely_role": "analysis-generators-or-dev-tools"
+  }
+ ]
+}

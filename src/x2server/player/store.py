@@ -28,7 +28,7 @@ class PlayerStore:
         with self.db:
             self.db.execute("INSERT OR IGNORE INTO players VALUES (?, ?, ?, 0, ?, 1)",
                             (player_id, account, now, json.dumps({"nickname": "Revival", "level": 1,
-                                "gold": 0, "crystal": 0, "exp": 0, "show": 1003})))
+                                "gold": 0, "crystal": 0, "exp": 0, "show": 0})))
             row = self.db.execute("SELECT * FROM players WHERE id=?", (player_id,)).fetchone()
             if row is None or row["account"] != account:
                 raise ValueError("player/account identity conflict")

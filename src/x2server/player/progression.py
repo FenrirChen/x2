@@ -1,4 +1,4 @@
-"""Confirmed 1003 growth costs; unknown weapon/equipment operations stay closed."""
+"""Static-configured hero growth; unsupported costs remain closed."""
 from functools import lru_cache
 from importlib.resources import files
 from collections import Counter
@@ -18,15 +18,32 @@ def catalog():
     return json.loads(files("x2server").joinpath("data/progression_catalog.json").read_text(encoding="utf-8"))
 
 
+@lru_cache(maxsize=1)
+def battle_hero_base():
+    return json.loads(files("x2server").joinpath("data/battle_hero_base.json").read_text(encoding="utf-8"))
+
+
+@lru_cache(maxsize=1)
+def jewel_ids():
+    return frozenset(json.loads(files("x2server").joinpath("data/jewel_ids.json").read_text(encoding="utf-8")))
+
+
 def hero_skills(hero):
-    return hero.get("skills", [{"id": i, "level": 1} for i in (10030, 10031, 10032, 10033, 10035)]) if hero["id"] == 1003 else hero.get("skills", [])
+    if "skills" in hero:
+        return hero["skills"]
+    prototype = next((row for row in catalog()["hero_unlock"]
+                      if row["hero_id"] == hero["id"]), None)
+    return ([{"id": skill_id, "level": 1} for skill_id in prototype["initial_skills"]]
+            if prototype else [])
 
 
 def hero_attributes(hero):
+    base = battle_hero_base()[str(hero["id"])]
     level = next(r for r in catalog()["hero_level"] if r["level"] == hero["level"])["attribute_bonus"]
     stage = next(r for r in catalog()["hero_star"] if r["star"] == hero["star"])["attribute_bonus"]
-    return {field: int(base * (1 + stage[prefix+"StageBonus"]/1000) * (1 + level[prefix+"LevelBonus"]/1000) + cor)
-            for field, prefix, base, cor in (("atk","Damage",60,12), ("def","Defense",40,4), ("hp","HPMax",600,120), ("sp","SPMax",3000,0))}
+    return {field: int(base[name] * (1 + stage[prefix+"StageBonus"]/1000) * (1 + level[prefix+"LevelBonus"]/1000) + base.get(name+"COR", 0))
+            for field, prefix, name in (("atk","Damage","Damage"), ("def","Defense","Defense"),
+                                        ("hp","HPMax","HPMax"), ("sp","SPMax","SPMax"))}
 
 
 def advance_player(snapshot):
@@ -49,7 +66,7 @@ class ProgressionService:
                 PRIMARY KEY(player_id,request_key))""")
 
     def handlers(self):
-        return {name: self.handle for name in ("C2L_HeroOpt", "C2L_UpHeroSkill")}
+        return {name: self.handle for name in ("C2L_HeroOpt", "C2L_UpHeroSkill", "C2L_Artifact")}
 
     def spend(self, player_id, snapshot, costs):
         for item, amount in costs.items():
@@ -79,16 +96,94 @@ class ProgressionService:
         key = hashlib.sha256(f"{context.session.session_id}:{packet.header.request_id}:{name}".encode() + packet.body).hexdigest()
         cached = self.store.db.execute("SELECT response FROM progression_receipts WHERE player_id=? AND request_key=?", (player_id,key)).fetchone()
         if cached:
-            return OutboundMessage(response, schema.decode(cached[0]), pushes=self.pushes(player_id))
+            pushes = self.pushes(player_id)
+            return (OutboundMessage(response, schema.decode(cached[0]), before_response=pushes[:1], pushes=pushes[1:])
+                    if name == "C2L_Artifact" else OutboundMessage(response, schema.decode(cached[0]), pushes=pushes))
         try:
             with self.economy.transaction():
                 snapshot = self.store.get(player_id)["snapshot"]
                 hero = next((h for h in snapshot.get("heroes", []) if h["id"] == req.get("id",req.get("heroId"))), None)
-                if not hero or hero["id"] != 1003 or hero["state"] != 2:
-                    raise UnresolvedEconomy("unrecovered hero")
                 costs = Counter()
                 event = None
-                if name == "C2L_HeroOpt":
+                if name == "C2L_HeroOpt" and req.get("opt") == 0 and hero is None:
+                    prototype = next((r for r in catalog()["hero_unlock"] if r["hero_id"] == req.get("id")), None)
+                    if not prototype:
+                        raise UnresolvedEconomy("hero unlock not in recovered catalog")
+                    costs[prototype["fragment_item_id"]] = prototype["fragment_count"]
+                    # REVIVAL_COMPAT: exact initial server HeroData beyond the
+                    # static prototype and skill IDs has no official response.
+                    hero = {"id": prototype["hero_id"], "state": 2,
+                        "level": prototype["level"], "star": prototype["star"],
+                        "exp": 0, "skills": [{"id": i, "level": 1} for i in prototype["initial_skills"]],
+                        "compat": "REVIVAL_COMPAT"}
+                    snapshot.setdefault("heroes", []).append(hero)
+                elif not hero or hero["state"] != 2:
+                    raise UnresolvedEconomy("unrecovered hero")
+                elif name == "C2L_Artifact":
+                    prototype = next((r for r in catalog()["hero_unlock"] if r["hero_id"] == hero["id"]), None)
+                    if not prototype:
+                        raise UnresolvedEconomy("artifact hero not in recovered catalog")
+                    artifact = hero.get("god_equip")
+                    if artifact and artifact.get("id") != prototype["artifact_id"]:
+                        raise UnresolvedEconomy("unexpected artifact identity")
+                    if req.get("opt") == 2:
+                        if not artifact or artifact["star"] < 1:
+                            raise UnresolvedEconomy("artifact not unlocked")
+                        slot, item_id = req.get("holeId", -1), req.get("jewelId", 0)
+                        if not 0 <= slot < 16:
+                            raise UnresolvedEconomy("invalid artifact socket")
+                        jewels = artifact.setdefault("jewels", {})
+                        old = int(jewels.get(str(slot), 0))
+                        if item_id:
+                            if item_id not in jewel_ids():
+                                raise UnresolvedEconomy("invalid jewel")
+                            if item_id != old:
+                                costs[item_id] += 1
+                        elif not old:
+                            raise UnresolvedEconomy("empty artifact socket")
+                        if old and old != item_id:
+                            self.store.db.execute("""INSERT INTO inventory VALUES (?,?,1)
+                                ON CONFLICT(player_id,item_id) DO UPDATE SET quantity=quantity+1""",
+                                (player_id, old))
+                        if item_id:
+                            jewels[str(slot)] = item_id
+                        else:
+                            jewels.pop(str(slot), None)
+                    else:
+                        if req.get("jewelId", 0) or req.get("holeId", 0):
+                            raise UnresolvedEconomy("invalid artifact growth request")
+                        current_star = artifact["star"] if artifact else 0
+                        row = next((r for r in catalog()["weapon_progression"] if
+                                r["profession"] == prototype["profession"] and r["rank"] == current_star), None)
+                        if row is None or current_star > 6:
+                            raise UnresolvedEconomy("artifact at configured terminal stage")
+                        progress = artifact["level"] if artifact else 0
+                        if req.get("opt") == 0:
+                            if current_star and progress >= 100:
+                                raise UnresolvedEconomy("artifact progress full; fuse required")
+                            for material in row["level_up_materials"]:
+                                costs[material["material_item_id"]] += material["material_num"]
+                            costs[1237901] += row["level_up_gold_cost"]
+                            # HeroGodEquip.level is the 0..100 progress bar. The
+                            # rank-0 client path unlocks the weapon at star 1.
+                            next_star = current_star or 1
+                            next_progress = min(100, progress + row["fuse_value"]) if current_star else 0
+                        elif req.get("opt") == 1 and 0 < current_star < 6 and progress >= 100:
+                            if row["required_hero_stage"] and hero["star"] < row["required_hero_stage"]:
+                                raise UnresolvedEconomy("hero stage below artifact fuse requirement")
+                            for material in row["fuse_materials"]:
+                                costs[material["material_item_id"]] += material["material_num"]
+                            costs[1237901] += row["fuse_gold_cost"]
+                            next_star, next_progress = current_star + 1, 0
+                        else:
+                            raise UnresolvedEconomy("invalid artifact transition")
+                        hero["god_equip"] = {**(artifact or {}), "id": prototype["artifact_id"],
+                                             "level": next_progress, "star": next_star,
+                                             "compat": "REVIVAL_COMPAT"}
+                elif name == "C2L_HeroOpt":
+                    prototype = next((r for r in catalog()["hero_unlock"] if r["hero_id"] == hero["id"]), None)
+                    if not prototype:
+                        raise UnresolvedEconomy("hero not in recovered catalog")
                     if req.get("opt") == 1:
                         row = next(r for r in catalog()["hero_level"] if r["level"] == hero["level"])
                         # HeroLevelUP.OnClickUpLevel 0x14010D0 compares the
@@ -100,7 +195,8 @@ class ProgressionService:
                         event = 7
                     elif req.get("opt") == 2:
                         row = next(r for r in catalog()["hero_star"] if r["star"] == hero["star"])
-                        options = {1201003: row["fragment_count_field"], **{r["material_item_id"]:r["material_num"] for r in row["universal_fragment_option"]}}
+                        options = {prototype["fragment_item_id"]: row["fragment_count_field"],
+                                   **{r["material_item_id"]:r["material_num"] for r in row["universal_fragment_option"]}}
                         item = req.get("upstarConsumeItemId",0)
                         if not row["next_star"] or item not in options:
                             raise UnresolvedEconomy("invalid star request")
@@ -112,6 +208,10 @@ class ProgressionService:
                     # UI OnTongYongYesBtn_NormalClick passes uplevel=1.
                     if req.get("uplevel") != 1:
                         raise UnresolvedEconomy("unrecovered bulk skill operation")
+                    prototype = next((r for r in catalog()["hero_unlock"]
+                                      if r["hero_id"] == hero["id"]), None)
+                    if not prototype or req.get("skillId") not in prototype["initial_skills"]:
+                        raise UnresolvedEconomy("skill not in hero static configuration")
                     skills = {s["id"]:dict(s) for s in hero_skills(hero)}
                     skill = skills.get(req.get("skillId"))
                     row = next((r for r in catalog()["skill_progression"] if skill and r["skill_id"] == skill["id"] and r["level"] == skill["level"]), None)
@@ -136,7 +236,9 @@ class ProgressionService:
         except UnresolvedEconomy:
             values["code"] = 13
             return OutboundMessage(response,values)
-        return OutboundMessage(response,values,pushes=self.pushes(player_id))
+        pushes = self.pushes(player_id)
+        return (OutboundMessage(response, values, before_response=pushes[:1], pushes=pushes[1:])
+                if name == "C2L_Artifact" else OutboundMessage(response, values, pushes=pushes))
 
     def pushes(self, player_id):
         from .hero import encode_hero_data

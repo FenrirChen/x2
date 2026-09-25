@@ -1,0 +1,552 @@
+{
+ "generated_by": "tools/analysis/audit_persistence.py",
+ "note": "writers/readers resolved from static grep of src/x2server; relogin_restore is inferred from whether login-time assembly reads the table",
+ "snapshot_entities": [
+  "gold",
+  "crystal",
+  "exp",
+  "hero_exp",
+  "equip_exp",
+  "daily_activity",
+  "week_activity",
+  "main_chapter",
+  "main_section",
+  "mobility.power",
+  "heroes[id,level,star,state,skills,god_equip]",
+  "show",
+  "nickname"
+ ],
+ "snapshot_restore": "PlayerDataProto.snapshot_push reads the full snapshot at every login (src/x2server/player/login.py:64-85)",
+ "lifecycle": [
+  {
+   "entity": "battle_costs",
+   "module": "src/x2server/player/economy.py",
+   "writers": [
+    "src/x2server/player/economy.py:validate_daily_fixed_rewards"
+   ],
+   "readers_sample": [
+    "src/x2server/player/economy.py:validate_daily_fixed_rewards"
+   ],
+   "push_messages_in_module": [
+    "L2C_GameTask",
+    "L2C_ItemUpdate",
+    "L2C_TaskUpdate"
+   ],
+   "transactional": "yes",
+   "idempotent": "yes",
+   "relogin_restore": "QUERY_ONLY",
+   "pk": [
+    "uuid"
+   ]
+  },
+  {
+   "entity": "battle_entries",
+   "module": "src/x2server/player/battle.py",
+   "writers": [
+    "src/x2server/player/battle.py:kill_info"
+   ],
+   "readers_sample": [
+    "src/x2server/player/battle.py:kill_info"
+   ],
+   "push_messages_in_module": [
+    "L2C_CheckoutMainMission",
+    "L2C_DelFightProfile",
+    "L2C_FightData",
+    "L2C_FightDropData",
+    "L2C_FightKillInfo"
+   ],
+   "transactional": "yes",
+   "idempotent": "unknown",
+   "relogin_restore": "QUERY_ONLY",
+   "pk": [
+    "player_id",
+    "request_key"
+   ]
+  },
+  {
+   "entity": "battle_receipts",
+   "module": "src/x2server/player/battle.py",
+   "writers": [
+    "src/x2server/player/battle.py:kill_info"
+   ],
+   "readers_sample": [
+    "src/x2server/player/battle.py:kill_info"
+   ],
+   "push_messages_in_module": [
+    "L2C_CheckoutMainMission",
+    "L2C_DelFightProfile",
+    "L2C_FightData",
+    "L2C_FightDropData",
+    "L2C_FightKillInfo"
+   ],
+   "transactional": "yes",
+   "idempotent": "yes",
+   "relogin_restore": "QUERY_ONLY",
+   "pk": [
+    "uuid"
+   ]
+  },
+  {
+   "entity": "battle_unresolved_rewards",
+   "module": "src/x2server/player/economy.py",
+   "writers": [
+    "src/x2server/player/economy.py:validate_daily_fixed_rewards"
+   ],
+   "readers_sample": [],
+   "push_messages_in_module": [
+    "L2C_GameTask",
+    "L2C_ItemUpdate",
+    "L2C_TaskUpdate"
+   ],
+   "transactional": "yes",
+   "idempotent": "unknown",
+   "relogin_restore": "PERSISTED_NOT_RESTORED",
+   "pk": [
+    "uuid",
+    "reward_group"
+   ]
+  },
+  {
+   "entity": "economy_checkouts",
+   "module": "src/x2server/player/economy.py",
+   "writers": [
+    "src/x2server/player/battle.py:kill_info"
+   ],
+   "readers_sample": [],
+   "push_messages_in_module": [
+    "L2C_GameTask",
+    "L2C_ItemUpdate",
+    "L2C_TaskUpdate"
+   ],
+   "transactional": "yes",
+   "idempotent": "yes",
+   "relogin_restore": "PERSISTED_NOT_RESTORED",
+   "pk": [
+    "player_id",
+    "digest"
+   ]
+  },
+  {
+   "entity": "economy_clears",
+   "module": "src/x2server/player/economy.py",
+   "writers": [
+    "src/x2server/player/economy.py:validate_daily_fixed_rewards"
+   ],
+   "readers_sample": [
+    "src/x2server/player/battle_entry.py:resolve",
+    "src/x2server/player/economy.py:__init__",
+    "src/x2server/player/economy.py:validate_daily_fixed_rewards"
+   ],
+   "push_messages_in_module": [
+    "L2C_GameTask",
+    "L2C_ItemUpdate",
+    "L2C_TaskUpdate"
+   ],
+   "transactional": "yes",
+   "idempotent": "unknown",
+   "relogin_restore": "QUERY_ONLY",
+   "pk": [
+    "player_id",
+    "section_id"
+   ]
+  },
+  {
+   "entity": "economy_events",
+   "module": "src/x2server/player/economy.py",
+   "writers": [
+    "src/x2server/player/economy.py:validate_daily_fixed_rewards"
+   ],
+   "readers_sample": [],
+   "push_messages_in_module": [
+    "L2C_GameTask",
+    "L2C_ItemUpdate",
+    "L2C_TaskUpdate"
+   ],
+   "transactional": "yes",
+   "idempotent": "yes",
+   "relogin_restore": "PERSISTED_NOT_RESTORED",
+   "pk": [
+    "player_id"
+   ]
+  },
+  {
+   "entity": "economy_grants",
+   "module": "src/x2server/player/economy.py",
+   "writers": [
+    "src/x2server/player/economy.py:validate_daily_fixed_rewards"
+   ],
+   "readers_sample": [
+    "src/x2server/player/economy.py:validate_daily_fixed_rewards"
+   ],
+   "push_messages_in_module": [
+    "L2C_GameTask",
+    "L2C_ItemUpdate",
+    "L2C_TaskUpdate"
+   ],
+   "transactional": "yes",
+   "idempotent": "yes",
+   "relogin_restore": "QUERY_ONLY",
+   "pk": [
+    "created_at"
+   ]
+  },
+  {
+   "entity": "economy_runs",
+   "module": "src/x2server/player/economy.py",
+   "writers": [
+    "src/x2server/player/battle.py:kill_info",
+    "src/x2server/player/economy.py:validate_daily_fixed_rewards"
+   ],
+   "readers_sample": [
+    "src/x2server/player/battle.py:kill_info"
+   ],
+   "push_messages_in_module": [
+    "L2C_GameTask",
+    "L2C_ItemUpdate",
+    "L2C_TaskUpdate"
+   ],
+   "transactional": "yes",
+   "idempotent": "yes",
+   "relogin_restore": "QUERY_ONLY",
+   "pk": [
+    "uuid"
+   ]
+  },
+  {
+   "entity": "economy_tasks",
+   "module": "src/x2server/player/economy.py",
+   "writers": [
+    "src/x2server/player/economy.py:transaction",
+    "src/x2server/player/economy.py:validate_daily_fixed_rewards"
+   ],
+   "readers_sample": [
+    "src/x2server/player/economy.py:transaction",
+    "src/x2server/player/economy.py:validate_daily_fixed_rewards"
+   ],
+   "push_messages_in_module": [
+    "L2C_GameTask",
+    "L2C_ItemUpdate",
+    "L2C_TaskUpdate"
+   ],
+   "transactional": "yes",
+   "idempotent": "yes",
+   "relogin_restore": "QUERY_ONLY",
+   "pk": [
+    "claimed"
+   ]
+  },
+  {
+   "entity": "equipment_enhancements",
+   "module": "src/x2server/player/equipment.py",
+   "writers": [
+    "src/x2server/player/equipment.py:values"
+   ],
+   "readers_sample": [],
+   "push_messages_in_module": [
+    "L2C_EquipAll",
+    "L2C_EquipStrengthen",
+    "L2C_EquipUpdate",
+    "L2C_HeroUpdate"
+   ],
+   "transactional": "yes",
+   "idempotent": "unknown",
+   "relogin_restore": "PERSISTED_NOT_RESTORED",
+   "pk": [
+    "player_id",
+    "equip_id",
+    "level"
+   ]
+  },
+  {
+   "entity": "equipment_instances",
+   "module": "src/x2server/player/equipment.py",
+   "writers": [
+    "src/x2server/player/equipment.py:values"
+   ],
+   "readers_sample": [
+    "src/x2server/player/equipment.py:values"
+   ],
+   "push_messages_in_module": [
+    "L2C_EquipAll",
+    "L2C_EquipStrengthen",
+    "L2C_EquipUpdate",
+    "L2C_HeroUpdate"
+   ],
+   "transactional": "yes",
+   "idempotent": "yes",
+   "relogin_restore": "RESTORED_AT_LOGIN",
+   "pk": [
+    "id"
+   ]
+  },
+  {
+   "entity": "inventory",
+   "module": "src/x2server/player/economy.py",
+   "writers": [
+    "src/x2server/player/economy.py:validate_daily_fixed_rewards",
+    "src/x2server/player/progression.py:spend",
+    "src/x2server/player/wish.py:values"
+   ],
+   "readers_sample": [
+    "src/x2server/player/economy.py:validate_daily_fixed_rewards",
+    "src/x2server/player/wish.py:values"
+   ],
+   "push_messages_in_module": [
+    "L2C_GameTask",
+    "L2C_ItemUpdate",
+    "L2C_TaskUpdate"
+   ],
+   "transactional": "yes",
+   "idempotent": "unknown",
+   "relogin_restore": "RESTORED_AT_LOGIN",
+   "pk": [
+    "player_id",
+    "item_id"
+   ]
+  },
+  {
+   "entity": "pending_rewards",
+   "module": "src/x2server/player/economy.py",
+   "writers": [
+    "src/x2server/player/economy.py:validate_daily_fixed_rewards"
+   ],
+   "readers_sample": [],
+   "push_messages_in_module": [
+    "L2C_GameTask",
+    "L2C_ItemUpdate",
+    "L2C_TaskUpdate"
+   ],
+   "transactional": "yes",
+   "idempotent": "unknown",
+   "relogin_restore": "PERSISTED_NOT_RESTORED",
+   "pk": [
+    "player_id",
+    "source",
+    "item_id"
+   ]
+  },
+  {
+   "entity": "players",
+   "module": "src/x2server/player/store.py",
+   "writers": [
+    "src/x2server/player/economy.py:transaction",
+    "src/x2server/player/economy.py:validate_daily_fixed_rewards",
+    "src/x2server/player/store.py:login",
+    "src/x2server/player/store.py:save_snapshot",
+    "src/x2server/player/wish.py:values"
+   ],
+   "readers_sample": [
+    "src/x2server/player/economy.py:__init__",
+    "src/x2server/player/store.py:login"
+   ],
+   "push_messages_in_module": [],
+   "transactional": "yes",
+   "idempotent": "yes",
+   "relogin_restore": "RESTORED_AT_LOGIN",
+   "pk": [
+    "id"
+   ]
+  },
+  {
+   "entity": "progression_receipts",
+   "module": "src/x2server/player/progression.py",
+   "writers": [
+    "src/x2server/player/progression.py:spend"
+   ],
+   "readers_sample": [
+    "src/x2server/player/progression.py:spend"
+   ],
+   "push_messages_in_module": [
+    "L2C_HeroUpdate"
+   ],
+   "transactional": "yes",
+   "idempotent": "yes",
+   "relogin_restore": "QUERY_ONLY",
+   "pk": [
+    "player_id",
+    "request_key"
+   ]
+  },
+  {
+   "entity": "shop_purchase_counts",
+   "module": "src/x2server/player/shop.py",
+   "writers": [
+    "src/x2server/player/shop.py:handlers"
+   ],
+   "readers_sample": [
+    "src/x2server/player/shop.py:handlers"
+   ],
+   "push_messages_in_module": [
+    "L2C_BuyGoods"
+   ],
+   "transactional": "yes",
+   "idempotent": "unknown",
+   "relogin_restore": "QUERY_ONLY",
+   "pk": [
+    "player_id",
+    "goods_id"
+   ]
+  },
+  {
+   "entity": "shop_receipts",
+   "module": "src/x2server/player/shop.py",
+   "writers": [
+    "src/x2server/player/shop.py:handlers"
+   ],
+   "readers_sample": [
+    "src/x2server/player/shop.py:handlers"
+   ],
+   "push_messages_in_module": [
+    "L2C_BuyGoods"
+   ],
+   "transactional": "yes",
+   "idempotent": "yes",
+   "relogin_restore": "QUERY_ONLY",
+   "pk": [
+    "request_key"
+   ]
+  },
+  {
+   "entity": "task_history",
+   "module": "src/x2server/player/economy.py",
+   "writers": [
+    "src/x2server/player/economy.py:transaction"
+   ],
+   "readers_sample": [
+    "src/x2server/player/economy.py:validate_daily_fixed_rewards"
+   ],
+   "push_messages_in_module": [
+    "L2C_GameTask",
+    "L2C_ItemUpdate",
+    "L2C_TaskUpdate"
+   ],
+   "transactional": "yes",
+   "idempotent": "unknown",
+   "relogin_restore": "QUERY_ONLY",
+   "pk": [
+    "player_id",
+    "kind",
+    "start",
+    "task_id"
+   ]
+  },
+  {
+   "entity": "task_periods",
+   "module": "src/x2server/player/economy.py",
+   "writers": [
+    "src/x2server/player/economy.py:transaction"
+   ],
+   "readers_sample": [
+    "src/x2server/player/economy.py:transaction",
+    "src/x2server/player/economy.py:validate_daily_fixed_rewards"
+   ],
+   "push_messages_in_module": [
+    "L2C_GameTask",
+    "L2C_ItemUpdate",
+    "L2C_TaskUpdate"
+   ],
+   "transactional": "yes",
+   "idempotent": "unknown",
+   "relogin_restore": "QUERY_ONLY",
+   "pk": [
+    "player_id",
+    "kind"
+   ]
+  },
+  {
+   "entity": "wish_last_result",
+   "module": "src/x2server/player/wish.py",
+   "writers": [
+    "src/x2server/player/wish.py:values"
+   ],
+   "readers_sample": [
+    "src/x2server/player/wish.py:values"
+   ],
+   "push_messages_in_module": [
+    "L2C_CardPool",
+    "L2C_HeroUpdate",
+    "L2C_LuckDraw",
+    "L2C_RequestDrawResult"
+   ],
+   "transactional": "yes",
+   "idempotent": "unknown",
+   "relogin_restore": "RESTORED_AT_LOGIN",
+   "pk": [
+    "player_id",
+    "pool_id"
+   ]
+  },
+  {
+   "entity": "wish_pity",
+   "module": "src/x2server/player/wish.py",
+   "writers": [
+    "src/x2server/player/wish.py:__init__",
+    "src/x2server/player/wish.py:values"
+   ],
+   "readers_sample": [
+    "src/x2server/player/wish.py:__init__",
+    "src/x2server/player/wish.py:state"
+   ],
+   "push_messages_in_module": [
+    "L2C_CardPool",
+    "L2C_HeroUpdate",
+    "L2C_LuckDraw",
+    "L2C_RequestDrawResult"
+   ],
+   "transactional": "yes",
+   "idempotent": "unknown",
+   "relogin_restore": "QUERY_ONLY",
+   "pk": [
+    "player_id",
+    "category"
+   ]
+  },
+  {
+   "entity": "wish_receipts",
+   "module": "src/x2server/player/wish.py",
+   "writers": [
+    "src/x2server/player/wish.py:values"
+   ],
+   "readers_sample": [
+    "src/x2server/player/wish.py:values"
+   ],
+   "push_messages_in_module": [
+    "L2C_CardPool",
+    "L2C_HeroUpdate",
+    "L2C_LuckDraw",
+    "L2C_RequestDrawResult"
+   ],
+   "transactional": "yes",
+   "idempotent": "yes",
+   "relogin_restore": "RESTORED_AT_LOGIN",
+   "pk": [
+    "player_id",
+    "request_key"
+   ]
+  },
+  {
+   "entity": "wish_state",
+   "module": "src/x2server/player/wish.py",
+   "writers": [
+    "src/x2server/player/wish.py:values"
+   ],
+   "readers_sample": [
+    "src/x2server/player/wish.py:__init__",
+    "src/x2server/player/wish.py:state"
+   ],
+   "push_messages_in_module": [
+    "L2C_CardPool",
+    "L2C_HeroUpdate",
+    "L2C_LuckDraw",
+    "L2C_RequestDrawResult"
+   ],
+   "transactional": "yes",
+   "idempotent": "unknown",
+   "relogin_restore": "QUERY_ONLY",
+   "pk": [
+    "player_id",
+    "pool_id"
+   ]
+  }
+ ]
+}

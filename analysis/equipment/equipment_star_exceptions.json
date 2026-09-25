@@ -1,0 +1,160 @@
+{
+ "verdict": "MODEL C → refined: part-level instance TypeId (1240|SS|P) does NOT encode star (last digit = part 1-6); the 1245|SS|S family encodes (suit, star) but is a set-level display/collection family with no part and no EquibBase row, so it cannot be an instance TypeId; HeroEquip.Star is an independent server-provided instance field",
+ "families": {
+  "PART_LEVEL(1240)": {
+   "items": 108,
+   "encoding": "1240|SS|P — SS=suit ordinal(00-19), P=part(1-6)",
+   "equib_base_rows": 108,
+   "star_in_id": false
+  },
+  "SET_STAR(1245)": {
+   "items": 120,
+   "encoding": "1245|SS|S — SS=suit ordinal(00-19), S=star(1-6)",
+   "equib_base_rows": 0,
+   "star_in_id": true,
+   "quality_progression": "E_White/Green/Blue/Purple/Orange/Red == star 1-6",
+   "observed_in": [
+    "SectionTable.DroopDisplay (64 refs) — 掉落展示/图鉴"
+   ]
+  }
+ },
+ "groups": {
+  "set_star_groups_total": 20,
+  "full_1_to_6_star_groups": 20,
+  "partial_groups": {},
+  "part_level_groups": 108
+ },
+ "last_digit_stats": {
+  "part_level_1240_last_digit_is_PART": true,
+  "part_level_last_digit_distribution": {
+   "1": 18,
+   "2": 18,
+   "3": 18,
+   "4": 18,
+   "5": 18,
+   "6": 18
+  },
+  "set_star_1245_last_digit_distribution": {
+   "1": 20,
+   "2": 20,
+   "3": 20,
+   "4": 20,
+   "5": 20,
+   "6": 20
+  },
+  "set_star_name_crosscheck": {
+   "named_star_items": 51,
+   "name_star_equals_last_digit": true
+  }
+ },
+ "exceptions": [
+  {
+   "equib_base_id": 1240071,
+   "kind": "EQUIBBASE_ROW_WITHOUT_ITEM",
+   "suit": 407,
+   "part": 1
+  },
+  {
+   "equib_base_id": 1240072,
+   "kind": "EQUIBBASE_ROW_WITHOUT_ITEM",
+   "suit": 407,
+   "part": 2
+  },
+  {
+   "equib_base_id": 1240073,
+   "kind": "EQUIBBASE_ROW_WITHOUT_ITEM",
+   "suit": 407,
+   "part": 3
+  },
+  {
+   "equib_base_id": 1240074,
+   "kind": "EQUIBBASE_ROW_WITHOUT_ITEM",
+   "suit": 407,
+   "part": 4
+  },
+  {
+   "equib_base_id": 1240075,
+   "kind": "EQUIBBASE_ROW_WITHOUT_ITEM",
+   "suit": 407,
+   "part": 5
+  },
+  {
+   "equib_base_id": 1240076,
+   "kind": "EQUIBBASE_ROW_WITHOUT_ITEM",
+   "suit": 407,
+   "part": 6
+  },
+  {
+   "equib_base_id": 1240081,
+   "kind": "EQUIBBASE_ROW_WITHOUT_ITEM",
+   "suit": 408,
+   "part": 1
+  },
+  {
+   "equib_base_id": 1240082,
+   "kind": "EQUIBBASE_ROW_WITHOUT_ITEM",
+   "suit": 408,
+   "part": 2
+  },
+  {
+   "equib_base_id": 1240083,
+   "kind": "EQUIBBASE_ROW_WITHOUT_ITEM",
+   "suit": 408,
+   "part": 3
+  },
+  {
+   "equib_base_id": 1240084,
+   "kind": "EQUIBBASE_ROW_WITHOUT_ITEM",
+   "suit": 408,
+   "part": 4
+  },
+  {
+   "equib_base_id": 1240085,
+   "kind": "EQUIBBASE_ROW_WITHOUT_ITEM",
+   "suit": 408,
+   "part": 5
+  },
+  {
+   "equib_base_id": 1240086,
+   "kind": "EQUIBBASE_ROW_WITHOUT_ITEM",
+   "suit": 408,
+   "part": 6
+  },
+  {
+   "equib_base_id": 1244991,
+   "kind": "EQUIBBASE_ROW_WITHOUT_ITEM",
+   "suit": 499,
+   "part": 1
+  },
+  {
+   "equib_base_id": 1244992,
+   "kind": "EQUIBBASE_ROW_WITHOUT_ITEM",
+   "suit": 499,
+   "part": 2
+  },
+  {
+   "equib_base_id": 1244993,
+   "kind": "EQUIBBASE_ROW_WITHOUT_ITEM",
+   "suit": 499,
+   "part": 3
+  },
+  {
+   "equib_base_id": 1244994,
+   "kind": "EQUIBBASE_ROW_WITHOUT_ITEM",
+   "suit": 499,
+   "part": 4
+  },
+  {
+   "equib_base_id": 1244995,
+   "kind": "EQUIBBASE_ROW_WITHOUT_ITEM",
+   "suit": 499,
+   "part": 5
+  },
+  {
+   "equib_base_id": 1244996,
+   "kind": "EQUIBBASE_ROW_WITHOUT_ITEM",
+   "suit": 499,
+   "part": 6
+  }
+ ]
+}

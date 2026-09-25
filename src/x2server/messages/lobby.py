@@ -1,6 +1,12 @@
 """Read-only lobby queries recovered from 2.4 ERequestTypes and Serialize methods."""
 from x2server.protocol.protobuf import FieldKind as K, ProtoField as F, ProtoSchema
 
+MISSION_PAIR = ProtoSchema("KeyValuePair_Int32_Int32", (F(1, "Key", K.INT32), F(2, "Value", K.INT32)))
+MISSION_TYPE = ProtoSchema("MissionTypeData", (F(1, "type", K.INT32),
+    F(2, "missionData", K.MESSAGE, repeated=True),
+    F(3, "chapterHisMaxScore", K.MESSAGE, repeated=True),
+    F(4, "chapterHisMaxScoreSec", K.MESSAGE, repeated=True)))
+
 LOBBY_IDS = (
     ("QueryTelInfo", 782, 783), ("SeasonIcon", 999, 1001),
     ("QueryItemLimitTime", 715, 716), ("QueryDivination", 576, 578),

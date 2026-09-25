@@ -4,14 +4,19 @@ from contextlib import contextmanager
 from importlib.resources import files
 import json
 import logging
+import secrets
 import time
+from datetime import datetime, timedelta, timezone
 
 from x2server.messages.economy import ECONOMY_SCHEMAS, ITEM, REWARD, REWARD_ITEM, TASK, FINISH_REQUEST, FINISH_RESULT
-from x2server.messages.lobby import LOBBY_SCHEMAS
+from x2server.messages.lobby import LOBBY_SCHEMAS, MISSION_PAIR, MISSION_TYPE
 from x2server.network.dispatcher import OutboundMessage
 from x2server.protocol.errors import ProtocolError
 from x2server.protocol.registry import CORE_MESSAGE_REGISTRY
 from .task_calendar import task_period
+from .battle_entry import BattleEntryCatalog
+from .reward_system import (RewardGrant, RewardCompatibilityPolicy, RuntimeDropResolver,
+                            SectionRewardCatalog, audit_grants, sum_grants)
 
 
 class UnresolvedEconomy(ValueError):
@@ -20,16 +25,33 @@ class UnresolvedEconomy(ValueError):
 
 class EconomyService:
     # Item.EffData -> BaseInfoProto; only supported currency destinations.
-    CURRENCIES = {1237901: "gold", 1237902: "crystal", 1237907: "hero_exp",
+    CURRENCIES = {1237901: "gold", 1237902: "crystal", 1237906: "equip_exp", 1237907: "hero_exp",
                   1237908: "exp", 1237910: "daily_activity", 1237911: "week_activity"}
+    STACKABLE_REWARD_TYPES = frozenset((5, 12, 13, 14, 23, 24, 25, 33, 34))
 
     def __init__(self, store, clock=time.time):
         self.store = store
         self.clock = clock
         self.catalog = json.loads(files("x2server").joinpath("data/economy_catalog.json").read_text(encoding="utf-8"))
+        battle_rewards = json.loads(files("x2server").joinpath("data/battle_rewards_catalog.json").read_text(encoding="utf-8"))
+        recovered_groups = {row["GiftGroup"] for row in battle_rewards["gifts"]}
+        self.catalog["gifts"] = battle_rewards["gifts"] + [row for row in self.catalog["gifts"]
+            if row["GiftGroup"] not in recovered_groups]
+        recovered_items = {row["ItemID"] for row in battle_rewards["items"]}
+        self.catalog["items"] = battle_rewards["items"] + [row for row in self.catalog["items"]
+            if row["ItemID"] not in recovered_items]
+        reward_items = json.loads(files("x2server").joinpath("data/reward_items.json").read_text(encoding="utf-8"))
+        existing_items = {row["ItemID"] for row in self.catalog["items"]}
+        self.catalog["items"].extend(row for row in reward_items if row["ItemID"] not in existing_items)
         self.sections = {r["SectionID"]: r for r in self.catalog["sections"]}
+        self.daily_sections = {r["SectionID"]: r for r in self.catalog.get("daily_sections", [])}
+        self.reward_sections = {**self.sections, **self.daily_sections}
+        self.entry_catalog = BattleEntryCatalog()
+        self.reward_sections.update(self.entry_catalog.sections)
+        self.section_rewards = SectionRewardCatalog()
         self.tasks = {r["DailyTaskID"]: r for r in self.catalog["tasks"] if r.get("IsUse", {}).get("value") == 1}
         self.items = {r["ItemID"]: r for r in self.catalog["items"]}
+        self.runtime_drops = RuntimeDropResolver(self.items)
         self.shops = {r["ShopID"]: r for r in self.catalog["shops"]}
         with store.db:
             store.db.execute("""CREATE TABLE IF NOT EXISTS economy_grants (
@@ -43,6 +65,10 @@ class EconomyService:
                 claimed INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(player_id,task_id))""")
             store.db.execute("""CREATE TABLE IF NOT EXISTS economy_events (
                 player_id INTEGER NOT NULL, event_key TEXT NOT NULL, PRIMARY KEY(player_id,event_key))""")
+            store.db.execute("""CREATE TABLE IF NOT EXISTS battle_unresolved_rewards (
+                uuid TEXT NOT NULL, player_id INTEGER NOT NULL, section_id INTEGER NOT NULL,
+                reward_group INTEGER NOT NULL, reason TEXT NOT NULL,
+                PRIMARY KEY(uuid,reward_group))""")
             store.db.execute("""CREATE TABLE IF NOT EXISTS economy_clears (
                 player_id INTEGER NOT NULL, section_id INTEGER NOT NULL, first_uuid TEXT NOT NULL,
                 PRIMARY KEY(player_id,section_id))""")
@@ -66,6 +92,17 @@ class EconomyService:
                 player_id INTEGER NOT NULL, source TEXT NOT NULL, item_id INTEGER NOT NULL,
                 quantity INTEGER NOT NULL, reason TEXT NOT NULL,
                 PRIMARY KEY(player_id,source,item_id))""")
+            store.db.execute("""CREATE TABLE IF NOT EXISTS reward_settlement_audit (
+                run_id TEXT PRIMARY KEY, player_id INTEGER NOT NULL, section_id INTEGER NOT NULL,
+                sources TEXT NOT NULL, blocked TEXT NOT NULL, created_at INTEGER NOT NULL)""")
+            store.db.execute("""CREATE TABLE IF NOT EXISTS pending_reward_instances (
+                run_id TEXT NOT NULL, ordinal INTEGER NOT NULL, player_id INTEGER NOT NULL,
+                item_id INTEGER NOT NULL, quantity INTEGER NOT NULL, quality INTEGER NOT NULL,
+                e_num INTEGER NOT NULL, reason TEXT NOT NULL,
+                PRIMARY KEY(run_id,ordinal))""")
+            store.db.execute("""CREATE TABLE IF NOT EXISTS sweep_receipts (
+                request_key TEXT PRIMARY KEY, player_id INTEGER NOT NULL,
+                section_id INTEGER NOT NULL, response BLOB NOT NULL)""")
             # Phase19 recorded clears but did not advance BaseInfo. Adopt only
             # existing consecutive clears, without replaying rewards or charges.
             for player in store.db.execute("SELECT id FROM players").fetchall():
@@ -129,8 +166,21 @@ class EconomyService:
     def login_event(self, player_id):
         self.ensure_periods(player_id)
         self.record_event(player_id, "login", 5)
+        self.refresh_online_tasks(player_id)
 
-    def gifts(self, groups, deferred=None):
+    def refresh_online_tasks(self, player_id):
+        """Credit a daily online task once when the player contacts the server in its window."""
+        self.ensure_periods(player_id)
+        hour = datetime.fromtimestamp(int(self.clock()), timezone(timedelta(hours=8))).hour
+        for task_id, task in self.tasks.items():
+            condition = self.catalog["task_conditions"][str(task_id)]
+            if condition["CompleteType"]["value"] != 6 or task["RefreshCycle"]["value"] != 1:
+                continue
+            start, end = condition["CompleteValue1"][0], condition["CompleteValue2"][0]
+            if start <= hour < end:
+                self.record_event(player_id, f"online:{task_id}", 6, start)
+
+    def gifts(self, groups, deferred=None, allow_daily_random=False):
         rewards = Counter()
         for group in groups:
             rows = [r for r in self.catalog["gifts"] if r["GiftGroup"] == group]
@@ -138,20 +188,63 @@ class EconomyService:
                 raise UnresolvedEconomy(f"missing Gift {group}")
             for row in rows:
                 ids, nums = row.get("GiftValue", []), row.get("Num", [])
-                if (row.get("AwardType", {}).get("value") != 1 or row.get("Probability")
-                        or len(ids) != len(nums) or not ids):
+                kind = row.get("AwardType", {}).get("value")
+                probability = row.get("Probability", [])
+                if (kind not in (1, 2) or kind == 2 and not allow_daily_random
+                        or kind == 1 and probability or len(ids) != len(nums) or not ids
+                        or kind == 2 and (len(probability) != len(ids)
+                                          or sum(probability) != 100 or any(type(p) is not int or p < 0 for p in probability))):
                     raise UnresolvedEconomy(f"non-fixed Gift {group}")
+                if kind == 2:
+                    draw = secrets.randbelow(100)
+                    index = 0
+                    for index, weight in enumerate(probability):
+                        draw -= weight
+                        if draw < 0:
+                            break
+                    ids, nums = [ids[index]], [nums[index]]
                 for item, count in zip(ids, nums):
-                    if item not in self.items or type(count) is not int or count <= 0:
+                    if item not in self.items or type(count) is not int or count < 0 or kind == 1 and count == 0:
                         raise UnresolvedEconomy(f"invalid Gift {group}")
-                    kind = self.items[item].get("ItemType", {}).get("value")
-                    if kind == 10 or (kind == 16 and item not in self.CURRENCIES and item != 1237900):
+                    if count == 0:
+                        continue
+                    item_kind = self.items[item].get("ItemType", {}).get("value")
+                    if (item_kind not in self.STACKABLE_REWARD_TYPES
+                            and item not in self.CURRENCIES and item != 1237900):
                         if deferred is not None:
                             deferred[item] += count
                             continue
                         raise UnresolvedEconomy(f"unrecovered reward destination {item}")
                     rewards[item] += count
         return dict(rewards)
+
+    def validate_daily_fixed_rewards(self, section):
+        """Reject unresolved Daily destinations before consuming entry stamina."""
+        config = self.daily_sections.get(section)
+        if config is None:
+            raise UnresolvedEconomy("missing Daily reward section")
+        groups = list(config.get("VReward", [])) + list(config.get("FirVReward", []))
+        for group in groups:
+            rows = [r for r in self.catalog["gifts"] if r["GiftGroup"] == group]
+            if not rows:
+                raise UnresolvedEconomy(f"missing Gift {group}")
+            for row in rows:
+                ids, nums = row.get("GiftValue", []), row.get("Num", [])
+                kind = row.get("AwardType", {}).get("value")
+                probability = row.get("Probability", [])
+                if (kind not in (1, 2) or not ids or len(ids) != len(nums)
+                        or kind == 1 and probability
+                        or kind == 2 and (len(probability) != len(ids) or sum(probability) != 100)):
+                    raise UnresolvedEconomy(f"unresolved Gift {group}")
+                for item, count in zip(ids, nums):
+                    if (item not in self.items or type(count) is not int or count < 0
+                            or kind == 1 and count == 0):
+                        raise UnresolvedEconomy(f"invalid Gift {group}")
+                    destination = self.items[item].get("ItemType", {}).get("value")
+                    if destination == 10 or destination == 16 and item not in self.CURRENCIES and item != 1237900:
+                        raise UnresolvedEconomy(f"unresolved Daily reward destination {item}")
+        # A Daily battle must not be denied merely because its runtime drop
+        # amount cannot be inferred from the UI preview.
 
     @staticmethod
     def reward_bytes(rewards):
@@ -181,7 +274,7 @@ class EconomyService:
                 snapshot["mobility"]["power"] += count
                 if snapshot["mobility"]["power"] > 2**31 - 1:
                     raise UnresolvedEconomy("power overflow")
-            elif kind in (10, 16):
+            elif kind not in self.STACKABLE_REWARD_TYPES:
                 raise UnresolvedEconomy("unrecovered reward destination")
             else:
                 self.store.db.execute("""INSERT INTO inventory VALUES (?,?,?)
@@ -209,6 +302,7 @@ class EconomyService:
             for r in self.store.db.execute("SELECT item_id,quantity FROM inventory WHERE player_id=? ORDER BY item_id", (player_id,))]}
 
     def task_values(self, player_id, kind):
+        self.refresh_online_tasks(player_id)
         self.ensure_periods(player_id)
         level = self.store.get(player_id)["snapshot"]["level"]
         result = []
@@ -246,13 +340,14 @@ class EconomyService:
             condition = self.catalog["task_conditions"][str(task_id)]
             if (task["RefreshCycle"]["value"] not in active_kinds or task["AcceptLevel"] > level or condition["CompleteType"]["value"] != condition_type
                     or condition.get("CompleteValue1", [0]) not in ([0], []) and value not in condition["CompleteValue1"]
-                    or condition.get("CompleteValue2", [0]) not in ([0], [])):
+                    or condition_type != 6 and condition.get("CompleteValue2", [0]) not in ([0], [])):
                 continue
             self.store.db.execute("UPDATE economy_tasks SET progress=MIN(?,progress+?) WHERE player_id=? AND task_id=?",
                 (condition["CompleteNum"], amount, player_id, task_id))
 
     def claim(self, player_id, task_id, kind):
         self.ensure_periods(player_id)
+        self.refresh_online_tasks(player_id)
         task = self.tasks.get(task_id)
         result = {"code": 13, "taskId": task_id, "type": kind, "rewardData": b""}
         if not task or task["RefreshCycle"]["value"] != kind or task["AcceptLevel"] > self.store.get(player_id)["snapshot"]["level"]:
@@ -276,43 +371,165 @@ class EconomyService:
         except UnresolvedEconomy:
             return result
 
-    def settle(self, player_id, run_uuid, section, success):
+    def settle(self, player_id, run_uuid, section, success, section_type=0, outside_items=()):
         """Part of BattleService's receipt transaction, including first-clear key."""
-        rewards = {}
+        profile = self.section_rewards.get(section)
+        config = self.reward_sections.get(section)
+        run = self.store.db.execute("SELECT * FROM economy_runs WHERE uuid=?", (run_uuid,)).fetchone()
+        if (profile is None or config is None or profile["section_type"] != section_type
+                or run is None or run["player_id"] != player_id or run["section_id"] != section
+                or run["settled"]):
+            raise UnresolvedEconomy("unclassified, mismatched or settled run")
+        grants, pending_instances, blocked = self.runtime_drops.resolve(
+            run=run, profile=profile, outside_items=outside_items, success=success)
+        sources = {name: [] for name in ("FIRST_CLEAR_FIXED", "NORMAL_CLEAR_FIXED",
+            "RUNTIME_BATTLE_DROP", "SWEEP_REWARD", "EXTRA_DROP", "COMPAT_REWARD")}
         if success:
-            groups = list(self.sections[section].get("VReward", []))
-            if not self.store.db.execute("SELECT 1 FROM economy_clears WHERE player_id=? AND section_id=?", (player_id, section)).fetchone():
-                groups += self.sections[section].get("FirVReward", [])
             pending = Counter()
-            rewards = self.gifts(groups, deferred=pending)
-            rewards = self._grant(player_id, f"battle:{run_uuid}", rewards)
-            for item, count in pending.items():
-                self.store.db.execute("INSERT OR IGNORE INTO pending_rewards VALUES (?,?,?,?,?)",
-                    (player_id, f"battle:{run_uuid}", item, count, "unrecovered item instance or currency destination"))
-            self.store.db.execute("INSERT OR IGNORE INTO economy_clears VALUES (?,?,?)", (player_id, section, run_uuid))
+            first = not self.store.db.execute(
+                "SELECT 1 FROM economy_clears WHERE player_id=? AND section_id=?", (player_id, section)).fetchone()
+            for source, groups in (("NORMAL_CLEAR_FIXED", profile["normal_reward"]),
+                                   ("FIRST_CLEAR_FIXED", profile["first_reward"] if first else [])):
+                for group in groups:
+                    local_pending = Counter()
+                    try:
+                        resolved = self.gifts([group], deferred=local_pending,
+                                              allow_daily_random=section_type != 0)
+                    except UnresolvedEconomy as exc:
+                        self.store.db.execute("INSERT OR IGNORE INTO battle_unresolved_rewards VALUES (?,?,?,?,?)",
+                            (run_uuid, player_id, section, group, str(exc)))
+                        blocked.append({"gift_group": group, "reason": str(exc)})
+                        continue
+                    grants.extend(RewardGrant(source, section, run_uuid, item, count,
+                        reason=f"SectionTable GiftGroup {group}") for item, count in resolved.items())
+                    pending.update(local_pending)
+            compat = RewardCompatibilityPolicy.manual_gold(profile, run_uuid)
+            if compat:
+                grants = [g for g in grants if not (g.source == "RUNTIME_BATTLE_DROP" and g.item_id == 1237901)]
+                grants.append(compat)
+            if profile["drop_value_id"]:
+                self.store.db.execute("INSERT OR IGNORE INTO battle_unresolved_rewards VALUES (?,?,?,?,?)",
+                    (run_uuid, player_id, section, -2, "server DropValueID mapping unverified; client outsideItems used"))
+            for grant in grants:
+                key = "COMPAT_REWARD" if grant.source == "COMPAT_GOLD_DUNGEON" else grant.source
+                sources[key].append(grant.__dict__)
+            rewards = self._grant(player_id, f"battle:{run_uuid}", sum_grants(grants))
+            if pending:
+                for item, count in pending.items():
+                    self.store.db.execute("INSERT OR IGNORE INTO pending_rewards VALUES (?,?,?,?,?)",
+                        (player_id, f"battle:{run_uuid}", item, count, "unrecovered item instance or currency destination"))
+                    blocked.append({"item_id": item, "quantity": count,
+                                    "reason": "UNRESOLVED_INSTANCE_DELIVERY"})
+            for ordinal, grant in enumerate(pending_instances):
+                self.store.db.execute("INSERT INTO pending_reward_instances VALUES (?,?,?,?,?,?,?,?)",
+                    (run_uuid, ordinal, player_id, grant.item_id, grant.quantity, grant.quality,
+                     grant.e_num, "UNRESOLVED_INSTANCE_DELIVERY"))
+            self.mark_section_cleared(player_id, section, run_uuid, section_type)
+            self._event(player_id, f"clear:{run_uuid}", 3, section, 1)
+        else:
+            rewards = {}
+            self.refund_battle(player_id, run_uuid)
+        self.store.db.execute("INSERT INTO reward_settlement_audit VALUES (?,?,?,?,?,?)",
+            (run_uuid, player_id, section, json.dumps(sources, ensure_ascii=False, sort_keys=True),
+             json.dumps(blocked, ensure_ascii=False, sort_keys=True), int(time.time())))
+        self.store.db.execute("UPDATE economy_runs SET settled=1 WHERE uuid=?", (run_uuid,))
+        logging.getLogger("x2.rewards").info("RewardSettlement run=%s section=%s sources=%s blocked=%s final_grants=%s",
+            run_uuid, section, {k: len(v) for k, v in sources.items()}, blocked, rewards)
+        return self.reward_bytes(rewards)
+
+    def settle_sweep(self, player_id, section, count, request_key):
+        """Only MopReward; the stage must already be cleared and cost is per sweep."""
+        if type(count) is not int or not 1 <= count <= 10:
+            raise UnresolvedEconomy("invalid sweep count")
+        profile = self.section_rewards.get(section)
+        config = self.reward_sections.get(section)
+        if not profile or not config or not profile["sweep_reward"]:
+            raise UnresolvedEconomy("section has no confirmed MopReward")
+        if not self.store.db.execute("SELECT 1 FROM economy_clears WHERE player_id=? AND section_id=?",
+                                     (player_id, section)).fetchone():
+            raise UnresolvedEconomy("section not cleared for sweep")
+        cost = config.get("ManualValue")
+        if type(cost) is not int or cost < 0:
+            raise UnresolvedEconomy("sweep cost unknown")
+        snapshot = self.store.get(player_id)["snapshot"]
+        if snapshot.get("mobility", {}).get("power", 0) < cost * count:
+            raise UnresolvedEconomy("insufficient sweep stamina")
+        pending = Counter()
+        grants = []
+        for _ in range(count):
+            for group in profile["sweep_reward"]:
+                resolved = self.gifts([group], deferred=pending,
+                                      allow_daily_random=profile["section_type"] != 0)
+                grants.extend(RewardGrant("SWEEP_REWARD", section, request_key, item, amount,
+                    reason=f"SectionTable MopReward GiftGroup {group}") for item, amount in resolved.items())
+        snapshot["mobility"]["power"] -= cost * count
+        self.save_snapshot(player_id, snapshot)
+        rewards = self._grant(player_id, f"sweep:{request_key}", sum_grants(grants))
+        for item, amount in pending.items():
+            self.store.db.execute("INSERT OR IGNORE INTO pending_rewards VALUES (?,?,?,?,?)",
+                (player_id, f"sweep:{request_key}", item, amount, "UNRESOLVED_INSTANCE_DELIVERY"))
+        self._event(player_id, f"sweep:{request_key}", 3, section, count)
+        self.store.db.execute("INSERT INTO reward_settlement_audit VALUES (?,?,?,?,?,?)",
+            (request_key, player_id, section, json.dumps({"SWEEP_REWARD": audit_grants(grants)},
+             ensure_ascii=False), json.dumps({"pending": dict(pending)}), int(time.time())))
+        return self.reward_bytes(rewards)
+
+    def mark_section_cleared(self, player_id, section, run_uuid, section_type):
+        """Shared clear record with a type-specific frontier policy."""
+        self.store.db.execute("INSERT OR IGNORE INTO economy_clears VALUES (?,?,?)", (player_id, section, run_uuid))
+        if section_type == 0:
             snapshot = self.store.get(player_id)["snapshot"]
             route = list(self.sections)
-            current = snapshot.get("main_section", 2110001)
+            current = snapshot.get("main_section")
             if section in route and (current not in route or route.index(section) > route.index(current)):
                 snapshot.update(main_section=section, main_chapter=self.sections[section]["ChapterID"])
                 self.save_snapshot(player_id, snapshot)
-            self._event(player_id, f"clear:{run_uuid}", 3, section, 1)
-        else:
-            self.refund_battle(player_id, run_uuid)
-        self.store.db.execute("UPDATE economy_runs SET settled=1 WHERE uuid=?", (run_uuid,))
-        return self.reward_bytes(rewards)
+
+    def mission_values(self, player_id):
+        clears = {row[0] for row in self.store.db.execute(
+            "SELECT section_id FROM economy_clears WHERE player_id=?", (player_id,))}
+        daily_frontiers = []
+        for dungeon_id, dungeon in sorted(self.entry_catalog.daily_dungeons.items()):
+            frontier = None
+            for section in dungeon["SectionID"]:
+                if section not in clears or section not in self.daily_sections:
+                    break
+                frontier = section
+            if frontier is not None:
+                daily_frontiers.append(MISSION_PAIR.encode({"Key": dungeon_id, "Value": frontier}))
+        other = []
+        if daily_frontiers:
+            other.append(MISSION_TYPE.encode({"type": 3, "missionData": daily_frontiers}))
+        chapter_frontiers = {}
+        for section in clears:
+            row = self.entry_catalog.sections.get(section)
+            if not row or row["Type"] in (0, 3):
+                continue
+            key = (row["Type"], row["ChapterID"])
+            chapter_frontiers[key] = max(section, chapter_frontiers.get(key, 0))
+        by_type = {}
+        for (section_type, chapter), frontier in sorted(chapter_frontiers.items()):
+            by_type.setdefault(section_type, []).append(MISSION_PAIR.encode({"Key": chapter, "Value": frontier}))
+        other.extend(MISSION_TYPE.encode({"type": section_type, "missionData": pairs})
+                     for section_type, pairs in sorted(by_type.items()))
+        return {"mainMission": sorted(clears & self.sections.keys()), "OtherChapter": other}
 
     def save_snapshot(self, player_id, snapshot):
         self.store.db.execute("UPDATE players SET snapshot=?,revision=revision+1 WHERE id=?",
             (json.dumps(snapshot, ensure_ascii=False, sort_keys=True), player_id))
 
-    def charge_battle(self, player_id, run_uuid, section):
-        amount = self.sections[section]["ManualValue"]
+    def charge_battle(self, player_id, run_uuid, section, amount=None):
+        # BattleEntryContext supplies an explicit policy cost for non-main modes.
+        # MainMission keeps the confirmed SectionTable ManualValue behavior.
+        amount = self.sections[section]["ManualValue"] if amount is None else amount
+        if type(amount) is not int or amount < 0:
+            raise UnresolvedEconomy("invalid battle cost")
         snapshot = self.store.get(player_id)["snapshot"]
         if snapshot.get("mobility", {}).get("power", 0) < amount:
             raise UnresolvedEconomy("insufficient stamina")
-        snapshot["mobility"]["power"] -= amount
-        self.save_snapshot(player_id, snapshot)
+        if amount:
+            snapshot["mobility"]["power"] -= amount
+            self.save_snapshot(player_id, snapshot)
         self.store.db.execute("INSERT INTO battle_costs(uuid,player_id,amount) VALUES (?,?,?)", (run_uuid, player_id, amount))
 
     def refund_battle(self, player_id, run_uuid):
@@ -347,8 +564,7 @@ class EconomyService:
         if name == "C2L_ItemAll":
             return OutboundMessage(response_name, self.inventory_values(player_id))
         if name == "C2L_QueryMission":
-            return OutboundMessage(response_name, {"mainMission": [r[0] for r in self.store.db.execute(
-                "SELECT section_id FROM economy_clears WHERE player_id=? ORDER BY section_id", (player_id,))]})
+            return OutboundMessage(response_name, self.mission_values(player_id))
         if name in ("C2L_GameTask", "C2L_DailyAndWeekTask"):
             kind = request.get("type", 0)
             return OutboundMessage("L2C_GameTask", self.task_values(player_id, kind) if kind in (1, 2)

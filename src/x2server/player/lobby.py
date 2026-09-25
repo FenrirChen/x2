@@ -1,6 +1,7 @@
 """Explicit local empty-state queries; no purchases, rewards or progression mutations."""
 import logging
 import time
+from .server_clock import ServerClock
 
 from x2server.messages.lobby import LOBBY_IDS, LOBBY_SCHEMAS
 from x2server.network.dispatcher import DispatchContext, OutboundMessage
@@ -10,6 +11,9 @@ from x2server.protocol.types import DecodedPacket
 
 
 class LobbyService:
+    def __init__(self, clock=None):
+        self.clock = clock or ServerClock()
+
     def handlers(self):
         return {"C2L_" + name: self.query for name, _, _ in LOBBY_IDS}
 
@@ -27,7 +31,7 @@ class LobbyService:
             "C2L_QueryNotic": {"code": 10, "version": 0},
             "C2L_NoticPushInfo": {"code": 10},
             "C2L_QueryReturnInfo": {"code": 10, "hasReturn": False, "hasReciveReward": False, "hasDraw": False},
-            "C2L_SystemInfo": {"code": 10, "serverTime": int(time.time())},
+            "C2L_SystemInfo": {"code": 10, "serverTime": self.clock.now()},
             "C2L_GameTask": {"code": 10, "type": request.get("type", 0), "chapterId": request.get("chapterId", 0)},
             "C2L_EntryidStatus": {"code": 10},
             "C2L_EquipAll": {},

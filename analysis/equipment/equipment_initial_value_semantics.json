@@ -1,0 +1,137 @@
+{
+ "generated": "2026-09-25",
+ "question": "新生成 HeroEquip 的主属性/副词条初始数值来自哪张官方表、如何确定",
+ "evidence_grade_legend": {
+  "A": "native 指令/直接调用/原始表全量验证",
+  "B": "指令组合强推导",
+  "R": "Revival 自定（非官方）"
+ },
+ "tables": {
+  "EquibBase": {
+   "role": "A —— 只负责'抽什么属性'（类型池+权重），不含任何数值",
+   "fields": {
+    "EquibId": "TypeId(1240|SS|P)",
+    "EquibPart": "部位1-6",
+    "EquibSuit": "套装",
+    "MainAttrType[]": "主属性类型候选（全部部件均为单候选，MainAttrChance=[100]）",
+    "MainAttrChance[]": "主属性权重（实测恒 [100]，即固定）",
+    "MinorAttrType[]": "副词条类型池（16 类型宇宙的子集，典型 16 个全量）",
+    "MinorAttrChance[]": "副词条权重（如 [90,50,60,...]，加权随机）"
+   },
+   "source": "full_tables/equibbase.json (126 行)"
+  },
+  "EquibAttrib": {
+   "role": "A —— 官方数值宇宙：per (star, AttribSRC, AttrType) 的 3 档离散值阶梯 + 2 权重",
+   "key": "EquibAttribManager.GetItem(int equibrare /*star*/, int attribsrc, int attrtype) @0x1CAF32C",
+   "rows": "384 = 6星 × 4 src × 16 类型（full_tables JSON 丢失 AttribSRC；已从原始 bin 重解析：analysis/equipment/equibattrib_full.json）",
+   "src_semantics": {
+    "0": "主属性基础值阶梯（GetEquipBaseProperty isMain→src0；GetEquipMaxProperty main 公式基项）",
+    "1": "主属性成长值阶梯（GetEquipMaxProperty main: max = src0top + src1top × level）",
+    "2": "副词条基础值阶梯（GetEquipBaseProperty minor→src2）",
+    "3": "副词条强化增量阶梯（GetEquipMaxProperty minor 公式用 src3；Revival strengthen catalog 即取 src3）"
+   },
+   "value_structure": "ValueSec=3 档升序离散值（如 4★主HP [54,64,68]、4★副HP src2 [21,25,26]）；ChanceSec=2 个权重（src0/1 恒 [60,40]，src2/3 恒 [80,20]）——官方数值是'多档离散+权重'，不是连续 min-max",
+   "consumers": "仅 CollegeModule$$GetEquipBaseProperty(0x1B0156C)/GetEquipMaxProperty(0x1B010F8)（图鉴/学院显示）；无任何生成期消费（客户端无装备数值生成代码，CollegePurify 全部 Send*Opt 服务器驱动，0 处 Random）",
+   "display_semantics": "GetEquipBaseProperty 返回 ValueSec[最后一档]（main=src0top / minor=src2top）；GetEquipMaxProperty: 主属性 = src0top + src1top×level；副词条 = src2top 与 src3top×count 组合（count 由 value/src2top 比值对照 GlobalParam 阈值表计得）",
+   "chancesec_zero_readers": {
+    "grade": "A (反证)",
+    "evidence": "EquibAttrib 行的全部获取途径：GetItem 2 调用点（College 显示，均只读 ValueSec 顶档）+ GetAllItem 0 调用者（callgraph_bl.json 全量验证）→ ChanceSec(+0x28) 客户端零消费",
+    "candidate_mappings": [
+     {
+      "id": "A 逐段升级链",
+      "rule": "value=ValueSec[0]; roll<ChanceSec[0]%→ValueSec[1]; 再 roll<ChanceSec[1]%→ValueSec[2]",
+      "main_dist_[60,40]": "40% / 36% / 24%",
+      "minor_dist_[80,20]": "20% / 64% / 16%",
+      "note": "Sec=段 命名学最自洽",
+      "status": "ADOPTED as REVIVAL_COMPATIBILITY (USER_DECISION 2026-09-25, decisions/compatibility/equip_valuesec_tier_roll.md) —— 非官方算法"
+     },
+     {
+      "id": "B 互斥加权+保底",
+      "rule": "tier1/tier2 按 ChanceSec 加权互斥，tier0 为保底",
+      "issue": "60/40 归一化后 tier0 概率为 0，需隐含参数，存疑"
+     },
+     {
+      "id": "C 平行变体",
+      "rule": "3 档为平行内容变体（如难度档）而非 roll 空间；ChanceSec 非概率",
+      "note": "与恒定性相符，但与'两个显示函数恒取顶档'的规范值语义关系不明"
+     }
+    ],
+    "invariance": "ChanceSec 全 384 行仅两个值（主 [60,40] / 副 [80,20]）→ 公式级常数而非逐条调参",
+    "top_tier_canonical_evidence": "两个显示函数取 ValueSec 顶档；4★ AttribBD 盘副词条=src1 顶档精确命中（20/22/18/22）"
+   }
+  },
+  "EquibAttribBD": {
+   "role": "A —— 官方'授权固定盘'（exact-value plates），不是随机数值源",
+   "row_anatomy": {
+    "AttrbdID": "[QQ][SSS][NNN] 选择键（QQ=星级 11..16）",
+    "EquibQuality": "星级",
+    "EquibLevel": "全部 66 行 = 0（字段存在但未用）",
+    "MinorAttrNum": "该盘初始副词条数（条数决定，非数值）",
+    "MainAttr[4]": "[type, value(, g1, g2)]——盘的主属性类型与精确值；standard 4★ 盘 value=0（不指定）；seasonal 盘带 (15,16)/(15,26) 等附加对",
+    "MinorAttrType[5]/MinorAttrValue[5]": "盘的副词条槽位类型与精确值（按槽对齐）",
+    "MinorAttrStreNum[5]/MinorAttrStreValue[5]": "盘级强化增量（仅 seasonal 161511xx 非零；standard 行全 0）"
+   },
+   "row_groups": {
+    "base_QQ000000(+000001/000100 空盘)": "条数模板（MinorAttrNum=Min 或 Max），**全部数值=0 —— 不可能是数值来源**",
+    "filled_QQ000101-106": "6 部位精确盘：主属性(类型,值) + 副词条池/值 + 0 强化增量（1★/2★/4★ 少量行；5★6★ 各 6 行）",
+    "seasonal_161511xx": "6★ 活动盘：含 StreNum/StreValue 强化增量、附加 MainAttr 对"
+   },
+   "vs_ladders": "盘值与 EquibAttrib 阶梯的关系：4★ 盘副词条=src1 顶档精确命中（20/22/18/22）；5★/6★ 盘副词条落在 src2 阶梯区间内（非档位值）；seasonal 主属性=src0[0] 精确；**1★/2★ 盘值超出全部阶梯（如 1★主104=200 vs src0[102,121,128]）→ 盘是独立授权数据，不受阶梯约束**"
+  },
+  "AttribType": {
+   "role": "A —— 属性元数据（NameId/NameEnu/DataType=E_Percent|flat/显示 ValueMax/ValueMin），宽上下限（±100000），**不是数值 roll 范围**"
+  },
+  "EquibStage": {
+   "role": "A（既有）—— 条数上下限 + 价值；无数值语义"
+  }
+ },
+ "client_consumers_verdict": {
+  "generation": "客户端零参与：EquibAttribBDManager.GetItem 仅 GM 校验 2 处（GetEquip 0x13A20A4 / OnMailGetEquipBtnClick）；EquibAttribManager.GetItem 仅 College 显示 2 处；无 Random 调用与装备数值生成路径（CollegePurify 54 个方法 0 Random/0 EquibAttrib）",
+  "gm_path": "C2L_Cheat{opt=15, values=[equipId, attrbdId]} —— attrbdId 指定固定盘，服务器按盘构建（盘值=最终 Param 的直接依据）",
+  "display": "HeroEquip.Param.Av1..Av6 全部来自 wire，客户端只读不算"
+ },
+ "revival_existing_artifacts_audit": {
+  "equipment_seed_catalog.json": {
+   "source": "官方 EquibBase + EquibAttribBD 原始 bin（声明于 sources）",
+   "values": "直接复制官方 filled 盘（preset_id 15000101-106/16000101-106；42 行=5★6 盘+6★36 盘），Param 值与 AttribBD 行逐字段一致",
+   "policy_declared": "TEST_COMPAT_INSTANCE; static attribute preset reused deterministically, not an official drop roll —— 自证为兼容用法，非官方掉落 roll",
+   "verdict": "官方值、兼容用法（R：把固定盘当随机件用）"
+  },
+  "equipment_strengthen_catalog.json": {
+   "source": "官方 EquibAttrib 原始 bin（384 行，含 AttribSRC）",
+   "values": "取 AttribSRC=3（副词条强化增量阶梯）全部 96 行，value_range=ValueSec、chance=ChanceSec",
+   "usage": "EquipmentService.strengthen 在 value_range[min..max] 内均匀 roll（REVIVAL_COMPAT）——官方应为 3 档离散+ChanceSec",
+   "verdict": "官方表、官方值、兼容 roll 方式（已在 interpretation 自证）"
+  },
+  "conclusion": "Revival 已有的兽主数值全部来自官方表（AttribBD 盘 + EquibAttrib src3 阶梯），未发现自创数值被误当官方证据的情况"
+ },
+ "answers": {
+  "main_attr_type_source": "EquibBase[TypeId].MainAttrType/MainAttrChance（单候选固定）",
+  "main_attr_value_source": "随机生成 = EquibAttrib[star, src0, type] 3 档阶梯（服务器侧取档）；固定发放 = EquibAttribBD 盘 MainAttr[1]",
+  "minor_attr_type_source": "EquibBase[TypeId].MinorAttrType/MinorAttrChance 加权随机（随机件）；AttribBD 盘行 MinorAttrType 槽（固定件）",
+  "minor_attr_value_source": "随机生成 = EquibAttrib[star, src2, type] 3 档阶梯；强化增量 = src3 阶梯；固定件 = AttribBD 盘 MinorAttrValue",
+  "value_roll_algorithm": "官方表结构 = 3 档离散值 + ChanceSec[2] 权重（非 min-max 连续）；官方取档映射不可恢复（ChanceSec 客户端零消费）。Revival 兼容策略（USER_DECISION 2026-09-25）：逐段升级链——ValueSec[0] 起步，ChanceSec[0]% 升 tier1，再 ChanceSec[1]% 升 tier2；src0/src1=[60,40]→40/36/24，src2/src3=[80,20]→20/64/16；适用于主初始(src0)/副初始(src2)/强化增量(src3)",
+  "star_decides_attrbd_row": "星决定阶梯（EquibAttrib rare 维度）与盘组（QQ 前缀）；条数档(base/max)与盘选择=服务器（65/35 兼容策略见既有决策）",
+  "base_max_tier_decides_values": "否 —— base/max 行全部数值=0，仅决定条数；数值与档位行无关",
+  "level0_official_values_recovered": "PARTIAL：数值宇宙完整恢复（equibattrib_full.json 384 行阶梯 + 66 行盘）；随机件'如何取档'官方机制未知",
+  "strengthen_vs_initial_separated": "是：src2(基础)/src3(增量) 分离；盘行 MinorV 与 StreNum/StreValue 分离（仅 seasonal 非零）；强化条数门控(GetAttrNum<Max)与数值增量互不相干",
+  "remaining_custom_rules": [
+   "R1: 随机件数值取档 —— 已决策：逐段升级链（REVIVAL_COMPAT/USER_DECISION 2026-09-25）",
+   "R2: 掉落件条数档选择 —— 已决策：65/35（REVIVAL_COMPAT/USER_DECISION 2026-09-25）",
+   "R3: 主属性是否随等级成长（src1 阶梯的生成期用法）—— Revival 暂不实现成长，Lv0 定值",
+   "R4: 强化增量 roll —— 已决策：src3 阶梯逐段升级链（每事件一掷，实施时替换现行均匀 roll）"
+  ]
+ },
+ "revival_compatibility_decisions": [
+  {
+   "decision": "条数档 65/35",
+   "file": "docs/decisions/compatibility/equip_attribbd_tier_selection.md",
+   "date": "2026-09-25"
+  },
+  {
+   "decision": "ValueSec 逐段升级链取值（src0/src2/src3）",
+   "file": "docs/decisions/compatibility/equip_valuesec_tier_roll.md",
+   "date": "2026-09-25"
+  }
+ ]
+}

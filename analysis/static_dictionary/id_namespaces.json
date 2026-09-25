@@ -1,0 +1,215 @@
+{
+ "generated_by": "tools/analysis/build_reference_graph.py",
+ "namespaces": {
+  "Achievement": {
+   "table": "achievement",
+   "pk_field": "AchievementID",
+   "count": 318,
+   "min": 660001,
+   "max": 662909
+  },
+  "Artifact": {
+   "table": "artifactbase",
+   "pk_field": "ArtifactID",
+   "count": 40,
+   "min": 1503,
+   "max": 1699
+  },
+  "CurrencyType": {
+   "table": "currencytype",
+   "pk_field": "TpyeId",
+   "count": 46,
+   "min": 900,
+   "max": 999
+  },
+  "DailyDungeon": {
+   "table": "dailydungeon",
+   "pk_field": "ID",
+   "count": 25,
+   "min": 2030100,
+   "max": 2060900
+  },
+  "DailyTask": {
+   "table": "dailytask",
+   "pk_field": "DailyTaskID",
+   "count": 40,
+   "min": 630001,
+   "max": 630114
+  },
+  "DropClass": {
+   "table": "dropprop",
+   "pk_field": "DropClass",
+   "count": 332,
+   "min": 1301101,
+   "max": 1309250
+  },
+  "ExtraDroop": {
+   "table": "extradroop",
+   "pk_field": "ID",
+   "count": 26,
+   "min": 100001,
+   "max": 1000028
+  },
+  "FunctionOpen": {
+   "table": "functionopen",
+   "pk_field": "ID",
+   "count": 84,
+   "min": 21900,
+   "max": 21983
+  },
+  "Gift": {
+   "table": "gift",
+   "pk_field": "GiftGroup",
+   "count": 10930,
+   "min": 700001,
+   "max": 938407
+  },
+  "Goods": {
+   "table": "shopgoodsgroup",
+   "pk_field": "GoodsID",
+   "count": 1567,
+   "min": 1900101,
+   "max": 2007803
+  },
+  "Hero": {
+   "table": "playerattrib",
+   "pk_field": "ID",
+   "count": 1182,
+   "min": 1003,
+   "max": 905001
+  },
+  "Item": {
+   "table": "item",
+   "pk_field": "ItemID",
+   "count": 3026,
+   "min": 1001000,
+   "max": 1300105
+  },
+  "LanguageKey": {
+   "table": "language",
+   "pk_field": "Key",
+   "count": 28996,
+   "min": 1001,
+   "max": 216131112
+  },
+  "Map": {
+   "table": "mapinfo",
+   "pk_field": "MapTypeID",
+   "count": 3099,
+   "min": 2210001,
+   "max": 2293997
+  },
+  "MonsterEventGroup": {
+   "table": "monstereventgroup",
+   "pk_field": "EventGroupID",
+   "count": 1948,
+   "min": 2310001,
+   "max": 2392770
+  },
+  "MonsterEventTable": {
+   "table": "monstereventtable",
+   "pk_field": "EventID",
+   "count": 2630,
+   "min": 10001,
+   "max": 92747
+  },
+  "NpcEvent": {
+   "table": "npcevent",
+   "pk_field": "NPCEventID",
+   "count": 408,
+   "min": 60001,
+   "max": 69913
+  },
+  "PassiveSpell": {
+   "table": "passivespelltb",
+   "pk_field": "PassiveID",
+   "count": 2286,
+   "min": 240000,
+   "max": 248405
+  },
+  "Quest": {
+   "table": "quest",
+   "pk_field": "QuestID",
+   "count": 1098,
+   "min": 500001,
+   "max": 588311
+  },
+  "Scene": {
+   "table": "scenebase",
+   "pk_field": "ID",
+   "count": 3080,
+   "min": 2210001,
+   "max": 2293997
+  },
+  "Section": {
+   "table": "sectiontable",
+   "pk_field": "SectionID",
+   "count": 3203,
+   "min": 2110001,
+   "max": 2193997
+  },
+  "Shop": {
+   "table": "shopconfig",
+   "pk_field": "ShopID",
+   "count": 25,
+   "min": 801,
+   "max": 899
+  },
+  "ShopGroup": {
+   "table": "shopgoodsgroup",
+   "pk_field": "GroupID",
+   "count": 650,
+   "min": 1,
+   "max": 982
+  },
+  "Skill": {
+   "table": "skillbase",
+   "pk_field": "ID",
+   "count": 1333,
+   "min": 10030,
+   "max": 99421
+  },
+  "TaskCondition": {
+   "table": "taskcondition",
+   "pk_field": "TaskConditionID",
+   "count": 1728,
+   "min": 600000,
+   "max": 700542
+  },
+  "TitoGuide": {
+   "table": "titoguidetable",
+   "pk_field": "ID",
+   "count": 116,
+   "min": 21011,
+   "max": 21905
+  },
+  "Tower": {
+   "table": "towerbase",
+   "pk_field": "TowerID",
+   "count": 50,
+   "min": 100,
+   "max": 1901
+  },
+  "Unit": {
+   "table": "unitbase",
+   "pk_field": "ID",
+   "count": 1912,
+   "min": 1003,
+   "max": 905001
+  },
+  "WeeklyDungeon": {
+   "table": "weeklydungeon",
+   "pk_field": "ID",
+   "count": 5,
+   "min": 2050101,
+   "max": 2060201
+  },
+  "WorldBoss": {
+   "table": "worldbossinfo",
+   "pk_field": "BossID",
+   "count": 10,
+   "min": 2040101,
+   "max": 2040203
+  }
+ }
+}

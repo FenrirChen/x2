@@ -1,0 +1,43 @@
+{
+  "target": {
+    "requested_name": "DropPropManager.GetDropItemByGroup",
+    "actual_name": "LogicX2.DropItemManager.GetDropItemByGroup",
+    "rva": "0x1E4845C",
+    "end_exclusive": "0x1E48B0C",
+    "signature": "List<DropItemManager.ItemStruct> GetDropItemByGroup(DropProp group, int level)",
+    "confidence": "A for control flow and field use; B for conditional probability model"
+  },
+  "branches": [
+    {
+      "condition": "Picks < 0",
+      "operation": "For each ItemList[i], process Prob[i] repetitions. A direct Item produces one ItemStruct per repetition; a child DropClass is pushed onto the explicit mLootGroup stack per repetition. Picks magnitude and NoDrop are not used.",
+      "rng": false,
+      "evidence": ["0x1E484FC", "0x1E48534-0x1E48618", "0x1E486FC", "0x1E4886C-0x1E488AC"]
+    },
+    {
+      "condition": "Picks >= 0 and IsADC == 1",
+      "operation": "Dispatch AddMetaLoot for dynamic candidate discovery, battle-context filters, NoDrop gate and weighted selection. ItemList=[0] is a sentinel, not an Item ID.",
+      "rng": true,
+      "evidence": ["0x1E48940-0x1E48964", "0x1E4B768", "0x1E4B7AC", "0x1E4C308-0x1E4C314"]
+    },
+    {
+      "condition": "Picks >= 0 and IsADC != 1",
+      "operation": "For each of Picks draws, sample Range(0, NoDrop+sum(Prob)); if r<NoDrop emit nothing; otherwise call GetProbability(mRandom,Prob) and resolve ItemList[selectedIndex] to one direct Item or a nested DropClass.",
+      "per_pick_empty_probability": "NoDrop/(NoDrop+sum(Prob))",
+      "per_pick_candidate_probability": "Prob[i]/(NoDrop+sum(Prob))",
+      "rng": true,
+      "evidence": ["0x1E48704-0x1E48768", "0x1E4893C-0x1E489F4", "0x1E48A14-0x1E48AB8", "0x18D2880-0x18D2984"]
+    }
+  ],
+  "nested_groups": "Explicit LIFO mLootGroup stack; DropPropManager.GetItem resolves each popped DropClass. Child groups run their own Picks/NoDrop/IsADC branch. No direct recursive BL call.",
+  "item_id_range": "1000001..1299999 inclusive for direct Item routing",
+  "direct_item_num": 1,
+  "normalization": "No fixed 100 or 10000 normalization in ordinary DropProp selection.",
+  "drop_weight_param": "10000 is divided by Item.ItemValue to form dynamic IsADC candidate weights in CheckItem; it is not a scale for ordinary Prob.",
+  "output_scope": "pre CheckItemLimit, pickup and server reward handling",
+  "unresolved": [
+    "Dynamic IsADC eligible candidates and final per-Item rates require Section, unit and item-limit state.",
+    "CheckItemLimit, quality transforms and other downstream handling can alter emitted results.",
+    "Section.DropValueID and server FightDataProfile.dropValues remain separate, unresolved systems."
+  ]
+}

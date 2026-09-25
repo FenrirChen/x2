@@ -1,0 +1,29 @@
+{
+ "EquipParam layout": {
+  "At1/Av1 (0x10/0x14)": "MAIN attribute slot",
+  "At2..At6/Av2..Av6 (0x18..0x3C)": "minor affix slots (max 5)",
+  "Lock1..Lock6 (0x40..0x54)": "per-slot lock flags"
+ },
+ "counting_rule": {
+  "method": "EquipStrengthWnd.GetAttrNum(HeroEquip) @ 0x1C30E28 (A: full disasm)",
+  "rule": "count = number of NONZERO Av among Av2..Av6 (main slot Av1 NOT counted)",
+  "pseudocode": "int n=0; foreach av in {Av2,Av3,Av4,Av5,Av6}: n += (av != 0); return n;"
+ },
+ "slot_consumers": [
+  {
+   "method": "EquipStrengthWnd.CheckSubAttruib",
+   "rva": "0x1C30CFC",
+   "flow": "EquibExp.GetItem(level+1).IsEvent==1 (+3/6/9/12/15) -> EquibStage[Star].MinorListMax vs GetAttrNum(equip) -> whether this strengthen ADDS a new affix"
+  },
+  {
+   "method": "EquipStrengthWnd.SetStrengthInfo",
+   "rva": "0x1C2EDFC",
+   "flow": "display current affixes vs star cap (GetAttrNum + EquibStage.GetItem)"
+  },
+  {
+   "method": "ClientProperty.AddEqtsAttributes",
+   "rva": "0x1491674",
+   "flow": "agggregates equipped Param slots into player attributes"
+  }
+ ]
+}

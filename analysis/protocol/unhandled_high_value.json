@@ -1,0 +1,2348 @@
+{
+ "generated_by": "tools/analysis/build_protocol_catalog.py",
+ "note": "C2L requests the 2.4 client actually sends (send instantiation exists) but the Revival server has no handler; grouped by business domain",
+ "domains": {
+  "Achievement": [
+   {
+    "message_id": 344,
+    "name": "AchvDetialData",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "achievement/AchievementCondition/medal tables decoded (318+139 rows)"
+   },
+   {
+    "message_id": 345,
+    "name": "AchvOverView",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "achievement/AchievementCondition/medal tables decoded (318+139 rows)"
+   },
+   {
+    "message_id": 346,
+    "name": "AchvReward",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "achievement/AchievementCondition/medal tables decoded (318+139 rows)"
+   },
+   {
+    "message_id": 358,
+    "name": "AchvPointReward",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "achievement/AchievementCondition/medal tables decoded (318+139 rows)"
+   },
+   {
+    "message_id": 411,
+    "name": "MedalOpt",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "achievement/AchievementCondition/medal tables decoded (318+139 rows)"
+   },
+   {
+    "message_id": 990,
+    "name": "SeasonAchvOverView",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "achievement/AchievementCondition/medal tables decoded (318+139 rows)"
+   },
+   {
+    "message_id": 992,
+    "name": "SeasonAchvDetialData",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "achievement/AchievementCondition/medal tables decoded (318+139 rows)"
+   },
+   {
+    "message_id": 994,
+    "name": "SeasonAchvReward",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "achievement/AchievementCondition/medal tables decoded (318+139 rows)"
+   },
+   {
+    "message_id": 996,
+    "name": "SeasonAchvPointReward",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "achievement/AchievementCondition/medal tables decoded (318+139 rows)"
+   }
+  ],
+  "Activity/Event": [
+   {
+    "message_id": 268,
+    "name": "DelNoticeEvent",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 407,
+    "name": "WorldBossSearch",
+    "send_channels": [
+     "MarsNetManager.SendBattle"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 409,
+    "name": "WorldBossOpenSearchChest",
+    "send_channels": [
+     "MarsNetManager.SendBattle"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 415,
+    "name": "QueryWorldBossInfo",
+    "send_channels": [
+     "MarsNetManager.SendBattle"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 417,
+    "name": "WorldBossAct",
+    "send_channels": [
+     "MarsNetManager.SendBattle"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 419,
+    "name": "WorldBossLetter",
+    "send_channels": [
+     "MarsNetManager.SendBattle"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 471,
+    "name": "WorldBossQuestSelect",
+    "send_channels": [
+     "MarsNetManager.SendBattle"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 628,
+    "name": "ActivityDialogue",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 686,
+    "name": "ActivityDialogReciveInfo",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 703,
+    "name": "QueryActivityRecharge",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 705,
+    "name": "ReciveActivityRecharge",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 734,
+    "name": "QueryShuangHanActivity",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 738,
+    "name": "ActivityPreNoticInfo",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 740,
+    "name": "ActivityPreNotic",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 818,
+    "name": "ActivityReissue",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 820,
+    "name": "ActivityReissueState",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 830,
+    "name": "ActivityRewardPoolInfo",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 888,
+    "name": "DelNoticeEventByType",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 890,
+    "name": "ExchangeItemActivity",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 892,
+    "name": "QueryActivitySignRecharge",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 896,
+    "name": "QueryActivityConfig",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 898,
+    "name": "QueryActivityContinueRecharge",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 900,
+    "name": "ReceiveActivityContinueRecharge",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 902,
+    "name": "QueryActivityAccumulateRecharge",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 904,
+    "name": "ReceiveActivityAccumulateRecharge",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 913,
+    "name": "ActivityPassRecord",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 921,
+    "name": "QueryActivityTower",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 923,
+    "name": "ActivityTowerLevelUp",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 925,
+    "name": "ActivityTowerPassive",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 927,
+    "name": "QueryTowerReward",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 929,
+    "name": "ReceiveTowerReward",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 935,
+    "name": "QueryBattlePassInfo",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 939,
+    "name": "BuyBattlePassLevel",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 941,
+    "name": "ReceiveBattlePass",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 949,
+    "name": "SignBattlePass",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 951,
+    "name": "BattlePassTalentInfo",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 953,
+    "name": "BattlePassTalentLevel",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 956,
+    "name": "BattlePassTalentReset",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 958,
+    "name": "MoonCampUnlock",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 960,
+    "name": "MoonCampPrestige",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 962,
+    "name": "MoonCampPrestigeReward",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 968,
+    "name": "MoonNPCFavorability",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 970,
+    "name": "MoonNPCFavorabilityReward",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 976,
+    "name": "MoonFlowerGive",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 988,
+    "name": "SimpleActivityOpt",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 1017,
+    "name": "QueryActivityPassiveData",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 1019,
+    "name": "QueryActivityExchangeSmallChange",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 1021,
+    "name": "ActivityExchangeSmallChange",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 1040,
+    "name": "ActivityBuilding",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 1042,
+    "name": "ActivityBuildingUpgrade",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 1044,
+    "name": "ActivityMonopolyQuery",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 1046,
+    "name": "ActivityMonopolyThrowDice",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 1048,
+    "name": "ActivityMonopolySteped",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 1050,
+    "name": "ActivityMonopolyRockPaperScissor",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 1052,
+    "name": "ActivityMonopolyReceiveDice",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 1059,
+    "name": "BattlePassLevelReceiveReward",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 1087,
+    "name": "NewYearCookOverView",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 1089,
+    "name": "NewYearCookStart",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   },
+   {
+    "message_id": 1091,
+    "name": "NewYearCookGetPrize",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "worldboss*/tower*/activity*/challenge*/endless* tables decoded"
+   }
+  ],
+  "Alchemy": [
+   {
+    "message_id": 233,
+    "name": "BuildingUpgrade",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 234,
+    "name": "BuildSpeedUP",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 235,
+    "name": "BuildStarUP",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 271,
+    "name": "BuildCrystalFinish",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 366,
+    "name": "BuildCancelPrayGod",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 367,
+    "name": "BuildQuickenPrayGod",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 369,
+    "name": "BuildStartPrayGod",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 590,
+    "name": "AlchemyMainData",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 598,
+    "name": "AlchemyFinish",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 602,
+    "name": "AlchemyCollect",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 604,
+    "name": "AlchemyBuy",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 729,
+    "name": "QueryAlchemyTrade",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 731,
+    "name": "AlchemyTrade",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 824,
+    "name": "AlchemyMakeCancel",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 826,
+    "name": "AlchemyOnekeyCollect",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   }
+  ],
+  "Artifact": [
+   {
+    "message_id": 144,
+    "name": "JewelCompose",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 215,
+    "name": "GodEqupJewelCompose",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 725,
+    "name": "GodEquipJewelDot",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 1011,
+    "name": "BattlepassArtifactOpt",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 1030,
+    "name": "GodSlotLock",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   }
+  ],
+  "Battle Entry": [
+   {
+    "message_id": 803,
+    "name": "TrainingGroundDot",
+    "send_channels": [
+     "MarsNetManager.SendBattle"
+    ],
+    "static_data_note": "3,203 sections + supporting dungeon/tower/worldboss tables decoded"
+   },
+   {
+    "message_id": 1082,
+    "name": "MatchEnter",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "3,203 sections + supporting dungeon/tower/worldboss tables decoded"
+   },
+   {
+    "message_id": 1085,
+    "name": "BattleEnter",
+    "send_channels": [
+     "CardGameNetManager.Send"
+    ],
+    "static_data_note": "3,203 sections + supporting dungeon/tower/worldboss tables decoded"
+   },
+   {
+    "message_id": 1108,
+    "name": "BattleReady",
+    "send_channels": [
+     "CardGameNetManager.Send"
+    ],
+    "static_data_note": "3,203 sections + supporting dungeon/tower/worldboss tables decoded"
+   }
+  ],
+  "CafeStore": [
+   {
+    "message_id": 834,
+    "name": "CafeStoreInfo",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 836,
+    "name": "CafeStoreUnLock",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 838,
+    "name": "CafeStorePositionSet",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 840,
+    "name": "CafeStoreCooking",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 842,
+    "name": "CafeStoreLevelUp",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 844,
+    "name": "CafeStoreReceiveRevenue",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 846,
+    "name": "CafeStoreUpdate",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   }
+  ],
+  "Chat": [
+   {
+    "message_id": 339,
+    "name": "ChatEvent",
+    "send_channels": [
+     "ChatNetManager.Send",
+     "WorldBossNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 360,
+    "name": "ChatAchv",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   }
+  ],
+  "Club/Guild": [
+   {
+    "message_id": 742,
+    "name": "CreateClub",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 744,
+    "name": "RecommandClub",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 746,
+    "name": "AppalyJoinClub",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 748,
+    "name": "UpdateClubInfo",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 750,
+    "name": "ClubApproval",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 756,
+    "name": "QuitClub",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 758,
+    "name": "ClubActiMainData",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 786,
+    "name": "QuickJoinClub",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 791,
+    "name": "UpdateClubRecruit",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 795,
+    "name": "JoinClubListner",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 798,
+    "name": "ClubReceiveReward",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   }
+  ],
+  "Draw": [
+   {
+    "message_id": 698,
+    "name": "ReciveActivityDrawReward",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "drawrules/drawparam/card tables decoded"
+   },
+   {
+    "message_id": 762,
+    "name": "ClubWishing",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "drawrules/drawparam/card tables decoded"
+   },
+   {
+    "message_id": 764,
+    "name": "ClubWishingCount",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "drawrules/drawparam/card tables decoded"
+   },
+   {
+    "message_id": 766,
+    "name": "ClubWishingDonate",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "drawrules/drawparam/card tables decoded"
+   },
+   {
+    "message_id": 768,
+    "name": "ClubWishingReceive",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "drawrules/drawparam/card tables decoded"
+   },
+   {
+    "message_id": 832,
+    "name": "ActivityRewardPoolDraw",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "drawrules/drawparam/card tables decoded"
+   },
+   {
+    "message_id": 933,
+    "name": "MiddleDrawOpt",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "drawrules/drawparam/card tables decoded"
+   },
+   {
+    "message_id": 1025,
+    "name": "DrawPickSet",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "drawrules/drawparam/card tables decoded"
+   }
+  ],
+  "Equipment": [
+   {
+    "message_id": 114,
+    "name": "EquipReclaim",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 423,
+    "name": "UpdateEquipPlan",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 425,
+    "name": "SetTopEquipPlan",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 427,
+    "name": "DelEquipPlan",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 429,
+    "name": "UseEquipPlan",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 883,
+    "name": "LockEquip",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 966,
+    "name": "MoonEquipUpLevel",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 978,
+    "name": "MoonEquipPutOnOrOff",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   }
+  ],
+  "Explore/Train": [
+   {
+    "message_id": 236,
+    "name": "CancelExplore",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 239,
+    "name": "FinishExplore",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 242,
+    "name": "StartExplore",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 257,
+    "name": "CancelTrain",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 258,
+    "name": "FinishTrain",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 259,
+    "name": "StartTrain",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 622,
+    "name": "UnlockExploreRuin",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 624,
+    "name": "ExploreSpeed",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 661,
+    "name": "AutoAddAIPoint",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 663,
+    "name": "AddAIPoint",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 1101,
+    "name": "CancelMatch",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   }
+  ],
+  "Friend": [
+   {
+    "message_id": 434,
+    "name": "SendFriendCoin",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 436,
+    "name": "ReceiveFriendCoin",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 438,
+    "name": "SetFriendPos",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 449,
+    "name": "UpdateFriends",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 453,
+    "name": "SendFriendReq",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 465,
+    "name": "UpdateChatFriends",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 672,
+    "name": "QueryChatFriendsTime",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   }
+  ],
+  "Gift/Reward": [
+   {
+    "message_id": 356,
+    "name": "SignInReward",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 368,
+    "name": "BuildRewardPrayGod",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 542,
+    "name": "BuyGiftPackage",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 673,
+    "name": "QueryAccumulateSign",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 675,
+    "name": "ReciveAccumulateSign",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 721,
+    "name": "ReciveStarPrivilegeReward",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 778,
+    "name": "QueryReturnSign",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 780,
+    "name": "ReciveReturnSign",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 788,
+    "name": "ReciveReturnFirstReward",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 1006,
+    "name": "SeasonRankReward",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 1015,
+    "name": "QuerySeasonRankReward",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 1071,
+    "name": "FlipOneGameReward",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 1106,
+    "name": "RaceSectionGetReward",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   }
+  ],
+  "Guide": [
+   {
+    "message_id": 600,
+    "name": "AlchemyButtonClick",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 677,
+    "name": "ButtonClickDot",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 774,
+    "name": "ReciveNoviceSign",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 871,
+    "name": "GuideStep163",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   }
+  ],
+  "Hero": [
+   {
+    "message_id": 500,
+    "name": "UnlockHeroArchives",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 529,
+    "name": "HeroWearSkin",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 548,
+    "name": "HeroUpdate",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 606,
+    "name": "SetAssistHero",
+    "send_channels": [
+     "MarsNetManager.SendBattle"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 608,
+    "name": "QueryAssistHero",
+    "send_channels": [
+     "MarsNetManager.SendBattle"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 632,
+    "name": "HeroSkinAll",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 641,
+    "name": "QueryHeroDate",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 657,
+    "name": "QueryHeroJournal",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 688,
+    "name": "SaveHeroDubbing",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 690,
+    "name": "QueryHeroDubbing",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 701,
+    "name": "WorldBossSelectHero",
+    "send_channels": [
+     "MarsNetManager.SendBattle"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 931,
+    "name": "HeroGodLike",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 1034,
+    "name": "InvitationHero",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   }
+  ],
+  "Inventory/Item": [
+   {
+    "message_id": 111,
+    "name": "ItemOpt",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 552,
+    "name": "ItemUpdate",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 982,
+    "name": "ItemExchangeCurrency",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   }
+  ],
+  "Login/Session": [
+   {
+    "message_id": 816,
+    "name": "TotalLoginReward",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   }
+  ],
+  "MiniGame/CardBattle": [
+   {
+    "message_id": 1065,
+    "name": "BattleCardGroupsInfo",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 1067,
+    "name": "BattleCardGroupOpt",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 1075,
+    "name": "BattleCardsInfo",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 1094,
+    "name": "BattleShowCard",
+    "send_channels": [
+     "CardGameNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 1097,
+    "name": "BattleBureauEnd",
+    "send_channels": [
+     "CardGameNetManager.Send"
+    ],
+    "static_data_note": null
+   }
+  ],
+  "Mission/Chapter": [
+   {
+    "message_id": 618,
+    "name": "QueryActivityMissionRecord",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 620,
+    "name": "ActivityMissionRecordSave",
+    "send_channels": [
+     "MarsNetManager.SendBattle"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 667,
+    "name": "UnlockStory",
+    "send_channels": [
+     "MarsNetManager.SendBattle"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 858,
+    "name": "ActivityMissionData",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 874,
+    "name": "QueryFoodMissionReward",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 876,
+    "name": "ReceiveFoodMissionReward",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 909,
+    "name": "QueryDashMission",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 911,
+    "name": "ReceiveDashMission",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 974,
+    "name": "MoonMissionGroupSync",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 980,
+    "name": "MoonMissionGroupAcceptedSync",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 984,
+    "name": "BattlePassMissionInfo",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 1023,
+    "name": "BattlePassHistoryInfo",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 1112,
+    "name": "ActivityMissionSelBranch",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   }
+  ],
+  "Player/Growth": [
+   {
+    "message_id": 134,
+    "name": "FetchMobilityPower",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 141,
+    "name": "Account",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 238,
+    "name": "ExchangePower",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 445,
+    "name": "RecommendPlayer",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 518,
+    "name": "PlayerQuestionnaire",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 867,
+    "name": "AccountBuffStop",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 879,
+    "name": "HelpPowerSpeed",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 881,
+    "name": "HelpPowerSpeedValid",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   }
+  ],
+  "Shop": [
+   {
+    "message_id": 155,
+    "name": "BuyInsideBattleShopItems",
+    "send_channels": [
+     "MarsNetManager.SendBattle"
+    ],
+    "static_data_note": "shopconfig/shopgoodsgroup decoded; product content still server-side"
+   },
+   {
+    "message_id": 157,
+    "name": "RequestInsideBattleShop",
+    "send_channels": [
+     "MarsNetManager.SendBattle"
+    ],
+    "static_data_note": "shopconfig/shopgoodsgroup decoded; product content still server-side"
+   },
+   {
+    "message_id": 525,
+    "name": "BuyCommercialGoods",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "shopconfig/shopgoodsgroup decoded; product content still server-side"
+   },
+   {
+    "message_id": 659,
+    "name": "RechargeGoodsInfo",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "shopconfig/shopgoodsgroup decoded; product content still server-side"
+   },
+   {
+    "message_id": 684,
+    "name": "ActivityShop",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "shopconfig/shopgoodsgroup decoded; product content still server-side"
+   }
+  ],
+  "Skill": [
+   {
+    "message_id": 413,
+    "name": "StarSkillUp",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   }
+  ],
+  "Social": [
+   {
+    "message_id": 124,
+    "name": "Cheat",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 274,
+    "name": "AddFavor",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 297,
+    "name": "AddCatFavor",
+    "send_channels": [
+     "MarsNetManager.SendBattle"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 386,
+    "name": "CDKey",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 651,
+    "name": "FavorBreak",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 655,
+    "name": "ReciveSharedMessage",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 718,
+    "name": "ConvertLimitTimeItem",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 752,
+    "name": "UpdateMemberPrivilege",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 754,
+    "name": "DismissMember",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 784,
+    "name": "BindTelInfo",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   }
+  ],
+  "System": [
+   {
+    "message_id": 469,
+    "name": "ClearRechargeNotice",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 631,
+    "name": "NoticeInfoAll",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 665,
+    "name": "RechargeNoticeAll",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   }
+  ],
+  "Task": [
+   {
+    "message_id": 459,
+    "name": "AcceptFavorTask",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "40 daily/weekly + taskcondition(1728) + activitytask(314) decoded"
+   },
+   {
+    "message_id": 512,
+    "name": "GMAcceptFavorTask",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "40 daily/weekly + taskcondition(1728) + activitytask(314) decoded"
+   },
+   {
+    "message_id": 513,
+    "name": "GMRefreshFavorTask",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "40 daily/weekly + taskcondition(1728) + activitytask(314) decoded"
+   },
+   {
+    "message_id": 713,
+    "name": "LimitTaskData",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "40 daily/weekly + taskcondition(1728) + activitytask(314) decoded"
+   },
+   {
+    "message_id": 809,
+    "name": "ReCountTask",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "40 daily/weekly + taskcondition(1728) + activitytask(314) decoded"
+   },
+   {
+    "message_id": 947,
+    "name": "RefreshBattleTask",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "40 daily/weekly + taskcondition(1728) + activitytask(314) decoded"
+   },
+   {
+    "message_id": 972,
+    "name": "MoonAcceptableRepeatTask",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "40 daily/weekly + taskcondition(1728) + activitytask(314) decoded"
+   },
+   {
+    "message_id": 1073,
+    "name": "FlipPickTreasureBox",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": "40 daily/weekly + taskcondition(1728) + activitytask(314) decoded"
+   }
+  ],
+  "Unknown": [
+   {
+    "message_id": 208,
+    "name": "ReceiveAllAttachment",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 362,
+    "name": "Divination",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 364,
+    "name": "FillBirthday",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 403,
+    "name": "MissSyncData",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 405,
+    "name": "Logout",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 476,
+    "name": "QueryPrivateLetter",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 478,
+    "name": "UpdatePrivateLetter",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 482,
+    "name": "ReplyLetter",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 484,
+    "name": "QueryNpcBlog",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 486,
+    "name": "ReplyNpcBlog",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 488,
+    "name": "LikeNpcBlog",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 495,
+    "name": "ElementCompose",
+    "send_channels": [
+     "MarsNetManager.SendBattle"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 498,
+    "name": "UpgradeFetters",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 579,
+    "name": "QueryGrowthBase",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 588,
+    "name": "GetCollectionAward",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 592,
+    "name": "SingleCustomerInfo",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 594,
+    "name": "MakeItem",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 596,
+    "name": "MakIngSpeed",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 633,
+    "name": "QueryFirstReCharge",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 635,
+    "name": "ReciveFirstReCharge",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 637,
+    "name": "QueryAccumulateReCharge",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 639,
+    "name": "ReciveAccumulateReCharge",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 645,
+    "name": "UnLockDateOption",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 647,
+    "name": "SelcetDateOption",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 649,
+    "name": "OpenContract",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 736,
+    "name": "PlayShuangHanPV",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 770,
+    "name": "SendRedPackage",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 772,
+    "name": "ReceiveRedPackage",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 793,
+    "name": "ReissueDialogReciveInfo",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 807,
+    "name": "QueryRedPackageSendAble",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 828,
+    "name": "AppearancePreview",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 848,
+    "name": "LanternShowQuestion",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 850,
+    "name": "LanternShowAnswerQuestion",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 852,
+    "name": "LanternShowPaper",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 854,
+    "name": "LanternShowQueryData",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 856,
+    "name": "LanternShowRecBox",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 860,
+    "name": "ExtraDropData",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 906,
+    "name": "QueryHappyDayInfo",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 915,
+    "name": "MiniGameInfo",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 917,
+    "name": "ReceiveMiniGameInfo",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 943,
+    "name": "SetPayBirthday",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 1002,
+    "name": "PutOnOrPutOffSeasonIcon",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 1004,
+    "name": "SeasonRelic",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 1008,
+    "name": "SeasonIconStatusUp",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 1032,
+    "name": "InvitationInfo",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 1036,
+    "name": "QueryHappySevenInfo",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 1038,
+    "name": "SceneGlobalParam",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 1055,
+    "name": "WashingRoomRandomAttri",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 1057,
+    "name": "WashingRoomOpt",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 1061,
+    "name": "StorePreNoticInfo",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 1063,
+    "name": "StorePreNotic",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 1069,
+    "name": "FlipQuery",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   },
+   {
+    "message_id": 1104,
+    "name": "RaceSectionOverView",
+    "send_channels": [
+     "MarsNetManager.Send"
+    ],
+    "static_data_note": null
+   }
+  ]
+ },
+ "total_unhandled_sent_c2l": 286
+}
