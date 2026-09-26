@@ -8,6 +8,7 @@ REVIVAL_COMPATIBILITY / USER_DECISION 2026-09-26:
     (1-3 / 4-6 / 7+); sections without a difficulty default to MID.
 """
 import asyncio
+import json
 
 from tests.unit.test_battle import packet, request
 from tests.unit.test_economy import env, rewards  # noqa: F401 (fixtures)
@@ -16,6 +17,7 @@ from x2server.player.battle import BattleService
 from x2server.player.drop_budget import DropBudgetCompatibilityPolicy
 from x2server.player.economy import EconomyService
 from x2server.player.reward_system import ReportCurrencyResolver, RuntimeDropResolver
+import pytest
 
 
 def test_report_currency_resolver_maps_all_known_proxies():
@@ -25,6 +27,22 @@ def test_report_currency_resolver_maps_all_known_proxies():
     assert resolver.lookup(1101076) == (1237901, 28)   # bucket 901 -> gold
     assert resolver.lookup(1101060) == (1237912, 10)   # bucket 912 -> 月钻 (1237912)
     assert resolver.lookup(9999999) is None
+
+
+def test_all_report_currency_proxies_use_runtime_battle_dispatch(env):
+    _, economy, _ = env
+    mapping = _load_map()["items"]
+    profile = {"section_id": 2133101, "runtime_allowlist_mode": "DYNAMIC_ALLOWED"}
+    run = {"uuid": "all-report-currency", "section_id": 2133101, "settled": 0}
+    for proxy_text, row in mapping.items():
+        proxy_id = int(proxy_text)
+        grants, pending, blocked, equipment = economy.runtime_drops.resolve(
+            run=run, profile=profile,
+            outside_items=[OUTSIDE_ITEM.encode({"id": proxy_id, "num": 2,
+                                                "quality": 1, "eNum": 0})], success=True)
+        assert [(g.source, g.item_id, g.quantity) for g in grants] == [
+            ("REPORT_CURRENCY", row["account_item_id"], 2 * row["per_unit"])]
+        assert pending == blocked == equipment == []
 
 
 def _load_map():
@@ -103,6 +121,55 @@ def test_fixed_rewards_and_sweep_unaffected(env):
     assert delivered[1237901] == 28
     assert delivered.get(1237902) == 30  # first-clear fixed reward intact
     # sweep path (MopReward) is exercised by the existing sweep tests.
+
+
+def test_beast_dungeon_moon_diamond_proxy_checkout_and_replay(env):
+    store, economy, ctx = env
+    service = BattleService(store, economy)
+    with store.db:
+        store.db.execute("INSERT OR IGNORE INTO economy_clears VALUES (?,?,?)",
+            (1, service.catalog.sections[2133101]["OpenParam"], "prerequisite"))
+    values = request()
+    values.update(missionId=2133101, chapter=2033100, sceneId=2233101)
+    entered = asyncio.run(service.enter(ctx, packet(values)))
+    assert entered.values["result"] == 10
+    run = entered.values["uuid"]
+    raw = CHECKOUT.encode({"chapterId": 2033100, "sectionId": 2133101,
+        "success": True, "fightTime": 120,
+        "outsideItems": [OUTSIDE_ITEM.encode({"id": 1101060, "num": 90,
+                                               "quality": 4, "eNum": 0})]})
+    def submit(request_id):
+        return asyncio.run(service.checkout(ctx, packet({"checkout": raw},
+            name="C2L_CheckoutMainMissionSign", request_id=request_id)))
+    first = submit(1)
+    assert first.values["result"] == 10
+    assert rewards(first.values["rewardData"])[1237912] == 90 * _load_map()["items"]["1101060"]["per_unit"]
+    assert 1101060 not in rewards(first.values["rewardData"])
+    assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1237912").fetchone()[0] == 900
+    assert store.db.execute("SELECT COUNT(*) FROM inventory WHERE item_id=1101060").fetchone()[0] == 0
+    assert store.db.execute("SELECT COUNT(*) FROM pending_reward_instances WHERE run_id=?", (run,)).fetchone()[0] == 0
+    audit = store.db.execute("SELECT sources,blocked FROM reward_settlement_audit WHERE run_id=?", (run,)).fetchone()
+    assert json.loads(audit[1]) == []
+    assert json.loads(audit[0])["REPORT_CURRENCY"][0]["item_id"] == 1237912
+    replay = submit(2)
+    assert replay.values == first.values
+    assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1237912").fetchone()[0] == 900
+
+
+@pytest.mark.parametrize("bucket", (901, 904, 906, 907, 912, 913, 925, 981))
+def test_report_currency_families_settle_as_account_items(env, bucket):
+    store, economy, ctx = env
+    proxy_id, mapping = next((int(i), row) for i, row in _load_map()["items"].items()
+                             if row["bucket"] == bucket)
+    service = BattleService(store, economy)
+    enter_gold(service, ctx)
+    result = checkout(service, ctx, outside=({"id": proxy_id, "num": 2,
+                                              "quality": 1, "eNum": 0},))
+    assert result.values["result"] == 10
+    delivered = rewards(result.values["rewardData"])
+    assert delivered[mapping["account_item_id"]] >= 2 * mapping["per_unit"]
+    assert proxy_id not in delivered
+    assert store.db.execute("SELECT COUNT(*) FROM inventory WHERE item_id=?", (proxy_id,)).fetchone()[0] == 0
 
 
 def test_budget_tiers_by_official_difficulty():

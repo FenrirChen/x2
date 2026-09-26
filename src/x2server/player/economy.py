@@ -56,6 +56,10 @@ class EconomyService:
         self.equipment_factory = EquipmentInstanceFactory()
         report_map = json.loads(files("x2server").joinpath("data/report_currency_map.json").read_text(encoding="utf-8"))
         self.report_currency = ReportCurrencyResolver(report_map)
+        # Currencies absent from BaseInfoProto still have canonical E_Currency
+        # items. Keep their balances in the item ledger, never the proxy item.
+        self.item_currency_ids = {entry["account_item_id"]
+            for entry in self.report_currency.mapping.values()} - self.CURRENCIES.keys()
         self.runtime_drops = RuntimeDropResolver(self.items, self.equipment_factory.is_drop_equipment,
                                                  self.report_currency)
         self.shops = {r["ShopID"]: r for r in self.catalog["shops"]}
@@ -281,6 +285,13 @@ class EconomyService:
                 snapshot["mobility"]["power"] += count
                 if snapshot["mobility"]["power"] > 2**31 - 1:
                     raise UnresolvedEconomy("power overflow")
+            elif item in self.item_currency_ids and kind == 16:
+                self.store.db.execute("""INSERT INTO inventory VALUES (?,?,?)
+                    ON CONFLICT(player_id,item_id) DO UPDATE SET quantity=quantity+excluded.quantity""", (player_id, item, count))
+                quantity = self.store.db.execute("SELECT quantity FROM inventory WHERE player_id=? AND item_id=?",
+                    (player_id, item)).fetchone()[0]
+                if quantity > 2**31 - 1:
+                    raise UnresolvedEconomy("currency overflow")
             elif kind not in self.STACKABLE_REWARD_TYPES:
                 raise UnresolvedEconomy("unrecovered reward destination")
             else:

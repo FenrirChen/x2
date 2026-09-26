@@ -132,7 +132,7 @@ class BattleService:
         section = request.get("sectionId", 0)
         logging.getLogger("x2.battle").info("practice checkout section=%s success=%s", section, request.get("success", False))
         outside_decoded = [OUTSIDE_ITEM.decode(o) for o in request.get("outsideItems", [])]
-        logging.getLogger("x2.battle").info("checkout outsideItems=%s detail=%s killMonster=%s npcEvents=%s",
+        logging.getLogger("x2.battle").debug("checkout outsideItems=%s detail=%s killMonster=%s npcEvents=%s",
             len(request.get("outsideItems", [])), outside_decoded, "killMonster" in request,
             len(request.get("npcEventOnNumber", [])))
         reject = OutboundMessage("L2C_CheckoutMainMission", {"result": 13})
