@@ -111,7 +111,10 @@ SetCheckout_BattleItem: source==FIGHT ∧ ItemUseScence==E_Outside → outsideIt
 | CLIENT_ALREADY_GENERATES | 无（零参与；客户端只消费 wire Star/Param） |
 | UNKNOWN | AttribBD 选行官方概率（Revival 已定 65/35）；数值 3 档取档算法（数值宇宙已恢复）；BattleInfo.dropValues 填充方 |
 
-**结论**：交付已安全可行——服务器按上表生成完整 HeroEquip、以 `RewardData.rewardEquip`
-入 152 响应（或作为补偿走 L2C_EquipUpdate）、持久化 id 账本即可。Star 与初始词条数规则均已
-闭环（Star=quality 为官方语义；条数=行常量，仅"选行规则"属 Revival 兼容，须标注）。
-实施要点见 `docs/knowledge/equipment/equipment_server_fix_plan.md`。
+**结论（2026-09-25 已实施）**：887 路径交付已实现——`RuntimeDropResolver` 把 E_Equip 件
+从 pending 分流为 equipment specs，`EquipmentInstanceFactory`
+（src/x2server/player/equipment_factory.py，官方表数据 src/x2server/data/equipment_tables.json）
+以 Star=quality 生成 Param 并经 `materialize_instances` 落库 equipment_instances
+（marker=drop:{run_uuid}:{ordinal} 实例级幂等），`RewardData.rewardEquip` 随 152 返回，
+与 receipt 同事务。条数档 65/35 与 ValueSec 逐段链 = REVIVAL_COMPATIBILITY/USER_DECISION。
+Gift/邮件/商店/GM 等其他发放通道尚未接入工厂（scope 外）。

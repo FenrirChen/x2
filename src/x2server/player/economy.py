@@ -15,8 +15,10 @@ from x2server.protocol.errors import ProtocolError
 from x2server.protocol.registry import CORE_MESSAGE_REGISTRY
 from .task_calendar import task_period
 from .battle_entry import BattleEntryCatalog
-from .reward_system import (RewardGrant, RewardCompatibilityPolicy, RuntimeDropResolver,
+from .equipment_factory import EquipmentInstanceFactory, materialize_instances
+from .reward_system import (ReportCurrencyResolver, RewardGrant, RuntimeDropResolver,
                             SectionRewardCatalog, audit_grants, sum_grants)
+from x2server.messages.equipment import EQUIP_PARAM, HERO_EQUIP
 
 
 class UnresolvedEconomy(ValueError):
@@ -51,7 +53,11 @@ class EconomyService:
         self.section_rewards = SectionRewardCatalog()
         self.tasks = {r["DailyTaskID"]: r for r in self.catalog["tasks"] if r.get("IsUse", {}).get("value") == 1}
         self.items = {r["ItemID"]: r for r in self.catalog["items"]}
-        self.runtime_drops = RuntimeDropResolver(self.items)
+        self.equipment_factory = EquipmentInstanceFactory()
+        report_map = json.loads(files("x2server").joinpath("data/report_currency_map.json").read_text(encoding="utf-8"))
+        self.report_currency = ReportCurrencyResolver(report_map)
+        self.runtime_drops = RuntimeDropResolver(self.items, self.equipment_factory.is_drop_equipment,
+                                                 self.report_currency)
         self.shops = {r["ShopID"]: r for r in self.catalog["shops"]}
         with store.db:
             store.db.execute("""CREATE TABLE IF NOT EXISTS economy_grants (
@@ -247,9 +253,10 @@ class EconomyService:
         # amount cannot be inferred from the UI preview.
 
     @staticmethod
-    def reward_bytes(rewards):
+    def reward_bytes(rewards, reward_equips=()):
         return REWARD.encode({"rewardItem": [REWARD_ITEM.encode({"itemId": i, "itemNum": n, "transform": False})
-            for i, n in sorted(rewards.items())]})
+            for i, n in sorted(rewards.items())],
+            "rewardEquip": reward_equips})
 
     def _grant(self, player_id, source, rewards):
         """Called inside the owner's transaction; never commits independently."""
@@ -380,10 +387,12 @@ class EconomyService:
                 or run is None or run["player_id"] != player_id or run["section_id"] != section
                 or run["settled"]):
             raise UnresolvedEconomy("unclassified, mismatched or settled run")
-        grants, pending_instances, blocked = self.runtime_drops.resolve(
+        grants, pending_instances, blocked, equipment_specs = self.runtime_drops.resolve(
             run=run, profile=profile, outside_items=outside_items, success=success)
+        reward_equips: list = []
         sources = {name: [] for name in ("FIRST_CLEAR_FIXED", "NORMAL_CLEAR_FIXED",
-            "RUNTIME_BATTLE_DROP", "SWEEP_REWARD", "EXTRA_DROP", "COMPAT_REWARD")}
+            "RUNTIME_BATTLE_DROP", "REPORT_CURRENCY", "SWEEP_REWARD", "EXTRA_DROP",
+            "COMPAT_REWARD", "EQUIP_INSTANCE")}
         if success:
             pending = Counter()
             first = not self.store.db.execute(
@@ -403,10 +412,6 @@ class EconomyService:
                     grants.extend(RewardGrant(source, section, run_uuid, item, count,
                         reason=f"SectionTable GiftGroup {group}") for item, count in resolved.items())
                     pending.update(local_pending)
-            compat = RewardCompatibilityPolicy.manual_gold(profile, run_uuid)
-            if compat:
-                grants = [g for g in grants if not (g.source == "RUNTIME_BATTLE_DROP" and g.item_id == 1237901)]
-                grants.append(compat)
             if profile["drop_value_id"]:
                 self.store.db.execute("INSERT OR IGNORE INTO battle_unresolved_rewards VALUES (?,?,?,?,?)",
                     (run_uuid, player_id, section, -2, "server DropValueID mapping unverified; client outsideItems used"))
@@ -424,10 +429,24 @@ class EconomyService:
                 self.store.db.execute("INSERT INTO pending_reward_instances VALUES (?,?,?,?,?,?,?,?)",
                     (run_uuid, ordinal, player_id, grant.item_id, grant.quantity, grant.quality,
                      grant.e_num, "UNRESOLVED_INSTANCE_DELIVERY"))
+            reward_equips, equip_ordinal = [], 0
+            for spec in equipment_specs:
+                instances = materialize_instances(
+                    self.store.db, player_id, spec["item_id"], spec["quality"], spec["quantity"],
+                    run_uuid, self.equipment_factory, equip_ordinal)
+                equip_ordinal += spec["quantity"]
+                for instance in instances:
+                    wire = {k: v for k, v in instance.items() if k != "marker"}
+                    reward_equips.append(HERO_EQUIP.encode(
+                        {**wire, "param": EQUIP_PARAM.encode(instance["param"])}))
+                    sources["EQUIP_INSTANCE"].append(
+                        {"instance_id": instance["id"], "type_id": instance["typeId"],
+                         "star": instance["star"], "marker": instance["marker"]})
             self.mark_section_cleared(player_id, section, run_uuid, section_type)
             self._event(player_id, f"clear:{run_uuid}", 3, section, 1)
         else:
             rewards = {}
+            reward_equips = []
             self.refund_battle(player_id, run_uuid)
         self.store.db.execute("INSERT INTO reward_settlement_audit VALUES (?,?,?,?,?,?)",
             (run_uuid, player_id, section, json.dumps(sources, ensure_ascii=False, sort_keys=True),
@@ -435,7 +454,7 @@ class EconomyService:
         self.store.db.execute("UPDATE economy_runs SET settled=1 WHERE uuid=?", (run_uuid,))
         logging.getLogger("x2.rewards").info("RewardSettlement run=%s section=%s sources=%s blocked=%s final_grants=%s",
             run_uuid, section, {k: len(v) for k, v in sources.items()}, blocked, rewards)
-        return self.reward_bytes(rewards)
+        return self.reward_bytes(rewards, reward_equips), reward_equips
 
     def settle_sweep(self, player_id, section, count, request_key):
         """Only MopReward; the stage must already be cleared and cost is per sweep."""

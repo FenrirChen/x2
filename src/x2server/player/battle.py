@@ -6,7 +6,8 @@ import secrets
 import time
 import uuid
 
-from x2server.messages.battle import BATTLE_SCHEMAS, CHECKOUT, DROP_DATA, PROFILE_HERO, HERO_SKILL, HERO_ATTR, HERO_ATTR_ADD, FIGHT_HERO, FIGHT_DATA, FIGHT_PROFILE
+from x2server.messages.battle import (BATTLE_SCHEMAS, CHECKOUT, DROP_DATA, OUTSIDE_ITEM, PROFILE_HERO,
+    HERO_SKILL, HERO_ATTR, HERO_ATTR_ADD, FIGHT_HERO, FIGHT_DATA, FIGHT_PROFILE)
 from x2server.network.dispatcher import OutboundMessage
 from x2server.protocol.errors import ProtocolError
 from x2server.protocol.protobuf import decode_varint, _skip_unknown
@@ -19,6 +20,9 @@ class BattleService:
         self.store = store
         self.economy = economy
         self.catalog = BattleEntryCatalog()
+        from .drop_budget import DropBudgetCompatibilityPolicy
+        self.drop_budget = DropBudgetCompatibilityPolicy(
+            {s["SectionID"]: s.get("DifficultyLevel", 0) for s in self.catalog.sections.values()})
         main_rows = (economy.sections.values() if economy else
                      (r for r in self.catalog.sections.values() if r["Type"] == 0))
         self.SECTIONS = {s["SectionID"]: (s["ChapterID"], s["Maps"][0])
@@ -92,7 +96,9 @@ class BattleService:
                           "rewardData": reward_data}
                 self.store.db.execute("INSERT INTO sweep_receipts VALUES (?,?,?,?)",
                     (key, player_id, section, schema.encode(values)))
-        except UnresolvedEconomy:
+        except UnresolvedEconomy as exc:
+            logging.getLogger("x2.battle").info(
+                "checkout rejected section=%s reason=settle: %s", section, exc)
             return reject
         return OutboundMessage("L2C_SecSweep", values, pushes=self.economy.pushes(player_id))
 
@@ -125,27 +131,33 @@ class BattleService:
         request = CHECKOUT.decode(raw)
         section = request.get("sectionId", 0)
         logging.getLogger("x2.battle").info("practice checkout section=%s success=%s", section, request.get("success", False))
-        logging.getLogger("x2.battle").info("checkout outsideItems=%s killMonster=%s npcEvents=%s",
-            len(request.get("outsideItems", [])), "killMonster" in request,
+        outside_decoded = [OUTSIDE_ITEM.decode(o) for o in request.get("outsideItems", [])]
+        logging.getLogger("x2.battle").info("checkout outsideItems=%s detail=%s killMonster=%s npcEvents=%s",
+            len(request.get("outsideItems", [])), outside_decoded, "killMonster" in request,
             len(request.get("npcEventOnNumber", [])))
         reject = OutboundMessage("L2C_CheckoutMainMission", {"result": 13})
+
+        def reject_with(reason):
+            logging.getLogger("x2.battle").info("checkout rejected section=%s reason=%s", section, reason)
+            return reject
         static = self.catalog.sections.get(section)
         section_type = static["Type"] if static else None
         if (not static or request.get("chapterId") != static["ChapterID"]
                 or request.get("checkGm")
                 or not 0 <= request.get("fightTime", 0) <= 3600):
-            return reject
+            return reject_with('static/chapter/checkGm/fightTime gate')
         row = self.store.db.execute("SELECT uuid, created_at, response FROM battle_entries WHERE player_id=? ORDER BY rowid DESC LIMIT 1",
                                     (player_id,)).fetchone()
         if not row or int(time.time()) - row["created_at"] > 3600:
-            return reject
+            return reject_with('no/expired battle entry')
         entry = BATTLE_SCHEMAS["L2C_FightData"].decode(row["response"])
         if FIGHT_DATA.decode(entry["data"])["missionId"] != section:
-            return reject
+            return reject_with('entry missionId mismatch')
         if self.economy:
             run = self.store.db.execute("SELECT * FROM economy_runs WHERE uuid=?", (row["uuid"],)).fetchone()
             if not run or run["player_id"] != player_id or run["section_type"] != section_type:
-                return reject  # Old practice entries cannot acquire rewards retroactively.
+                return reject_with('economy run missing/mismatched')  # Old practice entries cannot acquire rewards retroactively.
+        reward_equips: tuple = ()
         digest = hashlib.sha256(packet.body if self.economy else raw).hexdigest()
         cached = self.store.db.execute("SELECT request_hash, response FROM battle_receipts WHERE uuid=?", (row["uuid"],)).fetchone()
         schema = BATTLE_SCHEMAS["L2C_CheckoutMainMission"]
@@ -165,7 +177,7 @@ class BattleService:
             with self.store.db:
                 if self.economy:
                     self.store.db.execute("INSERT OR IGNORE INTO economy_checkouts VALUES (?,?,?)", (player_id, digest, row["uuid"]))
-                    values["rewardData"] = self.economy.settle(
+                    values["rewardData"], reward_equips = self.economy.settle(
                         player_id, row["uuid"], section, request.get("success", False), section_type,
                         request.get("outsideItems", []))
                     updated = self.store.get(player_id)["snapshot"]
@@ -174,10 +186,17 @@ class BattleService:
                     (row["uuid"], digest, int(time.time()), schema.encode(values)))
                 self.store.db.execute("INSERT INTO battle_checkout_wire VALUES (?,?,?)",
                     (row["uuid"], raw, json.dumps(self._unknown_checkout_fields(raw))))
-        except UnresolvedEconomy:
+        except UnresolvedEconomy as exc:
+            logging.getLogger("x2.battle").info(
+                "checkout rejected section=%s reason=settle: %s", section, exc)
             return reject
-        return OutboundMessage("L2C_CheckoutMainMission", values,
-            pushes=self.economy.pushes(player_id) if self.economy else ())
+        pushes = self.economy.pushes(player_id) if self.economy else ()
+        if reward_equips:
+            # Official "subsequent change" channel: some client builds only apply
+            # equipment ledger updates via EquipUpdate, not via 152.rewardEquip.
+            pushes = (OutboundMessage("L2C_EquipUpdate",
+                                      {"code": 10, "equip": reward_equips}),) + tuple(pushes)
+        return OutboundMessage("L2C_CheckoutMainMission", values, pushes=pushes)
 
     async def drop_data(self, context, packet):
         if context.session.player_id is None:
@@ -191,15 +210,25 @@ class BattleService:
         row = self.store.db.execute("SELECT response, created_at FROM battle_entries WHERE player_id=? ORDER BY rowid DESC LIMIT 1",
                                     (context.session.player_id,)).fetchone()
         if not row or int(time.time()) - row["created_at"] > 3600:
-            return reject
+            return reject_with('no/expired battle entry')
         entry = BATTLE_SCHEMAS["L2C_FightData"].decode(row["response"])
         if FIGHT_DATA.decode(entry["data"])["missionId"] != section:
-            return reject
-        # Explicit local practice rule: no server drops. The receiver constructs
-        # its list before decoding, so an empty repeated field remains valid.
-        logging.getLogger("x2.battle").info("practice empty drop query section=%s", section)
+            return reject_with('entry missionId mismatch')
+        # Official chain (ARM64 2026-09-25): FightModule.OnFightDropData(0x1447E1C)
+        # checks result==10, deserializes response.data as FightDropData and feeds its
+        # dropValues into the running battle as LogicX2Command.UpdateDropValue
+        # (LogicBattle.OnInput 0x1448224) — that is how BattleInfo.dropValues (the
+        # JudgeDropItem budget) is armed mid-battle. An empty dropValues kept every
+        # client-side ItemStruct drop rejected (outsideItems stayed empty).
+        # Budget VALUES are REVIVAL_COMPATIBILITY tiers
+        # (docs/decisions/compatibility/equip_dropvalues_budget.md).
+        drop_values = self.drop_budget.budget_for(section)
+        tier, known = self.drop_budget.tier_for(section)
+        logging.getLogger("x2.battle").info("battle drop query section=%s tier=%s known=%s budget_groups=%d",
+            section, tier, known, len(drop_values))
         return OutboundMessage("L2C_FightDropData", {"result": 10, "uuid": entry["uuid"],
-            "sign": entry["sign"], "data": DROP_DATA.encode({"missionId": section})})
+            "sign": entry["sign"], "data": DROP_DATA.encode({"dropValues": drop_values,
+                                                             "missionId": section})})
 
     async def clear_profile(self, context, packet):
         if context.session.player_id is None:
@@ -256,8 +285,18 @@ class BattleService:
                 for r in catalog()["battle_base_1003"]["attributes"]]
             fight_heroes.append(FIGHT_HERO.encode({**hero_values, "heroGodEquip": b"",
                 "heroSkill": skills, "heroAttrCount": attrs, "attrAdd": base}))
+        # Official chain (ARM64 2026-09-25): BattleInfo.SetSceneInfo copies
+        # FightData.dropData.dropValues -> BattleInfo.dropValues, which JudgeDropItem
+        # consumes as the per-AddADCGroup drop value budget (equipment = group 5).
+        # Secondary carrier; the primary arm/update loop is 264 C2L_FightDropData ->
+        # 266 L2C_FightDropData -> UpdateDropValue (see drop_data below).
+        # Values: REVIVAL_COMPATIBILITY tiers (drop_budget.py) — official per-group
+        # budget values are lost with the official server data.
+        drop_values = self.drop_budget.budget_for(section)
         data = FIGHT_DATA.encode({"fightHeros": fight_heroes, "missionId": section,
-                                  "dropData": b"", "CRIDmg": 15000})
+                                  "dropData": DROP_DATA.encode({"dropValues": drop_values,
+                                                                "missionId": section}),
+                                  "CRIDmg": 15000})
         profile = FIGHT_PROFILE.encode({"missionId": section, "chapterId": chapter, "layer": 0,
             "sceneId": scene, "randomSeed": secrets.randbelow(2**30), "isProfileValid": False})
         values = {"result": 10, "uuid": str(uuid.uuid4()), "sign": secrets.token_bytes(32),
@@ -279,6 +318,8 @@ class BattleService:
                     VALUES (?,?,?,?,?,?,?,?,?)""", (player["id"], key, values["uuid"], int(time.time()),
                     BATTLE_SCHEMAS["L2C_FightData"].encode(values), entry_context.section_type,
                     entry_context.entry_source, entry_context.map_id, json.dumps(entry_context.hero_ids)))
-        except UnresolvedEconomy:
+        except UnresolvedEconomy as exc:
+            logging.getLogger("x2.battle").info(
+                "checkout rejected section=%s reason=settle: %s", section, exc)
             return reject
         return OutboundMessage("L2C_FightData", values, pushes=self.economy.pushes(player["id"]) if self.economy else ())

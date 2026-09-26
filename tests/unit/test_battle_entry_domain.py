@@ -105,7 +105,9 @@ def test_every_supported_daily_section_enters_and_settles_in_order(env):
             settled = asyncio.run(service.checkout(ctx, done))
             assert settled.values["result"] == 10, section
             if section in gold_by_section:
-                assert rewards(settled.values["rewardData"])[1237901] == gold_by_section[section]
+                # 2026-09-26: manual gold comes from E_ReportCurrency pouch conversion;
+                # with no pouches injected, the removed MopReward compat grants nothing.
+                assert 1237901 not in rewards(settled.values["rewardData"])
             checked.append(section)
     assert len(checked) == 20
     assert store.db.execute("SELECT COUNT(*) FROM economy_clears WHERE player_id=1").fetchone()[0] == 20
@@ -242,7 +244,7 @@ def test_daily_first_clear_rewards_delivery_unlock_and_idempotency(env):
     done = packet({"checkout": CHECKOUT.encode(values)}, name="C2L_CheckoutMainMissionSign")
     result = asyncio.run(service.checkout(ctx, done))
     assert result.values["result"] == 10
-    assert rewards(result.values["rewardData"]) == {1237902: 30, 1237908: 6, 1237907: 60, 1237901: 2078}
+    assert rewards(result.values["rewardData"]) == {1237902: 30, 1237908: 6, 1237907: 60}
     assert asyncio.run(service.checkout(ctx, done)).values == result.values
     assert store.db.execute("SELECT settled FROM economy_runs WHERE uuid=?",
                             (entry.values["uuid"],)).fetchone()[0] == 1
@@ -278,7 +280,7 @@ def test_daily_repeat_clear_excludes_first_reward(env):
     second = asyncio.run(service.enter(ctx, packet(daily(), 2)))
     assert second.values["uuid"] != first.values["uuid"]
     result = asyncio.run(service.checkout(ctx, done))
-    assert rewards(result.values["rewardData"]) == {1237908: 6, 1237907: 60, 1237901: 2078}
+    assert rewards(result.values["rewardData"]) == {1237908: 6, 1237907: 60}
     assert asyncio.run(service.checkout(ctx, done)).values == result.values
     assert store.get(1)["snapshot"]["crystal"] == before["crystal"]
     assert store.db.execute("SELECT COUNT(*) FROM economy_clears WHERE section_id=2130101").fetchone()[0] == 1

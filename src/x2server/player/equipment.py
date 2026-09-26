@@ -4,6 +4,7 @@ import secrets
 from pathlib import Path
 
 from x2server.messages.equipment import EQUIP_PARAM, HERO_EQUIP, EQUIPMENT_SCHEMAS
+from x2server.player.equipment_factory import load_equipment_tables
 from x2server.network.dispatcher import OutboundMessage
 from x2server.protocol.errors import ProtocolError
 from x2server.protocol.registry import CORE_MESSAGE_REGISTRY
@@ -13,8 +14,10 @@ class EquipmentService:
     def __init__(self, store, economy=None):
         self.store = store
         self.economy = economy
-        catalog = Path(__file__).resolve().parents[3] / "analysis/progression/equipment_seed_catalog.json"
-        self.parts = {r["type_id"]: r["part"] for r in json.loads(catalog.read_text(encoding="utf-8"))["rows"]}
+        # Canonical part/suit map: every EquibBase row (all part-level 1240xxx),
+        # not just the seeded test presets.
+        self.parts = {int(type_id): row["part"]
+                      for type_id, row in load_equipment_tables()["equib_base"].items()}
         increments = Path(__file__).resolve().parents[3] / "analysis/progression/equipment_strengthen_catalog.json"
         self.increments = {(r["quality"], r["attribute"]): r["value_range"]
                            for r in json.loads(increments.read_text(encoding="utf-8"))["rows"]}

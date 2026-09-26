@@ -1,0 +1,346 @@
+{
+ "source": "analysis/drop_archaeology/full_tables/item.json FunctionEff=E_ReportCurrency(14); account currency = the E_Currency Item whose EffData==[bucket]",
+ "items": {
+  "1003101": {
+   "bucket": 901,
+   "per_unit": 100,
+   "account_item_id": 1237901
+  },
+  "1003102": {
+   "bucket": 901,
+   "per_unit": 200,
+   "account_item_id": 1237901
+  },
+  "1003103": {
+   "bucket": 901,
+   "per_unit": 500,
+   "account_item_id": 1237901
+  },
+  "1003104": {
+   "bucket": 901,
+   "per_unit": 1000,
+   "account_item_id": 1237901
+  },
+  "1003105": {
+   "bucket": 901,
+   "per_unit": 2000,
+   "account_item_id": 1237901
+  },
+  "1003111": {
+   "bucket": 912,
+   "per_unit": 1,
+   "account_item_id": 1237912
+  },
+  "1003112": {
+   "bucket": 912,
+   "per_unit": 2,
+   "account_item_id": 1237912
+  },
+  "1003113": {
+   "bucket": 912,
+   "per_unit": 3,
+   "account_item_id": 1237912
+  },
+  "1003114": {
+   "bucket": 912,
+   "per_unit": 4,
+   "account_item_id": 1237912
+  },
+  "1003115": {
+   "bucket": 912,
+   "per_unit": 5,
+   "account_item_id": 1237912
+  },
+  "1003121": {
+   "bucket": 904,
+   "per_unit": 1,
+   "account_item_id": 1237904
+  },
+  "1003122": {
+   "bucket": 904,
+   "per_unit": 2,
+   "account_item_id": 1237904
+  },
+  "1003123": {
+   "bucket": 904,
+   "per_unit": 3,
+   "account_item_id": 1237904
+  },
+  "1003124": {
+   "bucket": 904,
+   "per_unit": 4,
+   "account_item_id": 1237904
+  },
+  "1003125": {
+   "bucket": 904,
+   "per_unit": 5,
+   "account_item_id": 1237904
+  },
+  "1003131": {
+   "bucket": 906,
+   "per_unit": 5,
+   "account_item_id": 1237906
+  },
+  "1003132": {
+   "bucket": 906,
+   "per_unit": 10,
+   "account_item_id": 1237906
+  },
+  "1003133": {
+   "bucket": 906,
+   "per_unit": 15,
+   "account_item_id": 1237906
+  },
+  "1003134": {
+   "bucket": 906,
+   "per_unit": 20,
+   "account_item_id": 1237906
+  },
+  "1003135": {
+   "bucket": 906,
+   "per_unit": 25,
+   "account_item_id": 1237906
+  },
+  "1003136": {
+   "bucket": 901,
+   "per_unit": 20,
+   "account_item_id": 1237901
+  },
+  "1003137": {
+   "bucket": 901,
+   "per_unit": 28,
+   "account_item_id": 1237901
+  },
+  "1003138": {
+   "bucket": 901,
+   "per_unit": 32,
+   "account_item_id": 1237901
+  },
+  "1003139": {
+   "bucket": 901,
+   "per_unit": 36,
+   "account_item_id": 1237901
+  },
+  "1003140": {
+   "bucket": 901,
+   "per_unit": 40,
+   "account_item_id": 1237901
+  },
+  "1101040": {
+   "bucket": 907,
+   "per_unit": 5,
+   "account_item_id": 1237907
+  },
+  "1101041": {
+   "bucket": 907,
+   "per_unit": 15,
+   "account_item_id": 1237907
+  },
+  "1101042": {
+   "bucket": 907,
+   "per_unit": 45,
+   "account_item_id": 1237907
+  },
+  "1101043": {
+   "bucket": 907,
+   "per_unit": 60,
+   "account_item_id": 1237907
+  },
+  "1101044": {
+   "bucket": 907,
+   "per_unit": 100,
+   "account_item_id": 1237907
+  },
+  "1101045": {
+   "bucket": 904,
+   "per_unit": 2,
+   "account_item_id": 1237904
+  },
+  "1101046": {
+   "bucket": 904,
+   "per_unit": 4,
+   "account_item_id": 1237904
+  },
+  "1101047": {
+   "bucket": 904,
+   "per_unit": 10,
+   "account_item_id": 1237904
+  },
+  "1101048": {
+   "bucket": 904,
+   "per_unit": 20,
+   "account_item_id": 1237904
+  },
+  "1101049": {
+   "bucket": 904,
+   "per_unit": 200,
+   "account_item_id": 1237904
+  },
+  "1101050": {
+   "bucket": 913,
+   "per_unit": 10,
+   "account_item_id": 1237913
+  },
+  "1101051": {
+   "bucket": 913,
+   "per_unit": 30,
+   "account_item_id": 1237913
+  },
+  "1101052": {
+   "bucket": 913,
+   "per_unit": 50,
+   "account_item_id": 1237913
+  },
+  "1101053": {
+   "bucket": 913,
+   "per_unit": 60,
+   "account_item_id": 1237913
+  },
+  "1101054": {
+   "bucket": 913,
+   "per_unit": 180,
+   "account_item_id": 1237913
+  },
+  "1101055": {
+   "bucket": 925,
+   "per_unit": 1,
+   "account_item_id": 1237925
+  },
+  "1101060": {
+   "bucket": 912,
+   "per_unit": 10,
+   "account_item_id": 1237912
+  },
+  "1101061": {
+   "bucket": 901,
+   "per_unit": 4,
+   "account_item_id": 1237901
+  },
+  "1101062": {
+   "bucket": 901,
+   "per_unit": 12,
+   "account_item_id": 1237901
+  },
+  "1101063": {
+   "bucket": 901,
+   "per_unit": 36,
+   "account_item_id": 1237901
+  },
+  "1101064": {
+   "bucket": 901,
+   "per_unit": 48,
+   "account_item_id": 1237901
+  },
+  "1101065": {
+   "bucket": 901,
+   "per_unit": 80,
+   "account_item_id": 1237901
+  },
+  "1101066": {
+   "bucket": 901,
+   "per_unit": 9,
+   "account_item_id": 1237901
+  },
+  "1101067": {
+   "bucket": 901,
+   "per_unit": 27,
+   "account_item_id": 1237901
+  },
+  "1101068": {
+   "bucket": 901,
+   "per_unit": 81,
+   "account_item_id": 1237901
+  },
+  "1101069": {
+   "bucket": 901,
+   "per_unit": 108,
+   "account_item_id": 1237901
+  },
+  "1101070": {
+   "bucket": 901,
+   "per_unit": 180,
+   "account_item_id": 1237901
+  },
+  "1101071": {
+   "bucket": 901,
+   "per_unit": 18,
+   "account_item_id": 1237901
+  },
+  "1101072": {
+   "bucket": 901,
+   "per_unit": 54,
+   "account_item_id": 1237901
+  },
+  "1101073": {
+   "bucket": 901,
+   "per_unit": 162,
+   "account_item_id": 1237901
+  },
+  "1101074": {
+   "bucket": 901,
+   "per_unit": 216,
+   "account_item_id": 1237901
+  },
+  "1101075": {
+   "bucket": 901,
+   "per_unit": 360,
+   "account_item_id": 1237901
+  },
+  "1101076": {
+   "bucket": 901,
+   "per_unit": 28,
+   "account_item_id": 1237901
+  },
+  "1101077": {
+   "bucket": 901,
+   "per_unit": 84,
+   "account_item_id": 1237901
+  },
+  "1101078": {
+   "bucket": 901,
+   "per_unit": 252,
+   "account_item_id": 1237901
+  },
+  "1101079": {
+   "bucket": 901,
+   "per_unit": 336,
+   "account_item_id": 1237901
+  },
+  "1101080": {
+   "bucket": 901,
+   "per_unit": 560,
+   "account_item_id": 1237901
+  },
+  "1101081": {
+   "bucket": 901,
+   "per_unit": 40,
+   "account_item_id": 1237901
+  },
+  "1101082": {
+   "bucket": 901,
+   "per_unit": 120,
+   "account_item_id": 1237901
+  },
+  "1101083": {
+   "bucket": 901,
+   "per_unit": 360,
+   "account_item_id": 1237901
+  },
+  "1101084": {
+   "bucket": 901,
+   "per_unit": 480,
+   "account_item_id": 1237901
+  },
+  "1101085": {
+   "bucket": 901,
+   "per_unit": 800,
+   "account_item_id": 1237901
+  },
+  "1101086": {
+   "bucket": 981,
+   "per_unit": 1,
+   "account_item_id": 1237979
+  }
+ },
+ "unresolvable": []
+}

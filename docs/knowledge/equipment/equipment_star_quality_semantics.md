@@ -22,7 +22,10 @@ Evidence-IDs: CLIENT_IL2CPP_2_4, CLIENT_FULL_TABLES_2_4, CLIENT_DUMP_CS
 因此**每件战斗掉落装备都走 identify**：
 
 `InitDrop(0x1E48D14)`：`ItemStruct.quality = IdentifyItem(item, level, dropProp)`，逐档尝试
-DropBase **6(Legendary)→5(Epic)→4(Rare)**，失败下探，兜底 **3**（1-2★ 不经战斗 ADC 掉落产生）。
+DropBase **6(Legendary)→5(Epic)→4(Rare)**，失败下探，兜底 **3**。
+**（2026-09-26 实机修正）**：低带关卡实测产出 1★/2★（2133101 带 [1,3]：1★×73/2★×9/3★×21）——
+IdentifyItem 只能解释 3-6★，**1-2★ 来自另一条未追明的低带路径**（疑似低带使用 DropBase 1/2/3
+或带内 roll），见 equipment_drop_pipeline.md §4。
 
 每档命中条件（完整公式，见 judge_drop_item_cfg.md §3）：
 

@@ -15,10 +15,12 @@ Param=EquipParam{At1/Av1=主属性, At2..6/Av2..6=副词条×5, Lock1..6}, LockS
 实例整只由服务器经 `RewardData.rewardEquip` 下发（152/1028/邮件），后续 L2C_EquipUpdate(536)，
 全量 L2C_EquipAll(555)。客户端零生成、零随机。
 
-**掉落→实例**：战斗 ADC 掉落（Section.DroopLimit=id 白名单、DroopLimit2=AddADCGroup 白名单、
-DroopLimit3=[min,max] 星级带）→ 客户端 IdentifyItem 掷星（DropBase 6/5/4 档，Cv/MF/level 公式，
-兜底 3★，带收敛）→ outsideItems{id,num,quality=★} → 服务器生成实例（Id 分配；Star=quality；
-AttrBD 行选择=初始条数档；EquipParam 按 EquibBase/EquibAttribBD 池 roll）→ RewardData.rewardEquip。
+**掉落→实例（实机已通 2026-09-26）**：战斗 ADC 掉落（Section.DroopLimit=id 白名单、
+DroopLimit2=AddADCGroup 白名单、DroopLimit3=[min,max] 星级带）→ 客户端 IdentifyItem 掷星
+（DropBase 档公式，带收敛）→ outsideItems{id,num,quality=★} → 服务器 EquipmentInstanceFactory
+（Star=quality；条数档 65/35；ValueSec 逐段链）→ equipment_instances 落库 →
+152.rewardEquip + L2C_EquipUpdate(536)。**关键前置**：264/266 dropValues 预算下发
+（缺失=客户端掉落全灭），详见 [equipment_drop_pipeline.md](equipment_drop_pipeline.md)。
 eNum 仅迷宫物品填写，outside 恒 0。星级判定链与概率公式见
 [equipment_star_quality_semantics.md](equipment_star_quality_semantics.md)（A）。
 

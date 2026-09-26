@@ -1,7 +1,7 @@
 ---
 Document-Type: Compatibility Decision
 Domain: Rewards
-Status: ACTIVE
+Status: SUPERSEDED（2026-09-26：E_ReportCurrency 折算机制实装后，金币本手打收入 = 代理物折算金（见 equip_report_currency_conversion.md）；MopReward 金量回归扫荡专用）
 Updated: 2026-09-25
 ---
 # Decision

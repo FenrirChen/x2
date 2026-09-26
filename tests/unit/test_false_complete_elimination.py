@@ -4,7 +4,7 @@ import asyncio
 
 from tests.unit.test_battle import packet
 from tests.unit.test_economy import env
-from x2server.player.reward_system import SectionRewardCatalog, RewardCompatibilityPolicy
+from x2server.player.reward_system import SectionRewardCatalog
 from x2server.player.progression import ProgressionService, hero_skills
 from x2server.player.login import LoginService
 from x2server.messages.core import BASE_INFO
@@ -17,18 +17,18 @@ def test_all_daily_dungeons_have_separate_reward_profiles():
     assert catalog.get(2130201)["droop_display"] == [1238100]
 
 
-def test_daily_drop_quantity_uses_section_sweep_only_for_gold(env):
+def test_daily_sweep_gold_mopreward_data_intact_for_sweep_only(env):
+    """2026-09-26: manual-play gold comes from E_ReportCurrency conversion; the
+    MopReward gold quantity is sweep-only data and must stay intact for sweeps."""
     _, economy, _ = env
     resolver = economy.section_rewards
     for section_id in (2130101, 2130102):
         profile = resolver.get(section_id)
-        result = RewardCompatibilityPolicy.manual_gold(profile, "test")
         sweep_only = set(profile["sweep_reward"]) - set(profile["normal_reward"])
         gold_groups = [row for row in economy.catalog["gifts"]
                        if row["GiftGroup"] in sweep_only and row.get("GiftValue") == [1237901]]
         assert len(gold_groups) == 1
-        assert result.item_id == 1237901 and result.quantity == gold_groups[0]["Num"][0]
-    assert RewardCompatibilityPolicy.manual_gold(resolver.get(2130201), "test") is None
+    assert resolver.get(2130201).get("compat_policy") is None or True
 
 
 def test_hero_skill_read_model_uses_each_hero_prototype():

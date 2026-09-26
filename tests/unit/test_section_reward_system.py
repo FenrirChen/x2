@@ -92,28 +92,45 @@ def test_invalid_outside_and_battle_currency_do_not_settle(env):
         assert store.db.execute("SELECT settled FROM economy_runs WHERE uuid=?", (run,)).fetchone()[0] == 0
 
 
-def test_runtime_equipment_is_pending_not_delivered(env):
+def test_runtime_equipment_is_instantiated_and_delivered(env):
+    """2026-09-25: equipment outsideItems go through EquipmentInstanceFactory
+    (Star=quality) instead of parking in pending_reward_instances."""
     store, economy, ctx = env
     service = BattleService(store, economy)
     run = enter(service, ctx)
     result = checkout(service, ctx, outside=({"id": 1240001, "num": 1, "quality": 4, "eNum": 5},))
     assert result.values["result"] == 10
-    pending = store.db.execute("SELECT item_id,quantity,quality,e_num FROM pending_reward_instances "
-        "WHERE run_id=?", (run,)).fetchone()
-    assert tuple(pending) == (1240001, 1, 4, 5)
-    assert store.db.execute("SELECT COUNT(*) FROM inventory WHERE item_id=1240001").fetchone()[0] == 0
-    assert 1240001 not in rewards(result.values["rewardData"])
+    assert store.db.execute("SELECT COUNT(*) FROM pending_reward_instances "
+        "WHERE run_id=?", (run,)).fetchone()[0] == 0
+    instance = store.db.execute("SELECT type_id, star, marker FROM equipment_instances "
+        "WHERE player_id=1").fetchall()
+    assert len(instance) == 1 and instance[0][0] == 1240001 and instance[0][1] == 4
+    assert instance[0][2].startswith(f"drop:{run}:")
+    assert 1240001 not in rewards(result.values["rewardData"])  # not a stackable grant
+    audit = store.db.execute("SELECT sources FROM reward_settlement_audit WHERE run_id=?", (run,)).fetchone()
+    assert json.loads(audit[0])["EQUIP_INSTANCE"]
 
 
-def test_gold_compat_suppresses_runtime_gold_but_keeps_other_items(env):
+def test_gold_dungeon_pouches_convert_and_no_mopreward_compat(env):
+    """2026-09-26: E_ReportCurrency pouches convert to account gold at settle;
+    the old manual-play MopReward compat (2078/14552...) is removed."""
     store, economy, ctx = env
     service = BattleService(store, economy)
     enter(service, ctx, 2130101, 2030100, 2230101)
     result = checkout(service, ctx, 2130101, 2030100, outside=(
-        {"id": 1237901, "num": 17}, {"id": 1238100, "num": 2}))
+        {"id": 1101076, "num": 100, "quality": 1, "eNum": 0},
+        {"id": 1101077, "num": 30, "quality": 1, "eNum": 0},
+        {"id": 1101078, "num": 13, "quality": 1, "eNum": 0},
+        {"id": 1101079, "num": 8, "quality": 1, "eNum": 0},
+        {"id": 1101080, "num": 2, "quality": 1, "eNum": 0}))
+    assert result.values["result"] == 10
     delivered = rewards(result.values["rewardData"])
-    assert delivered[1237901] == 2078 and delivered[1238100] == 2
-    assert store.get(1)["snapshot"]["gold"] == 2078
+    # 100x28 + 30x84 + 13x252 + 8x336 + 2x560 — proxies merged into one gold grant
+    assert delivered[1237901] == 12404
+    for proxy in (1101076, 1101077, 1101078, 1101079, 1101080):
+        assert proxy not in delivered  # faceless proxies never reach rewardItem
+    assert store.get(1)["snapshot"]["gold"] == 12404
+    assert store.db.execute("SELECT COUNT(*) FROM inventory WHERE item_id=1101076").fetchone()[0] == 0
 
 
 def test_non_gold_daily_does_not_receive_preview_item(env):
@@ -169,9 +186,15 @@ def test_runtime_delivery_and_pending_instance_survive_relogin(tmp_path):
     economy = EconomyService(store)
     service = BattleService(store, economy)
     assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1238100").fetchone()[0] == 2
-    assert store.db.execute("SELECT item_id,quality,e_num FROM pending_reward_instances WHERE run_id=?",
-                            (run,)).fetchone()[:] == (1240001, 4, 5)
-    assert rewards(checkout(service, context, outside=(
-        {"id": 1238100, "num": 2}, {"id": 1240001, "num": 1, "quality": 4, "eNum": 5})).values["rewardData"])[1238100] == 2
+    # 1240001 is a real HeroEquip instance now (Star=quality), surviving relogin
+    instance = store.db.execute("SELECT type_id, star, level, param FROM equipment_instances "
+                                "WHERE player_id=1").fetchall()
+    assert len(instance) == 1 and instance[0][0] == 1240001 and instance[0][1] == 4 and instance[0][2] == 0
+    assert store.db.execute("SELECT COUNT(*) FROM pending_reward_instances WHERE run_id=?",
+                            (run,)).fetchone()[0] == 0
+    replay = checkout(service, context, outside=(
+        {"id": 1238100, "num": 2}, {"id": 1240001, "num": 1, "quality": 4, "eNum": 5}))
+    assert rewards(replay.values["rewardData"])[1238100] == 2
+    assert store.db.execute("SELECT COUNT(*) FROM equipment_instances WHERE player_id=1").fetchone()[0] == 1
     assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1238100").fetchone()[0] == 2
     store.close()

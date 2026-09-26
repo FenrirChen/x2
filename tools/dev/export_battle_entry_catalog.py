@@ -22,11 +22,13 @@ def main():
         raise RuntimeError(f"indexed battle tables missing: {missing}")
     fields = ("SectionID", "ChapterID", "NextSectionID", "Maps", "ManualValue", "Open",
               "OpenType", "OpenParam", "HeroLimit", "AssistType", "AssistParam",
-              "FirVReward", "VReward", "MopReward", "ContinueFightID", "ContinueFightConsume")
+              "FirVReward", "VReward", "MopReward", "ContinueFightID", "ContinueFightConsume",
+              "DifficultyLevel")
     sections = []
     for row in tables["SectionTable"]:
         record = {key: row[key] for key in fields if key in row}
         record["Type"] = enum_value(row.get("Type"))
+        record["DifficultyLevel"] = enum_value(row.get("DifficultyLevel"))
         record["TypeName"] = row.get("Type", {}).get("enum", "E_guanqia") if isinstance(row.get("Type"), dict) else "E_guanqia"
         sections.append(record)
     dungeons = []

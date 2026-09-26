@@ -1,7 +1,9 @@
 ---
 Document-Type: Current Knowledge
 Domain: Equipment
-Status: AUTHORITATIVE (PLAN ONLY — 未实施，PART F 约束)
+Status: AUTHORITATIVE（FIX-E1/E2/E3 已于 2026-09-25 实施：887.outsideItems →
+EquipmentInstanceFactory → equipment_instances 落库 → 152.rewardEquip；FIX-E4 强化事件对齐
+与 FIX-E5 预算校验仍未实施）
 Updated: 2026-09-25
 ---
 

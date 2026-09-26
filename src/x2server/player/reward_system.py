@@ -67,32 +67,55 @@ def expand_drop_roots(roots, drop_groups):
 
 
 class RewardCompatibilityPolicy:
-    GOLD_DUNGEON_MANUAL_USE_MOP_REWARD = {
-        "source": "COMPAT_GOLD_DUNGEON", "official": False,
-        "user_authorized": True, "date": "2026-09-25",
-        "reason": "Manual gold resource stage uses its own official MopReward gold quantity."
-    }
+    """2026-09-26: the gold-dungeon manual-play MopReward compat was removed —
+    manual gold now comes from E_ReportCurrency pouch conversion (superseded,
+    see docs/history/SUPERSEDED_KNOWLEDGE.md)."""
 
-    @classmethod
-    def manual_gold(cls, profile, run_id):
-        config = profile.get("compat_policy")
-        if not config or config.get("policy") != "REVIVAL_COMPAT_GOLD_DUNGEON":
+
+class ReportCurrencyResolver:
+    """E_ReportCurrency (FunctionEff=14) battle proxies -> account currency.
+
+    Official semantics: these items are battle-internal currency representatives
+    (EffData=[currencyBucket, perUnitValue], no Icon/name by design); the settlement
+    converts them into the account currency instead of granting them as items.
+    The bucket->account-item mapping is table-derived (the E_Currency Item whose
+    EffData==[bucket]); unknown buckets are never guessed (parked upstream).
+    """
+
+    def __init__(self, data):
+        data = data or {}
+        # item_id -> {"bucket", "per_unit", "account_item_id"}
+        self.mapping = {int(k): v for k, v in (data.get("items") or {}).items()}
+        # proxies the export could not resolve to an account currency: park, never guess
+        self.unresolvable = {int(k) for k in (data.get("unresolvable") or [])}
+
+    def lookup(self, item_id):
+        entry = self.mapping.get(item_id)
+        if not entry:
             return None
-        return RewardGrant("COMPAT_GOLD_DUNGEON", profile["section_id"], run_id,
-                           config["item_id"], config["quantity"],
-                           official_or_compat="REVIVAL_COMPAT",
-                           reason="official section MopReward quantity; manual-only user policy")
+        return entry["account_item_id"], entry["per_unit"]
 
 
 class RuntimeDropResolver:
     MAX_ENTRY_QUANTITY = 100_000
     MAX_TOTAL_QUANTITY = 1_000_000
+    EQUIP_MAX_ENTRY_QUANTITY = 99
 
-    def __init__(self, items):
+    def __init__(self, items, equipment_types=None, report_currency=None):
         self.items = items
+        # callable item_id -> bool: part-level equib with a canonical EquibBase row
+        self.equipment_types = equipment_types
+        # ReportCurrencyResolver: E_ReportCurrency proxies -> account currency
+        self.report_currency = report_currency
 
     def resolve(self, *, run, profile, outside_items, success):
-        """Return (deliverable, pending, blocked) without rerolling DropProp."""
+        """Return (deliverable, pending, blocked, equipment) without rerolling DropProp.
+
+        Equipment outsideItems (ItemType E_Equip with a canonical EquibBase row) are
+        NOT delivered as stackable grants nor parked as pending: the client's drop
+        pipeline already fixed (TypeId, Star), so they are returned as specs for
+        EquipmentInstanceFactory. Star must be in the official 1..6 band.
+        """
         from .economy import EconomyService, UnresolvedEconomy
 
         if run is None or run["settled"] or run["section_id"] != profile["section_id"]:
@@ -101,7 +124,7 @@ class RuntimeDropResolver:
             raise UnresolvedEconomy("failed battle cannot export outsideItems")
         if len(outside_items) > 512:
             raise UnresolvedEconomy("too many outsideItems")
-        grants, pending, blocked = [], [], []
+        grants, pending, blocked, equipment = [], [], [], []
         total = 0
         for raw in outside_items:
             item = OUTSIDE_ITEM.decode(raw)
@@ -127,14 +150,30 @@ class RuntimeDropResolver:
             elif profile.get("runtime_allowlist_mode") != "DYNAMIC_ALLOWED":
                 raise UnresolvedEconomy("unclassified runtime allowlist")
             kind = row.get("ItemType", {}).get("value")
-            if item_id in EconomyService.CURRENCIES or item_id == 1237900 or kind in EconomyService.STACKABLE_REWARD_TYPES:
+            if self.report_currency and kind == 14 and item_id in self.report_currency.mapping:
+                # E_ReportCurrency proxy: convert to the account currency instead of
+                # granting the faceless item (official settlement semantics).
+                account_item_id, per_unit = self.report_currency.lookup(item_id)
+                grants.append(RewardGrant("REPORT_CURRENCY", profile["section_id"], run["uuid"],
+                                          account_item_id, per_unit * quantity, 0, e_num,
+                                          reason=f"proxy {item_id} x{quantity}"))
+            elif (self.report_currency and kind == 14
+                  and item_id in self.report_currency.unresolvable):
+                pending.append(grant)
+                blocked.append({"item_id": item_id, "reason": "UNRESOLVED_REPORT_CURRENCY",
+                                "quality": quality, "eNum": e_num})
+            elif item_id in EconomyService.CURRENCIES or item_id == 1237900 or kind in EconomyService.STACKABLE_REWARD_TYPES:
                 grants.append(grant)
+            elif kind == 10 and self.equipment_types and self.equipment_types(item_id):
+                if not 1 <= quality <= 6 or not 0 < quantity <= self.EQUIP_MAX_ENTRY_QUANTITY:
+                    raise UnresolvedEconomy(f"equipment outsideItem {item_id} has illegal star/quantity")
+                equipment.append({"item_id": item_id, "quantity": quantity, "quality": quality})
             else:
                 # Preserve exact instance metadata; it is not a delivered item.
                 pending.append(grant)
                 blocked.append({"item_id": item_id, "reason": "UNRESOLVED_INSTANCE_DELIVERY",
                                 "quality": quality, "eNum": e_num})
-        return grants, pending, blocked
+        return grants, pending, blocked, equipment
 
 
 def sum_grants(grants):
