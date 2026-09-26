@@ -297,3 +297,32 @@ def test_dropped_instance_can_be_equipped(env):
     assert response.values["code"] == 10  # part 1 -> position 0 via canonical EquibBase
     hero = next(h for h in store.get(1)["snapshot"]["heroes"] if h["id"] == 1003)
     assert {"position": 0, "equip_id": equip["id"]} in hero["equips"]
+
+
+def test_reclaim_unworn_equipment_returns_preview_currency_once(env):
+    store, economy, ctx, battle = equip_env(env)
+    result = checkout_equipment(battle, ctx, ({"id": 1240001, "num": 1, "quality": 3, "eNum": 0},))
+    equip = reward_equips(result.values["rewardData"])[0]
+    service = EquipmentService(store, economy)
+    req = packet({"equipID": [equip["id"]]}, name="C2L_EquipReclaim")
+    first = asyncio.run(service.reclaim(ctx, req))
+    assert first.values["code"] == 10
+    assert rewards(first.values["rewardData"])[1237906] == service.reclaim_stages[3]["Exp"]
+    assert first.before_response[0].message_name == "L2C_EquipRemove"
+    assert first.before_response[0].values["ids"] == [equip["id"]]
+    assert not db_instances(store)
+    before_exp = store.get(1)["snapshot"]["equip_exp"]
+    assert asyncio.run(service.reclaim(ctx, req)).values["code"] == 13
+    assert store.get(1)["snapshot"]["equip_exp"] == before_exp
+
+
+def test_reclaim_rejects_worn_equipment(env):
+    store, economy, ctx, battle = equip_env(env)
+    result = checkout_equipment(battle, ctx, ({"id": 1240001, "num": 1, "quality": 3, "eNum": 0},))
+    equip = reward_equips(result.values["rewardData"])[0]
+    service = EquipmentService(store, economy)
+    assert asyncio.run(service.handle(ctx, packet({"equipID": equip["id"], "heroID": 1003,
+        "optType": 1}, name="C2L_DoEquip"))).values["code"] == 10
+    assert asyncio.run(service.reclaim(ctx, packet({"equipID": [equip["id"]]},
+        name="C2L_EquipReclaim"))).values["code"] == 13
+    assert len(db_instances(store)) == 1

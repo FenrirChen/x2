@@ -26,6 +26,7 @@ class UnresolvedEconomy(ValueError):
 
 
 class EconomyService:
+    POWER_RECOVER_SECONDS = 225  # Client ServerData default 300s; user policy: 25% faster.
     # Item.EffData -> BaseInfoProto; only supported currency destinations.
     CURRENCIES = {1237901: "gold", 1237902: "crystal", 1237906: "equip_exp", 1237907: "hero_exp",
                   1237908: "exp", 1237910: "daily_activity", 1237911: "week_activity"}
@@ -53,13 +54,11 @@ class EconomyService:
         self.section_rewards = SectionRewardCatalog()
         self.tasks = {r["DailyTaskID"]: r for r in self.catalog["tasks"] if r.get("IsUse", {}).get("value") == 1}
         self.items = {r["ItemID"]: r for r in self.catalog["items"]}
+        player_levels = json.loads(files("x2server").joinpath("data/progression_catalog.json").read_text(encoding="utf-8"))["player_level"]
+        self.power_caps = {row["level"]: row["power_cap"] for row in player_levels}
         self.equipment_factory = EquipmentInstanceFactory()
         report_map = json.loads(files("x2server").joinpath("data/report_currency_map.json").read_text(encoding="utf-8"))
         self.report_currency = ReportCurrencyResolver(report_map)
-        # Currencies absent from BaseInfoProto still have canonical E_Currency
-        # items. Keep their balances in the item ledger, never the proxy item.
-        self.item_currency_ids = {entry["account_item_id"]
-            for entry in self.report_currency.mapping.values()} - self.CURRENCIES.keys()
         self.runtime_drops = RuntimeDropResolver(self.items, self.equipment_factory.is_drop_equipment,
                                                  self.report_currency)
         self.shops = {r["ShopID"]: r for r in self.catalog["shops"]}
@@ -174,6 +173,7 @@ class EconomyService:
                 self.store.db.execute("UPDATE players SET snapshot=?,revision=revision+1 WHERE id=?", (json.dumps(snapshot, ensure_ascii=False, sort_keys=True), player_id))
 
     def login_event(self, player_id):
+        self.refresh_stamina(player_id)
         self.ensure_periods(player_id)
         self.record_event(player_id, "login", 5)
         self.refresh_online_tasks(player_id)
@@ -219,8 +219,11 @@ class EconomyService:
                     if count == 0:
                         continue
                     item_kind = self.items[item].get("ItemType", {}).get("value")
+                    account_currency = (item_kind == 16 and
+                        self.items[item].get("ItemUseScence", {}).get("value") == 1)
                     if (item_kind not in self.STACKABLE_REWARD_TYPES
-                            and item not in self.CURRENCIES and item != 1237900):
+                            and item not in self.CURRENCIES and item != 1237900
+                            and not account_currency):
                         if deferred is not None:
                             deferred[item] += count
                             continue
@@ -285,7 +288,8 @@ class EconomyService:
                 snapshot["mobility"]["power"] += count
                 if snapshot["mobility"]["power"] > 2**31 - 1:
                     raise UnresolvedEconomy("power overflow")
-            elif item in self.item_currency_ids and kind == 16:
+            elif (kind == 16 and
+                  self.items[item].get("ItemUseScence", {}).get("value") == 1):
                 self.store.db.execute("""INSERT INTO inventory VALUES (?,?,?)
                     ON CONFLICT(player_id,item_id) DO UPDATE SET quantity=quantity+excluded.quantity""", (player_id, item, count))
                 quantity = self.store.db.execute("SELECT quantity FROM inventory WHERE player_id=? AND item_id=?",
@@ -338,15 +342,15 @@ class EconomyService:
                 "taskProgress": min(progress, target), "taskRefreshTime": period_end, "finishTimes": int(bool(claimed)), "stage": 0}))
         return {"code": 10, "type": kind, "taskList": result}
 
-    def record_event(self, player_id, key, condition_type, value=0, amount=1):
+    def record_event(self, player_id, key, condition_type, value=0, amount=1, value2=0):
         """Internal authoritative events only. No client-supplied progress endpoint."""
         if amount <= 0:
             raise ValueError("positive event amount required")
         self.ensure_periods(player_id)
         with self.transaction():
-            self._event(player_id, key, condition_type, value, amount)
+            self._event(player_id, key, condition_type, value, amount, value2)
 
-    def _event(self, player_id, key, condition_type, value, amount):
+    def _event(self, player_id, key, condition_type, value, amount, value2=0):
         self.ensure_periods(player_id)
         active_kinds = set()
         for row in self.store.db.execute("SELECT kind,start FROM task_periods WHERE player_id=?", (player_id,)).fetchall():
@@ -358,7 +362,8 @@ class EconomyService:
             condition = self.catalog["task_conditions"][str(task_id)]
             if (task["RefreshCycle"]["value"] not in active_kinds or task["AcceptLevel"] > level or condition["CompleteType"]["value"] != condition_type
                     or condition.get("CompleteValue1", [0]) not in ([0], []) and value not in condition["CompleteValue1"]
-                    or condition_type != 6 and condition.get("CompleteValue2", [0]) not in ([0], [])):
+                    or condition_type != 6 and condition.get("CompleteValue2", [0]) not in ([0], [])
+                    and value2 not in condition["CompleteValue2"]):
                 continue
             self.store.db.execute("UPDATE economy_tasks SET progress=MIN(?,progress+?) WHERE player_id=? AND task_id=?",
                 (condition["CompleteNum"], amount, player_id, task_id))
@@ -455,6 +460,10 @@ class EconomyService:
                          "star": instance["star"], "marker": instance["marker"]})
             self.mark_section_cleared(player_id, section, run_uuid, section_type)
             self._event(player_id, f"clear:{run_uuid}", 3, section, 1)
+            spent = self.store.db.execute("SELECT amount FROM battle_costs WHERE uuid=? AND player_id=?",
+                (run_uuid, player_id)).fetchone()
+            if spent and spent[0]:
+                self._event(player_id, f"power:{run_uuid}", 10, 900, spent[0])
         else:
             rewards = {}
             reward_equips = []
@@ -469,6 +478,7 @@ class EconomyService:
 
     def settle_sweep(self, player_id, section, count, request_key):
         """Only MopReward; the stage must already be cleared and cost is per sweep."""
+        self.refresh_stamina(player_id)
         if type(count) is not int or not 1 <= count <= 10:
             raise UnresolvedEconomy("invalid sweep count")
         profile = self.section_rewards.get(section)
@@ -499,6 +509,8 @@ class EconomyService:
             self.store.db.execute("INSERT OR IGNORE INTO pending_rewards VALUES (?,?,?,?,?)",
                 (player_id, f"sweep:{request_key}", item, amount, "UNRESOLVED_INSTANCE_DELIVERY"))
         self._event(player_id, f"sweep:{request_key}", 3, section, count)
+        if cost:
+            self._event(player_id, f"sweep-power:{request_key}", 10, 900, cost * count)
         self.store.db.execute("INSERT INTO reward_settlement_audit VALUES (?,?,?,?,?,?)",
             (request_key, player_id, section, json.dumps({"SWEEP_REWARD": audit_grants(grants)},
              ensure_ascii=False), json.dumps({"pending": dict(pending)}), int(time.time())))
@@ -548,12 +560,37 @@ class EconomyService:
         self.store.db.execute("UPDATE players SET snapshot=?,revision=revision+1 WHERE id=?",
             (json.dumps(snapshot, ensure_ascii=False, sort_keys=True), player_id))
 
+    def refresh_stamina(self, player_id):
+        """Settle earned points once, retaining the partial interval in the save."""
+        now = int(self.clock())
+        with self.transaction():
+            snapshot = self.store.get(player_id)["snapshot"]
+            mobility = snapshot.get("mobility")
+            if mobility is None:
+                return
+            cap = self.power_caps.get(snapshot["level"])
+            if cap is None:
+                return
+            anchor = mobility.get("recover_anchor")
+            if mobility["power"] >= cap or type(anchor) is not int or anchor <= 0 or anchor > now:
+                if anchor != now:
+                    mobility["recover_anchor"] = now
+                    self.save_snapshot(player_id, snapshot)
+                return
+            earned = (now - anchor) // self.POWER_RECOVER_SECONDS
+            if earned:
+                mobility["power"] = min(cap, mobility["power"] + earned)
+                mobility["recover_anchor"] = (now if mobility["power"] == cap
+                    else anchor + earned * self.POWER_RECOVER_SECONDS)
+                self.save_snapshot(player_id, snapshot)
+
     def charge_battle(self, player_id, run_uuid, section, amount=None):
         # BattleEntryContext supplies an explicit policy cost for non-main modes.
         # MainMission keeps the confirmed SectionTable ManualValue behavior.
         amount = self.sections[section]["ManualValue"] if amount is None else amount
         if type(amount) is not int or amount < 0:
             raise UnresolvedEconomy("invalid battle cost")
+        self.refresh_stamina(player_id)
         snapshot = self.store.get(player_id)["snapshot"]
         if snapshot.get("mobility", {}).get("power", 0) < amount:
             raise UnresolvedEconomy("insufficient stamina")
@@ -565,6 +602,7 @@ class EconomyService:
     def refund_battle(self, player_id, run_uuid):
         cost = self.store.db.execute("SELECT amount,refunded FROM battle_costs WHERE uuid=? AND player_id=?", (run_uuid, player_id)).fetchone()
         if cost and not cost[1]:
+            self.refresh_stamina(player_id)
             snapshot = self.store.get(player_id)["snapshot"]
             snapshot["mobility"]["power"] += cost[0]
             self.save_snapshot(player_id, snapshot)
@@ -572,6 +610,7 @@ class EconomyService:
 
     def pushes(self, player_id):
         from .login import LoginService
+        self.refresh_stamina(player_id)
         self.ensure_periods(player_id)
         return (LoginService.snapshot_push(self.store.get(player_id)),
             OutboundMessage("L2C_ItemUpdate", {"code": 10, **self.inventory_values(player_id)}),

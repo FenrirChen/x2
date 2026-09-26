@@ -140,6 +140,8 @@ class ShopService:
                     "changeItemID": self.CURRENCY_ITEM, "shopId": shop_id}
                 self.store.db.execute("INSERT INTO shop_receipts VALUES (?,?,?)",
                                       (request_key, player_id, schema.encode(values)))
+                self.economy._event(player_id, f"shop-buy:{request_key}", 24,
+                                    goods_id, buy_num, self.SHOP_ID)
         except UnresolvedEconomy as exc:
             LOGGER.info("purchase rejected goods=%s reason=%s", goods_id, exc)
             return reject

@@ -7,7 +7,7 @@ from x2server.messages.economy import TASK, REWARD, REWARD_ITEM, FINISH_REQUEST,
 from x2server.player.economy import EconomyService, UnresolvedEconomy
 from x2server.player.battle import BattleService
 from x2server.player.store import PlayerStore
-from x2server.messages.battle import CHECKOUT
+from x2server.messages.battle import CHECKOUT, FIGHT_KILL_DATA
 from x2server.network.dispatcher import DispatchContext
 from x2server.network.session import SessionState
 from x2server.protocol.errors import ProtocolError
@@ -62,6 +62,20 @@ def test_task_catalog_gates_and_login_claim_survives_restart(env):
     assert economy.claim(1, 630006, 1)["code"] == 13
 
 
+def test_every_eligible_daily_and_weekly_task_reward_can_be_claimed(env):
+    store, economy, _ = env
+    economy.ensure_periods(1)
+    for task_id, task in sorted(economy.tasks.items()):
+        if task["AcceptLevel"] > store.get(1)["snapshot"]["level"]:
+            continue
+        target = economy.catalog["task_conditions"][str(task_id)]["CompleteNum"]
+        store.db.execute("UPDATE economy_tasks SET progress=? WHERE player_id=1 AND task_id=?",
+                         (target, task_id))
+        result = economy.claim(1, task_id, task["RefreshCycle"]["value"])
+        assert result["code"] == 10, task_id
+        assert economy.claim(1, task_id, task["RefreshCycle"]["value"])["code"] == 10
+
+
 def test_battle_first_and_repeat_rewards_atomic_and_idempotent(env):
     store, economy, ctx = env
     battle = BattleService(store, economy)
@@ -85,6 +99,22 @@ def test_battle_first_and_repeat_rewards_atomic_and_idempotent(env):
     assert store.db.execute("SELECT COUNT(*) FROM economy_clears").fetchone()[0] == 1
 
 
+def test_kill_reports_credit_tasks_only_after_settled_battle(env):
+    store, economy, ctx = env
+    battle = BattleService(store, economy)
+    asyncio.run(battle.enter(ctx, packet(request())))
+    report = packet({"sectionId": 2110801, "datas": [FIGHT_KILL_DATA.encode({
+        "heroId": 1003, "unitId": [3001, 4001], "num": [5, 2]})]},
+        name="C2L_FightKillInfo")
+    assert asyncio.run(battle.kill_info(ctx, report)).values["code"] == 10
+    assert store.db.execute("SELECT SUM(progress) FROM economy_tasks WHERE task_id IN (630020,630101,630102)").fetchone()[0] == 0
+    assert asyncio.run(battle.checkout(ctx, checkout())).values["result"] == 10
+    assert asyncio.run(battle.kill_info(ctx, report)).values["code"] == 10
+    assert asyncio.run(battle.kill_info(ctx, report)).values["code"] == 10
+    progress = dict(store.db.execute("SELECT task_id,progress FROM economy_tasks WHERE task_id IN (630020,630101,630102)"))
+    assert progress == {630020: 7, 630101: 5, 630102: 2}
+
+
 def test_failure_and_old_practice_runs_never_grant(env):
     store, economy, ctx = env
     practice = BattleService(store)
@@ -96,7 +126,9 @@ def test_failure_and_old_practice_runs_never_grant(env):
     ctx.session.session_id = "other"
     failed = asyncio.run(battle.checkout(ctx, checkout(False)))
     assert failed.values["result"] == 10 and rewards(failed.values["rewardData"]) == {}
-    assert store.get(1)["snapshot"] == before["snapshot"]
+    after = store.get(1)["snapshot"]
+    assert after["mobility"]["power"] == before["snapshot"]["mobility"]["power"]
+    assert {**after, "mobility": {"power": after["mobility"]["power"]}} == before["snapshot"]
     assert store.db.execute("SELECT COUNT(*) FROM economy_grants").fetchone()[0] == 0
 
 

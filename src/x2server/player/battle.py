@@ -5,9 +5,10 @@ import logging
 import secrets
 import time
 import uuid
+from importlib.resources import files
 
 from x2server.messages.battle import (BATTLE_SCHEMAS, CHECKOUT, DROP_DATA, OUTSIDE_ITEM, PROFILE_HERO,
-    HERO_SKILL, HERO_ATTR, HERO_ATTR_ADD, FIGHT_HERO, FIGHT_DATA, FIGHT_PROFILE)
+    HERO_SKILL, HERO_ATTR, HERO_ATTR_ADD, FIGHT_HERO, FIGHT_DATA, FIGHT_PROFILE, FIGHT_KILL_DATA)
 from x2server.network.dispatcher import OutboundMessage
 from x2server.protocol.errors import ProtocolError
 from x2server.protocol.protobuf import decode_varint, _skip_unknown
@@ -20,6 +21,8 @@ class BattleService:
         self.store = store
         self.economy = economy
         self.catalog = BattleEntryCatalog()
+        self.unit_types = {int(k): v for k, v in json.loads(
+            files("x2server").joinpath("data/unit_types.json").read_text(encoding="utf-8")).items()}
         from .drop_budget import DropBudgetCompatibilityPolicy
         self.drop_budget = DropBudgetCompatibilityPolicy(
             {s["SectionID"]: s.get("DifficultyLevel", 0) for s in self.catalog.sections.values()})
@@ -107,14 +110,40 @@ class BattleService:
             raise ProtocolError("kill info before login")
         request = BATTLE_SCHEMAS["C2L_FightKillInfo"].decode(packet.body)
         section = request.get("sectionId", 0)
-        row = self.store.db.execute("SELECT response, created_at FROM battle_entries WHERE player_id=? ORDER BY rowid DESC LIMIT 1",
+        row = self.store.db.execute("SELECT uuid, response, created_at FROM battle_entries WHERE player_id=? ORDER BY rowid DESC LIMIT 1",
                                     (context.session.player_id,)).fetchone()
         accepted = bool(row and int(time.time()) - row["created_at"] <= 3600
             and FIGHT_DATA.decode(BATTLE_SCHEMAS["L2C_FightData"].decode(row["response"])["data"])["missionId"] == section)
-        # Receipt of practice telemetry only; no tasks or rewards are updated.
+        credited = False
+        if accepted and self.economy and request.get("datas"):
+            receipt = self.store.db.execute("SELECT response FROM battle_receipts WHERE uuid=?", (row["uuid"],)).fetchone()
+            settled = BATTLE_SCHEMAS["L2C_CheckoutMainMission"].decode(receipt[0]) if receipt else {}
+            if settled.get("result") == 10 and settled.get("success"):
+                by_type = {}
+                total = 0
+                for raw in request["datas"]:
+                    report = FIGHT_KILL_DATA.decode(raw)
+                    units, counts = report.get("unitId", []), report.get("num", [])
+                    if len(units) != len(counts) or len(units) > 512:
+                        continue
+                    for unit, count in zip(units, counts):
+                        if type(count) is not int or not 0 < count <= 10_000:
+                            continue
+                        total += count
+                        kind = self.unit_types.get(unit)
+                        if kind is not None:
+                            by_type[kind] = by_type.get(kind, 0) + count
+                if 0 < total <= 100_000:
+                    with self.economy.transaction():
+                        self.economy._event(context.session.player_id, f"kills:{row['uuid']}", 1, 0, total)
+                        for kind, count in by_type.items():
+                            self.economy._event(context.session.player_id,
+                                f"kills:{row['uuid']}:type:{kind}", 2, kind, count)
+                    credited = True
         logging.getLogger("x2.battle").info("practice kill report section=%s accepted=%s digest=%s",
             section, accepted, hashlib.sha256(packet.body).hexdigest())
-        return OutboundMessage("L2C_FightKillInfo", {"code": 10 if accepted else 13})
+        return OutboundMessage("L2C_FightKillInfo", {"code": 10 if accepted else 13},
+            pushes=self.economy.pushes(context.session.player_id) if credited else ())
 
     async def checkout(self, context, packet):
         """Close a bounded run; economy and receipt commit atomically when enabled.
@@ -309,6 +338,7 @@ class BattleService:
                         self.economy.refund_battle(player["id"], old[0])
                         self.store.db.execute("UPDATE economy_runs SET settled=1 WHERE uuid=?", (old[0],))
                     self.economy.charge_battle(player["id"], values["uuid"], section, entry_context.stamina_cost)
+                    self.economy._event(player["id"], f"entry:{values['uuid']}", 87, section, 1)
                     self.store.db.execute("""INSERT INTO economy_runs
                         (uuid,player_id,session_id,section_id,section_type,entry_source) VALUES (?,?,?,?,?,?)""",
                         (values["uuid"], player["id"], context.session.session_id, section,

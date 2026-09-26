@@ -8,6 +8,7 @@ from x2server.player.equipment_factory import load_equipment_tables
 from x2server.network.dispatcher import OutboundMessage
 from x2server.protocol.errors import ProtocolError
 from x2server.protocol.registry import CORE_MESSAGE_REGISTRY
+from .economy import UnresolvedEconomy
 
 
 class EquipmentService:
@@ -23,6 +24,7 @@ class EquipmentService:
                            for r in json.loads(increments.read_text(encoding="utf-8"))["rows"]}
         progression = Path(__file__).resolve().parents[3] / "analysis/progression/equipment_progression.json"
         self.exp_costs = {r["level"]: r for r in json.loads(progression.read_text(encoding="utf-8"))["level_rows"]}
+        self.reclaim_stages = {r["Stage"]: r for r in json.loads(progression.read_text(encoding="utf-8"))["stage_rows"]}
         with store.db:
             store.db.execute("""CREATE TABLE IF NOT EXISTS equipment_instances (
                 id INTEGER PRIMARY KEY AUTOINCREMENT, player_id INTEGER NOT NULL,
@@ -55,7 +57,60 @@ class EquipmentService:
     def handlers(self):
         return {"C2L_EquipAll": self.query_all,
                 "C2L_DoEquip": self.handle, "C2L_DoUnEquip": self.handle,
-                "C2L_EquipStrengthen": self.strengthen}
+                "C2L_EquipStrengthen": self.strengthen,
+                "C2L_EquipReclaim": self.reclaim}
+
+    def reclaim_rewards(self, rows):
+        """Mirror the client's BagDecomposePage currency preview calculation."""
+        rewards = {}
+        for row in rows:
+            level, star = row["level"], row["star"]
+            stage, exp_row = self.reclaim_stages[star], self.exp_costs[level]
+            equip_exp = stage["Exp"] + (exp_row["cumulative_exp"] * stage["ExpBonus"]
+                * (1000 - exp_row["loss_exp"])) // 1_000_000
+            rewards[1237906] = rewards.get(1237906, 0) + equip_exp
+            gold = exp_row["cumulative_gold"] * stage["GoldBonus"] // 1000
+            if gold:
+                rewards[1237901] = rewards.get(1237901, 0) + gold
+            chip = stage.get("EquibSeniorChip", [])
+            if len(chip) >= 2 and chip[0] >= 1000:
+                rewards[1237920] = rewards.get(1237920, 0) + chip[1]
+        return rewards
+
+    async def reclaim(self, context, packet):
+        player_id = context.session.player_id
+        if player_id is None:
+            raise ProtocolError("equipment reclaim before login")
+        request = EQUIPMENT_SCHEMAS["C2L_EquipReclaim"].decode(packet.body)
+        ids = request.get("equipID", [])
+        reject = OutboundMessage("L2C_EquipReclaim", {"code": 13})
+        if not ids or len(ids) > 200 or len(ids) != len(set(ids)) or self.economy is None:
+            return reject
+        snapshot = self.store.get(player_id)["snapshot"]
+        worn = {e["equip_id"] for hero in snapshot.get("heroes", []) for e in hero.get("equips", [])}
+        if any(equip_id in worn for equip_id in ids):
+            return reject
+        try:
+            with self.economy.transaction():
+                placeholders = ",".join("?" for _ in ids)
+                rows = self.store.db.execute(
+                    f"SELECT id,level,star FROM equipment_instances WHERE player_id=? AND id IN ({placeholders})",
+                    (player_id, *ids)).fetchall()
+                if len(rows) != len(ids) or any(row["star"] not in self.reclaim_stages
+                                              or row["level"] not in self.exp_costs for row in rows):
+                    return reject
+                rewards = self.reclaim_rewards(rows)
+                self.store.db.execute(f"DELETE FROM equipment_enhancements WHERE player_id=? AND equip_id IN ({placeholders})",
+                                      (player_id, *ids))
+                self.store.db.execute(f"DELETE FROM equipment_instances WHERE player_id=? AND id IN ({placeholders})",
+                                      (player_id, *ids))
+                rewards = self.economy._grant(player_id, "equip_reclaim:" + ",".join(map(str, sorted(ids))), rewards)
+        except UnresolvedEconomy:
+            return reject
+        removed = OutboundMessage("L2C_EquipRemove", {"ids": ids})
+        return OutboundMessage("L2C_EquipReclaim", {"code": 10,
+            "rewardData": self.economy.reward_bytes(rewards)},
+            before_response=(removed,), pushes=self.economy.pushes(player_id))
 
     async def strengthen(self, context, packet):
         player_id = context.session.player_id
@@ -95,6 +150,7 @@ class EquipmentService:
             self.store.db.execute("UPDATE equipment_instances SET level=?,param=? WHERE player_id=? AND id=?",
                                   (next_level, json.dumps(param, sort_keys=True), player_id, equip_id))
             self.economy.save_snapshot(player_id, snapshot)
+            self.economy._event(player_id, f"equip-strengthen:{equip_id}:{next_level}", 12, 0, 1)
             result.update(code=10, level=next_level)
         from .login import LoginService
         changed = next(e for e in self.values(player_id)["equip"] if HERO_EQUIP.decode(e)["id"] == equip_id)

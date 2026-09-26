@@ -205,9 +205,8 @@ def test_challenge_settlement_uses_only_static_gift_items_and_records_unpayable(
     result = asyncio.run(service.checkout(ctx, done))
     assert result.values["result"] == 10
     assert rewards(result.values["rewardData"]) == {
-        1237901: 900, 1237902: 30, 1237907: 300, 1237908: 30}
-    assert store.db.execute("SELECT item_id,quantity FROM pending_rewards WHERE source=?",
-                            (f"battle:{entry.values['uuid']}",)).fetchone()[:] == (1237914, 1)
+        1237901: 900, 1237902: 30, 1237907: 300, 1237908: 30, 1237914: 1}
+    assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1237914").fetchone()[0] == 1
     assert asyncio.run(service.checkout(ctx, done)).values == result.values
     challenge_progress = [MISSION_TYPE.decode(raw) for raw in economy.mission_values(1)["OtherChapter"]]
     assert challenge_progress[0]["type"] == 2

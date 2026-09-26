@@ -36,6 +36,7 @@ def test_recovered_shop_809_lists_and_purchases_persist(env):
     assert rewards(first.values["rewardData"]) == {1281001: 2}
     assert store.get(1)["snapshot"]["crystal"] == 8
     assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1281001").fetchone()[0] == 2
+    assert store.db.execute("SELECT progress FROM economy_tasks WHERE player_id=1 AND task_id=630015").fetchone()[0] == 1
     replay = asyncio.run(service.handle(ctx, purchase))
     assert replay.values == first.values
     assert store.get(1)["snapshot"]["crystal"] == 8

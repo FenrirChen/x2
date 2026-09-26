@@ -108,8 +108,9 @@ class LoginService:
         if context.session.player_id is None:
             raise ProtocolError("configuration requested before login")
         # An absent repeated field becomes null in this generated C# decoder.
-        # Echo one confirmed constructor default to materialize the list without
-        # inventing a table override: ServerData..ctor 0x13CD05C stores 120 at 0x10.
-        pair = STRING_PAIR.encode({"key": "PowerBuyNum", "val": "120"})
-        LOGGER.info("server configuration response prepared with packaged default")
-        return OutboundMessage("L2C_ServerTableConfig", {"code": 10, "keyVal": [pair]})
+        # The client default is 300 seconds; Revival recovers power 25% faster.
+        pairs = [STRING_PAIR.encode({"key": "PowerBuyNum", "val": "120"}),
+                 STRING_PAIR.encode({"key": "PowerRecover", "val": str(self.economy.POWER_RECOVER_SECONDS)})]
+        LOGGER.info("server configuration response prepared with %s-second power recovery",
+                    self.economy.POWER_RECOVER_SECONDS)
+        return OutboundMessage("L2C_ServerTableConfig", {"code": 10, "keyVal": pairs})

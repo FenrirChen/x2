@@ -18,6 +18,8 @@ FIGHT_PROFILE = S("FightDataProfile", (F(1, "missionId", K.INT32), F(2, "layer",
     F(20, "isProfileValid", K.BOOL)))
 OUTSIDE_ITEM = S("ItemDataP", (F(1, "id", K.INT32), F(2, "num", K.INT32),
     F(3, "quality", K.INT32), F(4, "eNum", K.INT32)))
+FIGHT_KILL_DATA = S("FightKillData", (F(1, "heroId", K.INT32),
+    F(2, "unitId", K.INT32, repeated=True), F(3, "num", K.INT32, repeated=True)))
 CHECKOUT = S("C2L_CheckoutMainMission", (F(1, "chapterId", K.INT32), F(2, "sectionId", K.INT32),
     F(3, "outsideItems", K.MESSAGE, repeated=True), F(4, "success", K.BOOL),
     F(6, "expertMode", K.BOOL), F(8, "checkGm", K.BOOL),
@@ -39,7 +41,8 @@ BATTLE_SCHEMAS = {
         F(8, "roleLevel", K.INT32), F(9, "UpLevelNum", K.INT32), F(10, "roleExp", K.INT32),
         F(14, "heroFullLevel", K.BOOL, repeated=True), F(15, "favorFullLevel", K.BOOL, repeated=True),
         F(16, "playerFullLevel", K.BOOL), F(18, "fightTimeLength", K.INT32))),
-    "C2L_FightKillInfo": S("C2L_FightKillInfo", (F(1, "sectionId", K.INT32),)),
+    "C2L_FightKillInfo": S("C2L_FightKillInfo", (F(1, "sectionId", K.INT32),
+        F(2, "datas", K.MESSAGE, repeated=True), F(3, "chapterTaskEvent", K.MESSAGE, repeated=True))),
     "L2C_FightKillInfo": S("L2C_FightKillInfo", (F(1, "code", K.ENUM),)),
     "C2L_FightDropData": S("C2L_FightDropData", (F(1, "missionId", K.INT32),
         F(2, "chapterId", K.INT32), F(3, "layer", K.INT32), F(10, "expertMode", K.BOOL),

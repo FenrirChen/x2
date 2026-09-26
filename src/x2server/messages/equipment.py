@@ -18,4 +18,7 @@ EQUIPMENT_SCHEMAS = {s.name: s for s in (
     S("C2L_DoUnEquip", (F(1, "posIdx", K.INT32), F(2, "heroID", K.INT32), F(3, "optType", K.ENUM))),
     S("L2C_DoUnEquip", (F(1, "code", K.ENUM), F(2, "posIdx", K.INT32), F(3, "heroID", K.INT32))),
     S("L2C_EquipUpdate", (F(1, "code", K.ENUM), F(2, "equip", K.MESSAGE, repeated=True))),
+    S("C2L_EquipReclaim", (F(1, "equipID", K.INT32, repeated=True),)),
+    S("L2C_EquipReclaim", (F(1, "code", K.ENUM), F(2, "rewardData", K.MESSAGE))),
+    S("L2C_EquipRemove", (F(1, "ids", K.INT32, repeated=True),)),
 )}
