@@ -64,6 +64,8 @@ for name, fields in {
     "EquipAll": (F(1, "equip", K.MESSAGE, repeated=True),),
     "QueryMission": (F(1, "OtherChapter", K.MESSAGE, repeated=True), F(2, "mainMission", K.INT32, repeated=True), F(3, "story", K.INT32, repeated=True)),
     "QueryCollectionAward": (F(1, "awardID", K.INT32, repeated=True),),
+    "GetCollectiontAward": (F(1, "code", K.ENUM), F(2, "awardID", K.INT32, repeated=True),
+                             F(3, "rewardData", K.MESSAGE)),
     "QueryActivity": (F(1, "code", K.ENUM), F(2, "activityData", K.MESSAGE, repeated=True)),
     "QueryWorldBossOpenTime": (F(1, "code", K.ENUM),),
     "QueryActivityDrawInfo": (F(1, "code", K.ENUM), F(2, "drawInfos", K.MESSAGE, repeated=True)),
@@ -83,3 +85,6 @@ for name, fields in {
     "QueryGiftPackage": (F(1, "code", K.ENUM), F(2, "datas", K.MESSAGE, repeated=True)),
 }.items():
     LOBBY_SCHEMAS["L2C_" + name] = ProtoSchema("L2C_" + name, fields)
+
+LOBBY_SCHEMAS["C2L_GetCollectionAward"] = ProtoSchema("C2L_GetCollectionAward",
+    (F(1, "collectionAwardID", K.INT32),))
