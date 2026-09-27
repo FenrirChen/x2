@@ -122,8 +122,14 @@ class AppearanceService:
             with self.economy.transaction():
                 self.store.db.execute("INSERT OR REPLACE INTO appearance_wear VALUES (?,?,?,?)",
                                       (player_id, hero, kind, skin))
+            # The client handles wear success by firing a UI event only. Its
+            # equipped-skin cache is updated by L2C_HeroSkinUpdate, so deliver
+            # the new HeroSkin before the success event is processed.
+            updated = next(value for value in self.skin_values(player_id)["skinList"]
+                           if HERO_SKIN.decode(value)["heroId"] == hero)
             return OutboundMessage("L2C_HeroWearSkin", {"code": 10,
-                "heroId": hero, "skinId": skin, "type": kind})
+                "heroId": hero, "skinId": skin, "type": kind},
+                before_response=(OutboundMessage("L2C_HeroSkinUpdate", {"skin": updated}),))
         if name == "C2L_PutOnOrPutOffSeasonIcon":
             kind, icon = req.get("type"), req.get("id")
             owned = self._icon_values(player_id)

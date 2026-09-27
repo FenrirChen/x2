@@ -18,17 +18,23 @@ def test_skin_catalog_wear_and_locked_skin_rejected(env):
     assert 1220303 not in data["skinIds"]
     assert invoke(service, context, "HeroWearSkin", {"heroId": 1003,
         "skinId": 1220303, "type": 1}).values["code"] == 13
-    assert invoke(service, context, "HeroWearSkin", {"heroId": 1003,
-        "skinId": 1220301, "type": 1}).values["code"] == 10
+    first = invoke(service, context, "HeroWearSkin", {"heroId": 1003,
+        "skinId": 1220301, "type": 1})
+    assert first.values["code"] == 10
+    assert [message.message_name for message in first.before_response] == ["L2C_HeroSkinUpdate"]
+    assert HERO_SKIN.decode(first.before_response[0].values["skin"])["battleSkin"] == 1220301
     assert HERO_SKIN.decode(service.skin_values(1)["skinList"][0])["battleSkin"] == 1220301
     store.db.execute("INSERT INTO inventory VALUES (1,1220303,1)")
-    assert invoke(service, context, "HeroWearSkin", {"heroId": 1003,
-        "skinId": 1220303, "type": 1}).values["code"] == 10
+    paid = invoke(service, context, "HeroWearSkin", {"heroId": 1003,
+        "skinId": 1220303, "type": 1})
+    assert paid.values["code"] == 10
+    assert HERO_SKIN.decode(paid.before_response[0].values["skin"])["battleSkin"] == 1220303
     assert HERO_SKIN.decode(AppearanceService(store, economy).skin_values(1)["skinList"][0])["battleSkin"] == 1220303
     daily = invoke(service, context, "HeroWearSkin", {"heroId": 1003,
         "skinId": 1220303, "type": 3})
     assert daily.values == {"code": 10, "heroId": 1003, "skinId": 1220303, "type": 3}
     assert not daily.pushes
+    assert HERO_SKIN.decode(daily.before_response[0].values["skin"])["outerSkin"] == 1220303
     assert HERO_SKIN.decode(AppearanceService(store, economy).skin_values(1)["skinList"][0])["outerSkin"] == 1220303
 
 
