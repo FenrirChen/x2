@@ -6,12 +6,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 
 
-def p(value, unit, source, reason, confidence="medium", *, constraint="", impact="", sensitivity="medium", evidence=""):
+def p(value, unit, source, reason, confidence="medium", *, constraint="", impact="", sensitivity="medium", evidence="", decision_required=None):
     assert source in {"OFFICIAL", "REVIVAL_COMPATIBILITY", "UNKNOWN"}
     return {"value": value, "unit": unit, "source": source, "reason": reason,
             "confidence": confidence, "official_constraint": constraint,
             "economic_impact": impact, "sensitivity": sensitivity, "evidence": evidence,
-            "user_decision_required": source == "REVIVAL_COMPATIBILITY"}
+            "user_decision_required": (source == "REVIVAL_COMPATIBILITY") if decision_required is None else decision_required}
 
 
 O = "OFFICIAL"
@@ -108,8 +108,7 @@ cfg = {
         "crystal_route": p("DEFER", "rule", U, "Avoid premium-currency drain until reviewed", "low"),
     },
     "assist": {
-        "policy": p("DEFER", "rule", U, "879/881 real send path and social state not closed", "low"),
-        "alternative": p("NPC/self assist without fictional accounts", "candidate", C, "Only after explicit separate approval", sensitivity="medium"),
+        "policy": p("OUT_OF_SCOPE", "rule", C, "User decision on 2026-09-27: optional social assist is excluded from College implementation", "high", evidence="protocol_matrix.csv; user decision", decision_required=False),
     },
     "daily_reset": {
         "timezone": p("Asia/Shanghai", "IANA zone", C, "Match current Revival daily task and gift calendar", "high", evidence="src/x2server/player/task_calendar.py"),
@@ -156,7 +155,7 @@ with (ROOT / "parameter_review.csv").open("w", encoding="utf-8-sig", newline="")
     writer.writerow(["Domain", "Parameter", "Official Constraint", "Proposed Value", "Unit", "Reason", "Economic Impact", "Sensitivity", "Evidence", "User Decision Required"])
     def visit(prefix, value):
         if isinstance(value, dict) and "source" in value:
-            if value["source"] == C:
+            if value["source"] == C and value["user_decision_required"]:
                 writer.writerow([prefix.split(".")[0], prefix, value["official_constraint"], json.dumps(value["value"], ensure_ascii=False),
                     value["unit"], value["reason"], value["economic_impact"], value["sensitivity"],
                     value["evidence"], "YES"])

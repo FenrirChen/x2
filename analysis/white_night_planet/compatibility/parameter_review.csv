@@ -35,7 +35,6 @@ customer,customer.order_reward,CollegeQuest.AwardType/AwardGroup,"""use CollegeQ
 customer,customer.client_price_trust,,false,bool,Ignore client plusPrice/discountPrice as authority,,high,,YES
 washing,washing.cost_options,CollegeEquibReset rows 1..5,"""CollegeEquibReset rows 1..5; prefer gold-side Item1 list""",rule,Official table lists gold and crystal alternatives; route preference is a policy choice,,high,official_economic_anchors.json,YES
 washing,washing.daily_attempt_cap,,10,attempts/day,Balanced candidate; compare 5/20/unlimited,Limits random reroll search without pay pressure,high,,YES
-assist,assist.alternative,,"""NPC/self assist without fictional accounts""",candidate,Only after explicit separate approval,,medium,,YES
 daily_reset,daily_reset.timezone,,"""Asia/Shanghai""",IANA zone,Match current Revival daily task and gift calendar,,medium,src/x2server/player/task_calendar.py,YES
 daily_reset,daily_reset.hour,,0,local hour,Match current Revival daily task boundary; official College hour unknown,,medium,,YES
 daily_reset,daily_reset.clock,,"""ServerClock""",authority,Never trust client time,,medium,,YES

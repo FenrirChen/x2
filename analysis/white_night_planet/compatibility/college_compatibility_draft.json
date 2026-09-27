@@ -863,28 +863,16 @@
   },
   "assist": {
     "policy": {
-      "value": "DEFER",
+      "value": "OUT_OF_SCOPE",
       "unit": "rule",
-      "source": "UNKNOWN",
-      "reason": "879/881 real send path and social state not closed",
-      "confidence": "low",
-      "official_constraint": "",
-      "economic_impact": "",
-      "sensitivity": "medium",
-      "evidence": "",
-      "user_decision_required": false
-    },
-    "alternative": {
-      "value": "NPC/self assist without fictional accounts",
-      "unit": "candidate",
       "source": "REVIVAL_COMPATIBILITY",
-      "reason": "Only after explicit separate approval",
-      "confidence": "medium",
+      "reason": "User decision on 2026-09-27: optional social assist is excluded from College implementation",
+      "confidence": "high",
       "official_constraint": "",
       "economic_impact": "",
       "sensitivity": "medium",
-      "evidence": "",
-      "user_decision_required": true
+      "evidence": "protocol_matrix.csv; user decision",
+      "user_decision_required": false
     }
   },
   "daily_reset": {
