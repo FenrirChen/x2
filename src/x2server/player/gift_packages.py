@@ -1,4 +1,4 @@
-"""Operator-selected client gift packages and one-time local purchases."""
+"""Operator-selected client gift packages and local purchases."""
 
 from __future__ import annotations
 
@@ -19,12 +19,13 @@ from .economy import UnresolvedEconomy
 class GiftPackageService:
     LOCAL_TZ = timezone(timedelta(hours=8))
     MONTHCARD_ID = 2700001
+    UNLIMITED_IDS = frozenset({2700092})
     def __init__(self, store, economy):
         self.store, self.economy = store, economy
         data = json.loads(files("x2server").joinpath("data/selected_gift_packages.json").read_text(encoding="utf-8"))
         self.packages = {row["GiftPackageID"]: row for row in data["packages"]}
         self.gifts = {row["GiftGroup"]: row for row in data["gifts"]}
-        if set(self.packages) != set(range(2700000, 2700034)):
+        if set(self.packages) != set(range(2700000, 2700034)) | self.UNLIMITED_IDS:
             raise ValueError("selected gift package list changed")
         with store.db:
             store.db.execute("""CREATE TABLE IF NOT EXISTS gift_package_claims (
@@ -100,6 +101,10 @@ class GiftPackageService:
                     "pushDeadline": start + 30 * 86400 if days_left else 0,
                     "PurchaseTime": 1 if days_left else 0, "unShelves": 0}))
                 continue
+            if package_id in self.UNLIMITED_IDS:
+                values.append(GIFT_PACKAGE_DATA.encode({"id": package_id, "state": 0,
+                    "PurchaseTime": 0, "unShelves": 0}))
+                continue
             claimed = self.store.db.execute("SELECT 1 FROM gift_package_claims WHERE player_id=? AND package_id=? AND period=?",
                 (player_id, package_id, self._period(package))).fetchone()
             state = (3 if package["GiftPackageType"]["value"] == 3
@@ -168,6 +173,8 @@ class GiftPackageService:
             period = str(int(self.economy.clock()))
         request_key = hashlib.sha256(f"gift:{player_id}:{context.session.session_id}:{packet.header.request_id}".encode()
                                      + packet.body).hexdigest()
+        if package_id in self.UNLIMITED_IDS:
+            period = request_key
         cached = self.store.db.execute("SELECT response FROM gift_package_receipts WHERE request_key=? AND player_id=?",
                                        (request_key, player_id)).fetchone()
         if cached and not recharge:

@@ -105,7 +105,7 @@ def test_exact_selected_gift_packages_and_one_time_claim(env):
     store, economy, ctx = env
     service = GiftPackageService(store, economy)
     listing = [GIFT_PACKAGE_DATA.decode(x) for x in service.listing(1)]
-    assert [x["id"] for x in listing] == [2700000, 2700001, 2700002, 2700018]
+    assert [x["id"] for x in listing] == [2700000, 2700001, 2700002, 2700018, 2700092]
     assert 2700050 not in service.packages
     assert asyncio.run(service.recharge(ctx, packet({"rechargeID": 22024},
         916, "C2L_RechargeGoodsInfo"))).values["code"] == 13
@@ -113,7 +113,7 @@ def test_exact_selected_gift_packages_and_one_time_claim(env):
         911, "C2L_BuyGiftPackage")))
     assert free.values["code"] == 10
     assert [GIFT_PACKAGE_DATA.decode(x)["id"] for x in service.listing(1)] == [
-        2700000, 2700001, 2700002, 2700019]
+        2700000, 2700001, 2700002, 2700019, 2700092]
     assert asyncio.run(service.buy(ctx, packet({"giftPackageID": 2700018, "num": 1},
         912, "C2L_BuyGiftPackage"))).values["code"] == 13
     with economy.transaction():
@@ -124,7 +124,7 @@ def test_exact_selected_gift_packages_and_one_time_claim(env):
     assert paid.values["code"] == 10
     assert store.get(1)["snapshot"]["crystal"] == before - 60
     assert [GIFT_PACKAGE_DATA.decode(x)["id"] for x in service.listing(1)] == [
-        2700000, 2700001, 2700003, 2700019]
+        2700000, 2700001, 2700003, 2700019, 2700092]
     assert asyncio.run(service.buy(ctx, packet({"giftPackageID": 2700004, "num": 1},
         915, "C2L_BuyGiftPackage"))).values["code"] == 13  # level 10 must be bought first
     assert asyncio.run(service.buy(ctx, packet({"giftPackageID": 2700033, "num": 1},
@@ -133,7 +133,30 @@ def test_exact_selected_gift_packages_and_one_time_claim(env):
         for package_id in [*range(2700003, 2700018), *range(2700019, 2700034)]:
             store.db.execute("INSERT INTO gift_package_claims VALUES (?,?,?,?)",
                 (1, package_id, "once", 1))
-    assert [GIFT_PACKAGE_DATA.decode(x)["id"] for x in service.listing(1)] == [2700000, 2700001]
+    assert [GIFT_PACKAGE_DATA.decode(x)["id"] for x in service.listing(1)] == [2700000, 2700001, 2700092]
+
+
+def test_appearance_coupon_package_can_be_bought_repeatedly(env):
+    store, economy, ctx = env
+    service = GiftPackageService(store, economy)
+    with economy.transaction():
+        economy._grant(1, "test-appearance-package-funds", {1237902: 300})
+    initial_crystal = store.get(1)["snapshot"]["crystal"]
+    initial_coupon = (store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1237923")
+                      .fetchone() or (0,))[0]
+    for request_id in (1101, 1102, 1103):
+        result = asyncio.run(service.buy(ctx, packet({"giftPackageID": 2700092, "num": 1},
+            request_id, "C2L_BuyGiftPackage")))
+        assert result.values["code"] == 10
+        listed = next(GIFT_PACKAGE_DATA.decode(raw) for raw in service.listing(1)
+                      if GIFT_PACKAGE_DATA.decode(raw)["id"] == 2700092)
+        assert listed["state"] == 0 and listed["PurchaseTime"] == 0
+    assert store.get(1)["snapshot"]["crystal"] == initial_crystal - 297
+    assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1237923").fetchone()[0] == initial_coupon + 90
+    retry = asyncio.run(service.buy(ctx, packet({"giftPackageID": 2700092, "num": 1},
+        1103, "C2L_BuyGiftPackage")))
+    assert retry.values["code"] == 10
+    assert store.get(1)["snapshot"]["crystal"] == initial_crystal - 297
 
 
 def test_monthcard_reports_active_status_and_daily_allowance(env):

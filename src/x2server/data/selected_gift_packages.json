@@ -1093,6 +1093,20 @@
       "GiftID": [
         781037
       ]
+    },
+    {
+      "GiftPackageID": 2700092,
+      "GiftPackageNameID": 27000921,
+      "GiftPackageIcon": "RechargeGiftIcon4/LiBao_SheTuan5",
+      "GiftPackageOrder": 2,
+      "GiftPlace": {"value": 1, "enum": "E_ShopGift"},
+      "GiftLabel": [0],
+      "GiftPackageType": {"value": 11, "enum": "E_Forever"},
+      "Times": 0,
+      "CurrencyType": 902,
+      "Price": 99,
+      "GiftID": [781099],
+      "GiftPrimePrice": 150
     }
   ],
   "gifts": [
@@ -1797,6 +1811,13 @@
         1
       ],
       "ItemNum": 2
+    },
+    {
+      "GiftGroup": 781099,
+      "AwardType": {"value": 1, "enum": "E_material"},
+      "GiftValue": [1237923, 1237832, 1237901],
+      "Num": [30, 3, 10000],
+      "ItemNum": 1
     }
   ]
 }
