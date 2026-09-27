@@ -1,0 +1,749 @@
+{
+  "source": "client AppearanceShop table; 1980004/1980005 operator price override to 980 crystal",
+  "goods": [
+    {
+      "goodsId": 1980001,
+      "itemId": 1221103,
+      "currencyType": 902,
+      "price": 980,
+      "goodsType": 2,
+      "sort": 1,
+      "sourcePrice": [
+        980,
+        320
+      ],
+      "sourceCurrency": [
+        902,
+        923
+      ]
+    },
+    {
+      "goodsId": 1980002,
+      "itemId": 1221803,
+      "currencyType": 902,
+      "price": 680,
+      "goodsType": 2,
+      "sort": 2,
+      "sourcePrice": [
+        680,
+        210
+      ],
+      "sourceCurrency": [
+        902,
+        923
+      ]
+    },
+    {
+      "goodsId": 1980003,
+      "itemId": 1221703,
+      "currencyType": 902,
+      "price": 580,
+      "goodsType": 2,
+      "sort": 3,
+      "sourcePrice": [
+        580,
+        160
+      ],
+      "sourceCurrency": [
+        902,
+        923
+      ]
+    },
+    {
+      "goodsId": 1980004,
+      "itemId": 1221903,
+      "currencyType": 902,
+      "price": 980,
+      "goodsType": 2,
+      "sort": 4,
+      "sourcePrice": [
+        999999
+      ],
+      "sourceCurrency": [
+        902
+      ]
+    },
+    {
+      "goodsId": 1980005,
+      "itemId": 1220803,
+      "currencyType": 902,
+      "price": 980,
+      "goodsType": 2,
+      "sort": 5,
+      "sourcePrice": [
+        999999
+      ],
+      "sourceCurrency": [
+        902
+      ]
+    },
+    {
+      "goodsId": 1980006,
+      "itemId": 1221403,
+      "currencyType": 902,
+      "price": 1680,
+      "goodsType": 2,
+      "sort": 6,
+      "sourcePrice": [
+        1680,
+        560
+      ],
+      "sourceCurrency": [
+        902,
+        923
+      ]
+    },
+    {
+      "goodsId": 1980007,
+      "itemId": 1221503,
+      "currencyType": 902,
+      "price": 1280,
+      "goodsType": 2,
+      "sort": 7,
+      "sourcePrice": [
+        1280,
+        420
+      ],
+      "sourceCurrency": [
+        902,
+        923
+      ]
+    },
+    {
+      "goodsId": 1980008,
+      "itemId": 1220804,
+      "currencyType": 902,
+      "price": 1680,
+      "goodsType": 1,
+      "sort": 9,
+      "sourcePrice": [
+        1680,
+        560
+      ],
+      "sourceCurrency": [
+        902,
+        923
+      ]
+    },
+    {
+      "goodsId": 1980009,
+      "itemId": 1221904,
+      "currencyType": 902,
+      "price": 1680,
+      "goodsType": 2,
+      "sort": 8,
+      "sourcePrice": [
+        1680,
+        560
+      ],
+      "sourceCurrency": [
+        902,
+        923
+      ]
+    },
+    {
+      "goodsId": 1980010,
+      "itemId": 1222503,
+      "currencyType": 923,
+      "price": 420,
+      "goodsType": 1,
+      "sort": 10,
+      "sourcePrice": [
+        420
+      ],
+      "sourceCurrency": [
+        923
+      ]
+    },
+    {
+      "goodsId": 1980011,
+      "itemId": 1222503,
+      "currencyType": 923,
+      "price": 420,
+      "goodsType": 2,
+      "sort": 10,
+      "sourcePrice": [
+        420,
+        128
+      ],
+      "sourceCurrency": [
+        923,
+        919
+      ]
+    },
+    {
+      "goodsId": 1980012,
+      "itemId": 1222703,
+      "currencyType": 923,
+      "price": 420,
+      "goodsType": 1,
+      "sort": 110,
+      "sourcePrice": [
+        420,
+        98
+      ],
+      "sourceCurrency": [
+        923,
+        919
+      ]
+    },
+    {
+      "goodsId": 1980013,
+      "itemId": 1222703,
+      "currencyType": 923,
+      "price": 420,
+      "goodsType": 1,
+      "sort": 11,
+      "sourcePrice": [
+        420,
+        128
+      ],
+      "sourceCurrency": [
+        923,
+        919
+      ]
+    },
+    {
+      "goodsId": 1980014,
+      "itemId": 1223403,
+      "currencyType": 923,
+      "price": 560,
+      "goodsType": 1,
+      "sort": 12,
+      "sourcePrice": [
+        560,
+        128
+      ],
+      "sourceCurrency": [
+        923,
+        919
+      ]
+    },
+    {
+      "goodsId": 1980015,
+      "itemId": 1223403,
+      "currencyType": 923,
+      "price": 560,
+      "goodsType": 2,
+      "sort": 12,
+      "sourcePrice": [
+        560,
+        168
+      ],
+      "sourceCurrency": [
+        923,
+        919
+      ]
+    },
+    {
+      "goodsId": 1980016,
+      "itemId": 1222203,
+      "currencyType": 923,
+      "price": 560,
+      "goodsType": 1,
+      "sort": 109,
+      "sourcePrice": [
+        560,
+        128
+      ],
+      "sourceCurrency": [
+        923,
+        919
+      ]
+    },
+    {
+      "goodsId": 1980017,
+      "itemId": 1222203,
+      "currencyType": 923,
+      "price": 560,
+      "goodsType": 1,
+      "sort": 13,
+      "sourcePrice": [
+        560,
+        168
+      ],
+      "sourceCurrency": [
+        923,
+        919
+      ]
+    },
+    {
+      "goodsId": 1980018,
+      "itemId": 1221005,
+      "currencyType": 923,
+      "price": 420,
+      "goodsType": 1,
+      "sort": 14,
+      "sourcePrice": [
+        420,
+        98
+      ],
+      "sourceCurrency": [
+        923,
+        919
+      ]
+    },
+    {
+      "goodsId": 1980019,
+      "itemId": 1221005,
+      "currencyType": 923,
+      "price": 420,
+      "goodsType": 2,
+      "sort": 14,
+      "sourcePrice": [
+        420,
+        128
+      ],
+      "sourceCurrency": [
+        923,
+        919
+      ]
+    },
+    {
+      "goodsId": 1980020,
+      "itemId": 1222303,
+      "currencyType": 923,
+      "price": 560,
+      "goodsType": 1,
+      "sort": 15,
+      "sourcePrice": [
+        560,
+        128
+      ],
+      "sourceCurrency": [
+        923,
+        919
+      ]
+    },
+    {
+      "goodsId": 1980021,
+      "itemId": 1222303,
+      "currencyType": 923,
+      "price": 560,
+      "goodsType": 2,
+      "sort": 15,
+      "sourcePrice": [
+        560,
+        168
+      ],
+      "sourceCurrency": [
+        923,
+        919
+      ]
+    },
+    {
+      "goodsId": 1980022,
+      "itemId": 1223503,
+      "currencyType": 923,
+      "price": 560,
+      "goodsType": 1,
+      "sort": 16,
+      "sourcePrice": [
+        560,
+        128
+      ],
+      "sourceCurrency": [
+        923,
+        919
+      ]
+    },
+    {
+      "goodsId": 1980023,
+      "itemId": 1223503,
+      "currencyType": 923,
+      "price": 560,
+      "goodsType": 2,
+      "sort": 16,
+      "sourcePrice": [
+        560,
+        168
+      ],
+      "sourceCurrency": [
+        923,
+        919
+      ]
+    },
+    {
+      "goodsId": 1980024,
+      "itemId": 1221704,
+      "currencyType": 923,
+      "price": 420,
+      "goodsType": 1,
+      "sort": 105,
+      "sourcePrice": [
+        420,
+        98
+      ],
+      "sourceCurrency": [
+        923,
+        919
+      ]
+    },
+    {
+      "goodsId": 1980025,
+      "itemId": 1221704,
+      "currencyType": 923,
+      "price": 420,
+      "goodsType": 1,
+      "sort": 17,
+      "sourcePrice": [
+        420,
+        128
+      ],
+      "sourceCurrency": [
+        923,
+        919
+      ]
+    },
+    {
+      "goodsId": 1980026,
+      "itemId": 1221905,
+      "currencyType": 923,
+      "price": 560,
+      "goodsType": 1,
+      "sort": 107,
+      "sourcePrice": [
+        560,
+        128
+      ],
+      "sourceCurrency": [
+        923,
+        919
+      ]
+    },
+    {
+      "goodsId": 1980027,
+      "itemId": 1221905,
+      "currencyType": 923,
+      "price": 560,
+      "goodsType": 1,
+      "sort": 18,
+      "sourcePrice": [
+        560,
+        168
+      ],
+      "sourceCurrency": [
+        923,
+        919
+      ]
+    },
+    {
+      "goodsId": 1980028,
+      "itemId": 1220305,
+      "currencyType": 923,
+      "price": 560,
+      "goodsType": 1,
+      "sort": 106,
+      "sourcePrice": [
+        560,
+        128
+      ],
+      "sourceCurrency": [
+        923,
+        919
+      ]
+    },
+    {
+      "goodsId": 1980029,
+      "itemId": 1220305,
+      "currencyType": 923,
+      "price": 560,
+      "goodsType": 1,
+      "sort": 19,
+      "sourcePrice": [
+        560,
+        168
+      ],
+      "sourceCurrency": [
+        923,
+        919
+      ]
+    },
+    {
+      "goodsId": 1980030,
+      "itemId": 1223203,
+      "currencyType": 923,
+      "price": 560,
+      "goodsType": 1,
+      "sort": 20,
+      "sourcePrice": [
+        560,
+        128
+      ],
+      "sourceCurrency": [
+        923,
+        919
+      ]
+    },
+    {
+      "goodsId": 1980031,
+      "itemId": 1223203,
+      "currencyType": 923,
+      "price": 560,
+      "goodsType": 2,
+      "sort": 20,
+      "sourcePrice": [
+        560,
+        168
+      ],
+      "sourceCurrency": [
+        923,
+        919
+      ]
+    },
+    {
+      "goodsId": 1980032,
+      "itemId": 1221404,
+      "currencyType": 923,
+      "price": 420,
+      "goodsType": 1,
+      "sort": 105,
+      "sourcePrice": [
+        420,
+        98
+      ],
+      "sourceCurrency": [
+        923,
+        919
+      ]
+    },
+    {
+      "goodsId": 1980033,
+      "itemId": 1221404,
+      "currencyType": 923,
+      "price": 420,
+      "goodsType": 1,
+      "sort": 21,
+      "sourcePrice": [
+        420,
+        128
+      ],
+      "sourceCurrency": [
+        923,
+        919
+      ]
+    },
+    {
+      "goodsId": 1980034,
+      "itemId": 1223603,
+      "currencyType": 923,
+      "price": 560,
+      "goodsType": 1,
+      "sort": 107,
+      "sourcePrice": [
+        560,
+        128
+      ],
+      "sourceCurrency": [
+        923,
+        919
+      ]
+    },
+    {
+      "goodsId": 1980035,
+      "itemId": 1223603,
+      "currencyType": 923,
+      "price": 560,
+      "goodsType": 1,
+      "sort": 22,
+      "sourcePrice": [
+        560,
+        168
+      ],
+      "sourceCurrency": [
+        923,
+        919
+      ]
+    },
+    {
+      "goodsId": 1980036,
+      "itemId": 1222003,
+      "currencyType": 923,
+      "price": 420,
+      "goodsType": 1,
+      "sort": 106,
+      "sourcePrice": [
+        420,
+        98
+      ],
+      "sourceCurrency": [
+        923,
+        919
+      ]
+    },
+    {
+      "goodsId": 1980037,
+      "itemId": 1222003,
+      "currencyType": 923,
+      "price": 420,
+      "goodsType": 1,
+      "sort": 23,
+      "sourcePrice": [
+        420,
+        128
+      ],
+      "sourceCurrency": [
+        923,
+        919
+      ]
+    },
+    {
+      "goodsId": 1980038,
+      "itemId": 1222803,
+      "currencyType": 923,
+      "price": 560,
+      "goodsType": 1,
+      "sort": 24,
+      "sourcePrice": [
+        560,
+        128
+      ],
+      "sourceCurrency": [
+        923,
+        919
+      ]
+    },
+    {
+      "goodsId": 1980039,
+      "itemId": 1222803,
+      "currencyType": 923,
+      "price": 560,
+      "goodsType": 1,
+      "sort": 24,
+      "sourcePrice": [
+        560,
+        168
+      ],
+      "sourceCurrency": [
+        923,
+        919
+      ]
+    },
+    {
+      "goodsId": 1980040,
+      "itemId": 1220804,
+      "currencyType": 923,
+      "price": 560,
+      "goodsType": 1,
+      "sort": 108,
+      "sourcePrice": [
+        560
+      ],
+      "sourceCurrency": [
+        923
+      ]
+    },
+    {
+      "goodsId": 1980041,
+      "itemId": 1222403,
+      "currencyType": 923,
+      "price": 560,
+      "goodsType": 1,
+      "sort": 25,
+      "sourcePrice": [
+        560,
+        128
+      ],
+      "sourceCurrency": [
+        923,
+        919
+      ]
+    },
+    {
+      "goodsId": 1980042,
+      "itemId": 1222403,
+      "currencyType": 923,
+      "price": 560,
+      "goodsType": 1,
+      "sort": 25,
+      "sourcePrice": [
+        560,
+        168
+      ],
+      "sourceCurrency": [
+        923,
+        919
+      ]
+    },
+    {
+      "goodsId": 1980043,
+      "itemId": 1222903,
+      "currencyType": 923,
+      "price": 560,
+      "goodsType": 1,
+      "sort": 26,
+      "sourcePrice": [
+        560,
+        128
+      ],
+      "sourceCurrency": [
+        923,
+        919
+      ]
+    },
+    {
+      "goodsId": 1980044,
+      "itemId": 1222903,
+      "currencyType": 923,
+      "price": 560,
+      "goodsType": 2,
+      "sort": 26,
+      "sourcePrice": [
+        560,
+        168
+      ],
+      "sourceCurrency": [
+        923,
+        919
+      ]
+    },
+    {
+      "goodsId": 1980045,
+      "itemId": 1223003,
+      "currencyType": 923,
+      "price": 560,
+      "goodsType": 1,
+      "sort": 27,
+      "sourcePrice": [
+        560,
+        128
+      ],
+      "sourceCurrency": [
+        923,
+        919
+      ]
+    },
+    {
+      "goodsId": 1980046,
+      "itemId": 1223003,
+      "currencyType": 923,
+      "price": 560,
+      "goodsType": 2,
+      "sort": 27,
+      "sourcePrice": [
+        560,
+        168
+      ],
+      "sourceCurrency": [
+        923,
+        919
+      ]
+    },
+    {
+      "goodsId": 1980047,
+      "itemId": 1222804,
+      "currencyType": 923,
+      "price": 560,
+      "goodsType": 1,
+      "sort": 111,
+      "sourcePrice": [
+        560,
+        168
+      ],
+      "sourceCurrency": [
+        923,
+        919
+      ]
+    }
+  ]
+}

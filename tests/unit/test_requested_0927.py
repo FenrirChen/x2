@@ -5,6 +5,7 @@ import asyncio
 from tests.unit.test_battle import packet
 from tests.unit.test_economy import env, rewards
 from x2server.messages.economy import GIFT_PACKAGE_DATA, TREASURE_BOX
+from x2server.messages.core import HERO_DATA, HERO_GOD_EQUIP, GOD_SLOT_LOCK_INFO
 from x2server.player.gift_packages import GiftPackageService
 from x2server.player.progression import ProgressionService, catalog
 
@@ -54,7 +55,8 @@ def test_six_star_godlike_answers_and_unlocks_client_skill(env):
     service = ProgressionService(store, economy)
     with economy.transaction():
         state = store.get(1)["snapshot"]
-        state["heroes"].append({"id": 1028, "state": 2, "level": 60, "star": 46})
+        state["heroes"].append({"id": 1028, "state": 2, "level": 60, "star": 46,
+                               "god_equip": {"id": 1528, "level": 100, "star": 6}})
         economy.save_snapshot(1, state)
         economy._grant(1, "test-godlike", {1206028: 20})
     request = {"heroId": 1028}
@@ -65,6 +67,13 @@ def test_six_star_godlike_answers_and_unlocks_client_skill(env):
     assert any(s["id"] == 10286 and s["level"] == 1 for s in hero["skills"])
     assert asyncio.run(service.handle(ctx, packet(request, 941, "C2L_HeroGodLike"))).values["code"] == 13
     assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1206028").fetchone()[0] == 0
+    slot = {"heroID": 1028, "slotIndex": 5}
+    second = asyncio.run(service.handle(ctx, packet(slot, 942, "C2L_GodSlotLock")))
+    assert second.values["code"] == 10 and second.message_name == "L2C_GodSlotLock"
+    wire = HERO_DATA.decode(second.pushes[0].values["heros"][-1])
+    equip = HERO_GOD_EQUIP.decode(wire["godEquip"])
+    assert GOD_SLOT_LOCK_INFO.decode(equip["godSlotLockInfo"][0]) == {"slot": 5, "state": 1}
+    assert asyncio.run(service.handle(ctx, packet(slot, 943, "C2L_GodSlotLock"))).values["code"] == 10
 
 
 def test_activity_boxes_show_status_claim_once_and_roll_over(env):

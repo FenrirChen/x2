@@ -56,9 +56,11 @@ class LoginService:
                   "startDataVersion": 0, "serverTime": now, "isCreateRole": player["login_count"] == 1,
                   "logicCode": 0, "sgroupId": "1"}
         # Explicit empty collections for the first controlled compatibility probe.
-        for name in ("itemAll", "noticeAll", "cardPool", "heroSkinAll", "growthBase",
+        for name in ("itemAll", "noticeAll", "cardPool", "heroSkinAll",
                      "rechargeNoticeAll", "equipAll", "taskDaily", "taskWeekly", "taskChallenge", "limitTaskChallenge"):
             result[name] = b""
+        from x2server.messages.lobby import GROWTH_BASE, growth_base_values
+        result["growthBase"] = GROWTH_BASE.encode(growth_base_values())
         result["heroAll"] = encode_hero_all(player["snapshot"])
         if self.equipment:
             from x2server.messages.lobby import LOBBY_SCHEMAS

@@ -180,12 +180,15 @@ HERO_DATA = ProtoSchema("HeroData", (
 ))
 INT_PAIR = ProtoSchema("KeyValuePair_Int32_Int32", (
     ProtoField(1, "Key", FieldKind.INT32), ProtoField(2, "Value", FieldKind.INT32)))
+GOD_SLOT_LOCK_INFO = ProtoSchema("GodSlotLockInfo", (
+    ProtoField(1, "slot", FieldKind.INT32), ProtoField(2, "state", FieldKind.INT32)))
 HERO_GOD_EQUIP = ProtoSchema("HeroGodEquip", (
     ProtoField(1, "id", FieldKind.INT32),
     ProtoField(2, "level", FieldKind.INT32),
     ProtoField(3, "star", FieldKind.INT32),
     ProtoField(4, "jewel", FieldKind.MESSAGE, repeated=True),
     ProtoField(5, "godEquipAttr", FieldKind.MESSAGE),
+    ProtoField(8, "godSlotLockInfo", FieldKind.MESSAGE, repeated=True),
 ))
 HERO_ALL = ProtoSchema("L2C_HeroAll", (ProtoField(1, "heros", FieldKind.MESSAGE, repeated=True),))
 STRING_PAIR = ProtoSchema("KeyValuePair_String_String", (

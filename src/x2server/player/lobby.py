@@ -3,7 +3,7 @@ import logging
 import time
 from .server_clock import ServerClock
 
-from x2server.messages.lobby import LOBBY_IDS, LOBBY_SCHEMAS
+from x2server.messages.lobby import LOBBY_IDS, LOBBY_SCHEMAS, growth_base_values
 from x2server.network.dispatcher import DispatchContext, OutboundMessage
 from x2server.protocol.errors import ProtocolError
 from x2server.protocol.registry import CORE_MESSAGE_REGISTRY
@@ -22,6 +22,10 @@ class LobbyService:
             raise ProtocolError("lobby query requested before login")
         name = CORE_MESSAGE_REGISTRY.name_for(packet.message_id)
         request = LOBBY_SCHEMAS[name].decode(packet.body)
+        if name == "C2L_QueryGrowthBase":
+            return OutboundMessage("L2C_QueryGrowthBase", growth_base_values())
+        if name == "C2L_UnlockExploreRuin":
+            return OutboundMessage("L2C_UnlockExploreRuin", {"code": 13})
         # These describe a dedicated local account with no online activities.
         states = {
             "C2L_QueryTelInfo": {"code": 10, "telNumber": "", "lastBindTime": 0},

@@ -12,4 +12,6 @@ PROGRESSION_SCHEMAS = {s.name: s for s in (
     S("L2C_UpdatePlayerLevel", (F(1,"beforeLevel",K.INT32), F(2,"afterLevel",K.INT32))),
     S("C2L_HeroGodLike", (F(1,"heroId",K.INT32),)),
     S("L2C_HeroGodLike", (F(1,"code",K.ENUM),)),
+    S("C2L_GodSlotLock", (F(1,"heroID",K.INT32), F(2,"slotIndex",K.INT32))),
+    S("L2C_GodSlotLock", (F(1,"code",K.ENUM), F(2,"heroID",K.INT32), F(3,"slotIndex",K.INT32))),
 )}

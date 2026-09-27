@@ -6,6 +6,28 @@ MISSION_TYPE = ProtoSchema("MissionTypeData", (F(1, "type", K.INT32),
     F(2, "missionData", K.MESSAGE, repeated=True),
     F(3, "chapterHisMaxScore", K.MESSAGE, repeated=True),
     F(4, "chapterHisMaxScoreSec", K.MESSAGE, repeated=True)))
+BUILDING_BASE_INFO = ProtoSchema("BuildingBaseInfo", (F(1, "buildingId", K.INT32),
+    F(2, "buildingLevel", K.INT32), F(3, "buildingStar", K.INT32)))
+GROWTH_BASE = ProtoSchema("L2C_QueryGrowthBase", (
+    F(1, "starEnergy", K.INT32), F(2, "buildingList", K.MESSAGE, repeated=True),
+    F(3, "warehouseGold", K.INT32), F(4, "goldGainTime", K.INT32),
+    F(5, "starGainTime", K.INT32), F(6, "extraPower", K.INT32),
+    F(7, "exploreList", K.MESSAGE, repeated=True),
+    F(8, "trainingList", K.MESSAGE, repeated=True),
+    F(9, "civilization", K.MESSAGE, repeated=True),
+    F(10, "buildQueue", K.MESSAGE), F(11, "wonderQueue", K.MESSAGE),
+    F(12, "prayQueue", K.MESSAGE, repeated=True), F(13, "washingCountDay", K.INT32)))
+
+
+def growth_base_values():
+    # Initial levels/stars come from the client's CollegeBuilding table.
+    buildings = [BUILDING_BASE_INFO.encode({"buildingId": i, "buildingLevel": 1,
+        "buildingStar": 1}) for i in range(701, 709)]
+    wonders = [BUILDING_BASE_INFO.encode({"buildingId": i, "buildingLevel": 1})
+               for i in range(721, 728)]
+    return {"buildingList": buildings, "civilization": wonders,
+        "exploreList": [b""], "trainingList": [b""], "prayQueue": [b""],
+        "buildQueue": b"", "wonderQueue": b""}
 
 LOBBY_IDS = (
     ("QueryTelInfo", 782, 783), ("SeasonIcon", 999, 1001),
@@ -14,6 +36,7 @@ LOBBY_IDS = (
     ("QueryReturnInfo", 776, 777), ("SystemInfo", 432, 433),
     ("GameTask", 351, 354), ("EntryidStatus", 515, 516), ("EquipAll", 539, 538),
     ("QueryMission", 574, 575), ("QueryCollectionAward", 586, 587),
+    ("QueryGrowthBase", 579, 584), ("UnlockExploreRuin", 622, 623),
     ("QueryActivity", 615, 616), ("QueryWorldBossOpenTime", 679, 680),
     ("QueryActivityDrawInfo", 697, 699), ("QueryStarPrivilegeReward", 719, 720),
     ("QueryStarPrivilegeInfo", 723, 724), ("QueryIllustrationData", 862, 863),
@@ -42,6 +65,8 @@ for name, fields in {
 }.items():
     LOBBY_SCHEMAS["C2L_" + name] = ProtoSchema("C2L_" + name, fields)
 for name, fields in {
+    "QueryGrowthBase": GROWTH_BASE.fields,
+    "UnlockExploreRuin": (F(1, "code", K.ENUM), F(2, "unlockExploreRuin", K.MESSAGE, repeated=True)),
     "QueryTelInfo": (F(1, "code", K.ENUM), F(2, "telNumber", K.STRING), F(3, "lastBindTime", K.INT32)),
     "SeasonIcon": (F(1, "code", K.ENUM), F(2, "putOnHeadIcon", K.INT32), F(3, "putOnSceneIcon", K.INT32),
                    F(4, "headIconList", K.MESSAGE, repeated=True), F(5, "sceneIconList", K.MESSAGE, repeated=True)),

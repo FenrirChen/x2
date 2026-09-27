@@ -1,6 +1,6 @@
 """Persisted hero read model for login and HeroAll query."""
 
-from x2server.messages.core import HERO_ALL, HERO_DATA, HERO_GOD_EQUIP, INT_PAIR
+from x2server.messages.core import HERO_ALL, HERO_DATA, HERO_GOD_EQUIP, INT_PAIR, GOD_SLOT_LOCK_INFO
 from x2server.messages.favor import HERO_FETTER, HERO_ARCHIVE
 from .favor import catalog, favor_state
 from functools import lru_cache
@@ -20,6 +20,8 @@ def encode_hero_data(hero: dict) -> bytes:
     artifact = hero.get("god_equip")
     god_equip = HERO_GOD_EQUIP.encode({"id": artifact["id"], "level": artifact["level"],
         "star": artifact["star"], "godEquipAttr": b"",
+        "godSlotLockInfo": [GOD_SLOT_LOCK_INFO.encode({"slot": int(slot), "state": 1})
+                            for slot in sorted(artifact.get("god_slot_lock", []))],
         "jewel": [INT_PAIR.encode({"Key": int(slot), "Value": int(item)})
                   for slot, item in sorted(artifact.get("jewels", {}).items(), key=lambda pair: int(pair[0]))]}) if artifact else b""
     data = favor_catalog()

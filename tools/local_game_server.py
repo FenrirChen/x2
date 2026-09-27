@@ -24,6 +24,7 @@ from x2server.player.equipment import EquipmentService
 from x2server.player.wish import WishService
 from x2server.player.shop import ShopService
 from x2server.player.gift_packages import GiftPackageService
+from x2server.player.appearance_shop import AppearanceShopService
 from x2server.player.server_clock import ServerClock
 from x2server.player.birthday import BirthdayService
 from x2server.player.collection import CollectionService
@@ -50,12 +51,13 @@ async def run(database: Path, seconds: float) -> None:
     collection = CollectionService(store, economy)
     favor = FavorService(store, economy, clock=clock.now)
     appearance = AppearanceService(store, economy)
+    appearance_shop = AppearanceShopService(store, economy, appearance)
     mail = MailService(store, economy, clock=clock.now)
     login = LoginService(identity, store, economy, equipment, wish, clock=clock, appearance=appearance,
                          mail=mail, gift_packages=gift_packages)
     http = BootstrapHTTPServer("127.0.0.1", 18080, identity)
     tcp = X2TCPServer(Settings(tcp_host="127.0.0.1", tcp_port=29000, read_timeout=120),
-        Dispatcher({**LobbyService(clock).handlers(), **BirthdayService(store).handlers(), **economy.handlers(), **shop.handlers(), **gift_packages.handlers(), **collection.handlers(), **favor.handlers(), **appearance.handlers(), **mail.handlers(), **equipment.handlers(), **wish.handlers(), **ProgressionService(store, economy).handlers(), **BattleService(store, economy).handlers(), "C2L_HeroAll": HeroService(store).query_all,
+        Dispatcher({**LobbyService(clock).handlers(), **BirthdayService(store).handlers(), **economy.handlers(), **shop.handlers(), **gift_packages.handlers(), **collection.handlers(), **favor.handlers(), **appearance.handlers(), **appearance_shop.handlers(), **mail.handlers(), **equipment.handlers(), **wish.handlers(), **ProgressionService(store, economy).handlers(), **BattleService(store, economy).handlers(), "C2L_HeroAll": HeroService(store).query_all,
                     "C2L_Login": login.login, "C2L_ReConnect": login.reconnect,
                     "C2L_ServerTableConfig": login.server_config}))
     chat = X2TCPServer(Settings(tcp_host="127.0.0.1", tcp_port=29001, read_timeout=120),

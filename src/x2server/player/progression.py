@@ -73,7 +73,7 @@ class ProgressionService:
 
     def handlers(self):
         return {name: self.handle for name in ("C2L_HeroOpt", "C2L_UpHeroSkill", "C2L_Artifact",
-                                               "C2L_HeroGodLike")}
+                                               "C2L_HeroGodLike", "C2L_GodSlotLock")}
 
     def spend(self, player_id, snapshot, costs):
         for item, amount in costs.items():
@@ -111,7 +111,7 @@ class ProgressionService:
         try:
             with self.economy.transaction():
                 snapshot = self.store.get(player_id)["snapshot"]
-                hero = next((h for h in snapshot.get("heroes", []) if h["id"] == req.get("id",req.get("heroId"))), None)
+                hero = next((h for h in snapshot.get("heroes", []) if h["id"] == req.get("id", req.get("heroId", req.get("heroID")))), None)
                 costs = Counter()
                 event = None
                 if name == "C2L_HeroOpt" and req.get("opt") == 0 and hero is None:
@@ -138,6 +138,16 @@ class ProgressionService:
                     costs[rule["ItemID"]] = rule["Cost"]
                     hero["skills"] = [*hero_skills(hero), {"id": skill_id, "level": 1}]
                     hero["god_shed"] = {"skill_id": skill_id}
+                elif name == "C2L_GodSlotLock":
+                    rule = godhole_rules().get(hero["id"])
+                    artifact = hero.get("god_equip")
+                    if (not hero.get("god_shed") or not artifact or not rule
+                            or req.get("slotIndex") != rule["HoleNum"]):
+                        raise UnresolvedEconomy("godlike slot cannot be opened")
+                    slots = artifact.setdefault("god_slot_lock", [])
+                    if req["slotIndex"] not in slots:
+                        slots.append(req["slotIndex"])
+                        slots.sort()
                 elif name == "C2L_Artifact":
                     prototype = next((r for r in catalog()["hero_unlock"] if r["hero_id"] == hero["id"]), None)
                     if not prototype:

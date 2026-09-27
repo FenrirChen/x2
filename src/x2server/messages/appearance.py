@@ -2,6 +2,7 @@
 from x2server.protocol.protobuf import FieldKind as K, ProtoField as F, ProtoSchema as S
 
 APPEARANCE_IDS = (("Account", 141, 142), ("HeroWearSkin", 529, 530),
+    ("BuyCommercialGoods", 525, 526),
     ("SaveHeroDubbing", 688, 689), ("QueryHeroDubbing", 690, 691),
     ("PutOnOrPutOffSeasonIcon", 1002, 1003), ("SeasonIconStatusUp", 1008, 1009))
 HERO_SKIN = S("HeroSkin", (F(1, "heroId", K.INT32), F(2, "skinIds", K.INT32, repeated=True),
@@ -11,6 +12,10 @@ HERO_DUBBING_DATA = S("HeroDubbingData", (F(1, "heroId", K.INT32),
     F(2, "dubbingIds", K.INT32, repeated=True)))
 ICON_INFO = S("IconInfoProto", (F(1, "IconType", K.INT32), F(2, "IconID", K.INT32),
     F(3, "OrnamentID", K.INT32), F(4, "PictureID", K.MESSAGE, repeated=True)))
+COMMERCIAL_GOODS = S("CommercialGoods", (F(1, "goodsId", K.INT32), F(2, "startTime", K.INT32),
+    F(3, "endTime", K.INT32), F(4, "originalPrice", K.INT32), F(5, "itemId", K.INT32),
+    F(6, "price", K.INT32), F(7, "currencyType", K.ENUM), F(8, "alreadyBuy", K.INT32),
+    F(9, "goodsType", K.ENUM), F(10, "preCount", K.INT32), F(11, "rechargeID", K.INT32)))
 
 APPEARANCE_SCHEMAS = {s.name: s for s in (
     HERO_SKIN, SEASON_ICON_DATA, HERO_DUBBING_DATA, ICON_INFO,
@@ -19,6 +24,10 @@ APPEARANCE_SCHEMAS = {s.name: s for s in (
     S("L2C_HeroSkinUpdate", (F(1, "skin", K.MESSAGE),)),
     S("C2L_HeroWearSkin", (F(1, "heroId", K.INT32), F(2, "skinId", K.INT32), F(3, "type", K.INT32))),
     S("L2C_HeroWearSkin", (F(1, "code", K.ENUM),)),
+    S("C2L_BuyCommercialGoods", (F(1, "goodsId", K.INT32), F(2, "shopType", K.ENUM),
+        F(3, "currencyType", K.ENUM))),
+    S("L2C_BuyCommercialGoods", (F(1, "code", K.ENUM), F(2, "goodsId", K.INT32),
+        F(3, "rewardData", K.MESSAGE), F(4, "shopType", K.ENUM))),
     S("C2L_QueryHeroDubbing", ()),
     S("L2C_QueryHeroDubbing", (F(1, "code", K.ENUM), F(2, "heroDubbingDatas", K.MESSAGE, repeated=True))),
     S("C2L_SaveHeroDubbing", (F(1, "heroId", K.INT32), F(2, "dubbingId", K.INT32))),
