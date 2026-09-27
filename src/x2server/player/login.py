@@ -110,8 +110,11 @@ class LoginService:
             raise ProtocolError("configuration requested before login")
         # An absent repeated field becomes null in this generated C# decoder.
         # The client default is 300 seconds; Revival recovers power 25% faster.
+        from .economy import EconomyService
+        recovery_seconds = (self.economy.POWER_RECOVER_SECONDS if self.economy is not None
+                            else EconomyService.POWER_RECOVER_SECONDS)
         pairs = [STRING_PAIR.encode({"key": "PowerBuyNum", "val": "120"}),
-                 STRING_PAIR.encode({"key": "PowerRecover", "val": str(self.economy.POWER_RECOVER_SECONDS)})]
+                 STRING_PAIR.encode({"key": "PowerRecover", "val": str(recovery_seconds)})]
         LOGGER.info("server configuration response prepared with %s-second power recovery",
-                    self.economy.POWER_RECOVER_SECONDS)
+                    recovery_seconds)
         return OutboundMessage("L2C_ServerTableConfig", {"code": 10, "keyVal": pairs})
