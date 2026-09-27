@@ -179,6 +179,9 @@ class BattleService:
                                     (player_id,)).fetchone()
         if not row or int(time.time()) - row["created_at"] > 3600:
             return reject_with('no/expired battle entry')
+        # Some 2.4 client paths submit fightTime=0. The entry timestamp is the
+        # server-side start of this run, so use elapsed time for that case.
+        fight_seconds = request.get("fightTime", 0) or max(1, min(3600, int(time.time()) - row["created_at"]))
         entry = BATTLE_SCHEMAS["L2C_FightData"].decode(row["response"])
         if FIGHT_DATA.decode(entry["data"])["missionId"] != section:
             return reject_with('entry missionId mismatch')
@@ -201,7 +204,7 @@ class BattleService:
             "heroExp": [h.get("exp", 0) for h in heroes], "heroUpLevelNum": [0] * len(heroes),
             "heroFavorExp": [0] * len(heroes), "heroAddFavorExp": [0] * len(heroes),
             "heroFavorLevel": [0] * len(heroes), "heroFullLevel": [False] * len(heroes),
-            "favorFullLevel": [False] * len(heroes), "fightTimeLength": request.get("fightTime", 0)}
+            "favorFullLevel": [False] * len(heroes), "fightTimeLength": fight_seconds}
         try:
             with self.store.db:
                 if self.economy:

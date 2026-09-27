@@ -17,6 +17,20 @@ from .server_clock import ServerClock
 
 LOGGER = logging.getLogger("x2.login")
 
+# CurrencyType.ItemID -> BaseInfoProto field. The client reads shop balances
+# through BaseInfoProto, while ItemAll is the separate item-bag ledger.
+SHOP_CURRENCY_FIELDS = {
+    1237904: "JewelChip", 1237905: "SeniorJewelChip",
+    1237912: "ChallengeCoin", 1237913: "PowerOfLight",
+    1237914: "VowOfCoin", 1237915: "WishCrystal",
+    1237916: "StarSkillPoint", 1237917: "FriendCoin",
+    1237918: "BossCoin", 1237920: "EquipSeniorChip",
+    1237921: "RechargeExp", 1237922: "AICoin",
+    1237923: "SkinCoupon", 1237924: "GuildScore",
+    1237925: "JewelCoin", 1237926: "RMBCrystal",
+    1237927: "FragmentMoney", 1237928: "FragmentMoney",
+}
+
 
 class LoginService:
     def __init__(self, identity: LocalIdentityService, store: PlayerStore, economy=None, equipment=None, wish=None, clock=None, appearance=None, mail=None) -> None:
@@ -65,9 +79,7 @@ class LoginService:
                 result[name] = LOBBY_SCHEMAS["L2C_GameTask"].encode(self.economy.task_values(player["id"], kind))
         LOGGER.info("authenticated login response prepared player=%s login_count=%s",
                     player["id"], player["login_count"])
-        fragment_money = self.store.db.execute(
-            "SELECT quantity FROM inventory WHERE player_id=? AND item_id=1237927", (player["id"],)).fetchone() if self.economy else None
-        push = self.snapshot_push(player, fragment_money[0] if fragment_money else 0)
+        push = self.snapshot_push(player, self.store if self.economy else None)
         pushes = (push,)
         if self.appearance:
             pushes += (OutboundMessage("L2C_QueryHeroDubbing",
@@ -77,12 +89,19 @@ class LoginService:
         return OutboundMessage("L2C_Login", result, pushes=pushes)
 
     @staticmethod
-    def snapshot_push(player: dict[str, Any], fragment_money: int = 0) -> OutboundMessage:
+    def snapshot_push(player: dict[str, Any], store: PlayerStore | None = None) -> OutboundMessage:
         snapshot = player["snapshot"]
         owned_ids = [hero["id"] for hero in snapshot.get("heroes", []) if hero.get("state") == 2]
         selected = snapshot.get("show")
         show = selected if selected in owned_ids else owned_ids[0] if owned_ids else 0
         from x2server.messages.appearance import ICON_INFO
+        currency_balances = {name: 0 for name in SHOP_CURRENCY_FIELDS.values()}
+        if store is not None:
+            for item_id, quantity in store.db.execute(
+                    "SELECT item_id,quantity FROM inventory WHERE player_id=?", (player["id"],)):
+                name = SHOP_CURRENCY_FIELDS.get(item_id)
+                if name:
+                    currency_balances[name] += quantity
         base = BASE_INFO.encode({"Id": player["id"], "NickName": snapshot["nickname"],
             "Level": snapshot["level"], "Show": show,
             "Gold": snapshot.get("gold", 0), "Crystal": snapshot.get("crystal", 0),
@@ -94,7 +113,7 @@ class LoginService:
             "Birthday": snapshot.get("birthday", 0),
             "MainChapter": snapshot.get("main_chapter", 0),
             "MainSection": snapshot.get("main_section", 0),
-            "FragmentMoney": fragment_money,
+            **currency_balances,
             "IconInfo": ICON_INFO.encode({"IconType": 1,
                 "IconID": snapshot.get("head_icon", 1000001)})})
         initial = {r["HeroID"]: r["InitialLevel"] for r in catalog()["favorabilityhero"]}

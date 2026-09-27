@@ -6,7 +6,9 @@ from pathlib import Path
 from tests.unit.test_battle import packet
 from tests.unit.test_economy import env, rewards
 from x2server.messages.economy import GOODS
+from x2server.messages.core import BASE_INFO
 from x2server.player.economy import EconomyService
+from x2server.player.login import LoginService
 from x2server.player.shop import ShopService
 from x2server.player.store import PlayerStore
 
@@ -51,6 +53,31 @@ def test_recovered_shop_809_lists_and_purchases_persist(env):
         assert reopened.get(1)["snapshot"]["crystal"] == 8
     finally:
         reopened.close()
+
+
+def test_shop_currency_balances_follow_inventory_and_purchase(env):
+    store, economy, ctx = env
+    service = ShopService(store, economy)
+    currencies = {1237904: ("JewelChip", 4), 1237905: ("SeniorJewelChip", 5),
+                  1237915: ("WishCrystal", 200), 1237917: ("FriendCoin", 17),
+                  1237918: ("BossCoin", 18), 1237924: ("GuildScore", 24),
+                  1237927: ("FragmentMoney", 27)}
+    with store.db:
+        for item_id, (_, balance) in currencies.items():
+            store.db.execute("INSERT INTO inventory VALUES (?,?,?)", (1, item_id, balance))
+    base = BASE_INFO.decode(LoginService.snapshot_push(store.get(1), store).values["BaseInfo"])
+    assert {field: base[field] for field, _ in currencies.values()} == {
+        field: balance for field, balance in currencies.values()}
+    ticket_offer = next(row for row in service.compat_offers.values()
+                        if row["currencyItemId"] == 1237915 and row["price"] <= 200)
+    shop_id = next(shop for (shop, goods), row in service.compat_offers.items()
+                   if row is ticket_offer)
+    purchase = asyncio.run(service.handle(ctx, packet({"shopId": shop_id,
+        "goodsId": ticket_offer["goodsId"], "buyNum": 1}, request_id=912,
+        name="C2L_BuyGoods")))
+    assert purchase.values["code"] == 10
+    updated = next(p for p in purchase.pushes if p.message_name == "PlayerDataProto")
+    assert BASE_INFO.decode(updated.values["BaseInfo"])["WishCrystal"] == 200 - ticket_offer["price"]
 
 
 def test_unresolved_shop_goods_and_invalid_purchase_never_charge(env):

@@ -157,7 +157,7 @@ class EquipmentService:
         # The client refreshes its open strengthen window as soon as it handles
         # L2C_EquipStrengthen, so its bag entry must already contain the new level.
         before = (OutboundMessage("L2C_EquipUpdate", {"code": 10, "equip": [changed]}),
-                  LoginService.snapshot_push(self.store.get(player_id)))
+                  LoginService.snapshot_push(self.store.get(player_id), self.store))
         return OutboundMessage("L2C_EquipStrengthen", result, before_response=before)
 
     async def handle(self, context, packet):

@@ -39,6 +39,8 @@ def test_entry_replay_persistence_and_no_economy_changes(tmp_path):
     assert hero["id"] == 1003 and hero["heroGodEquip"] == b""
     assert HERO_ATTR.decode(hero["heroAttrCount"])["hp"] == 720
     store.close()
+
+
     store = PlayerStore(path)
     service = BattleService(store)
     assert asyncio.run(service.enter(context, packet(request()))).values == first.values
@@ -78,4 +80,25 @@ def test_entry_replay_persistence_and_no_economy_changes(tmp_path):
     context.session.player_id = None
     with pytest.raises(ProtocolError):
         asyncio.run(service.enter(context, packet(request())))
+    store.close()
+
+
+def test_zero_client_fight_time_uses_server_elapsed(tmp_path, monkeypatch):
+    import x2server.player.battle as battle_module
+    current = [1000]
+    monkeypatch.setattr(battle_module.time, "time", lambda: current[0])
+    store = PlayerStore(tmp_path / "elapsed.db")
+    player = store.login("elapsed", 1, 0)
+    store.save_snapshot(1, dict(player["snapshot"], level=60,
+        heroes=[{"id": 1003, "state": 2, "level": 1, "star": 1}]), player["revision"])
+    context = DispatchContext("test", "local", SessionState("test", "elapsed", player_id=1))
+    battle = BattleService(store)
+    assert asyncio.run(battle.enter(context, packet(request()))).values["result"] == 10
+    current[0] = 1093
+    checkout = packet({"checkout": CHECKOUT.encode({"chapterId": 2010100,
+        "sectionId": 2110801, "success": True, "fightTime": 0})},
+        name="C2L_CheckoutMainMissionSign")
+    result = asyncio.run(battle.checkout(context, checkout))
+    assert result.values["result"] == 10
+    assert result.values["fightTimeLength"] == 93
     store.close()

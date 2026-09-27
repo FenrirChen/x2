@@ -35,4 +35,4 @@ class BirthdayService:
             self.store.save_snapshot(player_id, snapshot, player["revision"])
             player = self.store.get(player_id)
         return OutboundMessage("L2C_FillBirthday", {"code": 10},
-            before_response=(LoginService.snapshot_push(player),))
+            before_response=(LoginService.snapshot_push(player, self.store),))

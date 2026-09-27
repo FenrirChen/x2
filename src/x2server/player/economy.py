@@ -612,9 +612,7 @@ class EconomyService:
         from .login import LoginService
         self.refresh_stamina(player_id)
         self.ensure_periods(player_id)
-        fragment_money = self.store.db.execute(
-            "SELECT quantity FROM inventory WHERE player_id=? AND item_id=1237927", (player_id,)).fetchone()
-        return (LoginService.snapshot_push(self.store.get(player_id), fragment_money[0] if fragment_money else 0),
+        return (LoginService.snapshot_push(self.store.get(player_id), self.store),
             OutboundMessage("L2C_ItemUpdate", {"code": 10, **self.inventory_values(player_id)}),
             *(OutboundMessage("L2C_TaskUpdate", {"type": k, "taskList": self.task_values(player_id, k)["taskList"]}) for k in (1, 2)))
 
