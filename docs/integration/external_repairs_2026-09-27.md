@@ -4,7 +4,7 @@
 
 - 基线修复前：274 passed / 1 failed；`LoginService.server_config` 在未注入 economy 的隔离测试中解引用 `None`。修复后 275 passed。独立提交 `2932313`；用户主动删除的过时装备方案单独提交 `c8b8859`。
 - 分支：`integrate/external-repairs-0925-0926`。未覆盖外部包整文件；未导入旧 economy、battle、equipment、login 或测试存档。最终全量测试见下方验收记录。
-- 最终验收：`.venv/Scripts/python.exe -m pytest -q` → **282 passed in 60.47s**。当前运行服务仍需加载新版本并由客户端实测。
+- 最终验收：`.venv/Scripts/python.exe -m pytest -q` → **282 passed in 58.14s**。本地服务已用最终代码重启，18080/29000/29001 三端口可连接；客户端实测仍待用户完成。
 
 ### Collection
 
@@ -16,7 +16,7 @@
 
 59 种 `Item.FunctionEff=E_AddFavorability` 且可在外部使用的礼物已识别。3 种单值 `EffData=[5]` 能按静态值在一次事务里扣道具并加好感；其余双值 `[10,15]` / `[35,50]` 缺英雄偏好选择规则，拒绝且不扣物。触摸增量/次数、联结升级完整条件与突破服务端规则未知，拒绝未知变更。**未采纳**固定 +10、3 次/日、登录自动 10 级、免费突破、跨事务送礼。测试：`tests/unit/test_favor.py`。提交：`3e71835`。状态：**PARTIAL，官方可证部分运行，待客户端实测**。
 
-测试存档：在备份 `runtime/backups/pre-favor-test-gifts-20260927-105018.sqlite3` 后，仅对 `runtime/phase14/player.sqlite3` 的账号 `revival` / player 1 执行一次目标数 100 的定向补齐。59 种均由 0 补到 100；报告 `analysis/external_merge/favor_test_gifts_seed.json`。工具 `tools/dev/seed_favor_test_gifts.py` 用 `MAX(old,target)` 思路保证重复运行不无限叠加；测试 `tests/unit/test_favor_seed.py`。实际 SQLite 不提交。
+测试存档：在备份 `runtime/backups/pre-favor-test-gifts-20260927-105018.sqlite3` 后，仅对 `runtime/phase14/player.sqlite3` 的账号 `revival` / player 1 执行一次目标数 100 的定向补齐。59 种均由 0 补到 100；报告 `analysis/external_merge/favor_test_gifts_seed.json`。工具 `tools/dev/seed_favor_test_gifts.py` 用 `MAX(old,target)` 思路保证重复运行不无限叠加；测试 `tests/unit/test_favor_seed.py`。实际 SQLite 不提交。提交：`e8b0198`；送礼次数持久化补丁 `89c7700`。
 
 ### Shop
 
