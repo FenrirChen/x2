@@ -18,7 +18,7 @@ GOODS = S("L2C_Goods", (F(1, "goodsId", K.INT32), F(2, "originalPrice", K.INT32)
     F(10, "endTime", K.INT32), F(11, "goodsTag", K.INT32), F(12, "limited", K.INT32)))
 GIFT_PACKAGE_DATA = S("GiftPackageData", (F(1, "id", K.INT32), F(2, "state", K.ENUM),
     F(3, "pushID", K.INT32), F(4, "pushDeadline", K.INT64), F(5, "leftTime", K.INT32),
-    F(6, "PurchaseTime", K.INT32), F(7, "unShelves", K.BOOL)))
+    F(6, "PurchaseTime", K.INT32), F(7, "unShelves", K.INT64)))
 TASK = ints("TaskData", "taskId taskStatus taskProgress taskRefreshTime finishTimes stage activityId difficulty")
 TREASURE_BOX = ints("TreasureBoxData", "boxId pickStatus activityId")
 FINISH_REQUEST = ints("ReqFinishTaskData", "taskId type activityId")

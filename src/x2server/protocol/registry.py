@@ -74,6 +74,8 @@ CORE_MESSAGE_REGISTRY = MessageRegistry(
         MessageEntry("L2C_HeroOpt", 110, Direction.SERVER_TO_CLIENT),
         MessageEntry("C2L_UpHeroSkill", 131, Direction.CLIENT_TO_SERVER),
         MessageEntry("L2C_UpHeroSkill", 132, Direction.SERVER_TO_CLIENT),
+        MessageEntry("C2L_HeroGodLike", 931, Direction.CLIENT_TO_SERVER),
+        MessageEntry("L2C_HeroGodLike", 932, Direction.SERVER_TO_CLIENT),
         MessageEntry("L2C_HeroUpdate", 549, Direction.SERVER_TO_CLIENT),
         MessageEntry("L2C_TreasureBoxUpdate", 567, Direction.SERVER_TO_CLIENT),
         MessageEntry("C2L_BuyGiftPackage", 542, Direction.CLIENT_TO_SERVER),

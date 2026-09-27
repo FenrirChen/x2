@@ -33,7 +33,7 @@ SHOP_CURRENCY_FIELDS = {
 
 
 class LoginService:
-    def __init__(self, identity: LocalIdentityService, store: PlayerStore, economy=None, equipment=None, wish=None, clock=None, appearance=None, mail=None) -> None:
+    def __init__(self, identity: LocalIdentityService, store: PlayerStore, economy=None, equipment=None, wish=None, clock=None, appearance=None, mail=None, gift_packages=None) -> None:
         self.identity = identity
         self.store = store
         self.economy = economy
@@ -41,6 +41,7 @@ class LoginService:
         self.wish = wish
         self.appearance = appearance
         self.mail = mail
+        self.gift_packages = gift_packages
         self.clock = clock or ServerClock()
 
     async def login(self, context: DispatchContext, packet: DecodedPacket) -> OutboundMessage:
@@ -73,6 +74,8 @@ class LoginService:
             from x2server.messages.economy import ECONOMY_SCHEMAS
             from x2server.messages.lobby import LOBBY_SCHEMAS
             self.economy.login_event(player["id"])
+            if self.gift_packages:
+                self.gift_packages.settle_daily(player["id"])
             player = self.store.get(player["id"])
             result["itemAll"] = ECONOMY_SCHEMAS["L2C_ItemAll"].encode(self.economy.inventory_values(player["id"]))
             for name, kind in (("taskDaily", 1), ("taskWeekly", 2)):
@@ -139,13 +142,15 @@ class LoginService:
         except KeyError:
             return OutboundMessage("L2C_ReConnect", {"code": 0})
         context.session.player_id = player["id"]
+        daily_granted = self.gift_packages.settle_daily(player["id"]) if self.gift_packages else False
         # Same-process reconnect keeps the authenticated transport session supplied
         # by the client; a fresh login is required after identity-service restart.
         if not context.session.session_id:
             context.session.session_id = secrets.token_urlsafe(24)
         LOGGER.info("authenticated reconnect player=%s", player["id"])
         return OutboundMessage("L2C_ReConnect", {"code": 10, "id": player["id"],
-            "serverTime": self.clock.now()})
+            "serverTime": self.clock.now()},
+            pushes=self.economy.pushes(player["id"]) if daily_granted and self.economy else ())
 
     async def server_config(self, context: DispatchContext, packet: DecodedPacket) -> OutboundMessage:
         if context.session.player_id is None:

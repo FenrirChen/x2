@@ -6,6 +6,7 @@ import hashlib
 import json
 import secrets
 from collections import Counter
+from datetime import datetime, timedelta, timezone
 from importlib.resources import files
 
 from x2server.messages.economy import ECONOMY_SCHEMAS, GIFT_PACKAGE_DATA
@@ -16,6 +17,8 @@ from .economy import UnresolvedEconomy
 
 
 class GiftPackageService:
+    LOCAL_TZ = timezone(timedelta(hours=8))
+    MONTHCARD_ID = 2700001
     def __init__(self, store, economy):
         self.store, self.economy = store, economy
         data = json.loads(files("x2server").joinpath("data/selected_gift_packages.json").read_text(encoding="utf-8"))
@@ -29,6 +32,9 @@ class GiftPackageService:
                 claimed_at INTEGER NOT NULL, PRIMARY KEY(player_id,package_id,period))""")
             store.db.execute("""CREATE TABLE IF NOT EXISTS gift_package_receipts (
                 request_key TEXT PRIMARY KEY, player_id INTEGER NOT NULL, response BLOB NOT NULL)""")
+            store.db.execute("""CREATE TABLE IF NOT EXISTS gift_package_daily_claims (
+                player_id INTEGER NOT NULL, package_id INTEGER NOT NULL, day TEXT NOT NULL,
+                PRIMARY KEY(player_id,package_id,day))""")
 
     def handlers(self):
         return {"C2L_QueryGiftPackage": self.query, "C2L_BuyGiftPackage": self.buy,
@@ -36,24 +42,79 @@ class GiftPackageService:
 
     def _period(self, package):
         if package["GiftPackageType"]["value"] == 2:
-            from datetime import datetime, timedelta, timezone
-            return datetime.fromtimestamp(self.economy.clock(), timezone(timedelta(hours=8))).strftime("%Y-%m-%d")
+            return datetime.fromtimestamp(self.economy.clock(), self.LOCAL_TZ).strftime("%Y-%m-%d")
         return "once"
+
+    def _monthcard_start(self, player_id):
+        row = self.store.db.execute("""SELECT claimed_at FROM gift_package_claims
+            WHERE player_id=? AND package_id=? ORDER BY claimed_at DESC LIMIT 1""",
+            (player_id, self.MONTHCARD_ID)).fetchone()
+        return row[0] if row else None
+
+    def _monthcard_days_left(self, player_id):
+        start = self._monthcard_start(player_id)
+        if start is None:
+            return 0
+        start_day = datetime.fromtimestamp(start, self.LOCAL_TZ).date()
+        today = datetime.fromtimestamp(self.economy.clock(), self.LOCAL_TZ).date()
+        return max(0, 30 - (today - start_day).days)
+
+    def settle_daily(self, player_id):
+        """Pay today's month-card allowance once, including after a process restart."""
+        if not self._monthcard_days_left(player_id):
+            return False
+        day = datetime.fromtimestamp(self.economy.clock(), self.LOCAL_TZ).strftime("%Y-%m-%d")
+        try:
+            with self.economy.transaction():
+                inserted = self.store.db.execute("INSERT OR IGNORE INTO gift_package_daily_claims VALUES (?,?,?)",
+                    (player_id, self.MONTHCARD_ID, day))
+                if not inserted.rowcount:
+                    return False
+                amount = self.packages[self.MONTHCARD_ID]["Param2"][0]
+                self.economy._grant(player_id, f"monthcard:{self.MONTHCARD_ID}:{day}", {1237902: amount})
+        except UnresolvedEconomy:
+            return False
+        return True
 
     def listing(self, player_id):
         values = []
+        next_level = {}
+        for track in (1, 2):
+            for package_id, package in sorted(self.packages.items()):
+                if package["GiftPackageType"]["value"] != 3 or package["Param2"][0] != track:
+                    continue
+                claimed = self.store.db.execute("SELECT 1 FROM gift_package_claims WHERE player_id=? AND package_id=?",
+                    (player_id, package_id)).fetchone()
+                if not claimed:
+                    next_level[track] = package_id
+                    break
+        player_level = self.store.get(player_id)["snapshot"]["level"]
         for package_id, package in sorted(self.packages.items()):
+            if package["GiftPackageType"]["value"] == 3 and next_level.get(package["Param2"][0]) != package_id:
+                continue
+            if package_id == self.MONTHCARD_ID:
+                start = self._monthcard_start(player_id)
+                days_left = self._monthcard_days_left(player_id)
+                values.append(GIFT_PACKAGE_DATA.encode({"id": package_id,
+                    "state": 1 if days_left else 0, "leftTime": days_left,
+                    "pushDeadline": start + 30 * 86400 if days_left else 0,
+                    "PurchaseTime": 1 if days_left else 0, "unShelves": 0}))
+                continue
             claimed = self.store.db.execute("SELECT 1 FROM gift_package_claims WHERE player_id=? AND package_id=? AND period=?",
                 (player_id, package_id, self._period(package))).fetchone()
-            values.append(GIFT_PACKAGE_DATA.encode({"id": package_id, "state": int(bool(claimed)),
-                "unShelves": False}))
+            state = (3 if package["GiftPackageType"]["value"] == 3
+                     and player_level < package["Param1"][0] else int(bool(claimed)))
+            values.append(GIFT_PACKAGE_DATA.encode({"id": package_id, "state": state,
+                "PurchaseTime": int(bool(claimed)), "unShelves": 0}))
         return values
 
     async def query(self, context, packet):
         player_id = context.session.player_id
         if player_id is None:
             raise ProtocolError("gift packages queried before login")
-        return OutboundMessage("L2C_QueryGiftPackage", {"code": 10, "datas": self.listing(player_id)})
+        granted = self.settle_daily(player_id)
+        return OutboundMessage("L2C_QueryGiftPackage", {"code": 10, "datas": self.listing(player_id)},
+                               pushes=self.economy.pushes(player_id) if granted else ())
 
     def _rewards(self, package):
         rewards = Counter()
@@ -91,9 +152,20 @@ class GiftPackageService:
         reject = OutboundMessage(reply, {"code": 13})
         if package is None or (package["CurrencyType"] == 919) != recharge:
             return reject
-        if package["GiftPackageType"]["value"] == 3 and self.store.get(player_id)["snapshot"]["level"] < package["Param1"][0]:
-            return reject
+        if package["GiftPackageType"]["value"] == 3:
+            if self.store.get(player_id)["snapshot"]["level"] < package["Param1"][0]:
+                return reject
+            for other_id, other in self.packages.items():
+                if (other["GiftPackageType"]["value"] == 3
+                        and other["Param2"] == package["Param2"] and other["Param1"][0] < package["Param1"][0]
+                        and not self.store.db.execute("SELECT 1 FROM gift_package_claims WHERE player_id=? AND package_id=?",
+                            (player_id, other_id)).fetchone()):
+                    return reject
         period = self._period(package)
+        if recharge:
+            if self._monthcard_days_left(player_id):
+                return reject
+            period = str(int(self.economy.clock()))
         request_key = hashlib.sha256(f"gift:{player_id}:{context.session.session_id}:{packet.header.request_id}".encode()
                                      + packet.body).hexdigest()
         cached = self.store.db.execute("SELECT response FROM gift_package_receipts WHERE request_key=? AND player_id=?",
@@ -124,6 +196,7 @@ class GiftPackageService:
         except UnresolvedEconomy:
             return reject
         if recharge:
+            self.settle_daily(player_id)
             # The client enters an unavailable payment SDK when this reply is 10.
             # A separate gift success push displays the granted contents.
             return OutboundMessage(reply, {"code": 13}, pushes=(OutboundMessage("L2C_BuyGiftPackage",

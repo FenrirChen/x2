@@ -51,7 +51,8 @@ async def run(database: Path, seconds: float) -> None:
     favor = FavorService(store, economy, clock=clock.now)
     appearance = AppearanceService(store, economy)
     mail = MailService(store, economy, clock=clock.now)
-    login = LoginService(identity, store, economy, equipment, wish, clock=clock, appearance=appearance, mail=mail)
+    login = LoginService(identity, store, economy, equipment, wish, clock=clock, appearance=appearance,
+                         mail=mail, gift_packages=gift_packages)
     http = BootstrapHTTPServer("127.0.0.1", 18080, identity)
     tcp = X2TCPServer(Settings(tcp_host="127.0.0.1", tcp_port=29000, read_timeout=120),
         Dispatcher({**LobbyService(clock).handlers(), **BirthdayService(store).handlers(), **economy.handlers(), **shop.handlers(), **gift_packages.handlers(), **collection.handlers(), **favor.handlers(), **appearance.handlers(), **mail.handlers(), **equipment.handlers(), **wish.handlers(), **ProgressionService(store, economy).handlers(), **BattleService(store, economy).handlers(), "C2L_HeroAll": HeroService(store).query_all,

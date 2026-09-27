@@ -49,6 +49,24 @@ def test_artifact_unlock_route_covers_every_configured_hero(env):
                for hero, row in zip(state["heroes"], heroes))
 
 
+def test_six_star_godlike_answers_and_unlocks_client_skill(env):
+    store, economy, ctx = env
+    service = ProgressionService(store, economy)
+    with economy.transaction():
+        state = store.get(1)["snapshot"]
+        state["heroes"].append({"id": 1028, "state": 2, "level": 60, "star": 46})
+        economy.save_snapshot(1, state)
+        economy._grant(1, "test-godlike", {1206028: 20})
+    request = {"heroId": 1028}
+    first = asyncio.run(service.handle(ctx, packet(request, 940, "C2L_HeroGodLike")))
+    assert first.message_name == "L2C_HeroGodLike" and first.values["code"] == 10
+    assert first.pushes[0].message_name == "L2C_HeroUpdate"
+    hero = next(h for h in store.get(1)["snapshot"]["heroes"] if h["id"] == 1028)
+    assert any(s["id"] == 10286 and s["level"] == 1 for s in hero["skills"])
+    assert asyncio.run(service.handle(ctx, packet(request, 941, "C2L_HeroGodLike"))).values["code"] == 13
+    assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1206028").fetchone()[0] == 0
+
+
 def test_activity_boxes_show_status_claim_once_and_roll_over(env):
     store, economy, _ = env
     with economy.transaction():
@@ -69,10 +87,12 @@ def test_exact_selected_gift_packages_and_one_time_claim(env):
     store, economy, ctx = env
     service = GiftPackageService(store, economy)
     listing = [GIFT_PACKAGE_DATA.decode(x) for x in service.listing(1)]
-    assert [x["id"] for x in listing] == list(range(2700000, 2700034))
+    assert [x["id"] for x in listing] == [2700000, 2700001, 2700002, 2700018]
     free = asyncio.run(service.buy(ctx, packet({"giftPackageID": 2700018, "num": 1},
         911, "C2L_BuyGiftPackage")))
     assert free.values["code"] == 10
+    assert [GIFT_PACKAGE_DATA.decode(x)["id"] for x in service.listing(1)] == [
+        2700000, 2700001, 2700002, 2700019]
     assert asyncio.run(service.buy(ctx, packet({"giftPackageID": 2700018, "num": 1},
         912, "C2L_BuyGiftPackage"))).values["code"] == 13
     with economy.transaction():
@@ -82,5 +102,41 @@ def test_exact_selected_gift_packages_and_one_time_claim(env):
         913, "C2L_BuyGiftPackage")))
     assert paid.values["code"] == 10
     assert store.get(1)["snapshot"]["crystal"] == before - 60
+    assert [GIFT_PACKAGE_DATA.decode(x)["id"] for x in service.listing(1)] == [
+        2700000, 2700001, 2700003, 2700019]
+    assert asyncio.run(service.buy(ctx, packet({"giftPackageID": 2700004, "num": 1},
+        915, "C2L_BuyGiftPackage"))).values["code"] == 13  # level 10 must be bought first
     assert asyncio.run(service.buy(ctx, packet({"giftPackageID": 2700033, "num": 1},
         914, "C2L_BuyGiftPackage"))).values["code"] == 13  # level 80 gate
+    with economy.transaction():
+        for package_id in [*range(2700003, 2700018), *range(2700019, 2700034)]:
+            store.db.execute("INSERT INTO gift_package_claims VALUES (?,?,?,?)",
+                (1, package_id, "once", 1))
+    assert [GIFT_PACKAGE_DATA.decode(x)["id"] for x in service.listing(1)] == [2700000, 2700001]
+
+
+def test_monthcard_reports_active_status_and_daily_allowance(env):
+    store, economy, ctx = env
+    now = [1_790_501_200]
+    economy.clock = lambda: now[0]
+    service = GiftPackageService(store, economy)
+    first = asyncio.run(service.recharge(ctx, packet({"rechargeID": 22099},
+        950, "C2L_RechargeGoodsInfo")))
+    assert first.values["code"] == 13  # Avoid unavailable client payment SDK.
+    assert any(push.message_name == "L2C_BuyGiftPackage" and push.values["code"] == 10
+               for push in first.pushes)
+    card = next(GIFT_PACKAGE_DATA.decode(x) for x in service.listing(1)
+                if GIFT_PACKAGE_DATA.decode(x)["id"] == 2700001)
+    assert card["state"] == 1 and card["leftTime"] == 30 and card["PurchaseTime"] == 1
+    initial = store.get(1)["snapshot"]["crystal"]
+    assert initial >= 180  # 80 initial crystal plus today's 100.
+    assert not service.settle_daily(1)
+    now[0] += 86400
+    refreshed = asyncio.run(service.query(ctx, packet({"playerID": 1},
+        951, "C2L_QueryGiftPackage")))
+    assert refreshed.values["code"] == 10 and refreshed.pushes
+    assert store.get(1)["snapshot"]["crystal"] == initial + 100
+    assert next(GIFT_PACKAGE_DATA.decode(x) for x in service.listing(1)
+                if GIFT_PACKAGE_DATA.decode(x)["id"] == 2700001)["leftTime"] == 29
+    now[0] += 30 * 86400
+    assert not service.settle_daily(1)
