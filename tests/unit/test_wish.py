@@ -19,9 +19,31 @@ def test_duplicate_hero_awards_exchange_ticket_once(env, monkeypatch):
     first = asyncio.run(wish.draw(context, request))
     assert first.values["code"] == 10
     assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1237915").fetchone()[0] == 1
+    transforms = REWARD.decode(first.values["rewardData"])["transformHero"]
+    assert WishService.TRANSFORM_HERO.decode(transforms[0]) == {"heroId": 1003, "transform": True}
+    previous = asyncio.run(wish.result(context, packet({"drawnCountID": 41},
+        name="C2L_RequestDrawResult")))
+    assert REWARD.decode(previous.values["rewardData"])["transformHero"]
     assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1237927").fetchone() is None
     assert asyncio.run(wish.draw(context, request)).values == first.values
     assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1237915").fetchone()[0] == 1
+
+
+def test_banner_uses_forty_draw_counter_after_low_rarity_hero(env, monkeypatch):
+    store, economy, context = env
+    player = store.get(1)
+    store.save_snapshot(1, dict(player["snapshot"], crystal=1800), player["revision"])
+    wish = WishService(store, economy, clock=ServerClock(lambda: WishService.ANCHOR + 1))
+    store.db.execute("INSERT INTO wish_pity VALUES (1,'standard',3,7,0)")
+    store.db.execute("UPDATE players SET created_at=? WHERE id=1", (WishService.ANCHOR,))
+    before = [CARD_POOL.decode(raw) for raw in wish.values(1)["cardPoolList"]]
+    assert next(x for x in before if x["poolId"] == 22201)["securityNum"] == 3
+    assert next(x for x in before if x["poolId"] == 22202)["securityNum"] == 7
+    monkeypatch.setattr(wish, "_pick", lambda pool, group="common": {"item_id": 1211003, "quantity": 1})
+    result = asyncio.run(wish.draw(context, packet({"drawnId": 22202, "drawType": 0}, name="C2L_LuckDraw")))
+    assert result.values["securityNum"] == 8
+    pools = [CARD_POOL.decode(raw) for raw in wish.values(1)["cardPoolList"]]
+    assert next(x for x in pools if x["poolId"] == 22202)["securityNum"] == 8
 
 
 def test_duplicate_compensation_matches_official_rarity_table(env):
@@ -32,6 +54,14 @@ def test_duplicate_compensation_matches_official_rarity_table(env):
     assert amounts[1004] == 5
     assert set(amounts.values()) == {1, 5, 10}
     assert all(r["duplicate_ticket_item_id"] == 1237915 for r in catalog()["hero_unlock"])
+
+
+def test_saved_legacy_result_recovers_hero_transform_metadata():
+    legacy = REWARD.encode({"rewardItem": [REWARD_ITEM.encode({
+        "itemId": 1211003, "itemNum": 1, "transform": True})]})
+    fixed = REWARD.decode(WishService._reward_with_transform_heroes(legacy))
+    assert WishService.TRANSFORM_HERO.decode(fixed["transformHero"][0]) == {
+        "heroId": 1003, "transform": True}
 
 
 def test_newcomer_ten_draw_guarantee_cost_replay_and_limit(env, monkeypatch):

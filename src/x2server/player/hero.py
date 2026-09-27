@@ -26,8 +26,8 @@ def encode_hero_data(hero: dict) -> bytes:
     level = favor_state(hero, next((r["InitialLevel"] for r in data["favorabilityhero"]
                                     if r["HeroID"] == hero["id"]), 1))["level"]
     archives = [HERO_ARCHIVE.encode({"fileId": row["FilesID"],
-        "status": (2 if row["FilesID"] in hero.get("favor_archives", []) else
-                   1 if row["TriggerType"]["value"] == 1 and level >= row["TypeNumber"] else 0)})
+        "status": (2 if row["FilesID"] in hero.get("favor_archives", []) or
+                   row["TriggerType"]["value"] == 1 and level >= row["TypeNumber"] else 0)})
         for row in data["favorabilityfiles"] if row["HeroID"] == hero["id"]]
     fetters = [HERO_FETTER.encode({"posId": row["FettersID"],
         "level": hero.get("favor_fetters", {}).get(str(row["FettersID"]), 0)})

@@ -25,6 +25,8 @@ class FavorService:
         self.heroes = {r["HeroID"]: r for r in data["favorabilityhero"]}
         self.levels = {r["FavorLevel"]: r for r in data["favorabilitylevel"]}
         self.gifts = {r["ItemID"]: r for r in data["gifts"]}
+        self.favorites = {r["HeroID"]: set(r["FavoriteGoodID"])
+                          for r in data["sendgiftcontrol"]}
         self.files = {r["FilesID"]: r for r in data["favorabilityfiles"]}
         self.dairy = data["favorabilitydairy"]
 
@@ -48,8 +50,13 @@ class FavorService:
         hero = self._owned(player_id, hero_id)
         if name == "C2L_AddFavor":
             return self._add(player_id, req, hero)
+        if name == "C2L_FavorBreak":
+            return self._break(player_id, hero_id, hero)
         if name == "C2L_QueryHeroArchives":
-            return OutboundMessage(reply, {"code": 10 if hero else 13, "needRefresh": False})
+            from .hero import encode_hero_data
+            return OutboundMessage(reply, {"code": 10 if hero else 13, "needRefresh": bool(hero)},
+                pushes=(OutboundMessage("L2C_HeroUpdate", {"code": 10,
+                    "heros": [encode_hero_data(hero)]}),) if hero else ())
         if name == "C2L_QueryHeroJournal":
             journal = []
             if hero:
@@ -74,12 +81,59 @@ class FavorService:
                 if file_id not in claimed:
                     claimed.append(file_id)
                     self.economy.save_snapshot(player_id, snapshot)
-            return OutboundMessage(reply, {"code": 10, "heroID": hero_id, "archivesID": file_id})
-        # UpgradeFetters and FavorBreak carry costs/conditions that must be
-        # validated before changing state. No free fallback is permitted.
+            from .hero import encode_hero_data
+            return OutboundMessage(reply, {"code": 10, "heroID": hero_id, "archivesID": file_id},
+                pushes=(OutboundMessage("L2C_HeroUpdate", {"code": 10,
+                    "heros": [encode_hero_data(target)]}),))
+        # UpgradeFetters carries costs/conditions not yet recovered.
         return OutboundMessage(reply, {"code": 13,
-            **({"heroId": hero_id} if name == "C2L_FavorBreak" else
-               {"mainHeroId": hero_id, "positionId": req.get("positionId", 0)})})
+            "mainHeroId": hero_id, "positionId": req.get("positionId", 0)})
+
+    def _advance(self, hero_id, state, breaks):
+        cap = self.heroes[hero_id]["LevelLimit"]
+        while state["level"] < cap:
+            current = state["level"]
+            if self.levels[current].get("IsBreak") and current not in breaks:
+                break
+            if state["exp"] < self.levels[current + 1]["Exp"]:
+                break
+            state["level"] += 1
+        return state
+
+    def _break(self, player_id, hero_id, hero):
+        failure = OutboundMessage("L2C_FavorBreak", {"code": 13, "heroId": hero_id})
+        if not hero:
+            return failure
+        current = favor_state(hero, self.heroes[hero_id]["InitialLevel"])["level"]
+        row = self.levels[current]
+        if not row.get("IsBreak") or current in hero.get("favor_breaks", []):
+            return failure
+        costs = list(zip(row.get("BreakItem", []), row.get("BreakItemNum", []), strict=True))
+        if not costs:
+            return failure
+        with self.economy.transaction():
+            for item_id, quantity in costs:
+                available = self.store.db.execute("SELECT quantity FROM inventory WHERE player_id=? AND item_id=?",
+                                                  (player_id, item_id)).fetchone()
+                if not available or available[0] < quantity:
+                    return failure
+            for item_id, quantity in costs:
+                charged = self.store.db.execute("""UPDATE inventory SET quantity=quantity-?
+                    WHERE player_id=? AND item_id=? AND quantity>=?""",
+                    (quantity, player_id, item_id, quantity))
+                if charged.rowcount != 1:
+                    raise RuntimeError("favor break inventory changed during transaction")
+            snapshot = self.store.get(player_id)["snapshot"]
+            target = next(h for h in snapshot["heroes"] if h["id"] == hero_id and h["state"] == 2)
+            breaks = target.setdefault("favor_breaks", [])
+            breaks.append(current)
+            state = favor_state(target, self.heroes[hero_id]["InitialLevel"]).copy()
+            target["favor"] = self._advance(hero_id, state, breaks)
+            self.economy.save_snapshot(player_id, snapshot)
+        from .hero import encode_hero_data
+        return OutboundMessage("L2C_FavorBreak", {"code": 10, "heroId": hero_id}, pushes=(
+            OutboundMessage("L2C_HeroUpdate", {"code": 10, "heros": [encode_hero_data(target)]}),
+            *self.economy.pushes(player_id)))
 
     def _add(self, player_id, req, hero):
         hero_id, item_id, num, opt = (req.get("heroId", 0), req.get("optionId", 0),
@@ -91,13 +145,11 @@ class FavorService:
         day = datetime.fromtimestamp(int(self.clock()), timezone(timedelta(hours=8))).strftime("%Y-%m-%d")
         values["giftsTimes"] = hero.get("favor_gifts", {}).get("count", 0) if hero and hero.get("favor_gifts", {}).get("day") == day else 0
         gift = self.gifts.get(item_id)
-        # EffData[0] is the ordinary gift value. The optional second value
-        # is a preference bonus; use the ordinary value until that selector
-        # is recovered, so ordinary gifts remain usable without overpaying.
+        # SendGiftControl.FavoriteGoodID is the official hero preference list.
         if (not hero or opt != 2 or type(num) is not int or not 1 <= num <= 999 or
                 not gift or not gift.get("EffData")):
             return OutboundMessage("L2C_AddFavor", values)
-        gain = gift["EffData"][0] * num
+        gain = gift["EffData"][0] * num * (2 if item_id in self.favorites.get(hero_id, ()) else 1)
         if gain <= 0:
             return OutboundMessage("L2C_AddFavor", values)
         with self.economy.transaction():
@@ -109,9 +161,7 @@ class FavorService:
             target = next(h for h in snapshot["heroes"] if h["id"] == hero_id and h["state"] == 2)
             state = favor_state(target, self.heroes[hero_id]["InitialLevel"]).copy()
             state["exp"] += gain
-            # Static Exp values through the first break are cumulative.
-            while state["level"] < 4 and state["exp"] >= self.levels[state["level"] + 1]["Exp"]:
-                state["level"] += 1
+            self._advance(hero_id, state, target.get("favor_breaks", []))
             target["favor"] = state
             previous = target.get("favor_gifts", {})
             count = (previous.get("count", 0) if previous.get("day") == day else 0) + num
@@ -120,5 +170,7 @@ class FavorService:
         values.update(code=10, newExp=state["exp"], newLevel=state["level"], giftsTimes=count)
         change = FAVOR_CHANGE_INFO.encode({"beforeLevel": before["level"], "beforeExp": before["exp"],
             "afterLevel": state["level"], "afterExp": state["exp"], "heroID": hero_id, "type": 7})
+        from .hero import encode_hero_data
         return OutboundMessage("L2C_AddFavor", values, pushes=(OutboundMessage(
-            "L2C_FavorChangeInfo", {"data": [change]}), *self.economy.pushes(player_id)))
+            "L2C_FavorChangeInfo", {"data": [change]}), OutboundMessage("L2C_HeroUpdate",
+            {"code": 10, "heros": [encode_hero_data(target)]}), *self.economy.pushes(player_id)))

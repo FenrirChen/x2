@@ -19,13 +19,14 @@ LOGGER = logging.getLogger("x2.login")
 
 
 class LoginService:
-    def __init__(self, identity: LocalIdentityService, store: PlayerStore, economy=None, equipment=None, wish=None, clock=None, appearance=None) -> None:
+    def __init__(self, identity: LocalIdentityService, store: PlayerStore, economy=None, equipment=None, wish=None, clock=None, appearance=None, mail=None) -> None:
         self.identity = identity
         self.store = store
         self.economy = economy
         self.equipment = equipment
         self.wish = wish
         self.appearance = appearance
+        self.mail = mail
         self.clock = clock or ServerClock()
 
     async def login(self, context: DispatchContext, packet: DecodedPacket) -> OutboundMessage:
@@ -71,6 +72,8 @@ class LoginService:
         if self.appearance:
             pushes += (OutboundMessage("L2C_QueryHeroDubbing",
                 self.appearance._voice_values(player["id"])),)
+        if self.mail:
+            pushes += (self.mail.list_message(player["id"]),)
         return OutboundMessage("L2C_Login", result, pushes=pushes)
 
     @staticmethod

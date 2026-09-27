@@ -9,7 +9,7 @@ import logging
 from x2server.config.settings import Settings
 
 from .connection import X2Connection
-from .dispatcher import Dispatcher
+from .dispatcher import Dispatcher, OutboundMessage
 
 LOGGER = logging.getLogger("x2.network.server")
 
@@ -41,6 +41,19 @@ class X2TCPServer:
     @property
     def active_connection_count(self) -> int:
         return len(self._connections)
+
+    async def push_to_player(self, player_id: int, message: OutboundMessage) -> int:
+        """Deliver a server event to the authenticated player's live connections."""
+        connections = [connection for connection in self._connections.values()
+                       if not connection.closed and connection.session.player_id == player_id]
+        delivered = 0
+        for connection in connections:
+            try:
+                await connection.send_response(message, 0)
+                delivered += 1
+            except (ConnectionError, TimeoutError):
+                LOGGER.warning("mail push lost a closing connection player=%s", player_id)
+        return delivered
 
     async def start(self) -> None:
         """Bind the configured localhost listener without serving business logic."""

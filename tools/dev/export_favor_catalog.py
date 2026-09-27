@@ -6,7 +6,7 @@ ROOT = Path(__file__).resolve().parents[2]
 TABLES = ROOT.parent / "analysis/drop_archaeology/full_tables"
 OUTPUT = ROOT / "src/x2server/data/favor_catalog.json"
 NAMES = ("favorabilityhero", "favorabilitylevel", "favorabilityfetters",
-         "favorabilityfiles", "favorabilitydairy")
+         "favorabilityfiles", "favorabilitydairy", "sendgiftcontrol")
 
 
 def build():

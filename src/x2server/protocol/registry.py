@@ -7,6 +7,7 @@ from x2server.messages.chat import CHAT_IDS
 from x2server.messages.economy import ECONOMY_IDS
 from x2server.messages.favor import FAVOR_IDS
 from x2server.messages.appearance import APPEARANCE_IDS
+from x2server.messages.mail import MAIL_IDS
 
 from dataclasses import dataclass
 from enum import Enum
@@ -95,7 +96,7 @@ CORE_MESSAGE_REGISTRY = MessageRegistry(
         MessageEntry("C2L_RequestDrawResult", 381, Direction.CLIENT_TO_SERVER),
         MessageEntry("L2C_RequestDrawResult", 382, Direction.SERVER_TO_CLIENT),
         MessageEntry("L2C_UpdatePlayerLevel", 508, Direction.SERVER_TO_CLIENT),
-        *(entry for name, request_id, response_id in (*LOBBY_IDS, *CHAT_IDS, *ECONOMY_IDS, *FAVOR_IDS, *APPEARANCE_IDS) for entry in (
+        *(entry for name, request_id, response_id in (*LOBBY_IDS, *CHAT_IDS, *ECONOMY_IDS, *FAVOR_IDS, *APPEARANCE_IDS, *MAIL_IDS) for entry in (
             MessageEntry("C2L_" + name, request_id, Direction.CLIENT_TO_SERVER),
             MessageEntry("L2C_" + name, response_id, Direction.SERVER_TO_CLIENT))),
         MessageEntry("L2C_Login", 79, Direction.SERVER_TO_CLIENT),

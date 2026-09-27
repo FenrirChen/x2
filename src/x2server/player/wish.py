@@ -6,6 +6,7 @@ from importlib.resources import files
 from datetime import datetime
 
 from x2server.messages.economy import REWARD, REWARD_ITEM
+from x2server.protocol.protobuf import FieldKind, ProtoField, ProtoSchema
 from x2server.messages.wish import CARD_POOL, WISH_SCHEMAS
 from x2server.network.dispatcher import OutboundMessage
 from x2server.protocol.errors import ProtocolError
@@ -17,6 +18,8 @@ class WishService:
     POOL_ID = 22201
     ANCHOR = int(datetime(2026, 9, 24, tzinfo=BEIJING).timestamp())
     CLIENT_DISPLAY_OFFSET = 8 * 3600
+    TRANSFORM_HERO = ProtoSchema("TransformHero", (
+        ProtoField(1, "heroId", FieldKind.INT32), ProtoField(2, "transform", FieldKind.BOOL)))
 
     def __init__(self, store, economy=None, clock=None):
         self.store, self.economy = store, economy
@@ -72,6 +75,12 @@ class WishService:
         kind = self.catalog[str(pool_id)]["type"]
         return "limited" if kind == "E_Limited" else "jewel" if kind == "E_Jewel" else "standard"
 
+    def _banner_counter(self, pool_id, since_hero, since_top):
+        return since_hero if self.catalog[str(pool_id)]["type"] == "E_New" else since_top
+
+    def _fail_counter(self, pool_id, since_hero, since_top):
+        return since_top if self.catalog[str(pool_id)]["type"] == "E_Jewel" else since_hero
+
     def state(self, player_id, pool_id=None):
         pool_id = pool_id or self.POOL_ID
         row = self.store.db.execute("SELECT total,singles,tens,since_hero,since_top,first_three_star,since_featured FROM wish_state WHERE player_id=? AND pool_id=?", (player_id,pool_id)).fetchone()
@@ -113,8 +122,9 @@ class WishService:
             pools.append(CARD_POOL.encode({"poolId": pool_id, "startTime": start + display_offset,
                 "endTime": end + display_offset, "jackpotRate": 10000,
                 "oneDrawCount": singles, "tenDrawCount": tens,
-                "securityNum": since_top if self.catalog[str(pool_id)]["type"] == "E_Jewel" else since_hero,
-                "totalDrawCount": total, "limitValue": since_featured, "failCount": since_top,
+                "securityNum": self._banner_counter(pool_id, since_hero, since_top),
+                "totalDrawCount": total, "limitValue": since_featured,
+                "failCount": self._fail_counter(pool_id, since_hero, since_top),
                 "discountDrawCount": 0, "itemIdSecurity": 0}))
         selected = self.POOL_ID if self.POOL_ID in active and self.state(player_id)[0] < 10 else next((i for i in active if i != self.POOL_ID), next(iter(active), 0))
         return {"code": 10, "cardPoolList": pools,
@@ -138,7 +148,22 @@ class WishService:
     def _reward(prizes, transforms):
         return REWARD.encode({"rewardItem": [REWARD_ITEM.encode({"itemId": prize["item_id"],
             "itemNum": prize["quantity"], "transform": transform})
-            for prize, transform in zip(prizes, transforms, strict=True)]})
+            for prize, transform in zip(prizes, transforms, strict=True)],
+            "transformHero": [WishService.TRANSFORM_HERO.encode({"heroId": prize["item_id"] - 1210000,
+                "transform": transform}) for prize, transform in zip(prizes, transforms, strict=True)
+                if 1211000 <= prize["item_id"] < 1212000]})
+
+    @classmethod
+    def _reward_with_transform_heroes(cls, raw):
+        """Complete pre-fix saved results without changing their prize slots."""
+        reward = REWARD.decode(raw)
+        if reward.get("transformHero"):
+            return raw
+        heroes = [REWARD_ITEM.decode(item) for item in reward.get("rewardItem", [])]
+        reward["transformHero"] = [cls.TRANSFORM_HERO.encode({
+            "heroId": item["itemId"] - 1210000, "transform": item.get("transform", False)})
+            for item in heroes if 1211000 <= item["itemId"] < 1212000]
+        return REWARD.encode(reward)
 
     async def draw(self, context, packet):
         player_id = context.session.player_id
@@ -236,7 +261,7 @@ class WishService:
             values = {"code": 10, "drawnId": pool_id, "rewardData": self._reward(prizes, transforms),
                 "luckyValue": 0, "oneDrawCount": singles, "tenDrawCount": tens,
                 "limitValue": since_featured,
-                "securityNum": since_top if config["type"] == "E_Jewel" else since_hero,
+                "securityNum": self._banner_counter(pool_id, since_hero, since_top),
                 "luckyValueCurrent": [0],
                 "allHeroCardFirstThreeStar": bool(first_three_star)}
             response_bytes = WISH_SCHEMAS["L2C_LuckDraw"].encode(values)
@@ -267,7 +292,8 @@ class WishService:
         _, singles, tens, _, _, _, since_featured = self.state(context.session.player_id, pool_id)
         last = self.store.db.execute("SELECT response FROM wish_last_result WHERE player_id=? AND pool_id=?",
             (context.session.player_id, pool_id)).fetchone()
-        reward = WISH_SCHEMAS["L2C_LuckDraw"].decode(last[0])["rewardData"] if last else REWARD.encode({})
+        reward = self._reward_with_transform_heroes(
+            WISH_SCHEMAS["L2C_LuckDraw"].decode(last[0])["rewardData"]) if last else REWARD.encode({})
         return OutboundMessage("L2C_RequestDrawResult", {"code": 10, "drawnId": pool_id,
             "rewardData": reward, "luckyValue": 0,
             "oneDrawCount": singles, "tenDrawCount": tens, "limitValue": since_featured})

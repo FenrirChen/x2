@@ -6,7 +6,7 @@ import pytest
 from tests.unit.test_battle import packet
 from tests.unit.test_economy import env
 from x2server.messages.core import HERO_DATA
-from x2server.messages.favor import FAVOR, FAVOR_MAP_ENTRY
+from x2server.messages.favor import FAVOR, FAVOR_MAP_ENTRY, HERO_ARCHIVE
 from x2server.player.favor import FavorService
 from x2server.player.hero import encode_hero_data
 from x2server.player.login import LoginService
@@ -59,6 +59,45 @@ def test_two_value_gift_uses_base_gain_and_consumes(env):
     assert answer.values["code"] == 10
     assert answer.values["newExp"] == service.gifts[1204003]["EffData"][0]
     assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1204003").fetchone()[0] == 4
+
+
+def test_preferred_gift_doubles_favor_and_opens_archive(env):
+    store, economy, ctx = env
+    service = FavorService(store, economy)
+    favorite = 1204009
+    assert favorite in service.favorites[1003]
+    base = service.gifts[favorite]["EffData"][0]
+    count = (210 + base * 2 - 1) // (base * 2)
+    store.db.execute("INSERT INTO inventory VALUES (?,?,?)", (1, favorite, count))
+    result = asyncio.run(service.handle(ctx, packet({"opt": 2, "optionId": favorite,
+        "heroId": 1003, "num": count}, name="C2L_AddFavor")))
+    assert result.values["code"] == 10
+    assert result.values["newExp"] == base * 2 * count
+    assert result.values["newLevel"] >= 2
+    hero_push = next(push for push in result.pushes if push.message_name == "L2C_HeroUpdate")
+    archives = [HERO_ARCHIVE.decode(raw) for raw in HERO_DATA.decode(hero_push.values["heros"][0])["archives"]]
+    assert next(row for row in archives if row["fileId"] == 5100303)["status"] == 2
+    query = asyncio.run(service.handle(ctx, packet({"heroID": 1003}, name="C2L_QueryHeroArchives")))
+    assert query.values["needRefresh"] is True
+    assert query.pushes[0].message_name == "L2C_HeroUpdate"
+
+
+def test_favor_break_charges_material_before_lifting_level_cap(env):
+    store, economy, ctx = env
+    service = FavorService(store, economy)
+    player = store.get(1)
+    snapshot = player["snapshot"]
+    snapshot["heroes"][0]["favor"] = {"level": 4, "exp": 840}
+    store.save_snapshot(1, snapshot, player["revision"])
+    request = packet({"heroId": 1003}, name="C2L_FavorBreak")
+    assert asyncio.run(service.handle(ctx, request)).values["code"] == 13
+    assert store.get(1)["snapshot"]["heroes"][0]["favor"]["level"] == 4
+    store.db.execute("INSERT INTO inventory VALUES (1,1283001,20)")
+    result = asyncio.run(service.handle(ctx, request))
+    assert result.values["code"] == 10
+    assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1283001").fetchone()[0] == 0
+    assert store.get(1)["snapshot"]["heroes"][0]["favor"]["level"] == 5
+    assert asyncio.run(service.handle(ctx, request)).values["code"] == 13
 
 
 def test_gift_charge_rolls_back_when_state_write_fails(env, monkeypatch):
