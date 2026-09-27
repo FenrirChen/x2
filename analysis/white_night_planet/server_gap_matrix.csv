@@ -1,0 +1,33 @@
+﻿C2L,C2L ID,Current Server,Reason,Required dependency
+C2L_QueryGrowthBase,579,PARTIAL,Returns fixed level-one buildings; no persisted College state,基地快照/计时器读取
+C2L_UnlockExploreRuin,622,STUB,Returns code 13 without ruin records,遗迹开放状态读取
+C2L_BuildingUpgrade,233,MISSING,No College handler / state transaction,建筑等级/建造队列/资源
+C2L_BuildSpeedUP,234,MISSING,No College handler / state transaction,队列结束时间/加速道具
+C2L_BuildStarUP,235,MISSING,No College handler / state transaction,建筑星级/资源
+C2L_BuildCrystalFinish,271,MISSING,No College handler / state transaction,建造状态/奖励
+C2L_ExchangePower,238,MISSING,No College handler / state transaction,星能/额外体力
+C2L_StartExplore,242,MISSING,No College handler / state transaction,派遣槽/英雄占用/结束时间/消耗
+C2L_FinishExplore,239,MISSING,No College handler / state transaction,派遣槽/奖励/遗迹经验
+C2L_CancelExplore,236,MISSING,No College handler / state transaction,派遣槽/退还星能
+C2L_ExploreSpeed,624,MISSING,No College handler / state transaction,派遣结束时间/资源
+C2L_StartTrain,259,MISSING,No College handler / state transaction,训练槽/英雄占用/结束时间/消耗
+C2L_FinishTrain,258,MISSING,No College handler / state transaction,训练槽/英雄经验/等级
+C2L_CancelTrain,257,MISSING,No College handler / state transaction,训练槽/退还星能
+C2L_BuildStartPrayGod,369,MISSING,No College handler / state transaction,祈祷队列/英雄/材料/计时
+C2L_BuildCancelPrayGod,366,MISSING,No College handler / state transaction,祈祷队列/材料
+C2L_BuildRewardPrayGod,368,MISSING,No College handler / state transaction,祈祷队列/奖励账本
+C2L_BuildQuickenPrayGod,367,MISSING,No College handler / state transaction,祈祷结束时间/道具
+C2L_AlchemyMainData,590,MISSING,No College handler / state transaction,炼金快照读取
+C2L_SingleCustomerInfo,592,MISSING,No College handler / state transaction,顾客槽读取
+C2L_MakeItem,594,MISSING,No College handler / state transaction,生产槽/材料/计时
+C2L_MakIngSpeed,596,MISSING,No College handler / state transaction,生产结束时间/资源
+C2L_AlchemyFinish,598,MISSING,No College handler / state transaction,顾客订单/售价/奖励
+C2L_AlchemyButtonClick,600,MISSING,No College handler / state transaction,顾客交互状态
+C2L_AlchemyCollect,602,MISSING,No College handler / state transaction,生产槽/物品/配方经验
+C2L_AlchemyBuy,604,MISSING,No College handler / state transaction,生产位/资源
+C2L_AlchemyMakeCancel,824,MISSING,No College handler / state transaction,生产槽/返还
+C2L_AlchemyOnekeyCollect,826,MISSING,No College handler / state transaction,多生产槽/奖励账本
+C2L_WashingRoomRandomAttri,1055,MISSING,No College handler / state transaction,装备随机属性/日次数
+C2L_WashingRoomOpt,1057,MISSING,No College handler / state transaction,装备属性/材料/日次数
+C2L_HelpPowerSpeed,879,MISSING,No College handler / state transaction,协助速度/奖励
+C2L_HelpPowerSpeedValid,881,MISSING,No College handler / state transaction,协助次数/资格读取
