@@ -58,7 +58,9 @@ Supersedes:
 | K Mission / Chapter | QueryMission `574`、章节/剧情 | PARTIAL / MISSING | mainMission 与 Daily `OtherChapter` 进度可回送；其他类型、story、星/宝箱缺 |
 | L DailyDungeon / Resource Dungeon | 25 个 `DailyDungeon` 配置，E_Daily Section、FightData、SecSweep | PARTIAL / MISSING | 已关联且固定奖励可解析的资源本支持静态体力、首通/普通奖励、通关记录与下一节进度；开放日/次数兼容，Gift 随机组及 6 个孤立 E_Daily 缺 |
 | M Task | GameTask `351`、FinishGameTask `350`、PickTreasureBox `310` | PARTIAL / STUB | 日周实例/部分事件/领奖有持久化；击杀、社交、探索等事件与活跃箱缺 |
-| N Shop | ShopGoods `221`、BuyGoods `219`、RefreshShop `220` | STUB | 固定拒绝以避免成功空列表崩溃；商品 ID→物品/数量大范围缺证据 |
+| N Shop | ShopGoods `221`、BuyGoods `219`、RefreshShop `220` | PARTIAL / REVIVAL_COMPATIBILITY | 可安全发放商品查询购买、限购、收据、重登闭环；目录商品映射非官方，804 与刷新池未闭环 |
+| N1 Collection | QueryCollectionAward `586`、GetCollectionAward `588` | PARTIAL | 26 条官方条件与账本已接；25 个 Gift 可领取，133103 的 E_Medal 奖励目标未支持而拒绝 |
+| N2 Affection | AddFavor `274`、档案 `500–503`、联结 `498`、突破 `651`、手账 `657` | PARTIAL | 状态/查询/重登与 3 种单值礼物事务闭环；双值偏好、触摸和突破规则仍未知，拒绝未知变更 |
 | O Achievement | AchvOverView `345`、AchvReward `346`、点数奖 `358` | MISSING | 318 条静态成就；进度、领奖、持久化均无 |
 | P Draw / Gacha | CardPool `305`、LuckDraw `303`、结果 `381` | PARTIAL | 有轮换、花费、收据、保底；48 个 DrawParam 与当前 43 个轮换池不等；保底 UI/图片仍需实机核对 |
 | Q Mail | MailData `196`、ReadMail `204`、ReceiveAttachment `197`、DelMail `207` | MISSING | 邮件实例、附件幂等及清理未做 |
@@ -81,7 +83,7 @@ Supersedes:
 4. **Hero/技能**：HeroAll 可显示多角色，但技能升级只允许 1003；属性整合不包含魂器/兽主套装的完整效果。
 5. **装备**：背包有测试实例、六部位可佩戴，不代表真实掉落、品质、喂养、锁和套装规则可用。
 6. **任务**：列表和固定奖励可用，但事件来源只覆盖一部分；活跃宝箱固定拒绝。
-7. **商店**：接口有 handler，实际固定 code 13；静态商品价格存在但商品内容缺失。
+7. **商店**：809 的直接映射及 B 包 116 格可发放兼容商品可买；商品内容非官方，804 与刷新池未覆盖。
 8. **重登**：英雄/物品/装备/日周/抽卡会重建；邮件、活动、引导、战斗续档等状态未建模。
 
 ## VARIANT_GAPS
@@ -107,7 +109,7 @@ Supersedes:
 
 | 状态路径 | 已证实 | 缺口 |
 |---|---|---|
-| `request → SQLite` | players.snapshot/revision、inventory、equipment_instances、wish_state/pity/receipts、economy_tasks/periods/history、battle_entries/receipts/runs/clears | Guide、Mail、Achievement、Shop、Activity、Friend、Club 无状态表；`pending_rewards` 仅待发不入背包 |
+| `request → SQLite` | players.snapshot/revision、inventory、equipment_instances、wish_state/pity/receipts、economy_tasks/periods/history、battle_entries/receipts/runs/clears、shop receipts/counts、collection_awards、hero favor snapshot | Guide、Mail、Achievement、Activity、Friend、Club 无状态表；`pending_rewards` 仅待发不入背包 |
 | 事务/幂等 | 部分成长、固定奖、任务领奖、抽卡、战斗结算有事务或收据 | 装备穿戴 `save_snapshot` 单独提交；跨业务一致性、所有错误重试未普遍验收；普通 `CheckoutMainMission` 无 handler |
 | `disconnect → reconnect/login` | 登录回送 heroAll/equipAll/itemAll/taskDaily/taskWeekly/cardPool 及 PlayerData；同进程 token 重连 | 重启失效 token；重连只回 `id/serverTime`，不重放状态；战斗 profile 固定不存在；任务挑战/引导/邮件/活动为空 |
 | 即时客户端刷新 | HeroUpdate、EquipUpdate、ItemUpdate、TaskUpdate、PlayerData 在部分修改后推送 | Mission 变化无专门 mission push；Guide/Shop/Activity/Achievement/Mail 无刷新协议实现；部分页面可能只靠重开/重登 |
@@ -116,7 +118,7 @@ Supersedes:
 
 - **固定 Section→Gift→Item**：静态引用完整；运行奖励目录覆盖 78 个主线和 141 个已关联 E_Daily Section。主线实例奖仍可能待发；Daily 确定性 Gift 会实际入账，含随机 Gift/未恢复目标的关卡在入场前拒绝。状态 `PARTIAL`。
 - **随机掉落**：`DropValueID` 到 `DropProp` 的映射仍断链；`FightDropData` 空兼容。备注 `BLOCKED_BY_MISSING_DATA`，不能自造官方概率。
-- **Shop**：25 个店、1,567 行商品分组/价格可读；商品 ID→实际物品/数量多数缺。运行请求固定拒绝，状态 `STUB`，备注 `BLOCKED_BY_MISSING_DATA`。
+- **Shop**：25 个店、1,567 行静态分组；809 的 15 格沿用原证据映射，其余使用 B 包兼容目录中的可交付商品，购买/扣币/计数/收据/重登已实现。官方商品内容仍 `SERVER_ONLY_UNKNOWN`；804 和刷新池未闭环。
 - **Task**：40 日周任务的静态条件/Gift 可用；运行事件来源、活跃箱、活动任务不完整。状态 `PARTIAL/STUB`。
 - **Growth**：RoleExp/PlayerLevelBonus/PlayerStage/ArtifactFuse/EquibExp/SkillLevel 曲线已恢复到可验证程度；运行 handler 的角色、属性、奖励/材料变体仍 `PARTIAL`。
 
@@ -129,7 +131,7 @@ Supersedes:
 3. **魂器镶嵌**：用两个相邻孔位各镶一枚不同绮石，退出重进核对位置及属性；只在备份后操作。
 4. **绮石保底 UI**：同组两池切换后查看横幅数字，单抽一次，比较 `CardPool.securityNum/failCount` 与显示。
 5. **主线重试/下一节**：在不强制战斗的前提下抓准备页/失败页请求；需要实际战斗时由用户操作。
-6. **活动/商店**：只查询可见入口及空状态；不要试探不存在的官方商品/掉落规则。
+6. **活动/商店**：活动仍只查询可见入口及空状态；商店可实测已列出的兼容商品，记录扣款、发放和重登表现。
 
 ## DOC_STATUS_CORRECTIONS
 

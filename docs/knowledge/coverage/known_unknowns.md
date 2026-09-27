@@ -8,7 +8,7 @@ Supersedes:
 Evidence-IDs: see evidence/manifests/evidence_manifest.json
 ---
 
-# Known Unknowns（截至 2026-09-25 仍未解）
+# Known Unknowns（截至 2026-09-27 仍未解）
 
 | # | Domain | Unknown | Why unknown | Evidence searched | 当前处理 | 阻塞 | 下一步 |
 |---|---|---|---|---|---|---|---|
@@ -18,7 +18,9 @@ Evidence-IDs: see evidence/manifests/evidence_manifest.json
 | 4 | Gift | E_RandomInterval/E_Pick/E_BlindBox 语义 | 解析器 Num 维度未展开；交互 UI 未逆向 | GetItemByGiftGroup/GetItemNumByGiftGroup | 拒绝执行 | 低 | 定点 disasm GetItemNumByGiftGroup |
 | 5 | Special | WeeklyDungeon 里程碑触发 | 无独立协议枚举项 | protocol_catalog | 不并入 VReward | 低 | 等热更 DLL 或实机样本 |
 | 6 | Special | 宝箱开启 C2L（E_Chest 物品使用通道） | Send 泛型清单无独立出现 | PROTOCOL_CATALOG | 只登记数据源 | 中 | 物品使用通道逆向（ItemOpt/热更） |
-| 7 | Shop | GoodsID→ItemID/Num、库存/限购/刷新执行、随机店抽取 | 客户端无映射（17 条 QuickBuy 反查除外）；原服数据失传 | reference_graph+第三方互证 | 固定拒绝 | 高 | 历史非空 L2C_ShopGoods 样本 |
+| 7 | Shop | 大部分官方 GoodsID→ItemID/Num、库存/限购次数/刷新池 | 客户端无完整映射；原服数据失传 | 客户端表、QuickBuy 反查、A/B 包审计 | 809 沿用原映射；其他店使用 B 包兼容目录，安全可交付商品可购买，限购每周期 1 次（REVIVAL_COMPATIBILITY / USER_DECISION） | 中 | 原服非空 L2C_ShopGoods 样本替换兼容值 |
+| 12 | Affection | 双值 EffData 的英雄偏好选择、触摸增量/限额、突破与联结完整规则 | 官方静态表只有两档效果值，缺偏好选择及服务端限制 | Item/Favorability 全表、协议 send point、A/B 包审计 | 单值礼物事务扣物加好感；双值礼物及未知交互拒绝且不扣物 | 中 | 客户端算法或原服送礼报文 |
+| 13 | Collection | 133103 的 E_Medal 奖励落账位置 | 当前 RewardGrant 不支持 ItemType 20；不能把勋章当普通背包物伪发 | canonical Collection/Gift/Item 与当前 RewardGrant | 该条拒绝且不标记已领取；其他 25 条可领 | 中 | 恢复勋章账户状态与客户端显示链 |
 | 8 | Task | 宝箱 boxId 索引基数/季节切换 | 需非空 boxList 实测 | OnBoxReadyStateClick 链 | 不开放领取 | 中 | 实机抓 310 |
 | 9 | Battle | CheckFightProfile 续战语义 | 固定 false 兼容 | 447 结构 | 拒绝续战 | 中 | 447/399 样本 |
 | 10 | Client | ILRuntime 热更程序集本体 | 未随包（乐变下载链失传） | phase2 全量扫描 | 原生层足够 | 信息级 | 无 |

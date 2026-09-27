@@ -12,7 +12,7 @@ Evidence-IDs: see evidence/manifests/evidence_manifest.json
 
 - **可运行**：登录/大厅/物品/英雄(1003)/装备测试实例/**装备实例真交付(887→Factory→落库→152.rewardEquip)/**
   魂器基础/技能/抽卡/固定奖励结算/主线 78 关 + 资源本 20 关/扫荡(41 关静态)/日周任务/聊天空频道。
-- **测试**：256 passed（2026-09-27 隔离 SQLite 单元测试）。
+- **测试**：外部包合并后全量 282 passed（2026-09-27 隔离 SQLite 单元测试）。
 - **已恢复领域**：见 knowledge/ 各域文档；运行态口径：coverage/runtime_coverage.md。
 - **主要 PARTIAL**：Battle Entry 扩展类型、DailyDungeon 剩余变体、Mission 真进度。
 - **掉落经济**：E_ReportCurrency 代理物结算折算已实施（金币本实机空白贴图已修）；dropValues 预算改为 DifficultyLevel 分级 LOW/MID/HIGH=1000/3000/5000（REVIVAL_COMPAT）。
@@ -22,4 +22,5 @@ Evidence-IDs: see evidence/manifests/evidence_manifest.json
 - **主要 known unknowns**：coverage/known_unknowns.md（10 项）。
 - **兼容决策**：docs/decisions/compatibility/。
 - **下一步推荐**：reward_system_server_fix_plan.md 的 FIX-1/2/3。
-- **禁改**：Reference APK、活跃 SQLite（runtime/phase14/player.sqlite3）、已有备份。
+- **本轮外部包合并**：图鉴 26 个官方 Collection 条件已接入，25 个 Gift 可领取；133103 的 E_Medal 目标未被当前 RewardGrant 支持，会明确拒绝且不标记已领。好感协议、HeroData 档案/联结、FavorMap 与手账查询已接入，单值 EffData 礼物可事务送礼，双值偏好及突破等未知规则仍拒绝；商店除原 809 外接入明确标注的兼容目录。59 种官方好感礼物已按用户指令补到活跃测试账号每种 100 个，修改前已备份。上述功能尚待客户端实测。
+- **保护范围**：Reference APK、已有备份；活跃 SQLite 除本轮获授权的定向测试礼物 seed 外不可覆盖/重置。

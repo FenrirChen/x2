@@ -1,0 +1,1035 @@
+{
+  "package": "A",
+  "root": "D:\\demo\\x2\\other\\9.25 loadbyhoshi\\9.25 loadbyhoshi",
+  "file_count": 114,
+  "total_bytes": 7917762,
+  "files": [
+    {
+      "path": "docs/battle_model.md",
+      "size": 5900,
+      "sha256": "06d2f0be0348207865bbf3b8070f89bb80fd6be2b2a70ebf0a6565ed004ed10a",
+      "category": "document",
+      "current_equivalent": null,
+      "current_status": "no_direct_mapping",
+      "current_sha256": null
+    },
+    {
+      "path": "docs/compare_20260925_server.md",
+      "size": 21440,
+      "sha256": "bce6ba4d01a68301f8960fce886fe044e2e9cd8e1b6d1b37f25386a7f61a5125",
+      "category": "document",
+      "current_equivalent": null,
+      "current_status": "no_direct_mapping",
+      "current_sha256": null
+    },
+    {
+      "path": "docs/CREDITS_AND_DISCLAIMER.md",
+      "size": 438,
+      "sha256": "6b8b1a531b76fa461c2df399a0ec6faf66dfb356dad5396764c97bd3aef17c82",
+      "category": "document",
+      "current_equivalent": null,
+      "current_status": "no_direct_mapping",
+      "current_sha256": null
+    },
+    {
+      "path": "docs/CURRENT_STATUS.md",
+      "size": 17719,
+      "sha256": "fd3c287a5ee58cc87428887c1e504f9bd9c3afd38bb2f8bad3150ab7fb13a6b2",
+      "category": "document",
+      "current_equivalent": null,
+      "current_status": "no_direct_mapping",
+      "current_sha256": null
+    },
+    {
+      "path": "docs/DROP_RULES.md",
+      "size": 20958,
+      "sha256": "f6a8835935e88e52aa45a9fdf3430a4870c6f2f38ed48167af16c0f7eb03336b",
+      "category": "document",
+      "current_equivalent": null,
+      "current_status": "no_direct_mapping",
+      "current_sha256": null
+    },
+    {
+      "path": "docs/MODIFIER.md",
+      "size": 13739,
+      "sha256": "5e91e510e3f6f8ed551d3bf59031ac7756f071e3e00482a6a0f3779137bea157",
+      "category": "document",
+      "current_equivalent": null,
+      "current_status": "no_direct_mapping",
+      "current_sha256": null
+    },
+    {
+      "path": "docs/PORT_FROM_20260925.md",
+      "size": 7012,
+      "sha256": "534cb2e404c09c3f5c743d50b91cf7cd19a2e561fc54a1d88a311b1c7d50deac",
+      "category": "document",
+      "current_equivalent": null,
+      "current_status": "no_direct_mapping",
+      "current_sha256": null
+    },
+    {
+      "path": "docs/TROUBLESHOOTING.md",
+      "size": 2414,
+      "sha256": "5617b5a065f59e7e977ac41d0ec160e2ef4c2034b6e818b57c4843dcb936cf9f",
+      "category": "document",
+      "current_equivalent": null,
+      "current_status": "no_direct_mapping",
+      "current_sha256": null
+    },
+    {
+      "path": "HANDOFF.md",
+      "size": 71937,
+      "sha256": "f3922ead945b3ab9c7ffe5d66f7ac8ed6e21b1d40c5175a019cde77df6c6b1ce",
+      "category": "document",
+      "current_equivalent": null,
+      "current_status": "no_direct_mapping",
+      "current_sha256": null
+    },
+    {
+      "path": "README.md",
+      "size": 11220,
+      "sha256": "e03f991090f9a2aac51cab773e281aaeef19774b26b4cd0b78fc87aea8106501",
+      "category": "document",
+      "current_equivalent": null,
+      "current_status": "no_direct_mapping",
+      "current_sha256": null
+    },
+    {
+      "path": "save/demo.sqlite3",
+      "size": 585728,
+      "sha256": "c4c5701510025768f0b7d9302d9fb90d81ffdad1ee699e7cce11a51984b9dc4f",
+      "category": "runtime_artifact",
+      "current_equivalent": null,
+      "current_status": "no_direct_mapping",
+      "current_sha256": null
+    },
+    {
+      "path": "server/analysis/progression/equipment_progression.json",
+      "size": 11686,
+      "sha256": "af4c4c82140e06d586cc6e43267fb56f5835d4aba27224dfa3161b966baa93a5",
+      "category": "data_or_config",
+      "current_equivalent": "analysis/progression/equipment_progression.json",
+      "current_status": "identical",
+      "current_sha256": "af4c4c82140e06d586cc6e43267fb56f5835d4aba27224dfa3161b966baa93a5"
+    },
+    {
+      "path": "server/analysis/progression/equipment_seed_catalog.json",
+      "size": 19499,
+      "sha256": "554092e6d23450ee66c7f0a3186d72b61190f06e207cf3c6c79e2c055cdd3334",
+      "category": "data_or_config",
+      "current_equivalent": "analysis/progression/equipment_seed_catalog.json",
+      "current_status": "identical",
+      "current_sha256": "554092e6d23450ee66c7f0a3186d72b61190f06e207cf3c6c79e2c055cdd3334"
+    },
+    {
+      "path": "server/analysis/progression/equipment_strengthen_catalog.json",
+      "size": 18156,
+      "sha256": "e373729d974778da89c2d7231898edec803f40c16968ee53877915f10c904414",
+      "category": "data_or_config",
+      "current_equivalent": "analysis/progression/equipment_strengthen_catalog.json",
+      "current_status": "identical",
+      "current_sha256": "e373729d974778da89c2d7231898edec803f40c16968ee53877915f10c904414"
+    },
+    {
+      "path": "server/config/accounts.json",
+      "size": 582,
+      "sha256": "ca5dd8eb2e8333eb4580e952f0117dd5134aa2fba803e3785c779d9642c45fda",
+      "category": "data_or_config",
+      "current_equivalent": null,
+      "current_status": "no_direct_mapping",
+      "current_sha256": null
+    },
+    {
+      "path": "server/requirements.txt",
+      "size": 58,
+      "sha256": "f551a3758f932abf7f3a3f7b256eb72ba6034329d7449185a23378b5788b4001",
+      "category": "other",
+      "current_equivalent": null,
+      "current_status": "no_direct_mapping",
+      "current_sha256": null
+    },
+    {
+      "path": "server/run_server.py",
+      "size": 11096,
+      "sha256": "79c7430590d7243a8b7765cfdd87cdfef34b4d3378ec164feef148d4b0ddb657",
+      "category": "code_or_schema",
+      "current_equivalent": null,
+      "current_status": "no_direct_mapping",
+      "current_sha256": null
+    },
+    {
+      "path": "server/src/x2server/__init__.py",
+      "size": 74,
+      "sha256": "de1ce29b3546ada979956e5cdf19cc9543529e4a71a19b2bfeedceb520378119",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/__init__.py",
+      "current_status": "identical",
+      "current_sha256": "de1ce29b3546ada979956e5cdf19cc9543529e4a71a19b2bfeedceb520378119"
+    },
+    {
+      "path": "server/src/x2server/bootstrap/__init__.py",
+      "size": 53,
+      "sha256": "b1f5119e54c39f564b1cecf6fa0976044401a718a4f78c3e8ac27ffc1ef7f074",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/bootstrap/__init__.py",
+      "current_status": "identical",
+      "current_sha256": "b1f5119e54c39f564b1cecf6fa0976044401a718a4f78c3e8ac27ffc1ef7f074"
+    },
+    {
+      "path": "server/src/x2server/bootstrap/accounts.py",
+      "size": 8140,
+      "sha256": "d5e39b1942f49128c431166e9e1e1a0133df4ae61a6ab9ed1fd17e27bd1d6d99",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/bootstrap/accounts.py",
+      "current_status": "new_candidate",
+      "current_sha256": null
+    },
+    {
+      "path": "server/src/x2server/bootstrap/http_server.py",
+      "size": 5155,
+      "sha256": "8c92829280f40e7b7a9d368bf824818fdf4d4cc381f532ca84574e52d7ab37ea",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/bootstrap/http_server.py",
+      "current_status": "identical",
+      "current_sha256": "8c92829280f40e7b7a9d368bf824818fdf4d4cc381f532ca84574e52d7ab37ea"
+    },
+    {
+      "path": "server/src/x2server/bootstrap/local_identity.py",
+      "size": 7092,
+      "sha256": "73c8ba79c814110b723051bfc8ac5dc05b02c7f3c4dc82fef0b6c32ec6ffc431",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/bootstrap/local_identity.py",
+      "current_status": "different",
+      "current_sha256": "ef5f1a3102ac956ed6764f1670093cb65c88f8d3725129cceb8523ec5da2af6b"
+    },
+    {
+      "path": "server/src/x2server/bootstrap/models.py",
+      "size": 13331,
+      "sha256": "4116f82d8a0c9b56bd6c31aaf3ebd646d47130b239f77d832248bab6c3ecc387",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/bootstrap/models.py",
+      "current_status": "identical",
+      "current_sha256": "4116f82d8a0c9b56bd6c31aaf3ebd646d47130b239f77d832248bab6c3ecc387"
+    },
+    {
+      "path": "server/src/x2server/bootstrap/service.py",
+      "size": 3046,
+      "sha256": "ea80351b245f909dc2ffbd612bf0549f7ffb6a0c32f35fbe48d7c9c720ff2ae9",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/bootstrap/service.py",
+      "current_status": "identical",
+      "current_sha256": "ea80351b245f909dc2ffbd612bf0549f7ffb6a0c32f35fbe48d7c9c720ff2ae9"
+    },
+    {
+      "path": "server/src/x2server/config/__init__.py",
+      "size": 41,
+      "sha256": "c229d6c7a7cd77b0824d4c729ff70321989dfafd55abe2a6a4c7d0a75193883f",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/config/__init__.py",
+      "current_status": "identical",
+      "current_sha256": "c229d6c7a7cd77b0824d4c729ff70321989dfafd55abe2a6a4c7d0a75193883f"
+    },
+    {
+      "path": "server/src/x2server/config/logging.py",
+      "size": 1172,
+      "sha256": "1613ab3b54b1290ffa052f8201a6cac0a8b89c1ee7c0bc5b0163bb8990b58fec",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/config/logging.py",
+      "current_status": "identical",
+      "current_sha256": "1613ab3b54b1290ffa052f8201a6cac0a8b89c1ee7c0bc5b0163bb8990b58fec"
+    },
+    {
+      "path": "server/src/x2server/config/settings.py",
+      "size": 4508,
+      "sha256": "544096d0d06e93da2fb85c00354dba259893af53e36b732bb3e2ea00daba40de",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/config/settings.py",
+      "current_status": "different",
+      "current_sha256": "53ecfeea85c81f29c8321bad3146bc7908ec4d36382d698317dd5275040132d4"
+    },
+    {
+      "path": "server/src/x2server/data/appearance_shop.json",
+      "size": 71498,
+      "sha256": "e4f0a9f5f4674651f3b5662a466bf07025829df4eae52772b0d17cb183f08ad2",
+      "category": "data_or_config",
+      "current_equivalent": "src/x2server/data/appearance_shop.json",
+      "current_status": "new_candidate",
+      "current_sha256": null
+    },
+    {
+      "path": "server/src/x2server/data/appearance_units.json",
+      "size": 8318,
+      "sha256": "909af55b55fe8dda806605bc8dce8b2cf961fe5352b5257d564bd9b27a15c226",
+      "category": "data_or_config",
+      "current_equivalent": "src/x2server/data/appearance_units.json",
+      "current_status": "new_candidate",
+      "current_sha256": null
+    },
+    {
+      "path": "server/src/x2server/data/battle_entry_catalog.json",
+      "size": 612213,
+      "sha256": "eeb367d6693e209a5d9a92d0984dc11d14ddfbf5d5bf7a87ce2e2e2ae34b9459",
+      "category": "data_or_config",
+      "current_equivalent": "src/x2server/data/battle_entry_catalog.json",
+      "current_status": "different",
+      "current_sha256": "44e521d9d26dd536b0737c858423a19b420907d128bfa161b9ab4a069be3c90f"
+    },
+    {
+      "path": "server/src/x2server/data/battle_hero_base.json",
+      "size": 16956,
+      "sha256": "9d75df53245b4df83d5e58d8e098264f9996828ca8419a05da6c8320a6d06bb0",
+      "category": "data_or_config",
+      "current_equivalent": "src/x2server/data/battle_hero_base.json",
+      "current_status": "identical",
+      "current_sha256": "9d75df53245b4df83d5e58d8e098264f9996828ca8419a05da6c8320a6d06bb0"
+    },
+    {
+      "path": "server/src/x2server/data/battle_shop.json",
+      "size": 70573,
+      "sha256": "8a663756b5cac1644ae48cd12f5c75db344f84f011cb4d54990073ae1696e479",
+      "category": "data_or_config",
+      "current_equivalent": "src/x2server/data/battle_shop.json",
+      "current_status": "new_candidate",
+      "current_sha256": null
+    },
+    {
+      "path": "server/src/x2server/data/chapter_dp.json",
+      "size": 4242,
+      "sha256": "770f0a3cd2e52bbf4454e65a641e3116818cf4726b0f73b018070c50d323a723",
+      "category": "data_or_config",
+      "current_equivalent": "src/x2server/data/chapter_dp.json",
+      "current_status": "new_candidate",
+      "current_sha256": null
+    },
+    {
+      "path": "server/src/x2server/data/drop_catalog.json",
+      "size": 1004858,
+      "sha256": "c6a25cc0a0213ca1953c0b7501bf375982c231967436c9af95b2e97c5e70a17e",
+      "category": "data_or_config",
+      "current_equivalent": "src/x2server/data/drop_catalog.json",
+      "current_status": "new_candidate",
+      "current_sha256": null
+    },
+    {
+      "path": "server/src/x2server/data/dubbing_catalog.json",
+      "size": 19360,
+      "sha256": "f34dd07de2b47c83f1ef152e288b5104c9c6c9200c4a4d6b8b7d0f802f347712",
+      "category": "data_or_config",
+      "current_equivalent": "src/x2server/data/dubbing_catalog.json",
+      "current_status": "new_candidate",
+      "current_sha256": null
+    },
+    {
+      "path": "server/src/x2server/data/economy_catalog.json",
+      "size": 1358468,
+      "sha256": "e7c9ed12ac9f7f6d4d49a9922a71286ffe4073605f24f0f565eac5b33b228a98",
+      "category": "data_or_config",
+      "current_equivalent": "src/x2server/data/economy_catalog.json",
+      "current_status": "identical",
+      "current_sha256": "e7c9ed12ac9f7f6d4d49a9922a71286ffe4073605f24f0f565eac5b33b228a98"
+    },
+    {
+      "path": "server/src/x2server/data/equib_catalog.json",
+      "size": 65159,
+      "sha256": "c2a6622b6643de36fa380e2c1251e93013d1d574dfcf378ad5d2d888aea209b9",
+      "category": "data_or_config",
+      "current_equivalent": "src/x2server/data/equib_catalog.json",
+      "current_status": "new_candidate",
+      "current_sha256": null
+    },
+    {
+      "path": "server/src/x2server/data/equib_shop.json",
+      "size": 6530,
+      "sha256": "801fbcf8ad51d4964075ff5d6d00fa2966804902a11fc92b5ba4cf605066eaf2",
+      "category": "data_or_config",
+      "current_equivalent": "src/x2server/data/equib_shop.json",
+      "current_status": "new_candidate",
+      "current_sha256": null
+    },
+    {
+      "path": "server/src/x2server/data/gift_contents.json",
+      "size": 2053792,
+      "sha256": "0a33fc583013e8815067f68e0d213bacef7fb165b4737090d81542e5285921ee",
+      "category": "data_or_config",
+      "current_equivalent": "src/x2server/data/gift_contents.json",
+      "current_status": "new_candidate",
+      "current_sha256": null
+    },
+    {
+      "path": "server/src/x2server/data/gift_package_shop.json",
+      "size": 57635,
+      "sha256": "f30cd2ee3cbd57cd15a6045393e69884f80c5f7e27e0d93da6bf7b77d873fe65",
+      "category": "data_or_config",
+      "current_equivalent": "src/x2server/data/gift_package_shop.json",
+      "current_status": "new_candidate",
+      "current_sha256": null
+    },
+    {
+      "path": "server/src/x2server/data/godhole_rules.json",
+      "size": 6477,
+      "sha256": "c5f4da7d6ddb9fe6e7a4a2cd71a5dcec3b99728a9dc5fe21bde588792fcf08af",
+      "category": "data_or_config",
+      "current_equivalent": "src/x2server/data/godhole_rules.json",
+      "current_status": "new_candidate",
+      "current_sha256": null
+    },
+    {
+      "path": "server/src/x2server/data/icon_catalog.json",
+      "size": 2176,
+      "sha256": "4a524001564c07e9059c7dcb40c077ec247a8313e38da47cd5694db3ffe9bcbb",
+      "category": "data_or_config",
+      "current_equivalent": "src/x2server/data/icon_catalog.json",
+      "current_status": "new_candidate",
+      "current_sha256": null
+    },
+    {
+      "path": "server/src/x2server/data/jewel_ids.json",
+      "size": 1385,
+      "sha256": "af81543bcea7e83ec659451587d5833c5439977512583cd7791d64ab921cdfc5",
+      "category": "data_or_config",
+      "current_equivalent": "src/x2server/data/jewel_ids.json",
+      "current_status": "identical",
+      "current_sha256": "af81543bcea7e83ec659451587d5833c5439977512583cd7791d64ab921cdfc5"
+    },
+    {
+      "path": "server/src/x2server/data/modifier_catalog.json",
+      "size": 615589,
+      "sha256": "884854adf773244447bdff04942d7c803a53c005d966a2b09e0c521edab27f74",
+      "category": "data_or_config",
+      "current_equivalent": "src/x2server/data/modifier_catalog.json",
+      "current_status": "new_candidate",
+      "current_sha256": null
+    },
+    {
+      "path": "server/src/x2server/data/progression_catalog.json",
+      "size": 267582,
+      "sha256": "dc8e56f8d7c28739437f899e78bf2f50e94e4ca1dd6b5093487ca013088ba2d1",
+      "category": "data_or_config",
+      "current_equivalent": "src/x2server/data/progression_catalog.json",
+      "current_status": "identical",
+      "current_sha256": "dc8e56f8d7c28739437f899e78bf2f50e94e4ca1dd6b5093487ca013088ba2d1"
+    },
+    {
+      "path": "server/src/x2server/data/shop_goods.json",
+      "size": 21193,
+      "sha256": "29806c77e9dddfaa4c5fa5bf756e4c4387736b24b415141647deac846f7e8243",
+      "category": "data_or_config",
+      "current_equivalent": "src/x2server/data/shop_goods.json",
+      "current_status": "new_candidate",
+      "current_sha256": null
+    },
+    {
+      "path": "server/src/x2server/data/wish_catalog.json",
+      "size": 243548,
+      "sha256": "c29f3670c0f470a3adcf63927b5da4e0c5a19f0a20cbeb6410e91e8ae78df445",
+      "category": "data_or_config",
+      "current_equivalent": "src/x2server/data/wish_catalog.json",
+      "current_status": "different",
+      "current_sha256": "5627f0d58da3be6b0f62d4dc9de14d5d7c0f73cbe70d44cb3b237fb53f942026"
+    },
+    {
+      "path": "server/src/x2server/gm/__init__.py",
+      "size": 82,
+      "sha256": "bf7630beb2bc7e1f85aba6b9508e2e14758b7f90c50d337bfb464b8b6e6c13ea",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/gm/__init__.py",
+      "current_status": "new_candidate",
+      "current_sha256": null
+    },
+    {
+      "path": "server/src/x2server/gm/app.py",
+      "size": 4753,
+      "sha256": "1be0fbde50f8b2e5dd375e024d32cd1168fee9d6061e3668ba45e32c2508b072",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/gm/app.py",
+      "current_status": "new_candidate",
+      "current_sha256": null
+    },
+    {
+      "path": "server/src/x2server/gm/http_server.py",
+      "size": 8243,
+      "sha256": "8413ee45df1b934da5e784b055d6219c318d1c950326709a4ee5c7bb6f1aaa7f",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/gm/http_server.py",
+      "current_status": "new_candidate",
+      "current_sha256": null
+    },
+    {
+      "path": "server/src/x2server/messages/__init__.py",
+      "size": 43,
+      "sha256": "6a8035d066b7636e3993e36bbf366c555276c7544cef310caea6f7e61faae532",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/messages/__init__.py",
+      "current_status": "identical",
+      "current_sha256": "6a8035d066b7636e3993e36bbf366c555276c7544cef310caea6f7e61faae532"
+    },
+    {
+      "path": "server/src/x2server/messages/appearance.py",
+      "size": 5114,
+      "sha256": "1aa4b601e884917a3a88d8a969900f1bf02376eadda5bf1c940f9615a6c9afd6",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/messages/appearance.py",
+      "current_status": "new_candidate",
+      "current_sha256": null
+    },
+    {
+      "path": "server/src/x2server/messages/battle.py",
+      "size": 5032,
+      "sha256": "22750ccc8e5ef72696cd9acc3f65c3d2a9e008d57c94da98329b54ab6a604379",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/messages/battle.py",
+      "current_status": "different",
+      "current_sha256": "2e0097b1e5c4861b2a2a3f64cbfeb2cef0930ce47690feca96758dcf67b85184"
+    },
+    {
+      "path": "server/src/x2server/messages/battle_shop.py",
+      "size": 2898,
+      "sha256": "cbaf1c8c7693b49ea43411c0720a19e398f6ac930f5d266fc4234db29d989fe7",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/messages/battle_shop.py",
+      "current_status": "new_candidate",
+      "current_sha256": null
+    },
+    {
+      "path": "server/src/x2server/messages/chat.py",
+      "size": 602,
+      "sha256": "4de1219a8caf0ffc3c4905da6df42e2332d813d4dbb9782f8b9d34e10a9557b1",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/messages/chat.py",
+      "current_status": "identical",
+      "current_sha256": "4de1219a8caf0ffc3c4905da6df42e2332d813d4dbb9782f8b9d34e10a9557b1"
+    },
+    {
+      "path": "server/src/x2server/messages/core.py",
+      "size": 13834,
+      "sha256": "1a60909478877a19b6fbbe1cefe383487c31aecbb2db940d86d24905e8672980",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/messages/core.py",
+      "current_status": "different",
+      "current_sha256": "11a9fea101cd0f8e0072627d0b196b3903ab565a0798de7cc8fb35823ce05898"
+    },
+    {
+      "path": "server/src/x2server/messages/economy.py",
+      "size": 7316,
+      "sha256": "2c2f6dcbc48ab2c8324bea528221a82e227f081a619b91823e3f755e87551cf9",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/messages/economy.py",
+      "current_status": "different",
+      "current_sha256": "f3a0a304481f4ee74ae78054a162269a6503eb81b0353a85197fe5403a329dc8"
+    },
+    {
+      "path": "server/src/x2server/messages/equipment.py",
+      "size": 1400,
+      "sha256": "3bd1ca7bf8ccec7d0370e848efa2b69f4e99be127031c892115864a2bbd9c7df",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/messages/equipment.py",
+      "current_status": "different",
+      "current_sha256": "df4bbbc53465fe28010a19811162debe3fd2d686785162964a0a6d5344cbb7d4"
+    },
+    {
+      "path": "server/src/x2server/messages/favor.py",
+      "size": 1594,
+      "sha256": "80eb30caa742252573f4c7c0d65f25589c367c67419e53cc07e6513d88f1c3b7",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/messages/favor.py",
+      "current_status": "new_candidate",
+      "current_sha256": null
+    },
+    {
+      "path": "server/src/x2server/messages/lobby.py",
+      "size": 14120,
+      "sha256": "12602bca830bc91e39685028d96617ae705dd9247bc903f6f57dd930f61f7948",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/messages/lobby.py",
+      "current_status": "different",
+      "current_sha256": "b8a57b7c271abf9d1691af9c17d13638d7299a4f51604d4eae118eae1b073159"
+    },
+    {
+      "path": "server/src/x2server/messages/progression.py",
+      "size": 2427,
+      "sha256": "ff5acec5f913853fadd218364c4adb487e23adca2e1d7c61a0dea98d57b99fc2",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/messages/progression.py",
+      "current_status": "different",
+      "current_sha256": "a6d3d0bc78f14a0dbc929c26654df63c3535ac8e7153a3d448aae64a5559db9a"
+    },
+    {
+      "path": "server/src/x2server/messages/README.md",
+      "size": 257,
+      "sha256": "d3f4b6486c1bb87734f23058c81d822871d96a3b1bb5e48dc5c136a0e8961cba",
+      "category": "document",
+      "current_equivalent": "src/x2server/messages/README.md",
+      "current_status": "identical",
+      "current_sha256": "d3f4b6486c1bb87734f23058c81d822871d96a3b1bb5e48dc5c136a0e8961cba"
+    },
+    {
+      "path": "server/src/x2server/messages/wish.py",
+      "size": 1480,
+      "sha256": "f2fc7b6c857acb34590877b7521b02f3c7235c6e7aa731b00c55e8528b0e6fd7",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/messages/wish.py",
+      "current_status": "identical",
+      "current_sha256": "f2fc7b6c857acb34590877b7521b02f3c7235c6e7aa731b00c55e8528b0e6fd7"
+    },
+    {
+      "path": "server/src/x2server/network/__init__.py",
+      "size": 68,
+      "sha256": "246ec8e748a7512e3ce2f60161c7c344338d0b28f5fad3646faddf4ff29c104c",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/network/__init__.py",
+      "current_status": "identical",
+      "current_sha256": "246ec8e748a7512e3ce2f60161c7c344338d0b28f5fad3646faddf4ff29c104c"
+    },
+    {
+      "path": "server/src/x2server/network/connection.py",
+      "size": 12121,
+      "sha256": "3386a5ac68d52ad11ffa614225128a25f224c847504a4a59184a474d4dc7b07e",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/network/connection.py",
+      "current_status": "different",
+      "current_sha256": "5dfa1117c6858e0d51af289fb72ed01ee796851aa7b5d2d1ab327c379a037bae"
+    },
+    {
+      "path": "server/src/x2server/network/dispatcher.py",
+      "size": 3687,
+      "sha256": "5e985308514a94e22e73b5310e49e269f1a875bcc13c43c95e116a6d5a73629f",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/network/dispatcher.py",
+      "current_status": "different",
+      "current_sha256": "71ffc823ebadbfc4a75bd67a26b214fc32515e201ef6a71f16defc74eb4d0051"
+    },
+    {
+      "path": "server/src/x2server/network/server.py",
+      "size": 6392,
+      "sha256": "aa5b6a189242ec246ce82644d7a0af92374f192e3c3fa57b5f42aadbe15d2f14",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/network/server.py",
+      "current_status": "different",
+      "current_sha256": "4387b4df0ef397c55a74f77132cd298e4dae3713fb6c66c4654ea01aa5f02781"
+    },
+    {
+      "path": "server/src/x2server/network/session.py",
+      "size": 1921,
+      "sha256": "45fba004625fd9e73a2ad7ffa51d4356ded4f33f9f496f48b52f18a966f8773a",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/network/session.py",
+      "current_status": "different",
+      "current_sha256": "e68f57f2b1aa680fc17cb77948553a96e31f4c34f58238d0423fd811466f6a2b"
+    },
+    {
+      "path": "server/src/x2server/observability/__init__.py",
+      "size": 77,
+      "sha256": "54e0b3fc756922ccf792d9531a5ac1d19db0f46dfade4b7d05685cd7947150a1",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/observability/__init__.py",
+      "current_status": "new_candidate",
+      "current_sha256": null
+    },
+    {
+      "path": "server/src/x2server/observability/capture.py",
+      "size": 6491,
+      "sha256": "8018fa312a51cd1dc4026debc36fb2b14a230f34add9d77c8b51eb30d72f28ec",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/observability/capture.py",
+      "current_status": "new_candidate",
+      "current_sha256": null
+    },
+    {
+      "path": "server/src/x2server/player/__init__.py",
+      "size": 37,
+      "sha256": "23c5b969519e0281b21352f146da4076cab6920675faacc7e962751e6beac3ae",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/player/__init__.py",
+      "current_status": "identical",
+      "current_sha256": "23c5b969519e0281b21352f146da4076cab6920675faacc7e962751e6beac3ae"
+    },
+    {
+      "path": "server/src/x2server/player/appearance.py",
+      "size": 14956,
+      "sha256": "3fadf60652846a72ef24d2fee0db31baf6e29b6c91f39e42bb34f357dfd82431",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/player/appearance.py",
+      "current_status": "new_candidate",
+      "current_sha256": null
+    },
+    {
+      "path": "server/src/x2server/player/battle.py",
+      "size": 21051,
+      "sha256": "8c0a90bacd86ee5ea11139e5ac344bb331475d3edd0ceb04504c6ff7e383ab1a",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/player/battle.py",
+      "current_status": "different",
+      "current_sha256": "70026779b734de6653374ec8c58c9abfed3ac61c8948a20a96243df98a320dca"
+    },
+    {
+      "path": "server/src/x2server/player/battle_entry.py",
+      "size": 9286,
+      "sha256": "57f86b7579ff669a3b8200231adcb8ca80127171cc79f730eb9cbc6a655075d3",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/player/battle_entry.py",
+      "current_status": "different",
+      "current_sha256": "b7adb49ee21ca118ada5a905fea54e85c84540f1c581930f19204f9ab1d87fa1"
+    },
+    {
+      "path": "server/src/x2server/player/battle_shop.py",
+      "size": 12490,
+      "sha256": "452c7f90900b1ab6e943e96f0c8044c3bc3dce2a0d87284e722af44482583aed",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/player/battle_shop.py",
+      "current_status": "new_candidate",
+      "current_sha256": null
+    },
+    {
+      "path": "server/src/x2server/player/chat.py",
+      "size": 1015,
+      "sha256": "f802cf97d31415ef990d719cf5ba1c32d189cd1b8fd0d9be19cac1b1e0148b5e",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/player/chat.py",
+      "current_status": "identical",
+      "current_sha256": "f802cf97d31415ef990d719cf5ba1c32d189cd1b8fd0d9be19cac1b1e0148b5e"
+    },
+    {
+      "path": "server/src/x2server/player/daily_rewards.py",
+      "size": 1461,
+      "sha256": "cbed67c1ba66a0c95cffe43a8a707bad384163019468ad1be47a9993023a7d1c",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/player/daily_rewards.py",
+      "current_status": "new_candidate",
+      "current_sha256": null
+    },
+    {
+      "path": "server/src/x2server/player/drop.py",
+      "size": 15722,
+      "sha256": "091df9d8f1f5ad4bde47a933e8cc2c804dfd911e3b6916aa3c997ac433552286",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/player/drop.py",
+      "current_status": "new_candidate",
+      "current_sha256": null
+    },
+    {
+      "path": "server/src/x2server/player/economy.py",
+      "size": 81261,
+      "sha256": "035c120605ba8ed9bcf3103e6d9ee648b84df49a2aa2c78a61248455620a8233",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/player/economy.py",
+      "current_status": "different",
+      "current_sha256": "53cc3c8d4840ba51fb45a75dac53fefb1e095b16a00d2ceea23e82981150a807"
+    },
+    {
+      "path": "server/src/x2server/player/equib.py",
+      "size": 9595,
+      "sha256": "76bb24c06b3e24548f69acad035e15ecfaefa20d05b3145cfb7778efee971f01",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/player/equib.py",
+      "current_status": "new_candidate",
+      "current_sha256": null
+    },
+    {
+      "path": "server/src/x2server/player/equipment.py",
+      "size": 8762,
+      "sha256": "f51cc776098fe5e3d246ce462f1c967b59fdea7cb8a177e663d97900c8c2fcf7",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/player/equipment.py",
+      "current_status": "different",
+      "current_sha256": "798fc8d2c1112965e2973b5f0fed86ccfca62049bcccb9dc54a554bfb16bf355"
+    },
+    {
+      "path": "server/src/x2server/player/favor.py",
+      "size": 8344,
+      "sha256": "8d79273cdd76d1c0cf3d62ba3fba4b7155811f9dd928df4cdf582de69310148a",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/player/favor.py",
+      "current_status": "new_candidate",
+      "current_sha256": null
+    },
+    {
+      "path": "server/src/x2server/player/hero.py",
+      "size": 3891,
+      "sha256": "c57a047cdb36837b3b9a0b7714425cf20867e51219d95065c39d14ea4c8f982b",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/player/hero.py",
+      "current_status": "different",
+      "current_sha256": "93a2e7189f1d794b0bee07df10b07f5b2a14175beef54616cd7b410fa9989a9e"
+    },
+    {
+      "path": "server/src/x2server/player/lobby.py",
+      "size": 7369,
+      "sha256": "85da618b71f19a0ee054a4e50e242f5f8821354e9b36417517619d10b7f1a881",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/player/lobby.py",
+      "current_status": "different",
+      "current_sha256": "002bfcb61b701d7d484ab30b15cf3f94b5aefd16c170758efd4f049b5e409750"
+    },
+    {
+      "path": "server/src/x2server/player/login.py",
+      "size": 19999,
+      "sha256": "89d3d88e95e35003408ef042a8dc560d910fb8166b6192a0d616613e57b16b97",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/player/login.py",
+      "current_status": "different",
+      "current_sha256": "3c3af2af4a88b00955a5dbe855960661a3a57b35df8942fffec22f20ca1a8993"
+    },
+    {
+      "path": "server/src/x2server/player/modifier.py",
+      "size": 24937,
+      "sha256": "d4b30cff920b891392ea13c371ab77d8385e7290e17a8b6c9648f16bfad5ef5b",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/player/modifier.py",
+      "current_status": "new_candidate",
+      "current_sha256": null
+    },
+    {
+      "path": "server/src/x2server/player/progression.py",
+      "size": 21615,
+      "sha256": "f913c710ffd2190de2acbb81ab9a4d7cfba37617bb0737f310de0d7182f59dd3",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/player/progression.py",
+      "current_status": "different",
+      "current_sha256": "55703ce7f8059c5fb2d19af9b770b46eb36963611774c963ea7732391307f21f"
+    },
+    {
+      "path": "server/src/x2server/player/server_clock.py",
+      "size": 571,
+      "sha256": "cafda3a87e34d623cade1205a48515b07895d29ec1915994f1e22dc8eeec77eb",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/player/server_clock.py",
+      "current_status": "identical",
+      "current_sha256": "cafda3a87e34d623cade1205a48515b07895d29ec1915994f1e22dc8eeec77eb"
+    },
+    {
+      "path": "server/src/x2server/player/skins.py",
+      "size": 14989,
+      "sha256": "1bcb634203a33501c011aaa9cad53f9ca6d841b6488f725df916a6853f13b9a2",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/player/skins.py",
+      "current_status": "new_candidate",
+      "current_sha256": null
+    },
+    {
+      "path": "server/src/x2server/player/store.py",
+      "size": 6820,
+      "sha256": "1703e2b7e86e52d43e6442097ac7b98fd5de38a137ac5c82072a60143edf5955",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/player/store.py",
+      "current_status": "different",
+      "current_sha256": "f2707ff2855d9c5562cafd5b65e923d8649c85bc48781bf7cbb8ab49ed3c9c33"
+    },
+    {
+      "path": "server/src/x2server/player/task_calendar.py",
+      "size": 754,
+      "sha256": "01ae2f69a83839ec883446f0feb0bff0fae5e216bbe09ad1cee7baacc7d0ac52",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/player/task_calendar.py",
+      "current_status": "identical",
+      "current_sha256": "01ae2f69a83839ec883446f0feb0bff0fae5e216bbe09ad1cee7baacc7d0ac52"
+    },
+    {
+      "path": "server/src/x2server/player/wish.py",
+      "size": 21856,
+      "sha256": "833a503eb0c2584cf5b1967a94861f399730a8e4fc1bd132635280085ac9ee99",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/player/wish.py",
+      "current_status": "different",
+      "current_sha256": "3ac4f80c1549cdad1382a70bbb5259dfea4e0fb76bf4853cd29436847575a839"
+    },
+    {
+      "path": "server/src/x2server/protocol/__init__.py",
+      "size": 52,
+      "sha256": "17d751b09fec57aedebc09fc937425d5bdbaade15e739e2bd626d193c6a8eb7c",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/protocol/__init__.py",
+      "current_status": "identical",
+      "current_sha256": "17d751b09fec57aedebc09fc937425d5bdbaade15e739e2bd626d193c6a8eb7c"
+    },
+    {
+      "path": "server/src/x2server/protocol/codec.py",
+      "size": 2906,
+      "sha256": "f7ac3534915e8b700db3248505b2785b52e1ac6d5a5b3a4c8be3ee6df06a01e5",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/protocol/codec.py",
+      "current_status": "identical",
+      "current_sha256": "f7ac3534915e8b700db3248505b2785b52e1ac6d5a5b3a4c8be3ee6df06a01e5"
+    },
+    {
+      "path": "server/src/x2server/protocol/crc.py",
+      "size": 290,
+      "sha256": "72ced348d4feb63a3a21bbfa7932f1e7159a41b267c23931b123b35c49ddc868",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/protocol/crc.py",
+      "current_status": "identical",
+      "current_sha256": "72ced348d4feb63a3a21bbfa7932f1e7159a41b267c23931b123b35c49ddc868"
+    },
+    {
+      "path": "server/src/x2server/protocol/errors.py",
+      "size": 745,
+      "sha256": "10299dd79d53473f546747acbbbba93c5f90e3f2f4a78de6943f24e275072589",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/protocol/errors.py",
+      "current_status": "identical",
+      "current_sha256": "10299dd79d53473f546747acbbbba93c5f90e3f2f4a78de6943f24e275072589"
+    },
+    {
+      "path": "server/src/x2server/protocol/framing.py",
+      "size": 5488,
+      "sha256": "290637a322a9327b980e92b4d1dc4a535f738de84a9acacc6af90668ea11e82a",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/protocol/framing.py",
+      "current_status": "identical",
+      "current_sha256": "290637a322a9327b980e92b4d1dc4a535f738de84a9acacc6af90668ea11e82a"
+    },
+    {
+      "path": "server/src/x2server/protocol/headers.py",
+      "size": 3329,
+      "sha256": "fa39cdf43df42b50194e183281cfbe5d63c359dc8f9e194680ebb9388ed2c94b",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/protocol/headers.py",
+      "current_status": "identical",
+      "current_sha256": "fa39cdf43df42b50194e183281cfbe5d63c359dc8f9e194680ebb9388ed2c94b"
+    },
+    {
+      "path": "server/src/x2server/protocol/packint.py",
+      "size": 2733,
+      "sha256": "f83a88124a5ab4d1e77a82775b4326ed97ab4b061a416220e6542ec3d786d5c7",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/protocol/packint.py",
+      "current_status": "identical",
+      "current_sha256": "f83a88124a5ab4d1e77a82775b4326ed97ab4b061a416220e6542ec3d786d5c7"
+    },
+    {
+      "path": "server/src/x2server/protocol/protobuf.py",
+      "size": 7120,
+      "sha256": "fd81780beea5d196a2fef0e2a09498bab26b507a4c8347bec67e5ddf8897f809",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/protocol/protobuf.py",
+      "current_status": "identical",
+      "current_sha256": "fd81780beea5d196a2fef0e2a09498bab26b507a4c8347bec67e5ddf8897f809"
+    },
+    {
+      "path": "server/src/x2server/protocol/recovered_ids.py",
+      "size": 30907,
+      "sha256": "7f222466e1aa04577d8b98483275681356e49bbb8842399027a8397976d44bff",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/protocol/recovered_ids.py",
+      "current_status": "new_candidate",
+      "current_sha256": null
+    },
+    {
+      "path": "server/src/x2server/protocol/registry.py",
+      "size": 9862,
+      "sha256": "58ec2e88242af71f8f6bf2ca27139fc9e389712cd48fcf3fa604dd5e3e2e9ff2",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/protocol/registry.py",
+      "current_status": "different",
+      "current_sha256": "973b02953b219e58b22eb4d433eb9318d90cbb04f675267295d3351e3a82a093"
+    },
+    {
+      "path": "server/src/x2server/protocol/types.py",
+      "size": 574,
+      "sha256": "60d8475f4d0640d0bbdcbda0b6652b04192a1c2fddb9d19d861d0ec0b340f1c1",
+      "category": "code_or_schema",
+      "current_equivalent": "src/x2server/protocol/types.py",
+      "current_status": "identical",
+      "current_sha256": "60d8475f4d0640d0bbdcbda0b6652b04192a1c2fddb9d19d861d0ec0b340f1c1"
+    },
+    {
+      "path": "tools/_adb.ps1",
+      "size": 5298,
+      "sha256": "35ea5c3d640e4790ae97eb3087d2a83e6d5849892f839ed03995121a4ec89f3d",
+      "category": "other",
+      "current_equivalent": null,
+      "current_status": "no_direct_mapping",
+      "current_sha256": null
+    },
+    {
+      "path": "tools/configure_client.ps1",
+      "size": 3201,
+      "sha256": "298a99363a10cc6d9a0f33f992863fcb97afe58618ed3daa250be2495a7072b8",
+      "category": "other",
+      "current_equivalent": null,
+      "current_status": "no_direct_mapping",
+      "current_sha256": null
+    },
+    {
+      "path": "tools/patch_gameconfig.py",
+      "size": 14111,
+      "sha256": "c704300aff1aad97a0337ed813f0a0dee4a2dbc2a17f183610838ccf7468c6f2",
+      "category": "code_or_schema",
+      "current_equivalent": null,
+      "current_status": "no_direct_mapping",
+      "current_sha256": null
+    },
+    {
+      "path": "tools/reconfigure_apk.py",
+      "size": 3807,
+      "sha256": "480cc48c0c56222a7401fa346a9e14059472d4e05542bbf1f5f3cc7f1852e7ff",
+      "category": "code_or_schema",
+      "current_equivalent": null,
+      "current_status": "no_direct_mapping",
+      "current_sha256": null
+    },
+    {
+      "path": "tools/setup.ps1",
+      "size": 2795,
+      "sha256": "7cc29eac8970a575814b60a431b86b018f09a13ba45be1942d3380a575b0b84f",
+      "category": "other",
+      "current_equivalent": null,
+      "current_status": "no_direct_mapping",
+      "current_sha256": null
+    },
+    {
+      "path": "tools/start_modifier.ps1",
+      "size": 1381,
+      "sha256": "66f46d198e81096f5643f203829a9cd9ab8b62d89c54b9e28f1578b8b26695f7",
+      "category": "other",
+      "current_equivalent": null,
+      "current_status": "no_direct_mapping",
+      "current_sha256": null
+    },
+    {
+      "path": "tools/start_server.ps1",
+      "size": 4533,
+      "sha256": "5a7aa12b854352365bc8d23df804cae9b45d55a8a59b85d7953ddc4534468c3e",
+      "category": "other",
+      "current_equivalent": null,
+      "current_status": "no_direct_mapping",
+      "current_sha256": null
+    },
+    {
+      "path": "tools/stop_server.ps1",
+      "size": 1566,
+      "sha256": "fe636f740ecbdc44d5c1a2e01c10e0285996d1aaf5602fc0a5c92a34bd0b1a2b",
+      "category": "other",
+      "current_equivalent": null,
+      "current_status": "no_direct_mapping",
+      "current_sha256": null
+    },
+    {
+      "path": "tools/x2_modifier.py",
+      "size": 39070,
+      "sha256": "5d056e65bae94c46fabdc3943bc6edf79bacc25f350535220afb3576050826b1",
+      "category": "code_or_schema",
+      "current_equivalent": null,
+      "current_status": "no_direct_mapping",
+      "current_sha256": null
+    },
+    {
+      "path": "VERSION.txt",
+      "size": 706,
+      "sha256": "49821aa4131bbb60c2f650cbcf72a2a474b9fbf617e3aac9210537b5e62a693a",
+      "category": "other",
+      "current_equivalent": null,
+      "current_status": "no_direct_mapping",
+      "current_sha256": null
+    },
+    {
+      "path": "有什么不一样及需解决的问题.txt",
+      "size": 809,
+      "sha256": "b6307ad9824a783ebc00cf44beeb1f765c9ae00d22f9634a0c5eab973a78f275",
+      "category": "other",
+      "current_equivalent": null,
+      "current_status": "no_direct_mapping",
+      "current_sha256": null
+    }
+  ],
+  "deletion_intent": "not inferred from absent files in a snapshot"
+}
