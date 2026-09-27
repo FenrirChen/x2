@@ -89,7 +89,8 @@ class ProgressionService:
         self.economy.ensure_periods(player_id)
         name = CORE_MESSAGE_REGISTRY.name_for(packet.message_id)
         req = PROGRESSION_SCHEMAS[name].decode(packet.body)
-        logging.getLogger("x2.progression").info("growth request %s player=%s hero=%s", name, player_id, req.get("id",req.get("heroId")))
+        logging.getLogger("x2.progression").info("growth request %s player=%s hero=%s opt=%s skill=%s",
+            name, player_id, req.get("id", req.get("heroId")), req.get("opt"), req.get("skillId"))
         response = name.replace("C2L_", "L2C_")
         schema = PROGRESSION_SCHEMAS[response]
         values = {"code": 13, **{k: v for k, v in req.items() if k != "heroName"}}
@@ -233,7 +234,9 @@ class ProgressionService:
                     self.economy._event(player_id, "growth:"+key, event, hero["id"], 1)
                 values["code"] = 10
                 self.store.db.execute("INSERT INTO progression_receipts VALUES (?,?,?)", (player_id,key,schema.encode(values)))
-        except UnresolvedEconomy:
+        except UnresolvedEconomy as exc:
+            logging.getLogger("x2.progression").info("growth rejected %s player=%s hero=%s reason=%s",
+                name, player_id, req.get("id", req.get("heroId")), exc)
             values["code"] = 13
             return OutboundMessage(response,values)
         pushes = self.pushes(player_id)

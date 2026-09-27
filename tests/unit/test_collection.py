@@ -41,7 +41,7 @@ def test_collection_claim_requires_every_owned_hero_and_persists(env):
         reopened.close()
 
 
-def test_unresolved_medal_reward_rejects_without_claim(env):
+def test_shaojiang_medal_chest_claims_once(env):
     store, economy, ctx = env
     service = CollectionService(store, economy)
     p = store.get(1)
@@ -49,6 +49,9 @@ def test_unresolved_medal_reward_rejects_without_claim(env):
         [{"id": 1014, "state": 2, "level": 1, "star": 1}]), p["revision"])
     response = asyncio.run(service.claim(ctx, packet({"collectionAwardID": 133103},
         name="C2L_GetCollectionAward")))
-    assert response.values["code"] == 13
-    assert service.claimed(1) == []
-    assert store.db.execute("SELECT COUNT(*) FROM economy_grants WHERE source='collection:133103'").fetchone()[0] == 0
+    assert response.values["code"] == 10
+    assert service.claimed(1) == [133103]
+    assert rewards(response.values["rewardData"])[1260015] == 1
+    assert store.db.execute("SELECT quantity FROM inventory WHERE item_id=1260015").fetchone()[0] == 1
+    assert asyncio.run(service.claim(ctx, packet({"collectionAwardID": 133103},
+        name="C2L_GetCollectionAward"))).values["code"] == 13

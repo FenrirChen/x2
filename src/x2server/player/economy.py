@@ -8,7 +8,7 @@ import secrets
 import time
 from datetime import datetime, timedelta, timezone
 
-from x2server.messages.economy import ECONOMY_SCHEMAS, ITEM, REWARD, REWARD_ITEM, TASK, FINISH_REQUEST, FINISH_RESULT
+from x2server.messages.economy import ECONOMY_SCHEMAS, ITEM, REWARD, REWARD_ITEM, TASK, TREASURE_BOX, FINISH_REQUEST, FINISH_RESULT
 from x2server.messages.lobby import LOBBY_SCHEMAS, MISSION_PAIR, MISSION_TYPE
 from x2server.network.dispatcher import OutboundMessage
 from x2server.protocol.errors import ProtocolError
@@ -31,6 +31,7 @@ class EconomyService:
     CURRENCIES = {1237901: "gold", 1237902: "crystal", 1237906: "equip_exp", 1237907: "hero_exp",
                   1237908: "exp", 1237910: "daily_activity", 1237911: "week_activity"}
     STACKABLE_REWARD_TYPES = frozenset((5, 12, 13, 14, 17, 22, 23, 24, 25, 33, 34, 40, 41))
+    ACTIVITY_FIELDS = {1: "daily_activity", 2: "week_activity"}
 
     def __init__(self, store, clock=time.time):
         self.store = store
@@ -74,6 +75,9 @@ class EconomyService:
                 claimed INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(player_id,task_id))""")
             store.db.execute("""CREATE TABLE IF NOT EXISTS economy_events (
                 player_id INTEGER NOT NULL, event_key TEXT NOT NULL, PRIMARY KEY(player_id,event_key))""")
+            store.db.execute("""CREATE TABLE IF NOT EXISTS task_boxes (
+                player_id INTEGER NOT NULL, kind INTEGER NOT NULL, period_start INTEGER NOT NULL,
+                box_id INTEGER NOT NULL, PRIMARY KEY(player_id,kind,period_start,box_id))""")
             store.db.execute("""CREATE TABLE IF NOT EXISTS battle_unresolved_rewards (
                 uuid TEXT NOT NULL, player_id INTEGER NOT NULL, section_id INTEGER NOT NULL,
                 reward_group INTEGER NOT NULL, reason TEXT NOT NULL,
@@ -221,7 +225,7 @@ class EconomyService:
                     item_kind = self.items[item].get("ItemType", {}).get("value")
                     account_currency = (item_kind == 16 and
                         self.items[item].get("ItemUseScence", {}).get("value") == 1)
-                    if (item_kind not in self.STACKABLE_REWARD_TYPES
+                    if (item_kind not in self.STACKABLE_REWARD_TYPES and item != 1260015
                             and item not in self.CURRENCIES and item != 1237900
                             and not account_currency):
                         if deferred is not None:
@@ -296,7 +300,7 @@ class EconomyService:
                     (player_id, item)).fetchone()[0]
                 if quantity > 2**31 - 1:
                     raise UnresolvedEconomy("currency overflow")
-            elif kind not in self.STACKABLE_REWARD_TYPES:
+            elif kind not in self.STACKABLE_REWARD_TYPES and item != 1260015:
                 raise UnresolvedEconomy("unrecovered reward destination")
             else:
                 self.store.db.execute("""INSERT INTO inventory VALUES (?,?,?)
@@ -340,7 +344,59 @@ class EconomyService:
             target = self.catalog["task_conditions"][str(task_id)]["CompleteNum"]
             result.append(TASK.encode({"taskId": task_id, "taskStatus": 4 if claimed else 3 if progress >= target else 2,
                 "taskProgress": min(progress, target), "taskRefreshTime": period_end, "finishTimes": int(bool(claimed)), "stage": 0}))
-        return {"code": 10, "type": kind, "taskList": result}
+        return {"code": 10, "type": kind, "taskList": result,
+            "boxList": self.activity_boxes(player_id, kind)}
+
+    def activity_config(self, kind):
+        control = self.catalog["task_control"]
+        if kind == 1:
+            return control["DailyActiveValueNumber"], control["DailyGiftGroup"]
+        if kind == 2:
+            return control["WeeklyActiveValueNumber"], control["WeeklyGiftGroup"]
+        return (), ()
+
+    def activity_boxes(self, player_id, kind):
+        self.ensure_periods(player_id)
+        thresholds, _ = self.activity_config(kind)
+        if not thresholds:
+            return []
+        period = self.store.db.execute("SELECT start FROM task_periods WHERE player_id=? AND kind=?",
+                                       (player_id, kind)).fetchone()
+        picked = {r[0] for r in self.store.db.execute(
+            "SELECT box_id FROM task_boxes WHERE player_id=? AND kind=? AND period_start=?",
+            (player_id, kind, period[0]))} if period else set()
+        activity = self.store.get(player_id)["snapshot"].get(self.ACTIVITY_FIELDS[kind], 0)
+        return [TREASURE_BOX.encode({"boxId": index, "pickStatus":
+            2 if index in picked else 1 if activity >= threshold else 0, "activityId": 0})
+            for index, threshold in enumerate(thresholds)]
+
+    def pick_treasure_box(self, player_id, request):
+        kind, box_id = request.get("type", 0), request.get("boxId", -1)
+        result = {"code": 13, "boxId": box_id, "type": kind, "param": request.get("param", 0),
+                  "activityId": request.get("activityId", 0), "rewardData": b""}
+        thresholds, groups = self.activity_config(kind)
+        if (box_id not in range(len(thresholds)) or request.get("activityId", 0)
+                or request.get("param", 0)):
+            return OutboundMessage("L2C_PickTreasureBox", result)
+        try:
+            rewards = self.gifts([groups[box_id]])
+            with self.transaction():
+                self.ensure_periods(player_id)
+                period = self.store.db.execute("SELECT start FROM task_periods WHERE player_id=? AND kind=?",
+                                               (player_id, kind)).fetchone()
+                if not period or self.store.get(player_id)["snapshot"].get(self.ACTIVITY_FIELDS[kind], 0) < thresholds[box_id]:
+                    return OutboundMessage("L2C_PickTreasureBox", result)
+                inserted = self.store.db.execute("INSERT OR IGNORE INTO task_boxes VALUES (?,?,?,?)",
+                    (player_id, kind, period[0], box_id))
+                if not inserted.rowcount:
+                    return OutboundMessage("L2C_PickTreasureBox", result)
+                self._grant(player_id, f"box:{kind}:{period[0]}:{box_id}", rewards)
+                result.update(code=10, rewardData=self.reward_bytes(rewards))
+        except UnresolvedEconomy:
+            return OutboundMessage("L2C_PickTreasureBox", result)
+        return OutboundMessage("L2C_PickTreasureBox", result,
+            pushes=self.pushes(player_id) + (OutboundMessage("L2C_TreasureBoxUpdate",
+                {"type": kind, "boxList": self.activity_boxes(player_id, kind)}),))
 
     def record_event(self, player_id, key, condition_type, value=0, amount=1, value2=0):
         """Internal authoritative events only. No client-supplied progress endpoint."""
@@ -651,6 +707,6 @@ class EconomyService:
             # confirmed goods, reject the query before that success-only path.
             return OutboundMessage(response_name, {"code": 13, "shopId": shop})
         if name == "C2L_PickTreasureBox":
-            return OutboundMessage(response_name, {"code": 13, **request, "rewardData": b""})
+            return self.pick_treasure_box(player_id, request)
         # Known shop routes reply explicitly, never time out or charge for unknown data.
         return OutboundMessage(response_name, {"code": 13, **{k: v for k, v in request.items() if k in ("shopId", "goodsId", "buyNum")}})

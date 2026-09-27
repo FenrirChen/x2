@@ -1,0 +1,1802 @@
+{
+  "source": "client GiftPackage/Gift static tables; operator-selected first 34 packages",
+  "packages": [
+    {
+      "GiftPackageID": 2700000,
+      "GiftPackageNameID": 27009001,
+      "GiftPackageIcon": "RechargeGiftIcon1/LiBao_XuYuanBi_01",
+      "GiftPackageOrder": 1,
+      "GiftPlace": {
+        "value": 1,
+        "enum": "E_ShopGift"
+      },
+      "GiftLabel": [
+        1
+      ],
+      "GiftPackageType": {
+        "value": 2,
+        "enum": "E_FreeDaily"
+      },
+      "Param1": [
+        7
+      ],
+      "Param2": [
+        781005
+      ],
+      "Times": 1,
+      "CurrencyType": 902,
+      "GiftID": [
+        781004
+      ]
+    },
+    {
+      "GiftPackageID": 2700001,
+      "GiftPackageNameID": 27000011,
+      "GiftPackageIcon": "RechargeGiftIcon1/LiBao_YueKa",
+      "GiftPackageOrder": 2,
+      "GiftPlace": {
+        "value": 1,
+        "enum": "E_ShopGift"
+      },
+      "GiftLabel": [
+        0,
+        4
+      ],
+      "GiftPackageType": {
+        "value": 1,
+        "enum": "E_MonthCard"
+      },
+      "Param1": [
+        30
+      ],
+      "Param2": [
+        100
+      ],
+      "Param3": [
+        1324001,
+        1324002,
+        1324003,
+        1324004,
+        1324005,
+        1324006,
+        1324007,
+        1324008,
+        1324009,
+        1324010
+      ],
+      "Param4": [
+        1324101,
+        1324102,
+        1324103
+      ],
+      "CurrencyType": 919,
+      "Price": 22099,
+      "GiftID": [
+        781002
+      ],
+      "GiftPrimePrice": 1600
+    },
+    {
+      "GiftPackageID": 2700002,
+      "GiftPackageNameID": 27000021,
+      "GiftPackageIcon": "RechargeGiftIcon1/LiBao_Buy_01",
+      "GiftPackageOrder": 98,
+      "GiftPlace": {
+        "value": 1,
+        "enum": "E_ShopGift"
+      },
+      "GiftLabel": [
+        4
+      ],
+      "GiftPackageType": {
+        "value": 3,
+        "enum": "E_Level"
+      },
+      "Param1": [
+        5
+      ],
+      "Param2": [
+        1
+      ],
+      "Param3": [
+        2700003
+      ],
+      "Times": 1,
+      "CurrencyType": 902,
+      "Price": 60,
+      "GiftID": [
+        781006
+      ],
+      "GiftPrimePrice": 417
+    },
+    {
+      "GiftPackageID": 2700003,
+      "GiftPackageNameID": 27000031,
+      "GiftPackageIcon": "RechargeGiftIcon1/LiBao_Buy_01",
+      "GiftPackageOrder": 98,
+      "GiftPlace": {
+        "value": 1,
+        "enum": "E_ShopGift"
+      },
+      "GiftLabel": [
+        4
+      ],
+      "GiftPackageType": {
+        "value": 3,
+        "enum": "E_Level"
+      },
+      "Param1": [
+        10
+      ],
+      "Param2": [
+        1
+      ],
+      "Param3": [
+        2700004
+      ],
+      "Times": 1,
+      "CurrencyType": 902,
+      "Price": 120,
+      "GiftID": [
+        781007
+      ],
+      "GiftPrimePrice": 283
+    },
+    {
+      "GiftPackageID": 2700004,
+      "GiftPackageNameID": 27000041,
+      "GiftPackageIcon": "RechargeGiftIcon1/LiBao_Buy_01",
+      "GiftPackageOrder": 98,
+      "GiftPlace": {
+        "value": 1,
+        "enum": "E_ShopGift"
+      },
+      "GiftLabel": [
+        4
+      ],
+      "GiftPackageType": {
+        "value": 3,
+        "enum": "E_Level"
+      },
+      "Param1": [
+        15
+      ],
+      "Param2": [
+        1
+      ],
+      "Param3": [
+        2700005
+      ],
+      "Times": 1,
+      "CurrencyType": 902,
+      "Price": 180,
+      "GiftID": [
+        781008
+      ],
+      "GiftPrimePrice": 233
+    },
+    {
+      "GiftPackageID": 2700005,
+      "GiftPackageNameID": 27000051,
+      "GiftPackageIcon": "RechargeGiftIcon1/LiBao_Buy_01",
+      "GiftPackageOrder": 98,
+      "GiftPlace": {
+        "value": 1,
+        "enum": "E_ShopGift"
+      },
+      "GiftLabel": [
+        4
+      ],
+      "GiftPackageType": {
+        "value": 3,
+        "enum": "E_Level"
+      },
+      "Param1": [
+        20
+      ],
+      "Param2": [
+        1
+      ],
+      "Param3": [
+        2700006
+      ],
+      "Times": 1,
+      "CurrencyType": 902,
+      "Price": 240,
+      "GiftID": [
+        781009
+      ],
+      "GiftPrimePrice": 196
+    },
+    {
+      "GiftPackageID": 2700006,
+      "GiftPackageNameID": 27000061,
+      "GiftPackageIcon": "RechargeGiftIcon1/LiBao_Buy_01",
+      "GiftPackageOrder": 98,
+      "GiftPlace": {
+        "value": 1,
+        "enum": "E_ShopGift"
+      },
+      "GiftLabel": [
+        4
+      ],
+      "GiftPackageType": {
+        "value": 3,
+        "enum": "E_Level"
+      },
+      "Param1": [
+        25
+      ],
+      "Param2": [
+        1
+      ],
+      "Param3": [
+        2700007
+      ],
+      "Times": 1,
+      "CurrencyType": 902,
+      "Price": 300,
+      "GiftID": [
+        781010
+      ],
+      "GiftPrimePrice": 200
+    },
+    {
+      "GiftPackageID": 2700007,
+      "GiftPackageNameID": 27000071,
+      "GiftPackageIcon": "RechargeGiftIcon1/LiBao_Buy_01",
+      "GiftPackageOrder": 98,
+      "GiftPlace": {
+        "value": 1,
+        "enum": "E_ShopGift"
+      },
+      "GiftLabel": [
+        4
+      ],
+      "GiftPackageType": {
+        "value": 3,
+        "enum": "E_Level"
+      },
+      "Param1": [
+        30
+      ],
+      "Param2": [
+        1
+      ],
+      "Param3": [
+        2700008
+      ],
+      "Times": 1,
+      "CurrencyType": 902,
+      "Price": 360,
+      "GiftID": [
+        781011
+      ],
+      "GiftPrimePrice": 196
+    },
+    {
+      "GiftPackageID": 2700008,
+      "GiftPackageNameID": 27000081,
+      "GiftPackageIcon": "RechargeGiftIcon1/LiBao_Buy_01",
+      "GiftPackageOrder": 98,
+      "GiftPlace": {
+        "value": 1,
+        "enum": "E_ShopGift"
+      },
+      "GiftLabel": [
+        4
+      ],
+      "GiftPackageType": {
+        "value": 3,
+        "enum": "E_Level"
+      },
+      "Param1": [
+        35
+      ],
+      "Param2": [
+        1
+      ],
+      "Param3": [
+        2700009
+      ],
+      "Times": 1,
+      "CurrencyType": 902,
+      "Price": 420,
+      "GiftID": [
+        781012
+      ],
+      "GiftPrimePrice": 198
+    },
+    {
+      "GiftPackageID": 2700009,
+      "GiftPackageNameID": 27000091,
+      "GiftPackageIcon": "RechargeGiftIcon1/LiBao_Buy_01",
+      "GiftPackageOrder": 98,
+      "GiftPlace": {
+        "value": 1,
+        "enum": "E_ShopGift"
+      },
+      "GiftLabel": [
+        4
+      ],
+      "GiftPackageType": {
+        "value": 3,
+        "enum": "E_Level"
+      },
+      "Param1": [
+        40
+      ],
+      "Param2": [
+        1
+      ],
+      "Param3": [
+        2700010
+      ],
+      "Times": 1,
+      "CurrencyType": 902,
+      "Price": 480,
+      "GiftID": [
+        781013
+      ],
+      "GiftPrimePrice": 196
+    },
+    {
+      "GiftPackageID": 2700010,
+      "GiftPackageNameID": 27000101,
+      "GiftPackageIcon": "RechargeGiftIcon1/LiBao_Buy_01",
+      "GiftPackageOrder": 98,
+      "GiftPlace": {
+        "value": 1,
+        "enum": "E_ShopGift"
+      },
+      "GiftLabel": [
+        4
+      ],
+      "GiftPackageType": {
+        "value": 3,
+        "enum": "E_Level"
+      },
+      "Param1": [
+        45
+      ],
+      "Param2": [
+        1
+      ],
+      "Param3": [
+        2700011
+      ],
+      "Times": 1,
+      "CurrencyType": 902,
+      "Price": 540,
+      "GiftID": [
+        781014
+      ],
+      "GiftPrimePrice": 213
+    },
+    {
+      "GiftPackageID": 2700011,
+      "GiftPackageNameID": 27000111,
+      "GiftPackageIcon": "RechargeGiftIcon1/LiBao_Buy_01",
+      "GiftPackageOrder": 98,
+      "GiftPlace": {
+        "value": 1,
+        "enum": "E_ShopGift"
+      },
+      "GiftLabel": [
+        4
+      ],
+      "GiftPackageType": {
+        "value": 3,
+        "enum": "E_Level"
+      },
+      "Param1": [
+        50
+      ],
+      "Param2": [
+        1
+      ],
+      "Param3": [
+        2700012
+      ],
+      "Times": 1,
+      "CurrencyType": 902,
+      "Price": 600,
+      "GiftID": [
+        781015
+      ],
+      "GiftPrimePrice": 223
+    },
+    {
+      "GiftPackageID": 2700012,
+      "GiftPackageNameID": 27000121,
+      "GiftPackageIcon": "RechargeGiftIcon1/LiBao_Buy_01",
+      "GiftPackageOrder": 98,
+      "GiftPlace": {
+        "value": 1,
+        "enum": "E_ShopGift"
+      },
+      "GiftLabel": [
+        4
+      ],
+      "GiftPackageType": {
+        "value": 3,
+        "enum": "E_Level"
+      },
+      "Param1": [
+        55
+      ],
+      "Param2": [
+        1
+      ],
+      "Param3": [
+        2700013
+      ],
+      "Times": 1,
+      "CurrencyType": 902,
+      "Price": 750,
+      "GiftID": [
+        781016
+      ],
+      "GiftPrimePrice": 225
+    },
+    {
+      "GiftPackageID": 2700013,
+      "GiftPackageNameID": 27000131,
+      "GiftPackageIcon": "RechargeGiftIcon1/LiBao_Buy_01",
+      "GiftPackageOrder": 98,
+      "GiftPlace": {
+        "value": 1,
+        "enum": "E_ShopGift"
+      },
+      "GiftLabel": [
+        4
+      ],
+      "GiftPackageType": {
+        "value": 3,
+        "enum": "E_Level"
+      },
+      "Param1": [
+        60
+      ],
+      "Param2": [
+        1
+      ],
+      "Param3": [
+        2700014
+      ],
+      "Times": 1,
+      "CurrencyType": 902,
+      "Price": 900,
+      "GiftID": [
+        781017
+      ],
+      "GiftPrimePrice": 206
+    },
+    {
+      "GiftPackageID": 2700014,
+      "GiftPackageNameID": 27000141,
+      "GiftPackageIcon": "RechargeGiftIcon1/LiBao_Buy_01",
+      "GiftPackageOrder": 98,
+      "GiftPlace": {
+        "value": 1,
+        "enum": "E_ShopGift"
+      },
+      "GiftLabel": [
+        4
+      ],
+      "GiftPackageType": {
+        "value": 3,
+        "enum": "E_Level"
+      },
+      "Param1": [
+        65
+      ],
+      "Param2": [
+        1
+      ],
+      "Param3": [
+        2700015
+      ],
+      "Times": 1,
+      "CurrencyType": 902,
+      "Price": 1050,
+      "GiftID": [
+        781018
+      ],
+      "GiftPrimePrice": 195
+    },
+    {
+      "GiftPackageID": 2700015,
+      "GiftPackageNameID": 27000151,
+      "GiftPackageIcon": "RechargeGiftIcon1/LiBao_Buy_01",
+      "GiftPackageOrder": 98,
+      "GiftPlace": {
+        "value": 1,
+        "enum": "E_ShopGift"
+      },
+      "GiftLabel": [
+        4
+      ],
+      "GiftPackageType": {
+        "value": 3,
+        "enum": "E_Level"
+      },
+      "Param1": [
+        70
+      ],
+      "Param2": [
+        1
+      ],
+      "Param3": [
+        2700016
+      ],
+      "Times": 1,
+      "CurrencyType": 902,
+      "Price": 1200,
+      "GiftID": [
+        781019
+      ],
+      "GiftPrimePrice": 212
+    },
+    {
+      "GiftPackageID": 2700016,
+      "GiftPackageNameID": 27000161,
+      "GiftPackageIcon": "RechargeGiftIcon1/LiBao_Buy_01",
+      "GiftPackageOrder": 98,
+      "GiftPlace": {
+        "value": 1,
+        "enum": "E_ShopGift"
+      },
+      "GiftLabel": [
+        4
+      ],
+      "GiftPackageType": {
+        "value": 3,
+        "enum": "E_Level"
+      },
+      "Param1": [
+        75
+      ],
+      "Param2": [
+        1
+      ],
+      "Param3": [
+        2700017
+      ],
+      "Times": 1,
+      "CurrencyType": 902,
+      "Price": 1500,
+      "GiftID": [
+        781020
+      ],
+      "GiftPrimePrice": 212
+    },
+    {
+      "GiftPackageID": 2700017,
+      "GiftPackageNameID": 27000171,
+      "GiftPackageIcon": "RechargeGiftIcon1/LiBao_Buy_01",
+      "GiftPackageOrder": 98,
+      "GiftPlace": {
+        "value": 1,
+        "enum": "E_ShopGift"
+      },
+      "GiftLabel": [
+        4
+      ],
+      "GiftPackageType": {
+        "value": 3,
+        "enum": "E_Level"
+      },
+      "Param1": [
+        80
+      ],
+      "Param2": [
+        1
+      ],
+      "Times": 1,
+      "CurrencyType": 902,
+      "Price": 1800,
+      "GiftID": [
+        781021
+      ],
+      "GiftPrimePrice": 213
+    },
+    {
+      "GiftPackageID": 2700018,
+      "GiftPackageNameID": 27000181,
+      "GiftPackageIcon": "RechargeGiftIcon1/LiBao_Free_01",
+      "GiftPackageOrder": 99,
+      "GiftPlace": {
+        "value": 1,
+        "enum": "E_ShopGift"
+      },
+      "GiftLabel": [
+        4
+      ],
+      "GiftPackageType": {
+        "value": 3,
+        "enum": "E_Level"
+      },
+      "Param1": [
+        5
+      ],
+      "Param2": [
+        2
+      ],
+      "Param3": [
+        2700019
+      ],
+      "Times": 1,
+      "CurrencyType": 902,
+      "GiftID": [
+        781022
+      ]
+    },
+    {
+      "GiftPackageID": 2700019,
+      "GiftPackageNameID": 27000191,
+      "GiftPackageIcon": "RechargeGiftIcon1/LiBao_Free_01",
+      "GiftPackageOrder": 99,
+      "GiftPlace": {
+        "value": 1,
+        "enum": "E_ShopGift"
+      },
+      "GiftLabel": [
+        4
+      ],
+      "GiftPackageType": {
+        "value": 3,
+        "enum": "E_Level"
+      },
+      "Param1": [
+        10
+      ],
+      "Param2": [
+        2
+      ],
+      "Param3": [
+        2700020
+      ],
+      "Times": 1,
+      "CurrencyType": 902,
+      "GiftID": [
+        781023
+      ]
+    },
+    {
+      "GiftPackageID": 2700020,
+      "GiftPackageNameID": 27000201,
+      "GiftPackageIcon": "RechargeGiftIcon1/LiBao_Free_01",
+      "GiftPackageOrder": 99,
+      "GiftPlace": {
+        "value": 1,
+        "enum": "E_ShopGift"
+      },
+      "GiftLabel": [
+        4
+      ],
+      "GiftPackageType": {
+        "value": 3,
+        "enum": "E_Level"
+      },
+      "Param1": [
+        15
+      ],
+      "Param2": [
+        2
+      ],
+      "Param3": [
+        2700021
+      ],
+      "Times": 1,
+      "CurrencyType": 902,
+      "GiftID": [
+        781024
+      ]
+    },
+    {
+      "GiftPackageID": 2700021,
+      "GiftPackageNameID": 27000211,
+      "GiftPackageIcon": "RechargeGiftIcon1/LiBao_Free_01",
+      "GiftPackageOrder": 99,
+      "GiftPlace": {
+        "value": 1,
+        "enum": "E_ShopGift"
+      },
+      "GiftLabel": [
+        4
+      ],
+      "GiftPackageType": {
+        "value": 3,
+        "enum": "E_Level"
+      },
+      "Param1": [
+        20
+      ],
+      "Param2": [
+        2
+      ],
+      "Param3": [
+        2700022
+      ],
+      "Times": 1,
+      "CurrencyType": 902,
+      "GiftID": [
+        781025
+      ]
+    },
+    {
+      "GiftPackageID": 2700022,
+      "GiftPackageNameID": 27000221,
+      "GiftPackageIcon": "RechargeGiftIcon1/LiBao_Free_01",
+      "GiftPackageOrder": 99,
+      "GiftPlace": {
+        "value": 1,
+        "enum": "E_ShopGift"
+      },
+      "GiftLabel": [
+        4
+      ],
+      "GiftPackageType": {
+        "value": 3,
+        "enum": "E_Level"
+      },
+      "Param1": [
+        25
+      ],
+      "Param2": [
+        2
+      ],
+      "Param3": [
+        2700023
+      ],
+      "Times": 1,
+      "CurrencyType": 902,
+      "GiftID": [
+        781026
+      ]
+    },
+    {
+      "GiftPackageID": 2700023,
+      "GiftPackageNameID": 27000231,
+      "GiftPackageIcon": "RechargeGiftIcon1/LiBao_Free_01",
+      "GiftPackageOrder": 99,
+      "GiftPlace": {
+        "value": 1,
+        "enum": "E_ShopGift"
+      },
+      "GiftLabel": [
+        4
+      ],
+      "GiftPackageType": {
+        "value": 3,
+        "enum": "E_Level"
+      },
+      "Param1": [
+        30
+      ],
+      "Param2": [
+        2
+      ],
+      "Param3": [
+        2700024
+      ],
+      "Times": 1,
+      "CurrencyType": 902,
+      "GiftID": [
+        781027
+      ]
+    },
+    {
+      "GiftPackageID": 2700024,
+      "GiftPackageNameID": 27000241,
+      "GiftPackageIcon": "RechargeGiftIcon1/LiBao_Free_01",
+      "GiftPackageOrder": 99,
+      "GiftPlace": {
+        "value": 1,
+        "enum": "E_ShopGift"
+      },
+      "GiftLabel": [
+        4
+      ],
+      "GiftPackageType": {
+        "value": 3,
+        "enum": "E_Level"
+      },
+      "Param1": [
+        35
+      ],
+      "Param2": [
+        2
+      ],
+      "Param3": [
+        2700025
+      ],
+      "Times": 1,
+      "CurrencyType": 902,
+      "GiftID": [
+        781028
+      ]
+    },
+    {
+      "GiftPackageID": 2700025,
+      "GiftPackageNameID": 27000251,
+      "GiftPackageIcon": "RechargeGiftIcon1/LiBao_Free_01",
+      "GiftPackageOrder": 99,
+      "GiftPlace": {
+        "value": 1,
+        "enum": "E_ShopGift"
+      },
+      "GiftLabel": [
+        4
+      ],
+      "GiftPackageType": {
+        "value": 3,
+        "enum": "E_Level"
+      },
+      "Param1": [
+        40
+      ],
+      "Param2": [
+        2
+      ],
+      "Param3": [
+        2700026
+      ],
+      "Times": 1,
+      "CurrencyType": 902,
+      "GiftID": [
+        781029
+      ]
+    },
+    {
+      "GiftPackageID": 2700026,
+      "GiftPackageNameID": 27000261,
+      "GiftPackageIcon": "RechargeGiftIcon1/LiBao_Free_01",
+      "GiftPackageOrder": 99,
+      "GiftPlace": {
+        "value": 1,
+        "enum": "E_ShopGift"
+      },
+      "GiftLabel": [
+        4
+      ],
+      "GiftPackageType": {
+        "value": 3,
+        "enum": "E_Level"
+      },
+      "Param1": [
+        45
+      ],
+      "Param2": [
+        2
+      ],
+      "Param3": [
+        2700027
+      ],
+      "Times": 1,
+      "CurrencyType": 902,
+      "GiftID": [
+        781030
+      ]
+    },
+    {
+      "GiftPackageID": 2700027,
+      "GiftPackageNameID": 27000271,
+      "GiftPackageIcon": "RechargeGiftIcon1/LiBao_Free_01",
+      "GiftPackageOrder": 99,
+      "GiftPlace": {
+        "value": 1,
+        "enum": "E_ShopGift"
+      },
+      "GiftLabel": [
+        4
+      ],
+      "GiftPackageType": {
+        "value": 3,
+        "enum": "E_Level"
+      },
+      "Param1": [
+        50
+      ],
+      "Param2": [
+        2
+      ],
+      "Param3": [
+        2700028
+      ],
+      "Times": 1,
+      "CurrencyType": 902,
+      "GiftID": [
+        781031
+      ]
+    },
+    {
+      "GiftPackageID": 2700028,
+      "GiftPackageNameID": 27000281,
+      "GiftPackageIcon": "RechargeGiftIcon1/LiBao_Free_01",
+      "GiftPackageOrder": 99,
+      "GiftPlace": {
+        "value": 1,
+        "enum": "E_ShopGift"
+      },
+      "GiftLabel": [
+        4
+      ],
+      "GiftPackageType": {
+        "value": 3,
+        "enum": "E_Level"
+      },
+      "Param1": [
+        55
+      ],
+      "Param2": [
+        2
+      ],
+      "Param3": [
+        2700029
+      ],
+      "Times": 1,
+      "CurrencyType": 902,
+      "GiftID": [
+        781032
+      ]
+    },
+    {
+      "GiftPackageID": 2700029,
+      "GiftPackageNameID": 27000291,
+      "GiftPackageIcon": "RechargeGiftIcon1/LiBao_Free_01",
+      "GiftPackageOrder": 99,
+      "GiftPlace": {
+        "value": 1,
+        "enum": "E_ShopGift"
+      },
+      "GiftLabel": [
+        4
+      ],
+      "GiftPackageType": {
+        "value": 3,
+        "enum": "E_Level"
+      },
+      "Param1": [
+        60
+      ],
+      "Param2": [
+        2
+      ],
+      "Param3": [
+        2700030
+      ],
+      "Times": 1,
+      "CurrencyType": 902,
+      "GiftID": [
+        781033
+      ]
+    },
+    {
+      "GiftPackageID": 2700030,
+      "GiftPackageNameID": 27000301,
+      "GiftPackageIcon": "RechargeGiftIcon1/LiBao_Free_01",
+      "GiftPackageOrder": 99,
+      "GiftPlace": {
+        "value": 1,
+        "enum": "E_ShopGift"
+      },
+      "GiftLabel": [
+        4
+      ],
+      "GiftPackageType": {
+        "value": 3,
+        "enum": "E_Level"
+      },
+      "Param1": [
+        65
+      ],
+      "Param2": [
+        2
+      ],
+      "Param3": [
+        2700031
+      ],
+      "Times": 1,
+      "CurrencyType": 902,
+      "GiftID": [
+        781034
+      ]
+    },
+    {
+      "GiftPackageID": 2700031,
+      "GiftPackageNameID": 27000311,
+      "GiftPackageIcon": "RechargeGiftIcon1/LiBao_Free_01",
+      "GiftPackageOrder": 99,
+      "GiftPlace": {
+        "value": 1,
+        "enum": "E_ShopGift"
+      },
+      "GiftLabel": [
+        4
+      ],
+      "GiftPackageType": {
+        "value": 3,
+        "enum": "E_Level"
+      },
+      "Param1": [
+        70
+      ],
+      "Param2": [
+        2
+      ],
+      "Param3": [
+        2700032
+      ],
+      "Times": 1,
+      "CurrencyType": 902,
+      "GiftID": [
+        781035
+      ]
+    },
+    {
+      "GiftPackageID": 2700032,
+      "GiftPackageNameID": 27000321,
+      "GiftPackageIcon": "RechargeGiftIcon1/LiBao_Free_01",
+      "GiftPackageOrder": 99,
+      "GiftPlace": {
+        "value": 1,
+        "enum": "E_ShopGift"
+      },
+      "GiftLabel": [
+        4
+      ],
+      "GiftPackageType": {
+        "value": 3,
+        "enum": "E_Level"
+      },
+      "Param1": [
+        75
+      ],
+      "Param2": [
+        2
+      ],
+      "Param3": [
+        2700033
+      ],
+      "Times": 1,
+      "CurrencyType": 902,
+      "GiftID": [
+        781036
+      ]
+    },
+    {
+      "GiftPackageID": 2700033,
+      "GiftPackageNameID": 27000331,
+      "GiftPackageIcon": "RechargeGiftIcon1/LiBao_Free_01",
+      "GiftPackageOrder": 99,
+      "GiftPlace": {
+        "value": 1,
+        "enum": "E_ShopGift"
+      },
+      "GiftLabel": [
+        4
+      ],
+      "GiftPackageType": {
+        "value": 3,
+        "enum": "E_Level"
+      },
+      "Param1": [
+        80
+      ],
+      "Param2": [
+        2
+      ],
+      "Times": 1,
+      "CurrencyType": 902,
+      "GiftID": [
+        781037
+      ]
+    }
+  ],
+  "gifts": [
+    {
+      "GiftGroup": 781002,
+      "AwardType": {
+        "value": 1,
+        "enum": "E_material"
+      },
+      "GiftValue": [
+        1237902,
+        1202013,
+        1237922
+      ],
+      "Num": [
+        80,
+        1,
+        20
+      ],
+      "ItemNum": 1
+    },
+    {
+      "GiftGroup": 781004,
+      "AwardType": {
+        "value": 2,
+        "enum": "E_Random"
+      },
+      "Probability": [
+        20,
+        30,
+        50,
+        200,
+        200,
+        200,
+        200,
+        70,
+        20,
+        10
+      ],
+      "GiftValue": [
+        1202080,
+        1237840,
+        1237901,
+        1237900,
+        1237901,
+        1237906,
+        1237907,
+        1203001,
+        1203002,
+        1203003
+      ],
+      "Num": [
+        1,
+        1,
+        20000,
+        20,
+        5000,
+        200,
+        1000,
+        1,
+        1,
+        1
+      ],
+      "ItemNum": 1
+    },
+    {
+      "GiftGroup": 781006,
+      "AwardType": {
+        "value": 1,
+        "enum": "E_material"
+      },
+      "GiftValue": [
+        1237913,
+        1237922,
+        1237907,
+        1202080,
+        1203001
+      ],
+      "Num": [
+        100,
+        10,
+        1000,
+        1,
+        1
+      ],
+      "ItemNum": 2
+    },
+    {
+      "GiftGroup": 781007,
+      "AwardType": {
+        "value": 1,
+        "enum": "E_material"
+      },
+      "GiftValue": [
+        1237913,
+        1237922,
+        1237907,
+        1202080,
+        1203001
+      ],
+      "Num": [
+        200,
+        20,
+        2000,
+        1,
+        1
+      ],
+      "ItemNum": 2
+    },
+    {
+      "GiftGroup": 781008,
+      "AwardType": {
+        "value": 1,
+        "enum": "E_material"
+      },
+      "GiftValue": [
+        1237913,
+        1237922,
+        1237907,
+        1238100,
+        1203001
+      ],
+      "Num": [
+        300,
+        30,
+        3000,
+        30,
+        2
+      ],
+      "ItemNum": 3
+    },
+    {
+      "GiftGroup": 781009,
+      "AwardType": {
+        "value": 1,
+        "enum": "E_material"
+      },
+      "GiftValue": [
+        1237913,
+        1237918,
+        1237801,
+        1238100,
+        1203001
+      ],
+      "Num": [
+        400,
+        100,
+        20,
+        30,
+        2
+      ],
+      "ItemNum": 3
+    },
+    {
+      "GiftGroup": 781010,
+      "AwardType": {
+        "value": 1,
+        "enum": "E_material"
+      },
+      "GiftValue": [
+        1237913,
+        1237922,
+        1237801,
+        1238047,
+        1203001
+      ],
+      "Num": [
+        500,
+        30,
+        20,
+        10,
+        3
+      ],
+      "ItemNum": 3
+    },
+    {
+      "GiftGroup": 781011,
+      "AwardType": {
+        "value": 1,
+        "enum": "E_material"
+      },
+      "GiftValue": [
+        1237913,
+        1237918,
+        1237802,
+        1238101,
+        1203001
+      ],
+      "Num": [
+        600,
+        150,
+        20,
+        15,
+        3
+      ],
+      "ItemNum": 3
+    },
+    {
+      "GiftGroup": 781012,
+      "AwardType": {
+        "value": 1,
+        "enum": "E_material"
+      },
+      "GiftValue": [
+        1237913,
+        1237922,
+        1237802,
+        1238101,
+        1203002
+      ],
+      "Num": [
+        700,
+        40,
+        20,
+        15,
+        2
+      ],
+      "ItemNum": 3
+    },
+    {
+      "GiftGroup": 781013,
+      "AwardType": {
+        "value": 1,
+        "enum": "E_material"
+      },
+      "GiftValue": [
+        1237913,
+        1237918,
+        1237803,
+        1238048,
+        1203002
+      ],
+      "Num": [
+        800,
+        200,
+        15,
+        5,
+        2
+      ],
+      "ItemNum": 3
+    },
+    {
+      "GiftGroup": 781014,
+      "AwardType": {
+        "value": 1,
+        "enum": "E_material"
+      },
+      "GiftValue": [
+        1237913,
+        1237922,
+        1237803,
+        1238102,
+        1203002
+      ],
+      "Num": [
+        900,
+        60,
+        15,
+        10,
+        3
+      ],
+      "ItemNum": 3
+    },
+    {
+      "GiftGroup": 781015,
+      "AwardType": {
+        "value": 1,
+        "enum": "E_material"
+      },
+      "GiftValue": [
+        1237913,
+        1237918,
+        1237803,
+        1238102,
+        1203002
+      ],
+      "Num": [
+        1000,
+        250,
+        15,
+        10,
+        4
+      ],
+      "ItemNum": 3
+    },
+    {
+      "GiftGroup": 781016,
+      "AwardType": {
+        "value": 1,
+        "enum": "E_material"
+      },
+      "GiftValue": [
+        1237913,
+        1237922,
+        1237804,
+        1238049,
+        1203002
+      ],
+      "Num": [
+        1250,
+        80,
+        10,
+        5,
+        5
+      ],
+      "ItemNum": 3
+    },
+    {
+      "GiftGroup": 781017,
+      "AwardType": {
+        "value": 1,
+        "enum": "E_material"
+      },
+      "GiftValue": [
+        1237913,
+        1237918,
+        1237804,
+        1238103,
+        1203003
+      ],
+      "Num": [
+        1500,
+        300,
+        10,
+        10,
+        2
+      ],
+      "ItemNum": 3
+    },
+    {
+      "GiftGroup": 781018,
+      "AwardType": {
+        "value": 1,
+        "enum": "E_material"
+      },
+      "GiftValue": [
+        1237913,
+        1237922,
+        1237804,
+        1238103,
+        1203003
+      ],
+      "Num": [
+        1750,
+        100,
+        10,
+        10,
+        2
+      ],
+      "ItemNum": 3
+    },
+    {
+      "GiftGroup": 781019,
+      "AwardType": {
+        "value": 1,
+        "enum": "E_material"
+      },
+      "GiftValue": [
+        1237913,
+        1237918,
+        1237805,
+        1238050,
+        1203003
+      ],
+      "Num": [
+        2000,
+        400,
+        5,
+        5,
+        3
+      ],
+      "ItemNum": 3
+    },
+    {
+      "GiftGroup": 781020,
+      "AwardType": {
+        "value": 1,
+        "enum": "E_material"
+      },
+      "GiftValue": [
+        1237913,
+        1237922,
+        1237805,
+        1238104,
+        1203003
+      ],
+      "Num": [
+        2500,
+        100,
+        5,
+        10,
+        4
+      ],
+      "ItemNum": 2
+    },
+    {
+      "GiftGroup": 781021,
+      "AwardType": {
+        "value": 1,
+        "enum": "E_material"
+      },
+      "GiftValue": [
+        1237913,
+        1237918,
+        1237805,
+        1238104,
+        1203003
+      ],
+      "Num": [
+        3000,
+        500,
+        5,
+        10,
+        5
+      ],
+      "ItemNum": 2
+    },
+    {
+      "GiftGroup": 781022,
+      "AwardType": {
+        "value": 1,
+        "enum": "E_material"
+      },
+      "GiftValue": [
+        1237901,
+        1237907,
+        1203001
+      ],
+      "Num": [
+        10000,
+        1000,
+        1
+      ],
+      "ItemNum": 1
+    },
+    {
+      "GiftGroup": 781023,
+      "AwardType": {
+        "value": 1,
+        "enum": "E_material"
+      },
+      "GiftValue": [
+        1237901,
+        1237907,
+        1203001
+      ],
+      "Num": [
+        15000,
+        2000,
+        1
+      ],
+      "ItemNum": 1
+    },
+    {
+      "GiftGroup": 781024,
+      "AwardType": {
+        "value": 1,
+        "enum": "E_material"
+      },
+      "GiftValue": [
+        1237901,
+        1237907,
+        1203001
+      ],
+      "Num": [
+        20000,
+        3000,
+        1
+      ],
+      "ItemNum": 2
+    },
+    {
+      "GiftGroup": 781025,
+      "AwardType": {
+        "value": 1,
+        "enum": "E_material"
+      },
+      "GiftValue": [
+        1237901,
+        1237907,
+        1203001
+      ],
+      "Num": [
+        25000,
+        4000,
+        1
+      ],
+      "ItemNum": 2
+    },
+    {
+      "GiftGroup": 781026,
+      "AwardType": {
+        "value": 1,
+        "enum": "E_material"
+      },
+      "GiftValue": [
+        1237901,
+        1237907,
+        1203001
+      ],
+      "Num": [
+        30000,
+        5000,
+        1
+      ],
+      "ItemNum": 2
+    },
+    {
+      "GiftGroup": 781027,
+      "AwardType": {
+        "value": 1,
+        "enum": "E_material"
+      },
+      "GiftValue": [
+        1237901,
+        1237907,
+        1203001
+      ],
+      "Num": [
+        35000,
+        6000,
+        1
+      ],
+      "ItemNum": 2
+    },
+    {
+      "GiftGroup": 781028,
+      "AwardType": {
+        "value": 1,
+        "enum": "E_material"
+      },
+      "GiftValue": [
+        1237901,
+        1237907,
+        1203002
+      ],
+      "Num": [
+        40000,
+        7000,
+        1
+      ],
+      "ItemNum": 2
+    },
+    {
+      "GiftGroup": 781029,
+      "AwardType": {
+        "value": 1,
+        "enum": "E_material"
+      },
+      "GiftValue": [
+        1237901,
+        1237907,
+        1203002
+      ],
+      "Num": [
+        45000,
+        8000,
+        1
+      ],
+      "ItemNum": 2
+    },
+    {
+      "GiftGroup": 781030,
+      "AwardType": {
+        "value": 1,
+        "enum": "E_material"
+      },
+      "GiftValue": [
+        1237901,
+        1237907,
+        1203002
+      ],
+      "Num": [
+        50000,
+        9000,
+        1
+      ],
+      "ItemNum": 2
+    },
+    {
+      "GiftGroup": 781031,
+      "AwardType": {
+        "value": 1,
+        "enum": "E_material"
+      },
+      "GiftValue": [
+        1237901,
+        1237907,
+        1203002
+      ],
+      "Num": [
+        55000,
+        10000,
+        1
+      ],
+      "ItemNum": 2
+    },
+    {
+      "GiftGroup": 781032,
+      "AwardType": {
+        "value": 1,
+        "enum": "E_material"
+      },
+      "GiftValue": [
+        1237901,
+        1237907,
+        1203002
+      ],
+      "Num": [
+        60000,
+        11000,
+        1
+      ],
+      "ItemNum": 2
+    },
+    {
+      "GiftGroup": 781033,
+      "AwardType": {
+        "value": 1,
+        "enum": "E_material"
+      },
+      "GiftValue": [
+        1237901,
+        1237907,
+        1203003
+      ],
+      "Num": [
+        65000,
+        12000,
+        1
+      ],
+      "ItemNum": 2
+    },
+    {
+      "GiftGroup": 781034,
+      "AwardType": {
+        "value": 1,
+        "enum": "E_material"
+      },
+      "GiftValue": [
+        1237901,
+        1237907,
+        1203003
+      ],
+      "Num": [
+        70000,
+        13000,
+        1
+      ],
+      "ItemNum": 2
+    },
+    {
+      "GiftGroup": 781035,
+      "AwardType": {
+        "value": 1,
+        "enum": "E_material"
+      },
+      "GiftValue": [
+        1237901,
+        1237907,
+        1203003
+      ],
+      "Num": [
+        80000,
+        14000,
+        1
+      ],
+      "ItemNum": 2
+    },
+    {
+      "GiftGroup": 781036,
+      "AwardType": {
+        "value": 1,
+        "enum": "E_material"
+      },
+      "GiftValue": [
+        1237901,
+        1237907,
+        1203003
+      ],
+      "Num": [
+        90000,
+        15000,
+        1
+      ],
+      "ItemNum": 2
+    },
+    {
+      "GiftGroup": 781037,
+      "AwardType": {
+        "value": 1,
+        "enum": "E_material"
+      },
+      "GiftValue": [
+        1237901,
+        1237907,
+        1203003
+      ],
+      "Num": [
+        100000,
+        16000,
+        1
+      ],
+      "ItemNum": 2
+    }
+  ]
+}

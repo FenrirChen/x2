@@ -16,7 +16,11 @@ GOODS = S("L2C_Goods", (F(1, "goodsId", K.INT32), F(2, "originalPrice", K.INT32)
     F(6, "currencyType", K.INT32), F(7, "canBuyTimes", K.INT32),
     F(8, "hasBuyTimes", K.INT32), F(9, "startTime", K.INT32),
     F(10, "endTime", K.INT32), F(11, "goodsTag", K.INT32), F(12, "limited", K.INT32)))
+GIFT_PACKAGE_DATA = S("GiftPackageData", (F(1, "id", K.INT32), F(2, "state", K.ENUM),
+    F(3, "pushID", K.INT32), F(4, "pushDeadline", K.INT64), F(5, "leftTime", K.INT32),
+    F(6, "PurchaseTime", K.INT32), F(7, "unShelves", K.BOOL)))
 TASK = ints("TaskData", "taskId taskStatus taskProgress taskRefreshTime finishTimes stage activityId difficulty")
+TREASURE_BOX = ints("TreasureBoxData", "boxId pickStatus activityId")
 FINISH_REQUEST = ints("ReqFinishTaskData", "taskId type activityId")
 FINISH_RESULT = S("RspFinishTaskData", (F(1, "code", K.ENUM), F(2, "taskId", K.INT32),
     F(3, "rewardData", K.MESSAGE), F(4, "type", K.ENUM), F(5, "nextTask", K.MESSAGE), F(6, "activityId", K.INT32)))
@@ -36,6 +40,11 @@ ECONOMY_SCHEMAS = {s.name: s for s in (
     S("C2L_PaymentStore", ()),
     S("L2C_PaymentStore", (F(1, "code", K.ENUM), F(2, "product", K.MESSAGE, repeated=True))),
     ints("C2L_RechargeInfo", "extra"),
+    ints("C2L_BuyGiftPackage", "giftPackageID num"),
+    S("L2C_BuyGiftPackage", (F(1, "code", K.ENUM), F(2, "rewardData", K.MESSAGE),
+        F(3, "datas", K.MESSAGE, repeated=True))),
+    ints("C2L_RechargeGoodsInfo", "rechargeID"),
+    S("L2C_RechargeGoodsInfo", (F(1, "code", K.ENUM),)),
     S("L2C_RechargeInfo", (F(1, "code", K.ENUM), F(2, "totalRMB", K.INT32),
         F(3, "orders", K.MESSAGE, repeated=True))),
     ints("L2C_QueryGoodsInfo", "code shopId goodsId price originalPrice hasBuyTimes canBuyTimes itemNum currencyType"),
@@ -49,6 +58,7 @@ ECONOMY_SCHEMAS = {s.name: s for s in (
     ints("C2L_FinishGameTaskAsync", "taskId type"),
     S("L2C_FinishGameTaskAsync", (F(1, "data", K.MESSAGE),)),
     S("L2C_TaskUpdate", (F(1, "type", K.ENUM), F(2, "taskList", K.MESSAGE, repeated=True))),
+    S("L2C_TreasureBoxUpdate", (F(1, "type", K.ENUM), F(2, "boxList", K.MESSAGE, repeated=True))),
     ints("C2L_PickTreasureBox", "boxId type param activityId"),
     S("L2C_PickTreasureBox", (F(1, "code", K.ENUM), F(2, "boxId", K.INT32), F(3, "type", K.ENUM),
         F(4, "rewardData", K.MESSAGE), F(5, "param", K.INT32), F(6, "activityId", K.INT32))),

@@ -15,6 +15,10 @@ class CollectionService:
         self.awards = {row["CollectionID"]: row for row in catalog["collection"]}
         known = {row["GiftGroup"] for row in economy.catalog["gifts"]}
         economy.catalog["gifts"].extend(row for row in catalog["gifts"] if row["GiftGroup"] not in known)
+        # 少姜's chest contains this specific medal. The other collection rewards
+        # already resolve through the general item catalog.
+        economy.items[1260015] = {"ItemID": 1260015, "ItemType": {"value": 20},
+                                  "ItemUseScence": {"value": 1}}
         with store.db:
             store.db.execute("""CREATE TABLE IF NOT EXISTS collection_awards (
                 player_id INTEGER NOT NULL, award_id INTEGER NOT NULL,
