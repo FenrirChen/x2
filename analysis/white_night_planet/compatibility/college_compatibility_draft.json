@@ -601,15 +601,15 @@
       "user_decision_required": true
     },
     "exp_reward": {
-      "value": "DEFER",
-      "unit": "hero EXP",
-      "source": "UNKNOWN",
-      "reason": "No College training reward table or server sample",
-      "confidence": "low",
-      "official_constraint": "",
-      "economic_impact": "",
-      "sensitivity": "medium",
-      "evidence": "",
+      "value": "ceil(PlayerLevelBonus[current_hero_level].HeroExp / 4)",
+      "unit": "hero EXP per completed session",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "User delegated EXP design on 2026-09-27; 25% of the official next-level requirement per session, calculated from the level at training start",
+      "confidence": "high",
+      "official_constraint": "PlayerLevelBonus.HeroExp and canonical hero level cap",
+      "economic_impact": "Four sessions per same-level requirement; no reward on cancellation; excess is capped at the legal level ceiling",
+      "sensitivity": "high",
+      "evidence": "analysis/progression/hero_level.json; user decision",
       "user_decision_required": false
     },
     "cost": {
@@ -650,11 +650,23 @@
       "evidence": "official_economic_anchors.json",
       "user_decision_required": false
     },
-    "gold_pay_semantics": {
+    "gold_sale_price": {
+      "value": "CollegeRecipe.Gold",
+      "unit": "gold per product sale",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "User recalled and designated Gold as the sale price on 2026-09-27",
+      "confidence": "high",
+      "official_constraint": "CollegeRecipe.Gold",
+      "economic_impact": "Server computes order settlement from this base price",
+      "sensitivity": "high",
+      "evidence": "user decision; official_economic_anchors.json",
+      "user_decision_required": false
+    },
+    "pay_semantics": {
       "value": "DEFER",
       "unit": "rule",
       "source": "UNKNOWN",
-      "reason": "Gold/Pay field roles not proven; never charge/credit from names",
+      "reason": "CollegeRecipe.Pay meaning remains unproven; do not debit or credit it",
       "confidence": "low",
       "official_constraint": "",
       "economic_impact": "",
@@ -724,16 +736,28 @@
       "evidence": "phase0_response_audit.md",
       "user_decision_required": false
     },
+    "hero_order_generation": {
+      "value": "select one eligible E_Hero customer, then two distinct eligible recipe ProductID values matching CollegeCustomer.Like; one order and one suggestion",
+      "unit": "rule",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "User-described regular customer flow; use official customer and recipe pools, save both choices server-side",
+      "confidence": "high",
+      "official_constraint": "38 E_Hero customers; Like category pair; CollegeRecipe.RecipeType/ProductID",
+      "economic_impact": "",
+      "sensitivity": "high",
+      "evidence": "user decision; CollegeCustomer/CollegeRecipe",
+      "user_decision_required": false
+    },
     "generation_weights": {
-      "value": "DEFER",
+      "value": "uniform among eligible hero customers and products",
       "unit": "weights",
-      "source": "UNKNOWN",
-      "reason": "No original server frequency or eligibility",
-      "confidence": "low",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "Compatibility choice because original selection weights are absent; exclude locked recipes and invalid/duplicate products",
+      "confidence": "medium",
       "official_constraint": "",
       "economic_impact": "",
-      "sensitivity": "medium",
-      "evidence": "",
+      "sensitivity": "high",
+      "evidence": "user delegated customer flow",
       "user_decision_required": false
     },
     "refresh": {
@@ -749,16 +773,100 @@
       "user_decision_required": false
     },
     "order_reward": {
-      "value": "use CollegeQuest.AwardType/AwardGroup only after exact price/cost validation",
+      "value": "validate quest variant and settle its official AwardType/AwardGroup separately from CollegeRecipe.Gold sale price",
       "unit": "rule",
       "source": "REVIVAL_COMPATIBILITY",
-      "reason": "Official rows are 41 Gift, 77 Gold, 2 Buff; validation order is a proposed safeguard",
+      "reason": "Official rows are 41 Gift, 77 Gold, 2 Buff; never assume Gold award replaces or duplicates product sale price without quest-type mapping",
       "confidence": "medium",
       "official_constraint": "CollegeQuest.AwardType/AwardGroup",
       "economic_impact": "",
       "sensitivity": "high",
       "evidence": "official_economic_anchors.json",
       "user_decision_required": true
+    },
+    "raise_price": {
+      "value": "cost 22 star energy; final price=round_down(CollegeRecipe.Gold*1.2)",
+      "unit": "rule",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "User-described increase of 20%; fixed-point integer computation on server",
+      "confidence": "high",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "high",
+      "evidence": "user decision",
+      "user_decision_required": false
+    },
+    "suggest": {
+      "value": "cost 4 star energy; replace current order ProductID with persisted suggestion ProductID",
+      "unit": "rule",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "User-described suggestion operation; no fresh roll or client-chosen item",
+      "confidence": "high",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "user decision",
+      "user_decision_required": false
+    },
+    "chat_cost": {
+      "value": 10,
+      "unit": "star energy",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "User-described chat cost; effect awaits client interpretation of ChatChance/ChatParam",
+      "confidence": "high",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "user decision",
+      "user_decision_required": false
+    },
+    "chat_effect": {
+      "value": "DEFER",
+      "unit": "rule",
+      "source": "UNKNOWN",
+      "reason": "CollegeCustomer.ChatChance/ChatParam exist but their units and state effect are not established",
+      "confidence": "low",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "CollegeCustomer",
+      "user_decision_required": false
+    },
+    "discount": {
+      "value": "price=round_down(CollegeRecipe.Gold*0.5); customer hero favor +8 after completed sale",
+      "unit": "rule",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "User-described discount tradeoff; favor change is granted once on successful settlement",
+      "confidence": "high",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "high",
+      "evidence": "user decision",
+      "user_decision_required": false
+    },
+    "price_choice": {
+      "value": "raise or discount, mutually exclusive; each order action at most once",
+      "unit": "rule",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "Treat user's 'or' as exclusive and prevent repeat-click price exploits",
+      "confidence": "high",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "high",
+      "evidence": "user decision",
+      "user_decision_required": false
+    },
+    "special_customers": {
+      "value": "preserve official E_NPC and E_Chip/E_Gift/E_Superbuy/E_PriceBuff/E_MakeBuff quests for gift and alchemy-product customers",
+      "unit": "rule",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "User recalls gift and resale visitors; their exact interaction mapping remains a separate evidence gate",
+      "confidence": "medium",
+      "official_constraint": "4 E_NPC customers; CollegeQuest quest types",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "user decision; CollegeCustomer/CollegeQuest",
+      "user_decision_required": false
     },
     "client_price_trust": {
       "value": false,
@@ -799,15 +907,15 @@
       "user_decision_required": false
     },
     "reward_mapping": {
-      "value": "DEFER",
-      "unit": "Gift/fragment map",
-      "source": "UNKNOWN",
-      "reason": "Description says matching source Hero fragments; exact reward IDs absent",
-      "confidence": "low",
-      "official_constraint": "",
+      "value": "selected valid hero -> PlayerAttrib.ChipPropID fragment item x5",
+      "unit": "fragment grant",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "User fixed each completed prayer at five fragments; use canonical selected hero mapping and one-time claim receipt",
+      "confidence": "high",
+      "official_constraint": "Pray request heroId; PlayerAttrib.ChipPropID",
       "economic_impact": "",
-      "sensitivity": "medium",
-      "evidence": "",
+      "sensitivity": "high",
+      "evidence": "user decision; analysis/progression/hero_unlock_catalog.json",
       "user_decision_required": false
     }
   },
@@ -837,15 +945,27 @@
       "user_decision_required": true
     },
     "affix_generation": {
-      "value": "DEFER; reuse EquipmentInstanceFactory constraints if proven",
+      "value": "remove selected minor affix, then draw one new minor type from that equipment's EquibBase weighted pool excluding all remaining minor types; roll value with the star/type EquibAttrib ValueSec ladder",
+      "unit": "rule",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "User-directed reroll resembling new beast affix generation; preserve slot count and other affixes, never reroll star/main stat",
+      "confidence": "high",
+      "official_constraint": "EquipmentInstanceFactory roll rules; only a legal selected minor slot",
+      "economic_impact": "",
+      "sensitivity": "high",
+      "evidence": "user decision; src/x2server/player/equipment_factory.py",
+      "user_decision_required": false
+    },
+    "strengthen_bonus_handling": {
+      "value": "DEFER",
       "unit": "rule",
       "source": "UNKNOWN",
-      "reason": "Slot-lock and reroll mapping not closed",
+      "reason": "Existing equipment_enhancements bonuses are baked into slot values; audit how to carry or reassign them before washing a strengthened slot",
       "confidence": "low",
       "official_constraint": "",
       "economic_impact": "",
       "sensitivity": "medium",
-      "evidence": "",
+      "evidence": "src/x2server/player/equipment.py",
       "user_decision_required": false
     },
     "crystal_route": {

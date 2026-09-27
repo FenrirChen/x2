@@ -31,7 +31,7 @@ explore,explore.cancel_refund_fraction,,1.0,energy fraction,No reward granted on
 training,training.duration_seconds,,14400,seconds,"Four-hour candidate, subject to UI timer and EXP scale audit",,medium,,YES
 training,training.occupancy,,"""shared hero ledger with Explore""",rule,No simultaneous assignment,,high,,YES
 alchemy,alchemy.extra_rng,,false,bool,Do not roll another result over deterministic ProductID,,medium,,YES
-customer,customer.order_reward,CollegeQuest.AwardType/AwardGroup,"""use CollegeQuest.AwardType/AwardGroup only after exact price/cost validation""",rule,"Official rows are 41 Gift, 77 Gold, 2 Buff; validation order is a proposed safeguard",,high,official_economic_anchors.json,YES
+customer,customer.order_reward,CollegeQuest.AwardType/AwardGroup,"""validate quest variant and settle its official AwardType/AwardGroup separately from CollegeRecipe.Gold sale price""",rule,"Official rows are 41 Gift, 77 Gold, 2 Buff; never assume Gold award replaces or duplicates product sale price without quest-type mapping",,high,official_economic_anchors.json,YES
 customer,customer.client_price_trust,,false,bool,Ignore client plusPrice/discountPrice as authority,,high,,YES
 washing,washing.cost_options,CollegeEquibReset rows 1..5,"""CollegeEquibReset rows 1..5; prefer gold-side Item1 list""",rule,Official table lists gold and crystal alternatives; route preference is a policy choice,,high,official_economic_anchors.json,YES
 washing,washing.daily_attempt_cap,,10,attempts/day,Balanced candidate; compare 5/20/unlimited,Limits random reroll search without pay pressure,high,,YES

@@ -70,9 +70,9 @@ Evidence: official 2.4 decoded tables; dump.cs/script.json/libil2cpp.so; analysi
 
 ## Revival Compatibility Needed
 
-若官方服务器专属值无法恢复，须为星能产出、建筑资源消耗、派遣奖励权重、顾客/洗炼随机、取消退费和协助限制分别提出可审查的兼容参数；注明依据和经济影响后由项目决策层确定。本次未新增这些兼容值，也未重置活跃存档。
+若官方服务器专属值无法恢复，须为星能产出、建筑资源消耗、派遣奖励权重、顾客/洗炼随机和取消退费提出可审查的兼容参数；注明依据和经济影响后由项目决策层确定。社交协助已按用户决定退出实施范围。用户于 2026-09-27 补充训练经验设计授权、炼金售价、顾客订单交互、祈祷五碎片与兽主洗炼规则；这些只写入兼容草案，尚未改变正式 College 覆盖状态或活跃存档。
 
-**兼容设计提案（尚未批准、未实施）：**[college_growthbase_compatibility_PROPOSAL.md](../decisions/compatibility/college_growthbase_compatibility_PROPOSAL.md)。官方 Item 表证实 1237831–1237835 是建筑加速卡（10 分钟至 8 小时）；“时之痕”五档的材料 Gift 对应 1237801–1237806 建筑/奇迹升级材料。提案据此使用现有材料与加速卡设计成本和计时，附参数表与模拟；正式 College 覆盖状态未改变。
+**兼容设计提案（上述五项局部规则已有用户决定；整体尚未批准、未实施）：**[college_growthbase_compatibility_PROPOSAL.md](../decisions/compatibility/college_growthbase_compatibility_PROPOSAL.md)。官方 Item 表证实 1237831–1237835 是建筑加速卡（10 分钟至 8 小时）；“时之痕”五档的材料 Gift 对应 1237801–1237806 建筑/奇迹升级材料。提案据此使用现有材料与加速卡设计成本和计时，附参数表与模拟；模拟尚未纳入本轮顾客售价等新增规则。
 
 ## Implementation Plan
 
