@@ -1,5 +1,5 @@
 ﻿C2L,C2L ID,Current Server,Reason,Required dependency
-C2L_QueryGrowthBase,579,PARTIAL,Returns fixed level-one buildings; no persisted College state,基地快照/计时器读取
+C2L_QueryGrowthBase,579,PARTIAL,Persistent College state and Login shared snapshot; downstream UI requirements remain unknown,基地快照/计时器读取
 C2L_UnlockExploreRuin,622,STUB,Returns code 13 without ruin records,遗迹开放状态读取
 C2L_BuildingUpgrade,233,MISSING,No College handler / state transaction,建筑等级/建造队列/资源
 C2L_BuildSpeedUP,234,MISSING,No College handler / state transaction,队列结束时间/加速道具

@@ -20,14 +20,11 @@ GROWTH_BASE = ProtoSchema("L2C_QueryGrowthBase", (
 
 
 def growth_base_values():
-    # Initial levels/stars come from the client's CollegeBuilding table.
-    buildings = [BUILDING_BASE_INFO.encode({"buildingId": i, "buildingLevel": 1,
-        "buildingStar": 1}) for i in range(701, 709)]
-    wonders = [BUILDING_BASE_INFO.encode({"buildingId": i, "buildingLevel": 1})
-               for i in range(721, 728)]
-    return {"buildingList": buildings, "civilization": wonders,
-        "exploreList": [b""], "trainingList": [b""], "prayQueue": [b""],
-        "buildQueue": b"", "wonderQueue": b""}
+    # Compatibility helper for schema-only callers; production uses CollegeStateRepository.
+    from x2server.player.college import initial_state
+    state = initial_state()
+    return {"buildingList": [BUILDING_BASE_INFO.encode(row) for row in state["buildings"]],
+            "civilization": [BUILDING_BASE_INFO.encode(row) for row in state["wonders"]]}
 
 LOBBY_IDS = (
     ("QueryTelInfo", 782, 783), ("SeasonIcon", 999, 1001),

@@ -33,7 +33,7 @@ SHOP_CURRENCY_FIELDS = {
 
 
 class LoginService:
-    def __init__(self, identity: LocalIdentityService, store: PlayerStore, economy=None, equipment=None, wish=None, clock=None, appearance=None, mail=None, gift_packages=None) -> None:
+    def __init__(self, identity: LocalIdentityService, store: PlayerStore, economy=None, equipment=None, wish=None, clock=None, appearance=None, mail=None, gift_packages=None, college=None) -> None:
         self.identity = identity
         self.store = store
         self.economy = economy
@@ -42,6 +42,7 @@ class LoginService:
         self.appearance = appearance
         self.mail = mail
         self.gift_packages = gift_packages
+        self.college = college
         self.clock = clock or ServerClock()
 
     async def login(self, context: DispatchContext, packet: DecodedPacket) -> OutboundMessage:
@@ -60,7 +61,8 @@ class LoginService:
                      "rechargeNoticeAll", "equipAll", "taskDaily", "taskWeekly", "taskChallenge", "limitTaskChallenge"):
             result[name] = b""
         from x2server.messages.lobby import GROWTH_BASE, growth_base_values
-        result["growthBase"] = GROWTH_BASE.encode(growth_base_values())
+        result["growthBase"] = GROWTH_BASE.encode(self.college.growth_base(player["id"])
+                                                  if self.college else growth_base_values())
         result["heroAll"] = encode_hero_all(player["snapshot"])
         if self.equipment:
             from x2server.messages.lobby import LOBBY_SCHEMAS

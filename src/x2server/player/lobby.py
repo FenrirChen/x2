@@ -11,8 +11,9 @@ from x2server.protocol.types import DecodedPacket
 
 
 class LobbyService:
-    def __init__(self, clock=None):
+    def __init__(self, clock=None, college=None):
         self.clock = clock or ServerClock()
+        self.college = college
 
     def handlers(self):
         return {"C2L_" + name: self.query for name, _, _ in LOBBY_IDS}
@@ -23,7 +24,8 @@ class LobbyService:
         name = CORE_MESSAGE_REGISTRY.name_for(packet.message_id)
         request = LOBBY_SCHEMAS[name].decode(packet.body)
         if name == "C2L_QueryGrowthBase":
-            return OutboundMessage("L2C_QueryGrowthBase", growth_base_values())
+            return OutboundMessage("L2C_QueryGrowthBase", self.college.growth_base(context.session.player_id)
+                                   if self.college else growth_base_values())
         if name == "C2L_UnlockExploreRuin":
             return OutboundMessage("L2C_UnlockExploreRuin", {"code": 13})
         # These describe a dedicated local account with no online activities.

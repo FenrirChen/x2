@@ -58,19 +58,19 @@ Evidence: official 2.4 decoded tables; dump.cs/script.json/libil2cpp.so; analysi
 
 ## Server Dependencies / Coverage
 
-[server_gap_matrix.csv](../../analysis/white_night_planet/server_gap_matrix.csv) 对 32 条逐项审计：**COMPLETE 0；PARTIAL 1（579/584）；STUB 1（622/623）；MISSING 30**。目前 579 返回固定 1 级建筑/奇迹、空队列，未保存成长状态；622 固定错误 13；590/591 炼金入口及其他基地请求均无完整处理。现有通用战斗、Gift、物品、英雄、装备、账户等级与服务器时钟可作为依赖，但不能凭这些组件推定 College 已完成。固定成功或空响应会掩盖状态机缺失。
+[server_gap_matrix.csv](../../analysis/white_night_planet/server_gap_matrix.csv) 对 32 条逐项审计：**COMPLETE 0；PARTIAL 1（579/584）；STUB 1（622/623）；MISSING 30**。579 已读取独立 SQLite `college_state`，以官方 `CollegeBuilding` 初始等级/星级建立新账号状态；`Login.growthBase` 同源，状态可重登恢复。622 仍返回错误 13，590/591 炼金入口及其他基地请求尚无完整处理。Phase 0 的实际读取字段及未知项见 [phase0_response_audit.md](../../analysis/white_night_planet/phase0_response_audit.md)。基地入口仍为 PARTIAL。
 
 ## Official Unknowns
 
 1. 建筑/奇迹官方消耗、星能产速与上限、取消/加速价格、队列并发和社交协助规则。
 2. 派遣掉落的官方随机算法、顾客生成/偏好概率、洗炼随机属性与锁定的权威算法。
-3. 部分 response 字段的客户端精确读取偏移，559/561/617 的注册与发送触发，原服 push 顺序。
+3. GrowthBase 下游 UI 字段最小集，559/561/617 的注册与发送触发，原服 push 顺序。
 4. `BuildingOpen` 缺失的 728 及额外故事门如何在原服开放。
 5. 原服日切、退款及错误码边界。不得把缺失信息写成官方规则。
 
 ## Revival Compatibility Needed
 
-若官方服务器专属值无法恢复，须为星能产出、建筑资源消耗、派遣奖励权重、顾客/洗炼随机、取消退费和协助限制分别提出可审查的兼容参数；注明依据和经济影响后由项目决策层确定。本次没有新增兼容值、改动正式基地业务代码或触碰活跃存档。
+若官方服务器专属值无法恢复，须为星能产出、建筑资源消耗、派遣奖励权重、顾客/洗炼随机、取消退费和协助限制分别提出可审查的兼容参数；注明依据和经济影响后由项目决策层确定。本次未新增这些兼容值，也未重置活跃存档。
 
 ## Implementation Plan
 

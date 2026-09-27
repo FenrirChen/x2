@@ -10,7 +10,7 @@ Evidence-IDs: see evidence/manifests/evidence_manifest.json
 
 # 当前状态快照（2026-09-27）
 
-- **白夜行星客户端考古（2026-09-27）**：内部为 `College/GrowthBase` 基地系统；见 `white_night_planet.md` 与 `analysis/white_night_planet/`。32 条相关请求链中，当前服务端仅 579/584 为固定初始数据 PARTIAL、622/623 为拒绝 STUB，其余 30 条未实现。`CollegeExplore` 是计时派遣，不复用主线战斗入场/结算。此结论仅为后续实现蓝图，未将基地玩法宣告可用。
+- **白夜行星 Phase 0/安全子集（2026-09-27）**：实际字段审计见 `analysis/white_night_planet/phase0_response_audit.md`。579/584 使用独立 SQLite `college_state` 快照，登录同源，官方初始建筑/奇迹可重登恢复；590/591 和 622/623 因初始炼金/遗迹状态证据不足仍未闭环。`CollegeExplore` 是计时派遣，不复用主线战斗入场/结算。基地入口仍为 PARTIAL。
 
 - **可运行**：登录/大厅/物品/英雄(1003)/装备测试实例/**装备实例真交付(887→Factory→落库→152.rewardEquip)/**
   魂器基础/技能/抽卡/固定奖励结算/主线 78 关 + 资源本 20 关/扫荡(41 关静态)/日周任务/聊天空频道。

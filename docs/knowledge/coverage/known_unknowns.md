@@ -25,4 +25,5 @@ Evidence-IDs: see evidence/manifests/evidence_manifest.json
 | 9 | Battle | CheckFightProfile 续战语义 | 固定 false 兼容 | 447 结构 | 拒绝续战 | 中 | 447/399 样本 |
 | 10 | Client | ILRuntime 热更程序集本体 | 未随包（乐变下载链失传） | phase2 全量扫描 | 原生层足够 | 信息级 | 无 |
 | 11 | Reward | ~~E_ReportCurrency 折算语义~~ **已实施（2026-09-26）**：结算折算为账户货币（EffData=[桶,单件值]×num；桶→账户 Item 为官方表派生映射，68/68 全覆盖），原物不入包/不入rewardItem（实机金币本空白贴图根因）；金币本手打 MopReward 兼容金同步删除。**残留**：官方折算公式的精确语义（EffData[1]×num 为 Revival 解释）无官方样本 | 官方 item/language 表全量 + 实机 2130104 的 887/152 对账 + 修复后实机待复核 | 折算已实施（USER_DECISION，equip_report_currency_conversion.md） | 低 | 实机复核金币本结算无空白项、金额一致 |
+| 14 | College | 590/591 官方初始配方/生产槽/元素，622/623 初始遗迹列表及开放条件，728 BuildingOpen 缺失；559/561/617 注册与推送顺序 | native handler 确认消费与空列表循环安全，但不能证明原服初始内容；无原服线包 | `analysis/white_night_planet/phase0_response_audit.md` | 仅持久化官方建筑初始快照；590/622 保留未完成，不返回猜测的成功态 | 高（白夜行星主入口） | 捕获一次原服或可信客户端启动报文，并追下游 UI consumer |
 

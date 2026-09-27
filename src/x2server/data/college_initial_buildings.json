@@ -1,0 +1,17 @@
+[
+  {"id":701,"type":"building","level":1,"star":1},
+  {"id":702,"type":"building","level":1,"star":1},
+  {"id":703,"type":"building","level":1,"star":1},
+  {"id":704,"type":"building","level":1,"star":1},
+  {"id":705,"type":"building","level":1,"star":1},
+  {"id":706,"type":"building","level":1,"star":1},
+  {"id":707,"type":"building","level":1,"star":1},
+  {"id":708,"type":"building","level":1,"star":1},
+  {"id":721,"type":"wonder","level":1},
+  {"id":722,"type":"wonder","level":1},
+  {"id":723,"type":"wonder","level":1},
+  {"id":724,"type":"wonder","level":1},
+  {"id":725,"type":"wonder","level":1},
+  {"id":726,"type":"wonder","level":1},
+  {"id":727,"type":"wonder","level":1}
+]
