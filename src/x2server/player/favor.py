@@ -91,10 +91,11 @@ class FavorService:
         day = datetime.fromtimestamp(int(self.clock()), timezone(timedelta(hours=8))).strftime("%Y-%m-%d")
         values["giftsTimes"] = hero.get("favor_gifts", {}).get("count", 0) if hero and hero.get("favor_gifts", {}).get("day") == day else 0
         gift = self.gifts.get(item_id)
-        # A single EffData amount is unambiguous. Two amounts require the
-        # unrecovered hero-preference selector; never guess which applies.
+        # EffData[0] is the ordinary gift value. The optional second value
+        # is a preference bonus; use the ordinary value until that selector
+        # is recovered, so ordinary gifts remain usable without overpaying.
         if (not hero or opt != 2 or type(num) is not int or not 1 <= num <= 999 or
-                not gift or len(gift.get("EffData", [])) != 1):
+                not gift or not gift.get("EffData")):
             return OutboundMessage("L2C_AddFavor", values)
         gain = gift["EffData"][0] * num
         if gain <= 0:

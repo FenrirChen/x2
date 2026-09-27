@@ -8,6 +8,32 @@ from x2server.player.wish import WishService
 from x2server.player.server_clock import ServerClock
 
 
+def test_duplicate_hero_awards_exchange_ticket_once(env, monkeypatch):
+    store, economy, context = env
+    player = store.get(1)
+    store.save_snapshot(1, dict(player["snapshot"], crystal=1800), player["revision"])
+    wish = WishService(store, economy, clock=ServerClock(lambda: WishService.ANCHOR + 1))
+    monkeypatch.setattr(wish, "_pick", lambda pool, group="common":
+        {"item_id": 1211003, "quantity": 1})
+    request = packet({"drawnId": 22202, "drawType": 0}, name="C2L_LuckDraw")
+    first = asyncio.run(wish.draw(context, request))
+    assert first.values["code"] == 10
+    assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1237915").fetchone()[0] == 1
+    assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1237927").fetchone() is None
+    assert asyncio.run(wish.draw(context, request)).values == first.values
+    assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1237915").fetchone()[0] == 1
+
+
+def test_duplicate_compensation_matches_official_rarity_table(env):
+    store, economy, _ = env
+    from x2server.player.progression import catalog
+    amounts = {r["hero_id"]: r["duplicate_ticket_count"] for r in catalog()["hero_unlock"]}
+    assert amounts[1003] == 1
+    assert amounts[1004] == 5
+    assert set(amounts.values()) == {1, 5, 10}
+    assert all(r["duplicate_ticket_item_id"] == 1237915 for r in catalog()["hero_unlock"])
+
+
 def test_newcomer_ten_draw_guarantee_cost_replay_and_limit(env, monkeypatch):
     store, economy, context = env
     player = store.get(1)

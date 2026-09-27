@@ -208,6 +208,12 @@ class WishService:
                         self.store.db.execute("""INSERT INTO inventory VALUES (?,?,?)
                             ON CONFLICT(player_id,item_id) DO UPDATE SET quantity=quantity+excluded.quantity""",
                             (player_id, proto["fragment_item_id"], proto["fragment_count"] * quantity))
+                        # PlayerAttrib.Compensate defines the exact ticket
+                        # currency and amount for each duplicate hero.
+                        self.store.db.execute("""INSERT INTO inventory VALUES (?,?,?)
+                            ON CONFLICT(player_id,item_id) DO UPDATE SET quantity=quantity+excluded.quantity""",
+                            (player_id, proto["duplicate_ticket_item_id"],
+                             proto["duplicate_ticket_count"] * quantity))
                     else:
                         transforms.append(False)
                         snapshot.setdefault("heroes", []).append({"id": hero_id, "state": 2,

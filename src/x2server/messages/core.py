@@ -13,6 +13,7 @@ from x2server.messages.progression import PROGRESSION_SCHEMAS
 from x2server.messages.equipment import EQUIPMENT_SCHEMAS
 from x2server.messages.wish import WISH_SCHEMAS
 from x2server.messages.favor import FAVOR_SCHEMAS
+from x2server.messages.appearance import APPEARANCE_SCHEMAS
 
 C2L_LOGIN = ProtoSchema(
     "C2L_Login",
@@ -108,6 +109,7 @@ CORE_SCHEMAS.update(PROGRESSION_SCHEMAS)
 CORE_SCHEMAS.update(EQUIPMENT_SCHEMAS)
 CORE_SCHEMAS.update(WISH_SCHEMAS)
 CORE_SCHEMAS.update(FAVOR_SCHEMAS)
+CORE_SCHEMAS.update(APPEARANCE_SCHEMAS)
 
 # CONFIRMED: MessageReflector registers PlayerDataProto as 1000, independently
 # of its generated get_PID() returning 0. BaseInfo Serialize RVA 0x30A1348.
@@ -120,6 +122,9 @@ BASE_INFO = ProtoSchema("BaseInfoProto", (
     ProtoField(6, "Exp", FieldKind.INT32),
     ProtoField(7, "EquipExp", FieldKind.INT32),
     ProtoField(8, "Show", FieldKind.INT32),
+    ProtoField(9, "IconInfo", FieldKind.MESSAGE),
+    ProtoField(47, "SkinCoupon", FieldKind.INT32),
+    ProtoField(66, "FragmentMoney", FieldKind.INT32),
     ProtoField(32, "Birthday", FieldKind.INT32),
     ProtoField(14, "HeroExp", FieldKind.INT32),
     ProtoField(20, "DailyActivity", FieldKind.INT32),

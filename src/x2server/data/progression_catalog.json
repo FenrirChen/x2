@@ -9638,6 +9638,8 @@
       "star": 1,
       "fragment_item_id": 1201003,
       "fragment_count": 5,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 1,
       "artifact_id": 1503,
       "profession": 303,
       "initial_skills": [
@@ -9654,6 +9656,8 @@
       "star": 3,
       "fragment_item_id": 1201004,
       "fragment_count": 18,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 5,
       "artifact_id": 1504,
       "profession": 302,
       "initial_skills": [
@@ -9670,6 +9674,8 @@
       "star": 5,
       "fragment_item_id": 1201005,
       "fragment_count": 64,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 10,
       "artifact_id": 1505,
       "profession": 301,
       "initial_skills": [
@@ -9686,6 +9692,8 @@
       "star": 1,
       "fragment_item_id": 1201006,
       "fragment_count": 5,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 1,
       "artifact_id": 1506,
       "profession": 303,
       "initial_skills": [
@@ -9702,6 +9710,8 @@
       "star": 3,
       "fragment_item_id": 1201007,
       "fragment_count": 18,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 5,
       "artifact_id": 1507,
       "profession": 304,
       "initial_skills": [
@@ -9718,6 +9728,8 @@
       "star": 5,
       "fragment_item_id": 1201008,
       "fragment_count": 64,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 10,
       "artifact_id": 1508,
       "profession": 302,
       "initial_skills": [
@@ -9734,6 +9746,8 @@
       "star": 3,
       "fragment_item_id": 1201009,
       "fragment_count": 18,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 5,
       "artifact_id": 1509,
       "profession": 304,
       "initial_skills": [
@@ -9750,6 +9764,8 @@
       "star": 3,
       "fragment_item_id": 1201010,
       "fragment_count": 18,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 5,
       "artifact_id": 1510,
       "profession": 301,
       "initial_skills": [
@@ -9766,6 +9782,8 @@
       "star": 3,
       "fragment_item_id": 1201011,
       "fragment_count": 18,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 5,
       "artifact_id": 1511,
       "profession": 303,
       "initial_skills": [
@@ -9782,6 +9800,8 @@
       "star": 5,
       "fragment_item_id": 1201012,
       "fragment_count": 64,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 10,
       "artifact_id": 1512,
       "profession": 302,
       "initial_skills": [
@@ -9798,6 +9818,8 @@
       "star": 3,
       "fragment_item_id": 1201013,
       "fragment_count": 18,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 5,
       "artifact_id": 1513,
       "profession": 304,
       "initial_skills": [
@@ -9814,6 +9836,8 @@
       "star": 5,
       "fragment_item_id": 1201014,
       "fragment_count": 64,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 10,
       "artifact_id": 1514,
       "profession": 302,
       "initial_skills": [
@@ -9830,6 +9854,8 @@
       "star": 3,
       "fragment_item_id": 1201015,
       "fragment_count": 18,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 5,
       "artifact_id": 1515,
       "profession": 304,
       "initial_skills": [
@@ -9846,6 +9872,8 @@
       "star": 5,
       "fragment_item_id": 1201016,
       "fragment_count": 64,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 10,
       "artifact_id": 1516,
       "profession": 301,
       "initial_skills": [
@@ -9862,6 +9890,8 @@
       "star": 3,
       "fragment_item_id": 1201017,
       "fragment_count": 18,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 5,
       "artifact_id": 1517,
       "profession": 303,
       "initial_skills": [
@@ -9878,6 +9908,8 @@
       "star": 5,
       "fragment_item_id": 1201018,
       "fragment_count": 64,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 10,
       "artifact_id": 1518,
       "profession": 302,
       "initial_skills": [
@@ -9894,6 +9926,8 @@
       "star": 5,
       "fragment_item_id": 1201019,
       "fragment_count": 64,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 10,
       "artifact_id": 1519,
       "profession": 304,
       "initial_skills": [
@@ -9910,6 +9944,8 @@
       "star": 5,
       "fragment_item_id": 1201020,
       "fragment_count": 64,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 10,
       "artifact_id": 1520,
       "profession": 303,
       "initial_skills": [
@@ -9926,6 +9962,8 @@
       "star": 3,
       "fragment_item_id": 1201021,
       "fragment_count": 18,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 5,
       "artifact_id": 1521,
       "profession": 303,
       "initial_skills": [
@@ -9942,6 +9980,8 @@
       "star": 5,
       "fragment_item_id": 1201022,
       "fragment_count": 64,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 10,
       "artifact_id": 1522,
       "profession": 304,
       "initial_skills": [
@@ -9958,6 +9998,8 @@
       "star": 5,
       "fragment_item_id": 1201023,
       "fragment_count": 64,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 10,
       "artifact_id": 1523,
       "profession": 301,
       "initial_skills": [
@@ -9974,6 +10016,8 @@
       "star": 5,
       "fragment_item_id": 1201024,
       "fragment_count": 64,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 10,
       "artifact_id": 1524,
       "profession": 302,
       "initial_skills": [
@@ -9990,6 +10034,8 @@
       "star": 5,
       "fragment_item_id": 1201025,
       "fragment_count": 64,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 10,
       "artifact_id": 1525,
       "profession": 301,
       "initial_skills": [
@@ -10006,6 +10052,8 @@
       "star": 5,
       "fragment_item_id": 1201026,
       "fragment_count": 64,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 10,
       "artifact_id": 1526,
       "profession": 302,
       "initial_skills": [
@@ -10022,6 +10070,8 @@
       "star": 5,
       "fragment_item_id": 1201027,
       "fragment_count": 64,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 10,
       "artifact_id": 1527,
       "profession": 304,
       "initial_skills": [
@@ -10038,6 +10088,8 @@
       "star": 5,
       "fragment_item_id": 1201028,
       "fragment_count": 64,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 10,
       "artifact_id": 1528,
       "profession": 301,
       "initial_skills": [
@@ -10054,6 +10106,8 @@
       "star": 5,
       "fragment_item_id": 1201029,
       "fragment_count": 64,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 10,
       "artifact_id": 1529,
       "profession": 301,
       "initial_skills": [
@@ -10070,6 +10124,8 @@
       "star": 5,
       "fragment_item_id": 1201030,
       "fragment_count": 64,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 10,
       "artifact_id": 1530,
       "profession": 301,
       "initial_skills": [
@@ -10086,6 +10142,8 @@
       "star": 5,
       "fragment_item_id": 1201031,
       "fragment_count": 64,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 10,
       "artifact_id": 1531,
       "profession": 303,
       "initial_skills": [
@@ -10102,6 +10160,8 @@
       "star": 5,
       "fragment_item_id": 1201032,
       "fragment_count": 64,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 10,
       "artifact_id": 1532,
       "profession": 302,
       "initial_skills": [
@@ -10118,6 +10178,8 @@
       "star": 5,
       "fragment_item_id": 1201033,
       "fragment_count": 64,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 10,
       "artifact_id": 1533,
       "profession": 302,
       "initial_skills": [
@@ -10134,6 +10196,8 @@
       "star": 5,
       "fragment_item_id": 1201034,
       "fragment_count": 64,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 10,
       "artifact_id": 1534,
       "profession": 302,
       "initial_skills": [
@@ -10150,6 +10214,8 @@
       "star": 5,
       "fragment_item_id": 1201035,
       "fragment_count": 64,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 10,
       "artifact_id": 1535,
       "profession": 304,
       "initial_skills": [
@@ -10166,6 +10232,8 @@
       "star": 5,
       "fragment_item_id": 1201036,
       "fragment_count": 64,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 10,
       "artifact_id": 1536,
       "profession": 302,
       "initial_skills": [
@@ -10182,6 +10250,8 @@
       "star": 5,
       "fragment_item_id": 1201039,
       "fragment_count": 64,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 10,
       "artifact_id": 1539,
       "profession": 303,
       "initial_skills": [
@@ -10198,6 +10268,8 @@
       "star": 5,
       "fragment_item_id": 1201040,
       "fragment_count": 64,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 10,
       "artifact_id": 1540,
       "profession": 302,
       "initial_skills": [
@@ -10214,6 +10286,8 @@
       "star": 5,
       "fragment_item_id": 1201197,
       "fragment_count": 64,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 10,
       "artifact_id": 1697,
       "profession": 301,
       "initial_skills": [
@@ -10230,6 +10304,8 @@
       "star": 3,
       "fragment_item_id": 1201198,
       "fragment_count": 18,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 5,
       "artifact_id": 1698,
       "profession": 301,
       "initial_skills": [
@@ -10246,6 +10322,8 @@
       "star": 1,
       "fragment_item_id": 1201199,
       "fragment_count": 5,
+      "duplicate_ticket_item_id": 1237915,
+      "duplicate_ticket_count": 1,
       "artifact_id": 1699,
       "profession": 303,
       "initial_skills": [

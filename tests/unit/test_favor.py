@@ -50,15 +50,15 @@ def test_favor_gift_archive_and_relog(env):
         reopened.close()
 
 
-def test_uncertain_gift_gain_never_consumes(env):
+def test_two_value_gift_uses_base_gain_and_consumes(env):
     store, economy, ctx = env
     service = FavorService(store, economy)
     store.db.execute("INSERT INTO inventory VALUES (1,1204003,5)")
     answer = asyncio.run(service.handle(ctx, packet({"opt": 2, "optionId": 1204003,
         "heroId": 1003, "num": 1}, name="C2L_AddFavor")))
-    assert answer.values["code"] == 13
-    assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1204003").fetchone()[0] == 5
-    assert "favor" not in store.get(1)["snapshot"]["heroes"][0]
+    assert answer.values["code"] == 10
+    assert answer.values["newExp"] == service.gifts[1204003]["EffData"][0]
+    assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1204003").fetchone()[0] == 4
 
 
 def test_gift_charge_rolls_back_when_state_write_fails(env, monkeypatch):

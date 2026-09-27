@@ -19,12 +19,13 @@ LOGGER = logging.getLogger("x2.login")
 
 
 class LoginService:
-    def __init__(self, identity: LocalIdentityService, store: PlayerStore, economy=None, equipment=None, wish=None, clock=None) -> None:
+    def __init__(self, identity: LocalIdentityService, store: PlayerStore, economy=None, equipment=None, wish=None, clock=None, appearance=None) -> None:
         self.identity = identity
         self.store = store
         self.economy = economy
         self.equipment = equipment
         self.wish = wish
+        self.appearance = appearance
         self.clock = clock or ServerClock()
 
     async def login(self, context: DispatchContext, packet: DecodedPacket) -> OutboundMessage:
@@ -49,6 +50,10 @@ class LoginService:
         if self.wish:
             from x2server.messages.wish import WISH_SCHEMAS
             result["cardPool"] = WISH_SCHEMAS["L2C_CardPool"].encode(self.wish.values(player["id"]))
+        if self.appearance:
+            from x2server.messages.appearance import APPEARANCE_SCHEMAS
+            result["heroSkinAll"] = APPEARANCE_SCHEMAS["L2C_HeroSkinAll"].encode(
+                self.appearance.skin_values(player["id"]))
         if self.economy:
             from x2server.messages.economy import ECONOMY_SCHEMAS
             from x2server.messages.lobby import LOBBY_SCHEMAS
@@ -59,15 +64,22 @@ class LoginService:
                 result[name] = LOBBY_SCHEMAS["L2C_GameTask"].encode(self.economy.task_values(player["id"], kind))
         LOGGER.info("authenticated login response prepared player=%s login_count=%s",
                     player["id"], player["login_count"])
-        push = self.snapshot_push(player)
-        return OutboundMessage("L2C_Login", result, pushes=(push,))
+        fragment_money = self.store.db.execute(
+            "SELECT quantity FROM inventory WHERE player_id=? AND item_id=1237927", (player["id"],)).fetchone() if self.economy else None
+        push = self.snapshot_push(player, fragment_money[0] if fragment_money else 0)
+        pushes = (push,)
+        if self.appearance:
+            pushes += (OutboundMessage("L2C_QueryHeroDubbing",
+                self.appearance._voice_values(player["id"])),)
+        return OutboundMessage("L2C_Login", result, pushes=pushes)
 
     @staticmethod
-    def snapshot_push(player: dict[str, Any]) -> OutboundMessage:
+    def snapshot_push(player: dict[str, Any], fragment_money: int = 0) -> OutboundMessage:
         snapshot = player["snapshot"]
         owned_ids = [hero["id"] for hero in snapshot.get("heroes", []) if hero.get("state") == 2]
         selected = snapshot.get("show")
         show = selected if selected in owned_ids else owned_ids[0] if owned_ids else 0
+        from x2server.messages.appearance import ICON_INFO
         base = BASE_INFO.encode({"Id": player["id"], "NickName": snapshot["nickname"],
             "Level": snapshot["level"], "Show": show,
             "Gold": snapshot.get("gold", 0), "Crystal": snapshot.get("crystal", 0),
@@ -78,7 +90,10 @@ class LoginService:
             "WeekActivity": snapshot.get("week_activity", 0),
             "Birthday": snapshot.get("birthday", 0),
             "MainChapter": snapshot.get("main_chapter", 0),
-            "MainSection": snapshot.get("main_section", 0)})
+            "MainSection": snapshot.get("main_section", 0),
+            "FragmentMoney": fragment_money,
+            "IconInfo": ICON_INFO.encode({"IconType": 1,
+                "IconID": snapshot.get("head_icon", 1000001)})})
         initial = {r["HeroID"]: r["InitialLevel"] for r in catalog()["favorabilityhero"]}
         values = {"BaseInfo": base, "favor": [FAVOR_MAP_ENTRY.encode({"Key": hero["id"],
             "Value": FAVOR.encode(favor_state(hero, initial.get(hero["id"], 1)))})

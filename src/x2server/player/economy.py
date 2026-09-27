@@ -30,7 +30,7 @@ class EconomyService:
     # Item.EffData -> BaseInfoProto; only supported currency destinations.
     CURRENCIES = {1237901: "gold", 1237902: "crystal", 1237906: "equip_exp", 1237907: "hero_exp",
                   1237908: "exp", 1237910: "daily_activity", 1237911: "week_activity"}
-    STACKABLE_REWARD_TYPES = frozenset((5, 12, 13, 14, 23, 24, 25, 33, 34))
+    STACKABLE_REWARD_TYPES = frozenset((5, 12, 13, 14, 17, 22, 23, 24, 25, 33, 34, 40, 41))
 
     def __init__(self, store, clock=time.time):
         self.store = store
@@ -612,7 +612,9 @@ class EconomyService:
         from .login import LoginService
         self.refresh_stamina(player_id)
         self.ensure_periods(player_id)
-        return (LoginService.snapshot_push(self.store.get(player_id)),
+        fragment_money = self.store.db.execute(
+            "SELECT quantity FROM inventory WHERE player_id=? AND item_id=1237927", (player_id,)).fetchone()
+        return (LoginService.snapshot_push(self.store.get(player_id), fragment_money[0] if fragment_money else 0),
             OutboundMessage("L2C_ItemUpdate", {"code": 10, **self.inventory_values(player_id)}),
             *(OutboundMessage("L2C_TaskUpdate", {"type": k, "taskList": self.task_values(player_id, k)["taskList"]}) for k in (1, 2)))
 
