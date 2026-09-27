@@ -26,8 +26,10 @@ def test_favor_gift_archive_and_relog(env):
     assert answer.values["code"] == 10
     assert answer.values["newExp"] == 10
     assert answer.values["newLevel"] == 1
+    assert answer.values["giftsTimes"] == 2
     assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1204000").fetchone()[0] == 0
     assert store.get(1)["snapshot"]["heroes"][0]["favor"] == {"level": 1, "exp": 10}
+    assert store.get(1)["snapshot"]["heroes"][0]["favor_gifts"]["count"] == 2
     assert asyncio.run(service.handle(ctx, packet(request, name="C2L_AddFavor"))).values["code"] == 13
     assert asyncio.run(service.handle(ctx, packet({"heroID": 1003, "archivesID": 5100301},
         name="C2L_UnlockHeroArchives"))).values["code"] == 10

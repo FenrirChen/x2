@@ -1,5 +1,6 @@
 """Official-table favor state; uncertain interactions fail without consuming items."""
 from importlib.resources import files
+from datetime import datetime, timedelta, timezone
 import json
 import time
 
@@ -87,6 +88,8 @@ class FavorService:
         values = {"code": 13, "opt": opt, "optionId": item_id, "heroId": hero_id,
             "exp": before["exp"], "level": before["level"],
             "newExp": before["exp"], "newLevel": before["level"]}
+        day = datetime.fromtimestamp(int(self.clock()), timezone(timedelta(hours=8))).strftime("%Y-%m-%d")
+        values["giftsTimes"] = hero.get("favor_gifts", {}).get("count", 0) if hero and hero.get("favor_gifts", {}).get("day") == day else 0
         gift = self.gifts.get(item_id)
         # A single EffData amount is unambiguous. Two amounts require the
         # unrecovered hero-preference selector; never guess which applies.
@@ -96,24 +99,24 @@ class FavorService:
         gain = gift["EffData"][0] * num
         if gain <= 0:
             return OutboundMessage("L2C_AddFavor", values)
-        try:
-            with self.economy.transaction():
-                charged = self.store.db.execute("""UPDATE inventory SET quantity=quantity-?
-                    WHERE player_id=? AND item_id=? AND quantity>=?""", (num, player_id, item_id, num))
-                if charged.rowcount != 1:
-                    return OutboundMessage("L2C_AddFavor", values)
-                snapshot = self.store.get(player_id)["snapshot"]
-                target = next(h for h in snapshot["heroes"] if h["id"] == hero_id and h["state"] == 2)
-                state = favor_state(target, self.heroes[hero_id]["InitialLevel"]).copy()
-                state["exp"] += gain
-                # Static Exp values through the first break are cumulative.
-                while state["level"] < 4 and state["exp"] >= self.levels[state["level"] + 1]["Exp"]:
-                    state["level"] += 1
-                target["favor"] = state
-                self.economy.save_snapshot(player_id, snapshot)
-        except (KeyError, ValueError):
-            raise
-        values.update(code=10, newExp=state["exp"], newLevel=state["level"])
+        with self.economy.transaction():
+            charged = self.store.db.execute("""UPDATE inventory SET quantity=quantity-?
+                WHERE player_id=? AND item_id=? AND quantity>=?""", (num, player_id, item_id, num))
+            if charged.rowcount != 1:
+                return OutboundMessage("L2C_AddFavor", values)
+            snapshot = self.store.get(player_id)["snapshot"]
+            target = next(h for h in snapshot["heroes"] if h["id"] == hero_id and h["state"] == 2)
+            state = favor_state(target, self.heroes[hero_id]["InitialLevel"]).copy()
+            state["exp"] += gain
+            # Static Exp values through the first break are cumulative.
+            while state["level"] < 4 and state["exp"] >= self.levels[state["level"] + 1]["Exp"]:
+                state["level"] += 1
+            target["favor"] = state
+            previous = target.get("favor_gifts", {})
+            count = (previous.get("count", 0) if previous.get("day") == day else 0) + num
+            target["favor_gifts"] = {"day": day, "count": count}
+            self.economy.save_snapshot(player_id, snapshot)
+        values.update(code=10, newExp=state["exp"], newLevel=state["level"], giftsTimes=count)
         change = FAVOR_CHANGE_INFO.encode({"beforeLevel": before["level"], "beforeExp": before["exp"],
             "afterLevel": state["level"], "afterExp": state["exp"], "heroID": hero_id, "type": 7})
         return OutboundMessage("L2C_AddFavor", values, pushes=(OutboundMessage(
