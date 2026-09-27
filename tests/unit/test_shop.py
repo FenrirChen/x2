@@ -80,6 +80,9 @@ def test_compat_shop_query_limit_payment_receipt_and_relog(env):
         name="C2L_QueryGoodsInfo"))).values["shopId"] == 801
     request = packet({"shopId": 801, "goodsId": 1900101, "buyNum": 1},
                      request_id=77, name="C2L_BuyGoods")
+    p = store.get(1)
+    store.save_snapshot(1, dict(p["snapshot"], crystal=30000), p["revision"])
+    # Crystals cannot pay for a gold-priced offer.
     assert asyncio.run(service.handle(ctx, request)).values["code"] == 13
     p = store.get(1)
     store.save_snapshot(1, dict(p["snapshot"], gold=30000), p["revision"])
