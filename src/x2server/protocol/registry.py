@@ -116,6 +116,8 @@ CORE_MESSAGE_REGISTRY = MessageRegistry(
         MessageEntry("L2C_FightKillInfo", 318, Direction.SERVER_TO_CLIENT),
         MessageEntry("C2L_GuideStep", 374, Direction.CLIENT_TO_SERVER),
         MessageEntry("L2C_GuideStep", 375, Direction.SERVER_TO_CLIENT),
+        MessageEntry("C2L_FillBirthday", 364, Direction.CLIENT_TO_SERVER),
+        MessageEntry("L2C_FillBirthday", 365, Direction.SERVER_TO_CLIENT),
         MessageEntry("L2C_ItemUpdate", 553, Direction.SERVER_TO_CLIENT),
         MessageEntry("C2L_DailyAndWeekTask", 681, Direction.CLIENT_TO_SERVER),
         MessageEntry("L2C_TaskUpdate", 558, Direction.SERVER_TO_CLIENT),

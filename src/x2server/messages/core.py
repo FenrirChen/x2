@@ -65,6 +65,14 @@ L2C_GUIDE_STEP = ProtoSchema(
     (ProtoField(1, "code", FieldKind.ENUM),),
 )
 
+C2L_FILL_BIRTHDAY = ProtoSchema("C2L_FillBirthday", (
+    ProtoField(1, "month", FieldKind.INT32),
+    ProtoField(2, "day", FieldKind.INT32),
+))
+L2C_FILL_BIRTHDAY = ProtoSchema("L2C_FillBirthday", (
+    ProtoField(1, "code", FieldKind.ENUM),
+))
+
 C2L_PREPARE_MAIN_MISSION = ProtoSchema(
     "C2L_PrepareMainMission",
     (
@@ -85,6 +93,8 @@ CORE_SCHEMAS = {
         L2C_LOGIN,
         C2L_GUIDE_STEP,
         L2C_GUIDE_STEP,
+        C2L_FILL_BIRTHDAY,
+        L2C_FILL_BIRTHDAY,
         C2L_PREPARE_MAIN_MISSION,
         L2C_PREPARE_MAIN_MISSION,
     )
@@ -108,6 +118,7 @@ BASE_INFO = ProtoSchema("BaseInfoProto", (
     ProtoField(6, "Exp", FieldKind.INT32),
     ProtoField(7, "EquipExp", FieldKind.INT32),
     ProtoField(8, "Show", FieldKind.INT32),
+    ProtoField(32, "Birthday", FieldKind.INT32),
     ProtoField(14, "HeroExp", FieldKind.INT32),
     ProtoField(20, "DailyActivity", FieldKind.INT32),
     ProtoField(21, "WeekActivity", FieldKind.INT32),

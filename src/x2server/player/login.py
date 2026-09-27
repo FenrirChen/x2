@@ -74,6 +74,7 @@ class LoginService:
             "HeroExp": snapshot.get("hero_exp", 0),
             "DailyActivity": snapshot.get("daily_activity", 0),
             "WeekActivity": snapshot.get("week_activity", 0),
+            "Birthday": snapshot.get("birthday", 0),
             "MainChapter": snapshot.get("main_chapter", 0),
             "MainSection": snapshot.get("main_section", 0)})
         values = {"BaseInfo": base}
