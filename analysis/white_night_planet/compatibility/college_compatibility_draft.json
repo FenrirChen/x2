@@ -1,0 +1,1212 @@
+{
+  "status": {
+    "value": "PROPOSAL / NOT APPROVED / NOT IMPLEMENTED",
+    "unit": "status",
+    "source": "REVIVAL_COMPATIBILITY",
+    "reason": "Review only; no runtime loader",
+    "confidence": "high",
+    "official_constraint": "",
+    "economic_impact": "",
+    "sensitivity": "medium",
+    "evidence": "",
+    "user_decision_required": true
+  },
+  "version": {
+    "value": 1,
+    "unit": "schema version",
+    "source": "REVIVAL_COMPATIBILITY",
+    "reason": "Replaceable policy package",
+    "confidence": "high",
+    "official_constraint": "",
+    "economic_impact": "",
+    "sensitivity": "medium",
+    "evidence": "",
+    "user_decision_required": true
+  },
+  "building": {
+    "ordinary_ids": {
+      "value": [
+        701,
+        702,
+        703,
+        704,
+        705,
+        706,
+        707,
+        708
+      ],
+      "unit": "ids",
+      "source": "OFFICIAL",
+      "reason": "CollegeBuilding",
+      "confidence": "high",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "official_economic_anchors.json",
+      "user_decision_required": false
+    },
+    "material_tier_by_target_level": {
+      "value": [
+        [
+          2,
+          5,
+          1237801
+        ],
+        [
+          6,
+          10,
+          1237802
+        ],
+        [
+          11,
+          15,
+          1237803
+        ],
+        [
+          16,
+          20,
+          1237804
+        ],
+        [
+          21,
+          25,
+          1237805
+        ],
+        [
+          26,
+          40,
+          1237805
+        ]
+      ],
+      "unit": "target-level bands",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "Five Time Rift tiers map to growth bands; tier 6 reserved for star promotion",
+      "confidence": "medium",
+      "official_constraint": "1237801..6 are College upgrade items; static level prerequisites still gate",
+      "economic_impact": "Time Rift remains meaningful without making rare 6-star material a per-level tax",
+      "sensitivity": "high",
+      "evidence": "official_economic_anchors.json",
+      "user_decision_required": true
+    },
+    "material_count_formula": {
+      "value": "1+ceil(target_level/8)",
+      "unit": "items/upgrade",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "2 at level 2; 5 near level 30",
+      "confidence": "medium",
+      "official_constraint": "",
+      "economic_impact": "1-2 Time Rift runs per late upgrade",
+      "sensitivity": "high",
+      "evidence": "",
+      "user_decision_required": true
+    },
+    "gold_cost_formula": {
+      "value": "round_to_50(500+85*target_level**1.45)",
+      "unit": "gold/upgrade",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "Power growth below exponential",
+      "confidence": "medium",
+      "official_constraint": "",
+      "economic_impact": "~600 at level 2; ~12k at level 30",
+      "sensitivity": "high",
+      "evidence": "",
+      "user_decision_required": true
+    },
+    "time_seconds_formula": {
+      "value": "min(28800,300+43.2*target_level**2)",
+      "unit": "seconds/upgrade",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "Minutes early; 2-8 hours mid/late",
+      "confidence": "medium",
+      "official_constraint": "",
+      "economic_impact": "Avoids multi-day wall",
+      "sensitivity": "medium",
+      "evidence": "",
+      "user_decision_required": true
+    },
+    "prerequisites": {
+      "value": "CollegeLevel.PreconditionType/Value and CollegeStarLevel.LimitLevel",
+      "unit": "static rule",
+      "source": "OFFICIAL",
+      "reason": "Native static gating",
+      "confidence": "high",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "official_economic_anchors.json",
+      "user_decision_required": false
+    },
+    "queue_slots": {
+      "value": 1,
+      "unit": "ordinary build queue",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "One BuildQueue object in GrowthBase; UI concurrent use still to verify",
+      "confidence": "medium",
+      "official_constraint": "BuildQueue message exists",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "",
+      "user_decision_required": true
+    }
+  },
+  "wonder": {
+    "ids": {
+      "value": [
+        721,
+        722,
+        723,
+        724,
+        725,
+        726,
+        727
+      ],
+      "unit": "initial open IDs",
+      "source": "OFFICIAL",
+      "reason": "728 BuildingOpen missing; do not auto-open",
+      "confidence": "high",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "official_economic_anchors.json",
+      "user_decision_required": false
+    },
+    "level_material_count_formula": {
+      "value": "2+ceil(target_level/7)",
+      "unit": "items/upgrade",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "Wonder is a separate slower track",
+      "confidence": "medium",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "high",
+      "evidence": "",
+      "user_decision_required": true
+    },
+    "level_gold_cost_formula": {
+      "value": "round_to_50(1200+140*target_level**1.45)",
+      "unit": "gold/upgrade",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "Higher than ordinary building without exponential cost",
+      "confidence": "medium",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "high",
+      "evidence": "",
+      "user_decision_required": true
+    },
+    "level_time_seconds_formula": {
+      "value": "min(43200,900+64.8*target_level**2)",
+      "unit": "seconds/upgrade",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "15 minutes early, max 12 hours",
+      "confidence": "medium",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "",
+      "user_decision_required": true
+    },
+    "star_material_tier": {
+      "value": "target_star",
+      "unit": "1237801..6 tier",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "All six official star materials have a role",
+      "confidence": "medium",
+      "official_constraint": "Star caps/LimitLevel from CollegeStarLevel",
+      "economic_impact": "",
+      "sensitivity": "high",
+      "evidence": "official_economic_anchors.json",
+      "user_decision_required": true
+    },
+    "star_material_count": {
+      "value": [
+        2,
+        3,
+        3,
+        2,
+        2,
+        1
+      ],
+      "unit": "items by target star 1..6",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "6-star drop is rare in fifth Time Rift tier",
+      "confidence": "medium",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "high",
+      "evidence": "official_economic_anchors.json",
+      "user_decision_required": true
+    },
+    "star_gold_cost_formula": {
+      "value": "round_to_50(3000*target_star**1.5)",
+      "unit": "gold/star",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "Milestone sink; no premium currency",
+      "confidence": "medium",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "high",
+      "evidence": "",
+      "user_decision_required": true
+    },
+    "queue_slots": {
+      "value": 1,
+      "unit": "wonder queue",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "Separate WonderQueue object",
+      "confidence": "medium",
+      "official_constraint": "WonderQueue message exists",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "",
+      "user_decision_required": true
+    },
+    "building_728_unlock": {
+      "value": "DEFER",
+      "unit": "rule",
+      "source": "UNKNOWN",
+      "reason": "Missing BuildingOpen and no server unlock sample",
+      "confidence": "low",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "official_economic_anchors.json",
+      "user_decision_required": false
+    }
+  },
+  "star_energy": {
+    "rate_per_hour": {
+      "value": 2,
+      "unit": "energy/hour",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "Explore PowerConsume is exactly 2 per hour across all 15 rows",
+      "confidence": "medium",
+      "official_constraint": "Explore costs 6..72 for 3..36 hours",
+      "economic_impact": "Continuous single dispatch roughly consumes generated energy",
+      "sensitivity": "high",
+      "evidence": "official_economic_anchors.json",
+      "user_decision_required": true
+    },
+    "warehouse_cap": {
+      "value": 96,
+      "unit": "energy",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "Covers longest 72-energy dispatch with reserve",
+      "confidence": "medium",
+      "official_constraint": "",
+      "economic_impact": "No unlimited stockpile",
+      "sensitivity": "high",
+      "evidence": "official_economic_anchors.json",
+      "user_decision_required": true
+    },
+    "offline_accrual_cap_hours": {
+      "value": 24,
+      "unit": "hours/logout interval",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "Once-daily login gets full production; 2/4/8/12 hours would starve long dispatch",
+      "confidence": "medium",
+      "official_constraint": "",
+      "economic_impact": "Max 48 energy per long absence at base rate",
+      "sensitivity": "high",
+      "evidence": "",
+      "user_decision_required": true
+    },
+    "settlement": {
+      "value": "min(cap,current+floor(min(elapsed,offline_cap)*rate))",
+      "unit": "server-clock formula",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "Timestamp only moves forward; settle before cost or grant",
+      "confidence": "medium",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "high",
+      "evidence": "",
+      "user_decision_required": true
+    },
+    "building_rate_bonus": {
+      "value": "DEFER",
+      "unit": "rule",
+      "source": "UNKNOWN",
+      "reason": "EffectType links need exact native consumer mapping",
+      "confidence": "low",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "official_economic_anchors.json",
+      "user_decision_required": false
+    },
+    "power_exchange": {
+      "value": "DEFER",
+      "unit": "rule",
+      "source": "UNKNOWN",
+      "reason": "238/249 conversion rate unknown",
+      "confidence": "low",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "",
+      "user_decision_required": false
+    }
+  },
+  "acceleration": {
+    "allowed_item_ids": {
+      "value": [
+        1237831,
+        1237832,
+        1237833,
+        1237834,
+        1237835
+      ],
+      "unit": "item IDs",
+      "source": "OFFICIAL",
+      "reason": "Item.FunctionEff=E_SpeedUp; descriptions specify building upgrade",
+      "confidence": "high",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "official_economic_anchors.json",
+      "user_decision_required": false
+    },
+    "seconds_by_item": {
+      "value": {
+        "1237831": 600,
+        "1237832": 3600,
+        "1237833": 7200,
+        "1237834": 14400,
+        "1237835": 28800
+      },
+      "unit": "seconds/card",
+      "source": "OFFICIAL",
+      "reason": "Item.EffData",
+      "confidence": "high",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "official_economic_anchors.json",
+      "user_decision_required": false
+    },
+    "policy": {
+      "value": "consume named card; end=max(now,end-card_seconds); no premium-currency fallback",
+      "unit": "rule",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "Use existing obtainable cards, never free bypass",
+      "confidence": "medium",
+      "official_constraint": "",
+      "economic_impact": "Existing acceleration stock gains purpose",
+      "sensitivity": "medium",
+      "evidence": "",
+      "user_decision_required": true
+    },
+    "overflow_carry": {
+      "value": false,
+      "unit": "bool",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "Card shortens active queue only; no banked negative time",
+      "confidence": "medium",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "low",
+      "evidence": "",
+      "user_decision_required": true
+    }
+  },
+  "cancel_refund": {
+    "recommended_fraction": {
+      "value": 1.0,
+      "unit": "fraction of unearned base inputs",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "No output or completion reward before finish; receipt prevents loop",
+      "confidence": "medium",
+      "official_constraint": "",
+      "economic_impact": "No progress tax; speed cards already spent are not refunded",
+      "sensitivity": "medium",
+      "evidence": "",
+      "user_decision_required": true
+    },
+    "alternatives": {
+      "value": [
+        "0.8 flat",
+        "max(0,1-elapsed/total)"
+      ],
+      "unit": "candidate rules",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "80% is a sink; proportional is less predictable",
+      "confidence": "medium",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "",
+      "user_decision_required": true
+    },
+    "speed_card_refund": {
+      "value": false,
+      "unit": "bool",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "Consumed card is a separate completed transaction",
+      "confidence": "medium",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "",
+      "user_decision_required": true
+    }
+  },
+  "queues": {
+    "explore_slots": {
+      "value": 2,
+      "unit": "concurrent dispatches",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "Candidate pending UI-slot verification",
+      "confidence": "medium",
+      "official_constraint": "",
+      "economic_impact": "Max two timed sources",
+      "sensitivity": "high",
+      "evidence": "",
+      "user_decision_required": true
+    },
+    "training_slots": {
+      "value": 2,
+      "unit": "concurrent trainees",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "Candidate pending UI-slot verification",
+      "confidence": "medium",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "",
+      "user_decision_required": true
+    },
+    "alchemy_production_positions": {
+      "value": 5,
+      "unit": "client positions",
+      "source": "OFFICIAL",
+      "reason": "591 native handler resets five slots",
+      "confidence": "high",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "phase0_response_audit.md",
+      "user_decision_required": false
+    },
+    "alchemy_open_slots": {
+      "value": "DEFER",
+      "unit": "count",
+      "source": "UNKNOWN",
+      "reason": "Which of five positions start open is not proven",
+      "confidence": "low",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "",
+      "user_decision_required": false
+    }
+  },
+  "explore": {
+    "duration_and_cost": {
+      "value": "CollegeExplore.WaitTimes and PowerConsume",
+      "unit": "seconds and energy",
+      "source": "OFFICIAL",
+      "reason": "15 static rows; 3..36h and 6..72 energy",
+      "confidence": "high",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "official_economic_anchors.json",
+      "user_decision_required": false
+    },
+    "success_rate": {
+      "value": 1.0,
+      "unit": "probability",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "No failure result rule recovered",
+      "confidence": "medium",
+      "official_constraint": "",
+      "economic_impact": "Predictable timed return",
+      "sensitivity": "medium",
+      "evidence": "",
+      "user_decision_required": true
+    },
+    "reward_policy": {
+      "value": "one weight-normalized resolution of CollegeExplore.Reward Gift; no second roll or multiplier",
+      "unit": "rule",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "Gift weights sum to 1000; current EconomyService.gifts accepts only 100 and cannot be called unchanged",
+      "confidence": "medium",
+      "official_constraint": "",
+      "economic_impact": "Long missions yield less per hour; convenience is their advantage",
+      "sensitivity": "high",
+      "evidence": "official_economic_anchors.json",
+      "user_decision_required": true
+    },
+    "gift_resolver_gate": {
+      "value": "DEFER until a tested weighted-Gift resolver supports sum=1000 and all reward destinations",
+      "unit": "implementation gate",
+      "source": "UNKNOWN",
+      "reason": "Current daily Gift resolver rejects these weights; no runtime shortcut",
+      "confidence": "high",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "src/x2server/player/economy.py",
+      "user_decision_required": false
+    },
+    "hero_occupancy": {
+      "value": "same hero cannot occupy two Explore or Explore+Training",
+      "unit": "rule",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "Prevent duplicate utilization",
+      "confidence": "medium",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "high",
+      "evidence": "",
+      "user_decision_required": true
+    },
+    "early_finish": {
+      "value": "DEFER",
+      "unit": "rule",
+      "source": "UNKNOWN",
+      "reason": "Only card/use path should be enabled when proven",
+      "confidence": "low",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "",
+      "user_decision_required": false
+    },
+    "cancel_refund_fraction": {
+      "value": 1.0,
+      "unit": "energy fraction",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "No reward granted on cancel; no server-clock exploit",
+      "confidence": "medium",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "",
+      "user_decision_required": true
+    }
+  },
+  "training": {
+    "duration_seconds": {
+      "value": 14400,
+      "unit": "seconds",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "Four-hour candidate, subject to UI timer and EXP scale audit",
+      "confidence": "medium",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "",
+      "user_decision_required": true
+    },
+    "exp_reward": {
+      "value": "DEFER",
+      "unit": "hero EXP",
+      "source": "UNKNOWN",
+      "reason": "No College training reward table or server sample",
+      "confidence": "low",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "",
+      "user_decision_required": false
+    },
+    "cost": {
+      "value": "DEFER",
+      "unit": "items/energy",
+      "source": "UNKNOWN",
+      "reason": "No trustworthy training cost",
+      "confidence": "low",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "",
+      "user_decision_required": false
+    },
+    "occupancy": {
+      "value": "shared hero ledger with Explore",
+      "unit": "rule",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "No simultaneous assignment",
+      "confidence": "medium",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "high",
+      "evidence": "",
+      "user_decision_required": true
+    }
+  },
+  "alchemy": {
+    "recipe_inputs_outputs_time": {
+      "value": "CollegeRecipe.ItemGroup/ItemNum/ProductID/ProductNum/WaitTimes",
+      "unit": "static",
+      "source": "OFFICIAL",
+      "reason": "60 exact recipes",
+      "confidence": "high",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "official_economic_anchors.json",
+      "user_decision_required": false
+    },
+    "gold_pay_semantics": {
+      "value": "DEFER",
+      "unit": "rule",
+      "source": "UNKNOWN",
+      "reason": "Gold/Pay field roles not proven; never charge/credit from names",
+      "confidence": "low",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "official_economic_anchors.json",
+      "user_decision_required": false
+    },
+    "recipe_unlock": {
+      "value": "DEFER",
+      "unit": "rule",
+      "source": "UNKNOWN",
+      "reason": "591 initial recipe EXP state missing",
+      "confidence": "low",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "",
+      "user_decision_required": false
+    },
+    "extra_rng": {
+      "value": false,
+      "unit": "bool",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "Do not roll another result over deterministic ProductID",
+      "confidence": "medium",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "",
+      "user_decision_required": true
+    },
+    "economic_value": {
+      "value": "DEFER",
+      "unit": "gold-equivalent",
+      "source": "UNKNOWN",
+      "reason": "ItemValue 9999 for inputs and 1 for outputs is not exchange value",
+      "confidence": "low",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "official_economic_anchors.json",
+      "user_decision_required": false
+    }
+  },
+  "customer": {
+    "pool": {
+      "value": "CollegeCustomer 42 rows; CollegeQuest 120 rows",
+      "unit": "static",
+      "source": "OFFICIAL",
+      "reason": "No new NPC or quest IDs",
+      "confidence": "high",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "official_economic_anchors.json",
+      "user_decision_required": false
+    },
+    "active_positions": {
+      "value": 5,
+      "unit": "client positions",
+      "source": "OFFICIAL",
+      "reason": "591 handler resets five customer positions",
+      "confidence": "high",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "phase0_response_audit.md",
+      "user_decision_required": false
+    },
+    "generation_weights": {
+      "value": "DEFER",
+      "unit": "weights",
+      "source": "UNKNOWN",
+      "reason": "No original server frequency or eligibility",
+      "confidence": "low",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "",
+      "user_decision_required": false
+    },
+    "refresh": {
+      "value": "DEFER",
+      "unit": "cooldown/free count",
+      "source": "UNKNOWN",
+      "reason": "Manual-refresh eligibility/cost not proven",
+      "confidence": "low",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "",
+      "user_decision_required": false
+    },
+    "order_reward": {
+      "value": "use CollegeQuest.AwardType/AwardGroup only after exact price/cost validation",
+      "unit": "rule",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "Official rows are 41 Gift, 77 Gold, 2 Buff; validation order is a proposed safeguard",
+      "confidence": "medium",
+      "official_constraint": "CollegeQuest.AwardType/AwardGroup",
+      "economic_impact": "",
+      "sensitivity": "high",
+      "evidence": "official_economic_anchors.json",
+      "user_decision_required": true
+    },
+    "client_price_trust": {
+      "value": false,
+      "unit": "bool",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "Ignore client plusPrice/discountPrice as authority",
+      "confidence": "medium",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "high",
+      "evidence": "",
+      "user_decision_required": true
+    }
+  },
+  "pray": {
+    "static_cost_and_time": {
+      "value": "CollegeBuilding.PrayItem/PrayItemNum/PrayWaitTimes",
+      "unit": "static",
+      "source": "OFFICIAL",
+      "reason": "Wonder rows supply 3000 gold + one 1237840 and 28800 seconds",
+      "confidence": "high",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "official_economic_anchors.json",
+      "user_decision_required": false
+    },
+    "daily_limit": {
+      "value": "DEFER",
+      "unit": "count",
+      "source": "UNKNOWN",
+      "reason": "No proven original cap",
+      "confidence": "low",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "",
+      "user_decision_required": false
+    },
+    "reward_mapping": {
+      "value": "DEFER",
+      "unit": "Gift/fragment map",
+      "source": "UNKNOWN",
+      "reason": "Description says matching source Hero fragments; exact reward IDs absent",
+      "confidence": "low",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "",
+      "user_decision_required": false
+    }
+  },
+  "washing": {
+    "cost_options": {
+      "value": "CollegeEquibReset rows 1..5; prefer gold-side Item1 list",
+      "unit": "rule",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "Official table lists gold and crystal alternatives; route preference is a policy choice",
+      "confidence": "medium",
+      "official_constraint": "CollegeEquibReset rows 1..5",
+      "economic_impact": "",
+      "sensitivity": "high",
+      "evidence": "official_economic_anchors.json",
+      "user_decision_required": true
+    },
+    "daily_attempt_cap": {
+      "value": 10,
+      "unit": "attempts/day",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "Balanced candidate; compare 5/20/unlimited",
+      "confidence": "medium",
+      "official_constraint": "",
+      "economic_impact": "Limits random reroll search without pay pressure",
+      "sensitivity": "high",
+      "evidence": "",
+      "user_decision_required": true
+    },
+    "affix_generation": {
+      "value": "DEFER; reuse EquipmentInstanceFactory constraints if proven",
+      "unit": "rule",
+      "source": "UNKNOWN",
+      "reason": "Slot-lock and reroll mapping not closed",
+      "confidence": "low",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "",
+      "user_decision_required": false
+    },
+    "crystal_route": {
+      "value": "DEFER",
+      "unit": "rule",
+      "source": "UNKNOWN",
+      "reason": "Avoid premium-currency drain until reviewed",
+      "confidence": "low",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "",
+      "user_decision_required": false
+    }
+  },
+  "assist": {
+    "policy": {
+      "value": "DEFER",
+      "unit": "rule",
+      "source": "UNKNOWN",
+      "reason": "879/881 real send path and social state not closed",
+      "confidence": "low",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "",
+      "user_decision_required": false
+    },
+    "alternative": {
+      "value": "NPC/self assist without fictional accounts",
+      "unit": "candidate",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "Only after explicit separate approval",
+      "confidence": "medium",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "",
+      "user_decision_required": true
+    }
+  },
+  "daily_reset": {
+    "timezone": {
+      "value": "Asia/Shanghai",
+      "unit": "IANA zone",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "Match current Revival daily task and gift calendar",
+      "confidence": "high",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "src/x2server/player/task_calendar.py",
+      "user_decision_required": true
+    },
+    "hour": {
+      "value": 0,
+      "unit": "local hour",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "Match current Revival daily task boundary; official College hour unknown",
+      "confidence": "high",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "",
+      "user_decision_required": true
+    },
+    "clock": {
+      "value": "ServerClock",
+      "unit": "authority",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "Never trust client time",
+      "confidence": "high",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "",
+      "user_decision_required": true
+    }
+  },
+  "errors": {
+    "success_code": {
+      "value": 10,
+      "unit": "protocol code",
+      "source": "OFFICIAL",
+      "reason": "Native 591/623 success comparison",
+      "confidence": "high",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "phase0_response_audit.md",
+      "user_decision_required": false
+    },
+    "generic_reject_code": {
+      "value": 13,
+      "unit": "protocol code",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "Existing Revival unsupported/error fallback; exact original per-cause codes unknown",
+      "confidence": "medium",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "low",
+      "evidence": "",
+      "user_decision_required": true
+    },
+    "internal_reasons": {
+      "value": [
+        "not_owned",
+        "insufficient",
+        "busy",
+        "not_finished",
+        "already_claimed",
+        "invalid_state",
+        "limit_reached"
+      ],
+      "unit": "reason labels",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "Separate validation and logs even if wire maps to generic reject",
+      "confidence": "medium",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "low",
+      "evidence": "",
+      "user_decision_required": true
+    }
+  },
+  "transaction": {
+    "boundary": {
+      "value": "validate -> compute -> debit -> state -> reward -> receipt -> commit -> respond",
+      "unit": "SQLite transaction",
+      "source": "REVIVAL_COMPATIBILITY",
+      "reason": "Cancellation/finish/retry races cannot mint resources",
+      "confidence": "high",
+      "official_constraint": "",
+      "economic_impact": "",
+      "sensitivity": "medium",
+      "evidence": "",
+      "user_decision_required": true
+    }
+  },
+  "presets": {
+    "CONSERVATIVE": {
+      "material_cost_multiplier": {
+        "value": 1.25,
+        "unit": "x",
+        "source": "REVIVAL_COMPATIBILITY",
+        "reason": "Slower material progression",
+        "confidence": "medium",
+        "official_constraint": "",
+        "economic_impact": "",
+        "sensitivity": "high",
+        "evidence": "",
+        "user_decision_required": true
+      },
+      "gold_cost_multiplier": {
+        "value": 1.25,
+        "unit": "x",
+        "source": "REVIVAL_COMPATIBILITY",
+        "reason": "Higher gold sink",
+        "confidence": "medium",
+        "official_constraint": "",
+        "economic_impact": "",
+        "sensitivity": "high",
+        "evidence": "",
+        "user_decision_required": true
+      },
+      "build_time_multiplier": {
+        "value": 1.3,
+        "unit": "x",
+        "source": "REVIVAL_COMPATIBILITY",
+        "reason": "Longer queues",
+        "confidence": "medium",
+        "official_constraint": "",
+        "economic_impact": "",
+        "sensitivity": "medium",
+        "evidence": "",
+        "user_decision_required": true
+      },
+      "energy_rate_per_hour": {
+        "value": 1.5,
+        "unit": "energy/hour",
+        "source": "REVIVAL_COMPATIBILITY",
+        "reason": "Lower dispatch cadence",
+        "confidence": "medium",
+        "official_constraint": "",
+        "economic_impact": "",
+        "sensitivity": "high",
+        "evidence": "",
+        "user_decision_required": true
+      },
+      "offline_cap_hours": {
+        "value": 12,
+        "unit": "hours",
+        "source": "REVIVAL_COMPATIBILITY",
+        "reason": "Less idle accrual",
+        "confidence": "medium",
+        "official_constraint": "",
+        "economic_impact": "",
+        "sensitivity": "high",
+        "evidence": "",
+        "user_decision_required": true
+      },
+      "washing_cap": {
+        "value": 5,
+        "unit": "attempts/day",
+        "source": "REVIVAL_COMPATIBILITY",
+        "reason": "Restrictive comparison",
+        "confidence": "medium",
+        "official_constraint": "",
+        "economic_impact": "",
+        "sensitivity": "high",
+        "evidence": "",
+        "user_decision_required": true
+      }
+    },
+    "BALANCED": {
+      "material_cost_multiplier": {
+        "value": 1.0,
+        "unit": "x",
+        "source": "REVIVAL_COMPATIBILITY",
+        "reason": "Recommended baseline",
+        "confidence": "medium",
+        "official_constraint": "",
+        "economic_impact": "",
+        "sensitivity": "high",
+        "evidence": "",
+        "user_decision_required": true
+      },
+      "gold_cost_multiplier": {
+        "value": 1.0,
+        "unit": "x",
+        "source": "REVIVAL_COMPATIBILITY",
+        "reason": "Recommended baseline",
+        "confidence": "medium",
+        "official_constraint": "",
+        "economic_impact": "",
+        "sensitivity": "high",
+        "evidence": "",
+        "user_decision_required": true
+      },
+      "build_time_multiplier": {
+        "value": 1.0,
+        "unit": "x",
+        "source": "REVIVAL_COMPATIBILITY",
+        "reason": "Recommended baseline",
+        "confidence": "medium",
+        "official_constraint": "",
+        "economic_impact": "",
+        "sensitivity": "medium",
+        "evidence": "",
+        "user_decision_required": true
+      },
+      "energy_rate_per_hour": {
+        "value": 2.0,
+        "unit": "energy/hour",
+        "source": "REVIVAL_COMPATIBILITY",
+        "reason": "Matches Explore 2 energy/hour",
+        "confidence": "medium",
+        "official_constraint": "",
+        "economic_impact": "",
+        "sensitivity": "high",
+        "evidence": "",
+        "user_decision_required": true
+      },
+      "offline_cap_hours": {
+        "value": 24,
+        "unit": "hours",
+        "source": "REVIVAL_COMPATIBILITY",
+        "reason": "Supports once-daily play",
+        "confidence": "medium",
+        "official_constraint": "",
+        "economic_impact": "",
+        "sensitivity": "high",
+        "evidence": "",
+        "user_decision_required": true
+      },
+      "washing_cap": {
+        "value": 10,
+        "unit": "attempts/day",
+        "source": "REVIVAL_COMPATIBILITY",
+        "reason": "Recommended candidate",
+        "confidence": "medium",
+        "official_constraint": "",
+        "economic_impact": "",
+        "sensitivity": "high",
+        "evidence": "",
+        "user_decision_required": true
+      }
+    },
+    "RELAXED": {
+      "material_cost_multiplier": {
+        "value": 0.75,
+        "unit": "x",
+        "source": "REVIVAL_COMPATIBILITY",
+        "reason": "Faster collection play",
+        "confidence": "medium",
+        "official_constraint": "",
+        "economic_impact": "",
+        "sensitivity": "high",
+        "evidence": "",
+        "user_decision_required": true
+      },
+      "gold_cost_multiplier": {
+        "value": 0.75,
+        "unit": "x",
+        "source": "REVIVAL_COMPATIBILITY",
+        "reason": "Lighter gold sink",
+        "confidence": "medium",
+        "official_constraint": "",
+        "economic_impact": "",
+        "sensitivity": "high",
+        "evidence": "",
+        "user_decision_required": true
+      },
+      "build_time_multiplier": {
+        "value": 0.7,
+        "unit": "x",
+        "source": "REVIVAL_COMPATIBILITY",
+        "reason": "Shorter queues",
+        "confidence": "medium",
+        "official_constraint": "",
+        "economic_impact": "",
+        "sensitivity": "medium",
+        "evidence": "",
+        "user_decision_required": true
+      },
+      "energy_rate_per_hour": {
+        "value": 3.0,
+        "unit": "energy/hour",
+        "source": "REVIVAL_COMPATIBILITY",
+        "reason": "More dispatch capacity",
+        "confidence": "medium",
+        "official_constraint": "",
+        "economic_impact": "",
+        "sensitivity": "high",
+        "evidence": "",
+        "user_decision_required": true
+      },
+      "offline_cap_hours": {
+        "value": 24,
+        "unit": "hours",
+        "source": "REVIVAL_COMPATIBILITY",
+        "reason": "Keep cap bounded",
+        "confidence": "medium",
+        "official_constraint": "",
+        "economic_impact": "",
+        "sensitivity": "high",
+        "evidence": "",
+        "user_decision_required": true
+      },
+      "washing_cap": {
+        "value": 20,
+        "unit": "attempts/day",
+        "source": "REVIVAL_COMPATIBILITY",
+        "reason": "Generous reroll ceiling",
+        "confidence": "medium",
+        "official_constraint": "",
+        "economic_impact": "",
+        "sensitivity": "high",
+        "evidence": "",
+        "user_decision_required": true
+      }
+    }
+  }
+}

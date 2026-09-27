@@ -72,6 +72,8 @@ Evidence: official 2.4 decoded tables; dump.cs/script.json/libil2cpp.so; analysi
 
 若官方服务器专属值无法恢复，须为星能产出、建筑资源消耗、派遣奖励权重、顾客/洗炼随机、取消退费和协助限制分别提出可审查的兼容参数；注明依据和经济影响后由项目决策层确定。本次未新增这些兼容值，也未重置活跃存档。
 
+**兼容设计提案（尚未批准、未实施）：**[college_growthbase_compatibility_PROPOSAL.md](../decisions/compatibility/college_growthbase_compatibility_PROPOSAL.md)。官方 Item 表证实 1237831–1237835 是建筑加速卡（10 分钟至 8 小时）；“时之痕”五档的材料 Gift 对应 1237801–1237806 建筑/奇迹升级材料。提案据此使用现有材料与加速卡设计成本和计时，附参数表与模拟；正式 College 覆盖状态未改变。
+
 ## Implementation Plan
 
 | 阶段 | 请求/响应及 push | 静态与持久化 | 测试 / DoD |

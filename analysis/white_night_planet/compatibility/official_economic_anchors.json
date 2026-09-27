@@ -1,0 +1,4053 @@
+{
+  "provenance": "OFFICIAL_CONSTRAINT: official client 2.4 static tables; ItemValue is a rating, not an exchange rate",
+  "source_directory": "D:\\demo\\x2\\analysis\\drop_archaeology\\full_tables",
+  "college_building": {
+    "count": 16,
+    "ordinary_ids": [
+      701,
+      702,
+      703,
+      704,
+      705,
+      706,
+      707,
+      708
+    ],
+    "wonder_ids": [
+      721,
+      722,
+      723,
+      724,
+      725,
+      726,
+      727,
+      728
+    ],
+    "initial_and_caps": [
+      {
+        "id": 701,
+        "initial_level": 1,
+        "initial_star": 1,
+        "level_cap": 30,
+        "star_cap": 6,
+        "building_open": {
+          "value": 1,
+          "enum": "E_Yes"
+        }
+      },
+      {
+        "id": 702,
+        "initial_level": 1,
+        "initial_star": 1,
+        "level_cap": 30,
+        "star_cap": 6,
+        "building_open": {
+          "value": 1,
+          "enum": "E_Yes"
+        }
+      },
+      {
+        "id": 703,
+        "initial_level": 1,
+        "initial_star": 1,
+        "level_cap": 30,
+        "star_cap": 6,
+        "building_open": {
+          "value": 1,
+          "enum": "E_Yes"
+        }
+      },
+      {
+        "id": 704,
+        "initial_level": 1,
+        "initial_star": 1,
+        "level_cap": 30,
+        "star_cap": 6,
+        "building_open": {
+          "value": 1,
+          "enum": "E_Yes"
+        }
+      },
+      {
+        "id": 705,
+        "initial_level": 1,
+        "initial_star": 1,
+        "level_cap": 30,
+        "star_cap": 6,
+        "building_open": {
+          "value": 1,
+          "enum": "E_Yes"
+        }
+      },
+      {
+        "id": 706,
+        "initial_level": 1,
+        "initial_star": 1,
+        "level_cap": 30,
+        "star_cap": 6,
+        "building_open": {
+          "value": 1,
+          "enum": "E_Yes"
+        }
+      },
+      {
+        "id": 707,
+        "initial_level": 1,
+        "initial_star": 1,
+        "level_cap": 30,
+        "star_cap": 6,
+        "building_open": {
+          "value": 1,
+          "enum": "E_Yes"
+        }
+      },
+      {
+        "id": 708,
+        "initial_level": 1,
+        "initial_star": 1,
+        "level_cap": 25,
+        "star_cap": 5,
+        "building_open": {
+          "value": 1,
+          "enum": "E_Yes"
+        }
+      },
+      {
+        "id": 721,
+        "initial_level": 1,
+        "initial_star": null,
+        "level_cap": 35,
+        "star_cap": 6,
+        "building_open": {
+          "value": 1,
+          "enum": "E_Yes"
+        }
+      },
+      {
+        "id": 722,
+        "initial_level": 1,
+        "initial_star": null,
+        "level_cap": 35,
+        "star_cap": 6,
+        "building_open": {
+          "value": 1,
+          "enum": "E_Yes"
+        }
+      },
+      {
+        "id": 723,
+        "initial_level": 1,
+        "initial_star": null,
+        "level_cap": 35,
+        "star_cap": 6,
+        "building_open": {
+          "value": 1,
+          "enum": "E_Yes"
+        }
+      },
+      {
+        "id": 724,
+        "initial_level": 1,
+        "initial_star": null,
+        "level_cap": 35,
+        "star_cap": 6,
+        "building_open": {
+          "value": 1,
+          "enum": "E_Yes"
+        }
+      },
+      {
+        "id": 725,
+        "initial_level": 1,
+        "initial_star": null,
+        "level_cap": 35,
+        "star_cap": 6,
+        "building_open": {
+          "value": 1,
+          "enum": "E_Yes"
+        }
+      },
+      {
+        "id": 726,
+        "initial_level": 1,
+        "initial_star": null,
+        "level_cap": 35,
+        "star_cap": 6,
+        "building_open": {
+          "value": 1,
+          "enum": "E_Yes"
+        }
+      },
+      {
+        "id": 727,
+        "initial_level": 1,
+        "initial_star": null,
+        "level_cap": 35,
+        "star_cap": 6,
+        "building_open": {
+          "value": 1,
+          "enum": "E_Yes"
+        }
+      },
+      {
+        "id": 728,
+        "initial_level": 1,
+        "initial_star": null,
+        "level_cap": 35,
+        "star_cap": 6,
+        "building_open": "MISSING"
+      }
+    ]
+  },
+  "college_level": {
+    "row_count": 555,
+    "level_span": {
+      "min": 1,
+      "median": 18,
+      "max": 40
+    },
+    "prerequisite_types": [
+      "E_AccountLevel",
+      "E_Building01Level",
+      "MISSING"
+    ],
+    "cost": "MISSING",
+    "build_time": "MISSING"
+  },
+  "college_star_level": {
+    "row_count": 95,
+    "star_span": {
+      "min": 1,
+      "median": 3,
+      "max": 6
+    },
+    "limit_levels": [
+      3,
+      5,
+      6,
+      10,
+      12,
+      15,
+      18,
+      20,
+      24,
+      25,
+      30,
+      35
+    ],
+    "cost": "MISSING"
+  },
+  "college_wonder_skill": {
+    "row_count": 54,
+    "cost": "MISSING"
+  },
+  "college_explore": {
+    "row_count": 15,
+    "wait_seconds": {
+      "min": 10800,
+      "median": 54000,
+      "max": 129600
+    },
+    "power_consume": {
+      "min": 6,
+      "median": 30,
+      "max": 72
+    },
+    "rows": [
+      {
+        "id": 34001,
+        "wait_seconds": 10800,
+        "power_consume": 6,
+        "reward_gift": {
+          "gift_group": 761001,
+          "award_type": "E_Random",
+          "outcomes": [
+            {
+              "item_id": 1237840,
+              "count": 1,
+              "probability": 0.03,
+              "item_value": 720
+            },
+            {
+              "item_id": 1237901,
+              "count": 5000,
+              "probability": 0.05,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237901,
+              "count": 1000,
+              "probability": 0.27,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237907,
+              "count": 1000,
+              "probability": 0.05,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237907,
+              "count": 200,
+              "probability": 0.2,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237922,
+              "count": 5,
+              "probability": 0.1,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237991,
+              "count": 50,
+              "probability": 0.115,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237992,
+              "count": 50,
+              "probability": 0.1,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1203001,
+              "count": 1,
+              "probability": 0.05,
+              "item_value": 999
+            },
+            {
+              "item_id": 1203002,
+              "count": 1,
+              "probability": 0.025,
+              "item_value": 999
+            },
+            {
+              "item_id": 1203003,
+              "count": 1,
+              "probability": 0.01,
+              "item_value": 999
+            }
+          ],
+          "expected_quantity_by_item": {
+            "1203001": 0.05,
+            "1203002": 0.025,
+            "1203003": 0.01,
+            "1237840": 0.03,
+            "1237901": 520.0,
+            "1237907": 90.0,
+            "1237922": 0.5,
+            "1237991": 5.75,
+            "1237992": 5.0
+          }
+        },
+        "produce_id": 1281001,
+        "condition": [
+          100,
+          200,
+          300
+        ]
+      },
+      {
+        "id": 34002,
+        "wait_seconds": 14400,
+        "power_consume": 8,
+        "reward_gift": {
+          "gift_group": 761002,
+          "award_type": "E_Random",
+          "outcomes": [
+            {
+              "item_id": 1237840,
+              "count": 1,
+              "probability": 0.03,
+              "item_value": 720
+            },
+            {
+              "item_id": 1237901,
+              "count": 5000,
+              "probability": 0.05,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237901,
+              "count": 1000,
+              "probability": 0.27,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237907,
+              "count": 1000,
+              "probability": 0.05,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237907,
+              "count": 200,
+              "probability": 0.2,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237922,
+              "count": 5,
+              "probability": 0.1,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237991,
+              "count": 50,
+              "probability": 0.115,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237992,
+              "count": 50,
+              "probability": 0.1,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1203001,
+              "count": 1,
+              "probability": 0.05,
+              "item_value": 999
+            },
+            {
+              "item_id": 1203002,
+              "count": 1,
+              "probability": 0.025,
+              "item_value": 999
+            },
+            {
+              "item_id": 1203003,
+              "count": 1,
+              "probability": 0.01,
+              "item_value": 999
+            }
+          ],
+          "expected_quantity_by_item": {
+            "1203001": 0.05,
+            "1203002": 0.025,
+            "1203003": 0.01,
+            "1237840": 0.03,
+            "1237901": 520.0,
+            "1237907": 90.0,
+            "1237922": 0.5,
+            "1237991": 5.75,
+            "1237992": 5.0
+          }
+        },
+        "produce_id": 1281002,
+        "condition": [
+          400,
+          500,
+          600
+        ]
+      },
+      {
+        "id": 34003,
+        "wait_seconds": 18000,
+        "power_consume": 10,
+        "reward_gift": {
+          "gift_group": 761003,
+          "award_type": "E_Random",
+          "outcomes": [
+            {
+              "item_id": 1237840,
+              "count": 1,
+              "probability": 0.03,
+              "item_value": 720
+            },
+            {
+              "item_id": 1237901,
+              "count": 5000,
+              "probability": 0.05,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237901,
+              "count": 1000,
+              "probability": 0.27,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237907,
+              "count": 1000,
+              "probability": 0.05,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237907,
+              "count": 200,
+              "probability": 0.2,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237922,
+              "count": 5,
+              "probability": 0.1,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237991,
+              "count": 50,
+              "probability": 0.115,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237992,
+              "count": 50,
+              "probability": 0.1,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1203001,
+              "count": 1,
+              "probability": 0.05,
+              "item_value": 999
+            },
+            {
+              "item_id": 1203002,
+              "count": 1,
+              "probability": 0.025,
+              "item_value": 999
+            },
+            {
+              "item_id": 1203003,
+              "count": 1,
+              "probability": 0.01,
+              "item_value": 999
+            }
+          ],
+          "expected_quantity_by_item": {
+            "1203001": 0.05,
+            "1203002": 0.025,
+            "1203003": 0.01,
+            "1237840": 0.03,
+            "1237901": 520.0,
+            "1237907": 90.0,
+            "1237922": 0.5,
+            "1237991": 5.75,
+            "1237992": 5.0
+          }
+        },
+        "produce_id": 1281003,
+        "condition": [
+          700,
+          800,
+          900
+        ]
+      },
+      {
+        "id": 34004,
+        "wait_seconds": 21600,
+        "power_consume": 12,
+        "reward_gift": {
+          "gift_group": 761004,
+          "award_type": "E_Random",
+          "outcomes": [
+            {
+              "item_id": 1237840,
+              "count": 1,
+              "probability": 0.03,
+              "item_value": 720
+            },
+            {
+              "item_id": 1237901,
+              "count": 6000,
+              "probability": 0.05,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237901,
+              "count": 2000,
+              "probability": 0.27,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237907,
+              "count": 1200,
+              "probability": 0.05,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237907,
+              "count": 400,
+              "probability": 0.2,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237922,
+              "count": 6,
+              "probability": 0.1,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237992,
+              "count": 50,
+              "probability": 0.115,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237993,
+              "count": 50,
+              "probability": 0.1,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1203001,
+              "count": 1,
+              "probability": 0.05,
+              "item_value": 999
+            },
+            {
+              "item_id": 1203002,
+              "count": 1,
+              "probability": 0.025,
+              "item_value": 999
+            },
+            {
+              "item_id": 1203003,
+              "count": 1,
+              "probability": 0.01,
+              "item_value": 999
+            }
+          ],
+          "expected_quantity_by_item": {
+            "1203001": 0.05,
+            "1203002": 0.025,
+            "1203003": 0.01,
+            "1237840": 0.03,
+            "1237901": 840.0,
+            "1237907": 140.0,
+            "1237922": 0.6,
+            "1237992": 5.75,
+            "1237993": 5.0
+          }
+        },
+        "produce_id": 1281004,
+        "condition": [
+          1000,
+          1200,
+          1400
+        ]
+      },
+      {
+        "id": 34005,
+        "wait_seconds": 28800,
+        "power_consume": 16,
+        "reward_gift": {
+          "gift_group": 761005,
+          "award_type": "E_Random",
+          "outcomes": [
+            {
+              "item_id": 1237840,
+              "count": 1,
+              "probability": 0.03,
+              "item_value": 720
+            },
+            {
+              "item_id": 1237901,
+              "count": 6000,
+              "probability": 0.05,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237901,
+              "count": 2000,
+              "probability": 0.27,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237907,
+              "count": 1200,
+              "probability": 0.05,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237907,
+              "count": 400,
+              "probability": 0.2,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237922,
+              "count": 6,
+              "probability": 0.1,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237992,
+              "count": 50,
+              "probability": 0.115,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237993,
+              "count": 50,
+              "probability": 0.1,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1203001,
+              "count": 1,
+              "probability": 0.05,
+              "item_value": 999
+            },
+            {
+              "item_id": 1203002,
+              "count": 1,
+              "probability": 0.025,
+              "item_value": 999
+            },
+            {
+              "item_id": 1203003,
+              "count": 1,
+              "probability": 0.01,
+              "item_value": 999
+            }
+          ],
+          "expected_quantity_by_item": {
+            "1203001": 0.05,
+            "1203002": 0.025,
+            "1203003": 0.01,
+            "1237840": 0.03,
+            "1237901": 840.0,
+            "1237907": 140.0,
+            "1237922": 0.6,
+            "1237992": 5.75,
+            "1237993": 5.0
+          }
+        },
+        "produce_id": 1281005,
+        "condition": [
+          1600,
+          1800,
+          2000
+        ]
+      },
+      {
+        "id": 34006,
+        "wait_seconds": 36000,
+        "power_consume": 20,
+        "reward_gift": {
+          "gift_group": 761006,
+          "award_type": "E_Random",
+          "outcomes": [
+            {
+              "item_id": 1237840,
+              "count": 1,
+              "probability": 0.03,
+              "item_value": 720
+            },
+            {
+              "item_id": 1237901,
+              "count": 6000,
+              "probability": 0.05,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237901,
+              "count": 2000,
+              "probability": 0.27,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237907,
+              "count": 1200,
+              "probability": 0.05,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237907,
+              "count": 400,
+              "probability": 0.2,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237922,
+              "count": 6,
+              "probability": 0.1,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237992,
+              "count": 50,
+              "probability": 0.115,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237993,
+              "count": 50,
+              "probability": 0.1,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1203001,
+              "count": 1,
+              "probability": 0.05,
+              "item_value": 999
+            },
+            {
+              "item_id": 1203002,
+              "count": 1,
+              "probability": 0.025,
+              "item_value": 999
+            },
+            {
+              "item_id": 1203003,
+              "count": 1,
+              "probability": 0.01,
+              "item_value": 999
+            }
+          ],
+          "expected_quantity_by_item": {
+            "1203001": 0.05,
+            "1203002": 0.025,
+            "1203003": 0.01,
+            "1237840": 0.03,
+            "1237901": 840.0,
+            "1237907": 140.0,
+            "1237922": 0.6,
+            "1237992": 5.75,
+            "1237993": 5.0
+          }
+        },
+        "produce_id": 1281006,
+        "condition": [
+          2200,
+          2400,
+          2600
+        ]
+      },
+      {
+        "id": 34007,
+        "wait_seconds": 43200,
+        "power_consume": 24,
+        "reward_gift": {
+          "gift_group": 761007,
+          "award_type": "E_Random",
+          "outcomes": [
+            {
+              "item_id": 1237840,
+              "count": 1,
+              "probability": 0.03,
+              "item_value": 720
+            },
+            {
+              "item_id": 1237901,
+              "count": 7000,
+              "probability": 0.05,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237901,
+              "count": 3000,
+              "probability": 0.27,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237907,
+              "count": 1400,
+              "probability": 0.05,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237907,
+              "count": 600,
+              "probability": 0.2,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237922,
+              "count": 7,
+              "probability": 0.1,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237993,
+              "count": 50,
+              "probability": 0.115,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237994,
+              "count": 50,
+              "probability": 0.1,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1203001,
+              "count": 1,
+              "probability": 0.05,
+              "item_value": 999
+            },
+            {
+              "item_id": 1203002,
+              "count": 1,
+              "probability": 0.025,
+              "item_value": 999
+            },
+            {
+              "item_id": 1203003,
+              "count": 1,
+              "probability": 0.01,
+              "item_value": 999
+            }
+          ],
+          "expected_quantity_by_item": {
+            "1203001": 0.05,
+            "1203002": 0.025,
+            "1203003": 0.01,
+            "1237840": 0.03,
+            "1237901": 1160.0,
+            "1237907": 190.0,
+            "1237922": 0.7,
+            "1237993": 5.75,
+            "1237994": 5.0
+          }
+        },
+        "produce_id": 1281007,
+        "condition": [
+          3000,
+          3300,
+          3600
+        ]
+      },
+      {
+        "id": 34008,
+        "wait_seconds": 54000,
+        "power_consume": 30,
+        "reward_gift": {
+          "gift_group": 761008,
+          "award_type": "E_Random",
+          "outcomes": [
+            {
+              "item_id": 1237840,
+              "count": 1,
+              "probability": 0.03,
+              "item_value": 720
+            },
+            {
+              "item_id": 1237901,
+              "count": 7000,
+              "probability": 0.05,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237901,
+              "count": 3000,
+              "probability": 0.27,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237907,
+              "count": 1400,
+              "probability": 0.05,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237907,
+              "count": 600,
+              "probability": 0.2,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237922,
+              "count": 7,
+              "probability": 0.1,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237993,
+              "count": 50,
+              "probability": 0.115,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237994,
+              "count": 50,
+              "probability": 0.1,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1203001,
+              "count": 1,
+              "probability": 0.05,
+              "item_value": 999
+            },
+            {
+              "item_id": 1203002,
+              "count": 1,
+              "probability": 0.025,
+              "item_value": 999
+            },
+            {
+              "item_id": 1203003,
+              "count": 1,
+              "probability": 0.01,
+              "item_value": 999
+            }
+          ],
+          "expected_quantity_by_item": {
+            "1203001": 0.05,
+            "1203002": 0.025,
+            "1203003": 0.01,
+            "1237840": 0.03,
+            "1237901": 1160.0,
+            "1237907": 190.0,
+            "1237922": 0.7,
+            "1237993": 5.75,
+            "1237994": 5.0
+          }
+        },
+        "produce_id": 1281008,
+        "condition": [
+          3900,
+          4200,
+          4500
+        ]
+      },
+      {
+        "id": 34009,
+        "wait_seconds": 64800,
+        "power_consume": 36,
+        "reward_gift": {
+          "gift_group": 761009,
+          "award_type": "E_Random",
+          "outcomes": [
+            {
+              "item_id": 1237840,
+              "count": 1,
+              "probability": 0.03,
+              "item_value": 720
+            },
+            {
+              "item_id": 1237901,
+              "count": 7000,
+              "probability": 0.05,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237901,
+              "count": 3000,
+              "probability": 0.27,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237907,
+              "count": 1400,
+              "probability": 0.05,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237907,
+              "count": 600,
+              "probability": 0.2,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237922,
+              "count": 7,
+              "probability": 0.1,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237993,
+              "count": 50,
+              "probability": 0.115,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237994,
+              "count": 50,
+              "probability": 0.1,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1203001,
+              "count": 1,
+              "probability": 0.05,
+              "item_value": 999
+            },
+            {
+              "item_id": 1203002,
+              "count": 1,
+              "probability": 0.025,
+              "item_value": 999
+            },
+            {
+              "item_id": 1203003,
+              "count": 1,
+              "probability": 0.01,
+              "item_value": 999
+            }
+          ],
+          "expected_quantity_by_item": {
+            "1203001": 0.05,
+            "1203002": 0.025,
+            "1203003": 0.01,
+            "1237840": 0.03,
+            "1237901": 1160.0,
+            "1237907": 190.0,
+            "1237922": 0.7,
+            "1237993": 5.75,
+            "1237994": 5.0
+          }
+        },
+        "produce_id": 1281009,
+        "condition": [
+          4800,
+          5100,
+          5400
+        ]
+      },
+      {
+        "id": 34010,
+        "wait_seconds": 75600,
+        "power_consume": 42,
+        "reward_gift": {
+          "gift_group": 761010,
+          "award_type": "E_Random",
+          "outcomes": [
+            {
+              "item_id": 1237840,
+              "count": 1,
+              "probability": 0.03,
+              "item_value": 720
+            },
+            {
+              "item_id": 1237901,
+              "count": 8000,
+              "probability": 0.05,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237901,
+              "count": 4000,
+              "probability": 0.27,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237907,
+              "count": 1600,
+              "probability": 0.05,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237907,
+              "count": 800,
+              "probability": 0.2,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237922,
+              "count": 8,
+              "probability": 0.1,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237994,
+              "count": 50,
+              "probability": 0.115,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237995,
+              "count": 50,
+              "probability": 0.1,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1203001,
+              "count": 1,
+              "probability": 0.05,
+              "item_value": 999
+            },
+            {
+              "item_id": 1203002,
+              "count": 1,
+              "probability": 0.025,
+              "item_value": 999
+            },
+            {
+              "item_id": 1203003,
+              "count": 1,
+              "probability": 0.01,
+              "item_value": 999
+            }
+          ],
+          "expected_quantity_by_item": {
+            "1203001": 0.05,
+            "1203002": 0.025,
+            "1203003": 0.01,
+            "1237840": 0.03,
+            "1237901": 1480.0,
+            "1237907": 240.0,
+            "1237922": 0.8,
+            "1237994": 5.75,
+            "1237995": 5.0
+          }
+        },
+        "produce_id": 1281010,
+        "condition": [
+          6000,
+          7000,
+          8000
+        ]
+      },
+      {
+        "id": 34011,
+        "wait_seconds": 86400,
+        "power_consume": 48,
+        "reward_gift": {
+          "gift_group": 761011,
+          "award_type": "E_Random",
+          "outcomes": [
+            {
+              "item_id": 1237840,
+              "count": 1,
+              "probability": 0.03,
+              "item_value": 720
+            },
+            {
+              "item_id": 1237901,
+              "count": 8000,
+              "probability": 0.05,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237901,
+              "count": 4000,
+              "probability": 0.27,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237907,
+              "count": 1600,
+              "probability": 0.05,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237907,
+              "count": 800,
+              "probability": 0.2,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237922,
+              "count": 8,
+              "probability": 0.1,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237994,
+              "count": 50,
+              "probability": 0.115,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237995,
+              "count": 50,
+              "probability": 0.1,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1203001,
+              "count": 1,
+              "probability": 0.05,
+              "item_value": 999
+            },
+            {
+              "item_id": 1203002,
+              "count": 1,
+              "probability": 0.025,
+              "item_value": 999
+            },
+            {
+              "item_id": 1203003,
+              "count": 1,
+              "probability": 0.01,
+              "item_value": 999
+            }
+          ],
+          "expected_quantity_by_item": {
+            "1203001": 0.05,
+            "1203002": 0.025,
+            "1203003": 0.01,
+            "1237840": 0.03,
+            "1237901": 1480.0,
+            "1237907": 240.0,
+            "1237922": 0.8,
+            "1237994": 5.75,
+            "1237995": 5.0
+          }
+        },
+        "produce_id": 1281011,
+        "condition": [
+          9000,
+          10000,
+          11000
+        ]
+      },
+      {
+        "id": 34012,
+        "wait_seconds": 97200,
+        "power_consume": 54,
+        "reward_gift": {
+          "gift_group": 761012,
+          "award_type": "E_Random",
+          "outcomes": [
+            {
+              "item_id": 1237840,
+              "count": 1,
+              "probability": 0.03,
+              "item_value": 720
+            },
+            {
+              "item_id": 1237901,
+              "count": 8000,
+              "probability": 0.05,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237901,
+              "count": 4000,
+              "probability": 0.27,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237907,
+              "count": 1600,
+              "probability": 0.05,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237907,
+              "count": 800,
+              "probability": 0.2,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237922,
+              "count": 8,
+              "probability": 0.1,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237994,
+              "count": 50,
+              "probability": 0.115,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237995,
+              "count": 50,
+              "probability": 0.1,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1203001,
+              "count": 1,
+              "probability": 0.05,
+              "item_value": 999
+            },
+            {
+              "item_id": 1203002,
+              "count": 1,
+              "probability": 0.025,
+              "item_value": 999
+            },
+            {
+              "item_id": 1203003,
+              "count": 1,
+              "probability": 0.01,
+              "item_value": 999
+            }
+          ],
+          "expected_quantity_by_item": {
+            "1203001": 0.05,
+            "1203002": 0.025,
+            "1203003": 0.01,
+            "1237840": 0.03,
+            "1237901": 1480.0,
+            "1237907": 240.0,
+            "1237922": 0.8,
+            "1237994": 5.75,
+            "1237995": 5.0
+          }
+        },
+        "produce_id": 1281012,
+        "condition": [
+          12000,
+          13000,
+          14000
+        ]
+      },
+      {
+        "id": 34013,
+        "wait_seconds": 108000,
+        "power_consume": 60,
+        "reward_gift": {
+          "gift_group": 761013,
+          "award_type": "E_Random",
+          "outcomes": [
+            {
+              "item_id": 1237840,
+              "count": 1,
+              "probability": 0.03,
+              "item_value": 720
+            },
+            {
+              "item_id": 1237901,
+              "count": 10000,
+              "probability": 0.05,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237901,
+              "count": 5000,
+              "probability": 0.27,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237907,
+              "count": 2000,
+              "probability": 0.05,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237907,
+              "count": 1000,
+              "probability": 0.2,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237922,
+              "count": 10,
+              "probability": 0.1,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237995,
+              "count": 50,
+              "probability": 0.115,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237996,
+              "count": 50,
+              "probability": 0.1,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1203001,
+              "count": 1,
+              "probability": 0.05,
+              "item_value": 999
+            },
+            {
+              "item_id": 1203002,
+              "count": 1,
+              "probability": 0.025,
+              "item_value": 999
+            },
+            {
+              "item_id": 1203003,
+              "count": 1,
+              "probability": 0.01,
+              "item_value": 999
+            }
+          ],
+          "expected_quantity_by_item": {
+            "1203001": 0.05,
+            "1203002": 0.025,
+            "1203003": 0.01,
+            "1237840": 0.03,
+            "1237901": 1850.0,
+            "1237907": 300.0,
+            "1237922": 1.0,
+            "1237995": 5.75,
+            "1237996": 5.0
+          }
+        },
+        "produce_id": 1281013,
+        "condition": [
+          16000,
+          18000,
+          20000
+        ]
+      },
+      {
+        "id": 34014,
+        "wait_seconds": 118800,
+        "power_consume": 66,
+        "reward_gift": {
+          "gift_group": 761014,
+          "award_type": "E_Random",
+          "outcomes": [
+            {
+              "item_id": 1237840,
+              "count": 1,
+              "probability": 0.03,
+              "item_value": 720
+            },
+            {
+              "item_id": 1237901,
+              "count": 10000,
+              "probability": 0.05,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237901,
+              "count": 5000,
+              "probability": 0.27,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237907,
+              "count": 2000,
+              "probability": 0.05,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237907,
+              "count": 1000,
+              "probability": 0.2,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237922,
+              "count": 10,
+              "probability": 0.1,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237995,
+              "count": 50,
+              "probability": 0.115,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237996,
+              "count": 50,
+              "probability": 0.1,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1203001,
+              "count": 1,
+              "probability": 0.05,
+              "item_value": 999
+            },
+            {
+              "item_id": 1203002,
+              "count": 1,
+              "probability": 0.025,
+              "item_value": 999
+            },
+            {
+              "item_id": 1203003,
+              "count": 1,
+              "probability": 0.01,
+              "item_value": 999
+            }
+          ],
+          "expected_quantity_by_item": {
+            "1203001": 0.05,
+            "1203002": 0.025,
+            "1203003": 0.01,
+            "1237840": 0.03,
+            "1237901": 1850.0,
+            "1237907": 300.0,
+            "1237922": 1.0,
+            "1237995": 5.75,
+            "1237996": 5.0
+          }
+        },
+        "produce_id": 1281014,
+        "condition": [
+          22000,
+          24000,
+          26000
+        ]
+      },
+      {
+        "id": 34015,
+        "wait_seconds": 129600,
+        "power_consume": 72,
+        "reward_gift": {
+          "gift_group": 761015,
+          "award_type": "E_Random",
+          "outcomes": [
+            {
+              "item_id": 1237840,
+              "count": 1,
+              "probability": 0.03,
+              "item_value": 720
+            },
+            {
+              "item_id": 1237901,
+              "count": 10000,
+              "probability": 0.05,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237901,
+              "count": 5000,
+              "probability": 0.27,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237907,
+              "count": 2000,
+              "probability": 0.05,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237907,
+              "count": 1000,
+              "probability": 0.2,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237922,
+              "count": 10,
+              "probability": 0.1,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237995,
+              "count": 50,
+              "probability": 0.115,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1237996,
+              "count": 50,
+              "probability": 0.1,
+              "item_value": 9999
+            },
+            {
+              "item_id": 1203001,
+              "count": 1,
+              "probability": 0.05,
+              "item_value": 999
+            },
+            {
+              "item_id": 1203002,
+              "count": 1,
+              "probability": 0.025,
+              "item_value": 999
+            },
+            {
+              "item_id": 1203003,
+              "count": 1,
+              "probability": 0.01,
+              "item_value": 999
+            }
+          ],
+          "expected_quantity_by_item": {
+            "1203001": 0.05,
+            "1203002": 0.025,
+            "1203003": 0.01,
+            "1237840": 0.03,
+            "1237901": 1850.0,
+            "1237907": 300.0,
+            "1237922": 1.0,
+            "1237995": 5.75,
+            "1237996": 5.0
+          }
+        },
+        "produce_id": 1281015,
+        "condition": [
+          28000,
+          30000,
+          32000
+        ]
+      }
+    ]
+  },
+  "college_recipe": {
+    "row_count": 60,
+    "gold": {
+      "min": 2400,
+      "median": 11640.0,
+      "max": 25920
+    },
+    "pay": {
+      "min": 5,
+      "median": 22.0,
+      "max": 39
+    },
+    "wait_seconds": {
+      "min": 4000,
+      "median": 19400.0,
+      "max": 43200
+    },
+    "input_item_ids": [
+      1237991,
+      1237992,
+      1237993,
+      1237994,
+      1237995,
+      1237996,
+      1281001,
+      1281002,
+      1281003,
+      1281004,
+      1281005,
+      1281006,
+      1281007,
+      1281008,
+      1281009,
+      1281010,
+      1281011,
+      1281012,
+      1281013,
+      1281014,
+      1281015
+    ],
+    "output_item_ids": [
+      1280011,
+      1280012,
+      1280013,
+      1280014,
+      1280015,
+      1280016,
+      1280017,
+      1280018,
+      1280019,
+      1280020,
+      1280021,
+      1280022,
+      1280023,
+      1280024,
+      1280025,
+      1280026,
+      1280027,
+      1280028,
+      1280029,
+      1280030,
+      1280031,
+      1280032,
+      1280033,
+      1280034,
+      1280035,
+      1280036,
+      1280037,
+      1280038,
+      1280039,
+      1280040,
+      1280041,
+      1280042,
+      1280043,
+      1280044,
+      1280045,
+      1280046,
+      1280047,
+      1280048,
+      1280049,
+      1280050,
+      1280051,
+      1280052,
+      1280053,
+      1280054,
+      1280055,
+      1280056,
+      1280057,
+      1280058,
+      1280059,
+      1280060,
+      1280061,
+      1280062,
+      1280063,
+      1280064,
+      1280065,
+      1280066,
+      1280067,
+      1280068,
+      1280069,
+      1280070
+    ],
+    "rows": [
+      {
+        "id": 36011,
+        "level": 1,
+        "inputs": [
+          [
+            1237991,
+            4
+          ]
+        ],
+        "output": [
+          1280011,
+          1
+        ],
+        "gold": 2400,
+        "pay": 5,
+        "wait_seconds": 4000
+      },
+      {
+        "id": 36012,
+        "level": 2,
+        "inputs": [
+          [
+            1237991,
+            9
+          ]
+        ],
+        "output": [
+          1280012,
+          1
+        ],
+        "gold": 3420,
+        "pay": 7,
+        "wait_seconds": 5700
+      },
+      {
+        "id": 36013,
+        "level": 3,
+        "inputs": [
+          [
+            1237991,
+            16
+          ],
+          [
+            1281001,
+            2
+          ]
+        ],
+        "output": [
+          1280013,
+          1
+        ],
+        "gold": 5040,
+        "pay": 10,
+        "wait_seconds": 8400
+      },
+      {
+        "id": 36014,
+        "level": 4,
+        "inputs": [
+          [
+            1237991,
+            25
+          ],
+          [
+            1281002,
+            2
+          ]
+        ],
+        "output": [
+          1280014,
+          1
+        ],
+        "gold": 6660,
+        "pay": 13,
+        "wait_seconds": 11100
+      },
+      {
+        "id": 36015,
+        "level": 5,
+        "inputs": [
+          [
+            1237991,
+            36
+          ],
+          [
+            1237995,
+            5
+          ],
+          [
+            1281004,
+            2
+          ]
+        ],
+        "output": [
+          1280015,
+          1
+        ],
+        "gold": 8280,
+        "pay": 17,
+        "wait_seconds": 13800
+      },
+      {
+        "id": 36016,
+        "level": 6,
+        "inputs": [
+          [
+            1237991,
+            49
+          ],
+          [
+            1237995,
+            6
+          ],
+          [
+            1281005,
+            2
+          ]
+        ],
+        "output": [
+          1280016,
+          1
+        ],
+        "gold": 9900,
+        "pay": 20,
+        "wait_seconds": 16500
+      },
+      {
+        "id": 36017,
+        "level": 7,
+        "inputs": [
+          [
+            1237991,
+            64
+          ],
+          [
+            1237995,
+            7
+          ],
+          [
+            1281007,
+            2
+          ]
+        ],
+        "output": [
+          1280017,
+          1
+        ],
+        "gold": 11520,
+        "pay": 21,
+        "wait_seconds": 19200
+      },
+      {
+        "id": 36018,
+        "level": 8,
+        "inputs": [
+          [
+            1237991,
+            81
+          ],
+          [
+            1237995,
+            8
+          ],
+          [
+            1281008,
+            2
+          ]
+        ],
+        "output": [
+          1280018,
+          1
+        ],
+        "gold": 13140,
+        "pay": 22,
+        "wait_seconds": 21900
+      },
+      {
+        "id": 36019,
+        "level": 9,
+        "inputs": [
+          [
+            1237991,
+            100
+          ],
+          [
+            1237995,
+            9
+          ],
+          [
+            1281010,
+            2
+          ]
+        ],
+        "output": [
+          1280019,
+          1
+        ],
+        "gold": 14760,
+        "pay": 22,
+        "wait_seconds": 24600
+      },
+      {
+        "id": 36020,
+        "level": 10,
+        "inputs": [
+          [
+            1237991,
+            121
+          ],
+          [
+            1237995,
+            10
+          ],
+          [
+            1281011,
+            2
+          ]
+        ],
+        "output": [
+          1280020,
+          1
+        ],
+        "gold": 17280,
+        "pay": 26,
+        "wait_seconds": 28800
+      },
+      {
+        "id": 36021,
+        "level": 1,
+        "inputs": [
+          [
+            1237992,
+            4
+          ]
+        ],
+        "output": [
+          1280021,
+          1
+        ],
+        "gold": 2400,
+        "pay": 5,
+        "wait_seconds": 4000
+      },
+      {
+        "id": 36022,
+        "level": 2,
+        "inputs": [
+          [
+            1237992,
+            9
+          ],
+          [
+            1281001,
+            2
+          ]
+        ],
+        "output": [
+          1280022,
+          1
+        ],
+        "gold": 4080,
+        "pay": 8,
+        "wait_seconds": 6800
+      },
+      {
+        "id": 36023,
+        "level": 3,
+        "inputs": [
+          [
+            1237992,
+            16
+          ],
+          [
+            1281003,
+            2
+          ]
+        ],
+        "output": [
+          1280023,
+          1
+        ],
+        "gold": 6000,
+        "pay": 12,
+        "wait_seconds": 10000
+      },
+      {
+        "id": 36024,
+        "level": 4,
+        "inputs": [
+          [
+            1237992,
+            25
+          ],
+          [
+            1281004,
+            2
+          ]
+        ],
+        "output": [
+          1280024,
+          1
+        ],
+        "gold": 7920,
+        "pay": 16,
+        "wait_seconds": 13200
+      },
+      {
+        "id": 36025,
+        "level": 5,
+        "inputs": [
+          [
+            1237992,
+            36
+          ],
+          [
+            1237996,
+            5
+          ],
+          [
+            1281006,
+            2
+          ]
+        ],
+        "output": [
+          1280025,
+          1
+        ],
+        "gold": 9840,
+        "pay": 20,
+        "wait_seconds": 16400
+      },
+      {
+        "id": 36026,
+        "level": 6,
+        "inputs": [
+          [
+            1237992,
+            49
+          ],
+          [
+            1237996,
+            6
+          ],
+          [
+            1281007,
+            2
+          ]
+        ],
+        "output": [
+          1280026,
+          1
+        ],
+        "gold": 11760,
+        "pay": 24,
+        "wait_seconds": 19600
+      },
+      {
+        "id": 36027,
+        "level": 7,
+        "inputs": [
+          [
+            1237992,
+            64
+          ],
+          [
+            1237996,
+            7
+          ],
+          [
+            1281009,
+            2
+          ]
+        ],
+        "output": [
+          1280027,
+          1
+        ],
+        "gold": 13680,
+        "pay": 25,
+        "wait_seconds": 22800
+      },
+      {
+        "id": 36028,
+        "level": 8,
+        "inputs": [
+          [
+            1237992,
+            81
+          ],
+          [
+            1237996,
+            8
+          ],
+          [
+            1281010,
+            2
+          ]
+        ],
+        "output": [
+          1280028,
+          1
+        ],
+        "gold": 15600,
+        "pay": 26,
+        "wait_seconds": 26000
+      },
+      {
+        "id": 36029,
+        "level": 9,
+        "inputs": [
+          [
+            1237992,
+            100
+          ],
+          [
+            1237996,
+            9
+          ],
+          [
+            1281012,
+            2
+          ]
+        ],
+        "output": [
+          1280029,
+          1
+        ],
+        "gold": 17520,
+        "pay": 26,
+        "wait_seconds": 29200
+      },
+      {
+        "id": 36030,
+        "level": 10,
+        "inputs": [
+          [
+            1237992,
+            121
+          ],
+          [
+            1237996,
+            10
+          ],
+          [
+            1281013,
+            2
+          ]
+        ],
+        "output": [
+          1280030,
+          1
+        ],
+        "gold": 19440,
+        "pay": 29,
+        "wait_seconds": 32400
+      },
+      {
+        "id": 36031,
+        "level": 1,
+        "inputs": [
+          [
+            1237993,
+            4
+          ]
+        ],
+        "output": [
+          1280031,
+          1
+        ],
+        "gold": 2520,
+        "pay": 5,
+        "wait_seconds": 4200
+      },
+      {
+        "id": 36032,
+        "level": 2,
+        "inputs": [
+          [
+            1237993,
+            9
+          ]
+        ],
+        "output": [
+          1280032,
+          1
+        ],
+        "gold": 4620,
+        "pay": 9,
+        "wait_seconds": 7700
+      },
+      {
+        "id": 36033,
+        "level": 3,
+        "inputs": [
+          [
+            1237993,
+            16
+          ],
+          [
+            1281002,
+            2
+          ]
+        ],
+        "output": [
+          1280033,
+          1
+        ],
+        "gold": 6720,
+        "pay": 13,
+        "wait_seconds": 11200
+      },
+      {
+        "id": 36034,
+        "level": 4,
+        "inputs": [
+          [
+            1237993,
+            25
+          ],
+          [
+            1281003,
+            2
+          ]
+        ],
+        "output": [
+          1280034,
+          1
+        ],
+        "gold": 8820,
+        "pay": 18,
+        "wait_seconds": 14700
+      },
+      {
+        "id": 36035,
+        "level": 5,
+        "inputs": [
+          [
+            1237993,
+            36
+          ],
+          [
+            1237995,
+            5
+          ],
+          [
+            1281005,
+            2
+          ]
+        ],
+        "output": [
+          1280035,
+          1
+        ],
+        "gold": 10920,
+        "pay": 22,
+        "wait_seconds": 18200
+      },
+      {
+        "id": 36036,
+        "level": 6,
+        "inputs": [
+          [
+            1237993,
+            49
+          ],
+          [
+            1237995,
+            6
+          ],
+          [
+            1281006,
+            2
+          ]
+        ],
+        "output": [
+          1280036,
+          1
+        ],
+        "gold": 13020,
+        "pay": 26,
+        "wait_seconds": 21700
+      },
+      {
+        "id": 36037,
+        "level": 7,
+        "inputs": [
+          [
+            1237993,
+            64
+          ],
+          [
+            1237995,
+            7
+          ],
+          [
+            1281008,
+            2
+          ]
+        ],
+        "output": [
+          1280037,
+          1
+        ],
+        "gold": 15120,
+        "pay": 28,
+        "wait_seconds": 25200
+      },
+      {
+        "id": 36038,
+        "level": 8,
+        "inputs": [
+          [
+            1237993,
+            81
+          ],
+          [
+            1237995,
+            8
+          ],
+          [
+            1281009,
+            2
+          ]
+        ],
+        "output": [
+          1280038,
+          1
+        ],
+        "gold": 17220,
+        "pay": 29,
+        "wait_seconds": 28700
+      },
+      {
+        "id": 36039,
+        "level": 9,
+        "inputs": [
+          [
+            1237993,
+            100
+          ],
+          [
+            1237995,
+            9
+          ],
+          [
+            1281011,
+            2
+          ]
+        ],
+        "output": [
+          1280039,
+          1
+        ],
+        "gold": 19320,
+        "pay": 29,
+        "wait_seconds": 32200
+      },
+      {
+        "id": 36040,
+        "level": 10,
+        "inputs": [
+          [
+            1237993,
+            121
+          ],
+          [
+            1237995,
+            10
+          ],
+          [
+            1281012,
+            2
+          ]
+        ],
+        "output": [
+          1280040,
+          1
+        ],
+        "gold": 21600,
+        "pay": 32,
+        "wait_seconds": 36000
+      },
+      {
+        "id": 36041,
+        "level": 1,
+        "inputs": [
+          [
+            1237994,
+            4
+          ]
+        ],
+        "output": [
+          1280041,
+          1
+        ],
+        "gold": 2880,
+        "pay": 6,
+        "wait_seconds": 4800
+      },
+      {
+        "id": 36042,
+        "level": 2,
+        "inputs": [
+          [
+            1237994,
+            9
+          ],
+          [
+            1281002,
+            2
+          ]
+        ],
+        "output": [
+          1280042,
+          1
+        ],
+        "gold": 5040,
+        "pay": 10,
+        "wait_seconds": 8400
+      },
+      {
+        "id": 36043,
+        "level": 3,
+        "inputs": [
+          [
+            1237994,
+            16
+          ],
+          [
+            1281001,
+            2
+          ]
+        ],
+        "output": [
+          1280043,
+          1
+        ],
+        "gold": 7200,
+        "pay": 14,
+        "wait_seconds": 12000
+      },
+      {
+        "id": 36044,
+        "level": 4,
+        "inputs": [
+          [
+            1237994,
+            25
+          ],
+          [
+            1281005,
+            2
+          ]
+        ],
+        "output": [
+          1280044,
+          1
+        ],
+        "gold": 9360,
+        "pay": 19,
+        "wait_seconds": 15600
+      },
+      {
+        "id": 36045,
+        "level": 5,
+        "inputs": [
+          [
+            1237994,
+            36
+          ],
+          [
+            1237996,
+            5
+          ],
+          [
+            1281004,
+            2
+          ]
+        ],
+        "output": [
+          1280045,
+          1
+        ],
+        "gold": 11520,
+        "pay": 23,
+        "wait_seconds": 19200
+      },
+      {
+        "id": 36046,
+        "level": 6,
+        "inputs": [
+          [
+            1237994,
+            49
+          ],
+          [
+            1237996,
+            6
+          ],
+          [
+            1281008,
+            2
+          ]
+        ],
+        "output": [
+          1280046,
+          1
+        ],
+        "gold": 13680,
+        "pay": 27,
+        "wait_seconds": 22800
+      },
+      {
+        "id": 36047,
+        "level": 7,
+        "inputs": [
+          [
+            1237994,
+            64
+          ],
+          [
+            1237996,
+            7
+          ],
+          [
+            1281007,
+            2
+          ]
+        ],
+        "output": [
+          1280047,
+          1
+        ],
+        "gold": 15840,
+        "pay": 29,
+        "wait_seconds": 26400
+      },
+      {
+        "id": 36048,
+        "level": 8,
+        "inputs": [
+          [
+            1237994,
+            81
+          ],
+          [
+            1237996,
+            8
+          ],
+          [
+            1281011,
+            2
+          ]
+        ],
+        "output": [
+          1280048,
+          1
+        ],
+        "gold": 18000,
+        "pay": 30,
+        "wait_seconds": 30000
+      },
+      {
+        "id": 36049,
+        "level": 9,
+        "inputs": [
+          [
+            1237994,
+            100
+          ],
+          [
+            1237996,
+            9
+          ],
+          [
+            1281010,
+            2
+          ]
+        ],
+        "output": [
+          1280049,
+          1
+        ],
+        "gold": 20160,
+        "pay": 30,
+        "wait_seconds": 33600
+      },
+      {
+        "id": 36050,
+        "level": 10,
+        "inputs": [
+          [
+            1237994,
+            121
+          ],
+          [
+            1237996,
+            10
+          ],
+          [
+            1281014,
+            2
+          ]
+        ],
+        "output": [
+          1280050,
+          1
+        ],
+        "gold": 23760,
+        "pay": 36,
+        "wait_seconds": 39600
+      },
+      {
+        "id": 36051,
+        "level": 1,
+        "inputs": [
+          [
+            1237995,
+            9
+          ]
+        ],
+        "output": [
+          1280051,
+          1
+        ],
+        "gold": 3240,
+        "pay": 6,
+        "wait_seconds": 5400
+      },
+      {
+        "id": 36052,
+        "level": 2,
+        "inputs": [
+          [
+            1237995,
+            16
+          ]
+        ],
+        "output": [
+          1280052,
+          1
+        ],
+        "gold": 5760,
+        "pay": 12,
+        "wait_seconds": 9600
+      },
+      {
+        "id": 36053,
+        "level": 3,
+        "inputs": [
+          [
+            1237995,
+            25
+          ],
+          [
+            1281003,
+            2
+          ],
+          [
+            1281001,
+            2
+          ]
+        ],
+        "output": [
+          1280053,
+          1
+        ],
+        "gold": 8280,
+        "pay": 17,
+        "wait_seconds": 13800
+      },
+      {
+        "id": 36054,
+        "level": 4,
+        "inputs": [
+          [
+            1237995,
+            36
+          ],
+          [
+            1281002,
+            2
+          ]
+        ],
+        "output": [
+          1280054,
+          1
+        ],
+        "gold": 10800,
+        "pay": 22,
+        "wait_seconds": 18000
+      },
+      {
+        "id": 36055,
+        "level": 5,
+        "inputs": [
+          [
+            1237995,
+            49
+          ],
+          [
+            1237992,
+            7
+          ],
+          [
+            1281006,
+            2
+          ],
+          [
+            1281004,
+            2
+          ]
+        ],
+        "output": [
+          1280055,
+          1
+        ],
+        "gold": 13320,
+        "pay": 27,
+        "wait_seconds": 22200
+      },
+      {
+        "id": 36056,
+        "level": 6,
+        "inputs": [
+          [
+            1237995,
+            64
+          ],
+          [
+            1237992,
+            8
+          ],
+          [
+            1281005,
+            2
+          ]
+        ],
+        "output": [
+          1280056,
+          1
+        ],
+        "gold": 15840,
+        "pay": 32,
+        "wait_seconds": 26400
+      },
+      {
+        "id": 36057,
+        "level": 7,
+        "inputs": [
+          [
+            1237995,
+            81
+          ],
+          [
+            1237992,
+            9
+          ],
+          [
+            1281009,
+            2
+          ],
+          [
+            1281007,
+            2
+          ]
+        ],
+        "output": [
+          1280057,
+          1
+        ],
+        "gold": 18360,
+        "pay": 34,
+        "wait_seconds": 30600
+      },
+      {
+        "id": 36058,
+        "level": 8,
+        "inputs": [
+          [
+            1237995,
+            100
+          ],
+          [
+            1237994,
+            10
+          ],
+          [
+            1281008,
+            2
+          ]
+        ],
+        "output": [
+          1280058,
+          1
+        ],
+        "gold": 20880,
+        "pay": 35,
+        "wait_seconds": 34800
+      },
+      {
+        "id": 36059,
+        "level": 9,
+        "inputs": [
+          [
+            1237995,
+            121
+          ],
+          [
+            1237994,
+            11
+          ],
+          [
+            1281012,
+            2
+          ],
+          [
+            1281010,
+            2
+          ]
+        ],
+        "output": [
+          1280059,
+          1
+        ],
+        "gold": 23400,
+        "pay": 35,
+        "wait_seconds": 39000
+      },
+      {
+        "id": 36060,
+        "level": 10,
+        "inputs": [
+          [
+            1237995,
+            144
+          ],
+          [
+            1237994,
+            12
+          ],
+          [
+            1281011,
+            2
+          ]
+        ],
+        "output": [
+          1280060,
+          1
+        ],
+        "gold": 25920,
+        "pay": 39,
+        "wait_seconds": 43200
+      },
+      {
+        "id": 36061,
+        "level": 1,
+        "inputs": [
+          [
+            1237996,
+            9
+          ]
+        ],
+        "output": [
+          1280061,
+          1
+        ],
+        "gold": 3240,
+        "pay": 6,
+        "wait_seconds": 5400
+      },
+      {
+        "id": 36062,
+        "level": 2,
+        "inputs": [
+          [
+            1237996,
+            16
+          ],
+          [
+            1281003,
+            2
+          ]
+        ],
+        "output": [
+          1280062,
+          1
+        ],
+        "gold": 5760,
+        "pay": 12,
+        "wait_seconds": 9600
+      },
+      {
+        "id": 36063,
+        "level": 3,
+        "inputs": [
+          [
+            1237996,
+            25
+          ],
+          [
+            1281001,
+            2
+          ]
+        ],
+        "output": [
+          1280063,
+          1
+        ],
+        "gold": 8280,
+        "pay": 17,
+        "wait_seconds": 13800
+      },
+      {
+        "id": 36064,
+        "level": 4,
+        "inputs": [
+          [
+            1237996,
+            36
+          ],
+          [
+            1281006,
+            2
+          ],
+          [
+            1281002,
+            2
+          ]
+        ],
+        "output": [
+          1280064,
+          1
+        ],
+        "gold": 10800,
+        "pay": 22,
+        "wait_seconds": 18000
+      },
+      {
+        "id": 36065,
+        "level": 5,
+        "inputs": [
+          [
+            1237996,
+            49
+          ],
+          [
+            1237991,
+            7
+          ],
+          [
+            1281004,
+            2
+          ]
+        ],
+        "output": [
+          1280065,
+          1
+        ],
+        "gold": 13320,
+        "pay": 27,
+        "wait_seconds": 22200
+      },
+      {
+        "id": 36066,
+        "level": 6,
+        "inputs": [
+          [
+            1237996,
+            64
+          ],
+          [
+            1237991,
+            8
+          ],
+          [
+            1281009,
+            2
+          ],
+          [
+            1281005,
+            2
+          ]
+        ],
+        "output": [
+          1280066,
+          1
+        ],
+        "gold": 15840,
+        "pay": 32,
+        "wait_seconds": 26400
+      },
+      {
+        "id": 36067,
+        "level": 7,
+        "inputs": [
+          [
+            1237996,
+            81
+          ],
+          [
+            1237991,
+            9
+          ],
+          [
+            1281007,
+            2
+          ]
+        ],
+        "output": [
+          1280067,
+          1
+        ],
+        "gold": 18360,
+        "pay": 34,
+        "wait_seconds": 30600
+      },
+      {
+        "id": 36068,
+        "level": 8,
+        "inputs": [
+          [
+            1237996,
+            100
+          ],
+          [
+            1237993,
+            10
+          ],
+          [
+            1281012,
+            2
+          ],
+          [
+            1281008,
+            2
+          ]
+        ],
+        "output": [
+          1280068,
+          1
+        ],
+        "gold": 20880,
+        "pay": 35,
+        "wait_seconds": 34800
+      },
+      {
+        "id": 36069,
+        "level": 9,
+        "inputs": [
+          [
+            1237996,
+            121
+          ],
+          [
+            1237993,
+            11
+          ],
+          [
+            1281010,
+            2
+          ]
+        ],
+        "output": [
+          1280069,
+          1
+        ],
+        "gold": 23400,
+        "pay": 35,
+        "wait_seconds": 39000
+      },
+      {
+        "id": 36070,
+        "level": 10,
+        "inputs": [
+          [
+            1237996,
+            144
+          ],
+          [
+            1237993,
+            12
+          ],
+          [
+            1281015,
+            2
+          ],
+          [
+            1281011,
+            2
+          ]
+        ],
+        "output": [
+          1280070,
+          1
+        ],
+        "gold": 25920,
+        "pay": 39,
+        "wait_seconds": 43200
+      }
+    ],
+    "gold_pay_semantics": "MISSING: do not assume Gold/Pay are craft costs or sale prices"
+  },
+  "college_quest": {
+    "row_count": 120,
+    "award_type_counts": {
+      "E_Buff": 2,
+      "E_Gift": 41,
+      "E_Gold": 77
+    },
+    "gift_award_groups": [
+      782003,
+      782004,
+      782005,
+      782006,
+      782007,
+      782008,
+      782009,
+      782010,
+      782011,
+      782012,
+      782013,
+      782014,
+      782015,
+      782016,
+      782017,
+      782018,
+      782019,
+      782020,
+      782021,
+      782022,
+      782023,
+      782025,
+      782026,
+      782027,
+      782028,
+      782029,
+      782030,
+      782031,
+      782032,
+      782033,
+      782034,
+      782035,
+      782036,
+      782039,
+      782040,
+      782197,
+      782198,
+      782199,
+      795085,
+      795086,
+      795087,
+      795088,
+      795089,
+      795090,
+      795091,
+      795092,
+      795093,
+      795094,
+      795095,
+      795096,
+      795097,
+      795098,
+      795099,
+      795100,
+      795101,
+      795102,
+      795103,
+      795104,
+      795105,
+      795106,
+      795107,
+      795108,
+      795109,
+      795110,
+      795111,
+      795112,
+      795113,
+      795114,
+      795115,
+      795116,
+      795117,
+      795118,
+      795119,
+      795120,
+      795121,
+      795122,
+      795123,
+      795124,
+      795125,
+      795126,
+      795127,
+      795128,
+      795129,
+      795130,
+      795131,
+      795132,
+      795133,
+      795134,
+      795135
+    ],
+    "gold_award_values": [
+      500,
+      10000
+    ]
+  },
+  "college_customer": {
+    "row_count": 42,
+    "hero_count": 38,
+    "npc_count": 4
+  },
+  "college_equib_reset": {
+    "row_count": 5,
+    "rows": [
+      {
+        "ID": 1,
+        "EquibReastItem1": [
+          1237901,
+          1237804,
+          1237805
+        ],
+        "EquibReastItemNum1": [
+          60000,
+          1,
+          1
+        ],
+        "EquibReastItem2": [
+          1237902,
+          1237804,
+          1237805
+        ],
+        "EquibReastItemNum2": [
+          60,
+          1,
+          1
+        ]
+      },
+      {
+        "ID": 2,
+        "EquibReastItem1": [
+          1237901,
+          1237920,
+          1237805
+        ],
+        "EquibReastItemNum1": [
+          60000,
+          1,
+          2
+        ],
+        "EquibReastItem2": [
+          1237902,
+          1237920,
+          1237805
+        ],
+        "EquibReastItemNum2": [
+          60,
+          1,
+          2
+        ]
+      },
+      {
+        "ID": 3,
+        "EquibReastItem1": [
+          1237901,
+          1237920,
+          1237806
+        ],
+        "EquibReastItemNum1": [
+          60000,
+          1,
+          2
+        ],
+        "EquibReastItem2": [
+          1237902,
+          1237920,
+          1237806
+        ],
+        "EquibReastItemNum2": [
+          60,
+          1,
+          2
+        ]
+      },
+      {
+        "ID": 4,
+        "EquibReastItem1": [
+          1237901,
+          1237920,
+          1237807
+        ],
+        "EquibReastItemNum1": [
+          60000,
+          2,
+          1
+        ],
+        "EquibReastItem2": [
+          1237902,
+          1237920,
+          1237807
+        ],
+        "EquibReastItemNum2": [
+          60,
+          2,
+          1
+        ]
+      },
+      {
+        "ID": 5,
+        "EquibReastItem1": [
+          1237901,
+          1237920,
+          1237808
+        ],
+        "EquibReastItemNum1": [
+          60000,
+          2,
+          1
+        ],
+        "EquibReastItem2": [
+          1237902,
+          1237920,
+          1237808
+        ],
+        "EquibReastItemNum2": [
+          60,
+          2,
+          1
+        ]
+      }
+    ]
+  },
+  "time_rift": {
+    "note": "MopReward includes account EXP, hero EXP and gold; 123780x is the College material part",
+    "sections": [
+      {
+        "section_id": 2132101,
+        "manual_value": 12,
+        "reward_groups": [
+          730077,
+          722051,
+          722052
+        ],
+        "gifts": [
+          {
+            "gift_group": 730077,
+            "award_type": "E_material",
+            "outcomes": [
+              {
+                "item_id": 1237908,
+                "count": 12,
+                "probability": 1,
+                "item_value": 9999
+              },
+              {
+                "item_id": 1237907,
+                "count": 120,
+                "probability": 1,
+                "item_value": 9999
+              },
+              {
+                "item_id": 1237901,
+                "count": 360,
+                "probability": 1,
+                "item_value": 9999
+              }
+            ],
+            "expected_quantity_by_item": {
+              "1237901": 360,
+              "1237907": 120,
+              "1237908": 12
+            }
+          },
+          {
+            "gift_group": 722051,
+            "award_type": "E_material",
+            "outcomes": [
+              {
+                "item_id": 1237801,
+                "count": 5,
+                "probability": 1,
+                "item_value": 2
+              }
+            ],
+            "expected_quantity_by_item": {
+              "1237801": 5
+            }
+          },
+          {
+            "gift_group": 722052,
+            "award_type": "E_Random",
+            "outcomes": [
+              {
+                "item_id": 1237802,
+                "count": 0,
+                "probability": 0.5,
+                "item_value": 3
+              },
+              {
+                "item_id": 1237802,
+                "count": 1,
+                "probability": 0.5,
+                "item_value": 3
+              }
+            ],
+            "expected_quantity_by_item": {
+              "1237802": 0.5
+            }
+          }
+        ]
+      },
+      {
+        "section_id": 2132102,
+        "manual_value": 18,
+        "reward_groups": [
+          730078,
+          722053,
+          722054,
+          722055
+        ],
+        "gifts": [
+          {
+            "gift_group": 730078,
+            "award_type": "E_material",
+            "outcomes": [
+              {
+                "item_id": 1237908,
+                "count": 18,
+                "probability": 1,
+                "item_value": 9999
+              },
+              {
+                "item_id": 1237907,
+                "count": 180,
+                "probability": 1,
+                "item_value": 9999
+              },
+              {
+                "item_id": 1237901,
+                "count": 540,
+                "probability": 1,
+                "item_value": 9999
+              }
+            ],
+            "expected_quantity_by_item": {
+              "1237901": 540,
+              "1237907": 180,
+              "1237908": 18
+            }
+          },
+          {
+            "gift_group": 722053,
+            "award_type": "E_material",
+            "outcomes": [
+              {
+                "item_id": 1237801,
+                "count": 1,
+                "probability": 1,
+                "item_value": 2
+              }
+            ],
+            "expected_quantity_by_item": {
+              "1237801": 1
+            }
+          },
+          {
+            "gift_group": 722054,
+            "award_type": "E_material",
+            "outcomes": [
+              {
+                "item_id": 1237802,
+                "count": 5,
+                "probability": 1,
+                "item_value": 3
+              }
+            ],
+            "expected_quantity_by_item": {
+              "1237802": 5
+            }
+          },
+          {
+            "gift_group": 722055,
+            "award_type": "E_Random",
+            "outcomes": [
+              {
+                "item_id": 1237803,
+                "count": 0,
+                "probability": 0.9,
+                "item_value": 6
+              },
+              {
+                "item_id": 1237803,
+                "count": 1,
+                "probability": 0.1,
+                "item_value": 6
+              }
+            ],
+            "expected_quantity_by_item": {
+              "1237803": 0.1
+            }
+          }
+        ]
+      },
+      {
+        "section_id": 2132103,
+        "manual_value": 24,
+        "reward_groups": [
+          730079,
+          722056,
+          722057,
+          722058
+        ],
+        "gifts": [
+          {
+            "gift_group": 730079,
+            "award_type": "E_material",
+            "outcomes": [
+              {
+                "item_id": 1237908,
+                "count": 24,
+                "probability": 1,
+                "item_value": 9999
+              },
+              {
+                "item_id": 1237907,
+                "count": 240,
+                "probability": 1,
+                "item_value": 9999
+              },
+              {
+                "item_id": 1237901,
+                "count": 720,
+                "probability": 1,
+                "item_value": 9999
+              }
+            ],
+            "expected_quantity_by_item": {
+              "1237901": 720,
+              "1237907": 240,
+              "1237908": 24
+            }
+          },
+          {
+            "gift_group": 722056,
+            "award_type": "E_material",
+            "outcomes": [
+              {
+                "item_id": 1237802,
+                "count": 1,
+                "probability": 1,
+                "item_value": 3
+              }
+            ],
+            "expected_quantity_by_item": {
+              "1237802": 1
+            }
+          },
+          {
+            "gift_group": 722057,
+            "award_type": "E_material",
+            "outcomes": [
+              {
+                "item_id": 1237803,
+                "count": 4,
+                "probability": 1,
+                "item_value": 6
+              }
+            ],
+            "expected_quantity_by_item": {
+              "1237803": 4
+            }
+          },
+          {
+            "gift_group": 722058,
+            "award_type": "E_Random",
+            "outcomes": [
+              {
+                "item_id": 1237804,
+                "count": 0,
+                "probability": 0.9,
+                "item_value": 12
+              },
+              {
+                "item_id": 1237804,
+                "count": 1,
+                "probability": 0.1,
+                "item_value": 12
+              }
+            ],
+            "expected_quantity_by_item": {
+              "1237804": 0.1
+            }
+          }
+        ]
+      },
+      {
+        "section_id": 2132104,
+        "manual_value": 30,
+        "reward_groups": [
+          730080,
+          722059,
+          722060,
+          722061
+        ],
+        "gifts": [
+          {
+            "gift_group": 730080,
+            "award_type": "E_material",
+            "outcomes": [
+              {
+                "item_id": 1237908,
+                "count": 30,
+                "probability": 1,
+                "item_value": 9999
+              },
+              {
+                "item_id": 1237907,
+                "count": 300,
+                "probability": 1,
+                "item_value": 9999
+              },
+              {
+                "item_id": 1237901,
+                "count": 900,
+                "probability": 1,
+                "item_value": 9999
+              }
+            ],
+            "expected_quantity_by_item": {
+              "1237901": 900,
+              "1237907": 300,
+              "1237908": 30
+            }
+          },
+          {
+            "gift_group": 722059,
+            "award_type": "E_material",
+            "outcomes": [
+              {
+                "item_id": 1237803,
+                "count": 1,
+                "probability": 1,
+                "item_value": 6
+              }
+            ],
+            "expected_quantity_by_item": {
+              "1237803": 1
+            }
+          },
+          {
+            "gift_group": 722060,
+            "award_type": "E_Random",
+            "outcomes": [
+              {
+                "item_id": 1237804,
+                "count": 2,
+                "probability": 0.35,
+                "item_value": 12
+              },
+              {
+                "item_id": 1237804,
+                "count": 3,
+                "probability": 0.65,
+                "item_value": 12
+              }
+            ],
+            "expected_quantity_by_item": {
+              "1237804": 2.65
+            }
+          },
+          {
+            "gift_group": 722061,
+            "award_type": "E_Random",
+            "outcomes": [
+              {
+                "item_id": 1237805,
+                "count": 0,
+                "probability": 0.9,
+                "item_value": 24
+              },
+              {
+                "item_id": 1237805,
+                "count": 1,
+                "probability": 0.1,
+                "item_value": 24
+              }
+            ],
+            "expected_quantity_by_item": {
+              "1237805": 0.1
+            }
+          }
+        ]
+      },
+      {
+        "section_id": 2132105,
+        "manual_value": 36,
+        "reward_groups": [
+          730081,
+          722062,
+          722063,
+          722064
+        ],
+        "gifts": [
+          {
+            "gift_group": 730081,
+            "award_type": "E_material",
+            "outcomes": [
+              {
+                "item_id": 1237908,
+                "count": 36,
+                "probability": 1,
+                "item_value": 9999
+              },
+              {
+                "item_id": 1237907,
+                "count": 360,
+                "probability": 1,
+                "item_value": 9999
+              },
+              {
+                "item_id": 1237901,
+                "count": 1080,
+                "probability": 1,
+                "item_value": 9999
+              }
+            ],
+            "expected_quantity_by_item": {
+              "1237901": 1080,
+              "1237907": 360,
+              "1237908": 36
+            }
+          },
+          {
+            "gift_group": 722062,
+            "award_type": "E_material",
+            "outcomes": [
+              {
+                "item_id": 1237804,
+                "count": 1,
+                "probability": 1,
+                "item_value": 12
+              }
+            ],
+            "expected_quantity_by_item": {
+              "1237804": 1
+            }
+          },
+          {
+            "gift_group": 722063,
+            "award_type": "E_Random",
+            "outcomes": [
+              {
+                "item_id": 1237805,
+                "count": 1,
+                "probability": 0.25,
+                "item_value": 24
+              },
+              {
+                "item_id": 1237805,
+                "count": 2,
+                "probability": 0.75,
+                "item_value": 24
+              }
+            ],
+            "expected_quantity_by_item": {
+              "1237805": 1.75
+            }
+          },
+          {
+            "gift_group": 722064,
+            "award_type": "E_Random",
+            "outcomes": [
+              {
+                "item_id": 1237806,
+                "count": 0,
+                "probability": 0.9,
+                "item_value": 48
+              },
+              {
+                "item_id": 1237806,
+                "count": 1,
+                "probability": 0.1,
+                "item_value": 48
+              }
+            ],
+            "expected_quantity_by_item": {
+              "1237806": 0.1
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "gold_dungeon_reference": {
+    "note": "Official client MopReward values only; daily access and stamina cost are separate",
+    "sections": [
+      {
+        "section_id": 2130101,
+        "reward_groups": [
+          730071,
+          795201
+        ],
+        "deterministic_gold": 2078
+      },
+      {
+        "section_id": 2130102,
+        "reward_groups": [
+          730072,
+          795202
+        ],
+        "deterministic_gold": 4678
+      },
+      {
+        "section_id": 2130103,
+        "reward_groups": [
+          730073,
+          795203
+        ],
+        "deterministic_gold": 9356
+      },
+      {
+        "section_id": 2130104,
+        "reward_groups": [
+          730074,
+          795204
+        ],
+        "deterministic_gold": 14552
+      },
+      {
+        "section_id": 2130105,
+        "reward_groups": [
+          730075,
+          795205
+        ],
+        "deterministic_gold": 20788
+      }
+    ]
+  },
+  "acceleration_cards": [
+    {
+      "item_id": 1237831,
+      "name": "加速卡：10分钟",
+      "description": "可供建筑升级加速使用，加速时间：10分钟",
+      "effect": {
+        "value": 8,
+        "enum": "E_SpeedUp"
+      },
+      "seconds": 600
+    },
+    {
+      "item_id": 1237832,
+      "name": "加速卡：1小时",
+      "description": "可供建筑升级加速使用，加速时间：1小时",
+      "effect": {
+        "value": 8,
+        "enum": "E_SpeedUp"
+      },
+      "seconds": 3600
+    },
+    {
+      "item_id": 1237833,
+      "name": "加速卡：2小时",
+      "description": "可供建筑升级加速使用，加速时间：2小时",
+      "effect": {
+        "value": 8,
+        "enum": "E_SpeedUp"
+      },
+      "seconds": 7200
+    },
+    {
+      "item_id": 1237834,
+      "name": "加速卡：4小时",
+      "description": "可供建筑升级加速使用，加速时间：4小时",
+      "effect": {
+        "value": 8,
+        "enum": "E_SpeedUp"
+      },
+      "seconds": 14400
+    },
+    {
+      "item_id": 1237835,
+      "name": "加速卡：8小时",
+      "description": "可供建筑升级加速使用，加速时间：8小时",
+      "effect": {
+        "value": 8,
+        "enum": "E_SpeedUp"
+      },
+      "seconds": 28800
+    }
+  ],
+  "upgrade_items": [
+    {
+      "item_id": 1237801,
+      "name": "1★炼金尘",
+      "description": "在炼金实验室和奇迹位面中，1★建筑和奇迹的通用升级材料",
+      "item_value": 2
+    },
+    {
+      "item_id": 1237802,
+      "name": "2★聚灵枝",
+      "description": "在炼金实验室和奇迹位面中，2★建筑和奇迹的通用升级材料",
+      "item_value": 3
+    },
+    {
+      "item_id": 1237803,
+      "name": "3★奇迹铁",
+      "description": "在炼金实验室和奇迹位面中，3★建筑和奇迹的通用升级材料",
+      "item_value": 6
+    },
+    {
+      "item_id": 1237804,
+      "name": "4★炼金土",
+      "description": "在炼金实验室和奇迹位面中，4★建筑和奇迹的通用升级材料",
+      "item_value": 12
+    },
+    {
+      "item_id": 1237805,
+      "name": "5★聚灵木",
+      "description": "在炼金实验室和奇迹位面中，5★建筑和奇迹的通用升级材料",
+      "item_value": 24
+    },
+    {
+      "item_id": 1237806,
+      "name": "6★奇迹合金",
+      "description": "在炼金实验室和奇迹位面中，6★建筑和奇迹的通用升级材料",
+      "item_value": 48
+    },
+    {
+      "item_id": 1237807,
+      "name": "初·研构原能",
+      "description": "炼金实验室中，4★星锑间轨的升级材料，也可以用来重置兽主强化等级。",
+      "item_value": 48
+    },
+    {
+      "item_id": 1237808,
+      "name": "纯·研构原能",
+      "description": "炼金实验室中，5★星锑间轨的升级材料，也可以对兽主词条数值进行洗炼。",
+      "item_value": 48
+    },
+    {
+      "item_id": 1237809,
+      "name": "粹·研构原能",
+      "description": "炼金实验室中，6★星锑间轨的升级材料",
+      "item_value": 48
+    }
+  ],
+  "currency_anchors": {
+    "items": [
+      {
+        "item_id": 1237901,
+        "name": "金币",
+        "item_value": 9999
+      },
+      {
+        "item_id": 1237902,
+        "name": "光辉",
+        "item_value": 9999
+      },
+      {
+        "item_id": 1237907,
+        "name": "神格经验",
+        "item_value": 9999
+      },
+      {
+        "item_id": 1237922,
+        "name": "生物电源",
+        "item_value": 9999
+      }
+    ],
+    "star_energy_item_id": "MISSING: GrowthBase field, no confirmed account Item mapping",
+    "exchange_rates": "MISSING: ItemValue is not a currency exchange rate"
+  },
+  "missing_server_only": [
+    "building_upgrade_cost",
+    "wonder_upgrade_cost",
+    "star_energy_rate_and_cap",
+    "build_time",
+    "cancel_refund",
+    "customer_generation",
+    "training_reward",
+    "daily_reset_hour"
+  ]
+}

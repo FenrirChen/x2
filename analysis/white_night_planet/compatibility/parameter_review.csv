@@ -1,0 +1,62 @@
+﻿Domain,Parameter,Official Constraint,Proposed Value,Unit,Reason,Economic Impact,Sensitivity,Evidence,User Decision Required
+status,status,,"""PROPOSAL / NOT APPROVED / NOT IMPLEMENTED""",status,Review only; no runtime loader,,medium,,YES
+version,version,,1,schema version,Replaceable policy package,,medium,,YES
+building,building.material_tier_by_target_level,1237801..6 are College upgrade items; static level prerequisites still gate,"[[2, 5, 1237801], [6, 10, 1237802], [11, 15, 1237803], [16, 20, 1237804], [21, 25, 1237805], [26, 40, 1237805]]",target-level bands,Five Time Rift tiers map to growth bands; tier 6 reserved for star promotion,Time Rift remains meaningful without making rare 6-star material a per-level tax,high,official_economic_anchors.json,YES
+building,building.material_count_formula,,"""1+ceil(target_level/8)""",items/upgrade,2 at level 2; 5 near level 30,1-2 Time Rift runs per late upgrade,high,,YES
+building,building.gold_cost_formula,,"""round_to_50(500+85*target_level**1.45)""",gold/upgrade,Power growth below exponential,~600 at level 2; ~12k at level 30,high,,YES
+building,building.time_seconds_formula,,"""min(28800,300+43.2*target_level**2)""",seconds/upgrade,Minutes early; 2-8 hours mid/late,Avoids multi-day wall,medium,,YES
+building,building.queue_slots,BuildQueue message exists,1,ordinary build queue,One BuildQueue object in GrowthBase; UI concurrent use still to verify,,medium,,YES
+wonder,wonder.level_material_count_formula,,"""2+ceil(target_level/7)""",items/upgrade,Wonder is a separate slower track,,high,,YES
+wonder,wonder.level_gold_cost_formula,,"""round_to_50(1200+140*target_level**1.45)""",gold/upgrade,Higher than ordinary building without exponential cost,,high,,YES
+wonder,wonder.level_time_seconds_formula,,"""min(43200,900+64.8*target_level**2)""",seconds/upgrade,"15 minutes early, max 12 hours",,medium,,YES
+wonder,wonder.star_material_tier,Star caps/LimitLevel from CollegeStarLevel,"""target_star""",1237801..6 tier,All six official star materials have a role,,high,official_economic_anchors.json,YES
+wonder,wonder.star_material_count,,"[2, 3, 3, 2, 2, 1]",items by target star 1..6,6-star drop is rare in fifth Time Rift tier,,high,official_economic_anchors.json,YES
+wonder,wonder.star_gold_cost_formula,,"""round_to_50(3000*target_star**1.5)""",gold/star,Milestone sink; no premium currency,,high,,YES
+wonder,wonder.queue_slots,WonderQueue message exists,1,wonder queue,Separate WonderQueue object,,medium,,YES
+star_energy,star_energy.rate_per_hour,Explore costs 6..72 for 3..36 hours,2,energy/hour,Explore PowerConsume is exactly 2 per hour across all 15 rows,Continuous single dispatch roughly consumes generated energy,high,official_economic_anchors.json,YES
+star_energy,star_energy.warehouse_cap,,96,energy,Covers longest 72-energy dispatch with reserve,No unlimited stockpile,high,official_economic_anchors.json,YES
+star_energy,star_energy.offline_accrual_cap_hours,,24,hours/logout interval,Once-daily login gets full production; 2/4/8/12 hours would starve long dispatch,Max 48 energy per long absence at base rate,high,,YES
+star_energy,star_energy.settlement,,"""min(cap,current+floor(min(elapsed,offline_cap)*rate))""",server-clock formula,Timestamp only moves forward; settle before cost or grant,,high,,YES
+acceleration,acceleration.policy,,"""consume named card; end=max(now,end-card_seconds); no premium-currency fallback""",rule,"Use existing obtainable cards, never free bypass",Existing acceleration stock gains purpose,medium,,YES
+acceleration,acceleration.overflow_carry,,false,bool,Card shortens active queue only; no banked negative time,,low,,YES
+cancel_refund,cancel_refund.recommended_fraction,,1.0,fraction of unearned base inputs,No output or completion reward before finish; receipt prevents loop,No progress tax; speed cards already spent are not refunded,medium,,YES
+cancel_refund,cancel_refund.alternatives,,"[""0.8 flat"", ""max(0,1-elapsed/total)""]",candidate rules,80% is a sink; proportional is less predictable,,medium,,YES
+cancel_refund,cancel_refund.speed_card_refund,,false,bool,Consumed card is a separate completed transaction,,medium,,YES
+queues,queues.explore_slots,,2,concurrent dispatches,Candidate pending UI-slot verification,Max two timed sources,high,,YES
+queues,queues.training_slots,,2,concurrent trainees,Candidate pending UI-slot verification,,medium,,YES
+explore,explore.success_rate,,1.0,probability,No failure result rule recovered,Predictable timed return,medium,,YES
+explore,explore.reward_policy,,"""one weight-normalized resolution of CollegeExplore.Reward Gift; no second roll or multiplier""",rule,Gift weights sum to 1000; current EconomyService.gifts accepts only 100 and cannot be called unchanged,Long missions yield less per hour; convenience is their advantage,high,official_economic_anchors.json,YES
+explore,explore.hero_occupancy,,"""same hero cannot occupy two Explore or Explore+Training""",rule,Prevent duplicate utilization,,high,,YES
+explore,explore.cancel_refund_fraction,,1.0,energy fraction,No reward granted on cancel; no server-clock exploit,,medium,,YES
+training,training.duration_seconds,,14400,seconds,"Four-hour candidate, subject to UI timer and EXP scale audit",,medium,,YES
+training,training.occupancy,,"""shared hero ledger with Explore""",rule,No simultaneous assignment,,high,,YES
+alchemy,alchemy.extra_rng,,false,bool,Do not roll another result over deterministic ProductID,,medium,,YES
+customer,customer.order_reward,CollegeQuest.AwardType/AwardGroup,"""use CollegeQuest.AwardType/AwardGroup only after exact price/cost validation""",rule,"Official rows are 41 Gift, 77 Gold, 2 Buff; validation order is a proposed safeguard",,high,official_economic_anchors.json,YES
+customer,customer.client_price_trust,,false,bool,Ignore client plusPrice/discountPrice as authority,,high,,YES
+washing,washing.cost_options,CollegeEquibReset rows 1..5,"""CollegeEquibReset rows 1..5; prefer gold-side Item1 list""",rule,Official table lists gold and crystal alternatives; route preference is a policy choice,,high,official_economic_anchors.json,YES
+washing,washing.daily_attempt_cap,,10,attempts/day,Balanced candidate; compare 5/20/unlimited,Limits random reroll search without pay pressure,high,,YES
+assist,assist.alternative,,"""NPC/self assist without fictional accounts""",candidate,Only after explicit separate approval,,medium,,YES
+daily_reset,daily_reset.timezone,,"""Asia/Shanghai""",IANA zone,Match current Revival daily task and gift calendar,,medium,src/x2server/player/task_calendar.py,YES
+daily_reset,daily_reset.hour,,0,local hour,Match current Revival daily task boundary; official College hour unknown,,medium,,YES
+daily_reset,daily_reset.clock,,"""ServerClock""",authority,Never trust client time,,medium,,YES
+errors,errors.generic_reject_code,,13,protocol code,Existing Revival unsupported/error fallback; exact original per-cause codes unknown,,low,,YES
+errors,errors.internal_reasons,,"[""not_owned"", ""insufficient"", ""busy"", ""not_finished"", ""already_claimed"", ""invalid_state"", ""limit_reached""]",reason labels,Separate validation and logs even if wire maps to generic reject,,low,,YES
+transaction,transaction.boundary,,"""validate -> compute -> debit -> state -> reward -> receipt -> commit -> respond""",SQLite transaction,Cancellation/finish/retry races cannot mint resources,,medium,,YES
+presets,presets.CONSERVATIVE.material_cost_multiplier,,1.25,x,Slower material progression,,high,,YES
+presets,presets.CONSERVATIVE.gold_cost_multiplier,,1.25,x,Higher gold sink,,high,,YES
+presets,presets.CONSERVATIVE.build_time_multiplier,,1.3,x,Longer queues,,medium,,YES
+presets,presets.CONSERVATIVE.energy_rate_per_hour,,1.5,energy/hour,Lower dispatch cadence,,high,,YES
+presets,presets.CONSERVATIVE.offline_cap_hours,,12,hours,Less idle accrual,,high,,YES
+presets,presets.CONSERVATIVE.washing_cap,,5,attempts/day,Restrictive comparison,,high,,YES
+presets,presets.BALANCED.material_cost_multiplier,,1.0,x,Recommended baseline,,high,,YES
+presets,presets.BALANCED.gold_cost_multiplier,,1.0,x,Recommended baseline,,high,,YES
+presets,presets.BALANCED.build_time_multiplier,,1.0,x,Recommended baseline,,medium,,YES
+presets,presets.BALANCED.energy_rate_per_hour,,2.0,energy/hour,Matches Explore 2 energy/hour,,high,,YES
+presets,presets.BALANCED.offline_cap_hours,,24,hours,Supports once-daily play,,high,,YES
+presets,presets.BALANCED.washing_cap,,10,attempts/day,Recommended candidate,,high,,YES
+presets,presets.RELAXED.material_cost_multiplier,,0.75,x,Faster collection play,,high,,YES
+presets,presets.RELAXED.gold_cost_multiplier,,0.75,x,Lighter gold sink,,high,,YES
+presets,presets.RELAXED.build_time_multiplier,,0.7,x,Shorter queues,,medium,,YES
+presets,presets.RELAXED.energy_rate_per_hour,,3.0,energy/hour,More dispatch capacity,,high,,YES
+presets,presets.RELAXED.offline_cap_hours,,24,hours,Keep cap bounded,,high,,YES
+presets,presets.RELAXED.washing_cap,,20,attempts/day,Generous reroll ceiling,,high,,YES

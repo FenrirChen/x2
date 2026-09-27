@@ -1,0 +1,2067 @@
+{
+  "status": "PROPOSAL EXPECTATION MODEL; NOT RUNTIME",
+  "runs": [
+    {
+      "preset": "CONSERVATIVE",
+      "logins_per_day": 1,
+      "days": 1,
+      "average_building_level": 1.0,
+      "average_wonder_level": 1.0,
+      "completed_upgrades": 0,
+      "rift_runs_assumed": 1,
+      "energy_generated": 18.0,
+      "energy_spent": 0.0,
+      "energy_end": 18.0,
+      "dispatches_claimed": 0,
+      "dispatch_gold_expected": 0.0,
+      "dispatch_reward_vector_expected": {
+        "1237901": 0.0
+      },
+      "alchemy_outputs": 0,
+      "washing_actual": 0,
+      "washing_potential_ceiling": 5,
+      "college_gold_receipts": 0.0,
+      "college_gold_spent": 900.0,
+      "college_gold_net": -900.0,
+      "rift_gold_receipts": 360.0,
+      "external_gold_assumed": 14552,
+      "unspent_material_vector": {
+        "1237801": 2.0,
+        "1237802": 0.5
+      },
+      "rift_materials_earned": {
+        "1237801": 5.0,
+        "1237802": 0.5
+      },
+      "upgrade_materials_spent": {
+        "1237801": 3.0
+      },
+      "resource_net_vector": {
+        "college_gold": -900.0,
+        "energy": 18.0,
+        "1237801": 2.0,
+        "1237802": 0.5
+      },
+      "limitations": "expected gifts; level-60 account; one external gold dungeon/day; 1 Rift run/login; no stamina model; alchemy/training/customers/pray/washing DEFER"
+    },
+    {
+      "preset": "CONSERVATIVE",
+      "logins_per_day": 1,
+      "days": 7,
+      "average_building_level": 1.75,
+      "average_wonder_level": 1.43,
+      "completed_upgrades": 9,
+      "rift_runs_assumed": 7,
+      "energy_generated": 126.0,
+      "energy_spent": 96.0,
+      "energy_end": 30.0,
+      "dispatches_claimed": 2,
+      "dispatch_gold_expected": 2960.0,
+      "dispatch_reward_vector_expected": {
+        "1203001": 0.1,
+        "1203002": 0.05,
+        "1203003": 0.02,
+        "1237840": 0.06,
+        "1237901": 2960.0,
+        "1237907": 480.0,
+        "1237922": 1.6,
+        "1237994": 11.5,
+        "1237995": 10.0
+      },
+      "alchemy_outputs": 0,
+      "washing_actual": 0,
+      "washing_potential_ceiling": 35,
+      "college_gold_receipts": 2960.0,
+      "college_gold_spent": 12300.0,
+      "college_gold_net": -9340.0,
+      "rift_gold_receipts": 2520.0,
+      "external_gold_assumed": 101864,
+      "unspent_material_vector": {
+        "1237801": 2.0,
+        "1237802": 3.5
+      },
+      "rift_materials_earned": {
+        "1237801": 35.0,
+        "1237802": 3.5
+      },
+      "upgrade_materials_spent": {
+        "1237801": 33.0
+      },
+      "resource_net_vector": {
+        "college_gold": -9340.0,
+        "energy": 30.0,
+        "1237801": 2.0,
+        "1237802": 3.5
+      },
+      "limitations": "expected gifts; level-60 account; one external gold dungeon/day; 1 Rift run/login; no stamina model; alchemy/training/customers/pray/washing DEFER"
+    },
+    {
+      "preset": "CONSERVATIVE",
+      "logins_per_day": 1,
+      "days": 30,
+      "average_building_level": 4.62,
+      "average_wonder_level": 3.14,
+      "completed_upgrades": 44,
+      "rift_runs_assumed": 30,
+      "energy_generated": 540.0,
+      "energy_spent": 528.0,
+      "energy_end": 12.0,
+      "dispatches_claimed": 10,
+      "dispatch_gold_expected": 14800.0,
+      "dispatch_reward_vector_expected": {
+        "1203001": 0.5,
+        "1203002": 0.25,
+        "1203003": 0.1,
+        "1237840": 0.3,
+        "1237901": 14800.0,
+        "1237907": 2400.0,
+        "1237922": 8.0,
+        "1237994": 57.5,
+        "1237995": 50.0
+      },
+      "alchemy_outputs": 0,
+      "washing_actual": 0,
+      "washing_potential_ceiling": 150,
+      "college_gold_receipts": 14800.0,
+      "college_gold_spent": 76200.0,
+      "college_gold_net": -61400.0,
+      "rift_gold_receipts": 10800.0,
+      "external_gold_assumed": 436560,
+      "unspent_material_vector": {
+        "1237801": 2.0,
+        "1237802": 9.0
+      },
+      "rift_materials_earned": {
+        "1237801": 150.0,
+        "1237802": 15.0
+      },
+      "upgrade_materials_spent": {
+        "1237801": 148.0,
+        "1237802": 6.0
+      },
+      "resource_net_vector": {
+        "college_gold": -61400.0,
+        "energy": 12.0,
+        "1237801": 2.0,
+        "1237802": 9.0
+      },
+      "limitations": "expected gifts; level-60 account; one external gold dungeon/day; 1 Rift run/login; no stamina model; alchemy/training/customers/pray/washing DEFER"
+    },
+    {
+      "preset": "CONSERVATIVE",
+      "logins_per_day": 1,
+      "days": 90,
+      "average_building_level": 9.0,
+      "average_wonder_level": 9.14,
+      "completed_upgrades": 121,
+      "rift_runs_assumed": 90,
+      "energy_generated": 1620.0,
+      "energy_spent": 1584.0,
+      "energy_end": 36.0,
+      "dispatches_claimed": 33,
+      "dispatch_gold_expected": 48840.0,
+      "dispatch_reward_vector_expected": {
+        "1203001": 1.65,
+        "1203002": 0.83,
+        "1203003": 0.33,
+        "1237840": 0.99,
+        "1237901": 48840.0,
+        "1237907": 7920.0,
+        "1237922": 26.4,
+        "1237994": 189.75,
+        "1237995": 165.0
+      },
+      "alchemy_outputs": 0,
+      "washing_actual": 0,
+      "washing_potential_ceiling": 450,
+      "college_gold_receipts": 48840.0,
+      "college_gold_spent": 358200.0,
+      "college_gold_net": -309360.0,
+      "rift_gold_receipts": 41040.0,
+      "external_gold_assumed": 1309680,
+      "unspent_material_vector": {
+        "1237801": 62.0,
+        "1237802": 6.0,
+        "1237803": 0.8
+      },
+      "rift_materials_earned": {
+        "1237801": 258.0,
+        "1237802": 261.0,
+        "1237803": 4.8
+      },
+      "upgrade_materials_spent": {
+        "1237801": 196.0,
+        "1237802": 255.0,
+        "1237803": 4.0
+      },
+      "resource_net_vector": {
+        "college_gold": -309360.0,
+        "energy": 36.0,
+        "1237801": 62.0,
+        "1237802": 6.0,
+        "1237803": 0.8
+      },
+      "limitations": "expected gifts; level-60 account; one external gold dungeon/day; 1 Rift run/login; no stamina model; alchemy/training/customers/pray/washing DEFER"
+    },
+    {
+      "preset": "CONSERVATIVE",
+      "logins_per_day": 2,
+      "days": 1,
+      "average_building_level": 1.12,
+      "average_wonder_level": 1.0,
+      "completed_upgrades": 1,
+      "rift_runs_assumed": 2,
+      "energy_generated": 30.0,
+      "energy_spent": 24.0,
+      "energy_end": 6.0,
+      "dispatches_claimed": 0,
+      "dispatch_gold_expected": 0.0,
+      "dispatch_reward_vector_expected": {
+        "1237901": 0.0
+      },
+      "alchemy_outputs": 0,
+      "washing_actual": 0,
+      "washing_potential_ceiling": 5,
+      "college_gold_receipts": 0.0,
+      "college_gold_spent": 3800.0,
+      "college_gold_net": -3800.0,
+      "rift_gold_receipts": 720.0,
+      "external_gold_assumed": 14552,
+      "unspent_material_vector": {
+        "1237801": 0.0,
+        "1237802": 1.0
+      },
+      "rift_materials_earned": {
+        "1237801": 10.0,
+        "1237802": 1.0
+      },
+      "upgrade_materials_spent": {
+        "1237801": 10.0
+      },
+      "resource_net_vector": {
+        "college_gold": -3800.0,
+        "energy": 6.0,
+        "1237801": 0.0,
+        "1237802": 1.0
+      },
+      "limitations": "expected gifts; level-60 account; one external gold dungeon/day; 1 Rift run/login; no stamina model; alchemy/training/customers/pray/washing DEFER"
+    },
+    {
+      "preset": "CONSERVATIVE",
+      "logins_per_day": 2,
+      "days": 7,
+      "average_building_level": 2.62,
+      "average_wonder_level": 1.86,
+      "completed_upgrades": 19,
+      "rift_runs_assumed": 14,
+      "energy_generated": 246.0,
+      "energy_spent": 240.0,
+      "energy_end": 6.0,
+      "dispatches_claimed": 9,
+      "dispatch_gold_expected": 10440.0,
+      "dispatch_reward_vector_expected": {
+        "1203001": 0.45,
+        "1203002": 0.22,
+        "1203003": 0.09,
+        "1237840": 0.27,
+        "1237901": 10440.0,
+        "1237907": 1710.0,
+        "1237922": 6.3,
+        "1237993": 51.75,
+        "1237994": 45.0
+      },
+      "alchemy_outputs": 0,
+      "washing_actual": 0,
+      "washing_potential_ceiling": 35,
+      "college_gold_receipts": 10440.0,
+      "college_gold_spent": 28600.0,
+      "college_gold_net": -18160.0,
+      "rift_gold_receipts": 5040.0,
+      "external_gold_assumed": 101864,
+      "unspent_material_vector": {
+        "1237801": 0.0,
+        "1237802": 7.0
+      },
+      "rift_materials_earned": {
+        "1237801": 70.0,
+        "1237802": 7.0
+      },
+      "upgrade_materials_spent": {
+        "1237801": 70.0
+      },
+      "resource_net_vector": {
+        "college_gold": -18160.0,
+        "energy": 6.0,
+        "1237801": 0.0,
+        "1237802": 7.0
+      },
+      "limitations": "expected gifts; level-60 account; one external gold dungeon/day; 1 Rift run/login; no stamina model; alchemy/training/customers/pray/washing DEFER"
+    },
+    {
+      "preset": "CONSERVATIVE",
+      "logins_per_day": 2,
+      "days": 30,
+      "average_building_level": 7.5,
+      "average_wonder_level": 6.0,
+      "completed_upgrades": 87,
+      "rift_runs_assumed": 60,
+      "energy_generated": 1074.0,
+      "energy_spent": 1056.0,
+      "energy_end": 18.0,
+      "dispatches_claimed": 44,
+      "dispatch_gold_expected": 51040.0,
+      "dispatch_reward_vector_expected": {
+        "1203001": 2.2,
+        "1203002": 1.1,
+        "1203003": 0.44,
+        "1237840": 1.32,
+        "1237901": 51040.0,
+        "1237907": 8360.0,
+        "1237922": 30.8,
+        "1237993": 253.0,
+        "1237994": 220.0
+      },
+      "alchemy_outputs": 0,
+      "washing_actual": 0,
+      "washing_potential_ceiling": 150,
+      "college_gold_receipts": 51040.0,
+      "college_gold_spent": 204150.0,
+      "college_gold_net": -153110.0,
+      "rift_gold_receipts": 24840.0,
+      "external_gold_assumed": 436560,
+      "unspent_material_vector": {
+        "1237801": 32.0,
+        "1237802": 0.0,
+        "1237803": 1.8
+      },
+      "rift_materials_earned": {
+        "1237801": 228.0,
+        "1237802": 111.0,
+        "1237803": 1.8
+      },
+      "upgrade_materials_spent": {
+        "1237801": 196.0,
+        "1237802": 111.0
+      },
+      "resource_net_vector": {
+        "college_gold": -153110.0,
+        "energy": 18.0,
+        "1237801": 32.0,
+        "1237802": 0.0,
+        "1237803": 1.8
+      },
+      "limitations": "expected gifts; level-60 account; one external gold dungeon/day; 1 Rift run/login; no stamina model; alchemy/training/customers/pray/washing DEFER"
+    },
+    {
+      "preset": "CONSERVATIVE",
+      "logins_per_day": 2,
+      "days": 90,
+      "average_building_level": 13.75,
+      "average_wonder_level": 15.0,
+      "completed_upgrades": 200,
+      "rift_runs_assumed": 180,
+      "energy_generated": 3234.0,
+      "energy_spent": 3216.0,
+      "energy_end": 18.0,
+      "dispatches_claimed": 134,
+      "dispatch_gold_expected": 155440.0,
+      "dispatch_reward_vector_expected": {
+        "1203001": 6.7,
+        "1203002": 3.35,
+        "1203003": 1.34,
+        "1237840": 4.02,
+        "1237901": 155440.0,
+        "1237907": 25460.0,
+        "1237922": 93.8,
+        "1237993": 770.5,
+        "1237994": 670.0
+      },
+      "alchemy_outputs": 0,
+      "washing_actual": 0,
+      "washing_potential_ceiling": 450,
+      "college_gold_receipts": 155440.0,
+      "college_gold_spent": 894200.0,
+      "college_gold_net": -738760.0,
+      "rift_gold_receipts": 105660.0,
+      "external_gold_assumed": 1309680,
+      "unspent_material_vector": {
+        "1237801": 67.0,
+        "1237802": 87.0,
+        "1237803": 4.3,
+        "1237804": 2.7,
+        "1237805": 0.4
+      },
+      "rift_materials_earned": {
+        "1237801": 263.0,
+        "1237802": 367.0,
+        "1237803": 333.3,
+        "1237804": 18.7,
+        "1237805": 0.4
+      },
+      "upgrade_materials_spent": {
+        "1237801": 196.0,
+        "1237802": 280.0,
+        "1237803": 329.0,
+        "1237804": 16.0
+      },
+      "resource_net_vector": {
+        "college_gold": -738760.0,
+        "energy": 18.0,
+        "1237801": 67.0,
+        "1237802": 87.0,
+        "1237803": 4.3,
+        "1237804": 2.7,
+        "1237805": 0.4
+      },
+      "limitations": "expected gifts; level-60 account; one external gold dungeon/day; 1 Rift run/login; no stamina model; alchemy/training/customers/pray/washing DEFER"
+    },
+    {
+      "preset": "CONSERVATIVE",
+      "logins_per_day": 3,
+      "days": 1,
+      "average_building_level": 1.25,
+      "average_wonder_level": 1.14,
+      "completed_upgrades": 3,
+      "rift_runs_assumed": 3,
+      "energy_generated": 30.0,
+      "energy_spent": 16.0,
+      "energy_end": 14.0,
+      "dispatches_claimed": 0,
+      "dispatch_gold_expected": 0.0,
+      "dispatch_reward_vector_expected": {
+        "1237901": 0.0
+      },
+      "alchemy_outputs": 0,
+      "washing_actual": 0,
+      "washing_potential_ceiling": 5,
+      "college_gold_receipts": 0.0,
+      "college_gold_spent": 4700.0,
+      "college_gold_net": -4700.0,
+      "rift_gold_receipts": 1080.0,
+      "external_gold_assumed": 14552,
+      "unspent_material_vector": {
+        "1237801": 2.0,
+        "1237802": 1.5
+      },
+      "rift_materials_earned": {
+        "1237801": 15.0,
+        "1237802": 1.5
+      },
+      "upgrade_materials_spent": {
+        "1237801": 13.0
+      },
+      "resource_net_vector": {
+        "college_gold": -4700.0,
+        "energy": 14.0,
+        "1237801": 2.0,
+        "1237802": 1.5
+      },
+      "limitations": "expected gifts; level-60 account; one external gold dungeon/day; 1 Rift run/login; no stamina model; alchemy/training/customers/pray/washing DEFER"
+    },
+    {
+      "preset": "CONSERVATIVE",
+      "logins_per_day": 3,
+      "days": 7,
+      "average_building_level": 3.5,
+      "average_wonder_level": 2.43,
+      "completed_upgrades": 30,
+      "rift_runs_assumed": 21,
+      "energy_generated": 246.0,
+      "energy_spent": 240.0,
+      "energy_end": 6.0,
+      "dispatches_claimed": 14,
+      "dispatch_gold_expected": 11760.0,
+      "dispatch_reward_vector_expected": {
+        "1203001": 0.7,
+        "1203002": 0.35,
+        "1203003": 0.14,
+        "1237840": 0.42,
+        "1237901": 11760.0,
+        "1237907": 1960.0,
+        "1237922": 8.4,
+        "1237992": 80.5,
+        "1237993": 70.0
+      },
+      "alchemy_outputs": 0,
+      "washing_actual": 0,
+      "washing_potential_ceiling": 35,
+      "college_gold_receipts": 11760.0,
+      "college_gold_spent": 45200.0,
+      "college_gold_net": -33440.0,
+      "rift_gold_receipts": 7560.0,
+      "external_gold_assumed": 101864,
+      "unspent_material_vector": {
+        "1237801": 2.0,
+        "1237802": 10.5
+      },
+      "rift_materials_earned": {
+        "1237801": 105.0,
+        "1237802": 10.5
+      },
+      "upgrade_materials_spent": {
+        "1237801": 103.0
+      },
+      "resource_net_vector": {
+        "college_gold": -33440.0,
+        "energy": 6.0,
+        "1237801": 2.0,
+        "1237802": 10.5
+      },
+      "limitations": "expected gifts; level-60 account; one external gold dungeon/day; 1 Rift run/login; no stamina model; alchemy/training/customers/pray/washing DEFER"
+    },
+    {
+      "preset": "CONSERVATIVE",
+      "logins_per_day": 3,
+      "days": 30,
+      "average_building_level": 9.0,
+      "average_wonder_level": 9.14,
+      "completed_upgrades": 121,
+      "rift_runs_assumed": 90,
+      "energy_generated": 1074.0,
+      "energy_spent": 1072.0,
+      "energy_end": 2.0,
+      "dispatches_claimed": 65,
+      "dispatch_gold_expected": 54600.0,
+      "dispatch_reward_vector_expected": {
+        "1203001": 3.25,
+        "1203002": 1.62,
+        "1203003": 0.65,
+        "1237840": 1.95,
+        "1237901": 54600.0,
+        "1237907": 9100.0,
+        "1237922": 39.0,
+        "1237992": 373.75,
+        "1237993": 325.0
+      },
+      "alchemy_outputs": 0,
+      "washing_actual": 0,
+      "washing_potential_ceiling": 150,
+      "college_gold_receipts": 54600.0,
+      "college_gold_spent": 358200.0,
+      "college_gold_net": -303600.0,
+      "rift_gold_receipts": 41040.0,
+      "external_gold_assumed": 436560,
+      "unspent_material_vector": {
+        "1237801": 62.0,
+        "1237802": 6.0,
+        "1237803": 0.8
+      },
+      "rift_materials_earned": {
+        "1237801": 258.0,
+        "1237802": 261.0,
+        "1237803": 4.8
+      },
+      "upgrade_materials_spent": {
+        "1237801": 196.0,
+        "1237802": 255.0,
+        "1237803": 4.0
+      },
+      "resource_net_vector": {
+        "college_gold": -303600.0,
+        "energy": 2.0,
+        "1237801": 62.0,
+        "1237802": 6.0,
+        "1237803": 0.8
+      },
+      "limitations": "expected gifts; level-60 account; one external gold dungeon/day; 1 Rift run/login; no stamina model; alchemy/training/customers/pray/washing DEFER"
+    },
+    {
+      "preset": "CONSERVATIVE",
+      "logins_per_day": 3,
+      "days": 90,
+      "average_building_level": 17.88,
+      "average_wonder_level": 16.57,
+      "completed_upgrades": 244,
+      "rift_runs_assumed": 270,
+      "energy_generated": 3234.0,
+      "energy_spent": 3232.0,
+      "energy_end": 2.0,
+      "dispatches_claimed": 200,
+      "dispatch_gold_expected": 168000.0,
+      "dispatch_reward_vector_expected": {
+        "1203001": 10.0,
+        "1203002": 5.0,
+        "1203003": 2.0,
+        "1237840": 6.0,
+        "1237901": 168000.0,
+        "1237907": 28000.0,
+        "1237922": 120.0,
+        "1237992": 1150.0,
+        "1237993": 1000.0
+      },
+      "alchemy_outputs": 0,
+      "washing_actual": 0,
+      "washing_potential_ceiling": 450,
+      "college_gold_receipts": 168000.0,
+      "college_gold_spent": 1285900.0,
+      "college_gold_net": -1117900.0,
+      "rift_gold_receipts": 186120.0,
+      "external_gold_assumed": 1309680,
+      "unspent_material_vector": {
+        "1237801": 69.0,
+        "1237802": 87.5,
+        "1237803": 93.3,
+        "1237804": 2.55,
+        "1237805": 4.3
+      },
+      "rift_materials_earned": {
+        "1237801": 268.0,
+        "1237802": 367.5,
+        "1237803": 422.3,
+        "1237804": 254.55,
+        "1237805": 9.3
+      },
+      "upgrade_materials_spent": {
+        "1237801": 199.0,
+        "1237802": 280.0,
+        "1237803": 329.0,
+        "1237804": 252.0,
+        "1237805": 5.0
+      },
+      "resource_net_vector": {
+        "college_gold": -1117900.0,
+        "energy": 2.0,
+        "1237801": 69.0,
+        "1237802": 87.5,
+        "1237803": 93.3,
+        "1237804": 2.55,
+        "1237805": 4.3
+      },
+      "limitations": "expected gifts; level-60 account; one external gold dungeon/day; 1 Rift run/login; no stamina model; alchemy/training/customers/pray/washing DEFER"
+    },
+    {
+      "preset": "BALANCED",
+      "logins_per_day": 1,
+      "days": 1,
+      "average_building_level": 1.0,
+      "average_wonder_level": 1.0,
+      "completed_upgrades": 0,
+      "rift_runs_assumed": 1,
+      "energy_generated": 24.0,
+      "energy_spent": 0.0,
+      "energy_end": 24.0,
+      "dispatches_claimed": 0,
+      "dispatch_gold_expected": 0.0,
+      "dispatch_reward_vector_expected": {
+        "1237901": 0.0
+      },
+      "alchemy_outputs": 0,
+      "washing_actual": 0,
+      "washing_potential_ceiling": 10,
+      "college_gold_receipts": 0.0,
+      "college_gold_spent": 750.0,
+      "college_gold_net": -750.0,
+      "rift_gold_receipts": 360.0,
+      "external_gold_assumed": 14552,
+      "unspent_material_vector": {
+        "1237801": 3.0,
+        "1237802": 0.5
+      },
+      "rift_materials_earned": {
+        "1237801": 5.0,
+        "1237802": 0.5
+      },
+      "upgrade_materials_spent": {
+        "1237801": 2.0
+      },
+      "resource_net_vector": {
+        "college_gold": -750.0,
+        "energy": 24.0,
+        "1237801": 3.0,
+        "1237802": 0.5
+      },
+      "limitations": "expected gifts; level-60 account; one external gold dungeon/day; 1 Rift run/login; no stamina model; alchemy/training/customers/pray/washing DEFER"
+    },
+    {
+      "preset": "BALANCED",
+      "logins_per_day": 1,
+      "days": 7,
+      "average_building_level": 1.75,
+      "average_wonder_level": 1.71,
+      "completed_upgrades": 11,
+      "rift_runs_assumed": 7,
+      "energy_generated": 312.0,
+      "energy_spent": 288.0,
+      "energy_end": 24.0,
+      "dispatches_claimed": 5,
+      "dispatch_gold_expected": 7400.0,
+      "dispatch_reward_vector_expected": {
+        "1203001": 0.25,
+        "1203002": 0.12,
+        "1203003": 0.05,
+        "1237840": 0.15,
+        "1237901": 7400.0,
+        "1237907": 1200.0,
+        "1237922": 4.0,
+        "1237994": 28.75,
+        "1237995": 25.0
+      },
+      "alchemy_outputs": 0,
+      "washing_actual": 0,
+      "washing_potential_ceiling": 70,
+      "college_gold_receipts": 7400.0,
+      "college_gold_spent": 14850.0,
+      "college_gold_net": -7450.0,
+      "rift_gold_receipts": 2520.0,
+      "external_gold_assumed": 101864,
+      "unspent_material_vector": {
+        "1237801": 3.0,
+        "1237802": 3.5
+      },
+      "rift_materials_earned": {
+        "1237801": 35.0,
+        "1237802": 3.5
+      },
+      "upgrade_materials_spent": {
+        "1237801": 32.0
+      },
+      "resource_net_vector": {
+        "college_gold": -7450.0,
+        "energy": 24.0,
+        "1237801": 3.0,
+        "1237802": 3.5
+      },
+      "limitations": "expected gifts; level-60 account; one external gold dungeon/day; 1 Rift run/login; no stamina model; alchemy/training/customers/pray/washing DEFER"
+    },
+    {
+      "preset": "BALANCED",
+      "logins_per_day": 1,
+      "days": 30,
+      "average_building_level": 4.62,
+      "average_wonder_level": 5.0,
+      "completed_upgrades": 57,
+      "rift_runs_assumed": 30,
+      "energy_generated": 1416.0,
+      "energy_spent": 1392.0,
+      "energy_end": 24.0,
+      "dispatches_claimed": 28,
+      "dispatch_gold_expected": 41440.0,
+      "dispatch_reward_vector_expected": {
+        "1203001": 1.4,
+        "1203002": 0.7,
+        "1203003": 0.28,
+        "1237840": 0.84,
+        "1237901": 41440.0,
+        "1237907": 6720.0,
+        "1237922": 22.4,
+        "1237994": 161.0,
+        "1237995": 140.0
+      },
+      "alchemy_outputs": 0,
+      "washing_actual": 0,
+      "washing_potential_ceiling": 300,
+      "college_gold_receipts": 41440.0,
+      "college_gold_spent": 94600.0,
+      "college_gold_net": -53160.0,
+      "rift_gold_receipts": 10980.0,
+      "external_gold_assumed": 436560,
+      "unspent_material_vector": {
+        "1237801": 6.0,
+        "1237802": 12.5,
+        "1237803": 0.1
+      },
+      "rift_materials_earned": {
+        "1237801": 146.0,
+        "1237802": 19.5,
+        "1237803": 0.1
+      },
+      "upgrade_materials_spent": {
+        "1237801": 140.0,
+        "1237802": 7.0
+      },
+      "resource_net_vector": {
+        "college_gold": -53160.0,
+        "energy": 24.0,
+        "1237801": 6.0,
+        "1237802": 12.5,
+        "1237803": 0.1
+      },
+      "limitations": "expected gifts; level-60 account; one external gold dungeon/day; 1 Rift run/login; no stamina model; alchemy/training/customers/pray/washing DEFER"
+    },
+    {
+      "preset": "BALANCED",
+      "logins_per_day": 1,
+      "days": 90,
+      "average_building_level": 11.38,
+      "average_wonder_level": 10.71,
+      "completed_upgrades": 151,
+      "rift_runs_assumed": 90,
+      "energy_generated": 4296.0,
+      "energy_spent": 4272.0,
+      "energy_end": 24.0,
+      "dispatches_claimed": 88,
+      "dispatch_gold_expected": 130240.0,
+      "dispatch_reward_vector_expected": {
+        "1203001": 4.4,
+        "1203002": 2.2,
+        "1203003": 0.88,
+        "1237840": 2.64,
+        "1237901": 130240.0,
+        "1237907": 21120.0,
+        "1237922": 70.4,
+        "1237994": 506.0,
+        "1237995": 440.0
+      },
+      "alchemy_outputs": 0,
+      "washing_actual": 0,
+      "washing_potential_ceiling": 900,
+      "college_gold_receipts": 130240.0,
+      "college_gold_spent": 415550.0,
+      "college_gold_net": -285310.0,
+      "rift_gold_receipts": 46980.0,
+      "external_gold_assumed": 1309680,
+      "unspent_material_vector": {
+        "1237801": 46.0,
+        "1237802": 29.5,
+        "1237803": 1.1,
+        "1237804": 2.0
+      },
+      "rift_materials_earned": {
+        "1237801": 186.0,
+        "1237802": 239.5,
+        "1237803": 84.1,
+        "1237804": 2.0
+      },
+      "upgrade_materials_spent": {
+        "1237801": 140.0,
+        "1237802": 210.0,
+        "1237803": 83.0
+      },
+      "resource_net_vector": {
+        "college_gold": -285310.0,
+        "energy": 24.0,
+        "1237801": 46.0,
+        "1237802": 29.5,
+        "1237803": 1.1,
+        "1237804": 2.0
+      },
+      "limitations": "expected gifts; level-60 account; one external gold dungeon/day; 1 Rift run/login; no stamina model; alchemy/training/customers/pray/washing DEFER"
+    },
+    {
+      "preset": "BALANCED",
+      "logins_per_day": 2,
+      "days": 1,
+      "average_building_level": 1.12,
+      "average_wonder_level": 1.0,
+      "completed_upgrades": 1,
+      "rift_runs_assumed": 2,
+      "energy_generated": 40.0,
+      "energy_spent": 24.0,
+      "energy_end": 16.0,
+      "dispatches_claimed": 0,
+      "dispatch_gold_expected": 0.0,
+      "dispatch_reward_vector_expected": {
+        "1237901": 0.0
+      },
+      "alchemy_outputs": 0,
+      "washing_actual": 0,
+      "washing_potential_ceiling": 10,
+      "college_gold_receipts": 0.0,
+      "college_gold_spent": 3100.0,
+      "college_gold_net": -3100.0,
+      "rift_gold_receipts": 720.0,
+      "external_gold_assumed": 14552,
+      "unspent_material_vector": {
+        "1237801": 3.0,
+        "1237802": 1.0
+      },
+      "rift_materials_earned": {
+        "1237801": 10.0,
+        "1237802": 1.0
+      },
+      "upgrade_materials_spent": {
+        "1237801": 7.0
+      },
+      "resource_net_vector": {
+        "college_gold": -3100.0,
+        "energy": 16.0,
+        "1237801": 3.0,
+        "1237802": 1.0
+      },
+      "limitations": "expected gifts; level-60 account; one external gold dungeon/day; 1 Rift run/login; no stamina model; alchemy/training/customers/pray/washing DEFER"
+    },
+    {
+      "preset": "BALANCED",
+      "logins_per_day": 2,
+      "days": 7,
+      "average_building_level": 2.62,
+      "average_wonder_level": 2.71,
+      "completed_upgrades": 25,
+      "rift_runs_assumed": 14,
+      "energy_generated": 328.0,
+      "energy_spent": 312.0,
+      "energy_end": 16.0,
+      "dispatches_claimed": 12,
+      "dispatch_gold_expected": 13920.0,
+      "dispatch_reward_vector_expected": {
+        "1203001": 0.6,
+        "1203002": 0.3,
+        "1203003": 0.12,
+        "1237840": 0.36,
+        "1237901": 13920.0,
+        "1237907": 2280.0,
+        "1237922": 8.4,
+        "1237993": 69.0,
+        "1237994": 60.0
+      },
+      "alchemy_outputs": 0,
+      "washing_actual": 0,
+      "washing_potential_ceiling": 70,
+      "college_gold_receipts": 13920.0,
+      "college_gold_spent": 34400.0,
+      "college_gold_net": -20480.0,
+      "rift_gold_receipts": 5040.0,
+      "external_gold_assumed": 101864,
+      "unspent_material_vector": {
+        "1237801": 3.0,
+        "1237802": 7.0
+      },
+      "rift_materials_earned": {
+        "1237801": 70.0,
+        "1237802": 7.0
+      },
+      "upgrade_materials_spent": {
+        "1237801": 67.0
+      },
+      "resource_net_vector": {
+        "college_gold": -20480.0,
+        "energy": 16.0,
+        "1237801": 3.0,
+        "1237802": 7.0
+      },
+      "limitations": "expected gifts; level-60 account; one external gold dungeon/day; 1 Rift run/login; no stamina model; alchemy/training/customers/pray/washing DEFER"
+    },
+    {
+      "preset": "BALANCED",
+      "logins_per_day": 2,
+      "days": 30,
+      "average_building_level": 8.38,
+      "average_wonder_level": 8.71,
+      "completed_upgrades": 113,
+      "rift_runs_assumed": 60,
+      "energy_generated": 1432.0,
+      "energy_spent": 1416.0,
+      "energy_end": 16.0,
+      "dispatches_claimed": 58,
+      "dispatch_gold_expected": 67280.0,
+      "dispatch_reward_vector_expected": {
+        "1203001": 2.9,
+        "1203002": 1.45,
+        "1203003": 0.58,
+        "1237840": 1.74,
+        "1237901": 67280.0,
+        "1237907": 11020.0,
+        "1237922": 40.6,
+        "1237993": 333.5,
+        "1237994": 290.0
+      },
+      "alchemy_outputs": 0,
+      "washing_actual": 0,
+      "washing_potential_ceiling": 300,
+      "college_gold_receipts": 67280.0,
+      "college_gold_spent": 261100.0,
+      "college_gold_net": -193820.0,
+      "rift_gold_receipts": 27180.0,
+      "external_gold_assumed": 436560,
+      "unspent_material_vector": {
+        "1237801": 36.0,
+        "1237802": 0.5,
+        "1237803": 3.1
+      },
+      "rift_materials_earned": {
+        "1237801": 176.0,
+        "1237802": 169.5,
+        "1237803": 3.1
+      },
+      "upgrade_materials_spent": {
+        "1237801": 140.0,
+        "1237802": 169.0
+      },
+      "resource_net_vector": {
+        "college_gold": -193820.0,
+        "energy": 16.0,
+        "1237801": 36.0,
+        "1237802": 0.5,
+        "1237803": 3.1
+      },
+      "limitations": "expected gifts; level-60 account; one external gold dungeon/day; 1 Rift run/login; no stamina model; alchemy/training/customers/pray/washing DEFER"
+    },
+    {
+      "preset": "BALANCED",
+      "logins_per_day": 2,
+      "days": 90,
+      "average_building_level": 17.62,
+      "average_wonder_level": 15.0,
+      "completed_upgrades": 231,
+      "rift_runs_assumed": 180,
+      "energy_generated": 4312.0,
+      "energy_spent": 4296.0,
+      "energy_end": 16.0,
+      "dispatches_claimed": 178,
+      "dispatch_gold_expected": 206480.0,
+      "dispatch_reward_vector_expected": {
+        "1203001": 8.9,
+        "1203002": 4.45,
+        "1203003": 1.78,
+        "1237840": 5.34,
+        "1237901": 206480.0,
+        "1237907": 33820.0,
+        "1237922": 124.6,
+        "1237993": 1023.5,
+        "1237994": 890.0
+      },
+      "alchemy_outputs": 0,
+      "washing_actual": 0,
+      "washing_potential_ceiling": 900,
+      "college_gold_receipts": 206480.0,
+      "college_gold_spent": 911550.0,
+      "college_gold_net": -705070.0,
+      "rift_gold_receipts": 119880.0,
+      "external_gold_assumed": 1309680,
+      "unspent_material_vector": {
+        "1237801": 49.0,
+        "1237802": 72.0,
+        "1237803": 47.1,
+        "1237804": 1.75,
+        "1237805": 0.7
+      },
+      "rift_materials_earned": {
+        "1237801": 191.0,
+        "1237802": 282.0,
+        "1237803": 299.1,
+        "1237804": 130.75,
+        "1237805": 4.7
+      },
+      "upgrade_materials_spent": {
+        "1237801": 142.0,
+        "1237802": 210.0,
+        "1237803": 252.0,
+        "1237804": 129.0,
+        "1237805": 4.0
+      },
+      "resource_net_vector": {
+        "college_gold": -705070.0,
+        "energy": 16.0,
+        "1237801": 49.0,
+        "1237802": 72.0,
+        "1237803": 47.1,
+        "1237804": 1.75,
+        "1237805": 0.7
+      },
+      "limitations": "expected gifts; level-60 account; one external gold dungeon/day; 1 Rift run/login; no stamina model; alchemy/training/customers/pray/washing DEFER"
+    },
+    {
+      "preset": "BALANCED",
+      "logins_per_day": 3,
+      "days": 1,
+      "average_building_level": 1.25,
+      "average_wonder_level": 1.14,
+      "completed_upgrades": 3,
+      "rift_runs_assumed": 3,
+      "energy_generated": 40.0,
+      "energy_spent": 32.0,
+      "energy_end": 8.0,
+      "dispatches_claimed": 1,
+      "dispatch_gold_expected": 840.0,
+      "dispatch_reward_vector_expected": {
+        "1203001": 0.05,
+        "1203002": 0.03,
+        "1203003": 0.01,
+        "1237840": 0.03,
+        "1237901": 840.0,
+        "1237907": 140.0,
+        "1237922": 0.6,
+        "1237992": 5.75,
+        "1237993": 5.0
+      },
+      "alchemy_outputs": 0,
+      "washing_actual": 0,
+      "washing_potential_ceiling": 10,
+      "college_gold_receipts": 840.0,
+      "college_gold_spent": 5450.0,
+      "college_gold_net": -4610.0,
+      "rift_gold_receipts": 1080.0,
+      "external_gold_assumed": 14552,
+      "unspent_material_vector": {
+        "1237801": 3.0,
+        "1237802": 1.5
+      },
+      "rift_materials_earned": {
+        "1237801": 15.0,
+        "1237802": 1.5
+      },
+      "upgrade_materials_spent": {
+        "1237801": 12.0
+      },
+      "resource_net_vector": {
+        "college_gold": -4610.0,
+        "energy": 8.0,
+        "1237801": 3.0,
+        "1237802": 1.5
+      },
+      "limitations": "expected gifts; level-60 account; one external gold dungeon/day; 1 Rift run/login; no stamina model; alchemy/training/customers/pray/washing DEFER"
+    },
+    {
+      "preset": "BALANCED",
+      "logins_per_day": 3,
+      "days": 7,
+      "average_building_level": 3.5,
+      "average_wonder_level": 3.71,
+      "completed_upgrades": 39,
+      "rift_runs_assumed": 21,
+      "energy_generated": 328.0,
+      "energy_spent": 320.0,
+      "energy_end": 8.0,
+      "dispatches_claimed": 18,
+      "dispatch_gold_expected": 15120.0,
+      "dispatch_reward_vector_expected": {
+        "1203001": 0.9,
+        "1203002": 0.45,
+        "1203003": 0.18,
+        "1237840": 0.54,
+        "1237901": 15120.0,
+        "1237907": 2520.0,
+        "1237922": 10.8,
+        "1237992": 103.5,
+        "1237993": 90.0
+      },
+      "alchemy_outputs": 0,
+      "washing_actual": 0,
+      "washing_potential_ceiling": 70,
+      "college_gold_receipts": 15120.0,
+      "college_gold_spent": 57600.0,
+      "college_gold_net": -42480.0,
+      "rift_gold_receipts": 7560.0,
+      "external_gold_assumed": 101864,
+      "unspent_material_vector": {
+        "1237801": 3.0,
+        "1237802": 10.5
+      },
+      "rift_materials_earned": {
+        "1237801": 105.0,
+        "1237802": 10.5
+      },
+      "upgrade_materials_spent": {
+        "1237801": 102.0
+      },
+      "resource_net_vector": {
+        "college_gold": -42480.0,
+        "energy": 8.0,
+        "1237801": 3.0,
+        "1237802": 10.5
+      },
+      "limitations": "expected gifts; level-60 account; one external gold dungeon/day; 1 Rift run/login; no stamina model; alchemy/training/customers/pray/washing DEFER"
+    },
+    {
+      "preset": "BALANCED",
+      "logins_per_day": 3,
+      "days": 30,
+      "average_building_level": 11.38,
+      "average_wonder_level": 10.71,
+      "completed_upgrades": 151,
+      "rift_runs_assumed": 90,
+      "energy_generated": 1432.0,
+      "energy_spent": 1424.0,
+      "energy_end": 8.0,
+      "dispatches_claimed": 87,
+      "dispatch_gold_expected": 73080.0,
+      "dispatch_reward_vector_expected": {
+        "1203001": 4.35,
+        "1203002": 2.17,
+        "1203003": 0.87,
+        "1237840": 2.61,
+        "1237901": 73080.0,
+        "1237907": 12180.0,
+        "1237922": 52.2,
+        "1237992": 500.25,
+        "1237993": 435.0
+      },
+      "alchemy_outputs": 0,
+      "washing_actual": 0,
+      "washing_potential_ceiling": 300,
+      "college_gold_receipts": 73080.0,
+      "college_gold_spent": 415550.0,
+      "college_gold_net": -342470.0,
+      "rift_gold_receipts": 46980.0,
+      "external_gold_assumed": 436560,
+      "unspent_material_vector": {
+        "1237801": 46.0,
+        "1237802": 29.5,
+        "1237803": 1.1,
+        "1237804": 2.0
+      },
+      "rift_materials_earned": {
+        "1237801": 186.0,
+        "1237802": 239.5,
+        "1237803": 84.1,
+        "1237804": 2.0
+      },
+      "upgrade_materials_spent": {
+        "1237801": 140.0,
+        "1237802": 210.0,
+        "1237803": 83.0
+      },
+      "resource_net_vector": {
+        "college_gold": -342470.0,
+        "energy": 8.0,
+        "1237801": 46.0,
+        "1237802": 29.5,
+        "1237803": 1.1,
+        "1237804": 2.0
+      },
+      "limitations": "expected gifts; level-60 account; one external gold dungeon/day; 1 Rift run/login; no stamina model; alchemy/training/customers/pray/washing DEFER"
+    },
+    {
+      "preset": "BALANCED",
+      "logins_per_day": 3,
+      "days": 90,
+      "average_building_level": 19.25,
+      "average_wonder_level": 20.0,
+      "completed_upgrades": 279,
+      "rift_runs_assumed": 270,
+      "energy_generated": 4312.0,
+      "energy_spent": 4304.0,
+      "energy_end": 8.0,
+      "dispatches_claimed": 267,
+      "dispatch_gold_expected": 224280.0,
+      "dispatch_reward_vector_expected": {
+        "1203001": 13.35,
+        "1203002": 6.68,
+        "1203003": 2.67,
+        "1237840": 8.01,
+        "1237901": 224280.0,
+        "1237907": 37380.0,
+        "1237922": 160.2,
+        "1237992": 1535.25,
+        "1237993": 1335.0
+      },
+      "alchemy_outputs": 0,
+      "washing_actual": 0,
+      "washing_potential_ceiling": 900,
+      "college_gold_receipts": 224280.0,
+      "college_gold_spent": 1371450.0,
+      "college_gold_net": -1147170.0,
+      "rift_gold_receipts": 204120.0,
+      "external_gold_assumed": 1309680,
+      "unspent_material_vector": {
+        "1237801": 52.0,
+        "1237802": 72.5,
+        "1237803": 115.1,
+        "1237804": 23.95,
+        "1237805": 0.25,
+        "1237806": 2.1
+      },
+      "rift_materials_earned": {
+        "1237801": 196.0,
+        "1237802": 282.5,
+        "1237803": 367.1,
+        "1237804": 331.95,
+        "1237805": 48.25,
+        "1237806": 2.1
+      },
+      "upgrade_materials_spent": {
+        "1237801": 144.0,
+        "1237802": 210.0,
+        "1237803": 252.0,
+        "1237804": 308.0,
+        "1237805": 48.0
+      },
+      "resource_net_vector": {
+        "college_gold": -1147170.0,
+        "energy": 8.0,
+        "1237801": 52.0,
+        "1237802": 72.5,
+        "1237803": 115.1,
+        "1237804": 23.95,
+        "1237805": 0.25,
+        "1237806": 2.1
+      },
+      "limitations": "expected gifts; level-60 account; one external gold dungeon/day; 1 Rift run/login; no stamina model; alchemy/training/customers/pray/washing DEFER"
+    },
+    {
+      "preset": "RELAXED",
+      "logins_per_day": 1,
+      "days": 1,
+      "average_building_level": 1.0,
+      "average_wonder_level": 1.0,
+      "completed_upgrades": 0,
+      "rift_runs_assumed": 1,
+      "energy_generated": 36.0,
+      "energy_spent": 0.0,
+      "energy_end": 36.0,
+      "dispatches_claimed": 0,
+      "dispatch_gold_expected": 0.0,
+      "dispatch_reward_vector_expected": {
+        "1237901": 0.0
+      },
+      "alchemy_outputs": 0,
+      "washing_actual": 0,
+      "washing_potential_ceiling": 20,
+      "college_gold_receipts": 0.0,
+      "college_gold_spent": 550.0,
+      "college_gold_net": -550.0,
+      "rift_gold_receipts": 360.0,
+      "external_gold_assumed": 14552,
+      "unspent_material_vector": {
+        "1237801": 3.0,
+        "1237802": 0.5
+      },
+      "rift_materials_earned": {
+        "1237801": 5.0,
+        "1237802": 0.5
+      },
+      "upgrade_materials_spent": {
+        "1237801": 2.0
+      },
+      "resource_net_vector": {
+        "college_gold": -550.0,
+        "energy": 36.0,
+        "1237801": 3.0,
+        "1237802": 0.5
+      },
+      "limitations": "expected gifts; level-60 account; one external gold dungeon/day; 1 Rift run/login; no stamina model; alchemy/training/customers/pray/washing DEFER"
+    },
+    {
+      "preset": "RELAXED",
+      "logins_per_day": 1,
+      "days": 7,
+      "average_building_level": 1.75,
+      "average_wonder_level": 1.71,
+      "completed_upgrades": 11,
+      "rift_runs_assumed": 7,
+      "energy_generated": 336.0,
+      "energy_spent": 288.0,
+      "energy_end": 48.0,
+      "dispatches_claimed": 5,
+      "dispatch_gold_expected": 7400.0,
+      "dispatch_reward_vector_expected": {
+        "1203001": 0.25,
+        "1203002": 0.12,
+        "1203003": 0.05,
+        "1237840": 0.15,
+        "1237901": 7400.0,
+        "1237907": 1200.0,
+        "1237922": 4.0,
+        "1237994": 28.75,
+        "1237995": 25.0
+      },
+      "alchemy_outputs": 0,
+      "washing_actual": 0,
+      "washing_potential_ceiling": 140,
+      "college_gold_receipts": 7400.0,
+      "college_gold_spent": 11050.0,
+      "college_gold_net": -3650.0,
+      "rift_gold_receipts": 2520.0,
+      "external_gold_assumed": 101864,
+      "unspent_material_vector": {
+        "1237801": 3.0,
+        "1237802": 3.5
+      },
+      "rift_materials_earned": {
+        "1237801": 35.0,
+        "1237802": 3.5
+      },
+      "upgrade_materials_spent": {
+        "1237801": 32.0
+      },
+      "resource_net_vector": {
+        "college_gold": -3650.0,
+        "energy": 48.0,
+        "1237801": 3.0,
+        "1237802": 3.5
+      },
+      "limitations": "expected gifts; level-60 account; one external gold dungeon/day; 1 Rift run/login; no stamina model; alchemy/training/customers/pray/washing DEFER"
+    },
+    {
+      "preset": "RELAXED",
+      "logins_per_day": 1,
+      "days": 30,
+      "average_building_level": 4.62,
+      "average_wonder_level": 5.0,
+      "completed_upgrades": 57,
+      "rift_runs_assumed": 30,
+      "energy_generated": 1440.0,
+      "energy_spent": 1392.0,
+      "energy_end": 48.0,
+      "dispatches_claimed": 28,
+      "dispatch_gold_expected": 41440.0,
+      "dispatch_reward_vector_expected": {
+        "1203001": 1.4,
+        "1203002": 0.7,
+        "1203003": 0.28,
+        "1237840": 0.84,
+        "1237901": 41440.0,
+        "1237907": 6720.0,
+        "1237922": 22.4,
+        "1237994": 161.0,
+        "1237995": 140.0
+      },
+      "alchemy_outputs": 0,
+      "washing_actual": 0,
+      "washing_potential_ceiling": 600,
+      "college_gold_receipts": 41440.0,
+      "college_gold_spent": 70950.0,
+      "college_gold_net": -29510.0,
+      "rift_gold_receipts": 10980.0,
+      "external_gold_assumed": 436560,
+      "unspent_material_vector": {
+        "1237801": 6.0,
+        "1237802": 12.5,
+        "1237803": 0.1
+      },
+      "rift_materials_earned": {
+        "1237801": 146.0,
+        "1237802": 19.5,
+        "1237803": 0.1
+      },
+      "upgrade_materials_spent": {
+        "1237801": 140.0,
+        "1237802": 7.0
+      },
+      "resource_net_vector": {
+        "college_gold": -29510.0,
+        "energy": 48.0,
+        "1237801": 6.0,
+        "1237802": 12.5,
+        "1237803": 0.1
+      },
+      "limitations": "expected gifts; level-60 account; one external gold dungeon/day; 1 Rift run/login; no stamina model; alchemy/training/customers/pray/washing DEFER"
+    },
+    {
+      "preset": "RELAXED",
+      "logins_per_day": 1,
+      "days": 90,
+      "average_building_level": 12.0,
+      "average_wonder_level": 11.14,
+      "completed_upgrades": 159,
+      "rift_runs_assumed": 90,
+      "energy_generated": 4320.0,
+      "energy_spent": 4272.0,
+      "energy_end": 48.0,
+      "dispatches_claimed": 88,
+      "dispatch_gold_expected": 130240.0,
+      "dispatch_reward_vector_expected": {
+        "1203001": 4.4,
+        "1203002": 2.2,
+        "1203003": 0.88,
+        "1237840": 2.64,
+        "1237901": 130240.0,
+        "1237907": 21120.0,
+        "1237922": 70.4,
+        "1237994": 506.0,
+        "1237995": 440.0
+      },
+      "alchemy_outputs": 0,
+      "washing_actual": 0,
+      "washing_potential_ceiling": 1800,
+      "college_gold_receipts": 130240.0,
+      "college_gold_spent": 340800.0,
+      "college_gold_net": -210560.0,
+      "rift_gold_receipts": 47880.0,
+      "external_gold_assumed": 1309680,
+      "unspent_material_vector": {
+        "1237801": 41.0,
+        "1237802": 30.5,
+        "1237803": 1.6,
+        "1237804": 2.5
+      },
+      "rift_materials_earned": {
+        "1237801": 181.0,
+        "1237802": 219.5,
+        "1237803": 103.6,
+        "1237804": 2.5
+      },
+      "upgrade_materials_spent": {
+        "1237801": 140.0,
+        "1237802": 189.0,
+        "1237803": 102.0
+      },
+      "resource_net_vector": {
+        "college_gold": -210560.0,
+        "energy": 48.0,
+        "1237801": 41.0,
+        "1237802": 30.5,
+        "1237803": 1.6,
+        "1237804": 2.5
+      },
+      "limitations": "expected gifts; level-60 account; one external gold dungeon/day; 1 Rift run/login; no stamina model; alchemy/training/customers/pray/washing DEFER"
+    },
+    {
+      "preset": "RELAXED",
+      "logins_per_day": 2,
+      "days": 1,
+      "average_building_level": 1.12,
+      "average_wonder_level": 1.0,
+      "completed_upgrades": 1,
+      "rift_runs_assumed": 2,
+      "energy_generated": 60.0,
+      "energy_spent": 48.0,
+      "energy_end": 12.0,
+      "dispatches_claimed": 1,
+      "dispatch_gold_expected": 1160.0,
+      "dispatch_reward_vector_expected": {
+        "1203001": 0.05,
+        "1203002": 0.03,
+        "1203003": 0.01,
+        "1237840": 0.03,
+        "1237901": 1160.0,
+        "1237907": 190.0,
+        "1237922": 0.7,
+        "1237993": 5.75,
+        "1237994": 5.0
+      },
+      "alchemy_outputs": 0,
+      "washing_actual": 0,
+      "washing_potential_ceiling": 20,
+      "college_gold_receipts": 1160.0,
+      "college_gold_spent": 2300.0,
+      "college_gold_net": -1140.0,
+      "rift_gold_receipts": 720.0,
+      "external_gold_assumed": 14552,
+      "unspent_material_vector": {
+        "1237801": 3.0,
+        "1237802": 1.0
+      },
+      "rift_materials_earned": {
+        "1237801": 10.0,
+        "1237802": 1.0
+      },
+      "upgrade_materials_spent": {
+        "1237801": 7.0
+      },
+      "resource_net_vector": {
+        "college_gold": -1140.0,
+        "energy": 12.0,
+        "1237801": 3.0,
+        "1237802": 1.0
+      },
+      "limitations": "expected gifts; level-60 account; one external gold dungeon/day; 1 Rift run/login; no stamina model; alchemy/training/customers/pray/washing DEFER"
+    },
+    {
+      "preset": "RELAXED",
+      "logins_per_day": 2,
+      "days": 7,
+      "average_building_level": 2.62,
+      "average_wonder_level": 2.71,
+      "completed_upgrades": 25,
+      "rift_runs_assumed": 14,
+      "energy_generated": 408.0,
+      "energy_spent": 336.0,
+      "energy_end": 72.0,
+      "dispatches_claimed": 13,
+      "dispatch_gold_expected": 15080.0,
+      "dispatch_reward_vector_expected": {
+        "1203001": 0.65,
+        "1203002": 0.33,
+        "1203003": 0.13,
+        "1237840": 0.39,
+        "1237901": 15080.0,
+        "1237907": 2470.0,
+        "1237922": 9.1,
+        "1237993": 74.75,
+        "1237994": 65.0
+      },
+      "alchemy_outputs": 0,
+      "washing_actual": 0,
+      "washing_potential_ceiling": 140,
+      "college_gold_receipts": 15080.0,
+      "college_gold_spent": 25700.0,
+      "college_gold_net": -10620.0,
+      "rift_gold_receipts": 5040.0,
+      "external_gold_assumed": 101864,
+      "unspent_material_vector": {
+        "1237801": 3.0,
+        "1237802": 7.0
+      },
+      "rift_materials_earned": {
+        "1237801": 70.0,
+        "1237802": 7.0
+      },
+      "upgrade_materials_spent": {
+        "1237801": 67.0
+      },
+      "resource_net_vector": {
+        "college_gold": -10620.0,
+        "energy": 72.0,
+        "1237801": 3.0,
+        "1237802": 7.0
+      },
+      "limitations": "expected gifts; level-60 account; one external gold dungeon/day; 1 Rift run/login; no stamina model; alchemy/training/customers/pray/washing DEFER"
+    },
+    {
+      "preset": "RELAXED",
+      "logins_per_day": 2,
+      "days": 30,
+      "average_building_level": 8.38,
+      "average_wonder_level": 9.29,
+      "completed_upgrades": 117,
+      "rift_runs_assumed": 60,
+      "energy_generated": 1512.0,
+      "energy_spent": 1440.0,
+      "energy_end": 72.0,
+      "dispatches_claimed": 59,
+      "dispatch_gold_expected": 68440.0,
+      "dispatch_reward_vector_expected": {
+        "1203001": 2.95,
+        "1203002": 1.47,
+        "1203003": 0.59,
+        "1237840": 1.77,
+        "1237901": 68440.0,
+        "1237907": 11210.0,
+        "1237922": 41.3,
+        "1237993": 339.25,
+        "1237994": 295.0
+      },
+      "alchemy_outputs": 0,
+      "washing_actual": 0,
+      "washing_potential_ceiling": 600,
+      "college_gold_receipts": 68440.0,
+      "college_gold_spent": 210550.0,
+      "college_gold_net": -142110.0,
+      "rift_gold_receipts": 27180.0,
+      "external_gold_assumed": 436560,
+      "unspent_material_vector": {
+        "1237801": 36.0,
+        "1237802": 1.5,
+        "1237803": 3.1
+      },
+      "rift_materials_earned": {
+        "1237801": 176.0,
+        "1237802": 169.5,
+        "1237803": 3.1
+      },
+      "upgrade_materials_spent": {
+        "1237801": 140.0,
+        "1237802": 168.0
+      },
+      "resource_net_vector": {
+        "college_gold": -142110.0,
+        "energy": 72.0,
+        "1237801": 36.0,
+        "1237802": 1.5,
+        "1237803": 3.1
+      },
+      "limitations": "expected gifts; level-60 account; one external gold dungeon/day; 1 Rift run/login; no stamina model; alchemy/training/customers/pray/washing DEFER"
+    },
+    {
+      "preset": "RELAXED",
+      "logins_per_day": 2,
+      "days": 90,
+      "average_building_level": 17.88,
+      "average_wonder_level": 16.57,
+      "completed_upgrades": 244,
+      "rift_runs_assumed": 180,
+      "energy_generated": 4392.0,
+      "energy_spent": 4320.0,
+      "energy_end": 72.0,
+      "dispatches_claimed": 179,
+      "dispatch_gold_expected": 207640.0,
+      "dispatch_reward_vector_expected": {
+        "1203001": 8.95,
+        "1203002": 4.47,
+        "1203003": 1.79,
+        "1237840": 5.37,
+        "1237901": 207640.0,
+        "1237907": 34010.0,
+        "1237922": 125.3,
+        "1237993": 1029.25,
+        "1237994": 895.0
+      },
+      "alchemy_outputs": 0,
+      "washing_actual": 0,
+      "washing_potential_ceiling": 1800,
+      "college_gold_receipts": 207640.0,
+      "college_gold_spent": 772800.0,
+      "college_gold_net": -565160.0,
+      "rift_gold_receipts": 122400.0,
+      "external_gold_assumed": 1309680,
+      "unspent_material_vector": {
+        "1237801": 44.0,
+        "1237802": 64.0,
+        "1237803": 74.6,
+        "1237804": 1.2,
+        "1237805": 2.6
+      },
+      "rift_materials_earned": {
+        "1237801": 186.0,
+        "1237802": 253.0,
+        "1237803": 291.6,
+        "1237804": 154.2,
+        "1237805": 5.6
+      },
+      "upgrade_materials_spent": {
+        "1237801": 142.0,
+        "1237802": 189.0,
+        "1237803": 217.0,
+        "1237804": 153.0,
+        "1237805": 3.0
+      },
+      "resource_net_vector": {
+        "college_gold": -565160.0,
+        "energy": 72.0,
+        "1237801": 44.0,
+        "1237802": 64.0,
+        "1237803": 74.6,
+        "1237804": 1.2,
+        "1237805": 2.6
+      },
+      "limitations": "expected gifts; level-60 account; one external gold dungeon/day; 1 Rift run/login; no stamina model; alchemy/training/customers/pray/washing DEFER"
+    },
+    {
+      "preset": "RELAXED",
+      "logins_per_day": 3,
+      "days": 1,
+      "average_building_level": 1.25,
+      "average_wonder_level": 1.14,
+      "completed_upgrades": 3,
+      "rift_runs_assumed": 3,
+      "energy_generated": 60.0,
+      "energy_spent": 48.0,
+      "energy_end": 12.0,
+      "dispatches_claimed": 1,
+      "dispatch_gold_expected": 840.0,
+      "dispatch_reward_vector_expected": {
+        "1203001": 0.05,
+        "1203002": 0.03,
+        "1203003": 0.01,
+        "1237840": 0.03,
+        "1237901": 840.0,
+        "1237907": 140.0,
+        "1237922": 0.6,
+        "1237992": 5.75,
+        "1237993": 5.0
+      },
+      "alchemy_outputs": 0,
+      "washing_actual": 0,
+      "washing_potential_ceiling": 20,
+      "college_gold_receipts": 840.0,
+      "college_gold_spent": 4050.0,
+      "college_gold_net": -3210.0,
+      "rift_gold_receipts": 1080.0,
+      "external_gold_assumed": 14552,
+      "unspent_material_vector": {
+        "1237801": 3.0,
+        "1237802": 1.5
+      },
+      "rift_materials_earned": {
+        "1237801": 15.0,
+        "1237802": 1.5
+      },
+      "upgrade_materials_spent": {
+        "1237801": 12.0
+      },
+      "resource_net_vector": {
+        "college_gold": -3210.0,
+        "energy": 12.0,
+        "1237801": 3.0,
+        "1237802": 1.5
+      },
+      "limitations": "expected gifts; level-60 account; one external gold dungeon/day; 1 Rift run/login; no stamina model; alchemy/training/customers/pray/washing DEFER"
+    },
+    {
+      "preset": "RELAXED",
+      "logins_per_day": 3,
+      "days": 7,
+      "average_building_level": 3.5,
+      "average_wonder_level": 3.71,
+      "completed_upgrades": 39,
+      "rift_runs_assumed": 21,
+      "energy_generated": 416.0,
+      "energy_spent": 336.0,
+      "energy_end": 80.0,
+      "dispatches_claimed": 19,
+      "dispatch_gold_expected": 15960.0,
+      "dispatch_reward_vector_expected": {
+        "1203001": 0.95,
+        "1203002": 0.48,
+        "1203003": 0.19,
+        "1237840": 0.57,
+        "1237901": 15960.0,
+        "1237907": 2660.0,
+        "1237922": 11.4,
+        "1237992": 109.25,
+        "1237993": 95.0
+      },
+      "alchemy_outputs": 0,
+      "washing_actual": 0,
+      "washing_potential_ceiling": 140,
+      "college_gold_receipts": 15960.0,
+      "college_gold_spent": 43100.0,
+      "college_gold_net": -27140.0,
+      "rift_gold_receipts": 7560.0,
+      "external_gold_assumed": 101864,
+      "unspent_material_vector": {
+        "1237801": 3.0,
+        "1237802": 10.5
+      },
+      "rift_materials_earned": {
+        "1237801": 105.0,
+        "1237802": 10.5
+      },
+      "upgrade_materials_spent": {
+        "1237801": 102.0
+      },
+      "resource_net_vector": {
+        "college_gold": -27140.0,
+        "energy": 80.0,
+        "1237801": 3.0,
+        "1237802": 10.5
+      },
+      "limitations": "expected gifts; level-60 account; one external gold dungeon/day; 1 Rift run/login; no stamina model; alchemy/training/customers/pray/washing DEFER"
+    },
+    {
+      "preset": "RELAXED",
+      "logins_per_day": 3,
+      "days": 30,
+      "average_building_level": 12.0,
+      "average_wonder_level": 11.14,
+      "completed_upgrades": 159,
+      "rift_runs_assumed": 90,
+      "energy_generated": 1520.0,
+      "energy_spent": 1440.0,
+      "energy_end": 80.0,
+      "dispatches_claimed": 88,
+      "dispatch_gold_expected": 73920.0,
+      "dispatch_reward_vector_expected": {
+        "1203001": 4.4,
+        "1203002": 2.2,
+        "1203003": 0.88,
+        "1237840": 2.64,
+        "1237901": 73920.0,
+        "1237907": 12320.0,
+        "1237922": 52.8,
+        "1237992": 506.0,
+        "1237993": 440.0
+      },
+      "alchemy_outputs": 0,
+      "washing_actual": 0,
+      "washing_potential_ceiling": 600,
+      "college_gold_receipts": 73920.0,
+      "college_gold_spent": 340800.0,
+      "college_gold_net": -266880.0,
+      "rift_gold_receipts": 47880.0,
+      "external_gold_assumed": 436560,
+      "unspent_material_vector": {
+        "1237801": 41.0,
+        "1237802": 30.5,
+        "1237803": 1.6,
+        "1237804": 2.5
+      },
+      "rift_materials_earned": {
+        "1237801": 181.0,
+        "1237802": 219.5,
+        "1237803": 103.6,
+        "1237804": 2.5
+      },
+      "upgrade_materials_spent": {
+        "1237801": 140.0,
+        "1237802": 189.0,
+        "1237803": 102.0
+      },
+      "resource_net_vector": {
+        "college_gold": -266880.0,
+        "energy": 80.0,
+        "1237801": 41.0,
+        "1237802": 30.5,
+        "1237803": 1.6,
+        "1237804": 2.5
+      },
+      "limitations": "expected gifts; level-60 account; one external gold dungeon/day; 1 Rift run/login; no stamina model; alchemy/training/customers/pray/washing DEFER"
+    },
+    {
+      "preset": "RELAXED",
+      "logins_per_day": 3,
+      "days": 90,
+      "average_building_level": 22.12,
+      "average_wonder_level": 20.0,
+      "completed_upgrades": 302,
+      "rift_runs_assumed": 270,
+      "energy_generated": 4400.0,
+      "energy_spent": 4320.0,
+      "energy_end": 80.0,
+      "dispatches_claimed": 268,
+      "dispatch_gold_expected": 225120.0,
+      "dispatch_reward_vector_expected": {
+        "1203001": 13.4,
+        "1203002": 6.7,
+        "1203003": 2.68,
+        "1237840": 8.04,
+        "1237901": 225120.0,
+        "1237907": 37520.0,
+        "1237922": 160.8,
+        "1237992": 1541.0,
+        "1237993": 1340.0
+      },
+      "alchemy_outputs": 0,
+      "washing_actual": 0,
+      "washing_potential_ceiling": 1800,
+      "college_gold_receipts": 225120.0,
+      "college_gold_spent": 1152350.0,
+      "college_gold_net": -927230.0,
+      "rift_gold_receipts": 208980.0,
+      "external_gold_assumed": 1309680,
+      "unspent_material_vector": {
+        "1237801": 57.0,
+        "1237802": 76.5,
+        "1237803": 110.0,
+        "1237804": 49.95,
+        "1237805": 1.1,
+        "1237806": 4.8
+      },
+      "rift_materials_earned": {
+        "1237801": 205.0,
+        "1237802": 274.5,
+        "1237803": 327.0,
+        "1237804": 294.95,
+        "1237805": 93.1,
+        "1237806": 4.8
+      },
+      "upgrade_materials_spent": {
+        "1237801": 148.0,
+        "1237802": 198.0,
+        "1237803": 217.0,
+        "1237804": 245.0,
+        "1237805": 92.0
+      },
+      "resource_net_vector": {
+        "college_gold": -927230.0,
+        "energy": 80.0,
+        "1237801": 57.0,
+        "1237802": 76.5,
+        "1237803": 110.0,
+        "1237804": 49.95,
+        "1237805": 1.1,
+        "1237806": 4.8
+      },
+      "limitations": "expected gifts; level-60 account; one external gold dungeon/day; 1 Rift run/login; no stamina model; alchemy/training/customers/pray/washing DEFER"
+    }
+  ],
+  "dispatch_gold_rates": [
+    {
+      "id": 34001,
+      "hours": 3.0,
+      "energy": 6,
+      "expected_gold_per_hour": 173.33,
+      "expected_gold_total": 520.0,
+      "gold_vs_three_hour_rate": 1.0
+    },
+    {
+      "id": 34002,
+      "hours": 4.0,
+      "energy": 8,
+      "expected_gold_per_hour": 130.0,
+      "expected_gold_total": 520.0,
+      "gold_vs_three_hour_rate": 0.75
+    },
+    {
+      "id": 34003,
+      "hours": 5.0,
+      "energy": 10,
+      "expected_gold_per_hour": 104.0,
+      "expected_gold_total": 520.0,
+      "gold_vs_three_hour_rate": 0.6
+    },
+    {
+      "id": 34004,
+      "hours": 6.0,
+      "energy": 12,
+      "expected_gold_per_hour": 140.0,
+      "expected_gold_total": 840.0,
+      "gold_vs_three_hour_rate": 0.808
+    },
+    {
+      "id": 34005,
+      "hours": 8.0,
+      "energy": 16,
+      "expected_gold_per_hour": 105.0,
+      "expected_gold_total": 840.0,
+      "gold_vs_three_hour_rate": 0.606
+    },
+    {
+      "id": 34006,
+      "hours": 10.0,
+      "energy": 20,
+      "expected_gold_per_hour": 84.0,
+      "expected_gold_total": 840.0,
+      "gold_vs_three_hour_rate": 0.485
+    },
+    {
+      "id": 34007,
+      "hours": 12.0,
+      "energy": 24,
+      "expected_gold_per_hour": 96.67,
+      "expected_gold_total": 1160.0,
+      "gold_vs_three_hour_rate": 0.558
+    },
+    {
+      "id": 34008,
+      "hours": 15.0,
+      "energy": 30,
+      "expected_gold_per_hour": 77.33,
+      "expected_gold_total": 1160.0,
+      "gold_vs_three_hour_rate": 0.446
+    },
+    {
+      "id": 34009,
+      "hours": 18.0,
+      "energy": 36,
+      "expected_gold_per_hour": 64.44,
+      "expected_gold_total": 1160.0,
+      "gold_vs_three_hour_rate": 0.372
+    },
+    {
+      "id": 34010,
+      "hours": 21.0,
+      "energy": 42,
+      "expected_gold_per_hour": 70.48,
+      "expected_gold_total": 1480.0,
+      "gold_vs_three_hour_rate": 0.407
+    },
+    {
+      "id": 34011,
+      "hours": 24.0,
+      "energy": 48,
+      "expected_gold_per_hour": 61.67,
+      "expected_gold_total": 1480.0,
+      "gold_vs_three_hour_rate": 0.356
+    },
+    {
+      "id": 34012,
+      "hours": 27.0,
+      "energy": 54,
+      "expected_gold_per_hour": 54.81,
+      "expected_gold_total": 1480.0,
+      "gold_vs_three_hour_rate": 0.316
+    },
+    {
+      "id": 34013,
+      "hours": 30.0,
+      "energy": 60,
+      "expected_gold_per_hour": 61.67,
+      "expected_gold_total": 1850.0,
+      "gold_vs_three_hour_rate": 0.356
+    },
+    {
+      "id": 34014,
+      "hours": 33.0,
+      "energy": 66,
+      "expected_gold_per_hour": 56.06,
+      "expected_gold_total": 1850.0,
+      "gold_vs_three_hour_rate": 0.323
+    },
+    {
+      "id": 34015,
+      "hours": 36.0,
+      "energy": 72,
+      "expected_gold_per_hour": 51.39,
+      "expected_gold_total": 1850.0,
+      "gold_vs_three_hour_rate": 0.296
+    }
+  ],
+  "arbitrage_checks": {
+    "alchemy": "DEFER: Gold/Pay semantics and customer reward loop not known; no modeled profitable loop",
+    "cancellation": "full refund only of unearned inputs; no reward or spent speed card returned",
+    "energy": "warehouse capped at 96; offline accrual bounded by preset hours",
+    "gift": "one official Gift roll per dispatch; no second random roll or multiplier"
+  }
+}
