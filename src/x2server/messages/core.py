@@ -12,6 +12,7 @@ from x2server.messages.economy import ECONOMY_SCHEMAS
 from x2server.messages.progression import PROGRESSION_SCHEMAS
 from x2server.messages.equipment import EQUIPMENT_SCHEMAS
 from x2server.messages.wish import WISH_SCHEMAS
+from x2server.messages.favor import FAVOR_SCHEMAS
 
 C2L_LOGIN = ProtoSchema(
     "C2L_Login",
@@ -106,6 +107,7 @@ CORE_SCHEMAS.update(ECONOMY_SCHEMAS)
 CORE_SCHEMAS.update(PROGRESSION_SCHEMAS)
 CORE_SCHEMAS.update(EQUIPMENT_SCHEMAS)
 CORE_SCHEMAS.update(WISH_SCHEMAS)
+CORE_SCHEMAS.update(FAVOR_SCHEMAS)
 
 # CONFIRMED: MessageReflector registers PlayerDataProto as 1000, independently
 # of its generated get_PID() returning 0. BaseInfo Serialize RVA 0x30A1348.
@@ -134,6 +136,7 @@ MOBILITY = ProtoSchema("MobilityProto", (
 PLAYER_DATA = ProtoSchema("PlayerDataProto", (
     ProtoField(1, "BaseInfo", FieldKind.MESSAGE),
     ProtoField(2, "Mobility", FieldKind.MESSAGE),
+    ProtoField(15, "favor", FieldKind.MESSAGE, repeated=True),
 ))
 HERO_DATA = ProtoSchema("HeroData", (
     ProtoField(1, "id", FieldKind.INT32),
@@ -144,6 +147,14 @@ HERO_DATA = ProtoSchema("HeroData", (
     ProtoField(6, "equips", FieldKind.MESSAGE, repeated=True),
     ProtoField(7, "exp", FieldKind.INT32),
     ProtoField(8, "heroSkills", FieldKind.MESSAGE, repeated=True),
+    ProtoField(9, "Enjoy", FieldKind.INT32),
+    ProtoField(10, "Status", FieldKind.INT32),
+    ProtoField(11, "name", FieldKind.STRING),
+    ProtoField(12, "fetters", FieldKind.MESSAGE, repeated=True),
+    ProtoField(13, "getTime", FieldKind.INT64),
+    ProtoField(14, "archives", FieldKind.MESSAGE, repeated=True),
+    ProtoField(15, "tiredStatus", FieldKind.INT32),
+    ProtoField(16, "seasonEquips", FieldKind.MESSAGE, repeated=True),
 ))
 INT_PAIR = ProtoSchema("KeyValuePair_Int32_Int32", (
     ProtoField(1, "Key", FieldKind.INT32), ProtoField(2, "Value", FieldKind.INT32)))

@@ -6,6 +6,8 @@ from typing import Any
 
 from x2server.bootstrap.local_identity import LocalIdentityService
 from x2server.messages.core import C2L_LOGIN, BASE_INFO, MOBILITY, RECONNECT, STRING_PAIR
+from x2server.messages.favor import FAVOR, FAVOR_MAP_ENTRY
+from .favor import catalog, favor_state
 from x2server.network.dispatcher import DispatchContext, OutboundMessage
 from x2server.protocol.errors import ProtocolError
 from x2server.protocol.types import DecodedPacket
@@ -77,7 +79,10 @@ class LoginService:
             "Birthday": snapshot.get("birthday", 0),
             "MainChapter": snapshot.get("main_chapter", 0),
             "MainSection": snapshot.get("main_section", 0)})
-        values = {"BaseInfo": base}
+        initial = {r["HeroID"]: r["InitialLevel"] for r in catalog()["favorabilityhero"]}
+        values = {"BaseInfo": base, "favor": [FAVOR_MAP_ENTRY.encode({"Key": hero["id"],
+            "Value": FAVOR.encode(favor_state(hero, initial.get(hero["id"], 1)))})
+            for hero in snapshot.get("heroes", []) if hero.get("state") == 2]}
         if "mobility" in snapshot:
             mobility = snapshot["mobility"]
             values["Mobility"] = MOBILITY.encode({
