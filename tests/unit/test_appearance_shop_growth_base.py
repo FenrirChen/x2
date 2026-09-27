@@ -16,8 +16,9 @@ def test_all_appearance_goods_are_listed_and_purchasable(env):
     appearance = AppearanceService(store, economy)
     service = AppearanceShopService(store, economy, appearance)
     listing = [COMMERCIAL_GOODS.decode(x) for x in service.listing(1)]
-    assert len(listing) == 47
-    assert {x["goodsId"] for x in listing} == set(range(1980001, 1980048))
+    assert len(listing) == 27
+    assert len({x["itemId"] for x in listing}) == 27
+    assert 1223003 not in {x["itemId"] for x in listing}
     assert all(x["rechargeID"] == 0 and x["price"] > 0 for x in listing)
     assert [(x["currencyType"], x["price"]) for x in listing
             if x["goodsId"] in (1980004, 1980005)] == [(902, 980), (902, 980)]

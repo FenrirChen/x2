@@ -1,5 +1,5 @@
 {
-  "source": "client GiftPackage/Gift static tables; operator-selected first 34 packages",
+  "source": "client GiftPackage/Gift static tables; operator-selected first 34 packages; operator-restored 2700050 with unlimited repeat purchases",
   "packages": [
     {
       "GiftPackageID": 2700000,
@@ -1093,6 +1093,30 @@
       "GiftID": [
         781037
       ]
+    },
+    {
+      "GiftPackageID": 2700050,
+      "GiftPackageNameID": 27000501,
+      "GiftPackageIcon": "RechargeGiftIcon1/LiBao_WaiGuan",
+      "GiftPackageOrder": 17,
+      "GiftPlace": {
+        "value": 1,
+        "enum": "E_ShopGift"
+      },
+      "GiftLabel": [
+        0
+      ],
+      "GiftPackageType": {
+        "value": 4,
+        "enum": "E_OnlyOnce"
+      },
+      "Times": 0,
+      "CurrencyType": 919,
+      "Price": 22024,
+      "GiftID": [
+        781054
+      ],
+      "GiftPrimePrice": 210
     }
   ],
   "gifts": [
@@ -1797,6 +1821,23 @@
         1
       ],
       "ItemNum": 2
+    },
+    {
+      "GiftGroup": 781054,
+      "AwardType": {
+        "value": 1,
+        "enum": "E_material"
+      },
+      "GiftValue": [
+        1237923,
+        1237902,
+        1237901
+      ],
+      "Num": [
+        210,
+        680,
+        50000
+      ]
     }
   ]
 }

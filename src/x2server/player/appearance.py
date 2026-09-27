@@ -115,17 +115,15 @@ class AppearanceService:
         if name == "C2L_HeroWearSkin":
             hero, skin, kind = req.get("heroId"), req.get("skinId"), req.get("type")
             valid = (kind in (1, 3) and skin in self._owned_skins(player_id) and
-                     self.skins[skin]["hero_id"] == hero and
-                     self.skins[skin]["type"] == ("E_IntoFight" if kind == 1 else "E_OutFight"))
+                     self.skins[skin]["hero_id"] == hero)
             if not valid:
-                return OutboundMessage("L2C_HeroWearSkin", {"code": 13})
+                return OutboundMessage("L2C_HeroWearSkin", {"code": 13,
+                    "heroId": hero or 0, "skinId": skin or 0, "type": kind or 0})
             with self.economy.transaction():
                 self.store.db.execute("INSERT OR REPLACE INTO appearance_wear VALUES (?,?,?,?)",
                                       (player_id, hero, kind, skin))
-            skin_data = next(raw for raw in self.skin_values(player_id)["skinList"]
-                             if HERO_SKIN.decode(raw)["heroId"] == hero)
-            return OutboundMessage("L2C_HeroWearSkin", {"code": 10}, pushes=(
-                OutboundMessage("L2C_HeroSkinUpdate", {"skin": skin_data}),))
+            return OutboundMessage("L2C_HeroWearSkin", {"code": 10,
+                "heroId": hero, "skinId": skin, "type": kind})
         if name == "C2L_PutOnOrPutOffSeasonIcon":
             kind, icon = req.get("type"), req.get("id")
             owned = self._icon_values(player_id)

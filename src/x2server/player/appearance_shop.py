@@ -22,7 +22,8 @@ class AppearanceShopService:
         self.store, self.economy, self.appearance = store, economy, appearance
         catalog = json.loads(files("x2server").joinpath("data/appearance_shop_catalog.json").read_text(encoding="utf-8"))
         self.goods = {row["goodsId"]: row for row in catalog["goods"]}
-        if len(self.goods) != 47 or any(row["itemId"] not in economy.items for row in self.goods.values()):
+        if len(self.goods) != 27 or len({row["itemId"] for row in self.goods.values()}) != len(self.goods) or any(
+                row["itemId"] not in economy.items for row in self.goods.values()):
             raise ValueError("appearance shop catalog changed")
         with store.db:
             store.db.execute("""CREATE TABLE IF NOT EXISTS appearance_shop_purchases (

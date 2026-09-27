@@ -25,6 +25,11 @@ def test_skin_catalog_wear_and_locked_skin_rejected(env):
     assert invoke(service, context, "HeroWearSkin", {"heroId": 1003,
         "skinId": 1220303, "type": 1}).values["code"] == 10
     assert HERO_SKIN.decode(AppearanceService(store, economy).skin_values(1)["skinList"][0])["battleSkin"] == 1220303
+    daily = invoke(service, context, "HeroWearSkin", {"heroId": 1003,
+        "skinId": 1220303, "type": 3})
+    assert daily.values == {"code": 10, "heroId": 1003, "skinId": 1220303, "type": 3}
+    assert not daily.pushes
+    assert HERO_SKIN.decode(AppearanceService(store, economy).skin_values(1)["skinList"][0])["outerSkin"] == 1220303
 
 
 def test_avatar_inventory_and_voice_conditions(env):

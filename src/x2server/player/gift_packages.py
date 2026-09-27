@@ -24,7 +24,7 @@ class GiftPackageService:
         data = json.loads(files("x2server").joinpath("data/selected_gift_packages.json").read_text(encoding="utf-8"))
         self.packages = {row["GiftPackageID"]: row for row in data["packages"]}
         self.gifts = {row["GiftGroup"]: row for row in data["gifts"]}
-        if set(self.packages) != set(range(2700000, 2700034)):
+        if set(self.packages) != set(range(2700000, 2700034)) | {2700050}:
             raise ValueError("selected gift package list changed")
         with store.db:
             store.db.execute("""CREATE TABLE IF NOT EXISTS gift_package_claims (
@@ -100,6 +100,10 @@ class GiftPackageService:
                     "pushDeadline": start + 30 * 86400 if days_left else 0,
                     "PurchaseTime": 1 if days_left else 0, "unShelves": 0}))
                 continue
+            if package_id == 2700050:
+                values.append(GIFT_PACKAGE_DATA.encode({"id": package_id, "state": 0,
+                    "PurchaseTime": 0, "unShelves": 0}))
+                continue
             claimed = self.store.db.execute("SELECT 1 FROM gift_package_claims WHERE player_id=? AND package_id=? AND period=?",
                 (player_id, package_id, self._period(package))).fetchone()
             state = (3 if package["GiftPackageType"]["value"] == 3
@@ -163,11 +167,13 @@ class GiftPackageService:
                     return reject
         period = self._period(package)
         if recharge:
-            if self._monthcard_days_left(player_id):
+            if package_id == self.MONTHCARD_ID and self._monthcard_days_left(player_id):
                 return reject
             period = str(int(self.economy.clock()))
         request_key = hashlib.sha256(f"gift:{player_id}:{context.session.session_id}:{packet.header.request_id}".encode()
                                      + packet.body).hexdigest()
+        if package_id == 2700050:
+            period = f"repeat:{request_key}"
         cached = self.store.db.execute("SELECT response FROM gift_package_receipts WHERE request_key=? AND player_id=?",
                                        (request_key, player_id)).fetchone()
         if cached and not recharge:

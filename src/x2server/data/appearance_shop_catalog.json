@@ -1,5 +1,5 @@
 {
-  "source": "client AppearanceShop table; 1980004/1980005 operator price override to 980 crystal",
+  "source": "client AppearanceShop table; 1980004/1980005 operator price override to 980 crystal; display name deduplicated, 静影糜株 removed",
   "goods": [
     {
       "goodsId": 1980001,
@@ -15,7 +15,8 @@
       "sourceCurrency": [
         902,
         923
-      ]
+      ],
+      "name": "红皇后"
     },
     {
       "goodsId": 1980002,
@@ -31,7 +32,8 @@
       "sourceCurrency": [
         902,
         923
-      ]
+      ],
+      "name": "柴郡猫"
     },
     {
       "goodsId": 1980003,
@@ -47,7 +49,8 @@
       "sourceCurrency": [
         902,
         923
-      ]
+      ],
+      "name": "疯帽子"
     },
     {
       "goodsId": 1980004,
@@ -61,7 +64,8 @@
       ],
       "sourceCurrency": [
         902
-      ]
+      ],
+      "name": "夏日花火"
     },
     {
       "goodsId": 1980005,
@@ -75,7 +79,8 @@
       ],
       "sourceCurrency": [
         902
-      ]
+      ],
+      "name": "白皇后"
     },
     {
       "goodsId": 1980006,
@@ -91,7 +96,8 @@
       "sourceCurrency": [
         902,
         923
-      ]
+      ],
+      "name": "月萤逐兔"
     },
     {
       "goodsId": 1980007,
@@ -107,23 +113,8 @@
       "sourceCurrency": [
         902,
         923
-      ]
-    },
-    {
-      "goodsId": 1980008,
-      "itemId": 1220804,
-      "currencyType": 902,
-      "price": 1680,
-      "goodsType": 1,
-      "sort": 9,
-      "sourcePrice": [
-        1680,
-        560
       ],
-      "sourceCurrency": [
-        902,
-        923
-      ]
+      "name": "云月兑酒"
     },
     {
       "goodsId": 1980009,
@@ -139,7 +130,25 @@
       "sourceCurrency": [
         902,
         923
-      ]
+      ],
+      "name": "小镇冬谣"
+    },
+    {
+      "goodsId": 1980008,
+      "itemId": 1220804,
+      "currencyType": 902,
+      "price": 1680,
+      "goodsType": 1,
+      "sort": 9,
+      "sourcePrice": [
+        1680,
+        560
+      ],
+      "sourceCurrency": [
+        902,
+        923
+      ],
+      "name": "雪原幻域"
     },
     {
       "goodsId": 1980010,
@@ -153,39 +162,8 @@
       ],
       "sourceCurrency": [
         923
-      ]
-    },
-    {
-      "goodsId": 1980011,
-      "itemId": 1222503,
-      "currencyType": 923,
-      "price": 420,
-      "goodsType": 2,
-      "sort": 10,
-      "sourcePrice": [
-        420,
-        128
       ],
-      "sourceCurrency": [
-        923,
-        919
-      ]
-    },
-    {
-      "goodsId": 1980012,
-      "itemId": 1222703,
-      "currencyType": 923,
-      "price": 420,
-      "goodsType": 1,
-      "sort": 110,
-      "sourcePrice": [
-        420,
-        98
-      ],
-      "sourceCurrency": [
-        923,
-        919
-      ]
+      "name": "时钟节拍"
     },
     {
       "goodsId": 1980013,
@@ -201,7 +179,8 @@
       "sourceCurrency": [
         923,
         919
-      ]
+      ],
+      "name": "春声"
     },
     {
       "goodsId": 1980014,
@@ -217,39 +196,8 @@
       "sourceCurrency": [
         923,
         919
-      ]
-    },
-    {
-      "goodsId": 1980015,
-      "itemId": 1223403,
-      "currencyType": 923,
-      "price": 560,
-      "goodsType": 2,
-      "sort": 12,
-      "sourcePrice": [
-        560,
-        168
       ],
-      "sourceCurrency": [
-        923,
-        919
-      ]
-    },
-    {
-      "goodsId": 1980016,
-      "itemId": 1222203,
-      "currencyType": 923,
-      "price": 560,
-      "goodsType": 1,
-      "sort": 109,
-      "sourcePrice": [
-        560,
-        128
-      ],
-      "sourceCurrency": [
-        923,
-        919
-      ]
+      "name": "镜影摇曳"
     },
     {
       "goodsId": 1980017,
@@ -265,7 +213,8 @@
       "sourceCurrency": [
         923,
         919
-      ]
+      ],
+      "name": "赤焰"
     },
     {
       "goodsId": 1980018,
@@ -281,23 +230,8 @@
       "sourceCurrency": [
         923,
         919
-      ]
-    },
-    {
-      "goodsId": 1980019,
-      "itemId": 1221005,
-      "currencyType": 923,
-      "price": 420,
-      "goodsType": 2,
-      "sort": 14,
-      "sourcePrice": [
-        420,
-        128
       ],
-      "sourceCurrency": [
-        923,
-        919
-      ]
+      "name": "爱丽丝"
     },
     {
       "goodsId": 1980020,
@@ -313,23 +247,8 @@
       "sourceCurrency": [
         923,
         919
-      ]
-    },
-    {
-      "goodsId": 1980021,
-      "itemId": 1222303,
-      "currencyType": 923,
-      "price": 560,
-      "goodsType": 2,
-      "sort": 15,
-      "sourcePrice": [
-        560,
-        168
       ],
-      "sourceCurrency": [
-        923,
-        919
-      ]
+      "name": "榛睡鼠"
     },
     {
       "goodsId": 1980022,
@@ -345,39 +264,8 @@
       "sourceCurrency": [
         923,
         919
-      ]
-    },
-    {
-      "goodsId": 1980023,
-      "itemId": 1223503,
-      "currencyType": 923,
-      "price": 560,
-      "goodsType": 2,
-      "sort": 16,
-      "sourcePrice": [
-        560,
-        168
       ],
-      "sourceCurrency": [
-        923,
-        919
-      ]
-    },
-    {
-      "goodsId": 1980024,
-      "itemId": 1221704,
-      "currencyType": 923,
-      "price": 420,
-      "goodsType": 1,
-      "sort": 105,
-      "sourcePrice": [
-        420,
-        98
-      ],
-      "sourceCurrency": [
-        923,
-        919
-      ]
+      "name": "日悬"
     },
     {
       "goodsId": 1980025,
@@ -393,23 +281,8 @@
       "sourceCurrency": [
         923,
         919
-      ]
-    },
-    {
-      "goodsId": 1980026,
-      "itemId": 1221905,
-      "currencyType": 923,
-      "price": 560,
-      "goodsType": 1,
-      "sort": 107,
-      "sourcePrice": [
-        560,
-        128
       ],
-      "sourceCurrency": [
-        923,
-        919
-      ]
+      "name": "清河蓝珀"
     },
     {
       "goodsId": 1980027,
@@ -425,23 +298,8 @@
       "sourceCurrency": [
         923,
         919
-      ]
-    },
-    {
-      "goodsId": 1980028,
-      "itemId": 1220305,
-      "currencyType": 923,
-      "price": 560,
-      "goodsType": 1,
-      "sort": 106,
-      "sourcePrice": [
-        560,
-        128
       ],
-      "sourceCurrency": [
-        923,
-        919
-      ]
+      "name": "群星起誓"
     },
     {
       "goodsId": 1980029,
@@ -457,7 +315,8 @@
       "sourceCurrency": [
         923,
         919
-      ]
+      ],
+      "name": "蔷薇来时"
     },
     {
       "goodsId": 1980030,
@@ -473,39 +332,8 @@
       "sourceCurrency": [
         923,
         919
-      ]
-    },
-    {
-      "goodsId": 1980031,
-      "itemId": 1223203,
-      "currencyType": 923,
-      "price": 560,
-      "goodsType": 2,
-      "sort": 20,
-      "sourcePrice": [
-        560,
-        168
       ],
-      "sourceCurrency": [
-        923,
-        919
-      ]
-    },
-    {
-      "goodsId": 1980032,
-      "itemId": 1221404,
-      "currencyType": 923,
-      "price": 420,
-      "goodsType": 1,
-      "sort": 105,
-      "sourcePrice": [
-        420,
-        98
-      ],
-      "sourceCurrency": [
-        923,
-        919
-      ]
+      "name": "醇夜微醺"
     },
     {
       "goodsId": 1980033,
@@ -521,23 +349,8 @@
       "sourceCurrency": [
         923,
         919
-      ]
-    },
-    {
-      "goodsId": 1980034,
-      "itemId": 1223603,
-      "currencyType": 923,
-      "price": 560,
-      "goodsType": 1,
-      "sort": 107,
-      "sourcePrice": [
-        560,
-        128
       ],
-      "sourceCurrency": [
-        923,
-        919
-      ]
+      "name": "蓝水乐园"
     },
     {
       "goodsId": 1980035,
@@ -553,23 +366,8 @@
       "sourceCurrency": [
         923,
         919
-      ]
-    },
-    {
-      "goodsId": 1980036,
-      "itemId": 1222003,
-      "currencyType": 923,
-      "price": 420,
-      "goodsType": 1,
-      "sort": 106,
-      "sourcePrice": [
-        420,
-        98
       ],
-      "sourceCurrency": [
-        923,
-        919
-      ]
+      "name": "仲夏光晕"
     },
     {
       "goodsId": 1980037,
@@ -585,7 +383,8 @@
       "sourceCurrency": [
         923,
         919
-      ]
+      ],
+      "name": "穿云逐浪"
     },
     {
       "goodsId": 1980038,
@@ -601,37 +400,8 @@
       "sourceCurrency": [
         923,
         919
-      ]
-    },
-    {
-      "goodsId": 1980039,
-      "itemId": 1222803,
-      "currencyType": 923,
-      "price": 560,
-      "goodsType": 1,
-      "sort": 24,
-      "sourcePrice": [
-        560,
-        168
       ],
-      "sourceCurrency": [
-        923,
-        919
-      ]
-    },
-    {
-      "goodsId": 1980040,
-      "itemId": 1220804,
-      "currencyType": 923,
-      "price": 560,
-      "goodsType": 1,
-      "sort": 108,
-      "sourcePrice": [
-        560
-      ],
-      "sourceCurrency": [
-        923
-      ]
+      "name": "音奏热风"
     },
     {
       "goodsId": 1980041,
@@ -647,23 +417,8 @@
       "sourceCurrency": [
         923,
         919
-      ]
-    },
-    {
-      "goodsId": 1980042,
-      "itemId": 1222403,
-      "currencyType": 923,
-      "price": 560,
-      "goodsType": 1,
-      "sort": 25,
-      "sourcePrice": [
-        560,
-        168
       ],
-      "sourceCurrency": [
-        923,
-        919
-      ]
+      "name": "审判之眼"
     },
     {
       "goodsId": 1980043,
@@ -679,55 +434,8 @@
       "sourceCurrency": [
         923,
         919
-      ]
-    },
-    {
-      "goodsId": 1980044,
-      "itemId": 1222903,
-      "currencyType": 923,
-      "price": 560,
-      "goodsType": 2,
-      "sort": 26,
-      "sourcePrice": [
-        560,
-        168
       ],
-      "sourceCurrency": [
-        923,
-        919
-      ]
-    },
-    {
-      "goodsId": 1980045,
-      "itemId": 1223003,
-      "currencyType": 923,
-      "price": 560,
-      "goodsType": 1,
-      "sort": 27,
-      "sourcePrice": [
-        560,
-        128
-      ],
-      "sourceCurrency": [
-        923,
-        919
-      ]
-    },
-    {
-      "goodsId": 1980046,
-      "itemId": 1223003,
-      "currencyType": 923,
-      "price": 560,
-      "goodsType": 2,
-      "sort": 27,
-      "sourcePrice": [
-        560,
-        168
-      ],
-      "sourceCurrency": [
-        923,
-        919
-      ]
+      "name": "暗烛秘境"
     },
     {
       "goodsId": 1980047,
@@ -743,7 +451,8 @@
       "sourceCurrency": [
         923,
         919
-      ]
+      ],
+      "name": "霁雪聆春"
     }
   ]
 }
