@@ -10,6 +10,7 @@ from x2server.bootstrap.local_identity import LocalIdentityService
 from x2server.bootstrap.models import RecoveredBootstrapContract, RecoveredWebGameConfig, RecoveredServerAddressConfig, ServerAddressEntry
 from x2server.config.logging import configure_logging
 from x2server.config.settings import Settings
+from x2server.config.deployment import DeploymentEndpoints
 from x2server.network.dispatcher import Dispatcher
 from x2server.network.server import X2TCPServer
 from x2server.player.store import PlayerStore
@@ -36,16 +37,18 @@ from x2server.player.college import CollegeStateRepository
 
 
 async def run(database: Path, seconds: float) -> None:
-    guest_http = "http://10.0.2.2:18080"
+    endpoints = DeploymentEndpoints.from_environment()
+    guest_http = f"http://{endpoints.public_host}:{endpoints.http_port}"
     contract = RecoveredBootstrapContract(
         RecoveredWebGameConfig(service_app_id="x2-local-compat", pbs_server=guest_http,
             login_server=guest_http, account_server=guest_http, esweb_server=guest_http,
             lb_pbs_server=(guest_http,), lb_login_server=(guest_http,), lb_esweb_server=(guest_http,), area_id="local"),
-        RecoveredServerAddressConfig((ServerAddressEntry("10.0.2.2", 29000),)))
+        RecoveredServerAddressConfig((ServerAddressEntry(endpoints.public_host, endpoints.game_port),)))
     store = PlayerStore(database)
     accounts = AccountStore(store)
     identity = LocalIdentityService(contract, account=os.environ.get("X2_LOCAL_ACCOUNT"),
-        password=os.environ.get("X2_LOCAL_PASSWORD"), accounts=accounts, players=store)
+        password=os.environ.get("X2_LOCAL_PASSWORD"), accounts=accounts, players=store,
+        chat_entry=f"{endpoints.public_host}:{endpoints.chat_port}")
     clock = ServerClock()
     college = CollegeStateRepository(store, clock)
     economy = EconomyService(store, clock=clock.now)
@@ -60,12 +63,12 @@ async def run(database: Path, seconds: float) -> None:
     mail = MailService(store, economy, clock=clock.now)
     login = LoginService(identity, store, economy, equipment, wish, clock=clock, appearance=appearance,
                          mail=mail, gift_packages=gift_packages, college=college)
-    http = BootstrapHTTPServer("127.0.0.1", 18080, identity)
-    tcp = X2TCPServer(Settings(tcp_host="127.0.0.1", tcp_port=29000, read_timeout=120),
+    http = BootstrapHTTPServer(endpoints.bind_host, endpoints.http_port, identity)
+    tcp = X2TCPServer(Settings(tcp_host=endpoints.bind_host, tcp_port=endpoints.game_port, read_timeout=120),
         Dispatcher({**LobbyService(clock, college).handlers(), **BirthdayService(store).handlers(), **economy.handlers(), **shop.handlers(), **gift_packages.handlers(), **collection.handlers(), **favor.handlers(), **appearance.handlers(), **appearance_shop.handlers(), **mail.handlers(), **equipment.handlers(), **wish.handlers(), **ProgressionService(store, economy).handlers(), **BattleService(store, economy).handlers(), "C2L_HeroAll": HeroService(store).query_all,
                     "C2L_Login": login.login, "C2L_ReConnect": login.reconnect,
                     "C2L_ServerTableConfig": login.server_config}))
-    chat = X2TCPServer(Settings(tcp_host="127.0.0.1", tcp_port=29001, read_timeout=120),
+    chat = X2TCPServer(Settings(tcp_host=endpoints.bind_host, tcp_port=endpoints.chat_port, read_timeout=120),
                        Dispatcher(SilentChatService().handlers()))
     mail_task = None
     try:
@@ -73,8 +76,14 @@ async def run(database: Path, seconds: float) -> None:
         await tcp.start()
         await chat.start()
         mail_task = asyncio.create_task(mail.watch(tcp), name="local-mail-push")
-        logging.getLogger("x2.local").info("local services ready; HTTP 127.0.0.1:18080 TCP 127.0.0.1:29000")
-        await asyncio.sleep(seconds)
+        logging.getLogger("x2.local").info(
+            "services ready; HTTP %s:%s game TCP %s:%s chat TCP %s:%s public=%s",
+            endpoints.bind_host, endpoints.http_port, endpoints.bind_host, endpoints.game_port,
+            endpoints.bind_host, endpoints.chat_port, endpoints.public_host)
+        if seconds == 0:
+            await asyncio.Event().wait()
+        else:
+            await asyncio.sleep(seconds)
     finally:
         if mail_task:
             mail_task.cancel()
@@ -88,11 +97,12 @@ async def run(database: Path, seconds: float) -> None:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--database", type=Path, default=Path("runtime/player.sqlite3"))
+    parser.add_argument("--database", type=Path,
+                        default=Path(os.getenv("X2_DB_PATH", "runtime/player.sqlite3")))
     parser.add_argument("--seconds", type=float, default=3600)
     args = parser.parse_args()
-    if args.seconds <= 0:
-        parser.error("--seconds must be positive")
+    if args.seconds < 0:
+        parser.error("--seconds must be nonnegative (0 runs until stopped)")
     if not os.environ.get("X2_LOCAL_ACCOUNT") or not os.environ.get("X2_LOCAL_PASSWORD"):
         # Optional since the account layer: new players register through the
         # client UI (/register). The passwordless visitor mode needs a

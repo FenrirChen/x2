@@ -1,0 +1,17 @@
+[Unit]
+Description=X2 Revival compatibility server
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=@SERVICE_USER@
+WorkingDirectory=@WORKDIR@
+EnvironmentFile=@ENV_FILE@
+ExecStart=@WORKDIR@/.venv/bin/python -m tools.local_game_server --seconds 0
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+
+[Install]
+WantedBy=@INSTALL_TARGET@

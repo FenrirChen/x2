@@ -42,6 +42,7 @@ class LocalIdentityService(RecoveredBootstrapService):
     def __init__(
         self, contract: RecoveredBootstrapContract, *, account: str | None = None,
         password: str | None = None, accounts=None, players=None,
+        chat_entry: str = "10.0.2.2:29001",
         clock: Callable[[], float] = time.time,
     ) -> None:
         super().__init__(contract, RecoveredControlInfo(update="LEBIAN"))
@@ -51,6 +52,7 @@ class LocalIdentityService(RecoveredBootstrapService):
         self._password = password
         self._accounts = accounts
         self._players = players
+        self._chat_entry = chat_entry
         self._clock = clock
         self._account_token = secrets.token_urlsafe(32)
         self._game_token = secrets.token_urlsafe(32)
@@ -73,7 +75,7 @@ class LocalIdentityService(RecoveredBootstrapService):
             # ChatModule.GetChatServers parses a list of ChannelInfo, with a
             # second JSON-encoded list in channel; Connect splits entry on ':'.
             return self._json([{"channel": json.dumps([{"channel": 1, "free": 1, "limit": 1}]),
-                               "entry": "10.0.2.2:29001", "nodeType": "local", "token": ""}])
+                               "entry": self._chat_entry, "nodeType": "local", "token": ""}])
         if path not in ("/register", "/login", "/loginwithpw", "/apply/httpLogin"):
             return super().respond(method, target, body)
         if method.upper() != "POST":

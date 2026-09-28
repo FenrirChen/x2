@@ -7,12 +7,24 @@ __pycache__/
 venv/
 .env
 .env.*
+!.env.example
 runtime/*
 !runtime/.gitkeep
+runtime/*.sqlite3
+runtime/**/*.sqlite3
+runtime/*.log
+runtime/**/*.log
+*.log
+logs/
+secrets/
+credentials/
 
 *.apk
+*.idsig
 *.jks
 *.keystore
+*.pem
+*.key
 *.so
 *.dll
 *.bank
