@@ -27,6 +27,9 @@ done
 for tool in git python3 systemctl; do
   command -v "$tool" >/dev/null || { echo "Missing dependency: $tool" >&2; exit 1; }
 done
+python3 -c 'import sys; sys.exit(sys.version_info < (3, 12))' || {
+  echo "Python 3.12 or newer is required" >&2; exit 1;
+}
 python3 -m venv --help >/dev/null 2>&1 || { echo "Install python3-venv" >&2; exit 1; }
 
 if [[ "$(id -u)" == 0 ]] && ! id "$SERVICE_USER" >/dev/null 2>&1; then

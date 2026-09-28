@@ -89,3 +89,10 @@ is deliberately excluded from Git. Existing local signing material produces
 a test-signed APK, but its certificate differs from the installed v0.2 APK;
 Android cannot update that installation in place. Preserve the installed
 app data before uninstalling, or provide the matching release signing key.
+
+The 2026-09-28 test-signed APK installed and launched in a disposable read-only
+Android AVD. A successful connection to `fenrirchen.com` could not yet be
+verified: the domain's A record exists, but ports 18080/29000/29001 are not
+reachable from the development machine, and the AVD's external HTTP proxy
+also failed its connectivity checks. Deploy the server and open the three
+ports before final end-to-end APK acceptance.
