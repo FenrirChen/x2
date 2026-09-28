@@ -20,6 +20,11 @@ from x2server.network.server import X2TCPServer
 from x2server.player.accounts import AccountStore
 from x2server.player.login import LoginService
 from x2server.player.store import PlayerStore
+from x2server.player.economy import EconomyService
+from x2server.player.mail import MailService
+from x2server.network.dispatcher import DispatchContext
+from x2server.network.session import SessionState
+from tests.unit.test_battle import packet
 
 
 class AccountFlow:
@@ -181,3 +186,19 @@ def test_actual_http_wire_and_relogin_preserve_snapshot(tmp_path):
     assert second["playerID"] == player_id
     assert reopened.store.get(player_id)["snapshot"]["gold"] == 37
     assert reopened.store.db.execute("SELECT COUNT(*) FROM players").fetchone()[0] == 1
+
+
+def test_tcp_login_creates_daily_mail_once_after_registration(tmp_path):
+    flow = AccountFlow(tmp_path)
+    assert flow.register("nova", "pw") == {"success": True}
+    _, login_ctx = flow.game_session("nova", "pw")
+    economy = EconomyService(flow.store)
+    mail = MailService(flow.store, economy)
+    service = LoginService(flow.identity, flow.store, economy=economy, mail=mail)
+    request = packet({"id": login_ctx["playerID"], "token": login_ctx["token"]}, name="C2L_Login")
+    for _ in range(2):
+        context = DispatchContext("test", "local", SessionState("test"))
+        response = asyncio.run(service.login(context, request))
+        assert response.values["code"] == 10
+        assert next(push for push in response.pushes if push.message_name == "L2C_MailData").values["total"] == 2
+    assert flow.store.db.execute("SELECT count(*) FROM player_mail").fetchone()[0] == 2

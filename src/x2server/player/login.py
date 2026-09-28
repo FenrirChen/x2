@@ -51,6 +51,8 @@ class LoginService:
             raise ProtocolError("local login authentication failed")
         now = self.clock.now()
         player = self.store.login(self.identity.account_for_player(values["id"]), values["id"], now)
+        if self.mail:
+            self.identity.ensure_daily_login_mail(player["id"], now)
         context.session.session_id = secrets.token_urlsafe(24)
         context.session.player_id = player["id"]
         result: dict[str, Any] = {"code": 10, "id": player["id"], "loginCount": player["login_count"],

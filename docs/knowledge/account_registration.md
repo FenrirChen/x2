@@ -33,6 +33,8 @@ Account 模式的注册按钮向 `{Login_Url}/register` 发送 HTTP form `accoun
 事务插入 `players`（SQLite 自动分配整数主键）和 `accounts`（用户名 UNIQUE，
 玩家 ID UNIQUE），成功后同时提交；异常时回滚。密码使用随机盐 PBKDF2-SHA256
 哈希，不保存明文。HTTP 线程使用独立 SQLite 连接并串行化对该连接的访问。
+新账号同时写入一次性欢迎邮件；旧玩家种子账号关联不会补发。每日登录邮件只在
+成功的游戏 TCP 登录后按北京时间自然日幂等创建。两类奖励仍需在邮箱领取。
 
 ## Login flow and security constraints
 

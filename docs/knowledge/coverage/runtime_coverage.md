@@ -63,7 +63,7 @@ Supersedes:
 | N2 Affection | AddFavor `274`、档案 `500–503`、联结 `498`、突破 `651`、手账 `657` | PARTIAL | 状态/查询/重登与 3 种单值礼物事务闭环；双值偏好、触摸和突破规则仍未知，拒绝未知变更 |
 | O Achievement | AchvOverView `345`、AchvReward `346`、点数奖 `358` | MISSING | 318 条静态成就；进度、领奖、持久化均无 |
 | P Draw / Gacha | CardPool `305`、LuckDraw `303`、结果 `381` | PARTIAL | 有轮换、花费、收据、保底；48 个 DrawParam 与当前 43 个轮换池不等；保底 UI/图片仍需实机核对 |
-| Q Mail | MailData `196`、ReadMail `204`、ReceiveAttachment `197`、DelMail `207` | MISSING | 邮件实例、附件幂等及清理未做 |
+| Q Mail | MailData `196`、ReadMail `204`、ReceiveAttachment `197`、DelMail `207`，批量领取/删除 | PARTIAL | 邮件持久化、登录同步、在线推送及附件事务领取已接入；系统邮件按 source_key 防重复；客户端实机仍待复测，过期策略未设 |
 | R Friend | UpdateFriends `449`、SendFriendReq `453`、SendFriendCoin `434` | MISSING | 好友关系、体力/友情币和关联任务未做；尚未正式决定不恢复 |
 | S Club / Guild | CreateClub `742`、加入/审批/捐赠/活动 | MISSING | 社团状态、挑战、奖励未做；尚未正式决定不恢复 |
 | T Chat / Comet / Snowflake | ChatJoin `521`、ChatAway `527`、ChatEvent `339` | STUB / INTENTIONALLY_UNSUPPORTED | Null Chat 只保证节点与空连接兼容；完整内容/私聊/社交广播不在当前目标 |
@@ -83,7 +83,7 @@ Supersedes:
 4. **Hero/技能**：HeroAll 可显示多角色，但技能升级只允许 1003；属性整合不包含魂器/兽主套装的完整效果。
 5. **装备**：背包有测试实例、六部位可佩戴，不代表真实掉落、品质、喂养、锁和套装规则可用。
 6. **任务**：列表和固定奖励可用，但事件来源只覆盖一部分；活跃宝箱固定拒绝。
-7. **商店**：809 的直接映射及 B 包 116 格可发放兼容商品可买；商品内容非官方，804 与刷新池未覆盖。
+7. **商店**：809 的直接映射商品可买；第三方随机/友情兼容目录按用户决定暂停，礼包商店独立可用。
 8. **重登**：英雄/物品/装备/日周/抽卡会重建；邮件、活动、引导、战斗续档等状态未建模。
 
 ## VARIANT_GAPS

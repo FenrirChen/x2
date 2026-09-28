@@ -11,16 +11,26 @@ from x2server.protocol.registry import CORE_MESSAGE_REGISTRY
 from .economy import UnresolvedEconomy
 
 
+def ensure_mail_schema(db):
+    """Shared schema for the HTTP registration and game connections."""
+    db.execute("""CREATE TABLE IF NOT EXISTS player_mail (
+        id INTEGER PRIMARY KEY AUTOINCREMENT, player_id INTEGER NOT NULL,
+        sender TEXT NOT NULL, title TEXT NOT NULL, body TEXT NOT NULL,
+        state INTEGER NOT NULL DEFAULT 0, created_at INTEGER NOT NULL,
+        attachments TEXT NOT NULL, deleted INTEGER NOT NULL DEFAULT 0,
+        source_key TEXT)""")
+    columns = {row[1] for row in db.execute("PRAGMA table_info(player_mail)")}
+    if "source_key" not in columns:
+        db.execute("ALTER TABLE player_mail ADD COLUMN source_key TEXT")
+    db.execute("CREATE UNIQUE INDEX IF NOT EXISTS player_mail_source ON player_mail(player_id,source_key)")
+    db.execute("CREATE INDEX IF NOT EXISTS player_mail_owner ON player_mail(player_id,deleted,created_at)")
+
+
 class MailService:
     def __init__(self, store, economy, clock=time.time):
         self.store, self.economy, self.clock = store, economy, clock
         with store.db:
-            store.db.execute("""CREATE TABLE IF NOT EXISTS player_mail (
-                id INTEGER PRIMARY KEY AUTOINCREMENT, player_id INTEGER NOT NULL,
-                sender TEXT NOT NULL, title TEXT NOT NULL, body TEXT NOT NULL,
-                state INTEGER NOT NULL DEFAULT 0, created_at INTEGER NOT NULL,
-                attachments TEXT NOT NULL, deleted INTEGER NOT NULL DEFAULT 0)""")
-            store.db.execute("CREATE INDEX IF NOT EXISTS player_mail_owner ON player_mail(player_id,deleted,created_at)")
+            ensure_mail_schema(store.db)
 
     def handlers(self):
         return {"C2L_" + name: self.handle for name in (
@@ -30,8 +40,8 @@ class MailService:
     def send(self, player_id, title, body, attachments=None, sender="解神者 Revival"):
         """Queue a server-authored mail; the caller may push ``list_message`` online."""
         self.store.get(player_id)
-        if not all(isinstance(value, str) and value and len(value) <= maximum
-                   for value, maximum in ((sender, 80), (title, 120), (body, 4000))):
+        if not all(isinstance(value, str) and len(value) <= maximum
+                   for value, maximum in ((sender, 80), (title, 120), (body, 4000))) or not sender:
             raise ValueError("invalid mail text")
         rewards = dict(attachments or {})
         for item_id, quantity in rewards.items():

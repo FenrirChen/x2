@@ -192,3 +192,6 @@ class LocalIdentityService(RecoveredBootstrapService):
         if row is None:
             raise ValueError(f"no account bound to player {player_id}")
         return row["username"]
+
+    def ensure_daily_login_mail(self, player_id: int, now: int) -> bool:
+        return self._accounts.ensure_daily_login_mail(player_id, now) if self._accounts is not None else False

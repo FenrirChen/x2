@@ -16,6 +16,8 @@ from typing import Any
 
 from .store import PlayerStore
 from .new_player import new_player_snapshot
+from .mail import ensure_mail_schema
+from .system_mail import insert_system_mail
 
 PBKDF2_ITERATIONS = 100_000
 MAX_USERNAME = 64
@@ -58,6 +60,7 @@ class AccountStore:
         with self.db:
             self.db.execute("CREATE UNIQUE INDEX IF NOT EXISTS accounts_player_id_unique "
                             "ON accounts(player_id)")
+            ensure_mail_schema(self.db)
 
     def create(self, username: str, password: str, now: int, *, allow_legacy: bool = False) -> str:
         """Create both rows atomically; only the configured seed can claim a legacy player."""
@@ -86,9 +89,12 @@ class AccountStore:
                         "VALUES (?,?,0,?,1)",
                         (username, now, json.dumps(new_player_snapshot(), ensure_ascii=False)))
                     player_id = cursor.lastrowid
-                self.db.execute(
+                cursor = self.db.execute(
                     "INSERT INTO accounts(username,password_hash,created_at,status,player_id) "
                     "VALUES (?,?,?,'active',?)", (username, password_hash, now, player_id))
+                if not existing:
+                    if not insert_system_mail(self.db, player_id, cursor.lastrowid, "welcome", now):
+                        raise sqlite3.IntegrityError("welcome mail was not inserted")
                 self.db.commit()
             except sqlite3.IntegrityError as exc:
                 self.db.rollback()
@@ -100,6 +106,21 @@ class AccountStore:
                 self.db.rollback()
                 raise
         return "created"
+
+    def ensure_daily_login_mail(self, player_id: int, now: int) -> bool:
+        with self._lock:
+            try:
+                self.db.execute("BEGIN IMMEDIATE")
+                row = self.db.execute("SELECT account_id FROM accounts WHERE player_id=? AND status='active'",
+                                      (player_id,)).fetchone()
+                if row is None:
+                    raise ValueError("player has no active account")
+                created = insert_system_mail(self.db, player_id, row["account_id"], "daily_login", now)
+                self.db.commit()
+                return created
+            except BaseException:
+                self.db.rollback()
+                raise
 
     def verify(self, username: str, password: str, now: int) -> dict[str, Any] | None:
         with self._lock:
