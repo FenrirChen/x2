@@ -1,5 +1,6 @@
 """Confirmed rewards and tasks with the user-defined Revival calendar."""
 from collections import Counter
+import hashlib
 from contextlib import contextmanager
 from importlib.resources import files
 import json
@@ -26,6 +27,8 @@ class UnresolvedEconomy(ValueError):
 
 
 class EconomyService:
+    CAUSALITY_CARDS = {1202010: 10, 1202011: 20, 1202012: 30,
+                       1202013: 60, 1202014: 100}  # Item.Used -> Gift.Num
     POWER_RECOVER_SECONDS = 225  # Client ServerData default 300s; user policy: 25% faster.
     # Item.EffData -> BaseInfoProto; only supported currency destinations.
     CURRENCIES = {1237901: "gold", 1237902: "crystal", 1237906: "equip_exp", 1237907: "hero_exp",
@@ -70,6 +73,8 @@ class EconomyService:
             store.db.execute("""CREATE TABLE IF NOT EXISTS inventory (
                 player_id INTEGER NOT NULL, item_id INTEGER NOT NULL, quantity INTEGER NOT NULL CHECK(quantity>=0),
                 PRIMARY KEY(player_id,item_id))""")
+            store.db.execute("""CREATE TABLE IF NOT EXISTS item_opt_receipts (
+                request_key TEXT PRIMARY KEY, player_id INTEGER NOT NULL, response BLOB NOT NULL)""")
             store.db.execute("""CREATE TABLE IF NOT EXISTS economy_tasks (
                 player_id INTEGER NOT NULL, task_id INTEGER NOT NULL, progress INTEGER NOT NULL DEFAULT 0,
                 claimed INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(player_id,task_id))""")
@@ -673,7 +678,7 @@ class EconomyService:
             *(OutboundMessage("L2C_TaskUpdate", {"type": k, "taskList": self.task_values(player_id, k)["taskList"]}) for k in (1, 2)))
 
     def handlers(self):
-        return {name: self.handle for name in ("C2L_ItemAll", "C2L_ShopGoods", "C2L_RefreshShop", "C2L_BuyGoods",
+        return {name: self.handle for name in ("C2L_ItemAll", "C2L_ItemOpt", "C2L_ShopGoods", "C2L_RefreshShop", "C2L_BuyGoods",
             "C2L_QueryGoodsInfo", "C2L_GameTask", "C2L_DailyAndWeekTask", "C2L_FinishGameTask",
             "C2L_FinishGameTaskAsync", "C2L_PickTreasureBox", "C2L_QueryMission")}
 
@@ -686,6 +691,8 @@ class EconomyService:
         logging.getLogger("x2.economy").info("economy request %s player=%s", name, player_id)
         request = (ECONOMY_SCHEMAS if name in ECONOMY_SCHEMAS else LOBBY_SCHEMAS)[name].decode(packet.body)
         response_name = name.replace("C2L_", "L2C_", 1)
+        if name == "C2L_ItemOpt":
+            return self.use_causality_card(context, packet, request)
         if name == "C2L_ItemAll":
             return OutboundMessage(response_name, self.inventory_values(player_id))
         if name == "C2L_QueryMission":
@@ -710,3 +717,37 @@ class EconomyService:
             return self.pick_treasure_box(player_id, request)
         # Known shop routes reply explicitly, never time out or charge for unknown data.
         return OutboundMessage(response_name, {"code": 13, **{k: v for k, v in request.items() if k in ("shopId", "goodsId", "buyNum")}})
+
+    def use_causality_card(self, context, packet, request):
+        player_id = context.session.player_id
+        item_id, count = request.get("id", 0), request.get("count", 0)
+        rejected = OutboundMessage("L2C_ItemOpt", {"code": 13, "opt": request.get("opt", 0), "itemId": item_id})
+        if (request.get("opt", 0) != 0 or item_id not in self.CAUSALITY_CARDS
+                or type(count) is not int or not 1 <= count <= 999):
+            return rejected
+        key = hashlib.sha256(f"{player_id}:{context.session.session_id}:{packet.header.request_id}:item-opt".encode()
+                             + packet.body).hexdigest()
+        try:
+            return self._use_causality_card(player_id, item_id, count, key, rejected)
+        except UnresolvedEconomy:
+            return rejected
+
+    def _use_causality_card(self, player_id, item_id, count, key, rejected):
+        with self.transaction():
+            row = self.store.db.execute("SELECT response FROM item_opt_receipts WHERE request_key=? AND player_id=?",
+                                        (key, player_id)).fetchone()
+            if row:
+                return OutboundMessage("L2C_ItemOpt", ECONOMY_SCHEMAS["L2C_ItemOpt"].decode(row[0]),
+                                       pushes=self.pushes(player_id))
+            consumed = self.store.db.execute("UPDATE inventory SET quantity=quantity-? "
+                "WHERE player_id=? AND item_id=? AND quantity>=?", (count, player_id, item_id, count))
+            if not consumed.rowcount:
+                return rejected
+            amount = self.CAUSALITY_CARDS[item_id] * count
+            self.refresh_stamina(player_id)
+            rewards = self._grant(player_id, f"item-opt:{key}", {1237900: amount})
+            values = {"code": 10, "opt": 0, "itemId": item_id,
+                      "rewardData": self.reward_bytes(rewards)}
+            self.store.db.execute("INSERT INTO item_opt_receipts VALUES (?,?,?)",
+                                  (key, player_id, ECONOMY_SCHEMAS["L2C_ItemOpt"].encode(values)))
+        return OutboundMessage("L2C_ItemOpt", values, pushes=self.pushes(player_id))
