@@ -10,6 +10,9 @@ Evidence-IDs: see evidence/manifests/evidence_manifest.json
 
 # Known Unknowns（截至 2026-09-27 仍未解）
 
+账号领域另见 `../account_registration.md`：官方初始赠送和游客后端失传；
+Revival 注册兼容层已有隔离库测试，真实客户端注册/重登待验证，公网部署仍阻塞。
+
 | # | Domain | Unknown | Why unknown | Evidence searched | 当前处理 | 阻塞 | 下一步 |
 |---|---|---|---|---|---|---|---|
 | 1 | Drop | ~~DropValueID 语义~~ **结构已破解（2026-09-26）**：`DropValueID = 10600000 + SectionID%100000`（310/341 全量命中；85 组为有意的跨关卡共享，如活动变体复用本体；少量错位为手工授权痕迹）——它是**服务器侧按关卡派生的掉落配置键**（现知用途：264/266 dropValues 战斗预算的配置来源，B 级），不是'掉什么'的内容表（静态零命中因此合理）。**残留**：配置的具体数值（每组预算等）在官方服务器数据中已失传 | 全量公式验证 341 组 + SetSceneInfo/OnUpdateDropValue/JudgeDropItem 反汇编 + 实机 264/266 闭环 | Revival 用 27×1,000,000 兼容预算（REVIVAL_COMPAT）；不生成 DropValueID 账本 | 低（从'完全未知'降级为'键已破解、值失传'） | 若需官方量级：只有官方报文样本可解 |

@@ -10,6 +10,12 @@ Evidence-IDs: see evidence/manifests/evidence_manifest.json
 
 # 当前状态快照（2026-09-27）
 
+- **账号注册接管（2026-09-28）**：已按客户端 Account 模式接入 HTTP `/register`，
+  以同一 SQLite 事务创建账号和最小新玩家快照；密码哈希、唯一用户名、独立 HTTP
+  数据库连接、旧测试玩家关联与隔离库首登/重登测试见
+  `account_registration.md`。游客按钮的空密码短随机身份仍不开放。
+  **PUBLIC_DEPLOYMENT_BLOCKER: BLOCKED**（真实客户端注册和重登尚待验证）。
+
 - **白夜行星 Phase 0/安全子集（2026-09-27）**：实际字段审计见 `analysis/white_night_planet/phase0_response_audit.md`。579/584 使用独立 SQLite `college_state` 快照，登录同源，官方初始建筑/奇迹可重登恢复；590/591 和 622/623 因初始炼金/遗迹状态证据不足仍未闭环。`CollegeExplore` 是计时派遣，不复用主线战斗入场/结算。基地入口仍为 PARTIAL。
 
 - **可运行**：登录/大厅/物品/英雄(1003)/装备测试实例/**装备实例真交付(887→Factory→落库→152.rewardEquip)/**

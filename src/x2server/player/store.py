@@ -6,14 +6,18 @@ import sqlite3
 from pathlib import Path
 from typing import Any
 
+DEFAULT_SNAPSHOT: dict[str, Any] = {"nickname": "Revival", "level": 1,
+    "gold": 0, "crystal": 0, "exp": 0, "show": 0}
+
 
 class PlayerStore:
     def __init__(self, path: Path) -> None:
         path.parent.mkdir(parents=True, exist_ok=True)
+        self.path = path
         self.db = sqlite3.connect(path)
         self.db.row_factory = sqlite3.Row
         version = self.db.execute("PRAGMA user_version").fetchone()[0]
-        if version not in (0, 1):
+        if version not in (0, 1, 2):
             self.db.close()
             raise ValueError("unsupported player database version")
         with self.db:
@@ -21,14 +25,21 @@ class PlayerStore:
                 id INTEGER PRIMARY KEY, account TEXT NOT NULL UNIQUE,
                 created_at INTEGER NOT NULL, login_count INTEGER NOT NULL DEFAULT 0,
                 snapshot TEXT NOT NULL, revision INTEGER NOT NULL DEFAULT 1)""")
-            self.db.execute("PRAGMA user_version=1")
+            # Version 2 adds the Revival compatibility account layer; existing
+            # player rows and their snapshots are untouched by this migration.
+            self.db.execute("""CREATE TABLE IF NOT EXISTS accounts (
+                account_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT NOT NULL UNIQUE, password_hash TEXT NOT NULL,
+                created_at INTEGER NOT NULL, last_login_at INTEGER,
+                status TEXT NOT NULL DEFAULT 'active', player_id INTEGER)""")
+            if version < 2:
+                self.db.execute("PRAGMA user_version=2")
 
     def login(self, account: str, player_id: int, now: int) -> dict[str, Any]:
         """Create once and increment atomically; never replace an existing snapshot."""
         with self.db:
             self.db.execute("INSERT OR IGNORE INTO players VALUES (?, ?, ?, 0, ?, 1)",
-                            (player_id, account, now, json.dumps({"nickname": "Revival", "level": 1,
-                                "gold": 0, "crystal": 0, "exp": 0, "show": 0})))
+                            (player_id, account, now, json.dumps(DEFAULT_SNAPSHOT)))
             row = self.db.execute("SELECT * FROM players WHERE id=?", (player_id,)).fetchone()
             if row is None or row["account"] != account:
                 raise ValueError("player/account identity conflict")

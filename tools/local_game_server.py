@@ -13,6 +13,7 @@ from x2server.config.settings import Settings
 from x2server.network.dispatcher import Dispatcher
 from x2server.network.server import X2TCPServer
 from x2server.player.store import PlayerStore
+from x2server.player.accounts import AccountStore
 from x2server.player.login import LoginService
 from x2server.player.lobby import LobbyService
 from x2server.player.hero import HeroService
@@ -41,8 +42,10 @@ async def run(database: Path, seconds: float) -> None:
             login_server=guest_http, account_server=guest_http, esweb_server=guest_http,
             lb_pbs_server=(guest_http,), lb_login_server=(guest_http,), lb_esweb_server=(guest_http,), area_id="local"),
         RecoveredServerAddressConfig((ServerAddressEntry("10.0.2.2", 29000),)))
-    identity = LocalIdentityService(contract, account=os.environ["X2_LOCAL_ACCOUNT"], password=os.environ["X2_LOCAL_PASSWORD"])
     store = PlayerStore(database)
+    accounts = AccountStore(store)
+    identity = LocalIdentityService(contract, account=os.environ.get("X2_LOCAL_ACCOUNT"),
+        password=os.environ.get("X2_LOCAL_PASSWORD"), accounts=accounts, players=store)
     clock = ServerClock()
     college = CollegeStateRepository(store, clock)
     economy = EconomyService(store, clock=clock.now)
@@ -79,6 +82,7 @@ async def run(database: Path, seconds: float) -> None:
         await chat.stop()
         await tcp.stop()
         await http.stop()
+        accounts.close()
         store.close()
 
 
@@ -90,7 +94,11 @@ if __name__ == "__main__":
     if args.seconds <= 0:
         parser.error("--seconds must be positive")
     if not os.environ.get("X2_LOCAL_ACCOUNT") or not os.environ.get("X2_LOCAL_PASSWORD"):
-        parser.error("set X2_LOCAL_ACCOUNT and X2_LOCAL_PASSWORD to dedicated local test values")
+        # Optional since the account layer: new players register through the
+        # client UI (/register). The passwordless visitor mode needs a
+        # collision-safe identity before it can be offered publicly.
+        logging.getLogger("x2.local").info(
+            "no X2_LOCAL_ACCOUNT/PASSWORD seed; new users register in the client")
     configure_logging("INFO")
     try:
         asyncio.run(run(args.database, args.seconds))

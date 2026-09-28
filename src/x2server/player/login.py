@@ -50,7 +50,7 @@ class LoginService:
         if not self.identity.validates_game_identity(values.get("id", 0), values.get("token", "")):
             raise ProtocolError("local login authentication failed")
         now = self.clock.now()
-        player = self.store.login(self.identity.account, values["id"], now)
+        player = self.store.login(self.identity.account_for_player(values["id"]), values["id"], now)
         context.session.session_id = secrets.token_urlsafe(24)
         context.session.player_id = player["id"]
         result: dict[str, Any] = {"code": 10, "id": player["id"], "loginCount": player["login_count"],

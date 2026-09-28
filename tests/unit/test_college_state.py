@@ -51,6 +51,10 @@ def test_growth_base_static_initial_and_persistence(tmp_path):
         def validates_game_identity(player_id, token):
             return player_id == 1 and token == "test"
 
+        @staticmethod
+        def account_for_player(player_id):
+            return "college-test"
+
     relog_context = DispatchContext("relog", "local", SessionState("relog", "session"))
     login = asyncio.run(LoginService(Identity(), restored_store, clock=FixedClock(), college=restored).login(
         relog_context, packet({"id": 1, "token": "test"}, 3, "C2L_Login")))
