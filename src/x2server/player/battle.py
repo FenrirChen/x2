@@ -69,7 +69,8 @@ class BattleService:
         return sorted(set(unknown))
 
     def handlers(self):
-        return {"C2L_FightData": self.enter, "C2L_DelFightProfile": self.clear_profile,
+        return {"C2L_PrepareMainMission": self.prepare_main_mission,
+                "C2L_FightData": self.enter, "C2L_DelFightProfile": self.clear_profile,
                 "C2L_FightDropData": self.drop_data,
                 "C2L_SecSweep": self.sweep,
                 "C2L_CheckoutMainMissionSign": self.checkout,
@@ -270,6 +271,18 @@ class BattleService:
         # Acknowledgement does not settle a fight or delete its audit record.
         logging.getLogger("x2.battle").info("clear absent battle profile section=%s", request.get("sectionID", 0))
         return OutboundMessage("L2C_DelFightProfile", {"code": 10, "sectionID": request.get("sectionID", 0)})
+
+    async def prepare_main_mission(self, context, packet):
+        if context.session.player_id is None:
+            raise ProtocolError("mission preparation before login")
+        from x2server.messages.core import C2L_PREPARE_MAIN_MISSION
+        request = C2L_PREPARE_MAIN_MISSION.decode(packet.body)
+        chapter, section = request.get("chapter", 0), request.get("level", 0)
+        row = self.catalog.sections.get(section)
+        accepted = bool(row and row["ChapterID"] == chapter and row["Type"] == 0)
+        logging.getLogger("x2.tutorial").info("prepare mission player=%s chapter=%s section=%s accepted=%s",
+            context.session.player_id, chapter, section, accepted)
+        return OutboundMessage("L2C_PrepareMainMission", {"result": 10 if accepted else 13})
 
     async def enter(self, context, packet):
         if context.session.player_id is None:

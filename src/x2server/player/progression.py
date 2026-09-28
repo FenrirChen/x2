@@ -64,8 +64,9 @@ def advance_player(snapshot):
 
 
 class ProgressionService:
-    def __init__(self, store, economy):
+    def __init__(self, store, economy, appearance=None):
         self.store, self.economy = store, economy
+        self.appearance = appearance
         with store.db:
             store.db.execute("""CREATE TABLE IF NOT EXISTS progression_receipts (
                 player_id INTEGER NOT NULL, request_key TEXT NOT NULL, response BLOB NOT NULL,
@@ -89,6 +90,14 @@ class ProgressionService:
                 if not result.rowcount:
                     raise UnresolvedEconomy("insufficient material")
 
+    def stage_skin_update(self, player_id, hero_id):
+        if self.appearance is None or hero_id is None:
+            return ()
+        from x2server.messages.appearance import HERO_SKIN
+        skin = next((value for value in self.appearance.skin_values(player_id)["skinList"]
+                     if HERO_SKIN.decode(value)["heroId"] == hero_id), None)
+        return (OutboundMessage("L2C_HeroSkinUpdate", {"skin": skin}),) if skin else ()
+
     async def handle(self, context, packet):
         player_id = context.session.player_id
         if player_id is None:
@@ -106,9 +115,13 @@ class ProgressionService:
         cached = self.store.db.execute("SELECT response FROM progression_receipts WHERE player_id=? AND request_key=?", (player_id,key)).fetchone()
         if cached:
             pushes = self.pushes(player_id)
+            skin_update = (self.stage_skin_update(player_id, req.get("id"))
+                           if name == "C2L_HeroOpt" and req.get("opt") == 2 else ())
             return (OutboundMessage(response, schema.decode(cached[0]), before_response=pushes[:1], pushes=pushes[1:])
-                    if name == "C2L_Artifact" else OutboundMessage(response, schema.decode(cached[0]), pushes=pushes))
+                    if name == "C2L_Artifact" else OutboundMessage(response, schema.decode(cached[0]),
+                        before_response=skin_update, pushes=pushes))
         try:
+            stage_skin_hero = None
             with self.economy.transaction():
                 snapshot = self.store.get(player_id)["snapshot"]
                 hero = next((h for h in snapshot.get("heroes", []) if h["id"] == req.get("id", req.get("heroId", req.get("heroID")))), None)
@@ -230,6 +243,8 @@ class ProgressionService:
                         if not row["next_star"] or item not in options:
                             raise UnresolvedEconomy("invalid star request")
                         costs[item] = options[item]
+                        if hero["star"] < 11 <= row["next_star"]:
+                            stage_skin_hero = hero["id"]
                         hero["star"] = row["next_star"]
                     else:
                         raise UnresolvedEconomy("unrecovered hero operation")
@@ -268,8 +283,10 @@ class ProgressionService:
             values["code"] = 13
             return OutboundMessage(response,values)
         pushes = self.pushes(player_id)
+        skin_update = self.stage_skin_update(player_id, stage_skin_hero)
         return (OutboundMessage(response, values, before_response=pushes[:1], pushes=pushes[1:])
-                if name == "C2L_Artifact" else OutboundMessage(response, values, pushes=pushes))
+                if name == "C2L_Artifact" else OutboundMessage(response, values,
+                    before_response=skin_update, pushes=pushes))
 
     def pushes(self, player_id):
         from .hero import encode_hero_data

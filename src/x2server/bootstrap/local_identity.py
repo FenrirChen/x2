@@ -43,6 +43,8 @@ class LocalIdentityService(RecoveredBootstrapService):
         self, contract: RecoveredBootstrapContract, *, account: str | None = None,
         password: str | None = None, accounts=None, players=None,
         chat_entry: str = "10.0.2.2:29001",
+        allow_local_mail_without_token: bool = False,
+        active_mail_players: Callable[[], set[int]] | None = None,
         clock: Callable[[], float] = time.time,
     ) -> None:
         super().__init__(contract, RecoveredControlInfo(update="LEBIAN"))
@@ -53,6 +55,8 @@ class LocalIdentityService(RecoveredBootstrapService):
         self._accounts = accounts
         self._players = players
         self._chat_entry = chat_entry
+        self.allow_local_mail_without_token = allow_local_mail_without_token
+        self.active_mail_players = active_mail_players
         self._clock = clock
         self._account_token = secrets.token_urlsafe(32)
         self._game_token = secrets.token_urlsafe(32)
@@ -69,8 +73,10 @@ class LocalIdentityService(RecoveredBootstrapService):
         return HTTPResponse(status, "application/json; charset=utf-8",
                             (json.dumps(value) + "\n").encode("utf-8"))
 
-    def respond(self, method: str, target: str, body: bytes = b"") -> HTTPResponse:
+    def respond(self, method: str, target: str, body: bytes = b"", *, authorization: str = "") -> HTTPResponse:
         path = urlsplit(target).path
+        if path in ("/MailService.GetMailPage", "/MailService.GetMail"):
+            return self._mail_http(method, path, body, authorization)
         if path == "/apply/chatNode" and method.upper() == "POST":
             # ChatModule.GetChatServers parses a list of ChannelInfo, with a
             # second JSON-encoded list in channel; Connect splits entry on ':'.
@@ -94,6 +100,80 @@ class LocalIdentityService(RecoveredBootstrapService):
         if path in ("/login", "/loginwithpw"):
             return self._password_login(values, path)
         return self._http_login(values)
+
+    def _mail_http(self, method: str, path: str, body: bytes, authorization: str) -> HTTPResponse:
+        """Serve the 2.4 client's PBS mail reads using the authenticated game token."""
+        if method.upper() != "POST":
+            return self._json({"error": "method_not_allowed"}, 405)
+        try:
+            args = json.loads(body)
+            if not isinstance(args, dict):
+                raise ValueError("invalid request")
+            requested_player = int(args.get("userid", 0))
+            if requested_player <= 0:
+                raise ValueError("invalid player")
+            if self._accounts is None:
+                return self._json({"error": "unauthorized"}, 401)
+            if authorization.startswith("Bearer ") and authorization[7:]:
+                binding = self._game_tokens.get(authorization[7:])
+                if binding is None or self._clock() >= binding.expire:
+                    return self._json({"error": "unauthorized"}, 401)
+                if requested_player != binding.player_id:
+                    return self._json({"error": "forbidden"}, 403)
+            elif authorization.strip() == "Bearer" and self.allow_local_mail_without_token:
+                # The 2.4 client sends exactly "Bearer" for PBS mail requests.
+                # Only a loopback listener with one authenticated game player may
+                # resolve this credential-free legacy request.
+                active = self.active_mail_players() if self.active_mail_players else set()
+                if active != {requested_player}:
+                    return self._json({"error": "unauthorized"}, 401)
+            else:
+                return self._json({"error": "unauthorized"}, 401)
+            if args.get("appid") != self.contract.web_config.service_app_id:
+                return self._json({"error": "forbidden"}, 403)
+            if path == "/MailService.GetMailPage":
+                page, page_size = int(args.get("page", 1)), int(args.get("page_num", 20))
+                if not 0 <= page <= 100000 or not 1 <= page_size <= 100:
+                    raise ValueError("invalid page")
+                state = int(args.get("state", -1))
+                if state not in (-1, 0, 1, 2, 3, 4):
+                    raise ValueError("invalid state")
+            else:
+                mail_id = int(args["id"])
+                if mail_id <= 0:
+                    raise ValueError("invalid id")
+        except (ValueError, TypeError, KeyError, json.JSONDecodeError):
+            return self._json({"error": "invalid_request"}, 400)
+        with self._accounts._lock:
+            db = self._accounts.db
+            if path == "/MailService.GetMailPage":
+                condition = "player_id=? AND deleted=0"
+                params: list[int] = [requested_player]
+                if state != -1:
+                    condition += " AND state=?"
+                    params.append(state)
+                total = db.execute(f"SELECT count(*) FROM player_mail WHERE {condition}", params).fetchone()[0]
+                rows = db.execute(f"SELECT * FROM player_mail WHERE {condition} "
+                                  "ORDER BY created_at DESC,id DESC LIMIT ? OFFSET ?",
+                                  (*params, page_size, max(page - 1, 0) * page_size)).fetchall()
+                data = {"total": total, "mails": [self._pbs_mail(row) for row in rows]}
+            else:
+                row = db.execute("SELECT * FROM player_mail WHERE player_id=? AND id=? AND deleted=0",
+                                 (requested_player, mail_id)).fetchone()
+                data = {"mail": self._pbs_mail(row) if row is not None else None}
+        return self._json({"error": "" if path.endswith("GetMailPage") or data["mail"] else "not_found",
+                           "data": data, "code": 0 if path.endswith("GetMailPage") or data["mail"] else 404})
+
+    @staticmethod
+    def _pbs_mail(row: sqlite3.Row) -> dict[str, object]:
+        rewards = json.loads(row["attachments"])
+        attachment = {"attachment": [{"item": int(item), "num": count}
+                                      for item, count in rewards.items()], "equip": [], "gift": []}
+        return {"id": str(row["id"]), "from": row["sender"], "title": row["title"],
+                "body": row["body"], "state": row["state"], "time": str(row["created_at"]),
+                "attachment": json.dumps(attachment, separators=(",", ":")), "type": 0,
+                "expireAt": "0", "operateId": "", "readTime": "0", "recvTime": "0",
+                "delTime": "0"}
 
     # -- Revival compatibility account mode --------------------------------
 

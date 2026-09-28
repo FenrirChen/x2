@@ -13,6 +13,7 @@ class _ContextDefaults(logging.Filter):
             ("message_id", "-"),
             ("message_name", "-"),
             ("request_id", "-"),
+            ("player_id", "-"),
         ):
             if not hasattr(record, name):
                 setattr(record, name, default)
@@ -28,7 +29,7 @@ def configure_logging(level: str = "INFO") -> None:
             "%(asctime)s %(levelname)s %(name)s "
             "connection=%(connection_id)s peer=%(peer)s "
             "message=%(message_id)s/%(message_name)s "
-            "request=%(request_id)s %(message)s"
+            "request=%(request_id)s player=%(player_id)s %(message)s"
         )
     )
     root = logging.getLogger()

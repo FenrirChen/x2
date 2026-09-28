@@ -4,6 +4,8 @@ from tests.unit.test_battle import packet
 from tests.unit.test_economy import env
 from x2server.messages.appearance import HERO_DUBBING_DATA, HERO_SKIN, SEASON_ICON_DATA
 from x2server.player.appearance import AppearanceService
+from x2server.messages.core import BASE_INFO
+from x2server.player.progression import ProgressionService
 
 
 def invoke(service, context, name, values=None):
@@ -62,3 +64,38 @@ def test_avatar_inventory_and_voice_conditions(env):
         "dubbingId": 1350306}).values["code"] == 10  # Bare click-unlock condition.
     assert 1350306 in HERO_DUBBING_DATA.decode(
         AppearanceService(store, economy)._voice_values(1)["heroDubbingDatas"][0])["dubbingIds"]
+
+
+def test_five_star_stage_skin_unlocks_and_show_hero_can_change(env):
+    store, economy, context = env
+    service = AppearanceService(store, economy)
+    assert 1220302 not in HERO_SKIN.decode(service.skin_values(1)["skinList"][0])["skinIds"]
+    player = store.get(1)
+    player["snapshot"]["heroes"][0]["star"] = 11
+    player["snapshot"]["heroes"].append({"id": 1004, "state": 2, "level": 1, "star": 1})
+    store.save_snapshot(1, player["snapshot"], player["revision"])
+    assert 1220302 in HERO_SKIN.decode(service.skin_values(1)["skinList"][0])["skinIds"]
+    assert invoke(service, context, "HeroWearSkin", {"heroId": 1003,
+        "skinId": 1220302, "type": 3}).values["code"] == 10
+    assert invoke(service, context, "Account", {"opt": 1, "values": [9999]}).values["result"] == 13
+    changed = invoke(service, context, "Account", {"opt": 1, "values": [1004]})
+    assert changed.values == {"result": 10, "opt": 1}
+    assert store.get(1)["snapshot"]["show"] == 1004
+    assert BASE_INFO.decode(changed.before_response[0].values["BaseInfo"])["Show"] == 1004
+    assert not changed.pushes
+
+
+def test_five_star_promotion_pushes_stage_skin(env):
+    store, economy, context = env
+    appearance = AppearanceService(store, economy)
+    player = store.get(1)
+    player["snapshot"]["heroes"][0]["star"] = 10
+    store.save_snapshot(1, player["snapshot"], player["revision"])
+    store.db.execute("INSERT INTO inventory VALUES (1,1201003,999)")
+    progression = ProgressionService(store, economy, appearance)
+    result = invoke(progression, context, "HeroOpt", {"id": 1003, "opt": 2,
+        "upstarConsumeItemId": 1201003})
+    assert result.values["code"] == 10
+    assert store.get(1)["snapshot"]["heroes"][0]["star"] == 11
+    update = next(push for push in result.before_response if push.message_name == "L2C_HeroSkinUpdate")
+    assert 1220302 in HERO_SKIN.decode(update.values["skin"])["skinIds"]

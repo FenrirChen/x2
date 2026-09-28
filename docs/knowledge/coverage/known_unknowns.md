@@ -10,6 +10,8 @@ Evidence-IDs: see evidence/manifests/evidence_manifest.json
 
 # Known Unknowns（截至 2026-09-27 仍未解）
 
+新号教程另见 `../tutorial_onboarding.md`：实机日志已证剧情后教程战斗 `FightData(126)` 被拒绝（result=13），新号缺英雄是直接服务端阻断；99% 的视觉进度判断、命名与首战顺序，以及后续教程奖励仍待 native 方法体和实机时序验证；部署门槛未解除。
+
 账号领域另见 `../account_registration.md`：官方初始赠送和游客后端失传；
 Revival 注册兼容层已通过隔离库与 MuMu 实机注册/重登；官方游客身份规则
 仍未知，Revival 暂不支持其空密码短随机账号路径。注册门槛已解除，公网部署仍暂停。
