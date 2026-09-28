@@ -5,7 +5,7 @@ import time
 from typing import Any
 
 from x2server.bootstrap.local_identity import LocalIdentityService
-from x2server.messages.core import C2L_LOGIN, BASE_INFO, MOBILITY, RECONNECT, STRING_PAIR
+from x2server.messages.core import C2L_LOGIN, BASE_INFO, MOBILITY, RECONNECT, STRING_PAIR, INT_PAIR
 from x2server.messages.favor import FAVOR, FAVOR_MAP_ENTRY
 from .favor import catalog, favor_state
 from x2server.network.dispatcher import DispatchContext, OutboundMessage
@@ -122,6 +122,8 @@ class LoginService:
             "Birthday": snapshot.get("birthday", 0),
             "MainChapter": snapshot.get("main_chapter", 0),
             "MainSection": snapshot.get("main_section", 0),
+            "QuestIDs": [INT_PAIR.encode({"Key": int(k), "Value": int(v)})
+                for k, v in sorted(snapshot.get("guide_groups", {}).items(), key=lambda p: int(p[0]))],
             **currency_balances,
             "IconInfo": ICON_INFO.encode({"IconType": 1,
                 "IconID": snapshot.get("head_icon", 1000001)})})
@@ -148,15 +150,19 @@ class LoginService:
         except KeyError:
             return OutboundMessage("L2C_ReConnect", {"code": 0})
         context.session.player_id = player["id"]
+        now = self.clock.now()
+        mail_created = self.identity.ensure_daily_login_mail(player["id"], now) if self.mail else False
         daily_granted = self.gift_packages.settle_daily(player["id"]) if self.gift_packages else False
         # Same-process reconnect keeps the authenticated transport session supplied
         # by the client; a fresh login is required after identity-service restart.
         if not context.session.session_id:
             context.session.session_id = secrets.token_urlsafe(24)
         LOGGER.info("authenticated reconnect player=%s", player["id"])
+        pushes = self.economy.pushes(player["id"]) if daily_granted and self.economy else ()
+        if mail_created:
+            pushes += (self.mail.list_message(player["id"]),)
         return OutboundMessage("L2C_ReConnect", {"code": 10, "id": player["id"],
-            "serverTime": self.clock.now()},
-            pushes=self.economy.pushes(player["id"]) if daily_granted and self.economy else ())
+            "serverTime": now}, pushes=pushes)
 
     async def server_config(self, context: DispatchContext, packet: DecodedPacket) -> OutboundMessage:
         if context.session.player_id is None:

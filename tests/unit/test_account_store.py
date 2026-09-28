@@ -81,7 +81,7 @@ def test_registration_allocates_fresh_ids(tmp_path):
     accounts.create("nova", "pw", 3)
     assert accounts.get_by_name("revival")["player_id"] == 1
     assert accounts.get_by_name("nova")["player_id"] == 2
-    assert store.get(2)["snapshot"]["nickname"] == "Revival"
+    assert store.get(2)["snapshot"]["nickname"] == ""
     assert store.get(1)["login_count"] == 0
 
 

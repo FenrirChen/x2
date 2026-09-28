@@ -27,7 +27,7 @@ class BootstrapService:
         self.config = config
         self.path = path
 
-    def respond(self, method: str, target: str, body: bytes = b"") -> HTTPResponse:
+    def respond(self, method: str, target: str, body: bytes = b"", *, authorization: str = "") -> HTTPResponse:
         """Return explicit 200/404/405 responses without exposing tracebacks."""
         path = urlsplit(target).path
         if path != self.path:
@@ -57,7 +57,7 @@ class RecoveredBootstrapService:
         self.contract = contract
         self.control_info = control_info or RecoveredControlInfo()
 
-    def respond(self, method: str, target: str, body: bytes = b"") -> HTTPResponse:
+    def respond(self, method: str, target: str, body: bytes = b"", *, authorization: str = "") -> HTTPResponse:
         """Route only the confirmed POST endpoints."""
         path = urlsplit(target).path
         if path not in (

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import json
 import logging
 import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -62,7 +63,28 @@ def _handler_for(
             if error := self._consume_request_body():
                 self._send(error)
                 return
-            self._send(service.respond("POST", self.path, self.request_body))
+            if self.path.split("?", 1)[0].startswith("/MailService."):
+                try:
+                    payload = json.loads(self.request_body)
+                    fields = sorted(payload) if isinstance(payload, dict) else [type(payload).__name__]
+                    mail_page = payload.get("page") if isinstance(payload, dict) else None
+                    mail_state = payload.get("state") if isinstance(payload, dict) else None
+                except (ValueError, UnicodeDecodeError):
+                    fields = ["non_json"]
+                    mail_page = mail_state = None
+                authorization = self.headers.get("Authorization", "")
+                LOGGER.info("mail HTTP request shape route=%s fields=%s page=%s state=%s headers=%s auth_scheme=%s auth_size=%s",
+                            self.path.split("?", 1)[0], fields, mail_page, mail_state,
+                            sorted(key.lower() for key in self.headers if key.lower() not in
+                                   {"host", "user-agent", "accept", "connection", "content-length"}),
+                            authorization.split(" ", 1)[0] if authorization else "absent",
+                            len(authorization))
+            response = service.respond("POST", self.path, self.request_body,
+                                       authorization=self.headers.get("Authorization", ""))
+            if self.path.split("?", 1)[0].startswith("/MailService."):
+                LOGGER.info("mail HTTP response route=%s status=%s",
+                            self.path.split("?", 1)[0], response.status)
+            self._send(response)
 
         def do_GET(self) -> None:  # noqa: N802 - BaseHTTPRequestHandler API
             self._send(service.respond("GET", self.path))

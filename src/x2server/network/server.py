@@ -42,6 +42,14 @@ class X2TCPServer:
     def active_connection_count(self) -> int:
         return len(self._connections)
 
+    def authenticated_player_ids(self) -> set[int]:
+        """Snapshot of players with a live authenticated game connection."""
+        try:
+            return {connection.session.player_id for connection in tuple(self._connections.values())
+                    if not connection.closed and connection.session.player_id is not None}
+        except RuntimeError:
+            return set()
+
     async def push_to_player(self, player_id: int, message: OutboundMessage) -> int:
         """Deliver a server event to the authenticated player's live connections."""
         connections = [connection for connection in self._connections.values()

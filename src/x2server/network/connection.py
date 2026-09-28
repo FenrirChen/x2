@@ -64,6 +64,7 @@ class X2Connection:
             "message_id": message_id,
             "message_name": message_name,
             "request_id": request_id,
+            "player_id": self.session.player_id,
         }
 
     async def run(self) -> None:
@@ -88,9 +89,6 @@ class X2Connection:
                     if os.getenv("X2_BATTLE_PROBE") == "1" and packet.message_id in (126, 150, 264, 316, 323, 399, 887):
                         LOGGER.info("battle probe body=%s", packet.body.hex(),
                                     extra=self._extra(packet.message_id, "battle-probe", packet.header.request_id))
-                    if packet.message_id == 143:
-                        LOGGER.info("artifact request body=%s", packet.body.hex(),
-                                    extra=self._extra(packet.message_id, "C2L_Artifact", packet.header.request_id))
                     self.session.record_request(
                         packet.header.request_id, packet.header.session_id
                     )

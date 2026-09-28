@@ -61,8 +61,8 @@ class PlayerStore:
         self, player_id: int, snapshot: dict[str, Any], expected_revision: int
     ) -> int:
         """Optimistic update; conflicting writes roll back instead of losing progress."""
-        if not isinstance(snapshot.get("nickname"), str) or not snapshot["nickname"]:
-            raise ValueError("nickname must be nonempty")
+        if not isinstance(snapshot.get("nickname"), str):
+            raise ValueError("nickname must be a string")
         if type(snapshot.get("level")) is not int or snapshot["level"] < 1:
             raise ValueError("level must be positive")
         for name in ("gold", "crystal", "exp", "show", "main_chapter", "main_section"):

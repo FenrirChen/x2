@@ -146,6 +146,7 @@ BASE_INFO = ProtoSchema("BaseInfoProto", (
     ProtoField(66, "FragmentMoney", FieldKind.INT32),
     ProtoField(32, "Birthday", FieldKind.INT32),
     ProtoField(14, "HeroExp", FieldKind.INT32),
+    ProtoField(15, "QuestIDs", FieldKind.MESSAGE, repeated=True),
     ProtoField(20, "DailyActivity", FieldKind.INT32),
     ProtoField(21, "WeekActivity", FieldKind.INT32),
     ProtoField(33, "MainChapter", FieldKind.INT32),

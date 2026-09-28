@@ -1,6 +1,7 @@
 """Owned appearance catalog and persistent equipped state."""
 from importlib.resources import files
 import json
+import logging
 
 from x2server.messages.appearance import APPEARANCE_SCHEMAS as SCHEMAS, HERO_SKIN, HERO_DUBBING_DATA, SEASON_ICON_DATA
 from x2server.network.dispatcher import OutboundMessage
@@ -37,9 +38,13 @@ class AppearanceService:
             "SELECT item_id FROM inventory WHERE player_id=? AND quantity>0", (player_id,))}
 
     def _owned_skins(self, player_id):
-        heroes, items = self._owned_heroes(player_id), self._inventory(player_id)
+        heroes = {h["id"]: h for h in self.store.get(player_id)["snapshot"].get("heroes", [])
+                  if h.get("state") == 2}
+        items = self._inventory(player_id)
+        # PlayerStage 11 is the first five-star stage in the client table.
         return {i for i, r in self.skins.items() if r["hero_id"] in heroes and
-                (r["acquire"] == "E_Default" or i in items)}
+                (r["acquire"] == "E_Default" or i in items or
+                 r["acquire"] == "E_Stage" and heroes[r["hero_id"]].get("star", 0) >= 11)}
 
     def skin_values(self, player_id):
         owned = self._owned_skins(player_id)
@@ -77,18 +82,52 @@ class AppearanceService:
         req = SCHEMAS[name].decode(packet.body) if name in SCHEMAS else {}
         if name == "C2L_Account":
             opt, values = req.get("opt", -1), req.get("values", [])
-            if opt != 2 or len(values) != 1:
+            if opt == 3:
+                if len(values) != 2 or values[0] <= 0 or values[1] < 0:
+                    return OutboundMessage("L2C_Account", {"result": 13, "opt": opt})
+                with self.economy.transaction():
+                    snapshot = self.store.get(player_id)["snapshot"]
+                    groups = snapshot.setdefault("guide_groups", {})
+                    old = groups.get(str(values[0]))
+                    if old is not None and old != values[1]:
+                        return OutboundMessage("L2C_Account", {"result": 13, "opt": opt})
+                    groups[str(values[0])] = values[1]
+                    self.economy.save_snapshot(player_id, snapshot)
+                logging.getLogger("x2.tutorial").info("guide group player=%s group=%s next=%s",
+                    player_id, values[0], values[1])
+                return OutboundMessage("L2C_Account", {"result": 10, "opt": opt},
+                    before_response=(self.economy.pushes(player_id)[0],))
+            if opt == 7:
+                names = req.get("strvals", [])
+                if len(names) != 1 or not names[0].strip() or len(names[0]) > 16 or any(
+                        not char.isprintable() for char in names[0]):
+                    return OutboundMessage("L2C_Account", {"result": 13, "opt": opt})
+                requested = names[0]
+                with self.economy.transaction():
+                    snapshot = self.store.get(player_id)["snapshot"]
+                    current = snapshot.get("nickname", "")
+                    if current and current != requested:
+                        return OutboundMessage("L2C_Account", {"result": 13, "opt": opt})
+                    if not current:
+                        snapshot["nickname"] = requested
+                        self.economy.save_snapshot(player_id, snapshot)
+                logging.getLogger("x2.tutorial").info("first name player=%s set=%s", player_id, not current)
+                return OutboundMessage("L2C_Account", {"result": 10, "opt": opt},
+                    before_response=(self.economy.pushes(player_id)[0],))
+            if opt not in (1, 2) or len(values) != 1:
                 return OutboundMessage("L2C_Account", {"result": 13, "opt": opt})
-            owned = {SEASON_ICON_DATA.decode(x)["id"] for x in
-                     self._icon_values(player_id)["headIconList"]}
+            owned = (self._owned_heroes(player_id) if opt == 1 else
+                {SEASON_ICON_DATA.decode(x)["id"] for x in self._icon_values(player_id)["headIconList"]})
             if values[0] not in owned:
                 return OutboundMessage("L2C_Account", {"result": 13, "opt": opt})
             with self.economy.transaction():
                 snapshot = self.store.get(player_id)["snapshot"]
-                snapshot["head_icon"] = values[0]
+                snapshot["show" if opt == 1 else "head_icon"] = values[0]
                 self.economy.save_snapshot(player_id, snapshot)
+            update = (self.economy.pushes(player_id)[0],)
             return OutboundMessage("L2C_Account", {"result": 10, "opt": opt},
-                                   pushes=(self.economy.pushes(player_id)[0],))
+                                   before_response=update if opt == 1 else (),
+                                   pushes=() if opt == 1 else update)
         if name == "C2L_HeroSkinAll":
             return OutboundMessage("L2C_HeroSkinAll", self.skin_values(player_id))
         if name == "C2L_SeasonIcon":

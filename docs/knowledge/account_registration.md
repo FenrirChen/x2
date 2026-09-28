@@ -47,10 +47,12 @@ token 在服务重启后失效，需要重新登录。注册限流留待公网�
 ## New player bootstrap
 
 `new_player_snapshot()` 在注册事务中生成独立的 1 级快照：0 货币、0 经验、
-无 Hero、满额 60 体力。它是 REVIVAL_COMPATIBILITY 最小初始状态，未从
+教程所需英雄 1003、空昵称、满额 60 体力，且带 `bootstrap_version=1`。
+它是 REVIVAL_COMPATIBILITY 教程初始状态，未从
 `runtime/phase14/player.sqlite3` 复制。背包、装备、任务等扩展状态由已有
 领域服务在首次登录时读取空态或幂等生成；不能将空态解释为官方开服奖励。
-重复登录不再运行注册 bootstrap，也不会重置保存的快照。
+重复登录不再运行注册 bootstrap，也不会重置保存的快照。历史早期错误快照
+与显式开发跳教程路径见 `tutorial_onboarding.md`。
 
 ## Legacy compatibility
 

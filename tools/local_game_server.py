@@ -35,6 +35,7 @@ from x2server.player.appearance import AppearanceService
 from x2server.player.mail import MailService
 from x2server.player.terminal import TerminalService
 from x2server.player.college import CollegeStateRepository
+from x2server.player.tutorial import TutorialService
 
 
 async def run(database: Path, seconds: float) -> None:
@@ -49,7 +50,8 @@ async def run(database: Path, seconds: float) -> None:
     accounts = AccountStore(store)
     identity = LocalIdentityService(contract, account=os.environ.get("X2_LOCAL_ACCOUNT"),
         password=os.environ.get("X2_LOCAL_PASSWORD"), accounts=accounts, players=store,
-        chat_entry=f"{endpoints.public_host}:{endpoints.chat_port}")
+        chat_entry=f"{endpoints.public_host}:{endpoints.chat_port}",
+        allow_local_mail_without_token=endpoints.bind_host in ("127.0.0.1", "::1"))
     clock = ServerClock()
     college = CollegeStateRepository(store, clock)
     economy = EconomyService(store, clock=clock.now)
@@ -67,11 +69,12 @@ async def run(database: Path, seconds: float) -> None:
                          mail=mail, gift_packages=gift_packages, college=college)
     http = BootstrapHTTPServer(endpoints.bind_host, endpoints.http_port, identity)
     tcp = X2TCPServer(Settings(tcp_host=endpoints.bind_host, tcp_port=endpoints.game_port, read_timeout=120),
-        Dispatcher({**LobbyService(clock, college).handlers(), **BirthdayService(store).handlers(), **economy.handlers(), **shop.handlers(), **gift_packages.handlers(), **collection.handlers(), **favor.handlers(), **appearance.handlers(), **appearance_shop.handlers(), **mail.handlers(), **terminal.handlers(), **equipment.handlers(), **wish.handlers(), **ProgressionService(store, economy).handlers(), **BattleService(store, economy).handlers(), "C2L_HeroAll": HeroService(store).query_all,
+        Dispatcher({**LobbyService(clock, college).handlers(), **TutorialService(store).handlers(), **BirthdayService(store).handlers(), **economy.handlers(), **shop.handlers(), **gift_packages.handlers(), **collection.handlers(), **favor.handlers(), **appearance.handlers(), **appearance_shop.handlers(), **mail.handlers(), **terminal.handlers(), **equipment.handlers(), **wish.handlers(), **ProgressionService(store, economy, appearance).handlers(), **BattleService(store, economy).handlers(), "C2L_HeroAll": HeroService(store).query_all,
                     "C2L_Login": login.login, "C2L_ReConnect": login.reconnect,
                     "C2L_ServerTableConfig": login.server_config}))
     chat = X2TCPServer(Settings(tcp_host=endpoints.bind_host, tcp_port=endpoints.chat_port, read_timeout=120),
                        Dispatcher(SilentChatService().handlers()))
+    identity.active_mail_players = tcp.authenticated_player_ids
     mail_task = None
     try:
         await http.start()

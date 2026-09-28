@@ -75,6 +75,7 @@ class Dispatcher:
         extra = {
             "connection_id": context.connection_id,
             "peer": context.peer,
+            "player_id": context.session.player_id,
             "message_id": packet.message_id,
             "request_id": packet.header.request_id,
             "message_name": "unknown",
@@ -82,14 +83,25 @@ class Dispatcher:
         try:
             entry = self._registry.entry_for_id(packet.message_id)
         except UnknownMessageError:
-            LOGGER.warning("unknown message ID; no response", extra=extra)
+            LOGGER.warning("unknown message ID; no response body_bytes=%s decode=unavailable",
+                           len(packet.body), extra=extra)
             return DispatchOutcome(DispatchStatus.UNKNOWN, None)
 
         extra["message_name"] = entry.name
         handler = self._handlers.get(entry.name)
         if handler is None:
-            # In particular, C2L_Login is decoded only as envelope metadata in M2.
-            LOGGER.info("known message has no implemented handler; no response", extra=extra)
+            from x2server.messages.core import CORE_SCHEMAS
+            schema = CORE_SCHEMAS.get(entry.name)
+            if schema is None:
+                decoded = "schema_unavailable"
+            else:
+                try:
+                    schema.decode(packet.body)
+                    decoded = "ok"
+                except Exception:
+                    decoded = "invalid"
+            LOGGER.info("known message has no implemented handler; no response body_bytes=%s decode=%s",
+                        len(packet.body), decoded, extra=extra)
             return DispatchOutcome(DispatchStatus.UNIMPLEMENTED, entry.name)
         response = await handler(context, packet)
         return DispatchOutcome(DispatchStatus.HANDLED, entry.name, response)

@@ -70,7 +70,8 @@ def test_register_then_login_allocates_a_persistent_player(tmp_path):
     # Second login of the same account must restore the same player row.
     _, again = flow.game_session("nova", "pw1")
     assert again["playerID"] == player_id
-    assert flow.store.get(player_id)["snapshot"]["nickname"] == "Revival"
+    assert flow.store.get(player_id)["snapshot"]["nickname"] == ""
+    assert [h["id"] for h in flow.store.get(player_id)["snapshot"]["heroes"]] == [1003]
 
 
 def test_two_accounts_get_isolated_players(tmp_path):
@@ -202,3 +203,111 @@ def test_tcp_login_creates_daily_mail_once_after_registration(tmp_path):
         assert response.values["code"] == 10
         assert next(push for push in response.pushes if push.message_name == "L2C_MailData").values["total"] == 2
     assert flow.store.db.execute("SELECT count(*) FROM player_mail").fetchone()[0] == 2
+
+
+def test_reconnect_creates_and_pushes_daily_mail_once(tmp_path):
+    flow = AccountFlow(tmp_path)
+    assert flow.register("nova", "pw") == {"success": True}
+    _, login_ctx = flow.game_session("nova", "pw")
+    economy = EconomyService(flow.store)
+    mail = MailService(flow.store, economy)
+    service = LoginService(flow.identity, flow.store, economy=economy, mail=mail)
+    request = packet({"id": login_ctx["playerID"], "token": login_ctx["token"]},
+                     name="C2L_ReConnect")
+    context = DispatchContext("test", "local", SessionState("test"))
+    first = asyncio.run(service.reconnect(context, request))
+    assert first.values["code"] == 10
+    assert next(push for push in first.pushes if push.message_name == "L2C_MailData").values["total"] == 2
+    second = asyncio.run(service.reconnect(context, request))
+    assert second.values["code"] == 10
+    assert not any(push.message_name == "L2C_MailData" for push in second.pushes)
+    assert flow.store.db.execute("SELECT count(*) FROM player_mail").fetchone()[0] == 2
+
+
+def test_http_mail_page_uses_game_token_and_isolates_accounts(tmp_path):
+    flow = AccountFlow(tmp_path)
+    assert flow.register("nova", "pw") == {"success": True}
+    assert flow.register("orbit", "pw") == {"success": True}
+    _, first = flow.game_session("nova", "pw")
+    _, second = flow.game_session("orbit", "pw")
+    assert flow.accounts.ensure_daily_login_mail(first["playerID"], 1_800_000_000)
+    args = {"appid": flow.identity.contract.web_config.service_app_id,
+            "userid": str(first["playerID"]), "page": 1, "page_num": 20, "state": -1}
+    def query(token):
+        response = flow.identity.respond("POST", "/MailService.GetMailPage",
+            json.dumps(args).encode(), authorization="Bearer " + token)
+        return response.status, json.loads(response.body)
+    status, result = query(first["token"])
+    assert status == 200 and result["data"]["total"] == 2
+    assert len(result["data"]["mails"]) == 2
+    assert json.loads(result["data"]["mails"][0]["attachment"])["attachment"]
+    assert query(second["token"])[0] == 403
+    assert query("invalid")[0] == 401
+
+
+def test_real_client_bare_bearer_mail_requires_local_single_online_player(tmp_path):
+    flow = AccountFlow(tmp_path)
+    flow.register("nova", "pw")
+    flow.register("orbit", "pw")
+    _, first = flow.game_session("nova", "pw")
+    flow.game_session("orbit", "pw")
+    player_id = first["playerID"]
+    flow.identity.allow_local_mail_without_token = True
+    flow.identity.active_mail_players = lambda: {player_id}
+    args = {"appid": flow.identity.contract.web_config.service_app_id,
+            "userid": str(player_id), "page": 1, "page_num": 20, "state": -1}
+    def query(values):
+        return flow.identity.respond("POST", "/MailService.GetMailPage",
+            json.dumps(values).encode(), authorization="Bearer")
+    response = query(args)
+    assert response.status == 200
+    data = json.loads(response.body)
+    assert data["code"] == 0 and data["data"]["total"] == 1
+    assert len(data["data"]["mails"]) == 1
+    assert query(dict(args, userid="2")).status == 401
+    flow.identity.active_mail_players = lambda: {1, 2}
+    assert query(args).status == 401
+    flow.identity.allow_local_mail_without_token = False
+    flow.identity.active_mail_players = lambda: {player_id}
+    assert query(args).status == 401
+
+
+def test_bare_bearer_mail_over_http_after_authenticated_tcp_login(tmp_path):
+    flow = AccountFlow(tmp_path)
+    flow.register("fresh", "pw")
+    _, login_ctx = flow.game_session("fresh", "pw")
+    player_id = login_ctx["playerID"]
+
+    async def scenario():
+        service = LoginService(flow.identity, flow.store)
+        tcp = X2TCPServer(Settings(tcp_port=0), Dispatcher({"C2L_Login": service.login}))
+        flow.identity.allow_local_mail_without_token = True
+        flow.identity.active_mail_players = tcp.authenticated_player_ids
+        http = BootstrapHTTPServer("127.0.0.1", 0, flow.identity)
+        await tcp.start()
+        await http.start()
+        try:
+            reader, writer = await asyncio.open_connection(tcp.bound_host, tcp.bound_port)
+            from x2server.protocol.codec import ProtocolCodec
+            from x2server.protocol.headers import RequestHeader
+            writer.write(ProtocolCodec().encode("C2L_Login", {"id": player_id,
+                "token": login_ctx["token"]}, RequestHeader(request_id=1)))
+            await writer.drain()
+            assert await asyncio.wait_for(reader.read(4096), 2)
+            args = {"appid": flow.identity.contract.web_config.service_app_id,
+                    "userid": str(player_id), "page": 1, "page_num": 20, "state": -1}
+            def request():
+                req = Request(f"http://127.0.0.1:{http.bound_port}/MailService.GetMailPage",
+                    json.dumps(args).encode(), {"Authorization": "Bearer", "Content-Type": "application/json"},
+                    method="POST")
+                with urlopen(req, timeout=3) as response:
+                    return response.status, json.load(response)
+            status, body = await asyncio.to_thread(request)
+            assert status == 200 and body["data"]["total"] == 1
+            assert len(body["data"]["mails"]) == 1
+            writer.close()
+            await writer.wait_closed()
+        finally:
+            await http.stop()
+            await tcp.stop()
+    asyncio.run(scenario())
