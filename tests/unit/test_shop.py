@@ -55,7 +55,7 @@ def test_recovered_shop_809_lists_and_purchases_persist(env):
         reopened.close()
 
 
-def test_shop_currency_balances_follow_inventory_and_purchase(env):
+def test_shop_currency_balances_follow_inventory(env):
     store, economy, ctx = env
     service = ShopService(store, economy)
     currencies = {1237904: ("JewelChip", 4), 1237905: ("SeniorJewelChip", 5),
@@ -68,24 +68,14 @@ def test_shop_currency_balances_follow_inventory_and_purchase(env):
     base = BASE_INFO.decode(LoginService.snapshot_push(store.get(1), store).values["BaseInfo"])
     assert {field: base[field] for field, _ in currencies.values()} == {
         field: balance for field, balance in currencies.values()}
-    ticket_offer = next(row for row in service.compat_offers.values()
-                        if row["currencyItemId"] == 1237915 and row["price"] <= 200)
-    shop_id = next(shop for (shop, goods), row in service.compat_offers.items()
-                   if row is ticket_offer)
-    purchase = asyncio.run(service.handle(ctx, packet({"shopId": shop_id,
-        "goodsId": ticket_offer["goodsId"], "buyNum": 1}, request_id=912,
-        name="C2L_BuyGoods")))
-    assert purchase.values["code"] == 10
-    updated = next(p for p in purchase.pushes if p.message_name == "PlayerDataProto")
-    assert BASE_INFO.decode(updated.values["BaseInfo"])["WishCrystal"] == 200 - ticket_offer["price"]
+    assert service.compat_offers == {}
 
 
 def test_unresolved_shop_goods_and_invalid_purchase_never_charge(env):
     store, economy, ctx = env
     service = ShopService(store, economy)
     before = store.get(1)
-    for name, values in (("C2L_ShopGoods", {"shopId": 804}),
-                         ("C2L_RefreshShop", {"shopId": 809}),
+    for name, values in (("C2L_RefreshShop", {"shopId": 809}),
                          ("C2L_BuyGoods", {"shopId": 809, "goodsId": 1933001, "buyNum": 1}),
                          ("C2L_BuyGoods", {"shopId": 809, "goodsId": 1900101, "buyNum": 1}),
                          ("C2L_BuyGoods", {"shopId": 809, "goodsId": 1933001, "buyNum": -1})):
@@ -94,42 +84,20 @@ def test_unresolved_shop_goods_and_invalid_purchase_never_charge(env):
     assert store.db.execute("SELECT COUNT(*) FROM shop_receipts").fetchone()[0] == 0
 
 
-def test_compat_shop_query_limit_payment_receipt_and_relog(env):
+def test_retired_compat_shop_has_no_listing_info_or_purchase(env):
     store, economy, ctx = env
     service = ShopService(store, economy)
     listing = asyncio.run(service.handle(ctx, packet({"shopId": 801}, name="C2L_ShopGoods")))
-    assert listing.values["code"] == 10
-    goods = [GOODS.decode(raw) for raw in listing.values["goods"]]
-    limited = next(row for row in goods if row["goodsId"] == 1900101)
-    assert limited["canBuyTimes"] == 1 and limited["limited"] == 3
-    assert all(row["goodsId"] != 1900313 for row in goods)  # unsupported reward destination
+    assert listing.values["code"] == 10 and listing.values["goods"] == []
     assert asyncio.run(service.handle(ctx, packet({"goodsId": 1900101},
-        name="C2L_QueryGoodsInfo"))).values["shopId"] == 801
+        name="C2L_QueryGoodsInfo"))).values["code"] == 13
     request = packet({"shopId": 801, "goodsId": 1900101, "buyNum": 1},
                      request_id=77, name="C2L_BuyGoods")
     p = store.get(1)
-    store.save_snapshot(1, dict(p["snapshot"], crystal=30000), p["revision"])
-    # Crystals cannot pay for a gold-priced offer.
-    assert asyncio.run(service.handle(ctx, request)).values["code"] == 13
-    p = store.get(1)
     store.save_snapshot(1, dict(p["snapshot"], gold=30000), p["revision"])
-    first = asyncio.run(service.handle(ctx, request))
-    assert first.values["code"] == 10
-    assert first.values["hasBuyTimes"] == 1
-    assert rewards(first.values["rewardData"]) == {1201003: 3}
-    assert store.get(1)["snapshot"]["gold"] == 7500
-    assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1201003").fetchone()[0] == 3
-    assert asyncio.run(service.handle(ctx, request)).values == first.values
-    assert asyncio.run(service.handle(ctx, packet({"shopId": 801, "goodsId": 1900101,
-        "buyNum": 1}, request_id=78, name="C2L_BuyGoods"))).values["code"] == 13
-    db_path = Path(store.db.execute("PRAGMA database_list").fetchone()[2])
-    reopened = PlayerStore(db_path)
-    try:
-        reread = ShopService(reopened, EconomyService(reopened))
-        assert reread._compat_count(1, 801, reread.compat_offers[(801, 1900101)]) == 1
-        assert reopened.get(1)["snapshot"]["gold"] == 7500
-    finally:
-        reopened.close()
+    assert asyncio.run(service.handle(ctx, request)).values["code"] == 13
+    assert store.get(1)["snapshot"]["gold"] == 30000
+    assert store.db.execute("SELECT COUNT(*) FROM shop_receipts").fetchone()[0] == 0
 
 
 def test_shop_entrance_optional_queries_answer_without_mutation(env):

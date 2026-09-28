@@ -46,7 +46,10 @@ class ShopService:
             self.offers[row["GoodsID"]] = (item_id, row["ItemPrice"], row.get("GoodsTag", {}).get("value", 0))
         if len(self.offers) != 15:
             raise ValueError("shop 809 static goods evidence changed")
-        compat = json.loads(files("x2server").joinpath("data/shop_compat_catalog.json").read_text(encoding="utf-8"))
+        # The third-party random/friendship catalog is retired by operator decision.
+        # Keep static shop 809 and GiftPackageService separate and available.
+        compat = {"shops": {}}
+        self.retired_shop_ids = set(range(801, 812)) - {self.SHOP_ID}
         self.compat_offers = {}
         self.compat_disabled = []
         for shop_id, rows in compat["shops"].items():
@@ -130,6 +133,9 @@ class ShopService:
         if name == "C2L_ShopGoods":
             shop_id = request.get("shopId", 0)
             LOGGER.info("shop listing requested shop_id=%s player_id=%s", shop_id, player_id)
+            if shop_id in self.retired_shop_ids:
+                return OutboundMessage(response_name, {"code": 10, "shopId": shop_id,
+                    "NextRefreshTime": 0, "RefreshTimes": 0, "RefreshPrice": 0, "goods": []})
             if shop_id != self.SHOP_ID and not any(k[0] == shop_id for k in self.compat_offers):
                 return OutboundMessage(response_name, {"code": 13, "shopId": shop_id})
             goods = ([GOODS.encode(self._goods(player_id, goods_id)) for goods_id in sorted(self.offers)]
