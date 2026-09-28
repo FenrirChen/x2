@@ -58,5 +58,9 @@ token 在服务重启后失效，需要重新登录。注册限流留待公网�
 ## Remaining unknowns and deployment
 
 原服账号规则、初始赠送和游客后端规则仍未知。自动化测试验证了独立数据库的
-注册、首登、重登、并发及 HTTP/TCP 报文；真实客户端 UI 尚需实测。
-`PUBLIC_DEPLOYMENT_BLOCKER: BLOCKED`，本轮不改 APK 端点或公网配置。
+注册、首登、重登、并发及 HTTP/TCP 报文。
+2026-09-28 的 MuMu 实机新号注册、首登和服务重启后重登均通过；详见
+`../../analysis/account_registration/real_client_validation.md`。注册闭环的五项门槛
+（注册、登录、新玩家、重登、旧玩家）均已通过，
+`PUBLIC_DEPLOYMENT_BLOCKER: CLEARED`。这只表示账号注册门槛已解除；
+本轮仍按用户要求暂停 APK 端点修改和公网部署。游客路径及限流留待公网加固。

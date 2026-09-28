@@ -11,7 +11,8 @@ Evidence-IDs: see evidence/manifests/evidence_manifest.json
 # Known Unknowns（截至 2026-09-27 仍未解）
 
 账号领域另见 `../account_registration.md`：官方初始赠送和游客后端失传；
-Revival 注册兼容层已有隔离库测试，真实客户端注册/重登待验证，公网部署仍阻塞。
+Revival 注册兼容层已通过隔离库与 MuMu 实机注册/重登；官方游客身份规则
+仍未知，Revival 暂不支持其空密码短随机账号路径。注册门槛已解除，公网部署仍暂停。
 
 | # | Domain | Unknown | Why unknown | Evidence searched | 当前处理 | 阻塞 | 下一步 |
 |---|---|---|---|---|---|---|---|
