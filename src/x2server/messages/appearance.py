@@ -10,6 +10,7 @@ HERO_SKIN = S("HeroSkin", (F(1, "heroId", K.INT32), F(2, "skinIds", K.INT32, rep
 SEASON_ICON_DATA = S("SeasonIconData", (F(1, "id", K.INT32), F(2, "rankId", K.INT32)))
 HERO_DUBBING_DATA = S("HeroDubbingData", (F(1, "heroId", K.INT32),
     F(2, "dubbingIds", K.INT32, repeated=True)))
+PICTURE_ID_ENTRY = S("PictureIDEntry", (F(1, "Key", K.INT32), F(2, "Value", K.INT32)))
 ICON_INFO = S("IconInfoProto", (F(1, "IconType", K.INT32), F(2, "IconID", K.INT32),
     F(3, "OrnamentID", K.INT32), F(4, "PictureID", K.MESSAGE, repeated=True)))
 COMMERCIAL_GOODS = S("CommercialGoods", (F(1, "goodsId", K.INT32), F(2, "startTime", K.INT32),
@@ -18,7 +19,7 @@ COMMERCIAL_GOODS = S("CommercialGoods", (F(1, "goodsId", K.INT32), F(2, "startTi
     F(9, "goodsType", K.ENUM), F(10, "preCount", K.INT32), F(11, "rechargeID", K.INT32)))
 
 APPEARANCE_SCHEMAS = {s.name: s for s in (
-    HERO_SKIN, SEASON_ICON_DATA, HERO_DUBBING_DATA, ICON_INFO,
+    HERO_SKIN, SEASON_ICON_DATA, HERO_DUBBING_DATA, PICTURE_ID_ENTRY, ICON_INFO,
     S("C2L_HeroSkinAll", ()),
     S("L2C_HeroSkinAll", (F(1, "skinList", K.MESSAGE, repeated=True),)),
     S("L2C_HeroSkinUpdate", (F(1, "skin", K.MESSAGE),)),

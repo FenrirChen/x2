@@ -62,9 +62,9 @@ class LoginService:
         for name in ("itemAll", "noticeAll", "cardPool", "heroSkinAll",
                      "rechargeNoticeAll", "equipAll", "taskDaily", "taskWeekly", "taskChallenge", "limitTaskChallenge"):
             result[name] = b""
-        from x2server.messages.lobby import GROWTH_BASE, growth_base_values
-        result["growthBase"] = GROWTH_BASE.encode(self.college.growth_base(player["id"])
-                                                  if self.college else growth_base_values())
+        from x2server.messages.lobby import GROWTH_BASE, growth_base_payload, growth_base_values
+        growth = self.college.growth_base(player["id"]) if self.college else growth_base_values()
+        result["growthBase"] = GROWTH_BASE.encode(growth_base_payload(growth))
         result["heroAll"] = encode_hero_all(player["snapshot"])
         if self.equipment:
             from x2server.messages.lobby import LOBBY_SCHEMAS
@@ -86,6 +86,8 @@ class LoginService:
             result["itemAll"] = ECONOMY_SCHEMAS["L2C_ItemAll"].encode(self.economy.inventory_values(player["id"]))
             for name, kind in (("taskDaily", 1), ("taskWeekly", 2)):
                 result[name] = LOBBY_SCHEMAS["L2C_GameTask"].encode(self.economy.task_values(player["id"], kind))
+            result["taskChallenge"] = LOBBY_SCHEMAS["L2C_GameTask"].encode(
+                self.economy.challenge_values(player["id"]))
         LOGGER.info("authenticated login response prepared player=%s login_count=%s",
                     player["id"], player["login_count"])
         push = self.snapshot_push(player, self.store if self.economy else None)
@@ -103,7 +105,7 @@ class LoginService:
         owned_ids = [hero["id"] for hero in snapshot.get("heroes", []) if hero.get("state") == 2]
         selected = snapshot.get("show")
         show = selected if selected in owned_ids else owned_ids[0] if owned_ids else 0
-        from x2server.messages.appearance import ICON_INFO
+        from x2server.player.appearance import head_icon_info
         currency_balances = {name: 0 for name in SHOP_CURRENCY_FIELDS.values()}
         if store is not None:
             for item_id, quantity in store.db.execute(
@@ -125,8 +127,9 @@ class LoginService:
             "QuestIDs": [INT_PAIR.encode({"Key": int(k), "Value": int(v)})
                 for k, v in sorted(snapshot.get("guide_groups", {}).items(), key=lambda p: int(p[0]))],
             **currency_balances,
-            "IconInfo": ICON_INFO.encode({"IconType": 1,
-                "IconID": snapshot.get("head_icon", 1000001)})})
+            "IconInfo": head_icon_info(snapshot, {
+                int(hero["id"]): hero.get("favor", {})
+                for hero in snapshot.get("heroes", [])})})
         initial = {r["HeroID"]: r["InitialLevel"] for r in catalog()["favorabilityhero"]}
         values = {"BaseInfo": base, "favor": [FAVOR_MAP_ENTRY.encode({"Key": hero["id"],
             "Value": FAVOR.encode(favor_state(hero, initial.get(hero["id"], 1)))})

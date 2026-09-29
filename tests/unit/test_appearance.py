@@ -52,7 +52,7 @@ def test_avatar_inventory_and_voice_conditions(env):
         "id": 1270300}).values["code"] == 10
     assert service._icon_values(1)["putOnHeadIcon"] == 1270300
     assert invoke(service, context, "Account", {"opt": 2,
-        "values": [1270301]}).values["result"] == 13
+        "values": [1270301]}).values["result"] == 10
     assert invoke(service, context, "Account", {"opt": 2,
         "values": [1270300]}).values["result"] == 10
     voices = HERO_DUBBING_DATA.decode(service._voice_values(1)["heroDubbingDatas"][0])["dubbingIds"]

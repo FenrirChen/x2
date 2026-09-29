@@ -23,11 +23,19 @@ class TutorialService:
         step_id, state = request.get("stepId", 0), request.get("stepState", 0)
         if step_id <= 0 or state not in (0, 1, 2):
             return OutboundMessage("L2C_GuideStep", {"code": 13})
-        player = self.store.get(player_id)
-        snapshot = player["snapshot"]
-        if snapshot.get("tutorial_mode") != "skip":
-            steps = snapshot.setdefault("guide_steps", {})
-            steps[str(step_id)] = max(state, steps.get(str(step_id), 0))
-            self.store.save_snapshot(player_id, snapshot, player["revision"])
+        if self.store.get(player_id)["snapshot"].get("tutorial_mode") != "skip":
+            for _ in range(3):
+                player = self.store.get(player_id)
+                snapshot = player["snapshot"]
+                steps = snapshot.setdefault("guide_steps", {})
+                steps[str(step_id)] = max(state, steps.get(str(step_id), 0))
+                try:
+                    self.store.save_snapshot(player_id, snapshot, player["revision"])
+                    break
+                except ValueError as exc:
+                    if "revision conflict" not in str(exc):
+                        raise
+            else:
+                return OutboundMessage("L2C_GuideStep", {"code": 13})
         LOGGER.info("guide step player=%s step=%s state=%s", player_id, step_id, state)
         return OutboundMessage("L2C_GuideStep", {"code": 10})

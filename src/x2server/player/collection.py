@@ -26,7 +26,23 @@ class CollectionService:
 
     def handlers(self):
         return {"C2L_QueryCollectionAward": self.query,
-                "C2L_GetCollectionAward": self.claim}
+                "C2L_GetCollectionAward": self.claim,
+                "C2L_QueryIllustrationData": self.illustration}
+
+    def illustration_values(self, player_id):
+        from .progression import jewel_ids
+        allowed = jewel_ids()
+        return [row[0] for row in self.store.db.execute(
+            "SELECT item_id FROM inventory WHERE player_id=? AND item_id IN ({}) "
+            "ORDER BY item_id".format(",".join("?" for _ in allowed)),
+            (player_id, *sorted(allowed)))] if allowed else []
+
+    async def illustration(self, context, packet):
+        player_id = context.session.player_id
+        if player_id is None:
+            raise ProtocolError("illustration queried before login")
+        return OutboundMessage("L2C_QueryIllustrationData", {
+            "code": 10, "jewelBases": self.illustration_values(player_id)})
 
     def claimed(self, player_id):
         return [row[0] for row in self.store.db.execute(

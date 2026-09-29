@@ -86,7 +86,8 @@
           "weight": 1
         }
       ]
-    }
+    },
+    "one_power_of_light": 300
   },
   "22202": {
     "draw_count_id": 41,
@@ -395,7 +396,8 @@
           "weight": 116
         }
       ]
-    }
+    },
+    "one_power_of_light": 300
   },
   "22204": {
     "draw_count_id": 41,
@@ -743,7 +745,8 @@
           "weight": 1
         }
       ]
-    }
+    },
+    "one_power_of_light": 300
   },
   "22205": {
     "draw_count_id": 41,
@@ -1142,7 +1145,8 @@
           "weight": 117
         }
       ]
-    }
+    },
+    "one_power_of_light": 300
   },
   "22206": {
     "draw_count_id": 41,
@@ -1496,7 +1500,8 @@
           "weight": 87
         }
       ]
-    }
+    },
+    "one_power_of_light": 300
   },
   "22207": {
     "draw_count_id": 41,
@@ -1895,7 +1900,8 @@
           "weight": 113
         }
       ]
-    }
+    },
+    "one_power_of_light": 300
   },
   "22208": {
     "draw_count_id": 41,
@@ -2234,7 +2240,8 @@
           "weight": 163
         }
       ]
-    }
+    },
+    "one_power_of_light": 300
   },
   "22209": {
     "draw_count_id": 41,
@@ -2678,7 +2685,8 @@
           "weight": 79
         }
       ]
-    }
+    },
+    "one_power_of_light": 300
   },
   "22210": {
     "draw_count_id": 41,
@@ -3047,7 +3055,8 @@
           "weight": 134
         }
       ]
-    }
+    },
+    "one_power_of_light": 300
   },
   "22211": {
     "draw_count_id": 42,
@@ -3491,7 +3500,8 @@
           "weight": 31
         }
       ]
-    }
+    },
+    "one_power_of_light": 300
   },
   "22212": {
     "draw_count_id": 41,
@@ -3920,7 +3930,8 @@
           "weight": 62
         }
       ]
-    }
+    },
+    "one_power_of_light": 300
   },
   "22213": {
     "draw_count_id": 41,
@@ -4319,7 +4330,8 @@
           "weight": 12
         }
       ]
-    }
+    },
+    "one_power_of_light": 300
   },
   "22214": {
     "draw_count_id": 41,
@@ -4703,7 +4715,8 @@
           "weight": 154
         }
       ]
-    }
+    },
+    "one_power_of_light": 300
   },
   "22215": {
     "draw_count_id": 41,
@@ -5102,7 +5115,8 @@
           "weight": 109
         }
       ]
-    }
+    },
+    "one_power_of_light": 300
   },
   "22216": {
     "draw_count_id": 41,
@@ -5531,7 +5545,8 @@
           "weight": 139
         }
       ]
-    }
+    },
+    "one_power_of_light": 300
   },
   "22217": {
     "draw_count_id": 41,
@@ -5975,7 +5990,8 @@
           "weight": 79
         }
       ]
-    }
+    },
+    "one_power_of_light": 300
   },
   "22218": {
     "draw_count_id": 41,
@@ -6374,7 +6390,8 @@
           "weight": 122
         }
       ]
-    }
+    },
+    "one_power_of_light": 300
   },
   "22219": {
     "draw_count_id": 41,
@@ -6848,7 +6865,8 @@
           "weight": 1298
         }
       ]
-    }
+    },
+    "one_power_of_light": 300
   },
   "22220": {
     "draw_count_id": 41,
@@ -7227,7 +7245,8 @@
           "weight": 115
         }
       ]
-    }
+    },
+    "one_power_of_light": 300
   },
   "22221": {
     "draw_count_id": 41,
@@ -7396,7 +7415,8 @@
           "weight": 1025
         }
       ]
-    }
+    },
+    "one_power_of_light": 300
   },
   "22222": {
     "draw_count_id": 42,
@@ -7565,7 +7585,8 @@
           "weight": 570
         }
       ]
-    }
+    },
+    "one_power_of_light": 300
   },
   "22223": {
     "draw_count_id": 42,
@@ -7734,7 +7755,8 @@
           "weight": 560
         }
       ]
-    }
+    },
+    "one_power_of_light": 300
   },
   "22224": {
     "draw_count_id": 42,
@@ -7918,7 +7940,8 @@
           "weight": 112
         }
       ]
-    }
+    },
+    "one_power_of_light": 300
   },
   "22225": {
     "draw_count_id": 42,
@@ -8087,7 +8110,8 @@
           "weight": 109
         }
       ]
-    }
+    },
+    "one_power_of_light": 300
   },
   "22226": {
     "draw_count_id": 42,
@@ -8256,7 +8280,8 @@
           "weight": 109
         }
       ]
-    }
+    },
+    "one_power_of_light": 300
   },
   "22228": {
     "draw_count_id": 41,
@@ -8730,7 +8755,8 @@
           "weight": 91
         }
       ]
-    }
+    },
+    "one_power_of_light": 300
   },
   "22229": {
     "draw_count_id": 42,
@@ -8899,7 +8925,8 @@
           "weight": 109
         }
       ]
-    }
+    },
+    "one_power_of_light": 300
   },
   "22230": {
     "draw_count_id": 42,
@@ -9083,7 +9110,8 @@
           "weight": 112
         }
       ]
-    }
+    },
+    "one_power_of_light": 300
   },
   "22231": {
     "draw_count_id": 42,
@@ -9267,7 +9295,8 @@
           "weight": 112
         }
       ]
-    }
+    },
+    "one_power_of_light": 300
   },
   "22232": {
     "draw_count_id": 41,
@@ -9741,7 +9770,8 @@
           "weight": 1298
         }
       ]
-    }
+    },
+    "one_power_of_light": 300
   },
   "22234": {
     "draw_count_id": 42,
@@ -9925,7 +9955,8 @@
           "weight": 112
         }
       ]
-    }
+    },
+    "one_power_of_light": 300
   },
   "22235": {
     "draw_count_id": 41,
@@ -10429,7 +10460,8 @@
           "weight": 1422
         }
       ]
-    }
+    },
+    "one_power_of_light": 300
   },
   "22401": {
     "draw_count_id": 42,
@@ -10912,7 +10944,8 @@
           "weight": 1
         }
       ]
-    }
+    },
+    "one_power_of_light": 300
   },
   "22402": {
     "draw_count_id": 42,
@@ -11410,7 +11443,8 @@
           "weight": 1
         }
       ]
-    }
+    },
+    "one_power_of_light": 300
   },
   "22700": {
     "draw_count_id": 36,
@@ -11599,7 +11633,8 @@
           "weight": 8
         }
       ]
-    }
+    },
+    "one_power_of_light": 0
   },
   "22701": {
     "draw_count_id": 36,
@@ -11788,7 +11823,8 @@
           "weight": 11
         }
       ]
-    }
+    },
+    "one_power_of_light": 0
   },
   "22702": {
     "draw_count_id": 36,
@@ -12007,7 +12043,8 @@
           "weight": 62
         }
       ]
-    }
+    },
+    "one_power_of_light": 0
   },
   "22703": {
     "draw_count_id": 36,
@@ -12301,7 +12338,8 @@
           "weight": 108
         }
       ]
-    }
+    },
+    "one_power_of_light": 0
   },
   "22704": {
     "draw_count_id": 36,
@@ -12490,7 +12528,8 @@
           "weight": 10
         }
       ]
-    }
+    },
+    "one_power_of_light": 0
   },
   "22705": {
     "draw_count_id": 36,
@@ -12679,7 +12718,8 @@
           "weight": 10
         }
       ]
-    }
+    },
+    "one_power_of_light": 0
   },
   "22706": {
     "draw_count_id": 36,
@@ -12868,7 +12908,8 @@
           "weight": 12
         }
       ]
-    }
+    },
+    "one_power_of_light": 0
   },
   "22707": {
     "draw_count_id": 36,
@@ -13057,7 +13098,8 @@
           "weight": 12
         }
       ]
-    }
+    },
+    "one_power_of_light": 0
   },
   "22708": {
     "draw_count_id": 36,
@@ -13246,7 +13288,8 @@
           "weight": 14
         }
       ]
-    }
+    },
+    "one_power_of_light": 0
   },
   "22709": {
     "draw_count_id": 36,
@@ -13435,6 +13478,7 @@
           "weight": 12
         }
       ]
-    }
+    },
+    "one_power_of_light": 0
   }
 }

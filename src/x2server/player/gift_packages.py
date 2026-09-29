@@ -77,6 +77,11 @@ class GiftPackageService:
             return False
         return True
 
+    def _bought_count(self, player_id, package_id):
+        return self.store.db.execute(
+            "SELECT COUNT(*) FROM gift_package_claims WHERE player_id=? AND package_id=?",
+            (player_id, package_id)).fetchone()[0]
+
     def listing(self, player_id):
         values = []
         next_level = {}
@@ -105,12 +110,20 @@ class GiftPackageService:
                 values.append(GIFT_PACKAGE_DATA.encode({"id": package_id, "state": 0,
                     "PurchaseTime": 0, "unShelves": 0}))
                 continue
+            bought = self._bought_count(player_id, package_id)
+            limit = int(package.get("Times") or 0)
+            if limit and bought >= limit:
+                state = 2
+                values.append(GIFT_PACKAGE_DATA.encode({"id": package_id, "state": state,
+                    "PurchaseTime": bought, "unShelves": 0}))
+                continue
             claimed = self.store.db.execute("SELECT 1 FROM gift_package_claims WHERE player_id=? AND package_id=? AND period=?",
                 (player_id, package_id, self._period(package))).fetchone()
+            display_claimed = bought >= limit if limit else bool(claimed)
             state = (3 if package["GiftPackageType"]["value"] == 3
-                     and player_level < package["Param1"][0] else int(bool(claimed)))
+                     and player_level < package["Param1"][0] else int(display_claimed))
             values.append(GIFT_PACKAGE_DATA.encode({"id": package_id, "state": state,
-                "PurchaseTime": int(bool(claimed)), "unShelves": 0}))
+                "PurchaseTime": bought if limit else int(bool(claimed)), "unShelves": 0}))
         return values
 
     async def query(self, context, packet):
@@ -157,6 +170,10 @@ class GiftPackageService:
         reject = OutboundMessage(reply, {"code": 13})
         if package is None or (package["CurrencyType"] == 919) != recharge:
             return reject
+        limit = int(package.get("Times") or 0)
+        if not recharge and package_id not in self.UNLIMITED_IDS and limit:
+            if self._bought_count(player_id, package_id) >= limit:
+                return reject
         if package["GiftPackageType"]["value"] == 3:
             if self.store.get(player_id)["snapshot"]["level"] < package["Param1"][0]:
                 return reject
@@ -167,6 +184,8 @@ class GiftPackageService:
                             (player_id, other_id)).fetchone()):
                     return reject
         period = self._period(package)
+        if not recharge and limit > 1 and package["GiftPackageType"]["value"] != 2:
+            period = f"purchase:{self._bought_count(player_id, package_id)}"
         if recharge:
             if package_id == self.MONTHCARD_ID and self._monthcard_days_left(player_id):
                 return reject

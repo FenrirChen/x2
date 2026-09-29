@@ -37,7 +37,7 @@ def test_banner_uses_forty_draw_counter_after_low_rarity_hero(env, monkeypatch):
     store.db.execute("INSERT INTO wish_pity VALUES (1,'standard',3,7,0)")
     store.db.execute("UPDATE players SET created_at=? WHERE id=1", (WishService.ANCHOR,))
     before = [CARD_POOL.decode(raw) for raw in wish.values(1)["cardPoolList"]]
-    assert next(x for x in before if x["poolId"] == 22201)["securityNum"] == 3
+    assert next(x for x in before if x["poolId"] == 22201)["securityNum"] == 7
     assert next(x for x in before if x["poolId"] == 22202)["securityNum"] == 7
     monkeypatch.setattr(wish, "_pick", lambda pool, group="common": {"item_id": 1211003, "quantity": 1})
     result = asyncio.run(wish.draw(context, packet({"drawnId": 22202, "drawType": 0}, name="C2L_LuckDraw")))

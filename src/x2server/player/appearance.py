@@ -3,10 +3,51 @@ from importlib.resources import files
 import json
 import logging
 
-from x2server.messages.appearance import APPEARANCE_SCHEMAS as SCHEMAS, HERO_SKIN, HERO_DUBBING_DATA, SEASON_ICON_DATA
+from x2server.messages.appearance import (APPEARANCE_SCHEMAS as SCHEMAS, HERO_SKIN,
+    HERO_DUBBING_DATA, SEASON_ICON_DATA, ICON_INFO, PICTURE_ID_ENTRY)
 from x2server.network.dispatcher import OutboundMessage
 from x2server.protocol.errors import ProtocolError
 from x2server.protocol.registry import CORE_MESSAGE_REGISTRY
+
+DEFAULT_HEAD_ICON = 1000001
+HEAD_ICON_Q_FAVOR_LEVEL = 10
+_HEAD_ICON_CATALOG = None
+
+
+def head_icon_catalog():
+    global _HEAD_ICON_CATALOG
+    if _HEAD_ICON_CATALOG is None:
+        _HEAD_ICON_CATALOG = json.loads(files("x2server").joinpath("data/head_icons.json").read_text(encoding="utf-8"))
+    return _HEAD_ICON_CATALOG
+
+
+def granted_head_icons(snapshot, favors=None):
+    catalog = head_icon_catalog()
+    favors = favors or {}
+    q_icons, standard_icons = [], []
+    for hero in sorted(h["id"] for h in snapshot.get("heroes", []) if h.get("state") == 2):
+        entry = catalog.get("by_hero", {}).get(str(hero))
+        if not entry:
+            continue
+        favor = favors.get(hero, {})
+        level = int(favor.get("level", favor[0] if isinstance(favor, (tuple, list)) else 1))
+        if entry.get("q") and level >= HEAD_ICON_Q_FAVOR_LEVEL:
+            q_icons.append(int(entry["q"]))
+        if entry.get("standard"):
+            standard_icons.append(int(entry["standard"]))
+    ordered = []
+    for icon in [snapshot.get("head_icon", DEFAULT_HEAD_ICON), catalog.get("default", DEFAULT_HEAD_ICON), *q_icons, *standard_icons]:
+        icon = int(icon or 0)
+        if icon > 0 and icon not in ordered:
+            ordered.append(icon)
+    return ordered
+
+
+def head_icon_info(snapshot, favors=None):
+    icons = granted_head_icons(snapshot, favors)
+    return ICON_INFO.encode({"IconType": 1, "IconID": int(snapshot.get("head_icon", DEFAULT_HEAD_ICON) or DEFAULT_HEAD_ICON),
+        "OrnamentID": 0, "PictureID": [PICTURE_ID_ENTRY.encode({"Key": i, "Value": value})
+            for i, value in enumerate(icons)]})
 
 
 class AppearanceService:
@@ -117,6 +158,9 @@ class AppearanceService:
             if opt not in (1, 2) or len(values) != 1:
                 return OutboundMessage("L2C_Account", {"result": 13, "opt": opt})
             owned = (self._owned_heroes(player_id) if opt == 1 else
+                set(granted_head_icons(self.store.get(player_id)["snapshot"], {
+                    int(hero["id"]): hero.get("favor", {})
+                    for hero in self.store.get(player_id)["snapshot"].get("heroes", [])})) |
                 {SEASON_ICON_DATA.decode(x)["id"] for x in self._icon_values(player_id)["headIconList"]})
             if values[0] not in owned:
                 return OutboundMessage("L2C_Account", {"result": 13, "opt": opt})

@@ -29,6 +29,11 @@ class FavorService:
                           for r in data["sendgiftcontrol"]}
         self.files = {r["FilesID"]: r for r in data["favorabilityfiles"]}
         self.dairy = data["favorabilitydairy"]
+        with store.db:
+            store.db.execute("""CREATE TABLE IF NOT EXISTS favor_touch_log (
+                player_id INTEGER NOT NULL, hero_id INTEGER NOT NULL, day TEXT NOT NULL,
+                count INTEGER NOT NULL DEFAULT 0,
+                PRIMARY KEY(player_id, hero_id, day))""")
 
     def handlers(self):
         return {"C2L_" + name: self.handle for name in
@@ -138,6 +143,29 @@ class FavorService:
     def _add(self, player_id, req, hero):
         hero_id, item_id, num, opt = (req.get("heroId", 0), req.get("optionId", 0),
                                      req.get("num", 0), req.get("opt", -1))
+        if opt != 2:
+            # The client uses AddFavor for the daily hero tap animation. Some
+            # builds send heroId=0 and carry the target in optionId; when a
+            # concrete owned hero is already supplied it is authoritative.
+            target_id = hero_id if hero else item_id
+            target = self._owned(player_id, target_id)
+            if target is None:
+                return OutboundMessage("L2C_AddFavor", {"code": 13, "opt": opt,
+                    "optionId": item_id, "heroId": hero_id})
+            day = datetime.fromtimestamp(int(self.clock()), timezone(timedelta(hours=8))).strftime("%Y-%m-%d")
+            row = self.store.db.execute("SELECT count FROM favor_touch_log WHERE player_id=? AND hero_id=? AND day=?",
+                                        (player_id, target_id, day)).fetchone()
+            used = row[0] if row else 0
+            if used >= 3:
+                return OutboundMessage("L2C_AddFavor", {"code": 13, "opt": opt,
+                    "optionId": item_id, "heroId": target_id})
+            with self.economy.transaction():
+                self.store.db.execute("INSERT INTO favor_touch_log VALUES (?,?,?,1) "
+                                      "ON CONFLICT(player_id,hero_id,day) DO UPDATE SET count=count+1",
+                                      (player_id, target_id, day))
+                self.economy.record_event(player_id, f"touch:{target_id}:{day}:{used + 1}", 19, target_id)
+            return OutboundMessage("L2C_AddFavor", {"code": 10, "opt": opt,
+                "optionId": item_id, "heroId": target_id}, pushes=self.economy.pushes(player_id))
         before = favor_state(hero, self.heroes[hero_id]["InitialLevel"]) if hero else {"level": 0, "exp": 0}
         values = {"code": 13, "opt": opt, "optionId": item_id, "heroId": hero_id,
             "exp": before["exp"], "level": before["level"],

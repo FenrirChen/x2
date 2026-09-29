@@ -122,9 +122,9 @@ class WishService:
             pools.append(CARD_POOL.encode({"poolId": pool_id, "startTime": start + display_offset,
                 "endTime": end + display_offset, "jackpotRate": 10000,
                 "oneDrawCount": singles, "tenDrawCount": tens,
-                "securityNum": self._banner_counter(pool_id, since_hero, since_top),
+                "securityNum": since_top,
                 "totalDrawCount": total, "limitValue": since_featured,
-                "failCount": self._fail_counter(pool_id, since_hero, since_top),
+                "failCount": since_top,
                 "discountDrawCount": 0, "itemIdSecurity": 0}))
         selected = self.POOL_ID if self.POOL_ID in active and self.state(player_id)[0] < 10 else next((i for i in active if i != self.POOL_ID), next(iter(active), 0))
         return {"code": 10, "cardPoolList": pools,
@@ -185,15 +185,32 @@ class WishService:
             snapshot = self.store.get(player_id)["snapshot"]
             config = self.catalog[str(pool_id)]
             ticket_id = config["ticket_item_id"]
-            ticket_cost = count * config["one_ticket"]
-            ticket = self.store.db.execute("SELECT quantity FROM inventory WHERE player_id=? AND item_id=?", (player_id,ticket_id)).fetchone()
-            available = ticket_cost if ticket and ticket[0] >= ticket_cost else 0
-            crystal_cost = 0 if available else count * config["one_crystal"]
-            if snapshot.get("crystal", 0) < crystal_cost:
+            power_light_id = 1237913
+            crystal_id = 1237902
+            tiers = ((ticket_id, count * config["one_ticket"]),
+                     (power_light_id, count * (0 if config["type"] == "E_Jewel" else 300)),
+                     (crystal_id, count * config["one_crystal"]))
+            paid = None
+            for item_id, cost in tiers:
+                if not cost:
+                    continue
+                if item_id == crystal_id:
+                    if snapshot.get("crystal", 0) >= cost:
+                        snapshot["crystal"] -= cost
+                        paid = (item_id, cost)
+                else:
+                    held = self.store.db.execute(
+                        "SELECT quantity FROM inventory WHERE player_id=? AND item_id=?",
+                        (player_id, item_id)).fetchone()
+                    if held and held[0] >= cost:
+                        self.store.db.execute(
+                            "UPDATE inventory SET quantity=quantity-? WHERE player_id=? AND item_id=?",
+                            (cost, player_id, item_id))
+                        paid = (item_id, cost)
+                if paid:
+                    break
+            if paid is None:
                 return OutboundMessage("L2C_LuckDraw", failure)
-            if available:
-                self.store.db.execute("UPDATE inventory SET quantity=quantity-? WHERE player_id=? AND item_id=?", (available, player_id,ticket_id))
-            snapshot["crystal"] -= crystal_cost
             total, singles, tens, since_hero, since_top, first_three_star, since_featured = self.state(player_id,pool_id)
             prizes, transforms = [], []
             prototypes = {r["hero_id"]: r for r in catalog()["hero_unlock"]}
@@ -261,7 +278,7 @@ class WishService:
             values = {"code": 10, "drawnId": pool_id, "rewardData": self._reward(prizes, transforms),
                 "luckyValue": 0, "oneDrawCount": singles, "tenDrawCount": tens,
                 "limitValue": since_featured,
-                "securityNum": self._banner_counter(pool_id, since_hero, since_top),
+                "securityNum": since_top,
                 "luckyValueCurrent": [0],
                 "allHeroCardFirstThreeStar": bool(first_three_star)}
             response_bytes = WISH_SCHEMAS["L2C_LuckDraw"].encode(values)

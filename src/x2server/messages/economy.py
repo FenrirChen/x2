@@ -24,7 +24,7 @@ TREASURE_BOX = ints("TreasureBoxData", "boxId pickStatus activityId")
 FINISH_REQUEST = ints("ReqFinishTaskData", "taskId type activityId")
 FINISH_RESULT = S("RspFinishTaskData", (F(1, "code", K.ENUM), F(2, "taskId", K.INT32),
     F(3, "rewardData", K.MESSAGE), F(4, "type", K.ENUM), F(5, "nextTask", K.MESSAGE), F(6, "activityId", K.INT32)))
-ECONOMY_IDS = (("ShopGoods", 221, 225), ("RefreshShop", 220, 224),
+ECONOMY_IDS = (("FetchMobilityPower", 134, 137), ("ShopGoods", 221, 225), ("RefreshShop", 220, 224),
     ("ItemOpt", 111, 112),
     ("BuyGoods", 219, 222), ("QueryGoodsInfo", 301, 302),
     ("QueryReCommendShop", 693, 694), ("PaymentStore", 451, 452),
@@ -35,6 +35,8 @@ ECONOMY_SCHEMAS = {s.name: s for s in (
         F(3, "count", K.INT32), F(4, "selectedItemIndexList", K.INT32, repeated=True))),
     S("L2C_ItemOpt", (F(1, "code", K.ENUM), F(2, "opt", K.ENUM),
         F(3, "rewardData", K.MESSAGE), F(4, "itemId", K.INT32))),
+    S("C2L_FetchMobilityPower", (F(1, "itemId", K.INT32),)),
+    S("L2C_FetchMobilityPower", (F(1, "result", K.ENUM), F(2, "rewardData", K.MESSAGE))),
     S("C2L_ItemAll", ()),
     S("L2C_ItemAll", (F(1, "items", K.MESSAGE, repeated=True),)),
     S("L2C_ItemUpdate", (F(1, "code", K.ENUM), F(2, "items", K.MESSAGE, repeated=True))),

@@ -1,0 +1,885 @@
+{
+ "_说明": "挑战任务表 —— 服务端用它回答 C2L_GameTask(type=3) 的 taskList/boxList, 以及 C2L_FinishGameTask(type=3) 的任务领取和 C2L_PickTreasureBox(type=3) 的宝箱领取。客户端只显示 TaskGroupID 等于「第一个未领取宝箱 boxId」的那一组任务, 所以 boxList 的 boxId 必须是 1..10(即 TaskGroupID), 不能是下标。",
+ "_来源": "table/ChallengeTask.bin(TaskConditionID/TaskGroupID/GiftGroup/JumpID/ShowLevel) + table/TaskCondition.bin(CompleteType/CompleteValue1/CompleteValue2/CompleteNum) + economy_catalog.json 的 task_control.ChallengeTaskGroupID / ChallengeTaskGiftGroup(10 个宝箱的礼包组)。track=event 由服务端真实事件推进; track=derived 是「达标 N」型, 进度 = 现存状态里达标的数量, 其 CompleteValue1/2 按阈值(>=)解释 —— 这一解释是从条件名与 E_AccountLevel 的既有做法推断的, 客户端没有可抄的判定函数。track=served 的条目见 work/make_challenge_catalog.py 文件头: 这些条件(炼金/学院/奇迹/武器/远征等)在本服没有事件源, 或条件 id 不在表里, 为使相位链可达而按「可领取」下发, 属兼容处理而非原始难度曲线。",
+ "provenance": {
+  "event_sources": {
+   "3": "E_CustomsPass",
+   "5": "E_SignInGame",
+   "7": "E_HeroLevelUp",
+   "12": "E_UpgradeEquipment",
+   "13": "E_UpgradeSkill",
+   "14": "E_UpgradeArtifact",
+   "24": "E_BuyGood",
+   "45": "E_Wish",
+   "49": "E_EquipEquip"
+  },
+  "derived_types": {
+   "44": "E_HeroReachStarAndLevel",
+   "47": "E_ItemStarAndID",
+   "73": "E_FavorabilityLevel"
+  },
+  "account_level_type": 43,
+  "login_day_type": 58
+ },
+ "boxes": {
+  "1": 760101,
+  "2": 760102,
+  "3": 760103,
+  "4": 760104,
+  "5": 760105,
+  "6": 760106,
+  "7": 760107,
+  "8": 760108,
+  "9": 760109,
+  "10": 760110
+ },
+ "tasks": {
+  "670001": {
+   "group": 1,
+   "condition": 600501,
+   "gift": 761101,
+   "jump": 0,
+   "showLevel": 1,
+   "completeType": 58,
+   "completeNum": 1,
+   "value1": [],
+   "value2": [],
+   "track": "loginday"
+  },
+  "670002": {
+   "group": 1,
+   "condition": 604211,
+   "gift": 761102,
+   "jump": 29005,
+   "showLevel": 1,
+   "completeType": 43,
+   "completeNum": 5,
+   "value1": [],
+   "value2": [],
+   "track": "account"
+  },
+  "670003": {
+   "group": 1,
+   "condition": 600211,
+   "gift": 761103,
+   "jump": 29005,
+   "showLevel": 1,
+   "completeType": 3,
+   "completeNum": 1,
+   "value1": [
+    2110803
+   ],
+   "value2": [],
+   "track": "event"
+  },
+  "670004": {
+   "group": 1,
+   "condition": 604501,
+   "gift": 761104,
+   "jump": 29017,
+   "showLevel": 1,
+   "completeType": 45,
+   "completeNum": 1,
+   "value1": [],
+   "value2": [],
+   "track": "event"
+  },
+  "670005": {
+   "group": 1,
+   "condition": 604901,
+   "gift": 761105,
+   "jump": 29002,
+   "showLevel": 1,
+   "completeType": 49,
+   "completeNum": 1,
+   "value1": [],
+   "value2": [],
+   "track": "event"
+  },
+  "670006": {
+   "group": 1,
+   "condition": 600611,
+   "gift": 761106,
+   "jump": 29002,
+   "showLevel": 1,
+   "completeType": 7,
+   "completeNum": 3,
+   "value1": [],
+   "value2": [],
+   "track": "event"
+  },
+  "670011": {
+   "group": 2,
+   "condition": 604212,
+   "gift": 761111,
+   "jump": 29005,
+   "showLevel": 1,
+   "completeType": 43,
+   "completeNum": 10,
+   "value1": [],
+   "value2": [],
+   "track": "account"
+  },
+  "670012": {
+   "group": 2,
+   "condition": 600212,
+   "gift": 761112,
+   "jump": 29005,
+   "showLevel": 1,
+   "completeType": 3,
+   "completeNum": 1,
+   "value1": [
+    2110804
+   ],
+   "value2": [],
+   "track": "event"
+  },
+  "670013": {
+   "group": 2,
+   "condition": 601211,
+   "gift": 761113,
+   "jump": 29002,
+   "showLevel": 1,
+   "completeType": 12,
+   "completeNum": 1,
+   "value1": [],
+   "value2": [],
+   "track": "event"
+  },
+  "670014": {
+   "group": 2,
+   "condition": 598601,
+   "gift": 761114,
+   "jump": 29002,
+   "showLevel": 1,
+   "completeType": null,
+   "completeNum": 1,
+   "value1": [],
+   "value2": [],
+   "track": "served"
+  },
+  "670015": {
+   "group": 2,
+   "condition": 602411,
+   "gift": 761115,
+   "jump": 29014,
+   "showLevel": 1,
+   "completeType": 24,
+   "completeNum": 1,
+   "value1": [],
+   "value2": [],
+   "track": "event"
+  },
+  "670016": {
+   "group": 2,
+   "condition": 604401,
+   "gift": 761116,
+   "jump": 29002,
+   "showLevel": 1,
+   "completeType": 44,
+   "completeNum": 1,
+   "value1": [],
+   "value2": [
+    10
+   ],
+   "track": "derived"
+  },
+  "670021": {
+   "group": 3,
+   "condition": 604213,
+   "gift": 761121,
+   "jump": 29005,
+   "showLevel": 1,
+   "completeType": 43,
+   "completeNum": 15,
+   "value1": [],
+   "value2": [],
+   "track": "account"
+  },
+  "670022": {
+   "group": 3,
+   "condition": 600213,
+   "gift": 761122,
+   "jump": 29005,
+   "showLevel": 1,
+   "completeType": 3,
+   "completeNum": 1,
+   "value1": [
+    2110103
+   ],
+   "value2": [],
+   "track": "event"
+  },
+  "670023": {
+   "group": 3,
+   "condition": 605101,
+   "gift": 761123,
+   "jump": 29018,
+   "showLevel": 1,
+   "completeType": 51,
+   "completeNum": 1,
+   "value1": [],
+   "value2": [],
+   "track": "served"
+  },
+  "670024": {
+   "group": 3,
+   "condition": 604502,
+   "gift": 761124,
+   "jump": 29017,
+   "showLevel": 1,
+   "completeType": 45,
+   "completeNum": 10,
+   "value1": [],
+   "value2": [],
+   "track": "event"
+  },
+  "670025": {
+   "group": 3,
+   "condition": 600301,
+   "gift": 761125,
+   "jump": 29005,
+   "showLevel": 1,
+   "completeType": 3,
+   "completeNum": 1,
+   "value1": [
+    2110851
+   ],
+   "value2": [],
+   "track": "event"
+  },
+  "670026": {
+   "group": 3,
+   "condition": 600341,
+   "gift": 761126,
+   "jump": 29020,
+   "showLevel": 1,
+   "completeType": 3,
+   "completeNum": 1,
+   "value1": [
+    2130101,
+    2130102,
+    2130103,
+    2130104,
+    2130105
+   ],
+   "value2": [],
+   "track": "event"
+  },
+  "670031": {
+   "group": 4,
+   "condition": 600214,
+   "gift": 761131,
+   "jump": 29005,
+   "showLevel": 1,
+   "completeType": 3,
+   "completeNum": 1,
+   "value1": [
+    2110106
+   ],
+   "value2": [],
+   "track": "event"
+  },
+  "670032": {
+   "group": 4,
+   "condition": 601311,
+   "gift": 761132,
+   "jump": 29002,
+   "showLevel": 1,
+   "completeType": 13,
+   "completeNum": 1,
+   "value1": [],
+   "value2": [],
+   "track": "event"
+  },
+  "670033": {
+   "group": 4,
+   "condition": 601411,
+   "gift": 761133,
+   "jump": 29002,
+   "showLevel": 1,
+   "completeType": 14,
+   "completeNum": 1,
+   "value1": [],
+   "value2": [],
+   "track": "event"
+  },
+  "670034": {
+   "group": 4,
+   "condition": 600342,
+   "gift": 761134,
+   "jump": 29020,
+   "showLevel": 1,
+   "completeType": 3,
+   "completeNum": 1,
+   "value1": [
+    2130201,
+    2130202,
+    2130203,
+    2130204,
+    2130205
+   ],
+   "value2": [],
+   "track": "event"
+  },
+  "670035": {
+   "group": 4,
+   "condition": 604403,
+   "gift": 761135,
+   "jump": 29002,
+   "showLevel": 1,
+   "completeType": 44,
+   "completeNum": 2,
+   "value1": [],
+   "value2": [
+    20
+   ],
+   "track": "derived"
+  },
+  "670036": {
+   "group": 4,
+   "condition": 607502,
+   "gift": 761136,
+   "jump": 29115,
+   "showLevel": 1,
+   "completeType": 75,
+   "completeNum": 3,
+   "value1": [],
+   "value2": [],
+   "track": "served"
+  },
+  "670041": {
+   "group": 5,
+   "condition": 600215,
+   "gift": 761141,
+   "jump": 29005,
+   "showLevel": 1,
+   "completeType": 3,
+   "completeNum": 1,
+   "value1": [
+    2110204
+   ],
+   "value2": [],
+   "track": "event"
+  },
+  "670042": {
+   "group": 5,
+   "condition": 600302,
+   "gift": 761142,
+   "jump": 29005,
+   "showLevel": 1,
+   "completeType": 3,
+   "completeNum": 1,
+   "value1": [
+    2110151
+   ],
+   "value2": [],
+   "track": "event"
+  },
+  "670043": {
+   "group": 5,
+   "condition": 600321,
+   "gift": 761143,
+   "jump": 29102,
+   "showLevel": 1,
+   "completeType": 3,
+   "completeNum": 1,
+   "value1": [
+    2140101,
+    2140102,
+    2140103,
+    2140104,
+    2140105,
+    2140106,
+    2140107,
+    2140108
+   ],
+   "value2": [],
+   "track": "event"
+  },
+  "670044": {
+   "group": 5,
+   "condition": 600361,
+   "gift": 761144,
+   "jump": 29021,
+   "showLevel": 1,
+   "completeType": 3,
+   "completeNum": 1,
+   "value1": [
+    2131301,
+    2131302,
+    2131303,
+    2131304,
+    2130501,
+    2130502,
+    2130503,
+    2130601,
+    2130602,
+    2130603,
+    2130701,
+    2130702,
+    2130703,
+    2131201,
+    2131202,
+    2131203
+   ],
+   "value2": [],
+   "track": "event"
+  },
+  "670045": {
+   "group": 5,
+   "condition": 601611,
+   "gift": 761145,
+   "jump": 29010,
+   "showLevel": 1,
+   "completeType": 16,
+   "completeNum": 3,
+   "value1": [],
+   "value2": [],
+   "track": "served"
+  },
+  "670046": {
+   "group": 5,
+   "condition": 600343,
+   "gift": 761146,
+   "jump": 29020,
+   "showLevel": 1,
+   "completeType": 3,
+   "completeNum": 1,
+   "value1": [
+    2132101,
+    2132102,
+    2132103,
+    2132104,
+    2132105
+   ],
+   "value2": [],
+   "track": "event"
+  },
+  "670051": {
+   "group": 6,
+   "condition": 600503,
+   "gift": 761151,
+   "jump": 0,
+   "showLevel": 1,
+   "completeType": 58,
+   "completeNum": 3,
+   "value1": [],
+   "value2": [],
+   "track": "loginday"
+  },
+  "670052": {
+   "group": 6,
+   "condition": 600216,
+   "gift": 761152,
+   "jump": 29005,
+   "showLevel": 1,
+   "completeType": 3,
+   "completeNum": 1,
+   "value1": [
+    2110208
+   ],
+   "value2": [],
+   "track": "event"
+  },
+  "670053": {
+   "group": 6,
+   "condition": 607901,
+   "gift": 761153,
+   "jump": 29002,
+   "showLevel": 1,
+   "completeType": 79,
+   "completeNum": 1,
+   "value1": [],
+   "value2": [
+    2
+   ],
+   "track": "served"
+  },
+  "670054": {
+   "group": 6,
+   "condition": 604405,
+   "gift": 761154,
+   "jump": 29002,
+   "showLevel": 1,
+   "completeType": 44,
+   "completeNum": 3,
+   "value1": [],
+   "value2": [
+    25
+   ],
+   "track": "derived"
+  },
+  "670055": {
+   "group": 6,
+   "condition": 607801,
+   "gift": 761155,
+   "jump": 29012,
+   "showLevel": 1,
+   "completeType": 78,
+   "completeNum": 1,
+   "value1": [],
+   "value2": [],
+   "track": "served"
+  },
+  "670056": {
+   "group": 6,
+   "condition": 604811,
+   "gift": 761156,
+   "jump": 29012,
+   "showLevel": 1,
+   "completeType": 48,
+   "completeNum": 1,
+   "value1": [],
+   "value2": [],
+   "track": "served"
+  },
+  "670061": {
+   "group": 7,
+   "condition": 600217,
+   "gift": 761161,
+   "jump": 29005,
+   "showLevel": 1,
+   "completeType": 3,
+   "completeNum": 1,
+   "value1": [
+    2110304
+   ],
+   "value2": [],
+   "track": "event"
+  },
+  "670062": {
+   "group": 7,
+   "condition": 600303,
+   "gift": 761162,
+   "jump": 29005,
+   "showLevel": 1,
+   "completeType": 3,
+   "completeNum": 1,
+   "value1": [
+    2110251
+   ],
+   "value2": [],
+   "track": "event"
+  },
+  "670063": {
+   "group": 7,
+   "condition": 608001,
+   "gift": 761163,
+   "jump": 29009,
+   "showLevel": 1,
+   "completeType": 80,
+   "completeNum": 1,
+   "value1": [],
+   "value2": [
+    2
+   ],
+   "track": "served"
+  },
+  "670064": {
+   "group": 7,
+   "condition": 604700,
+   "gift": 761164,
+   "jump": 0,
+   "showLevel": 1,
+   "completeType": 47,
+   "completeNum": 1,
+   "value1": [
+    1250011,
+    1250021,
+    1250031,
+    1250041,
+    1250051,
+    1250061,
+    1250073,
+    1250083,
+    1250093,
+    1250103
+   ],
+   "value2": [],
+   "track": "derived"
+  },
+  "670065": {
+   "group": 7,
+   "condition": 601612,
+   "gift": 761165,
+   "jump": 29010,
+   "showLevel": 1,
+   "completeType": 16,
+   "completeNum": 10,
+   "value1": [],
+   "value2": [],
+   "track": "served"
+  },
+  "670066": {
+   "group": 7,
+   "condition": 607602,
+   "gift": 761166,
+   "jump": 29115,
+   "showLevel": 1,
+   "completeType": 76,
+   "completeNum": 3,
+   "value1": [],
+   "value2": [],
+   "track": "served"
+  },
+  "670071": {
+   "group": 8,
+   "condition": 600218,
+   "gift": 761171,
+   "jump": 29005,
+   "showLevel": 1,
+   "completeType": 3,
+   "completeNum": 1,
+   "value1": [
+    2110308
+   ],
+   "value2": [],
+   "track": "event"
+  },
+  "670072": {
+   "group": 8,
+   "condition": 601213,
+   "gift": 761172,
+   "jump": 29002,
+   "showLevel": 1,
+   "completeType": 12,
+   "completeNum": 10,
+   "value1": [],
+   "value2": [],
+   "track": "event"
+  },
+  "670073": {
+   "group": 8,
+   "condition": 608002,
+   "gift": 761173,
+   "jump": 29009,
+   "showLevel": 1,
+   "completeType": 80,
+   "completeNum": 1,
+   "value1": [],
+   "value2": [
+    3
+   ],
+   "track": "served"
+  },
+  "670074": {
+   "group": 8,
+   "condition": 600331,
+   "gift": 761174,
+   "jump": 29032,
+   "showLevel": 1,
+   "completeType": 3,
+   "completeNum": 1,
+   "value1": [
+    2110191,
+    2110192,
+    2110193,
+    2110194,
+    2110291,
+    2110292,
+    2110293,
+    2110294
+   ],
+   "value2": [],
+   "track": "event"
+  },
+  "670075": {
+   "group": 8,
+   "condition": 604406,
+   "gift": 761175,
+   "jump": 29002,
+   "showLevel": 1,
+   "completeType": 44,
+   "completeNum": 3,
+   "value1": [],
+   "value2": [
+    30
+   ],
+   "track": "derived"
+  },
+  "670076": {
+   "group": 8,
+   "condition": 608101,
+   "gift": 761176,
+   "jump": 29012,
+   "showLevel": 1,
+   "completeType": 81,
+   "completeNum": 1,
+   "value1": [],
+   "value2": [
+    2
+   ],
+   "track": "served"
+  },
+  "670081": {
+   "group": 9,
+   "condition": 600219,
+   "gift": 761181,
+   "jump": 29005,
+   "showLevel": 1,
+   "completeType": 3,
+   "completeNum": 1,
+   "value1": [
+    2110405
+   ],
+   "value2": [],
+   "track": "event"
+  },
+  "670082": {
+   "group": 9,
+   "condition": 600304,
+   "gift": 761182,
+   "jump": 29005,
+   "showLevel": 1,
+   "completeType": 3,
+   "completeNum": 1,
+   "value1": [
+    2110351
+   ],
+   "value2": [],
+   "track": "event"
+  },
+  "670083": {
+   "group": 9,
+   "condition": 601313,
+   "gift": 761183,
+   "jump": 29002,
+   "showLevel": 1,
+   "completeType": 13,
+   "completeNum": 10,
+   "value1": [],
+   "value2": [],
+   "track": "event"
+  },
+  "670084": {
+   "group": 9,
+   "condition": 605401,
+   "gift": 761184,
+   "jump": 29002,
+   "showLevel": 1,
+   "completeType": 54,
+   "completeNum": 1,
+   "value1": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   "value2": [],
+   "track": "served"
+  },
+  "670085": {
+   "group": 9,
+   "condition": 607302,
+   "gift": 761185,
+   "jump": 0,
+   "showLevel": 1,
+   "completeType": 73,
+   "completeNum": 1,
+   "value1": [],
+   "value2": [
+    5
+   ],
+   "track": "derived"
+  },
+  "670086": {
+   "group": 9,
+   "condition": 608102,
+   "gift": 761186,
+   "jump": 29012,
+   "showLevel": 1,
+   "completeType": 81,
+   "completeNum": 1,
+   "value1": [],
+   "value2": [
+    3
+   ],
+   "track": "served"
+  },
+  "670091": {
+   "group": 10,
+   "condition": 600507,
+   "gift": 761191,
+   "jump": 0,
+   "showLevel": 1,
+   "completeType": 58,
+   "completeNum": 7,
+   "value1": [],
+   "value2": [],
+   "track": "loginday"
+  },
+  "670092": {
+   "group": 10,
+   "condition": 600220,
+   "gift": 761192,
+   "jump": 29005,
+   "showLevel": 1,
+   "completeType": 3,
+   "completeNum": 1,
+   "value1": [
+    2110410
+   ],
+   "value2": [],
+   "track": "event"
+  },
+  "670093": {
+   "group": 10,
+   "condition": 600305,
+   "gift": 761193,
+   "jump": 29005,
+   "showLevel": 1,
+   "completeType": 3,
+   "completeNum": 1,
+   "value1": [
+    2110451
+   ],
+   "value2": [],
+   "track": "event"
+  },
+  "670094": {
+   "group": 10,
+   "condition": 607902,
+   "gift": 761194,
+   "jump": 29002,
+   "showLevel": 1,
+   "completeType": 79,
+   "completeNum": 1,
+   "value1": [],
+   "value2": [
+    3
+   ],
+   "track": "served"
+  },
+  "670095": {
+   "group": 10,
+   "condition": 604421,
+   "gift": 761195,
+   "jump": 0,
+   "showLevel": 1,
+   "completeType": 44,
+   "completeNum": 1,
+   "value1": [
+    5
+   ],
+   "value2": [],
+   "track": "derived"
+  },
+  "670096": {
+   "group": 10,
+   "condition": 604407,
+   "gift": 761196,
+   "jump": 29002,
+   "showLevel": 1,
+   "completeType": 44,
+   "completeNum": 3,
+   "value1": [],
+   "value2": [
+    35
+   ],
+   "track": "derived"
+  }
+ }
+}

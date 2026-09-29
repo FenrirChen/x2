@@ -4,6 +4,8 @@ import json
 from .mail import ensure_mail_schema
 from .task_calendar import task_period
 
+WELFARE_POLL_SECONDS = 300.0
+
 BRILLIANCE = 1237902  # Item E_Currency, EffData 902
 WISH_COIN = 1237914  # Item E_Currency, EffData 914
 CAUSALITY_CARD = 1202014  # Client Item.Used 720004 -> 100 power; closest existing card to 120.
@@ -27,3 +29,38 @@ def insert_system_mail(db, player_id, account_id, kind, now):
         (player_id,sender,title,body,created_at,attachments,source_key)
         VALUES (?,?,?,?,?,?,?)""", (player_id, SENDER, "", body, now,
                                 json.dumps(rewards, sort_keys=True), source_key)).rowcount == 1
+
+
+def eligible_accounts(db):
+    """Return active player/account pairs, including offline players."""
+    return db.execute("""SELECT p.id, a.account_id FROM players p
+        LEFT JOIN accounts a ON a.player_id=p.id
+        WHERE a.status IS NULL OR a.status='active'""").fetchall()
+
+
+def deliver_daily_welfare(store, now):
+    """Insert today's welfare mail for every eligible account idempotently."""
+    minted, failed = 0, []
+    for player_id, account_id in eligible_accounts(store.db):
+        try:
+            with store.db:
+                if insert_system_mail(store.db, player_id, account_id or player_id,
+                                       "daily_login", int(now)):
+                    minted += 1
+        except Exception as exc:  # one broken row must not stop the sweep
+            failed.append((player_id, str(exc)))
+    return minted, failed
+
+
+async def daily_welfare_watch(store, clock, poll=WELFARE_POLL_SECONDS):
+    """Sweep once at each Beijing day boundary, retrying failed rows."""
+    import asyncio
+    completed_day = None
+    while True:
+        now = int(clock())
+        day_start, _ = task_period(1, now)
+        if completed_day != day_start:
+            _, failed = deliver_daily_welfare(store, now)
+            if not failed:
+                completed_day = day_start
+        await asyncio.sleep(poll)

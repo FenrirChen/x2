@@ -35,6 +35,7 @@ from x2server.player.appearance import AppearanceService
 from x2server.player.mail import MailService
 from x2server.player.terminal import TerminalService
 from x2server.player.college import CollegeStateRepository
+from x2server.player.system_mail import daily_welfare_watch
 from x2server.player.tutorial import TutorialService
 
 
@@ -76,11 +77,14 @@ async def run(database: Path, seconds: float) -> None:
                        Dispatcher(SilentChatService().handlers()))
     identity.active_mail_players = tcp.authenticated_player_ids
     mail_task = None
+    welfare_task = None
     try:
         await http.start()
         await tcp.start()
         await chat.start()
         mail_task = asyncio.create_task(mail.watch(tcp), name="local-mail-push")
+        welfare_task = asyncio.create_task(daily_welfare_watch(store, clock.now),
+                                           name="local-daily-welfare")
         logging.getLogger("x2.local").info(
             "services ready; HTTP %s:%s game TCP %s:%s chat TCP %s:%s public=%s",
             endpoints.bind_host, endpoints.http_port, endpoints.bind_host, endpoints.game_port,
@@ -90,9 +94,10 @@ async def run(database: Path, seconds: float) -> None:
         else:
             await asyncio.sleep(seconds)
     finally:
-        if mail_task:
-            mail_task.cancel()
-            await asyncio.gather(mail_task, return_exceptions=True)
+        for task in (mail_task, welfare_task):
+            if task:
+                task.cancel()
+                await asyncio.gather(task, return_exceptions=True)
         await chat.stop()
         await tcp.stop()
         await http.stop()

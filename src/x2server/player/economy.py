@@ -35,11 +35,23 @@ class EconomyService:
                   1237908: "exp", 1237910: "daily_activity", 1237911: "week_activity"}
     STACKABLE_REWARD_TYPES = frozenset((5, 12, 13, 14, 17, 22, 23, 24, 25, 33, 34, 40, 41))
     ACTIVITY_FIELDS = {1: "daily_activity", 2: "week_activity"}
+    POWER_BUY_ITEM = 1237900
+    POWER_BUY_AMOUNT = 120
+    POWER_BUY_CURRENCY = 1237902
+    # REVIVAL_COMPATIBILITY ladder retained from the community fix package.
+    POWER_BUY_PRICES = (20, 20, 40, 60, 80, 100, 120, 150, 180, 220,
+                        260, 300, 350, 400, 460, 520, 600, 700, 800, 1000)
 
     def __init__(self, store, clock=time.time):
         self.store = store
         self.clock = clock
         self.catalog = json.loads(files("x2server").joinpath("data/economy_catalog.json").read_text(encoding="utf-8"))
+        challenge_path = files("x2server").joinpath("data/challenge_tasks.json")
+        self.challenge = json.loads(challenge_path.read_text(encoding="utf-8")) if challenge_path.is_file() else {"tasks": {}, "boxes": {}}
+        with store.db:
+            store.db.execute("""CREATE TABLE IF NOT EXISTS challenge_task_state (
+                player_id INTEGER NOT NULL, task_id INTEGER NOT NULL, progress INTEGER NOT NULL DEFAULT 0,
+                claimed INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(player_id, task_id))""")
         battle_rewards = json.loads(files("x2server").joinpath("data/battle_rewards_catalog.json").read_text(encoding="utf-8"))
         recovered_groups = {row["GiftGroup"] for row in battle_rewards["gifts"]}
         self.catalog["gifts"] = battle_rewards["gifts"] + [row for row in self.catalog["gifts"]
@@ -331,6 +343,53 @@ class EconomyService:
     def inventory_values(self, player_id):
         return {"items": [ITEM.encode({"id": r[0], "num": r[1], "locked": False, "dayGet": 0})
             for r in self.store.db.execute("SELECT item_id,quantity FROM inventory WHERE player_id=? ORDER BY item_id", (player_id,))]}
+
+    def _ensure_challenge(self, player_id):
+        # Do not open a connection context here: task pushes can be built inside
+        # an EconomyService savepoint and sqlite would otherwise commit it.
+        def insert_rows():
+            for task_id, entry in self.challenge.get("tasks", {}).items():
+                progress = int(entry.get("completeNum", 0)) if entry.get("track") == "served" else 0
+                self.store.db.execute("INSERT OR IGNORE INTO challenge_task_state VALUES (?,?,?,0)",
+                                      (player_id, int(task_id), progress))
+        if self.store.db.in_transaction:
+            insert_rows()
+        else:
+            with self.store.db:
+                insert_rows()
+
+    def challenge_values(self, player_id):
+        self._ensure_challenge(player_id)
+        rows = []
+        for task_id, entry in sorted(self.challenge.get("tasks", {}).items(), key=lambda item: int(item[0])):
+            state = self.store.db.execute("SELECT progress,claimed FROM challenge_task_state WHERE player_id=? AND task_id=?",
+                                          (player_id, int(task_id))).fetchone()
+            progress, claimed = state or (0, 0)
+            target = int(entry.get("completeNum", 1))
+            rows.append(TASK.encode({"taskId": int(task_id),
+                "taskStatus": 4 if claimed else 3 if progress >= target else 2,
+                "taskProgress": min(progress, target), "finishTimes": int(bool(claimed)), "stage": 0}))
+        return {"code": 10, "type": 3, "taskList": rows, "boxList": []}
+
+    def claim_challenge(self, player_id, task_id):
+        self._ensure_challenge(player_id)
+        entry = self.challenge.get("tasks", {}).get(str(task_id))
+        if not entry:
+            return {"code": 13, "taskId": task_id, "type": 3}
+        row = self.store.db.execute("SELECT progress,claimed FROM challenge_task_state WHERE player_id=? AND task_id=?",
+                                    (player_id, task_id)).fetchone()
+        if not row or row[1] or row[0] < int(entry.get("completeNum", 1)):
+            return {"code": 13, "taskId": task_id, "type": 3}
+        try:
+            with self.transaction():
+                rewards = self.gifts([entry["gift"]])
+                self._grant(player_id, f"challenge:{task_id}", rewards)
+                self.store.db.execute("UPDATE challenge_task_state SET claimed=1 WHERE player_id=? AND task_id=?",
+                                      (player_id, task_id))
+            return {"code": 10, "taskId": task_id, "type": 3,
+                    "rewardData": self.reward_bytes(rewards)}
+        except UnresolvedEconomy:
+            return {"code": 13, "taskId": task_id, "type": 3}
 
     def task_values(self, player_id, kind):
         self.refresh_online_tasks(player_id)
@@ -675,12 +734,41 @@ class EconomyService:
         self.ensure_periods(player_id)
         return (LoginService.snapshot_push(self.store.get(player_id), self.store),
             OutboundMessage("L2C_ItemUpdate", {"code": 10, **self.inventory_values(player_id)}),
-            *(OutboundMessage("L2C_TaskUpdate", {"type": k, "taskList": self.task_values(player_id, k)["taskList"]}) for k in (1, 2)))
+            *(OutboundMessage("L2C_TaskUpdate", {"type": k, "taskList": self.task_values(player_id, k)["taskList"]}) for k in (1, 2)),
+            OutboundMessage("L2C_TaskUpdate", {"type": 3, "taskList": self.challenge_values(player_id)["taskList"]}))
 
     def handlers(self):
-        return {name: self.handle for name in ("C2L_ItemAll", "C2L_ItemOpt", "C2L_ShopGoods", "C2L_RefreshShop", "C2L_BuyGoods",
+        return {"C2L_FetchMobilityPower": self.fetch_mobility_power,
+                **{name: self.handle for name in ("C2L_ItemAll", "C2L_ItemOpt", "C2L_ShopGoods", "C2L_RefreshShop", "C2L_BuyGoods",
             "C2L_QueryGoodsInfo", "C2L_GameTask", "C2L_DailyAndWeekTask", "C2L_FinishGameTask",
-            "C2L_FinishGameTaskAsync", "C2L_PickTreasureBox", "C2L_QueryMission")}
+            "C2L_FinishGameTaskAsync", "C2L_PickTreasureBox", "C2L_QueryMission")}}
+
+    async def fetch_mobility_power(self, context, packet):
+        player_id = context.session.player_id
+        if player_id is None:
+            raise ProtocolError("power purchase before login")
+        request = ECONOMY_SCHEMAS["C2L_FetchMobilityPower"].decode(packet.body)
+        now = int(self.clock())
+        day_start, _ = task_period(1, now)
+        with self.transaction():
+            snapshot = self.store.get(player_id)["snapshot"]
+            mobility = snapshot.get("mobility")
+            if not mobility:
+                return OutboundMessage("L2C_FetchMobilityPower", {"result": 13})
+            state = snapshot.get("power_buy") or {}
+            count = int(state.get("count", 0)) if int(state.get("day", -1)) == day_start else 0
+            price = self.POWER_BUY_PRICES[min(count, len(self.POWER_BUY_PRICES) - 1)]
+            if snapshot.get("crystal", 0) < price:
+                return OutboundMessage("L2C_FetchMobilityPower", {"result": 13})
+            snapshot["crystal"] -= price
+            mobility["power"] += self.POWER_BUY_AMOUNT
+            snapshot["power_buy"] = {"day": day_start, "count": count + 1}
+            self.save_snapshot(player_id, snapshot)
+            self._event(player_id, f"power-buy:{day_start}:{count + 1}", 8, 900, 1)
+        return OutboundMessage("L2C_FetchMobilityPower", {
+            "result": 10,
+            "rewardData": self.reward_bytes({self.POWER_BUY_ITEM: self.POWER_BUY_AMOUNT})},
+            pushes=self.pushes(player_id))
 
     async def handle(self, context, packet):
         player_id = context.session.player_id
@@ -700,12 +788,15 @@ class EconomyService:
         if name in ("C2L_GameTask", "C2L_DailyAndWeekTask"):
             kind = request.get("type", 0)
             return OutboundMessage("L2C_GameTask", self.task_values(player_id, kind) if kind in (1, 2)
+                else self.challenge_values(player_id) if kind == 3
                 else {"code": 10, "type": kind, "chapterId": request.get("chapterId", 0)})
         if name in ("C2L_FinishGameTask", "C2L_FinishGameTaskAsync"):
             requests = [FINISH_REQUEST.decode(b) for b in request.get("data", [])] if name == "C2L_FinishGameTask" else [request]
             if len(requests) > 40:
                 raise ProtocolError("too many task claims")
-            results = [FINISH_RESULT.encode(self.claim(player_id, r.get("taskId", 0), r.get("type", 0))
+            results = [FINISH_RESULT.encode(
+                self.claim_challenge(player_id, r.get("taskId", 0)) if r.get("type", 0) == 3 else
+                self.claim(player_id, r.get("taskId", 0), r.get("type", 0))
                 if not r.get("activityId") else {"code": 13, "taskId": r.get("taskId", 0), "type": r.get("type", 0)}) for r in requests]
             return OutboundMessage(response_name, {"data": results if name == "C2L_FinishGameTask" else results[0]}, pushes=self.pushes(player_id))
         if name == "C2L_ShopGoods":

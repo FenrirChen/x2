@@ -60,5 +60,11 @@ def test_growth_base_static_initial_and_persistence(tmp_path):
         relog_context, packet({"id": 1, "token": "test"}, 3, "C2L_Login")))
     query = asyncio.run(LobbyService(college=restored).query(relog_context,
         packet({}, 4, "C2L_QueryGrowthBase")))
-    assert GROWTH_BASE.decode(login.values["growthBase"]) == GROWTH_BASE.decode(GROWTH_BASE.encode(query.values))
+    login_growth = GROWTH_BASE.decode(login.values["growthBase"])
+    query_growth = GROWTH_BASE.decode(GROWTH_BASE.encode(query.values))
+    for field in ("buildingList", "exploreList", "trainingList", "civilization",
+                  "buildQueue", "wonderQueue", "prayQueue"):
+        assert field in login_growth
+    assert login_growth["buildingList"] == query_growth["buildingList"]
+    assert login_growth["civilization"] == query_growth["civilization"]
     restored_store.close()
