@@ -13,6 +13,8 @@ Supersedes:
 
 ## 入场
 
+- 测试账号可通过 snapshot.test_challenge_unlocks 保存已授权开放的挑战 SectionID。QueryMission 仅将 Type=2 的有效记录纳入对应章节的界面开放进度，不写 economy_clears、不触发结算；2026-09-30 用户授权测试账号 1 的第一章全部月相开放。
+- 2026-09-30 月相难度继续修复：实机持久化回包确认第一章 `2110851/2110852/2110853` 已收到 expertMode=true、各自地图 ID，但 `L2C_FightData.monsterInitLevel` 仍缺失。ARM64 序列化 `0x34FAED8` 写 tag 0x80 0x01（field 16），`0x34FAF38` 读取应答偏移 0x80；`ChapterModule.Convert_L2CFightData_To_LogicFightData(0x16C1034)` 将该值复制到逻辑数据偏移 0x88；`LogicBattle.OnBattleStart(0x18F70EC)` 将它作为 `BaseLevel.InitMapInfo` 的第二个参数；`InitMapInfo(0x199F25C)` 直接将参数保存为基础等级，并未读取 `MapInfo.MonsterLevel`；后续 `BaseLevel.BuildScene(0x199F448..0x199F4C8)` 将基础等级与地图的 MonsterLevelUp 对应层增量相加。旧回包因此使基础等级恒为 0。现通过 `tools/dev/export_battle_monster_levels.py` 导出原始 MapInfo 3,099 条数据，并按实际入场地图下发 field 16。第一章十档为 15/23/31/40/53/64/78/89/103/290，剧情首关为 2；这些数值来自原表，并非 RecommendedLevel 或自定倍率。测试验证十档编码回包、地图、专家标志及切回剧情；实机战斗效果待用户复测。
 - 2026-09-30 难度传递修复：旧服务虽然接受请求的 `expertMode`，却在 `FightData` 与 `FightDataProfile` 回包中遗漏它，客户端收到默认 false。原客户端 ARM64 `FightData.Serialize(0x350E1C0)` 将偏移 0x29 的 bool 写为 field 6（tag 0x30）；`FightDataProfile.Serialize(0x351177C)` 将偏移 0x3C 的 bool 写为 field 8（tag 0x40）。`ChapterModule.ConvertFightData(0x16C24D4)` 把前者复制到逻辑战斗数据偏移 0x31，`LogicBattle.CheckExpert(0x18FE3F0)` 读取它。现在两个回包均保留请求标志。月相仍使用各自 SectionID/Maps，未新增怪物属性倍率；隔离测试覆盖白夜崩解 10 档月相和切回普通剧情，实机战斗难度待用户复测。
 - `C2L_FightData(126)` 对所有 24 种已知 SectionType 使用同一经过实测的战斗入场合同。按 SectionID、ChapterID、Map、已拥有且有战斗属性的队伍、已知等级/前置关卡校验；地图和 Chapter 不匹配仍拒绝。
 - 实机挑战关 `2110851` 的正常入口发送 `expertMode=true`。旧代码错误地把此标志判作未支持模式并返回 13；现在全类型共用入场、掉落和结算路径均接受它，仍校验 Section/Chapter/Map。`checkGm` 与旧战斗档恢复另列为未实现。

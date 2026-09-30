@@ -21,6 +21,8 @@ class BattleService:
         self.store = store
         self.economy = economy
         self.catalog = BattleEntryCatalog()
+        self.monster_levels = {int(k): v for k, v in json.loads(
+            files("x2server").joinpath("data/battle_monster_levels.json").read_text(encoding="utf-8"))["levels"].items()}
         self.unit_types = {int(k): v for k, v in json.loads(
             files("x2server").joinpath("data/unit_types.json").read_text(encoding="utf-8")).items()}
         from .drop_budget import DropBudgetCompatibilityPolicy
@@ -405,7 +407,12 @@ class BattleService:
             "expertMode": request.get("expertMode", False),
             "sceneId": scene, "randomSeed": secrets.randbelow(2**30), "isProfileValid": False})
         values = {"result": 10, "uuid": str(uuid.uuid4()), "sign": secrets.token_bytes(32),
-                  "data": data, "fightDataProfile": profile, "playerLevel": snapshot["level"]}
+                  "data": data, "fightDataProfile": profile, "playerLevel": snapshot["level"],
+                  "monsterInitLevel": self.monster_levels.get(scene, 0)}
+        logging.getLogger("x2.battle").info(
+            "battle difficulty section=%s scene=%s tier=%s expert=%s monsterInitLevel=%s",
+            section, scene, self.catalog.sections[section].get("DifficultyLevel", 0),
+            request.get("expertMode", False), values["monsterInitLevel"])
         try:
             with self.store.db:
                 if self.economy:

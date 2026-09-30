@@ -57,5 +57,6 @@ BATTLE_SCHEMAS = {
         F(6, "isFromProfile", K.BOOL), F(11, "randomSeed", K.INT32), F(13, "sceneId", K.INT32))),
     "L2C_FightData": S("L2C_FightData", (F(1, "result", K.ENUM), F(2, "uuid", K.STRING),
         F(3, "sign", K.BYTES), F(4, "data", K.BYTES), F(5, "fightDataProfile", K.MESSAGE),
+        F(16, "monsterInitLevel", K.INT32),
         F(19, "playerLevel", K.INT32))),
 }

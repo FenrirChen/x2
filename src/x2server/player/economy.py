@@ -1060,7 +1060,11 @@ class EconomyService:
         if daily_frontiers:
             other.append(MISSION_TYPE.encode({"type": 3, "missionData": daily_frontiers}))
         chapter_frontiers = {}
-        for section in clears:
+        # Explicit account fixture: expose selected challenge tiers for manual
+        # testing without recording clears or consuming first-clear rewards.
+        test_unlocks = {section for section in self.store.get(player_id)["snapshot"].get("test_challenge_unlocks", [])
+                        if self.entry_catalog.sections.get(section, {}).get("Type") == self.MAP_TYPE_CHALLENGE}
+        for section in clears | test_unlocks:
             row = self.entry_catalog.sections.get(section)
             if not row or row["Type"] in (0, 3):
                 continue

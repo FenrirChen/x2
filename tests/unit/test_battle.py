@@ -2,7 +2,7 @@ import asyncio
 
 import pytest
 
-from x2server.messages.battle import CHECKOUT, DROP_DATA, PROFILE_HERO, FIGHT_DATA, FIGHT_PROFILE, FIGHT_HERO, HERO_ATTR
+from x2server.messages.battle import BATTLE_SCHEMAS, CHECKOUT, DROP_DATA, PROFILE_HERO, FIGHT_DATA, FIGHT_PROFILE, FIGHT_HERO, HERO_ATTR
 from x2server.network.dispatcher import DispatchContext
 from x2server.network.session import SessionState
 from x2server.player.battle import BattleService
@@ -29,13 +29,16 @@ def test_moon_phase_entries_preserve_selected_scene_and_expert_mode(tmp_path):
         heroes=[{"id": 1003, "state": 2, "level": 1, "star": 1}]), player["revision"])
     context = DispatchContext("test", "local", SessionState("test", "moon-phases", player_id=1))
     service = BattleService(store)
-    for difficulty, section in enumerate(range(2110151, 2110161), start=1):
+    levels = (15, 23, 31, 40, 53, 64, 78, 89, 103, 290)
+    for difficulty, (section, level) in enumerate(zip(range(2110851, 2110861), levels), start=1):
         static = service.catalog.sections[section]
         assert static["DifficultyLevel"] == difficulty
         values = request(expertMode=True)
         values.update(missionId=section, chapter=static["ChapterID"], sceneId=static["Maps"][0])
         result = asyncio.run(service.enter(context, packet(values, difficulty)))
         assert result.values["result"] == 10
+        wire = BATTLE_SCHEMAS["L2C_FightData"].encode(result.values)
+        assert BATTLE_SCHEMAS["L2C_FightData"].decode(wire)["monsterInitLevel"] == level
         fight = FIGHT_DATA.decode(result.values["data"])
         profile = FIGHT_PROFILE.decode(result.values["fightDataProfile"])
         assert fight["missionId"] == profile["missionId"] == section
@@ -47,6 +50,7 @@ def test_moon_phase_entries_preserve_selected_scene_and_expert_mode(tmp_path):
     assert result.values["result"] == 10
     assert FIGHT_DATA.decode(result.values["data"])["expertMode"] is False
     assert FIGHT_PROFILE.decode(result.values["fightDataProfile"])["expertMode"] is False
+    assert result.values["monsterInitLevel"] == 2
     store.close()
 
 
