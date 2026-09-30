@@ -51,6 +51,8 @@ class BattleService:
             if economy:
                 self._add_column("economy_runs", "section_type", "INTEGER NOT NULL DEFAULT 0")
                 self._add_column("economy_runs", "entry_source", "TEXT NOT NULL DEFAULT 'MainMission'")
+            from .drop_report import FightDropRecorder
+            self.drop_recorder = FightDropRecorder(store)
 
     def _add_column(self, table, name, declaration):
         if name not in {r[1] for r in self.store.db.execute(f"PRAGMA table_info({table})")}:
@@ -285,6 +287,14 @@ class BattleService:
         entry = BATTLE_SCHEMAS["L2C_FightData"].decode(row["response"])
         if FIGHT_DATA.decode(entry["data"])["missionId"] != section:
             return reject_with('entry missionId mismatch')
+        try:
+            with self.store.db:
+                self.drop_recorder.record(context.session.player_id, context.session.session_id,
+                    packet.header.request_id, entry["uuid"], packet.body, request,
+                    {"section_id": section, "chapter_id": static["ChapterID"],
+                     "scene_id": request.get("sceneId", 0), "section_type": static["Type"]})
+        except Exception:
+            logging.getLogger("x2.battle").exception("264 observation failed")
         # Official chain (ARM64 2026-09-25): FightModule.OnFightDropData(0x1447E1C)
         # checks result==10, deserializes response.data as FightDropData and feeds its
         # dropValues into the running battle as LogicX2Command.UpdateDropValue

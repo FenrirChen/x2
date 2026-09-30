@@ -20,6 +20,9 @@ OUTSIDE_ITEM = S("ItemDataP", (F(1, "id", K.INT32), F(2, "num", K.INT32),
     F(3, "quality", K.INT32), F(4, "eNum", K.INT32)))
 FIGHT_KILL_DATA = S("FightKillData", (F(1, "heroId", K.INT32),
     F(2, "unitId", K.INT32, repeated=True), F(3, "num", K.INT32, repeated=True)))
+DROP_REPORT_NPC = S("FightDropNpc", (F(1, "id", K.INT32), F(2, "count", K.INT32)))
+DROP_REPORT_ITEM = S("FightDropItemEntry", (F(1, "itemId", K.INT32), F(2, "value", K.INT32), F(3, "variant", K.INT32)))
+DROP_REPORT_SPAN = S("FightDropSpan", tuple(F(n, f"field{n}", K.INT32) for n in range(1, 23)))
 CHECKOUT = S("C2L_CheckoutMainMission", (F(1, "chapterId", K.INT32), F(2, "sectionId", K.INT32),
     F(3, "outsideItems", K.MESSAGE, repeated=True), F(4, "success", K.BOOL),
     F(6, "expertMode", K.BOOL), F(8, "checkGm", K.BOOL),
@@ -46,8 +49,16 @@ BATTLE_SCHEMAS = {
         F(2, "datas", K.MESSAGE, repeated=True), F(3, "chapterTaskEvent", K.MESSAGE, repeated=True))),
     "L2C_FightKillInfo": S("L2C_FightKillInfo", (F(1, "code", K.ENUM),)),
     "C2L_FightDropData": S("C2L_FightDropData", (F(1, "missionId", K.INT32),
-        F(2, "chapterId", K.INT32), F(3, "layer", K.INT32), F(10, "expertMode", K.BOOL),
-        F(14, "sceneId", K.INT32))),
+        F(2, "chapterId", K.INT32), F(3, "layer", K.INT32), F(4, "buyCount", K.INT32),
+        F(5, "npcData", K.MESSAGE, repeated=True), F(6, "currency", K.MESSAGE, repeated=True),
+        F(7, "dropItem", K.MESSAGE, repeated=True), F(8, "heros", K.MESSAGE, repeated=True),
+        F(9, "fightTime", K.INT32), F(10, "expertMode", K.BOOL), F(11, "relicList", K.INT32, repeated=True),
+        F(12, "randomSeed", K.INT64), F(13, "monsterRoomList", K.INT32, repeated=True),
+        F(14, "sceneId", K.INT32), F(15, "killMonster", K.MESSAGE, repeated=True),
+        F(16, "antiCheat", K.MESSAGE), F(17, "layerRoom", K.INT32),
+        *(F(n, f"dropData{chr(65+n-18)}", K.INT32) for n in range(18, 22)),
+        F(22, "sectionlParam", K.INT32, repeated=True), F(23, "globalSectionlParam", K.INT32, repeated=True),
+        F(24, "sanValue", K.INT32), F(25, "seasonConfigID", K.INT32))),
     "L2C_FightDropData": S("L2C_FightDropData", (F(1, "result", K.ENUM), F(2, "uuid", K.STRING),
         F(3, "sign", K.BYTES), F(4, "data", K.BYTES))),
     "C2L_DelFightProfile": S("C2L_DelFightProfile", (F(1, "sectionID", K.INT32), F(2, "checkout", K.BOOL))),
