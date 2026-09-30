@@ -89,6 +89,8 @@ class FavorService:
             return self._add(player_id, req, hero)
         if name == "C2L_FavorBreak":
             return self._break(player_id, hero_id, hero)
+        if name == "C2L_UpgradeFetters":
+            return self._upgrade_fetters(player_id, hero_id, req.get("positionId", 0))
         if name == "C2L_QueryHeroArchives":
             from .hero import encode_hero_data
             return OutboundMessage(reply, {"code": 10 if hero else 13, "needRefresh": bool(hero)},
@@ -122,9 +124,38 @@ class FavorService:
             return OutboundMessage(reply, {"code": 10, "heroID": hero_id, "archivesID": file_id},
                 pushes=(OutboundMessage("L2C_HeroUpdate", {"code": 10,
                     "heros": [encode_hero_data(target)]}),))
-        # UpgradeFetters carries costs/conditions not yet recovered.
         return OutboundMessage(reply, {"code": 13,
             "mainHeroId": hero_id, "positionId": req.get("positionId", 0)})
+
+    def _upgrade_fetters(self, player_id, hero_id, position):
+        values = {"code": 13, "mainHeroId": hero_id, "positionId": position}
+        row = next((r for r in catalog()["favorabilityfetters"]
+                    if r["HeroID"] == hero_id and r["FettersID"] == position
+                    and r.get("IsOpen") == 1), None)
+        with self.economy.transaction():
+            snapshot = self.store.get(player_id)["snapshot"]
+            hero = next((h for h in snapshot.get("heroes", [])
+                         if h["id"] == hero_id and h.get("state") == 2), None)
+            level = hero.get("favor_fetters", {}).get(str(position), 0) if hero else -1
+            fields = ("Level", "FavorabilityLevel", "StarLevel", "HeroLevel", "CurrencyNum")
+            if not row or not hero or not 0 <= level < 10 or any(
+                    len(row.get(key, [])) != 10 for key in fields):
+                return OutboundMessage("L2C_UpgradeFetters", values)
+            favor = favor_state(hero, self.heroes[hero_id]["InitialLevel"])["level"]
+            if (favor < row["FavorabilityLevel"][level]
+                    or hero["star"] < row["StarLevel"][level]
+                    or hero["level"] < row["HeroLevel"][level]
+                    or row["CurrencyID"] != 901
+                    or snapshot.get("gold", 0) < row["CurrencyNum"][level]):
+                return OutboundMessage("L2C_UpgradeFetters", values)
+            snapshot["gold"] -= row["CurrencyNum"][level]
+            hero.setdefault("favor_fetters", {})[str(position)] = level + 1
+            self.economy.save_snapshot(player_id, snapshot)
+        from .hero import encode_hero_data
+        values["code"] = 10
+        return OutboundMessage("L2C_UpgradeFetters", values, pushes=(
+            OutboundMessage("L2C_HeroUpdate", {"code": 10, "heros": [encode_hero_data(hero)]}),
+            *self.economy.pushes(player_id)))
 
     def _advance(self, hero_id, state, breaks):
         cap = self.heroes[hero_id]["LevelLimit"]
