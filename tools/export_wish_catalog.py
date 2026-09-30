@@ -1,4 +1,4 @@
-"""Export the two local wish pools from the recovered client tables."""
+"""Export supported wish pools from the recovered client tables."""
 import json
 from pathlib import Path
 import sys
@@ -14,7 +14,7 @@ gifts = {row["GiftGroup"]: row for row in data["Gift"]}
 pools = {}
 for row in data["DrawParam"]:
     kind = row.get("DrawnType", {}).get("enum", "E_Hero")
-    if row["DrawnID"] != 22201 and kind not in ("E_Up", "E_Limited", "E_Jewel"):
+    if row["DrawnID"] not in (22201, 22203) and kind not in ("E_Up", "E_Limited", "E_Jewel"):
         continue
     groups = {}
     for kind, field in (("common", "CommonPrize"), ("security", "SecurityPrize"), ("top", "TopPrize")):
@@ -34,7 +34,8 @@ for row in data["DrawParam"]:
         "three_star_security": row["ThreeStarSecurityNum"],
         "hero_security": row.get("SecurityNum", 0),
         "limit_num": row.get("LimitNum", 0), "limit_items": row.get("LimitItem", []),
-        "groups": groups}
+        "groups": groups,
+        "one_power_of_light": row.get("Currency", [0, 0])[1]}
 target = ROOT / "src/x2server/data/wish_catalog.json"
 target.write_text(json.dumps(pools, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 print(target)

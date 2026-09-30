@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[3]
 sys.path[:0] = [str(ROOT), str(ROOT / '.phase2_deps')]
 import UnityPy
 from phase3_analyze import build_schema, class_blocks, parse_fields, decode_record, resource_map
-from phase3_output.phase3_parsers.x2_table_parser import parse_table_container
+from phase3_protobuf import parse_table_container
 
 NAMES = (
     'RoleExp', 'PlayerLevelBonus', 'PlayerStage', 'PlayerAttrib',
@@ -26,7 +26,9 @@ schemas, classes, enums, _ = build_schema(dump)
 for (namespace, name), block in class_blocks(dump).items():
     if namespace == 'Example' and name not in classes:
         classes[name] = parse_fields(block)
-active = {r['asset_name']: r for r in csv.DictReader((ROOT / 'phase3_output/phase3_active_table_versions.csv').open(encoding='utf-8-sig')) if r['selected_as_active'] == 'true'}
+active_versions = ROOT / 'phase3_output/phase3_active_table_versions.csv'
+active = ({r['asset_name']: r for r in csv.DictReader(active_versions.open(encoding='utf-8-sig'))
+           if r['selected_as_active'] == 'true'} if active_versions.exists() else {})
 resources = {r['resource_path'].lower(): r for r in resource_map()}
 
 

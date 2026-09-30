@@ -16,8 +16,11 @@ from .server_clock import BEIJING, ServerClock
 
 class WishService:
     POOL_ID = 22201
+    PERMANENT_POOL_ID = 22203
     ANCHOR = int(datetime(2026, 9, 24, tzinfo=BEIJING).timestamp())
     CLIENT_DISPLAY_OFFSET = 8 * 3600
+    # CardPool.endTime is int32; keep the displayed value in range.
+    PERMANENT_DISPLAY_END = 2_147_483_647 - CLIENT_DISPLAY_OFFSET
     TRANSFORM_HERO = ProtoSchema("TransformHero", (
         ProtoField(1, "heroId", FieldKind.INT32), ProtoField(2, "transform", FieldKind.BOOL)))
 
@@ -92,11 +95,13 @@ class WishService:
     def active_periods(self, now=None, player_id=None):
         """Half-open windows beginning at Beijing midnight on 2026-09-24."""
         now = self.clock.now() if now is None else now
+        result = {self.PERMANENT_POOL_ID: (1, self.PERMANENT_DISPLAY_END)}
         if player_id is None:
-            result = {self.POOL_ID: (1, 2_147_483_647)}
+            result[self.POOL_ID] = (1, 2_147_483_647)
         else:
             created = self.store.get(player_id)["created_at"] or now
-            result = {self.POOL_ID: (created, created + 7 * 86400)} if created <= now < created + 7 * 86400 else {}
+            if created <= now < created + 7 * 86400:
+                result[self.POOL_ID] = (created, created + 7 * 86400)
         if now < self.ANCHOR:
             return result
         for kind, days, batch in (("up", 5, 3), ("limited", 14, 1), ("jewel", 5, 2)):

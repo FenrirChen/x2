@@ -89,7 +89,7 @@ def test_newcomer_ten_draw_guarantee_cost_replay_and_limit(env, monkeypatch):
     rejected = asyncio.run(wish.draw(context, packet({"drawnId": 22201, "drawType": 0},
         request_id=2, name="C2L_LuckDraw")))
     assert rejected.values["code"] == 13
-    assert WISH_SCHEMAS["L2C_CardPool"].decode(WISH_SCHEMAS["L2C_CardPool"].encode(wish.values(1)))["select"] == 22202
+    assert WISH_SCHEMAS["L2C_CardPool"].decode(WISH_SCHEMAS["L2C_CardPool"].encode(wish.values(1)))["select"] == 22203
 
 
 def test_normal_pool_remains_available_after_newcomer_pool(env, monkeypatch):
@@ -106,7 +106,7 @@ def test_normal_pool_remains_available_after_newcomer_pool(env, monkeypatch):
     assert wish.state(1, 22202)[0] == 1
     assert store.get(1)["snapshot"]["crystal"] == 180
     assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1201006").fetchone()[0] == 3
-    assert wish.values(1)["select"] == 22202
+    assert wish.values(1)["select"] == 22203
     result = asyncio.run(wish.result(context, packet({"drawnCountID": 41}, name="C2L_RequestDrawResult")))
     assert REWARD.decode(result.values["rewardData"])["rewardItem"]
 
@@ -115,7 +115,7 @@ def test_rotation_at_beijing_midnight_and_wraparound(env):
     store, economy, _ = env
     now = [WishService.ANCHOR - 1]
     wish = WishService(store, economy, clock=ServerClock(lambda: now[0]))
-    assert list(wish.active_periods()) == [22201]
+    assert list(wish.active_periods()) == [22203, 22201]
     now[0] += 1
     active = wish.active_periods()
     assert [i for i in active if i in wish.groups["up"]] == wish.groups["up"][:3]
@@ -152,6 +152,32 @@ def test_newcomer_dates_follow_account_creation(env):
     assert (newcomer["startTime"], newcomer["endTime"]) == (created, created + 7 * 86400)
     now[0] = created + 7 * 86400
     assert 22201 not in wish.active_periods(player_id=1)
+
+
+def test_star_soul_pool_is_permanent_and_drawable_after_newcomer_expires(env, monkeypatch):
+    store, economy, context = env
+    now = [WishService.ANCHOR - 1]
+    store.db.execute("UPDATE players SET created_at=? WHERE id=1", (WishService.ANCHOR - 8 * 86400,))
+    player = store.get(1)
+    store.save_snapshot(1, dict(player["snapshot"], crystal=180), player["revision"])
+    wish = WishService(store, economy, clock=ServerClock(lambda: now[0]))
+    assert wish.catalog["22203"]["type"] == "E_Hero"
+    assert 22203 not in wish.groups["up"] + wish.groups["limited"] + wish.groups["jewel"]
+    for instant in (WishService.ANCHOR - 1, WishService.ANCHOR + 1,
+                    WishService.ANCHOR + 365 * 86400):
+        now[0] = instant
+        assert 22203 in wish.active_periods(player_id=1)
+        assert 22201 not in wish.active_periods(player_id=1)
+        displayed = [CARD_POOL.decode(raw) for raw in wish.values(1)["cardPoolList"]]
+        permanent = next(pool for pool in displayed if pool["poolId"] == 22203)
+        assert permanent["endTime"] == 2_147_483_647
+    monkeypatch.setattr(wish, "_pick", lambda pool, group="common":
+        {"item_id": 1211004, "quantity": 1})
+    result = asyncio.run(wish.draw(context, packet({"drawnId": 22203, "drawType": 0},
+        name="C2L_LuckDraw")))
+    assert result.values["code"] == 10
+    assert wish.state(1, 22203)[0] == 1
+    assert any(hero["id"] == 1004 for hero in store.get(1)["snapshot"]["heroes"])
 
 
 def test_closed_pool_rejected_and_jewel_pool_uses_own_ticket(env, monkeypatch):
