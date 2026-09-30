@@ -108,7 +108,7 @@ class LocalIdentityService(RecoveredBootstrapService):
         return self._http_login(values)
 
     def _mail_http(self, method: str, path: str, body: bytes, authorization: str) -> HTTPResponse:
-        """Serve the 2.4 client's PBS mail reads using the authenticated game token."""
+        """Serve PBS mail reads using either authenticated login token."""
         if method.upper() != "POST":
             return self._json({"error": "method_not_allowed"}, 405)
         try:
@@ -120,11 +120,11 @@ class LocalIdentityService(RecoveredBootstrapService):
                 raise ValueError("invalid player")
             if self._accounts is None:
                 return self._json({"error": "unauthorized"}, 401)
-            if authorization.startswith("Bearer ") and authorization[7:]:
-                binding = self._game_tokens.get(authorization[7:])
-                if binding is None or self._clock() >= binding.expire:
+            if authorization.startswith("Bearer ") and authorization[7:].strip():
+                player_id = self._mail_player_for_token(authorization[7:].strip())
+                if player_id is None:
                     return self._json({"error": "unauthorized"}, 401)
-                if requested_player != binding.player_id:
+                if requested_player != player_id:
                     return self._json({"error": "forbidden"}, 403)
             elif authorization.strip() == "Bearer" and self.allow_local_mail_without_token:
                 # The 2.4 client sends exactly "Bearer" for PBS mail requests.
@@ -169,6 +169,25 @@ class LocalIdentityService(RecoveredBootstrapService):
                 data = {"mail": self._pbs_mail(row) if row is not None else None}
         return self._json({"error": "" if path.endswith("GetMailPage") or data["mail"] else "not_found",
                            "data": data, "code": 0 if path.endswith("GetMailPage") or data["mail"] else 404})
+
+    def _mail_player_for_token(self, token: str) -> int | None:
+        """Resolve account and game credentials through the existing login bindings."""
+        if not token or self._accounts is None:
+            return None
+        now = self._clock()
+        game = self._game_tokens.get(token)
+        if game is not None and now < game.expire:
+            account = self._accounts.get_by_player(game.player_id)
+            return game.player_id if account and account["status"] == "active" else None
+        login = self._account_tokens.get(token)
+        if login is None or now >= login.expire:
+            return None
+        account = self._accounts.get_by_id(login.account_id)
+        if (account is None or account["status"] != "active" or
+                account["username"] != login.username or account["player_id"] is None):
+            return None
+        owner = self._accounts.get_by_player(account["player_id"])
+        return account["player_id"] if owner and owner["account_id"] == login.account_id else None
 
     @staticmethod
     def _pbs_mail(row: sqlite3.Row) -> dict[str, object]:
