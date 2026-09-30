@@ -2,6 +2,9 @@
 import logging
 import secrets
 import time
+import json
+from functools import lru_cache
+from importlib.resources import files
 from typing import Any
 
 from x2server.bootstrap.local_identity import LocalIdentityService
@@ -16,6 +19,14 @@ from .hero import encode_hero_all
 from .server_clock import ServerClock
 
 LOGGER = logging.getLogger("x2.login")
+
+
+@lru_cache(maxsize=1)
+def relic_item_ids():
+    rows = json.loads(files("x2server").joinpath(
+        "data/reward_items.json").read_text(encoding="utf-8"))
+    return frozenset(row["ItemID"] for row in rows
+                     if row.get("ItemType", {}).get("value") == 4)
 
 # CurrencyType.ItemID -> BaseInfoProto field. The client reads shop balances
 # through BaseInfoProto, while ItemAll is the separate item-bag ledger.
@@ -135,6 +146,13 @@ class LoginService:
         values = {"BaseInfo": base, "favor": [FAVOR_MAP_ENTRY.encode({"Key": hero["id"],
             "Value": FAVOR.encode(favor_state(hero, initial.get(hero["id"], 1)))})
             for hero in snapshot.get("heroes", []) if hero.get("state") == 2]}
+        if store is not None:
+            relic_ids = relic_item_ids()
+            owned_relics = [item_id for item_id, quantity in store.db.execute(
+                "SELECT item_id,quantity FROM inventory WHERE player_id=? ORDER BY item_id",
+                (player["id"],)) if quantity > 0 and item_id in relic_ids]
+            values["RelicPack"] = [INT_PAIR.encode({"Key": index, "Value": item_id})
+                                   for index, item_id in enumerate(owned_relics)]
         if "mobility" in snapshot:
             mobility = snapshot["mobility"]
             values["Mobility"] = MOBILITY.encode({

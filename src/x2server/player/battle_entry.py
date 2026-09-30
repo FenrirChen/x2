@@ -68,7 +68,7 @@ class BattleEntryCatalog:
         cost_kind = "STATIC_COST" if "ManualValue" in row and economy else "NO_KNOWN_COST"
         open_type = row.get("OpenType", {}).get("value", 0)
         open_param = row.get("OpenParam", 0)
-        if open_type == 1 and snapshot["level"] < open_param:
+        if open_type == 1 and isinstance(open_param, int) and open_param > 0 and snapshot["level"] < open_param:
             raise EntryDenied("account level requirement")
         if open_type == 2 and open_param and not store.db.execute(
             "SELECT 1 FROM economy_clears WHERE player_id=? AND section_id=?", (player_id, open_param)

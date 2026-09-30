@@ -333,8 +333,24 @@ class BattleService:
             return reject
         from .progression import battle_hero_base, hero_attributes, hero_skills, catalog
         owned = {h["id"]: h for h in snapshot.get("heroes", [])}
-        heroes = [owned.get(h.get("heroId")) for h in selected]
-        if any(not h or h["state"] != 2 or str(h["id"]) not in battle_hero_base()
+        section_config = self.economy.sections.get(section) if self.economy else None
+        trial_base = None
+        if (section_config and self.catalog.sections.get(section, {}).get("Type") == 0
+                and section_config.get("AssistType", {}).get("value") == 1):
+            trial_units = [unit for unit in section_config.get("AssistParam", []) if unit > 0]
+            if trial_units:
+                trial_base = 1000 + trial_units[0] % 100
+        heroes = []
+        for selected_hero in selected:
+            hero_id = selected_hero.get("heroId")
+            hero = owned.get(hero_id)
+            if (trial_base is not None and hero_id in (trial_base, trial_units[0])
+                    and (hero is None or hero.get("state") != 2)):
+                hero = {"id": hero_id, "battle_base_id": trial_base, "state": 2,
+                        "level": min(120, max(1, section_config.get("RecommendedLevel", 1))),
+                        "star": 1, "exp": 0}
+            heroes.append(hero)
+        if any(not h or h["state"] != 2 or str(h.get("battle_base_id", h["id"])) not in battle_hero_base()
                or not 1 <= h["level"] <= 120 or not 1 <= h["star"] <= 46 for h in heroes):
             return reject
         try:
@@ -352,11 +368,12 @@ class BattleService:
             return OutboundMessage("L2C_FightData", BATTLE_SCHEMAS["L2C_FightData"].decode(cached[0]))
         fight_heroes = []
         for hero in heroes:
-            attrs = HERO_ATTR.encode(hero_attributes(hero))
-            skills = [HERO_SKILL.encode(s) for s in hero_skills(hero)]
+            stat_hero = {**hero, "id": hero.get("battle_base_id", hero["id"])}
+            attrs = HERO_ATTR.encode(hero_attributes(stat_hero))
+            skills = [HERO_SKILL.encode(s) for s in hero_skills(stat_hero)]
             hero_values = {k:v for k,v in hero.items() if k in ("id", "state", "level", "star", "exp")}
             # Raw bases are keyed by the selected hero; the client applies growth.
-            base_values = battle_hero_base()[str(hero["id"])]
+            base_values = battle_hero_base()[str(stat_hero["id"])]
             base = [HERO_ATTR_ADD.encode({"attrId":r["attrId"], "attrValue":base_values[r["name"]]})
                 for r in catalog()["battle_base_1003"]["attributes"]]
             artifact = hero.get("god_equip")

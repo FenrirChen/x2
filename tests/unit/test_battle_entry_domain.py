@@ -13,7 +13,7 @@ from x2server.player.reward_system import SectionRewardCatalog
 from x2server.player.economy import EconomyService
 from x2server.player.login import LoginService
 from x2server.player.store import PlayerStore
-from x2server.messages.core import BASE_INFO
+from x2server.messages.core import BASE_INFO, PLAYER_DATA, INT_PAIR
 
 
 def daily(section=2130101, chapter=2030100, scene=2230101):
@@ -72,6 +72,36 @@ def test_successful_checkout_collects_maze_relics_once(env):
     assert asyncio.run(battle.checkout(ctx, checkout)).values == first.values
     assert store.db.execute("SELECT COUNT(*) FROM inventory WHERE player_id=1 AND item_id=1100001").fetchone()[0] == 0
     assert store.db.execute("SELECT COUNT(*) FROM inventory WHERE player_id=1 AND item_id=1004007").fetchone()[0] == 1
+    player_data = PLAYER_DATA.decode(PLAYER_DATA.encode(
+        LoginService.snapshot_push(store.get(1), store).values))
+    relics = [INT_PAIR.decode(raw) for raw in player_data["RelicPack"]]
+    assert relics == [{"Key": 0, "Value": 1004007}, {"Key": 1, "Value": 1004024}]
+
+
+def test_every_main_section_enters_including_trial_and_missing_level_gate(env):
+    store, economy, ctx = env
+    battle = BattleService(store, economy)
+    main_sections = sorted((row for row in battle.catalog.sections.values() if row["Type"] == 0),
+                           key=lambda row: row["SectionID"])
+    assert len(main_sections) == 79
+    for index, row in enumerate(main_sections):
+        section = row["SectionID"]
+        values = request()
+        values.update(missionId=section, chapter=row["ChapterID"], sceneId=row["Maps"][0])
+        reply = asyncio.run(battle.enter(ctx, packet(values, 1000 + index)))
+        assert reply.values["result"] == 10, section
+
+    # The SectionTable's E_Trial AssistParam names a unit variant. Its hero
+    # counterpart must enter even when it is absent from the player's roster.
+    for index, (section, hero_id) in enumerate(((2110208, 1019), (2110409, 1016),
+                                                (2110606, 1007), (2110707, 1003))):
+        row = battle.catalog.sections[section]
+        values = request()
+        values.update(missionId=section, chapter=row["ChapterID"],
+                      sceneId=row["Maps"][0],
+                      heros=[PROFILE_HERO.encode({"heroId": hero_id, "leader": 1})])
+        reply = asyncio.run(battle.enter(ctx, packet(values, 2000 + index)))
+        assert reply.values["result"] == 10, section
 
 
 def test_daily_entry_uses_static_section_and_compat_policy(env):
