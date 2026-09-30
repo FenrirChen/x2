@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import sqlite3
+from contextlib import closing
 from pathlib import Path
 from typing import Any
 
@@ -56,6 +57,17 @@ class PlayerStore:
 
     def close(self) -> None:
         self.db.close()
+
+    def backup_to(self, destination: Path) -> None:
+        """Consistent SQLite online backup; never overwrite a file or commit callers."""
+        destination = Path(destination)
+        if destination.resolve() == self.path.resolve() or destination.exists():
+            raise ValueError("backup destination must be a new file")
+        if self.db.in_transaction:
+            raise ValueError("backup must run between player transactions")
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        with closing(sqlite3.connect(destination)) as target:
+            self.db.backup(target, pages=256)
 
     def save_snapshot(
         self, player_id: int, snapshot: dict[str, Any], expected_revision: int
