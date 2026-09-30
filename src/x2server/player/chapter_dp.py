@@ -54,36 +54,35 @@ class ChapterDP:
         signals = self.db.execute("SELECT source,kind,subject,scope,amount FROM chapter_signals WHERE player_id=? AND chapter_id=?", (player, chapter)).fetchall()
         clears = {r[0] for r in self.db.execute("SELECT section_id FROM economy_clears WHERE player_id=?", (player,))}
         bag = dict(self.db.execute("SELECT item_id,quantity FROM inventory WHERE player_id=?", (player,)))
-        def total(kind, subject, scope=None):
-            return sum(r[4] for r in signals if r[1] == kind and (subject == -1 or r[2] == subject) and (scope is None or r[3] == scope))
+        def total(kind, subjects, scopes=None):
+            return sum(r[4] for r in signals if r[1] == kind and (-1 in subjects or r[2] in subjects)
+                       and (scopes is None or r[3] in scopes))
         for task in entries:
             kind = task.get("completeType")
-            subject = int(task.get("completeValue1", 0))
-            if subject >= 2**63:
-                subject = -1
-            second = int(task.get("completeValue2", 0))
-            target = task.get("completeNum", 1)
+            subjects = task["completeValues1"]
+            seconds = task["completeValues2"]
+            target = task["completeNums"][-1]
             value = 0
             if kind == "E_BeatSection":
-                value = int(subject in clears)
+                value = int(bool(set(subjects) & clears))
             elif kind == "E_KillMonster":
-                value = total("kill", subject)
+                value = total("kill", subjects)
             elif kind == "E_KillMonsterInSan":
-                value = total("san_kill", second, subject)
+                value = total("san_kill", seconds, subjects)
             elif kind == "E_ShopBuyItem":
-                value = total("buy", subject)
+                value = total("buy", subjects)
             elif kind == "E_ShopSpendMoney":
-                value = total("spend", subject)
+                value = total("spend", subjects)
             elif kind == "E_NPCInteraction":
-                value = total("npc", subject)
+                value = total("npc", subjects)
             elif kind == "E_GetItemID":
-                value = max(bag.get(subject, 0), total("item", subject))
+                value = max(sum(bag.get(subject, 0) for subject in subjects), total("item", subjects))
             elif kind == "E_GetMoneyPer":
-                value = max((r[4] for r in signals if r[1] == "money" and r[2] == 903), default=0)
+                value = max((r[4] for r in signals if r[1] == "money" and r[2] in subjects), default=0)
             elif kind in ("E_GetItemQuality", "E_GetItemQualityPer"):
                 by_run = Counter()
                 for r in signals:
-                    if r[1] == "quality" and r[2] >= subject and r[3] == second:
+                    if r[1] == "quality" and (-1 in subjects or r[2] in subjects) and r[3] in seconds:
                         by_run[r[0]] += r[4]
                 value = max(by_run.values(), default=0) if kind.endswith("Per") else sum(by_run.values())
             self.db.execute("""INSERT INTO chapter_objectives VALUES (?,?,?,?)
@@ -98,14 +97,21 @@ class ChapterDP:
         with self.economy.transaction():
             self.refresh(player, chapter)
             progress = dict(self.db.execute("SELECT task_id,progress FROM chapter_objectives WHERE player_id=? AND chapter_id=?", (player, chapter)))
-        return sum(t["dp"] for t in self.chapters.get(str(chapter), {}).get("tasks", []) if t.get("completeType") and progress.get(t["taskId"], 0) >= t.get("completeNum", 1))
+        return sum(dp for t in self.chapters.get(str(chapter), {}).get("tasks", [])
+                   for target, dp in zip(t["completeNums"], t["dpPoints"], strict=True)
+                   if progress.get(t["taskId"], 0) >= target)
 
     def task_list(self, player, chapter):
         self.points(player, chapter)
         progress = dict(self.db.execute("SELECT task_id,progress FROM chapter_objectives WHERE player_id=? AND chapter_id=?", (player, chapter)))
-        return [TASK.encode({"taskId": t["taskId"], "taskProgress": progress.get(t["taskId"], 0),
-            "taskStatus": 3 if t.get("completeType") and progress.get(t["taskId"], 0) >= t.get("completeNum", 1) else 2})
-            for t in self.chapters.get(str(chapter), {}).get("tasks", [])]
+        result = []
+        for task in self.chapters.get(str(chapter), {}).get("tasks", []):
+            value = progress.get(task["taskId"], 0)
+            completed = sum(value >= target for target in task["completeNums"])
+            result.append(TASK.encode({"taskId": task["taskId"], "taskProgress": value,
+                "stage": min(completed, len(task["completeNums"]) - 1), "finishTimes": completed,
+                "taskStatus": 3 if completed == len(task["completeNums"]) else 2}))
+        return result
 
     def report(self, player, chapter, run, values):
         from x2server.messages.battle import DROP_REPORT_ITEM, DROP_REPORT_NPC, DROP_REPORT_SPAN
@@ -155,13 +161,12 @@ class ChapterDP:
         if not box or not box.get("supported"):
             raise UnresolvedEconomy("DP box contents unavailable")
         source = f"chapterdp:{chapter}:{index}"
-        owned = {h["id"] for h in self.economy.store.get(player)["snapshot"].get("heroes", []) if h.get("state") == 2}
         grants = [RewardGrant("CHAPTER_DP_BOX", 0, source, row["itemId"], row["num"], reason=f"DP box {item_id}") for row in box["contents"]]
         equips = []
         spec = box.get("equib")
         if spec:
             factory = self.economy.equipment_factory
-            parts = {row["part"]: int(key) for key, row in factory.data["equib_base"].items() if row["suit"] == spec["suit"]}
+            parts = {row["part"]: int(key) for key, row in factory.data["equib_base"].items() if int(key) in spec["typeIds"]}
             if len(parts) != 6 or any(part not in parts for part in spec["parts"]):
                 raise UnresolvedEconomy("DP equipment suit unavailable")
             for ordinal, part in enumerate(spec["parts"]):
@@ -169,13 +174,4 @@ class ChapterDP:
                 equips.extend(HERO_EQUIP.encode({**{k: v for k, v in i.items() if k not in ("param", "marker")},
                     "param": EQUIP_PARAM.encode(i["param"])}) for i in instances)
         rewards = self.economy._grant(player, source, sum_grants(grants))
-        raw = self.economy.reward_bytes(rewards, equips)
-        if any(1211000 <= item < 1212000 for item in rewards):
-            from .wish import WishService
-            from x2server.messages.economy import REWARD, REWARD_ITEM
-            decoded = REWARD.decode(raw)
-            decoded["rewardItem"] = [REWARD_ITEM.encode({"itemId": item, "itemNum": count,
-                "transform": 1211000 <= item < 1212000 and item - 1210000 in owned}) for item, count in sorted(rewards.items())]
-            raw = REWARD.encode(decoded)
-            raw = WishService._reward_with_transform_heroes(raw)
-        return raw
+        return self.economy.reward_bytes(rewards, equips)

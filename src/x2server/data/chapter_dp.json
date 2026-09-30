@@ -1,40 +1,28 @@
 {
  "provenance": {
-  "ChapterInfo": {
-   "source": "table/chapterinfo",
-   "clean_start": 136,
-   "rows": 12,
-   "nested_rows": 12,
-   "fields": [
-    "MapTypeID",
-    "StageID",
-    "ExperienceChapterID",
-    "ChapterName",
-    "ChapterNumber",
-    "ChallengeLevel",
-    "EndlessLevel",
-    "BloodMoonOpenType",
-    "FlowchartName",
-    "IsOpen",
-    "ChapterPic",
-    "ChapterPicName",
-    "ChapterIcon",
-    "DPPic",
-    "DPPoint",
-    "DPReward",
-    "UnlockMapTypeID",
-    "UnlockDPRequest",
-    "PlotReviewBackground",
-    "PlotReviewDesc",
-    "ReviewUnlockRequest",
-    "RequestNum",
-    "ReviewUnlocAward",
-    "ShowReview"
-   ],
-   "note": "field numbers are the client class's declaration order; the inlined first row has lost its MapTypeID and is skipped (recovered thresholds [0])"
-  }
+  "source": "canonical APK ResourceManager; Resources.ConvertDataBytes; strict array framing",
+  "tables": {
+   "chapterinfo": 13,
+   "taskchapter": 260,
+   "taskcondition": 1728,
+   "taskconditionline": 139,
+   "item": 3026,
+   "language": 28996,
+   "gift": 10930
+  },
+  "byteRepairs": [],
+  "manifest": "analysis/dp_client/manifest.json"
  },
  "chapters": {
+  "2010000": {
+   "chapterId": 2010000,
+   "dpThresholds": [
+    0
+   ],
+   "dpRewards": [],
+   "unlockMapTypeId": 0,
+   "unlockDpRequest": 0
+  },
   "2010100": {
    "chapterId": 2010100,
    "dpThresholds": [
@@ -52,7 +40,7 @@
     1203840
    ],
    "unlockMapTypeId": 2010000,
-   "unlockDpRequest": null
+   "unlockDpRequest": 0
   },
   "2010200": {
    "chapterId": 2010200,
@@ -71,7 +59,7 @@
     1203805
    ],
    "unlockMapTypeId": 2010100,
-   "unlockDpRequest": null
+   "unlockDpRequest": 0
   },
   "2010300": {
    "chapterId": 2010300,
@@ -90,13 +78,7 @@
     1203810
    ],
    "unlockMapTypeId": 2010200,
-   "unlockDpRequest": 10,
-   "thresholdsFromRawBytes": [
-    40,
-    60,
-    80,
-    100
-   ]
+   "unlockDpRequest": 10
   },
   "2010400": {
    "chapterId": 2010400,
@@ -153,16 +135,7 @@
     1203825
    ],
    "unlockMapTypeId": 2010500,
-   "unlockDpRequest": 30,
-   "rewardsFromRawBytes": [
-    16,
-    48,
-    1203821,
-    1203822,
-    1203823,
-    1203824,
-    1203825
-   ]
+   "unlockDpRequest": 30
   },
   "2010700": {
    "chapterId": 2010700,
@@ -238,7 +211,7 @@
     1203850
    ],
    "unlockMapTypeId": 2010900,
-   "unlockDpRequest": null
+   "unlockDpRequest": 0
   },
   "2011100": {
    "chapterId": 2011100,
@@ -257,14 +230,14 @@
     1203850
    ],
    "unlockMapTypeId": 2010900,
-   "unlockDpRequest": null
+   "unlockDpRequest": 0
   },
   "2019900": {
    "chapterId": 2019900,
    "dpThresholds": [],
    "dpRewards": [],
-   "unlockMapTypeId": null,
-   "unlockDpRequest": null
+   "unlockMapTypeId": 0,
+   "unlockDpRequest": 0
   }
  }
 }

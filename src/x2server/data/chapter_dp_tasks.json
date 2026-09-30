@@ -1,511 +1,21 @@
 {
  "provenance": {
-  "TaskChapter": {
-   "source": "table/taskchapter",
-   "rows": 260,
-   "fields": [
-    "ChapterTaskID",
-    "TaskDescribe",
-    "TaskConditionID",
-    "TaskConditionType",
-    "AcceptLevel",
-    "LastTask",
-    "NextTask",
-    "ChapterId",
-    "CompletionLimit",
-    "DPPoint",
-    "GiftGroup",
-    "JumpID",
-    "IfNotice"
-   ],
-   "note": "recovered by row signature; the table carries damaged bytes and inlines its first row",
-   "repairedBytes": [
-    {
-     "table": "taskchapter",
-     "offset": 2076,
-     "before": "0xa5",
-     "after": "0x50",
-     "why": "task 650209: DPPoint key of the first entry; the surviving `02 50 04` is the sibling 650208's [2,4] run"
-    },
-    {
-     "table": "taskchapter",
-     "offset": 2104,
-     "before": "0x18",
-     "after": "0x02",
-     "why": "task 650210: DPPoint value; the same task in chapter 1 (650110) and every later sibling reads 2"
-    },
-    {
-     "table": "taskchapter",
-     "offset": 4124,
-     "before": "0xf6",
-     "after": "0x02",
-     "why": "task 650505: DPPoint value; the surviving `50 04` matches the sibling 650504's [2,4] run"
-    },
-    {
-     "table": "taskchapter",
-     "offset": 8333,
-     "before": "0x73",
-     "after": "0x02",
-     "why": "task 651201 (last row): DPPoint value; its condition 603801 is the 4500-prism task, worth 2 in every other chapter"
-    },
-    {
-     "table": "taskconditionline",
-     "offset": 1980,
-     "before": "0x9e",
-     "after": "0x01",
-     "why": "condition 610704: CompleteType value; the rest of the row is the intact f3=[4017,4025,4026] f5=[1,20], i.e. E_KillMonster"
-    }
-   ],
-   "tasksWithoutCondition": [
-    651113
-   ],
-   "tasksWithUnreadableCondition": [],
-   "tasksWithUnreadableDp": []
+  "source": "canonical APK ResourceManager; Resources.ConvertDataBytes; strict array framing",
+  "tables": {
+   "chapterinfo": 13,
+   "taskchapter": 260,
+   "taskcondition": 1728,
+   "taskconditionline": 139,
+   "item": 3026,
+   "language": 28996,
+   "gift": 10930
   },
-  "TaskCondition": {
-   "source": "table/taskcondition",
-   "rows": 1545,
-   "usedFor": "TaskConditionType E_Change (2)",
-   "fields": [
-    "TaskConditionID",
-    "CompleteType",
-    "CompleteValue1",
-    "CompleteValue2",
-    "CompleteNum"
-   ]
-  },
-  "TaskConditionLine": {
-   "source": "table/taskconditionline",
-   "rows": 139,
-   "usedFor": "TaskConditionType E_Line (1)",
-   "fields": [
-    "TaskConditionID",
-    "CompleteType",
-    "CompleteValue1",
-    "CompleteValue2",
-    "CompleteNum"
-   ]
-  },
-  "CompleteType": {
-   "source": "Example.TaskConditionECompleteType",
-   "members": [
-    [
-     0,
-     "E_None"
-    ],
-    [
-     1,
-     "E_KillMonster"
-    ],
-    [
-     2,
-     "E_KillMonsterType"
-    ],
-    [
-     3,
-     "E_CustomsPass"
-    ],
-    [
-     4,
-     "E_CarryHeroKillMonster"
-    ],
-    [
-     5,
-     "E_SignInGame"
-    ],
-    [
-     6,
-     "E_AppointTimeOnLine"
-    ],
-    [
-     7,
-     "E_HeroLevelUp"
-    ],
-    [
-     8,
-     "E_BuyPower"
-    ],
-    [
-     9,
-     "E_BuyGold"
-    ],
-    [
-     10,
-     "E_ConsumePowerToday"
-    ],
-    [
-     11,
-     "E_CarryHeroCustomsPass"
-    ],
-    [
-     12,
-     "E_UpgradeEquipment"
-    ],
-    [
-     13,
-     "E_UpgradeSkill"
-    ],
-    [
-     14,
-     "E_UpgradeArtifact"
-    ],
-    [
-     15,
-     "E_UpgradeBuild"
-    ],
-    [
-     16,
-     "E_HeroAdventure"
-    ],
-    [
-     17,
-     "E_HeroTrain"
-    ],
-    [
-     18,
-     "E_UpgradeMiracle"
-    ],
-    [
-     19,
-     "E_HeroInteractive"
-    ],
-    [
-     20,
-     "E_SendGift"
-    ],
-    [
-     21,
-     "E_ReplyPrivateMail"
-    ],
-    [
-     22,
-     "E_GetFavorability"
-    ],
-    [
-     23,
-     "E_OnlineTime"
-    ],
-    [
-     24,
-     "E_BuyGood"
-    ],
-    [
-     25,
-     "E_CarryHeroDifficultyPass"
-    ],
-    [
-     26,
-     "E_ShopBuyItem"
-    ],
-    [
-     27,
-     "E_NPCInteraction"
-    ],
-    [
-     28,
-     "E_ArriveComponent"
-    ],
-    [
-     29,
-     "E_BeatComponentPlus"
-    ],
-    [
-     30,
-     "E_BeatComponent"
-    ],
-    [
-     31,
-     "E_BeatLevel"
-    ],
-    [
-     32,
-     "E_ShopSpendMoney"
-    ],
-    [
-     33,
-     "E_ShopSpendMoneyPer"
-    ],
-    [
-     34,
-     "E_BeatSection"
-    ],
-    [
-     35,
-     "E_GetItemID"
-    ],
-    [
-     36,
-     "E_GetItemQuality"
-    ],
-    [
-     37,
-     "E_GetItemQualityPer"
-    ],
-    [
-     38,
-     "E_GetMoney"
-    ],
-    [
-     39,
-     "E_GetMoneyPer"
-    ],
-    [
-     40,
-     "E_OwnItem"
-    ],
-    [
-     41,
-     "E_GetMailReward"
-    ],
-    [
-     42,
-     "E_GetExpertChest"
-    ],
-    [
-     43,
-     "E_AccountLevel"
-    ],
-    [
-     44,
-     "E_HeroReachStarAndLevel"
-    ],
-    [
-     45,
-     "E_Wish"
-    ],
-    [
-     46,
-     "E_EquipReachStarAndLevel"
-    ],
-    [
-     47,
-     "E_ItemStarAndID"
-    ],
-    [
-     48,
-     "E_BaseBless"
-    ],
-    [
-     49,
-     "E_EquipEquip"
-    ],
-    [
-     50,
-     "E_StarLevel"
-    ],
-    [
-     51,
-     "E_DecomposeEquip"
-    ],
-    [
-     52,
-     "E_BuildingAdvanced"
-    ],
-    [
-     53,
-     "E_WonderAdvanced"
-    ],
-    [
-     54,
-     "E_GemstoneSet"
-    ],
-    [
-     55,
-     "E_GemstoneCompound"
-    ],
-    [
-     56,
-     "E_GemstoneDecompose"
-    ],
-    [
-     57,
-     "E_ArtifactAdvanced"
-    ],
-    [
-     58,
-     "E_LoginDay"
-    ],
-    [
-     59,
-     "E_SectionLayer"
-    ],
-    [
-     60,
-     "E_GetVom"
-    ],
-    [
-     61,
-     "E_Element"
-    ],
-    [
-     62,
-     "E_Recipe"
-    ],
-    [
-     63,
-     "E_ThreeHero"
-    ],
-    [
-     64,
-     "E_VomLimit"
-    ],
-    [
-     65,
-     "E_ElementExp"
-    ],
-    [
-     66,
-     "E_GetItem"
-    ],
-    [
-     67,
-     "E_DesignativeHeroAdventure"
-    ],
-    [
-     68,
-     "E_SendDesignativeHeroGift"
-    ],
-    [
-     69,
-     "E_DesignativeHeroTrain"
-    ],
-    [
-     70,
-     "E_HeroSkillLevelRequest"
-    ],
-    [
-     71,
-     "E_GiveFriendCoin"
-    ],
-    [
-     72,
-     "E_FavorabilityDailyTask"
-    ],
-    [
-     73,
-     "E_FavorabilityLevel"
-    ],
-    [
-     74,
-     "E_EmptyCondition"
-    ],
-    [
-     75,
-     "E_AlchemyDealTask"
-    ],
-    [
-     76,
-     "E_AlchemyQuestTask"
-    ],
-    [
-     77,
-     "E_AlchemyQuestAndDeal"
-    ],
-    [
-     78,
-     "E_WonderBuild"
-    ],
-    [
-     79,
-     "E_HeroWeapon"
-    ],
-    [
-     80,
-     "E_CollegeBuilding"
-    ],
-    [
-     81,
-     "E_CollegeWonder"
-    ],
-    [
-     82,
-     "E_LimitedTaskLogin"
-    ],
-    [
-     83,
-     "E_LimitedTaskConsume"
-    ],
-    [
-     84,
-     "E_LimitedTaskRecharge"
-    ],
-    [
-     85,
-     "E_JoinGuild"
-    ],
-    [
-     86,
-     "E_ActivityLogin"
-    ],
-    [
-     87,
-     "E_CustomsEntry"
-    ],
-    [
-     88,
-     "E_Recharge"
-    ],
-    [
-     89,
-     "E_JewelWish"
-    ],
-    [
-     90,
-     "E_WorldBossEvent"
-    ],
-    [
-     91,
-     "E_ChapterDP"
-    ],
-    [
-     92,
-     "E_HeroFetters"
-    ],
-    [
-     93,
-     "E_ConsumeCurrency"
-    ],
-    [
-     94,
-     "E_AddFriend"
-    ],
-    [
-     95,
-     "E_KillMonsterInSan"
-    ],
-    [
-     96,
-     "E_ComsumePower"
-    ],
-    [
-     97,
-     "E_CustomsPassType"
-    ],
-    [
-     98,
-     "E_ErosionTime"
-    ],
-    [
-     99,
-     "E_CookFood"
-    ],
-    [
-     100,
-     "E_ConsumeMaterial"
-    ],
-    [
-     101,
-     "E_FoodShopSell"
-    ]
-   ]
-  },
-  "Language": {
-   "source": "table/language",
-   "texts": 28843
-  }
+  "byteRepairs": [],
+  "manifest": "analysis/dp_client/manifest.json"
  },
  "chapters": {
   "2010100": {
+   "chapterId": 2010100,
    "tasks": [
     {
      "taskId": 650101,
@@ -515,14 +25,32 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      1,
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 3031,
      "completeValue2": 0,
-     "completeNum": 150
+     "completeNum": 150,
+     "completeValues1": [
+      3031,
+      3622,
+      3628
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      150,
+      250,
+      500
+     ]
     },
     {
      "taskId": 650102,
@@ -532,14 +60,32 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      2,
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 3032,
      "completeValue2": 0,
-     "completeNum": 50
+     "completeNum": 50,
+     "completeValues1": [
+      3032,
+      3623,
+      3629
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      50,
+      150,
+      250
+     ]
     },
     {
      "taskId": 650103,
@@ -549,14 +95,29 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      3
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 4019,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      4019,
+      4610
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1,
+      10
+     ]
     },
     {
      "taskId": 650104,
@@ -566,14 +127,29 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      3
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 4021,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      4021,
+      4611
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1,
+      10
+     ]
     },
     {
      "taskId": 650105,
@@ -583,14 +159,30 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      4,
+      6
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_NPCInteraction",
      "completeValue1": 60198,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      60198
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1,
+      25,
+      50
+     ]
     },
     {
      "taskId": 650106,
@@ -600,14 +192,31 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_NPCInteraction",
      "completeValue1": 60033,
      "completeValue2": 0,
-     "completeNum": 3
+     "completeNum": 3,
+     "completeValues1": [
+      60033,
+      60034,
+      60035,
+      60037
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      3,
+      10
+     ]
     },
     {
      "taskId": 650107,
@@ -617,14 +226,28 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_NPCInteraction",
      "completeValue1": 60036,
      "completeValue2": 0,
-     "completeNum": 3
+     "completeNum": 3,
+     "completeValues1": [
+      60036
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      3,
+      10
+     ]
     },
     {
      "taskId": 650108,
@@ -634,14 +257,28 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      3
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_ShopBuyItem",
-     "completeValue1": 18446744073709551615,
+     "completeValue1": -1,
      "completeValue2": 0,
-     "completeNum": 3
+     "completeNum": 3,
+     "completeValues1": [
+      -1
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      3,
+      10
+     ]
     },
     {
      "taskId": 650109,
@@ -651,14 +288,26 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_ShopSpendMoney",
      "completeValue1": 903,
      "completeValue2": 0,
-     "completeNum": 3000
+     "completeNum": 3000,
+     "completeValues1": [
+      903
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      3000
+     ]
     },
     {
      "taskId": 650110,
@@ -668,14 +317,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetMoneyPer",
      "completeValue1": 903,
      "completeValue2": 0,
-     "completeNum": 4500
+     "completeNum": 4500,
+     "completeValues1": [
+      903
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      4500
+     ]
     },
     {
      "taskId": 650111,
@@ -685,14 +346,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5026,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      5026
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650112,
@@ -702,14 +375,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5027,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      5027
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650113,
@@ -719,14 +404,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5910,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      5910
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650114,
@@ -736,14 +433,28 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 6,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      6
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5026,
      "completeValue2": 0,
-     "completeNum": 10
+     "completeNum": 10,
+     "completeValues1": [
+      5026,
+      5027,
+      5910
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      10
+     ]
     },
     {
      "taskId": 650115,
@@ -753,14 +464,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5911,
      "completeValue2": 0,
-     "completeNum": 3
+     "completeNum": 3,
+     "completeValues1": [
+      5911
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      3
+     ]
     },
     {
      "taskId": 650116,
@@ -770,14 +493,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
      "nextTask": 650117,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_BeatSection",
      "completeValue1": 2110851,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      2110851
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650117,
@@ -787,14 +522,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
+     "dpPoints": [
+      2
+     ],
      "lastTask": 650116,
      "nextTask": 650118,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_BeatSection",
      "completeValue1": 2110852,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      2110852
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650118,
@@ -804,14 +551,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
+     "dpPoints": [
+      2
+     ],
      "lastTask": 650117,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_BeatSection",
      "completeValue1": 2110853,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      2110853
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650119,
@@ -821,14 +580,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1004894,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      1004894
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650120,
@@ -838,14 +609,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1004943,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      1004943
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650121,
@@ -855,14 +638,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1004909,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      1004909
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650122,
@@ -872,14 +667,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 4,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemQuality",
-     "completeValue1": 18446744073709551615,
+     "completeValue1": -1,
      "completeValue2": 4,
-     "completeNum": 100
+     "completeNum": 100,
+     "completeValues1": [
+      -1
+     ],
+     "completeValues2": [
+      4
+     ],
+     "completeNums": [
+      100
+     ]
     },
     {
      "taskId": 650123,
@@ -889,14 +696,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 6,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      6
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemQualityPer",
-     "completeValue1": 18446744073709551615,
+     "completeValue1": -1,
      "completeValue2": 4,
-     "completeNum": 25
+     "completeNum": 25,
+     "completeValues1": [
+      -1
+     ],
+     "completeValues2": [
+      4
+     ],
+     "completeNums": [
+      25
+     ]
     },
     {
      "taskId": 650124,
@@ -906,14 +725,31 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1240131,
      "completeValue2": 0,
-     "completeNum": 10
+     "completeNum": 10,
+     "completeValues1": [
+      1240131,
+      1240132,
+      1240133,
+      1240134,
+      1240135,
+      1240136
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      10
+     ]
     },
     {
      "taskId": 650125,
@@ -923,14 +759,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 4,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemQuality",
      "completeValue1": 4,
      "completeValue2": 10,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      4
+     ],
+     "completeValues2": [
+      10
+     ],
+     "completeNums": [
+      5
+     ]
     },
     {
      "taskId": 650126,
@@ -940,14 +788,28 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 6,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      6
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemQualityPer",
      "completeValue1": 4,
      "completeValue2": 10,
-     "completeNum": 2
+     "completeNum": 2,
+     "completeValues1": [
+      4,
+      5,
+      6
+     ],
+     "completeValues2": [
+      10
+     ],
+     "completeNums": [
+      2
+     ]
     },
     {
      "taskId": 650127,
@@ -957,20 +819,35 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 6,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      6
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemQualityPer",
      "completeValue1": 3,
      "completeValue2": 10,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      3,
+      4,
+      5,
+      6
+     ],
+     "completeValues2": [
+      10
+     ],
+     "completeNums": [
+      5
+     ]
     }
    ],
-   "dpTotal": 70,
-   "dpUnreadableTasks": []
+   "totalDp": 100
   },
   "2010200": {
+   "chapterId": 2010200,
    "tasks": [
     {
      "taskId": 650201,
@@ -980,14 +857,31 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      2,
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 3023,
      "completeValue2": 0,
-     "completeNum": 50
+     "completeNum": 50,
+     "completeValues1": [
+      3023,
+      3603
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      50,
+      250,
+      500
+     ]
     },
     {
      "taskId": 650202,
@@ -997,14 +891,31 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      2,
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 3021,
      "completeValue2": 0,
-     "completeNum": 50
+     "completeNum": 50,
+     "completeValues1": [
+      3021,
+      3601
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      50,
+      200,
+      400
+     ]
     },
     {
      "taskId": 650203,
@@ -1014,14 +925,31 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      2,
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 3022,
      "completeValue2": 0,
-     "completeNum": 25
+     "completeNum": 25,
+     "completeValues1": [
+      3022,
+      3602
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      25,
+      150,
+      250
+     ]
     },
     {
      "taskId": 650204,
@@ -1031,14 +959,29 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 4009,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      4009,
+      4601
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1,
+      15
+     ]
     },
     {
      "taskId": 650205,
@@ -1048,14 +991,29 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 4010,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      4010,
+      4602
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1,
+      5
+     ]
     },
     {
      "taskId": 650206,
@@ -1065,14 +1023,31 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_NPCInteraction",
      "completeValue1": 60033,
      "completeValue2": 0,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      60033,
+      60034,
+      60035,
+      60037
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      5,
+      15
+     ]
     },
     {
      "taskId": 650207,
@@ -1082,14 +1057,28 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_ShopBuyItem",
-     "completeValue1": 18446744073709551615,
+     "completeValue1": -1,
      "completeValue2": 0,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      -1
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      5,
+      15
+     ]
     },
     {
      "taskId": 650208,
@@ -1099,14 +1088,28 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_NPCInteraction",
      "completeValue1": 60036,
      "completeValue2": 0,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      60036
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      5,
+      10
+     ]
     },
     {
      "taskId": 650209,
@@ -1116,14 +1119,28 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_ShopSpendMoney",
      "completeValue1": 903,
      "completeValue2": 0,
-     "completeNum": 3000
+     "completeNum": 3000,
+     "completeValues1": [
+      903
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      3000,
+      10000
+     ]
     },
     {
      "taskId": 650210,
@@ -1133,14 +1150,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetMoneyPer",
      "completeValue1": 903,
      "completeValue2": 0,
-     "completeNum": 4500
+     "completeNum": 4500,
+     "completeValues1": [
+      903
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      4500
+     ]
     },
     {
      "taskId": 650211,
@@ -1150,14 +1179,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5018,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      5018
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650212,
@@ -1167,14 +1208,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5016,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      5016
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650213,
@@ -1184,14 +1237,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5924,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      5924
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650214,
@@ -1201,14 +1266,28 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 6,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      6
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5018,
      "completeValue2": 0,
-     "completeNum": 15
+     "completeNum": 15,
+     "completeValues1": [
+      5018,
+      5016,
+      5924
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      15
+     ]
     },
     {
      "taskId": 650215,
@@ -1218,14 +1297,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
      "nextTask": 650216,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_BeatSection",
      "completeValue1": 2110151,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      2110151
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650216,
@@ -1235,14 +1326,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
+     "dpPoints": [
+      2
+     ],
      "lastTask": 650215,
      "nextTask": 650217,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_BeatSection",
      "completeValue1": 2110152,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      2110152
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650217,
@@ -1252,14 +1355,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
+     "dpPoints": [
+      2
+     ],
      "lastTask": 650216,
      "nextTask": 650218,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_BeatSection",
      "completeValue1": 2110153,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      2110153
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650218,
@@ -1269,14 +1384,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
+     "dpPoints": [
+      2
+     ],
      "lastTask": 650217,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_BeatSection",
      "completeValue1": 2110154,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      2110154
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650219,
@@ -1286,14 +1413,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1004937,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      1004937
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650220,
@@ -1303,14 +1442,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1004892,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      1004892
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650221,
@@ -1320,14 +1471,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1004938,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      1004938
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650222,
@@ -1337,14 +1500,31 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1240011,
      "completeValue2": 0,
-     "completeNum": 10
+     "completeNum": 10,
+     "completeValues1": [
+      1240011,
+      1240012,
+      1240013,
+      1240014,
+      1240015,
+      1240016
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      10
+     ]
     },
     {
      "taskId": 650223,
@@ -1354,14 +1534,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 4,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemQuality",
      "completeValue1": 5,
      "completeValue2": 10,
-     "completeNum": 2
+     "completeNum": 2,
+     "completeValues1": [
+      5
+     ],
+     "completeValues2": [
+      10
+     ],
+     "completeNums": [
+      2
+     ]
     },
     {
      "taskId": 650224,
@@ -1371,14 +1563,28 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 6,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      6
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemQualityPer",
      "completeValue1": 4,
      "completeValue2": 10,
-     "completeNum": 2
+     "completeNum": 2,
+     "completeValues1": [
+      4,
+      5,
+      6
+     ],
+     "completeValues2": [
+      10
+     ],
+     "completeNums": [
+      2
+     ]
     },
     {
      "taskId": 650225,
@@ -1388,20 +1594,35 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 6,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      6
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemQualityPer",
      "completeValue1": 3,
      "completeValue2": 10,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      3,
+      4,
+      5,
+      6
+     ],
+     "completeValues2": [
+      10
+     ],
+     "completeNums": [
+      5
+     ]
     }
    ],
-   "dpTotal": 64,
-   "dpUnreadableTasks": []
+   "totalDp": 100
   },
   "2010300": {
+   "chapterId": 2010300,
    "tasks": [
     {
      "taskId": 650301,
@@ -1411,14 +1632,31 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      1,
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
-     "completeValue1": 3604,
+     "completeValue1": 3018,
      "completeValue2": 0,
-     "completeNum": 100
+     "completeNum": 100,
+     "completeValues1": [
+      3018,
+      3604
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      100,
+      250,
+      500
+     ]
     },
     {
      "taskId": 650302,
@@ -1428,14 +1666,31 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 3020,
      "completeValue2": 0,
-     "completeNum": 50
+     "completeNum": 50,
+     "completeValues1": [
+      3020,
+      3605
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      50,
+      100,
+      200
+     ]
     },
     {
      "taskId": 650303,
@@ -1445,14 +1700,31 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
-     "completeValue1": 61,
+     "completeValue1": 3019,
      "completeValue2": 0,
-     "completeNum": 50
+     "completeNum": 50,
+     "completeValues1": [
+      3019,
+      3606
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      50,
+      150,
+      300
+     ]
     },
     {
      "taskId": 650304,
@@ -1462,14 +1734,29 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 4007,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      4007,
+      4603
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1,
+      15
+     ]
     },
     {
      "taskId": 650305,
@@ -1479,14 +1766,29 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 4008,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      4008,
+      4604
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1,
+      15
+     ]
     },
     {
      "taskId": 650306,
@@ -1496,14 +1798,31 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_NPCInteraction",
      "completeValue1": 60033,
      "completeValue2": 0,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      60033,
+      60034,
+      60035,
+      60037
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      5,
+      15
+     ]
     },
     {
      "taskId": 650307,
@@ -1513,14 +1832,28 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_ShopBuyItem",
-     "completeValue1": 18446744073709551615,
+     "completeValue1": -1,
      "completeValue2": 0,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      -1
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      5,
+      15
+     ]
     },
     {
      "taskId": 650308,
@@ -1530,14 +1863,28 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_NPCInteraction",
      "completeValue1": 60036,
      "completeValue2": 0,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      60036
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      5,
+      15
+     ]
     },
     {
      "taskId": 650309,
@@ -1547,14 +1894,26 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_ShopSpendMoney",
      "completeValue1": 903,
      "completeValue2": 0,
-     "completeNum": 10000
+     "completeNum": 10000,
+     "completeValues1": [
+      903
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      10000
+     ]
     },
     {
      "taskId": 650310,
@@ -1564,14 +1923,30 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 7025,
      "completeValue2": 0,
-     "completeNum": 100
+     "completeNum": 100,
+     "completeValues1": [
+      7025,
+      7026,
+      7027
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      100,
+      500
+     ]
     },
     {
      "taskId": 650311,
@@ -1581,14 +1956,32 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 4029,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      4029,
+      4011,
+      4014,
+      4015,
+      4016
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1,
+      20
+     ]
     },
     {
      "taskId": 650312,
@@ -1598,14 +1991,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetMoneyPer",
      "completeValue1": 903,
      "completeValue2": 0,
-     "completeNum": 4500
+     "completeNum": 4500,
+     "completeValues1": [
+      903
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      4500
+     ]
     },
     {
      "taskId": 650313,
@@ -1615,14 +2020,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5014,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      5014
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650314,
@@ -1632,14 +2049,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5020,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      5020
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650315,
@@ -1649,14 +2078,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5914,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      5914
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650316,
@@ -1666,14 +2107,28 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 5,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      5
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5014,
      "completeValue2": 0,
-     "completeNum": 20
+     "completeNum": 20,
+     "completeValues1": [
+      5014,
+      5020,
+      5914
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      20
+     ]
     },
     {
      "taskId": 650317,
@@ -1683,14 +2138,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
      "nextTask": 650318,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_BeatSection",
      "completeValue1": 2110251,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      2110251
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650318,
@@ -1700,14 +2167,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
+     "dpPoints": [
+      2
+     ],
      "lastTask": 650317,
      "nextTask": 650319,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_BeatSection",
      "completeValue1": 2110253,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      2110253
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650319,
@@ -1717,14 +2196,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
+     "dpPoints": [
+      2
+     ],
      "lastTask": 650318,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_BeatSection",
      "completeValue1": 2110255,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      2110255
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650320,
@@ -1734,14 +2225,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1004888,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      1004888
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650321,
@@ -1751,14 +2254,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1004705,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      1004705
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650322,
@@ -1768,14 +2283,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1004730,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      1004730
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650323,
@@ -1785,14 +2312,31 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1240091,
      "completeValue2": 0,
-     "completeNum": 10
+     "completeNum": 10,
+     "completeValues1": [
+      1240091,
+      1240092,
+      1240093,
+      1240094,
+      1240095,
+      1240096
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      10
+     ]
     },
     {
      "taskId": 650324,
@@ -1802,14 +2346,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 4,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemQuality",
      "completeValue1": 5,
      "completeValue2": 10,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      5
+     ],
+     "completeValues2": [
+      10
+     ],
+     "completeNums": [
+      5
+     ]
     },
     {
      "taskId": 650325,
@@ -1819,14 +2375,27 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 6,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      6
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemQualityPer",
      "completeValue1": 5,
      "completeValue2": 10,
-     "completeNum": 2
+     "completeNum": 2,
+     "completeValues1": [
+      5,
+      6
+     ],
+     "completeValues2": [
+      10
+     ],
+     "completeNums": [
+      2
+     ]
     },
     {
      "taskId": 650326,
@@ -1836,20 +2405,34 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 6,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      6
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemQualityPer",
      "completeValue1": 4,
      "completeValue2": 10,
-     "completeNum": 3
+     "completeNum": 3,
+     "completeValues1": [
+      4,
+      5,
+      6
+     ],
+     "completeValues2": [
+      10
+     ],
+     "completeNums": [
+      3
+     ]
     }
    ],
-   "dpTotal": 59,
-   "dpUnreadableTasks": []
+   "totalDp": 100
   },
   "2010400": {
+   "chapterId": 2010400,
    "tasks": [
     {
      "taskId": 650401,
@@ -1859,14 +2442,29 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 3004,
      "completeValue2": 0,
-     "completeNum": 50
+     "completeNum": 50,
+     "completeValues1": [
+      3004,
+      3607
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      50,
+      400
+     ]
     },
     {
      "taskId": 650402,
@@ -1876,14 +2474,29 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 3005,
      "completeValue2": 0,
-     "completeNum": 50
+     "completeNum": 50,
+     "completeValues1": [
+      3005,
+      3608
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      50,
+      200
+     ]
     },
     {
      "taskId": 650403,
@@ -1893,14 +2506,29 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 3006,
      "completeValue2": 0,
-     "completeNum": 50
+     "completeNum": 50,
+     "completeValues1": [
+      3006,
+      3609
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      50,
+      200
+     ]
     },
     {
      "taskId": 650404,
@@ -1910,14 +2538,29 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 3014,
      "completeValue2": 0,
-     "completeNum": 50
+     "completeNum": 50,
+     "completeValues1": [
+      3014,
+      3611
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      50,
+      200
+     ]
     },
     {
      "taskId": 650405,
@@ -1927,14 +2570,29 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 4003,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      4003,
+      4605
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1,
+      10
+     ]
     },
     {
      "taskId": 650406,
@@ -1944,14 +2602,29 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 4004,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      4004,
+      4606
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1,
+      20
+     ]
     },
     {
      "taskId": 650407,
@@ -1961,14 +2634,31 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_NPCInteraction",
      "completeValue1": 60033,
      "completeValue2": 0,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      60033,
+      60034,
+      60035,
+      60037
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      5,
+      15
+     ]
     },
     {
      "taskId": 650408,
@@ -1978,14 +2668,28 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_ShopBuyItem",
-     "completeValue1": 18446744073709551615,
+     "completeValue1": -1,
      "completeValue2": 0,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      -1
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      5,
+      15
+     ]
     },
     {
      "taskId": 650409,
@@ -1995,14 +2699,29 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_NPCInteraction",
      "completeValue1": 60036,
      "completeValue2": 0,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      60036,
+      60300
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      5,
+      15
+     ]
     },
     {
      "taskId": 650410,
@@ -2012,14 +2731,28 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      6
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_NPCInteraction",
      "completeValue1": 60300,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      60300
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1,
+      5
+     ]
     },
     {
      "taskId": 650411,
@@ -2029,14 +2762,28 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_ShopSpendMoney",
      "completeValue1": 903,
      "completeValue2": 0,
-     "completeNum": 3000
+     "completeNum": 3000,
+     "completeValues1": [
+      903
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      3000,
+      10000
+     ]
     },
     {
      "taskId": 650412,
@@ -2046,14 +2793,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetMoneyPer",
      "completeValue1": 903,
      "completeValue2": 0,
-     "completeNum": 4500
+     "completeNum": 4500,
+     "completeValues1": [
+      903
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      4500
+     ]
     },
     {
      "taskId": 650413,
@@ -2063,14 +2822,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5001,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      5001
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650414,
@@ -2080,14 +2851,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5002,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      5002
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650415,
@@ -2097,14 +2880,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5915,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      5915
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650416,
@@ -2114,14 +2909,28 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 6,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      6
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5001,
      "completeValue2": 0,
-     "completeNum": 20
+     "completeNum": 20,
+     "completeValues1": [
+      5001,
+      5002,
+      5915
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      20
+     ]
     },
     {
      "taskId": 650417,
@@ -2131,14 +2940,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
      "nextTask": 650418,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_BeatSection",
      "completeValue1": 2110351,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      2110351
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650418,
@@ -2148,14 +2969,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
+     "dpPoints": [
+      2
+     ],
      "lastTask": 650417,
      "nextTask": 650419,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_BeatSection",
      "completeValue1": 2110353,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      2110353
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650419,
@@ -2165,14 +2998,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 4,
+     "dpPoints": [
+      4
+     ],
      "lastTask": 650418,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_BeatSection",
      "completeValue1": 2110355,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      2110355
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650420,
@@ -2182,14 +3027,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1004887,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      1004887
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650421,
@@ -2199,14 +3056,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1004919,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      1004919
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650422,
@@ -2216,14 +3085,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1004917,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      1004917
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650423,
@@ -2233,14 +3114,31 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1240041,
      "completeValue2": 0,
-     "completeNum": 10
+     "completeNum": 10,
+     "completeValues1": [
+      1240041,
+      1240042,
+      1240043,
+      1240044,
+      1240045,
+      1240046
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      10
+     ]
     },
     {
      "taskId": 650424,
@@ -2250,14 +3148,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 4,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemQuality",
      "completeValue1": 5,
      "completeValue2": 10,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      5
+     ],
+     "completeValues2": [
+      10
+     ],
+     "completeNums": [
+      5
+     ]
     },
     {
      "taskId": 650425,
@@ -2267,14 +3177,27 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 6,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      6
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemQualityPer",
      "completeValue1": 5,
      "completeValue2": 10,
-     "completeNum": 2
+     "completeNum": 2,
+     "completeValues1": [
+      5,
+      6
+     ],
+     "completeValues2": [
+      10
+     ],
+     "completeNums": [
+      2
+     ]
     },
     {
      "taskId": 650426,
@@ -2284,20 +3207,34 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 6,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      6
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemQualityPer",
      "completeValue1": 4,
      "completeValue2": 10,
-     "completeNum": 4
+     "completeNum": 4,
+     "completeValues1": [
+      4,
+      5,
+      6
+     ],
+     "completeValues2": [
+      10
+     ],
+     "completeNums": [
+      4
+     ]
     }
    ],
-   "dpTotal": 62,
-   "dpUnreadableTasks": []
+   "totalDp": 100
   },
   "2010500": {
+   "chapterId": 2010500,
    "tasks": [
     {
      "taskId": 650501,
@@ -2307,14 +3244,31 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      1,
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 3008,
      "completeValue2": 0,
-     "completeNum": 100
+     "completeNum": 100,
+     "completeValues1": [
+      3008,
+      3612
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      100,
+      250,
+      500
+     ]
     },
     {
      "taskId": 650502,
@@ -2324,14 +3278,31 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      2,
+      3
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 3009,
      "completeValue2": 0,
-     "completeNum": 50
+     "completeNum": 50,
+     "completeValues1": [
+      3009,
+      3613
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      50,
+      150,
+      250
+     ]
     },
     {
      "taskId": 650503,
@@ -2341,14 +3312,31 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      2,
+      6
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 4013,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      4013,
+      4607
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1,
+      20,
+      40
+     ]
     },
     {
      "taskId": 650504,
@@ -2358,14 +3346,32 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 4029,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      4029,
+      4011,
+      4014,
+      4015,
+      4016
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1,
+      20
+     ]
     },
     {
      "taskId": 650505,
@@ -2375,14 +3381,31 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_NPCInteraction",
      "completeValue1": 60033,
      "completeValue2": 0,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      60033,
+      60034,
+      60035,
+      60037
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      5,
+      20
+     ]
     },
     {
      "taskId": 650506,
@@ -2392,14 +3415,28 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_ShopBuyItem",
-     "completeValue1": 18446744073709551615,
+     "completeValue1": -1,
      "completeValue2": 0,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      -1
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      5,
+      15
+     ]
     },
     {
      "taskId": 650507,
@@ -2407,16 +3444,32 @@
      "text": "累计打开宝箱 {0} 次",
      "conditionId": 610507,
      "conditionType": 1,
-     "completionLimit": 54,
+     "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      4,
+      6
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_NPCInteraction",
      "completeValue1": 60021,
      "completeValue2": 0,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      60021
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      5,
+      15,
+      30
+     ]
     },
     {
      "taskId": 650508,
@@ -2426,14 +3479,28 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_ShopSpendMoney",
      "completeValue1": 903,
      "completeValue2": 0,
-     "completeNum": 5000
+     "completeNum": 5000,
+     "completeValues1": [
+      903
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      5000,
+      15000
+     ]
     },
     {
      "taskId": 650509,
@@ -2443,14 +3510,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 3,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      3
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetMoneyPer",
      "completeValue1": 903,
      "completeValue2": 0,
-     "completeNum": 4500
+     "completeNum": 4500,
+     "completeValues1": [
+      903
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      4500
+     ]
     },
     {
      "taskId": 650510,
@@ -2460,14 +3539,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5005,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      5005
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650511,
@@ -2477,14 +3568,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5006,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      5006
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650512,
@@ -2494,14 +3597,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5916,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      5916
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650513,
@@ -2511,14 +3626,28 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 6,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      6
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5005,
      "completeValue2": 0,
-     "completeNum": 20
+     "completeNum": 20,
+     "completeValues1": [
+      5005,
+      5006,
+      5916
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      20
+     ]
     },
     {
      "taskId": 650514,
@@ -2528,14 +3657,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
      "nextTask": 650515,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_BeatSection",
      "completeValue1": 2110451,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      2110451
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650515,
@@ -2545,14 +3686,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
+     "dpPoints": [
+      2
+     ],
      "lastTask": 650514,
      "nextTask": 650516,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_BeatSection",
      "completeValue1": 2110453,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      2110453
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650516,
@@ -2562,14 +3715,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
+     "dpPoints": [
+      2
+     ],
      "lastTask": 650515,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_BeatSection",
      "completeValue1": 2110455,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      2110455
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650517,
@@ -2579,14 +3744,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1004890,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      1004890
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650518,
@@ -2596,14 +3773,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1004934,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      1004934
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650519,
@@ -2613,14 +3802,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1004635,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      1004635
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650520,
@@ -2630,14 +3831,31 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1240061,
      "completeValue2": 0,
-     "completeNum": 10
+     "completeNum": 10,
+     "completeValues1": [
+      1240061,
+      1240062,
+      1240063,
+      1240064,
+      1240065,
+      1240066
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      10
+     ]
     },
     {
      "taskId": 650521,
@@ -2647,14 +3865,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 4,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemQuality",
      "completeValue1": 5,
      "completeValue2": 10,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      5
+     ],
+     "completeValues2": [
+      10
+     ],
+     "completeNums": [
+      5
+     ]
     },
     {
      "taskId": 650522,
@@ -2664,14 +3894,27 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 6,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      6
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemQualityPer",
      "completeValue1": 5,
      "completeValue2": 10,
-     "completeNum": 2
+     "completeNum": 2,
+     "completeValues1": [
+      5,
+      6
+     ],
+     "completeValues2": [
+      10
+     ],
+     "completeNums": [
+      2
+     ]
     },
     {
      "taskId": 650523,
@@ -2681,20 +3924,34 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 6,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      6
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemQualityPer",
      "completeValue1": 4,
      "completeValue2": 10,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      4,
+      5,
+      6
+     ],
+     "completeValues2": [
+      10
+     ],
+     "completeNums": [
+      5
+     ]
     }
    ],
-   "dpTotal": 58,
-   "dpUnreadableTasks": []
+   "totalDp": 100
   },
   "2010600": {
+   "chapterId": 2010600,
    "tasks": [
     {
      "taskId": 650601,
@@ -2704,14 +3961,31 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 3033,
      "completeValue2": 0,
-     "completeNum": 100
+     "completeNum": 100,
+     "completeValues1": [
+      3033,
+      3626
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      100,
+      250,
+      500
+     ]
     },
     {
      "taskId": 650602,
@@ -2721,14 +3995,31 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      1,
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 3034,
      "completeValue2": 0,
-     "completeNum": 100
+     "completeNum": 100,
+     "completeValues1": [
+      3034,
+      3627
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      100,
+      250,
+      500
+     ]
     },
     {
      "taskId": 650603,
@@ -2738,14 +4029,29 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 4027,
      "completeValue2": 0,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      4027,
+      4616
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      5,
+      20
+     ]
     },
     {
      "taskId": 650604,
@@ -2755,14 +4061,29 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 4028,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      4028,
+      4617
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1,
+      10
+     ]
     },
     {
      "taskId": 650605,
@@ -2772,14 +4093,32 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 4029,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      4029,
+      4011,
+      4014,
+      4015,
+      4016
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1,
+      20
+     ]
     },
     {
      "taskId": 650606,
@@ -2789,14 +4128,33 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_NPCInteraction",
      "completeValue1": 60033,
      "completeValue2": 0,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      60033,
+      60034,
+      60035,
+      60037
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      5,
+      15,
+      30
+     ]
     },
     {
      "taskId": 650607,
@@ -2806,14 +4164,28 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_ShopBuyItem",
-     "completeValue1": 18446744073709551615,
+     "completeValue1": -1,
      "completeValue2": 0,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      -1
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      5,
+      20
+     ]
     },
     {
      "taskId": 650608,
@@ -2823,14 +4195,28 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_NPCInteraction",
      "completeValue1": 60036,
      "completeValue2": 0,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      60036
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      5,
+      15
+     ]
     },
     {
      "taskId": 650609,
@@ -2840,14 +4226,28 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_ShopSpendMoney",
      "completeValue1": 903,
      "completeValue2": 0,
-     "completeNum": 10000
+     "completeNum": 10000,
+     "completeValues1": [
+      903
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      10000,
+      23333
+     ]
     },
     {
      "taskId": 650610,
@@ -2857,14 +4257,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetMoneyPer",
      "completeValue1": 903,
      "completeValue2": 0,
-     "completeNum": 4500
+     "completeNum": 4500,
+     "completeValues1": [
+      903
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      4500
+     ]
     },
     {
      "taskId": 650611,
@@ -2874,14 +4286,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5029,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      5029
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650612,
@@ -2891,14 +4315,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5030,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      5030
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650613,
@@ -2908,14 +4344,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5917,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      5917
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650614,
@@ -2925,14 +4373,28 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 6,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      6
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5029,
      "completeValue2": 0,
-     "completeNum": 20
+     "completeNum": 20,
+     "completeValues1": [
+      5029,
+      5030,
+      5917
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      20
+     ]
     },
     {
      "taskId": 650615,
@@ -2942,14 +4404,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
      "nextTask": 650616,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_BeatSection",
      "completeValue1": 2110551,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      2110551
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650616,
@@ -2959,14 +4433,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
+     "dpPoints": [
+      2
+     ],
      "lastTask": 650615,
      "nextTask": 650617,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_BeatSection",
      "completeValue1": 2110553,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      2110553
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650617,
@@ -2976,14 +4462,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
+     "dpPoints": [
+      2
+     ],
      "lastTask": 650616,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_BeatSection",
      "completeValue1": 2110555,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      2110555
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650618,
@@ -2993,14 +4491,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1004889,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      1004889
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650619,
@@ -3010,14 +4520,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1004623,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      1004623
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650620,
@@ -3027,14 +4549,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1004628,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      1004628
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650621,
@@ -3044,14 +4578,31 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1240121,
      "completeValue2": 0,
-     "completeNum": 10
+     "completeNum": 10,
+     "completeValues1": [
+      1240121,
+      1240122,
+      1240123,
+      1240124,
+      1240125,
+      1240126
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      10
+     ]
     },
     {
      "taskId": 650622,
@@ -3061,14 +4612,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 4,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemQuality",
      "completeValue1": 5,
      "completeValue2": 10,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      5
+     ],
+     "completeValues2": [
+      10
+     ],
+     "completeNums": [
+      5
+     ]
     },
     {
      "taskId": 650623,
@@ -3078,14 +4641,27 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 6,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      6
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemQualityPer",
      "completeValue1": 5,
      "completeValue2": 10,
-     "completeNum": 2
+     "completeNum": 2,
+     "completeValues1": [
+      5,
+      6
+     ],
+     "completeValues2": [
+      10
+     ],
+     "completeNums": [
+      2
+     ]
     },
     {
      "taskId": 650624,
@@ -3095,20 +4671,34 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 6,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      6
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemQualityPer",
      "completeValue1": 4,
      "completeValue2": 10,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      4,
+      5,
+      6
+     ],
+     "completeValues2": [
+      10
+     ],
+     "completeNums": [
+      5
+     ]
     }
    ],
-   "dpTotal": 61,
-   "dpUnreadableTasks": []
+   "totalDp": 100
   },
   "2010700": {
+   "chapterId": 2010700,
    "tasks": [
     {
      "taskId": 650701,
@@ -3118,14 +4708,30 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      1,
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 3027,
      "completeValue2": 0,
-     "completeNum": 100
+     "completeNum": 100,
+     "completeValues1": [
+      3027
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      100,
+      250,
+      500
+     ]
     },
     {
      "taskId": 650702,
@@ -3135,14 +4741,33 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      1,
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 3024,
      "completeValue2": 0,
-     "completeNum": 100
+     "completeNum": 100,
+     "completeValues1": [
+      3024,
+      3028,
+      3029,
+      3030
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      100,
+      250,
+      500
+     ]
     },
     {
      "taskId": 650703,
@@ -3152,14 +4777,35 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      1,
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 3035,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      3035,
+      3036,
+      3037,
+      3038
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1,
+      20,
+      50,
+      100
+     ]
     },
     {
      "taskId": 650704,
@@ -3169,14 +4815,30 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 4017,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      4017,
+      4025,
+      4026
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1,
+      20
+     ]
     },
     {
      "taskId": 650705,
@@ -3186,14 +4848,32 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 4029,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      4029,
+      4011,
+      4014,
+      4015,
+      4016
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1,
+      20
+     ]
     },
     {
      "taskId": 650707,
@@ -3203,14 +4883,31 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_NPCInteraction",
      "completeValue1": 60033,
      "completeValue2": 0,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      60033,
+      60034,
+      60035,
+      60037
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      5,
+      20
+     ]
     },
     {
      "taskId": 650708,
@@ -3220,14 +4917,28 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_ShopBuyItem",
-     "completeValue1": 18446744073709551615,
+     "completeValue1": -1,
      "completeValue2": 0,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      -1
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      5,
+      20
+     ]
     },
     {
      "taskId": 650709,
@@ -3237,14 +4948,28 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_NPCInteraction",
      "completeValue1": 60036,
      "completeValue2": 0,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      60036
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      5,
+      20
+     ]
     },
     {
      "taskId": 650710,
@@ -3254,14 +4979,28 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_NPCInteraction",
      "completeValue1": 60605,
      "completeValue2": 0,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      60605
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      5,
+      15
+     ]
     },
     {
      "taskId": 650711,
@@ -3271,14 +5010,28 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_ShopSpendMoney",
      "completeValue1": 903,
      "completeValue2": 0,
-     "completeNum": 10000
+     "completeNum": 10000,
+     "completeValues1": [
+      903
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      10000,
+      23333
+     ]
     },
     {
      "taskId": 650712,
@@ -3288,14 +5041,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetMoneyPer",
      "completeValue1": 903,
      "completeValue2": 0,
-     "completeNum": 4500
+     "completeNum": 4500,
+     "completeValues1": [
+      903
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      4500
+     ]
     },
     {
      "taskId": 650713,
@@ -3305,14 +5070,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5025,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      5025
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650714,
@@ -3322,14 +5099,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5023,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      5023
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650715,
@@ -3339,14 +5128,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5922,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      5922
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650716,
@@ -3356,14 +5157,28 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 6,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      6
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5025,
      "completeValue2": 0,
-     "completeNum": 20
+     "completeNum": 20,
+     "completeValues1": [
+      5025,
+      5023,
+      5922
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      20
+     ]
     },
     {
      "taskId": 650717,
@@ -3373,14 +5188,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
      "nextTask": 650718,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_BeatSection",
      "completeValue1": 2110651,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      2110651
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650718,
@@ -3390,14 +5217,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
+     "dpPoints": [
+      2
+     ],
      "lastTask": 650717,
      "nextTask": 650719,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_BeatSection",
      "completeValue1": 2110653,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      2110653
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650719,
@@ -3407,14 +5246,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
+     "dpPoints": [
+      2
+     ],
      "lastTask": 650718,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_BeatSection",
      "completeValue1": 2110655,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      2110655
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650720,
@@ -3424,14 +5275,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1004621,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      1004621
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650721,
@@ -3441,14 +5304,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1004891,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      1004891
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650722,
@@ -3458,14 +5333,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1004920,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      1004920
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650723,
@@ -3475,14 +5362,31 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1240141,
      "completeValue2": 0,
-     "completeNum": 10
+     "completeNum": 10,
+     "completeValues1": [
+      1240141,
+      1240142,
+      1240143,
+      1240144,
+      1240145,
+      1240146
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      10
+     ]
     },
     {
      "taskId": 650724,
@@ -3492,14 +5396,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 4,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemQuality",
      "completeValue1": 5,
      "completeValue2": 10,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      5
+     ],
+     "completeValues2": [
+      10
+     ],
+     "completeNums": [
+      5
+     ]
     },
     {
      "taskId": 650725,
@@ -3509,14 +5425,27 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 6,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      6
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemQualityPer",
      "completeValue1": 5,
      "completeValue2": 10,
-     "completeNum": 2
+     "completeNum": 2,
+     "completeValues1": [
+      5,
+      6
+     ],
+     "completeValues2": [
+      10
+     ],
+     "completeNums": [
+      2
+     ]
     },
     {
      "taskId": 650726,
@@ -3526,14 +5455,28 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 6,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      6
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemQualityPer",
      "completeValue1": 4,
      "completeValue2": 10,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      4,
+      5,
+      6
+     ],
+     "completeValues2": [
+      10
+     ],
+     "completeNums": [
+      5
+     ]
     },
     {
      "taskId": 650727,
@@ -3543,20 +5486,32 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1107003,
      "completeValue2": 0,
-     "completeNum": 233
+     "completeNum": 233,
+     "completeValues1": [
+      1107003
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      233
+     ]
     }
    ],
-   "dpTotal": 61,
-   "dpUnreadableTasks": []
+   "totalDp": 100
   },
   "2010800": {
+   "chapterId": 2010800,
    "tasks": [
     {
      "taskId": 650801,
@@ -3566,14 +5521,33 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      2,
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 3010,
      "completeValue2": 0,
-     "completeNum": 100
+     "completeNum": 100,
+     "completeValues1": [
+      3010,
+      3015,
+      3016,
+      3017
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      100,
+      250,
+      500
+     ]
     },
     {
      "taskId": 650802,
@@ -3583,14 +5557,30 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      2,
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 3011,
      "completeValue2": 0,
-     "completeNum": 50
+     "completeNum": 50,
+     "completeValues1": [
+      3011
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      50,
+      150,
+      300
+     ]
     },
     {
      "taskId": 650803,
@@ -3600,14 +5590,28 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 4005,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      4005
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1,
+      20
+     ]
     },
     {
      "taskId": 650804,
@@ -3617,14 +5621,28 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 4006,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      4006
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1,
+      20
+     ]
     },
     {
      "taskId": 650805,
@@ -3634,14 +5652,32 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 4029,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      4029,
+      4011,
+      4014,
+      4015,
+      4016
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1,
+      20
+     ]
     },
     {
      "taskId": 650806,
@@ -3651,14 +5687,28 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_ShopBuyItem",
-     "completeValue1": 18446744073709551615,
+     "completeValue1": -1,
      "completeValue2": 0,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      -1
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      5,
+      20
+     ]
     },
     {
      "taskId": 650807,
@@ -3668,14 +5718,31 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_NPCInteraction",
      "completeValue1": 60033,
      "completeValue2": 0,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      60033,
+      60034,
+      60035,
+      60037
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      5,
+      20
+     ]
     },
     {
      "taskId": 650808,
@@ -3685,14 +5752,28 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_NPCInteraction",
      "completeValue1": 60036,
      "completeValue2": 0,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      60036
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      5,
+      20
+     ]
     },
     {
      "taskId": 650809,
@@ -3702,14 +5783,28 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_ShopSpendMoney",
      "completeValue1": 903,
      "completeValue2": 0,
-     "completeNum": 10000
+     "completeNum": 10000,
+     "completeValues1": [
+      903
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      10000,
+      23333
+     ]
     },
     {
      "taskId": 650810,
@@ -3719,14 +5814,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 4,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetMoneyPer",
      "completeValue1": 903,
      "completeValue2": 0,
-     "completeNum": 4500
+     "completeNum": 4500,
+     "completeValues1": [
+      903
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      4500
+     ]
     },
     {
      "taskId": 650811,
@@ -3736,14 +5843,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5010,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      5010
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650812,
@@ -3753,14 +5872,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5012,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      5012
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650813,
@@ -3770,14 +5901,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5923,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      5923
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650814,
@@ -3787,14 +5930,28 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 6,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      6
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5010,
      "completeValue2": 0,
-     "completeNum": 20
+     "completeNum": 20,
+     "completeValues1": [
+      5010,
+      5012,
+      5923
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      20
+     ]
     },
     {
      "taskId": 650815,
@@ -3804,14 +5961,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
      "nextTask": 650816,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_BeatSection",
      "completeValue1": 2110751,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      2110751
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650816,
@@ -3821,14 +5990,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
+     "dpPoints": [
+      2
+     ],
      "lastTask": 650815,
      "nextTask": 650817,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_BeatSection",
      "completeValue1": 2110753,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      2110753
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650817,
@@ -3838,14 +6019,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
+     "dpPoints": [
+      2
+     ],
      "lastTask": 650816,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_BeatSection",
      "completeValue1": 2110755,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      2110755
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650818,
@@ -3855,14 +6048,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1004744,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      1004744
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650819,
@@ -3872,14 +6077,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1004751,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      1004751
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650820,
@@ -3889,14 +6106,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1004753,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      1004753
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650821,
@@ -3906,14 +6135,31 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1240151,
      "completeValue2": 0,
-     "completeNum": 10
+     "completeNum": 10,
+     "completeValues1": [
+      1240151,
+      1240152,
+      1240153,
+      1240154,
+      1240155,
+      1240156
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      10
+     ]
     },
     {
      "taskId": 650822,
@@ -3923,14 +6169,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 4,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemQuality",
      "completeValue1": 5,
      "completeValue2": 10,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      5
+     ],
+     "completeValues2": [
+      10
+     ],
+     "completeNums": [
+      5
+     ]
     },
     {
      "taskId": 650823,
@@ -3940,14 +6198,27 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 6,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      6
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemQualityPer",
      "completeValue1": 5,
      "completeValue2": 10,
-     "completeNum": 2
+     "completeNum": 2,
+     "completeValues1": [
+      5,
+      6
+     ],
+     "completeValues2": [
+      10
+     ],
+     "completeNums": [
+      2
+     ]
     },
     {
      "taskId": 650824,
@@ -3957,20 +6228,34 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 6,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      6
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemQualityPer",
      "completeValue1": 4,
      "completeValue2": 10,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      4,
+      5,
+      6
+     ],
+     "completeValues2": [
+      10
+     ],
+     "completeNums": [
+      5
+     ]
     }
    ],
-   "dpTotal": 64,
-   "dpUnreadableTasks": []
+   "totalDp": 100
   },
   "2010900": {
+   "chapterId": 2010900,
    "tasks": [
     {
      "taskId": 650901,
@@ -3980,14 +6265,30 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      1,
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 3150,
      "completeValue2": 0,
-     "completeNum": 100
+     "completeNum": 100,
+     "completeValues1": [
+      3150
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      100,
+      250,
+      500
+     ]
     },
     {
      "taskId": 650902,
@@ -3997,14 +6298,30 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      1,
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 3155,
      "completeValue2": 0,
-     "completeNum": 50
+     "completeNum": 50,
+     "completeValues1": [
+      3155
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      50,
+      150,
+      300
+     ]
     },
     {
      "taskId": 650903,
@@ -4014,14 +6331,28 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      3
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 4055,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      4055
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1,
+      20
+     ]
     },
     {
      "taskId": 650904,
@@ -4031,14 +6362,28 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      3
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 4056,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      4056
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1,
+      20
+     ]
     },
     {
      "taskId": 650905,
@@ -4048,14 +6393,32 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      3
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 4029,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      4029,
+      4011,
+      4014,
+      4015,
+      4016
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1,
+      20
+     ]
     },
     {
      "taskId": 650906,
@@ -4065,14 +6428,28 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_ShopBuyItem",
-     "completeValue1": 18446744073709551615,
+     "completeValue1": -1,
      "completeValue2": 0,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      -1
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      5,
+      20
+     ]
     },
     {
      "taskId": 650907,
@@ -4082,14 +6459,43 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_NPCInteraction",
      "completeValue1": 64414,
      "completeValue2": 0,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      64414,
+      64415,
+      64416,
+      64417,
+      64418,
+      64419,
+      64420,
+      64421,
+      64422,
+      64423,
+      64424,
+      64425,
+      64426,
+      64427,
+      64428,
+      64429
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      5,
+      20
+     ]
     },
     {
      "taskId": 650908,
@@ -4099,14 +6505,28 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_NPCInteraction",
      "completeValue1": 64451,
      "completeValue2": 0,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      64451
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      5,
+      20
+     ]
     },
     {
      "taskId": 650909,
@@ -4116,14 +6536,28 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_ShopSpendMoney",
      "completeValue1": 903,
      "completeValue2": 0,
-     "completeNum": 10000
+     "completeNum": 10000,
+     "completeValues1": [
+      903
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      10000,
+      23333
+     ]
     },
     {
      "taskId": 650910,
@@ -4133,14 +6567,40 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_ShopBuyItem",
      "completeValue1": 1004765,
      "completeValue2": 0,
-     "completeNum": 3
+     "completeNum": 3,
+     "completeValues1": [
+      1004765,
+      1004766,
+      1004767,
+      1004768,
+      1004769,
+      1004770,
+      1004771,
+      1004772,
+      1004773,
+      1004774,
+      1004775,
+      1004776,
+      1004777,
+      1004778,
+      1004779
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      3
+     ]
     },
     {
      "taskId": 650911,
@@ -4150,14 +6610,26 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_NPCInteraction",
      "completeValue1": 64446,
      "completeValue2": 0,
-     "completeNum": 3
+     "completeNum": 3,
+     "completeValues1": [
+      64446
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      3
+     ]
     },
     {
      "taskId": 650912,
@@ -4167,14 +6639,26 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_NPCInteraction",
      "completeValue1": 64447,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      64447
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650913,
@@ -4184,14 +6668,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetMoneyPer",
      "completeValue1": 903,
      "completeValue2": 0,
-     "completeNum": 4500
+     "completeNum": 4500,
+     "completeValues1": [
+      903
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      4500
+     ]
     },
     {
      "taskId": 650914,
@@ -4201,14 +6697,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5035,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      5035
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650915,
@@ -4218,14 +6726,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5036,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      5036
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650916,
@@ -4235,14 +6755,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5944,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      5944
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650917,
@@ -4252,14 +6784,28 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 6,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      6
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5035,
      "completeValue2": 0,
-     "completeNum": 20
+     "completeNum": 20,
+     "completeValues1": [
+      5035,
+      5036,
+      5944
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      20
+     ]
     },
     {
      "taskId": 650918,
@@ -4269,14 +6815,32 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 3,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      3
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonsterInSan",
      "completeValue1": 1,
      "completeValue2": 3150,
-     "completeNum": 100
+     "completeNum": 100,
+     "completeValues1": [
+      1
+     ],
+     "completeValues2": [
+      3150,
+      3155,
+      4055,
+      4056,
+      5035,
+      5036,
+      5943
+     ],
+     "completeNums": [
+      100
+     ]
     },
     {
      "taskId": 650919,
@@ -4286,14 +6850,32 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 3,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      3
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonsterInSan",
      "completeValue1": 4,
      "completeValue2": 3150,
-     "completeNum": 100
+     "completeNum": 100,
+     "completeValues1": [
+      4
+     ],
+     "completeValues2": [
+      3150,
+      3155,
+      4055,
+      4056,
+      5035,
+      5036,
+      5943
+     ],
+     "completeNums": [
+      100
+     ]
     },
     {
      "taskId": 650920,
@@ -4303,14 +6885,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
      "nextTask": 650921,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_BeatSection",
      "completeValue1": 2110951,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      2110951
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650921,
@@ -4320,14 +6914,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
+     "dpPoints": [
+      2
+     ],
      "lastTask": 650920,
      "nextTask": 650922,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_BeatSection",
      "completeValue1": 2110953,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      2110953
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650922,
@@ -4337,14 +6943,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
+     "dpPoints": [
+      2
+     ],
      "lastTask": 650921,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_BeatSection",
      "completeValue1": 2110955,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      2110955
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650923,
@@ -4354,14 +6972,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1004772,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      1004772
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 650924,
@@ -4371,14 +7001,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 3,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      3
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemQualityPer",
      "completeValue1": 8,
      "completeValue2": 4,
-     "completeNum": 6
+     "completeNum": 6,
+     "completeValues1": [
+      8
+     ],
+     "completeValues2": [
+      4
+     ],
+     "completeNums": [
+      6
+     ]
     },
     {
      "taskId": 650925,
@@ -4388,14 +7030,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 3,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      3
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemQuality",
      "completeValue1": 8,
      "completeValue2": 4,
-     "completeNum": 25
+     "completeNum": 25,
+     "completeValues1": [
+      8
+     ],
+     "completeValues2": [
+      4
+     ],
+     "completeNums": [
+      25
+     ]
     },
     {
      "taskId": 650926,
@@ -4405,14 +7059,31 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1240181,
      "completeValue2": 0,
-     "completeNum": 10
+     "completeNum": 10,
+     "completeValues1": [
+      1240181,
+      1240182,
+      1240183,
+      1240184,
+      1240185,
+      1240186
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      10
+     ]
     },
     {
      "taskId": 650927,
@@ -4422,14 +7093,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 6,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      6
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemQuality",
      "completeValue1": 5,
      "completeValue2": 10,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      5
+     ],
+     "completeValues2": [
+      10
+     ],
+     "completeNums": [
+      5
+     ]
     },
     {
      "taskId": 650928,
@@ -4439,14 +7122,27 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 6,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      6
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemQualityPer",
      "completeValue1": 5,
      "completeValue2": 10,
-     "completeNum": 2
+     "completeNum": 2,
+     "completeValues1": [
+      5,
+      6
+     ],
+     "completeValues2": [
+      10
+     ],
+     "completeNums": [
+      2
+     ]
     },
     {
      "taskId": 650929,
@@ -4456,20 +7152,34 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 6,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      6
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemQualityPer",
      "completeValue1": 4,
      "completeValue2": 10,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      4,
+      5,
+      6
+     ],
+     "completeValues2": [
+      10
+     ],
+     "completeNums": [
+      5
+     ]
     }
    ],
-   "dpTotal": 69,
-   "dpUnreadableTasks": []
+   "totalDp": 100
   },
   "2011000": {
+   "chapterId": 2011000,
    "tasks": [
     {
      "taskId": 651001,
@@ -4479,20 +7189,32 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetMoneyPer",
      "completeValue1": 903,
      "completeValue2": 0,
-     "completeNum": 4500
+     "completeNum": 4500,
+     "completeValues1": [
+      903
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      4500
+     ]
     }
    ],
-   "dpTotal": 2,
-   "dpUnreadableTasks": []
+   "totalDp": 2
   },
   "2011100": {
+   "chapterId": 2011100,
    "tasks": [
     {
      "taskId": 651101,
@@ -4502,14 +7224,31 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      1,
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 3174,
      "completeValue2": 0,
-     "completeNum": 100
+     "completeNum": 100,
+     "completeValues1": [
+      3174,
+      3175
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      100,
+      250,
+      500
+     ]
     },
     {
      "taskId": 651102,
@@ -4519,14 +7258,31 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      1,
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 3176,
      "completeValue2": 0,
-     "completeNum": 50
+     "completeNum": 50,
+     "completeValues1": [
+      3176,
+      3177
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      50,
+      150,
+      300
+     ]
     },
     {
      "taskId": 651103,
@@ -4536,14 +7292,31 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      1,
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 3178,
      "completeValue2": 0,
-     "completeNum": 100
+     "completeNum": 100,
+     "completeValues1": [
+      3178,
+      3179
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      100,
+      250,
+      500
+     ]
     },
     {
      "taskId": 651104,
@@ -4553,14 +7326,28 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      3
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 4075,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      4075
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1,
+      20
+     ]
     },
     {
      "taskId": 651105,
@@ -4570,14 +7357,28 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      3
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 4076,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      4076
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1,
+      20
+     ]
     },
     {
      "taskId": 651106,
@@ -4587,14 +7388,28 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      3
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_NPCInteraction",
      "completeValue1": 64475,
      "completeValue2": 0,
-     "completeNum": 50
+     "completeNum": 50,
+     "completeValues1": [
+      64475
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      50,
+      100
+     ]
     },
     {
      "taskId": 651107,
@@ -4604,14 +7419,28 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_ShopBuyItem",
-     "completeValue1": 18446744073709551615,
+     "completeValue1": -1,
      "completeValue2": 0,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      -1
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      5,
+      20
+     ]
     },
     {
      "taskId": 651108,
@@ -4621,14 +7450,47 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_NPCInteraction",
      "completeValue1": 64452,
      "completeValue2": 0,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      64452,
+      64453,
+      64454,
+      64455,
+      64456,
+      64457,
+      64458,
+      64459,
+      64460,
+      64461,
+      64462,
+      64463,
+      64464,
+      64465,
+      64466,
+      64467,
+      64468,
+      64469,
+      64470,
+      64471
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      5,
+      20
+     ]
     },
     {
      "taskId": 651109,
@@ -4638,14 +7500,28 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_NPCInteraction",
      "completeValue1": 64451,
      "completeValue2": 0,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      64451
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      5,
+      20
+     ]
     },
     {
      "taskId": 651110,
@@ -4655,14 +7531,28 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 1,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      1,
+      4
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_ShopSpendMoney",
      "completeValue1": 903,
      "completeValue2": 0,
-     "completeNum": 10000
+     "completeNum": 10000,
+     "completeValues1": [
+      903
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      10000,
+      23333
+     ]
     },
     {
      "taskId": 651111,
@@ -4672,14 +7562,33 @@
      "conditionType": 1,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_ShopBuyItem",
      "completeValue1": 1004851,
      "completeValue2": 0,
-     "completeNum": 3
+     "completeNum": 3,
+     "completeValues1": [
+      1004851,
+      1004852,
+      1004853,
+      1004854,
+      1004856,
+      1004858,
+      1004859,
+      1004861
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      3
+     ]
     },
     {
      "taskId": 651112,
@@ -4689,14 +7598,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetMoneyPer",
      "completeValue1": 903,
      "completeValue2": 0,
-     "completeNum": 4500
+     "completeNum": 4500,
+     "completeValues1": [
+      903
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      4500
+     ]
     },
     {
      "taskId": 651113,
@@ -4706,10 +7627,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
+     "completeType": "E_KillMonster",
+     "completeValue1": 5040,
+     "completeValue2": 0,
+     "completeNum": 1,
+     "completeValues1": [
+      5040
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 651114,
@@ -4719,14 +7656,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5042,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      5042
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 651115,
@@ -4736,14 +7685,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5044,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      5044
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 651116,
@@ -4753,14 +7714,28 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 6,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      6
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonster",
      "completeValue1": 5040,
      "completeValue2": 0,
-     "completeNum": 20
+     "completeNum": 20,
+     "completeValues1": [
+      5040,
+      5042,
+      5044
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      20
+     ]
     },
     {
      "taskId": 651117,
@@ -4770,14 +7745,36 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 3,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      3
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonsterInSan",
      "completeValue1": 6,
      "completeValue2": 3174,
-     "completeNum": 100
+     "completeNum": 100,
+     "completeValues1": [
+      6
+     ],
+     "completeValues2": [
+      3174,
+      3175,
+      3176,
+      3177,
+      3178,
+      3179,
+      4063,
+      4064,
+      5040,
+      5042,
+      5044
+     ],
+     "completeNums": [
+      100
+     ]
     },
     {
      "taskId": 651118,
@@ -4787,14 +7784,36 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 3,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      3
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_KillMonsterInSan",
      "completeValue1": 10,
      "completeValue2": 3174,
-     "completeNum": 100
+     "completeNum": 100,
+     "completeValues1": [
+      10
+     ],
+     "completeValues2": [
+      3174,
+      3175,
+      3176,
+      3177,
+      3178,
+      3179,
+      4063,
+      4064,
+      5040,
+      5042,
+      5044
+     ],
+     "completeNums": [
+      100
+     ]
     },
     {
      "taskId": 651119,
@@ -4804,14 +7823,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
      "nextTask": 651120,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_BeatSection",
      "completeValue1": 2111151,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      2111151
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 651120,
@@ -4821,14 +7852,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
+     "dpPoints": [
+      2
+     ],
      "lastTask": 651119,
      "nextTask": 651121,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_BeatSection",
      "completeValue1": 2111153,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      2111153
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 651121,
@@ -4838,14 +7881,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
+     "dpPoints": [
+      2
+     ],
      "lastTask": 651120,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_BeatSection",
      "completeValue1": 2111155,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      2111155
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 651122,
@@ -4855,14 +7910,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1004846,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      1004846
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 651123,
@@ -4872,14 +7939,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 3,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      3
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1004847,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      1004847
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 651124,
@@ -4889,31 +7968,60 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 3,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      3
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1004848,
      "completeValue2": 0,
-     "completeNum": 1
+     "completeNum": 1,
+     "completeValues1": [
+      1004848
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      1
+     ]
     },
     {
      "taskId": 651125,
      "describeId": 6511251,
      "text": "累积获得【珀伽索斯】兽主10次",
      "conditionId": 603494,
-     "conditionType": 0,
+     "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemID",
      "completeValue1": 1240191,
      "completeValue2": 0,
-     "completeNum": 10
+     "completeNum": 10,
+     "completeValues1": [
+      1240191,
+      1240192,
+      1240193,
+      1240194,
+      1240195,
+      1240196
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      10
+     ]
     },
     {
      "taskId": 651126,
@@ -4923,14 +8031,26 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 6,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      6
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemQuality",
      "completeValue1": 5,
      "completeValue2": 10,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      5
+     ],
+     "completeValues2": [
+      10
+     ],
+     "completeNums": [
+      5
+     ]
     },
     {
      "taskId": 651127,
@@ -4940,14 +8060,27 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 6,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      6
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemQualityPer",
      "completeValue1": 5,
      "completeValue2": 10,
-     "completeNum": 2
+     "completeNum": 2,
+     "completeValues1": [
+      5,
+      6
+     ],
+     "completeValues2": [
+      10
+     ],
+     "completeNums": [
+      2
+     ]
     },
     {
      "taskId": 651128,
@@ -4957,20 +8090,34 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 6,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      6
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetItemQualityPer",
      "completeValue1": 4,
      "completeValue2": 10,
-     "completeNum": 5
+     "completeNum": 5,
+     "completeValues1": [
+      4,
+      5,
+      6
+     ],
+     "completeValues2": [
+      10
+     ],
+     "completeNums": [
+      5
+     ]
     }
    ],
-   "dpTotal": 66,
-   "dpUnreadableTasks": []
+   "totalDp": 100
   },
   "2011200": {
+   "chapterId": 2011200,
    "tasks": [
     {
      "taskId": 651201,
@@ -4980,18 +8127,29 @@
      "conditionType": 2,
      "completionLimit": 1,
      "dp": 2,
-     "lastTask": null,
-     "nextTask": null,
-     "giftGroup": null,
-     "acceptLevel": null,
+     "dpPoints": [
+      2
+     ],
+     "lastTask": 0,
+     "nextTask": 0,
+     "giftGroup": 0,
+     "acceptLevel": 0,
      "completeType": "E_GetMoneyPer",
      "completeValue1": 903,
      "completeValue2": 0,
-     "completeNum": 4500
+     "completeNum": 4500,
+     "completeValues1": [
+      903
+     ],
+     "completeValues2": [
+      0
+     ],
+     "completeNums": [
+      4500
+     ]
     }
    ],
-   "dpTotal": 2,
-   "dpUnreadableTasks": []
+   "totalDp": 2
   }
  }
 }

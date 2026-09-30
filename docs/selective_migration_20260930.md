@@ -11,7 +11,7 @@
 | A-04 任务 repair | 同周期内补建新满足 AcceptLevel 的任务；负进度归零；从该周期永久 grant receipt 恢复已领奖状态；已领奖进度至少达到目标；不降低更高进度；不改变原有周期切换和历史归档。 |
 | A-06 推荐页 | 使用当前 GiftPackageService.listing 可购买条目，配合已证实的 JumpID、RecommendTag/HotAreaParam；HTTP GET 白名单 PNG；使用现有 DeploymentEndpoints。没有每日推荐轮换、午夜截止或礼包运营推送。 |
 | A-08 手动刷新 | 随机池逐次改变选择；静态槽位整体轮换商品、数量、价格及货币，兑换货币槽位保持稳定；ShopConfig 刷新费用梯度；每日刷新计数与请求 receipt 持久化；每日槽位购买上限仍为一次，刷新不抹除已购买状态。809 保持不可手动刷新。 |
-| B-01 DP | 官方 260 条任务目录、12 个章节任务分组和45个可解析宝箱内容已接入；新增 chapter_signals 与 chapter_objectives；替换旧简化 DP 聚合；保留已有永久宝箱领取账本；见后述数据/事件缺口，不能宣称全部260条已可实际完成。 |
+| B-01 DP | 官方 260 条任务目录、12 个章节任务分组和50个结构化宝箱内容已接入；新增 chapter_signals 与 chapter_objectives；替换旧简化 DP 聚合；保留已有永久宝箱领取账本；见后述事件缺口，不能宣称全部260条已可实际完成。 |
 | B-02 264 recorder | 原始 body、解析数据、items、npc/currency/heros/killMonster/antiCheat 声明及 player/run/context 持久化；按 player/run/body digest 去重。记录失败不改变原有正式266响应。没有奖励逻辑。 |
 | B-04 battleSkinId | 从 main appearance_wear.type=1 读取当前穿戴皮肤，下发 FightHero field10；保留 heroGodEquip、monsterInitLevel、expertMode、difficulty 和现有战斗 builder。 |
 | B-17 工具 | PlayerStore.backup_to 与独立 tools/sqlite_backup.py；独立只读 tools/inspect_drop_reports.py；独立横幅资产构建工具 tools/dev/build_recommendation_assets.py。不接入 GM 或新启动体系。 |
@@ -32,34 +32,33 @@
 
 | chapterId | tasks | DP总分 |
 | --- | ---: | ---: |
-| 2010100 | 27 | 70 |
-| 2010200 | 25 | 64 |
-| 2010300 | 26 | 59 |
-| 2010400 | 26 | 62 |
-| 2010500 | 23 | 58 |
-| 2010600 | 24 | 61 |
-| 2010700 | 26 | 61 |
-| 2010800 | 24 | 64 |
-| 2010900 | 29 | 69 |
+| 2010100 | 27 | 100 |
+| 2010200 | 25 | 100 |
+| 2010300 | 26 | 100 |
+| 2010400 | 26 | 100 |
+| 2010500 | 23 | 100 |
+| 2010600 | 24 | 100 |
+| 2010700 | 26 | 100 |
+| 2010800 | 24 | 100 |
+| 2010900 | 29 | 100 |
 | 2011000 | 1 | 2 |
-| 2011100 | 28 | 66 |
+| 2011100 | 28 | 100 |
 | 2011200 | 1 | 2 |
 
-259 条有完成条件，651113/conditionId600091 在第三方导出中没有完成类型/参数。
+260 条均有完整客户端条件。正确解码后恢复651113/condition600091：击败5040一次，奖励2DP。
 四条 E_KillMonsterInSan（650918、650919、651117、651118）的状态分段击杀证据尚未恢复。
-普通击杀不能被误算成某个理智/疯狂状态的击杀，故这五项没有猜测性完成逻辑。
+普通击杀不能被误算成某个理智/疯狂状态的击杀，故这四项没有猜测性完成逻辑。
 2011200 存在于任务目录，但现有 ChapterInfo 使用2019900；没有擅自映射这两个不同章节ID。
 
-### 45 boxes
+### 50 boxes
 
-45 个 supported 宝箱（1203801–1203845）的普通奖励及装备套装映射均逐项测试。
+50 个 supported 宝箱（1203801–1203850）依据 Item.Used 引用 Gift.GiftValue/Num 发放，普通奖励及装备套装映射均逐项测试。
 六件兽主奖励使用当前 main EquipmentInstanceFactory/materialize_instances，保持原强化与副属性规则。
 未领取时直接发放宝箱完整内容，不再仅给不可打开的容器道具。
 宝石由 DP source 专用合法 destination 接入，不扩大其他来源奖励的权限。
-1203841 的原始文本是“卡恩斯x10”，导出映射为角色1211013x10，区别于同系列其余宝箱的“卡恩斯碎片”。
-当前忠实保留这一数据：新角色一次解锁，剩余重复份按 main 官方角色原型转换为碎片和票券；已拥有则全部转换。
-这一原始文本异常需人工复核，未擅自将其改成1201013碎片。
-后续章节引用的1203846–1203850没有内容，拒绝领取并不显示可领。
+1203841 文本“卡恩斯x10”与执行配置不同：Gift730950实际发1201013碎片x10、1251090魂石源质x10、金币20000。以结构化客户端数据为准，移除此前角色卡及重复转换分支。
+1203846–1203850虽无Language描述，Item.Used引用731250–731255保留完整奖励，现已支持。
+兽主六部件ID来自GiftValue；星级由GiftShow -> Item.NameID -> Language的“4★套装”确定，包括缺描述的1203847。
 
 ### event mapping
 
@@ -71,7 +70,7 @@
 | E_GetItemID | 当前inventory及明确的战斗携出/报告拾取证据；装备按实际部件ID。 |
 | E_NPCInteraction | 已校验当前entry的264 npcData(id,count)，按run累计最大值。 |
 | E_GetMoneyPer | 264 currency.field3 本局获得棱镜，field4=903；取单局最大，忽略带入金额。 |
-| E_GetItemQuality / Per | 当前结算真正生成的兽主实例星级；历史 reward_settlement_audit 的 EQUIP_INSTANCE 证据可迁移；神迹只计算 dropItem 中实际出现在 relicList 的条目，忽略仅候选池中的项目。按星级/品质门槛，Per限制同一run。 |
+| E_GetItemQuality / Per | 当前结算真正生成的兽主实例星级；历史 reward_settlement_audit 的 EQUIP_INSTANCE 证据可迁移；神迹只计算 dropItem 中实际出现在 relicList 的条目。按客户端完整品质列表匹配，-1为任意；单值5只计算五星，[5,6]计算五星及以上。Per限制同一run。 |
 | E_KillMonsterInSan | 框架支持独立状态信号，但当前没有足够证据接线，保持未完成。 |
 
 ### idempotency / claim / relog
@@ -82,7 +81,7 @@
 - 宝箱检查task_boxes及economy_grants，事务内完成全部内容发放、实例生成及领取记录。
 - 发奖后推送TreasureBoxUpdate；装备/角色奖励补EquipUpdate/HeroUpdate。再次领取拒绝。
 - chapter_objectives、chapter_signals、永久领取记录随数据库保存；重新登录/服务重建读取同一状态。
-- 45项内容发放测试、实际成功结算/击杀重发/264重发测试、领取重复测试和重建服务恢复测试通过。
+- 50项内容发放测试、实际成功结算/击杀重发/264重发测试、领取重复测试和重建服务恢复测试通过。
 
 ### 与旧简化 chapter DP 的迁移
 
@@ -91,7 +90,7 @@
 有效通关、当前背包及已存在的兽主结算审计可以还原；没有单位明细的历史击杀不猜造。
 chapter_dp_floors 原值归档到chapter_dp_migrations.legacy_floors，不再计入DP。
 因此原测试账号“跳过第二章”的人工10DP地板不再作用，下一章节门槛可能重新要求真实任务DP。
-旧存档副本实测：第一章6/70、第二章4/64；数据库 integrity_check=ok。正式Active DB未执行该探测。
+此前旧存档副本探测使用了仅第一档计分（第一章6/70、第二章4/64），该分母已被客户端完整多档数据纠正为100。正式Active DB未执行该探测。
 保留原始在线备份：runtime/phase14/backups/pristine_before_selective_20260930.sqlite3。
 
 ## Explicitly NOT Implemented
@@ -104,16 +103,17 @@ B-03：NOT IMPLEMENTED；没有导入trial_units，没有修改现有试玩分�
 ## Tests
 
 - Focused：56项通过，覆盖联结、周期repair、DP、商店、外观、战斗、264与备份。
-- DP：45个宝箱逐项完整奖励/实例验证；260任务唯一性/12分组；真实战斗receipt与重复kill/report；永久claim与relog；实例/角色更新推送。
+- DP：50个宝箱逐项完整奖励/实例验证；260任务唯一性/12分组；真实战斗receipt与重复kill/report；永久claim与relog；实例更新推送；客户端碎片配置取代文字猜测。
 - Full：完整测试尝试发现7项依赖缺失的历史分析文件（language.json/dropprop.json等）；这些文件在本机不存在，未伪造或替换夹具。排除这7项后，其余完整测试最终394项通过。
 - 在线备份：SQLite backup API复制Active DB，完整性ok；正式数据未迁移或批量修正。
+- 客户端复核修正后的定向回归：DP、economy及battle observer测试33项通过；覆盖多档计分/替代ID/精确星级/100点领取/50个宝箱/重复领取与重建恢复。
 
 ## Conflicts / Remaining Unknowns
 
-1. 宝箱DP门槛20/40/60/80/100与章节总分58–70不一致。原包直接按分数比较，80/100无法达到。已向用户询问Wiki的门槛是否百分比；在答案/客户端证据到达前保留原始分数语义，不擅改官方规则。
-2. 651113缺完成条件；四条状态击杀缺可靠状态事件源。这五条不虚构进度。
-3. 1203846–1203850没有奖励内容；2011200/2019900目录ID不一致。
-4. 1203841“卡恩斯x10”文本/角色卡映射需复核，当前按原数据发放及官方重复转换。
+1. 已确认20/40/60/80/100为点数。完整多档任务在第1–9及11章配置总计100，第1–8章消除此前80/100不可达到的问题；第9、11章仍各有6点状态击杀未接线，实际来源上限94。第10及12章客户端仅有一条2DP占位任务，保留其真实数据。
+2. 四条状态击杀仍缺已验证接入的事件源。客户端C2L_FightKillInfo.chapterTaskEvent提供候选来源，尚未接线验证，不用普通击杀填充。
+3. 2011200/2019900目录ID不同，保留客户端真实ID。
+4. 宝箱奖励已采用Gift结构化配置，描述与图片只供审查参考。
 5. 推荐页仅使用已证实的当前礼包JumpID；未覆盖缺JumpID的其他礼包。
 6. 7项历史分析工具测试缺外部源文件；正常业务链路测试可运行。
 7. 正式服务未重启；本轮代码尚未部署到正在运行的进程，亦未push远程。

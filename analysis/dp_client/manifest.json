@@ -1,0 +1,61 @@
+{
+ "apk": "D:\\demo\\x2\\X2_Eclipse_v2_4.apk",
+ "tables": [
+  {
+   "resource": "table/chapterinfo",
+   "external": "d120a4578bab38d49ac0a683ca05a471",
+   "path_id": 1,
+   "asset_name": "ChapterInfo",
+   "size": 3437,
+   "sha256": "f01dbf84322f8e62c4cb9783c6104d5e66e3390b66aea690b3d306e0936cb01c"
+  },
+  {
+   "resource": "table/gift",
+   "external": "97f907f95af754641b60175964616b99",
+   "path_id": 1,
+   "asset_name": "Gift",
+   "size": 355830,
+   "sha256": "846e25eb9827d97b403a997b70dce0863e1e23837bbcc4e08098123cf3f03db8"
+  },
+  {
+   "resource": "table/item",
+   "external": "e49ddfae661db9147b8823552f01df41",
+   "path_id": 1,
+   "asset_name": "Item",
+   "size": 255498,
+   "sha256": "da574b489b6efd8e6d6994464070589b74be660671c8a8f178f74d853e743a08"
+  },
+  {
+   "resource": "table/language",
+   "external": "844762d28a77f85408b631eb3f0186bc",
+   "path_id": 1,
+   "asset_name": "Language",
+   "size": 7047314,
+   "sha256": "3a9c3865677738d3e9739540dbffa89676bcdd1b0392af6d68fe1ab7e88f0e40"
+  },
+  {
+   "resource": "table/taskchapter",
+   "external": "ac12ba9b27907064fb6c3aa0daa5d7f8",
+   "path_id": 1,
+   "asset_name": "TaskChapter",
+   "size": 8334,
+   "sha256": "cfa59187af9c002867ffdded0365db910011774f7051c75d8d49bed86d936694"
+  },
+  {
+   "resource": "table/taskcondition",
+   "external": "3ee9401d542d7bf43b6b6786500040ed",
+   "path_id": 1,
+   "asset_name": "TaskCondition",
+   "size": 60910,
+   "sha256": "a989fedac757378b318793fbb0df362c0d38b74b38231ae3a7687b74a6ab09cd"
+  },
+  {
+   "resource": "table/taskconditionline",
+   "external": "1510c6aef8f5ed841956ca11d84948ae",
+   "path_id": 1,
+   "asset_name": "TaskConditionLine",
+   "size": 3933,
+   "sha256": "6a0fe9cbeca57b47f2d5361df992b883b52af51c89a1eb9ed10e14583f86fce4"
+  }
+ ]
+}

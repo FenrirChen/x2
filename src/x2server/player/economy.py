@@ -396,28 +396,6 @@ class EconomyService:
                     (player_id, item)).fetchone()[0]
                 if quantity > 2**31 - 1:
                     raise UnresolvedEconomy("currency overflow")
-            elif kind == 15 and source.startswith("chapterdp:"):
-                from .progression import catalog as progression_catalog
-                hero_id = item - 1210000
-                proto = next((r for r in progression_catalog()["hero_unlock"] if r["hero_id"] == hero_id), None)
-                if not proto:
-                    raise UnresolvedEconomy("DP hero prototype missing")
-                if any(h["id"] == hero_id and h.get("state") == 2 for h in snapshot.get("heroes", [])):
-                    for compensation, quantity in ((proto["fragment_item_id"], proto["fragment_count"]),
-                            (proto["duplicate_ticket_item_id"], proto["duplicate_ticket_count"])):
-                        self.store.db.execute("INSERT INTO inventory VALUES (?,?,?) ON CONFLICT(player_id,item_id) DO UPDATE SET quantity=quantity+excluded.quantity", (player_id, compensation, quantity * count))
-                else:
-                    new_hero = {"id": hero_id, "state": 2, "level": proto["level"],
-                        "star": proto["star"], "exp": 0, "skills": [{"id": i, "level": 1} for i in proto["initial_skills"]]}
-                    existing = next((h for h in snapshot.get("heroes", []) if h["id"] == hero_id), None)
-                    if existing is not None:
-                        existing.update(new_hero)
-                    else:
-                        snapshot.setdefault("heroes", []).append(new_hero)
-                    if count > 1:
-                        for compensation, quantity in ((proto["fragment_item_id"], proto["fragment_count"]),
-                                (proto["duplicate_ticket_item_id"], proto["duplicate_ticket_count"])):
-                            self.store.db.execute("INSERT INTO inventory VALUES (?,?,?) ON CONFLICT(player_id,item_id) DO UPDATE SET quantity=quantity+excluded.quantity", (player_id, compensation, quantity * (count - 1)))
             elif kind not in self.STACKABLE_REWARD_TYPES and item != 1260015 and not (kind == 11 and source.startswith("chapterdp:")):
                 raise UnresolvedEconomy("unrecovered reward destination")
             else:
@@ -689,12 +667,12 @@ class EconomyService:
         return self.dp.points(player_id, chapter)
 
     def chapter_dp_from_clears(self, clears, chapter) -> int:
-        return sum(t["dp"] for t in self.dp.chapters.get(str(chapter), {}).get("tasks", [])
+        return sum(sum(t["dpPoints"]) for t in self.dp.chapters.get(str(chapter), {}).get("tasks", [])
                    if t.get("completeType") == "E_BeatSection" and t.get("completeValue1") in clears)
 
     def chapter_dp_capacity(self, chapter) -> int:
         """Most DP the chapter can reach under the same rule (the client's total)."""
-        return sum(t["dp"] for t in self.dp.chapters.get(str(chapter), {}).get("tasks", []))
+        return sum(sum(t["dpPoints"]) for t in self.dp.chapters.get(str(chapter), {}).get("tasks", []))
 
     def chapter_dp_boxes(self, player_id, chapter) -> list:
         """The chapter page's DP 宝箱 (ChapterInfo.dpThresholds/dpRewards).
@@ -704,7 +682,8 @@ class EconomyService:
         """
         entry = self.chapter_dp_catalog.get(str(chapter)) or {}
         thresholds = entry.get("dpThresholds") or []
-        if not thresholds:
+        reward_ids = entry.get("dpRewards") or []
+        if not thresholds or not reward_ids:
             return []
         picked = {r[0] for r in self.store.db.execute(
             "SELECT box_id FROM task_boxes WHERE player_id=? AND kind=? AND period_start=?",
@@ -712,8 +691,8 @@ class EconomyService:
         dp = self.chapter_dp(player_id, chapter)
         return [TREASURE_BOX.encode({"boxId": index, "activityId": chapter,
             "pickStatus": 2 if index in picked else 1 if dp >= threshold and
-                self.dp.boxes.get(str((entry.get("dpRewards") or [])[index]), {}).get("supported") else 0})
-            for index, threshold in enumerate(thresholds)]
+                self.dp.boxes.get(str(reward_id), {}).get("supported") else 0})
+            for index, (threshold, reward_id) in enumerate(zip(thresholds, reward_ids))]
 
     def pick_chapter_dp_box(self, player_id, request):
         """Claim one DP 宝箱: C2L_PickTreasureBox{type:7}.

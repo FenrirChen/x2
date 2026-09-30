@@ -371,11 +371,11 @@ def test_chapter_dp_box_claim_flow(env):
     with store.db:
         for task in economy.dp.chapters[str(chapter)]["tasks"]:
             store.db.execute("INSERT INTO chapter_objectives VALUES (?,?,?,?) ON CONFLICT(player_id,chapter_id,task_id) DO UPDATE SET progress=excluded.progress",
-                (1, chapter, task["taskId"], task.get("completeNum", 1)))
-    assert economy.chapter_dp(1, chapter) == 64
+                (1, chapter, task["taskId"], task["completeNums"][-1]))
+    assert economy.chapter_dp(1, chapter) == 100
     boxes = [TREASURE_BOX.decode(raw) for raw in economy.chapter_dp_boxes(1, chapter)]
     assert boxes and all(b["activityId"] == chapter for b in boxes)
-    assert [b["pickStatus"] for b in boxes] == [1, 1, 1, 0, 0]
+    assert [b["pickStatus"] for b in boxes] == [1, 1, 1, 1, 1]
     first_reachable = boxes[0]
     assert first_reachable["pickStatus"] == 1
     request = {"boxId": first_reachable["boxId"], "type": 7, "param": chapter, "activityId": 0}
