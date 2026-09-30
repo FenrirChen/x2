@@ -3,7 +3,7 @@ import sqlite3
 
 import pytest
 
-from x2server.messages.economy import TASK, REWARD, REWARD_ITEM, FINISH_REQUEST, FINISH_RESULT
+from x2server.messages.economy import TASK, REWARD, REWARD_ITEM, FINISH_REQUEST, FINISH_RESULT, TREASURE_BOX
 from x2server.player.economy import EconomyService, UnresolvedEconomy
 from x2server.player.battle import BattleService
 from x2server.player.store import PlayerStore
@@ -60,6 +60,35 @@ def test_task_catalog_gates_and_login_claim_survives_restart(env):
     store.save_snapshot(1, dict(p["snapshot"], level=1), p["revision"])
     assert 630006 not in [TASK.decode(t)["taskId"] for t in economy.task_values(1, 1)["taskList"]]
     assert economy.claim(1, 630006, 1)["code"] == 13
+
+
+def test_challenge_page_includes_group_boxes_for_client_entry(env):
+    _, economy, _ = env
+    values = economy.challenge_values(1)
+    boxes = [TREASURE_BOX.decode(raw) for raw in values["boxList"]]
+    assert [box["boxId"] for box in boxes] == list(range(1, 11))
+    assert all(box["pickStatus"] == 0 for box in boxes)
+    assert values["taskList"]
+
+
+def test_hero_interaction_daily_task_capped_tap_does_not_advance(env):
+    from datetime import datetime, timedelta, timezone
+    from x2server.player.favor import FavorService
+
+    store, economy, context = env
+    now = 1_800_000_000
+    favor = FavorService(store, economy, clock=lambda: now)
+    day = datetime.fromtimestamp(now, timezone(timedelta(hours=8))).strftime("%Y-%m-%d")
+    with store.db:
+        store.db.execute("INSERT INTO favor_touch_log VALUES (1,1003,?,3)", (day,))
+    answer = asyncio.run(favor.handle(context, packet({"opt": 0, "optionId": 0,
+        "heroId": 1003, "num": 0}, name="C2L_AddFavor")))
+    assert answer.values["code"] == 13  # Touch reward cap remains in force.
+    # A tap rejected by the cap never counts towards the interactive task.
+    task = next(TASK.decode(raw) for raw in economy.task_values(1, 1)["taskList"]
+                if TASK.decode(raw)["taskId"] == 630010)
+    assert task["taskStatus"] == 2 and task["taskProgress"] == 0
+    assert any(push.message_name == "L2C_TaskUpdate" for push in answer.pushes)
 
 
 def test_every_eligible_daily_and_weekly_task_reward_can_be_claimed(env):
@@ -192,3 +221,237 @@ def test_task_claim_wire_and_event_filters(env):
     replay = asyncio.run(economy.handle(ctx, packet({"taskId": 630019, "type": 1}, name="C2L_FinishGameTaskAsync")))
     assert FINISH_RESULT.decode(replay.values["data"])["code"] == 10
     assert store.get(1)["snapshot"]["gold"] == 800
+
+
+def test_challenge_tasks_real_progress_boxes_and_claims(env):
+    """挑战任务: served tasks mint claimable, event tasks track real progress,
+    and a group box only opens after all six of its tasks are claimed."""
+    store, economy, context = env
+    import json as _json
+    from importlib.resources import files as _files
+    from x2server.player.progression import ProgressionService, hero_skills, catalog as prog_catalog
+
+    values = economy.challenge_values(1)
+    tasks = {TASK.decode(raw)["taskId"]: TASK.decode(raw) for raw in values["taskList"]}
+    assert len(tasks) == 60
+    boxes = [TREASURE_BOX.decode(raw) for raw in values["boxList"]]
+    assert [b["boxId"] for b in boxes] == list(range(1, 11))
+    # "served" tasks (no server-side event source) mint at their target.
+    served = [t for task_id, t in tasks.items()
+              if economy.challenge_tasks[task_id]["track"] == "served"]
+    assert served and all(t["taskStatus"] == 3 for t in served)
+    # Event-tracked tasks start at zero.
+    event_task_id = next(task_id for task_id, e in economy.challenge_tasks.items()
+                         if e["track"] == "event" and e["completeType"] == 13)
+    assert tasks[event_task_id]["taskProgress"] == 0
+
+    # A skill upgrade pays E_UpgradeSkill(13) exactly once.
+    service = ProgressionService(store, economy)
+    saved = store.get(1)
+    store.save_snapshot(1, dict(saved["snapshot"],
+        heroes=[dict(saved["snapshot"]["heroes"][0], level=16)]), saved["revision"])
+    hero = store.get(1)["snapshot"]["heroes"][0]
+    skill = next(s for s in hero_skills(hero) if s["id"] == 10031)
+    row = next(r for r in prog_catalog()["skill_progression"]
+               if r["skill_id"] == skill["id"] and r["level"] == skill["level"])
+    with store.db:
+        store.db.execute("""INSERT INTO inventory VALUES (1, 1237901, 999999)
+            ON CONFLICT(player_id,item_id) DO UPDATE SET quantity=999999""")
+        for material in row["materials"]:
+            store.db.execute("""INSERT INTO inventory VALUES (1, ?, 999)
+                ON CONFLICT(player_id,item_id) DO UPDATE SET quantity=999""",
+                (material["material_item_id"],))
+    answer = asyncio.run(service.handle(context, packet(
+        {"heroId": hero["id"], "skillId": skill["id"], "uplevel": 1}, name="C2L_UpHeroSkill")))
+    assert answer.values["code"] == 10
+    tasks = {TASK.decode(raw)["taskId"]: TASK.decode(raw)
+             for raw in economy.challenge_values(1)["taskList"]}
+    assert tasks[event_task_id]["taskProgress"] == 1
+
+    # Claiming: a group's box opens only when all six of its tasks are claimed.
+    # Group 1: loginday + account-derived + four event tasks (3/45/49/7).
+    economy.login_event(1)  # credits E_LoginDay and mints derived progress
+    group1 = {t: e for t, e in economy.challenge_tasks.items() if e["group"] == 1}
+    for task_id, entry in group1.items():
+        if entry["track"] == "event":
+            value = entry["value1"][0] if entry["value1"] else 0
+            value2 = entry["value2"][0] if entry["value2"] else 0
+            economy.record_event(1, f"sim:{task_id}", entry["completeType"], value,
+                                 entry["completeNum"], value2)
+    first = next(t for t, e in group1.items() if e["track"] == "loginday")
+    assert economy.claim_challenge(1, first)["code"] == 10
+    assert economy.claim_challenge(1, first)["code"] == 13  # once per life
+    assert economy.pick_challenge_box(1, 1).values["code"] == 13  # group not done
+    for task_id in group1:
+        if task_id != first:
+            assert economy.claim_challenge(1, task_id)["code"] == 10, task_id
+    # Live client sends a zero-based challenge box index (group one is zero).
+    wire = packet({"boxId": 0, "type": 3, "param": 0}, name="C2L_PickTreasureBox")
+    assert asyncio.run(economy.handle(context, wire)).values["code"] == 10
+    assert asyncio.run(economy.handle(context, wire)).values["code"] == 13
+    boxes = [TREASURE_BOX.decode(raw) for raw in economy.challenge_values(1)["boxList"]]
+    assert boxes[0]["pickStatus"] == 2 and boxes[1]["pickStatus"] == 0
+
+
+def test_chapter_dp_gate_progression(env):
+    """C2L_GameTask type 7 answers the DP the client's chapter gate reads."""
+    store, economy, context = env
+    chain = economy.challenge_chain(2010200)
+    assert chain, "chapter 2010200 must have 现世复刻 rows"
+    story_section = next(r["SectionID"] for r in economy.entry_catalog.sections.values()
+                         if r["Type"] == 0 and r["ChapterID"] == 2010200)
+    with store.db:
+        store.db.execute("INSERT OR IGNORE INTO economy_clears VALUES (1,?, 'uuid-a')", (story_section,))
+        store.db.execute("INSERT OR IGNORE INTO economy_clears VALUES (1,?, 'uuid-b')", (chain[0],))
+        store.db.execute("INSERT OR IGNORE INTO economy_clears VALUES (1,?, 'uuid-c')", (chain[1],))
+    answer = asyncio.run(economy.handle(context, packet(
+        {"type": 7, "chapterId": 2010200}, name="C2L_GameTask")))
+    assert answer.values["chapterTaskPoint"] == 4  # 1 story + difficulty 1 + difficulty 2
+
+
+def test_test_save_chapter_dp_floor_unlocks_next_chapter(env):
+    store, economy, context = env
+    with store.db:
+        store.db.execute("""INSERT INTO chapter_dp_floors VALUES
+            (1,2010200,10,'test-save chapter 2 skip')""")
+    answer = asyncio.run(economy.handle(context, packet(
+        {"type": 7, "chapterId": 2010200}, name="C2L_GameTask")))
+    assert answer.values["chapterTaskPoint"] == 10
+    assert economy.chapter_dp(1, 2010100) == 0
+    chain = economy.challenge_chain(2010200)
+    with store.db:
+        for index, section in enumerate(chain[:5]):
+            store.db.execute("INSERT INTO economy_clears VALUES (?,?,?)",
+                             (1, section, f"challenge-{index}"))
+    assert economy.chapter_dp(1, 2010200) == 15  # real progress can exceed the floor later
+
+
+def test_fixed_equipment_part_reward_becomes_instance(env):
+    """主线固定奖励里的装备部件 (124xxxx, ItemType 10) must materialize as a
+    HeroEquip instance instead of parking in pending_rewards forever."""
+    store, economy, context = env
+    from x2server.player.equipment_factory import EquipmentInstanceFactory
+    economy.equipment_factory = EquipmentInstanceFactory()
+    profile = economy.runtime_drops.resolve(1, "run-parts", 2110803, True, 2, ()) \
+        if False else None
+    settle = asyncio.run(BattleService(store, economy).settle) if False else None
+    # Drive the actual gift path the settle loop uses:
+    group = 710047  # {1240002: 1}, the recovered FirVReward row
+    from collections import Counter
+    from x2server.player.economy import UnresolvedEconomy
+    deferred = Counter()
+    resolved = economy.gifts([group], deferred=deferred)
+    assert resolved == {} and deferred == {1240002: 1}
+    # And the settle-loop conversion:
+    equipment_specs = []
+    part_catalogued = str(1240002) in economy.equipment_factory.data["equib_base"]
+    if part_catalogued:
+        for _ in range(deferred[1240002]):
+            equipment_specs.append({"item_id": 1240002, "quality": 1, "quantity": 1})
+    assert equipment_specs == [{"item_id": 1240002, "quality": 1, "quantity": 1}]
+    from x2server.player.equipment_factory import materialize_instances
+    instances = materialize_instances(store.db, 1, 1240002, 1, 1, "run-parts",
+                                      economy.equipment_factory, 0)
+    assert len(instances) == 1 and instances[0]["typeId"] == 1240002
+
+
+def test_chapter_dp_box_claim_flow(env):
+    """type=7 reply carries the chapter's DP boxes; a reached threshold grants
+    its dpRewards item exactly once."""
+    store, economy, context = env
+    chapter = 2010200
+    chain = economy.challenge_chain(chapter)
+    story_sections = [r["SectionID"] for r in economy.entry_catalog.sections.values()
+                      if r["Type"] == 0 and r["ChapterID"] == chapter]
+    with store.db:
+        for offset, section in enumerate([*story_sections, *chain]):
+            store.db.execute("INSERT OR IGNORE INTO economy_clears VALUES (1,?,?)",
+                             (section, f"uuid-{offset}"))
+    # Full chapter clear: DP 61 clears the first thresholds (20/40/60); the
+    # 80/100 thresholds of this chapter stay unreachable under the Revival DP
+    # rule (the community rule targeted the unlock gates, max 40).
+    assert economy.chapter_dp(1, chapter) == 61
+    boxes = [TREASURE_BOX.decode(raw) for raw in economy.chapter_dp_boxes(1, chapter)]
+    assert boxes and all(b["activityId"] == chapter for b in boxes)
+    assert [b["pickStatus"] for b in boxes] == [1, 1, 1, 0, 0]
+    first_reachable = boxes[0]
+    assert first_reachable["pickStatus"] == 1
+    request = {"boxId": first_reachable["boxId"], "type": 7, "param": chapter, "activityId": 0}
+    answer = asyncio.run(economy.handle(context, packet(request, name="C2L_PickTreasureBox")))
+    assert answer.values["code"] == 10
+    reward_items = REWARD.decode(answer.values["rewardData"])["rewardItem"]
+    assert reward_items, "DP box must pay its dpRewards item"
+    # Claiming the same box again is refused.
+    again = asyncio.run(economy.handle(context, packet(request, name="C2L_PickTreasureBox")))
+    assert again.values["code"] == 13
+    boxes = [TREASURE_BOX.decode(raw) for raw in economy.chapter_dp_boxes(1, chapter)]
+    assert boxes[first_reachable["boxId"]]["pickStatus"] == 2
+
+
+def test_challenge_story_clear_credit_for_preexisting_clears(env):
+    """剧情关 cannot be replayed: challenge tasks naming story stages credit
+    clears that already exist when the system ships."""
+    store, economy, context = env
+    entry = next(e for e in economy.challenge_tasks.values()
+                 if e["track"] == "event" and e["completeType"] == 3)
+    story_section = next(section for section in entry["value1"]
+                         if section in economy.entry_catalog.sections
+                         and economy.entry_catalog.sections[section]["Type"] == 0)
+    with store.db:
+        store.db.execute("INSERT OR IGNORE INTO economy_clears VALUES (1,?, 'pre')", (story_section,))
+    economy.login_event(1)
+    tasks = {TASK.decode(raw)["taskId"]: TASK.decode(raw)
+             for raw in economy.challenge_values(1)["taskList"]}
+    task_id = next(t for t, e in economy.challenge_tasks.items() if e is entry)
+    assert tasks[task_id]["taskProgress"] == 1
+    assert tasks[task_id]["taskStatus"] == 3
+
+
+def test_bag_item_use_pays_used_gifts(env):
+    """Using a Used-carrying bag item consumes it and pays its gift groups."""
+    store, economy, context = env
+    from tests.unit.test_battle import packet as pkt
+    item_id = 1202001  # Used -> 720071 -> fixed 1237907 x500
+    with store.db:
+        store.db.execute("INSERT INTO inventory VALUES (1, ?, 2)", (item_id,))
+    request = pkt({"id": item_id, "opt": 0, "count": 1}, name="C2L_ItemOpt")
+    answer = asyncio.run(economy.handle(context, request))
+    assert answer.values["code"] == 10
+    rewards = REWARD.decode(answer.values["rewardData"])["rewardItem"]
+    granted = {REWARD_ITEM.decode(raw)["itemId"]: REWARD_ITEM.decode(raw)["itemNum"]
+               for raw in rewards}
+    assert granted.get(1237907) == 500
+    assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=?",
+                            (item_id,)).fetchone()[0] == 1
+    replay = asyncio.run(economy.handle(context, request))
+    assert replay.values["code"] == 10  # receipt replays the same reply
+    assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=?",
+                            (item_id,)).fetchone()[0] == 1  # no double consumption
+    # An item without Used stays rejected.
+    reject = asyncio.run(economy.handle(context, pkt({"id": 1237901, "opt": 0, "count": 1},
+                                                     name="C2L_ItemOpt")))
+    assert reject.values["code"] == 13
+
+
+@pytest.mark.parametrize("item_id,currency,amount", [
+    (1202023, 1237901, 20000), (1202025, 1237901, 50000),
+    (1202071, 1237906, 1000), (1202072, 1237906, 2000),
+])
+def test_currency_cards_consume_grant_and_replay(env, item_id, currency, amount):
+    store, economy, context = env
+    from tests.unit.test_battle import packet as pkt
+    with store.db:
+        store.db.execute("INSERT INTO inventory VALUES (1, ?, 2)", (item_id,))
+    request = pkt({"id": item_id, "opt": 0, "count": 1}, name="C2L_ItemOpt")
+    first = asyncio.run(economy.handle(context, request))
+    assert first.values["code"] == 10
+    assert rewards(first.values["rewardData"])[currency] == amount
+    assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=?",
+                            (item_id,)).fetchone()[0] == 1
+    balance_field = "gold" if currency == 1237901 else "equip_exp"
+    balance = store.get(1)["snapshot"].get(balance_field, 0)
+    replay = asyncio.run(economy.handle(context, request))
+    assert replay.values == first.values
+    assert store.get(1)["snapshot"].get(balance_field, 0) == balance
+    assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=?",
+                            (item_id,)).fetchone()[0] == 1

@@ -3,7 +3,7 @@ import logging
 import time
 from .server_clock import ServerClock
 
-from x2server.messages.lobby import LOBBY_IDS, LOBBY_SCHEMAS, growth_base_payload, growth_base_values
+from x2server.messages.lobby import LOBBY_IDS, LOBBY_SCHEMAS, growth_base_values
 from x2server.network.dispatcher import DispatchContext, OutboundMessage
 from x2server.protocol.errors import ProtocolError
 from x2server.protocol.registry import CORE_MESSAGE_REGISTRY

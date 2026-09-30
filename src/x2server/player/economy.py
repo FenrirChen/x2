@@ -10,6 +10,7 @@ import time
 from datetime import datetime, timedelta, timezone
 
 from x2server.messages.economy import ECONOMY_SCHEMAS, ITEM, REWARD, REWARD_ITEM, TASK, TREASURE_BOX, FINISH_REQUEST, FINISH_RESULT
+from x2server.messages.battle import OUTSIDE_ITEM
 from x2server.messages.lobby import LOBBY_SCHEMAS, MISSION_PAIR, MISSION_TYPE
 from x2server.network.dispatcher import OutboundMessage
 from x2server.protocol.errors import ProtocolError
@@ -33,8 +34,34 @@ class EconomyService:
     # Item.EffData -> BaseInfoProto; only supported currency destinations.
     CURRENCIES = {1237901: "gold", 1237902: "crystal", 1237906: "equip_exp", 1237907: "hero_exp",
                   1237908: "exp", 1237910: "daily_activity", 1237911: "week_activity"}
-    STACKABLE_REWARD_TYPES = frozenset((5, 12, 13, 14, 17, 22, 23, 24, 25, 33, 34, 40, 41))
+    STACKABLE_REWARD_TYPES = frozenset((5, 12, 13, 14, 17, 18, 22, 23, 24, 25, 33, 34, 40, 41))
     ACTIVITY_FIELDS = {1: "daily_activity", 2: "week_activity"}
+    MAP_TYPE_CHALLENGE = 2  # 现世复刻: the difficulty stages of a chapter
+    # TaskCondition CompleteType enums that server events can authoritatively fire.
+    TASK_EVENT_CUSTOMS_PASS = 3        # E_CustomsPass
+    TASK_EVENT_SIGN_IN_GAME = 5        # E_SignInGame
+    TASK_EVENT_APPOINT_TIME_ONLINE = 6  # E_AppointTimeOnLine
+    TASK_EVENT_HERO_LEVEL_UP = 7       # E_HeroLevelUp
+    TASK_EVENT_BUY_POWER = 8           # E_BuyPower
+    TASK_EVENT_BUY_GOLD = 9            # E_BuyGold
+    TASK_EVENT_CONSUME_POWER_TODAY = 10  # E_ConsumePowerToday
+    TASK_EVENT_UPGRADE_EQUIPMENT = 12  # E_UpgradeEquipment
+    TASK_EVENT_UPGRADE_SKILL = 13      # E_UpgradeSkill
+    TASK_EVENT_UPGRADE_ARTIFACT = 14   # E_UpgradeArtifact
+    TASK_EVENT_HERO_INTERACTIVE = 19   # E_HeroInteractive
+    TASK_EVENT_BUY_GOOD = 24           # E_BuyGood
+    TASK_EVENT_ACCOUNT_LEVEL = 43      # E_AccountLevel: progress is the player's level
+    TASK_EVENT_HERO_REACH_STAR_LEVEL = 44  # E_HeroReachStarAndLevel: 达标的英雄数
+    TASK_EVENT_WISH = 45               # E_Wish
+    TASK_EVENT_ITEM_STAR_ID = 47       # E_ItemStarAndID: 已拥有的清单内道具数
+    TASK_EVENT_EQUIP_EQUIP = 49        # E_EquipEquip
+    TASK_EVENT_LOGIN_DAY = 58          # E_LoginDay: one per local day the player logs in
+    TASK_EVENT_FAVORABILITY_LEVEL = 73  # E_FavorabilityLevel: 好感等级达标的英雄数
+    TASK_EVENT_CUSTOMS_ENTRY = 87      # E_CustomsEntry
+    # GameTaskType.CHALLENGE: 60 tasks in 10 groups, no period, no rollover.
+    CHALLENGE_KIND = 3
+    # GameTaskType.CHAPTER (7): the chapter DP query and its DP 宝箱 claims.
+    CHAPTER_DP_KIND = 7
     POWER_BUY_ITEM = 1237900
     POWER_BUY_AMOUNT = 120
     POWER_BUY_CURRENCY = 1237902
@@ -46,12 +73,23 @@ class EconomyService:
         self.store = store
         self.clock = clock
         self.catalog = json.loads(files("x2server").joinpath("data/economy_catalog.json").read_text(encoding="utf-8"))
+        # 挑战任务 (ChallengeTask): 60 rows in 10 groups of 6, keyed to the client's
+        # own ChallengeTask/TaskCondition tables. Boxes 1..10 are the group ids.
         challenge_path = files("x2server").joinpath("data/challenge_tasks.json")
-        self.challenge = json.loads(challenge_path.read_text(encoding="utf-8")) if challenge_path.is_file() else {"tasks": {}, "boxes": {}}
-        with store.db:
-            store.db.execute("""CREATE TABLE IF NOT EXISTS challenge_task_state (
-                player_id INTEGER NOT NULL, task_id INTEGER NOT NULL, progress INTEGER NOT NULL DEFAULT 0,
-                claimed INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(player_id, task_id))""")
+        challenge = (json.loads(challenge_path.read_text(encoding="utf-8"))
+                     if challenge_path.is_file() else None)
+        self.challenge_tasks = {int(k): v for k, v in (challenge or {}).get("tasks", {}).items()}
+        self.challenge_boxes = {int(k): v for k, v in (challenge or {}).get("boxes", {}).items()}
+        # Chapter DP gates and thresholds, from the client's own ChapterInfo table.
+        dp_path = files("x2server").joinpath("data/chapter_dp.json")
+        self.chapter_dp_catalog = (json.loads(dp_path.read_text(encoding="utf-8"))["chapters"]
+                                   if dp_path.is_file() else {})
+        # Full recovered Gift table (10.7k groups) backing bag-item use: the
+        # Item.Used column names groups like 72xxxx/702xxx that the curated
+        # economy_catalog does not carry.
+        contents_path = files("x2server").joinpath("data/gift_contents.json")
+        self.gift_contents = (json.loads(contents_path.read_text(encoding="utf-8"))["gifts"]
+                              if contents_path.is_file() else {})
         battle_rewards = json.loads(files("x2server").joinpath("data/battle_rewards_catalog.json").read_text(encoding="utf-8"))
         recovered_groups = {row["GiftGroup"] for row in battle_rewards["gifts"]}
         self.catalog["gifts"] = battle_rewards["gifts"] + [row for row in self.catalog["gifts"]
@@ -62,6 +100,14 @@ class EconomyService:
         reward_items = json.loads(files("x2server").joinpath("data/reward_items.json").read_text(encoding="utf-8"))
         existing_items = {row["ItemID"] for row in self.catalog["items"]}
         self.catalog["items"].extend(row for row in reward_items if row["ItemID"] not in existing_items)
+        # The compact reward_items export omits Item.Used. Restore item-to-Gift
+        # links as data so every card uses the same receipt path.
+        used_path = files("x2server").joinpath("data/item_used_catalog.json")
+        if used_path.is_file():
+            used = json.loads(used_path.read_text(encoding="utf-8"))["items"]
+            for row in self.catalog["items"]:
+                if str(row["ItemID"]) in used and not row.get("Used"):
+                    row["Used"] = used[str(row["ItemID"])]["used"]
         self.sections = {r["SectionID"]: r for r in self.catalog["sections"]}
         self.daily_sections = {r["SectionID"]: r for r in self.catalog.get("daily_sections", [])}
         self.reward_sections = {**self.sections, **self.daily_sections}
@@ -133,6 +179,10 @@ class EconomyService:
             store.db.execute("""CREATE TABLE IF NOT EXISTS sweep_receipts (
                 request_key TEXT PRIMARY KEY, player_id INTEGER NOT NULL,
                 section_id INTEGER NOT NULL, response BLOB NOT NULL)""")
+            store.db.execute("""CREATE TABLE IF NOT EXISTS chapter_dp_floors (
+                player_id INTEGER NOT NULL, chapter_id INTEGER NOT NULL,
+                minimum_dp INTEGER NOT NULL CHECK(minimum_dp>=0), reason TEXT NOT NULL,
+                PRIMARY KEY(player_id,chapter_id))""")
             # Phase19 recorded clears but did not advance BaseInfo. Adopt only
             # existing consecutive clears, without replaying rewards or charges.
             for player in store.db.execute("SELECT id FROM players").fetchall():
@@ -197,6 +247,8 @@ class EconomyService:
         self.refresh_stamina(player_id)
         self.ensure_periods(player_id)
         self.record_event(player_id, "login", 5)
+        self.repair_challenge(player_id)
+        self.record_challenge_login_day(player_id)
         self.refresh_online_tasks(player_id)
 
     def refresh_online_tasks(self, player_id):
@@ -211,23 +263,40 @@ class EconomyService:
             if start <= hour < end:
                 self.record_event(player_id, f"online:{task_id}", 6, start)
 
+    def _gift_rows(self, group):
+        """Curated catalog rows first, then the full recovered Gift table."""
+        rows = [r for r in self.catalog["gifts"] if r["GiftGroup"] == group]
+        if rows:
+            return rows
+        entry = self.gift_contents.get(str(group))
+        if entry is None:
+            return []
+        return [{"GiftGroup": group, "AwardType": {"value": entry["awardType"]},
+                 "GiftValue": [item for item, _ in entry["items"]],
+                 "Num": [num for _, num in entry["items"]],
+                 "Probability": list(entry.get("weights") or []),
+                 "source": "gift_contents"}]
+
     def gifts(self, groups, deferred=None, allow_daily_random=False):
         rewards = Counter()
         for group in groups:
-            rows = [r for r in self.catalog["gifts"] if r["GiftGroup"] == group]
+            rows = self._gift_rows(group)
             if not rows:
                 raise UnresolvedEconomy(f"missing Gift {group}")
             for row in rows:
                 ids, nums = row.get("GiftValue", []), row.get("Num", [])
                 kind = row.get("AwardType", {}).get("value")
                 probability = row.get("Probability", [])
+                # gift_contents weights do not share one scale, so the draw
+                # normalizes over whatever total the row ships instead of
+                # requiring a sum of 100.
                 if (kind not in (1, 2) or kind == 2 and not allow_daily_random
                         or kind == 1 and probability or len(ids) != len(nums) or not ids
                         or kind == 2 and (len(probability) != len(ids)
-                                          or sum(probability) != 100 or any(type(p) is not int or p < 0 for p in probability))):
+                                          or sum(probability) <= 0 or any(type(p) is not int or p < 0 for p in probability))):
                     raise UnresolvedEconomy(f"non-fixed Gift {group}")
                 if kind == 2:
-                    draw = secrets.randbelow(100)
+                    draw = secrets.randbelow(sum(probability))
                     index = 0
                     for index, weight in enumerate(probability):
                         draw -= weight
@@ -344,52 +413,350 @@ class EconomyService:
         return {"items": [ITEM.encode({"id": r[0], "num": r[1], "locked": False, "dayGet": 0})
             for r in self.store.db.execute("SELECT item_id,quantity FROM inventory WHERE player_id=? ORDER BY item_id", (player_id,))]}
 
-    def _ensure_challenge(self, player_id):
-        # Do not open a connection context here: task pushes can be built inside
-        # an EconomyService savepoint and sqlite would otherwise commit it.
-        def insert_rows():
-            for task_id, entry in self.challenge.get("tasks", {}).items():
-                progress = int(entry.get("completeNum", 0)) if entry.get("track") == "served" else 0
-                self.store.db.execute("INSERT OR IGNORE INTO challenge_task_state VALUES (?,?,?,0)",
-                                      (player_id, int(task_id), progress))
-        if self.store.db.in_transaction:
-            insert_rows()
-        else:
-            with self.store.db:
-                insert_rows()
+    # -- 挑战任务 (challenge, GameTaskType 3) ------------------------------
+    #
+    # 60 tasks in 10 groups of 6 (data/challenge_tasks.json). The series is not
+    # periodic, so unlike 每日/周常 it has no task_periods row and no rollover;
+    # ensure_periods only ever touches the daily/weekly ids in self.tasks. The
+    # client decides what the page shows by itself: it sorts boxList, takes the
+    # first box whose pickStatus is not 2 (已领取), and keeps every TaskData whose
+    # group equals that box's boxId. Two consequences the server has to respect:
+    #
+    # * boxId must be the group id 1..10, not a 0-based cell index: the client
+    #   compares it against ChallengeTask.TaskGroupID.
+    # * a group's box only becomes claimable once all six of its tasks are 已领取,
+    #   so one un-completable task blocks the whole chain behind it. Tasks whose
+    #   condition has no server-side event source are therefore minted already at
+    #   their target (track "served" in the catalog) - a deliberate compatibility
+    #   choice, recorded in the catalog's own provenance.
+    def challenge_derived(self, player_id, entry):
+        """Progress a challenge task reads from state the server already owns.
+
+        "Reach N" conditions carry the requirement (star/level/item id) in
+        value1/value2 and the count in CompleteNum; the answer is how many things
+        already qualify. The value lists are read as *thresholds* (>=), not as the
+        equality whitelist events apply: 达标/Reach semantics, inferred - recorded
+        as provenance in data/challenge_tasks.json rather than claimed as
+        recovered.
+        """
+        complete_type = entry["completeType"]
+        if complete_type == self.TASK_EVENT_ACCOUNT_LEVEL:
+            return self.store.get(player_id)["snapshot"]["level"]
+        if complete_type == self.TASK_EVENT_HERO_REACH_STAR_LEVEL:
+            star = entry["value1"][0] if entry["value1"] else 0
+            level = entry["value2"][0] if entry["value2"] else 0
+            return sum(1 for hero in self.store.get(player_id)["snapshot"].get("heroes", [])
+                       if hero.get("state") == 2 and hero.get("star", 0) >= star
+                       and hero.get("level", 0) >= level)
+        if complete_type == self.TASK_EVENT_FAVORABILITY_LEVEL:
+            level = entry["value2"][0] if entry["value2"] else 0
+            return sum(1 for hero in self.store.get(player_id)["snapshot"].get("heroes", [])
+                       if hero.get("state") == 2 and hero.get("favor", {}).get("level", 0) >= level)
+        if complete_type == self.TASK_EVENT_ITEM_STAR_ID:
+            owned = {row[0] for row in self.store.db.execute(
+                "SELECT item_id FROM inventory WHERE player_id=?", (player_id,))}
+            return sum(1 for item_id in entry["value1"] if item_id in owned)
+        return 0
+
+    def repair_challenge(self, player_id):
+        """Mint the challenge rows and clamp derived progress up. Idempotent.
+
+        Wrapped in a savepoint: this also runs while building task pushes, and a
+        bare DML there would leave an uncommitted implicit transaction behind
+        (in_transaction stuck True), which silently hides later saves from any
+        other connection.
+        """
+        if not self.challenge_tasks:
+            return
+        with self.transaction():
+            clears = {row[0] for row in self.store.db.execute(
+                "SELECT section_id FROM economy_clears WHERE player_id=?", (player_id,))}
+            for task_id, entry in self.challenge_tasks.items():
+                target = entry["completeNum"]
+                if entry["track"] == "served":
+                    floor = target
+                elif entry["track"] == "event" and entry["completeType"] == self.TASK_EVENT_CUSTOMS_PASS:
+                    # 剧情关 cannot be re-entered, so a player who cleared the
+                    # named stages before this system shipped must still get the
+                    # credit: count their existing clears of the listed sections.
+                    floor = min(sum(1 for section in entry["value1"] if section in clears), target)
+                else:
+                    floor = self.challenge_derived(player_id, entry)
+                row = self.store.db.execute("SELECT progress FROM economy_tasks WHERE player_id=? AND task_id=?",
+                                            (player_id, task_id)).fetchone()
+                if row is None:
+                    self.store.db.execute("INSERT INTO economy_tasks(player_id,task_id,progress) VALUES (?,?,?)",
+                                          (player_id, task_id, floor))
+                elif floor > row[0]:
+                    self.store.db.execute("UPDATE economy_tasks SET progress=? WHERE player_id=? AND task_id=?",
+                                          (floor, player_id, task_id))
+
+    def _challenge_group_done(self, player_id, group):
+        """Whether every task of one group has been claimed."""
+        ids = [t for t, e in self.challenge_tasks.items() if e["group"] == group]
+        if not ids:
+            return False
+        done = self.store.db.execute(
+            "SELECT COUNT(*) FROM economy_tasks WHERE player_id=? AND claimed=1 AND task_id IN (%s)"
+            % ",".join("?" * len(ids)), (player_id, *ids)).fetchone()[0]
+        return done == len(ids)
 
     def challenge_values(self, player_id):
-        self._ensure_challenge(player_id)
-        rows = []
-        for task_id, entry in sorted(self.challenge.get("tasks", {}).items(), key=lambda item: int(item[0])):
-            state = self.store.db.execute("SELECT progress,claimed FROM challenge_task_state WHERE player_id=? AND task_id=?",
-                                          (player_id, int(task_id))).fetchone()
-            progress, claimed = state or (0, 0)
-            target = int(entry.get("completeNum", 1))
-            rows.append(TASK.encode({"taskId": int(task_id),
+        """L2C_GameTask payload for type 3: all 60 tasks plus the 10 group boxes."""
+        self.repair_challenge(player_id)
+        tasks = []
+        for task_id, entry in sorted(self.challenge_tasks.items()):
+            row = self.store.db.execute("SELECT progress,claimed FROM economy_tasks WHERE player_id=? AND task_id=?",
+                                        (player_id, task_id)).fetchone()
+            progress, claimed = tuple(row) if row else (0, 0)
+            target = entry["completeNum"]
+            tasks.append(TASK.encode({"taskId": task_id,
                 "taskStatus": 4 if claimed else 3 if progress >= target else 2,
-                "taskProgress": min(progress, target), "finishTimes": int(bool(claimed)), "stage": 0}))
-        return {"code": 10, "type": 3, "taskList": rows, "boxList": []}
+                "taskProgress": min(progress, target), "taskRefreshTime": 0,
+                "finishTimes": int(bool(claimed)), "stage": 0}))
+        picked = {r[0] for r in self.store.db.execute(
+            "SELECT box_id FROM task_boxes WHERE player_id=? AND kind=?", (player_id, self.CHALLENGE_KIND))}
+        boxes = [TREASURE_BOX.encode({"boxId": group, "activityId": 0,
+            "pickStatus": 2 if group in picked else 1 if self._challenge_group_done(player_id, group) else 0})
+            for group in sorted(self.challenge_boxes)]
+        return {"code": 10, "type": self.CHALLENGE_KIND, "taskList": tasks, "boxList": boxes}
 
     def claim_challenge(self, player_id, task_id):
-        self._ensure_challenge(player_id)
-        entry = self.challenge.get("tasks", {}).get(str(task_id))
-        if not entry:
-            return {"code": 13, "taskId": task_id, "type": 3}
-        row = self.store.db.execute("SELECT progress,claimed FROM challenge_task_state WHERE player_id=? AND task_id=?",
-                                    (player_id, task_id)).fetchone()
-        if not row or row[1] or row[0] < int(entry.get("completeNum", 1)):
-            return {"code": 13, "taskId": task_id, "type": 3}
+        """Pay one challenge task's Gift group; once per task for the player's life."""
+        entry = self.challenge_tasks.get(task_id)
+        result = {"code": 13, "taskId": task_id, "type": self.CHALLENGE_KIND, "rewardData": b""}
+        if entry is None:
+            return result
+        self.repair_challenge(player_id)
+        try:
+            rewards = self.gifts([entry["gift"]])
+            with self.transaction():
+                row = self.store.db.execute("SELECT progress,claimed FROM economy_tasks WHERE player_id=? AND task_id=?",
+                                            (player_id, task_id)).fetchone()
+                if not row or row[1] or row[0] < entry["completeNum"]:
+                    return result
+                self._grant(player_id, f"challenge:{task_id}", rewards)
+                self.store.db.execute("UPDATE economy_tasks SET claimed=1 WHERE player_id=? AND task_id=?",
+                                      (player_id, task_id))
+                result.update(code=10, rewardData=self.reward_bytes(rewards))
+        except UnresolvedEconomy:
+            return result
+        logging.getLogger("x2.economy").info("challenge task claimed task=%s player=%s",
+                                             task_id, player_id)
+        return result
+
+    def pick_challenge_box(self, player_id, box_id, param=0, *, wire=False):
+        """Open one 挑战宝箱; refused unless its whole group is already claimed.
+
+        Picking the box is what advances the page: the client's next refresh takes
+        the following boxId as the current phase, because this one now reads 已领取.
+        """
+        result = {"code": 13, "boxId": box_id, "type": self.CHALLENGE_KIND,
+                  "rewardData": b"", "param": param, "activityId": 0}
+        # The live 2.4 client sends boxId=0 for the first challenge phase,
+        # although challenge_tasks.json numbers its groups from 1. Keep the
+        # wire response's original index; persist the canonical group id.
+        group_id = box_id + 1 if wire and 0 <= box_id < len(self.challenge_boxes) else box_id
+        if group_id not in self.challenge_boxes and param in self.challenge_boxes:
+            group_id = param
+        group = self.challenge_boxes.get(group_id)
+        if group is None:
+            logging.getLogger("x2.economy").info(
+                "challenge box rejected player=%s box=%s param=%s reason=unknown group",
+                player_id, box_id, param)
+            return OutboundMessage("L2C_PickTreasureBox", result)
+        self.repair_challenge(player_id)
+        try:
+            rewards = self.gifts([group])
+            with self.transaction():
+                if self.store.db.execute("SELECT 1 FROM task_boxes WHERE player_id=? AND kind=? AND box_id=?",
+                                         (player_id, self.CHALLENGE_KIND, group_id)).fetchone():
+                    return OutboundMessage("L2C_PickTreasureBox", result)
+                if not self._challenge_group_done(player_id, group_id):
+                    logging.getLogger("x2.economy").info(
+                        "challenge box rejected player=%s box=%s param=%s group=%s reason=tasks incomplete",
+                        player_id, box_id, param, group_id)
+                    return OutboundMessage("L2C_PickTreasureBox", result)
+                self.store.db.execute("INSERT INTO task_boxes VALUES (?,?,?,?)",
+                                      (player_id, self.CHALLENGE_KIND, 0, group_id))
+                self._grant(player_id, f"challengebox:{group_id}", rewards)
+                result.update(code=10, rewardData=self.reward_bytes(rewards))
+        except UnresolvedEconomy as exc:
+            logging.getLogger("x2.economy").info(
+                "challenge box rejected player=%s box=%s param=%s group=%s reason=%s",
+                player_id, box_id, param, group_id, exc)
+            return OutboundMessage("L2C_PickTreasureBox", result)
+        logging.getLogger("x2.economy").info("challenge box picked box=%s player=%s",
+                                             group_id, player_id)
+        return OutboundMessage("L2C_PickTreasureBox", result, pushes=self.pushes(player_id) + (
+            OutboundMessage("L2C_TreasureBoxUpdate", {"type": self.CHALLENGE_KIND,
+                "boxList": self.challenge_values(player_id)["boxList"]}),))
+
+    def record_challenge_login_day(self, player_id):
+        """Credit E_LoginDay once per local day, for the player's whole life."""
+        if not self.challenge_tasks:
+            return
+        day = task_period(1, int(self.clock()))[0]
+        with self.transaction():
+            inserted = self.store.db.execute("INSERT OR IGNORE INTO economy_events VALUES (?,?)",
+                (player_id, f"challenge:loginday:{day}:{self.TASK_EVENT_LOGIN_DAY}"))
+            if not inserted.rowcount:
+                return
+            for task_id, entry in self.challenge_tasks.items():
+                if entry["track"] != "loginday":
+                    continue
+                self.store.db.execute("UPDATE economy_tasks SET progress=MIN(?,progress+1) WHERE player_id=? AND task_id=?",
+                                      (entry["completeNum"], player_id, task_id))
+
+    def _challenge_event(self, player_id, key, condition_type, value, amount, value2=0):
+        """Credit the same occurrence to the challenge tasks that count it.
+
+        Caller must already be inside ``self.transaction()``. 挑战任务 have no
+        period, so the dedup token is per player rather than per period: one clear
+        of a stage pays its challenge task once, ever. The event is only recorded
+        when a challenge task actually reads that type, so unrelated daily/weekly
+        traffic does not grow the token table.
+        """
+        matched = [(task_id, e) for task_id, e in self.challenge_tasks.items()
+                   if e["track"] == "event" and e["completeType"] == condition_type
+                   and not self._excluded(e, "value1", value) and not self._excluded(e, "value2", value2)]
+        if not matched:
+            return
+        inserted = self.store.db.execute("INSERT OR IGNORE INTO economy_events VALUES (?,?)",
+                                         (player_id, f"challenge:{key}:{condition_type}"))
+        if not inserted.rowcount:
+            return
+        for task_id, e in matched:
+            self.store.db.execute("UPDATE economy_tasks SET progress=MIN(?,progress+?) WHERE player_id=? AND task_id=?",
+                                  (e["completeNum"], amount, player_id, task_id))
+
+    @staticmethod
+    def _excluded(condition, field, value) -> bool:
+        """Whether an event's value falls outside the condition's allowed list.
+
+        An empty list or [0] means the condition does not filter on that
+        dimension at all.
+        """
+        allowed = condition.get(field) or [0]
+        return allowed not in ([0], []) and value not in allowed
+
+    # -- 章节 DP (C2L_GameTask type 7 = GameTaskType.CHAPTER) ---------------
+    #
+    # The client refuses to enter chapter N+1 until the DP of ChapterInfo's
+    # UnlockMapTypeID (the previous chapter) reaches UnlockDPRequest - the live
+    # refusal reads "白夜崩解的DP到10才解锁", exactly chapter 2010300's gate
+    # (after 2010200, DP 10). The DP it checks is L2C_GameTask.chapterTaskPoint.
+    #
+    # TEMPORARY_COMPAT: the original DP bookkeeping is not recoverable. 2.4 ships
+    # chapter tasks (table/taskchapter) only for chapters 2010900+, so chapters
+    # 1-8 have no task table left to derive DP from, and a plain cleared-stage
+    # count cannot reach chapter 2010800's gate of 40 (that chapter has 19
+    # stages). Revival rule (community package, operator-reviewed):
+    #     DP = cleared 剧情模式 stages of the chapter
+    #          + sum of the difficulty levels (1..10) of its cleared 现世复刻 stages
+    def chapter_dp(self, player_id, chapter) -> int:
+        clears = {row[0] for row in self.store.db.execute(
+            "SELECT section_id FROM economy_clears WHERE player_id=?", (player_id,))}
+        derived = self.chapter_dp_from_clears(clears, chapter)
+        floor = self.store.db.execute("""SELECT minimum_dp FROM chapter_dp_floors
+            WHERE player_id=? AND chapter_id=?""", (player_id, chapter)).fetchone()
+        return max(derived, floor[0]) if floor else derived
+
+    def chapter_dp_from_clears(self, clears, chapter) -> int:
+        story = sum(1 for section in clears
+                    if self.entry_catalog.sections.get(section, {}).get("Type") == 0
+                    and self.entry_catalog.sections[section]["ChapterID"] == chapter)
+        challenge = sum(level for level, section in enumerate(self.challenge_chain(chapter), start=1)
+                        if section in clears)
+        return story + challenge
+
+    def chapter_dp_capacity(self, chapter) -> int:
+        """Most DP the chapter can reach under the same rule (the client's total)."""
+        story = sum(1 for row in self.entry_catalog.sections.values()
+                    if row["Type"] == 0 and row["ChapterID"] == chapter)
+        capacity = story + sum(range(1, len(self.challenge_chain(chapter)) + 1))
+        thresholds = (self.chapter_dp_catalog.get(str(chapter)) or {}).get("dpThresholds") or []
+        return min(capacity, thresholds[-1]) if thresholds else capacity
+
+    def chapter_dp_boxes(self, player_id, chapter) -> list:
+        """The chapter page's DP 宝箱 (ChapterInfo.dpThresholds/dpRewards).
+
+        boxId is the threshold index; pickStatus 2=已领取, 1=DP 已达标可领,
+        0=未达标. Claims live in task_boxes(kind=7, period_start=chapterId).
+        """
+        entry = self.chapter_dp_catalog.get(str(chapter)) or {}
+        thresholds = entry.get("dpThresholds") or []
+        if not thresholds:
+            return []
+        picked = {r[0] for r in self.store.db.execute(
+            "SELECT box_id FROM task_boxes WHERE player_id=? AND kind=? AND period_start=?",
+            (player_id, self.CHAPTER_DP_KIND, chapter))}  # kind 7 = GameTaskType.CHAPTER
+        dp = self.chapter_dp(player_id, chapter)
+        return [TREASURE_BOX.encode({"boxId": index, "activityId": chapter,
+            "pickStatus": 2 if index in picked else 1 if dp >= threshold else 0})
+            for index, threshold in enumerate(thresholds)]
+
+    def pick_chapter_dp_box(self, player_id, request):
+        """Claim one DP 宝箱: C2L_PickTreasureBox{type:7}.
+
+        The client's wire shape sends the chapter id and the threshold index in
+        boxId/param (GetBoxTreasure stores arg2->boxId, arg1->param), so accept
+        either arrangement and normalize.
+        """
+        box_id, param = request.get("boxId", -1), request.get("param", 0)
+        activity_id = request.get("activityId", 0)
+        chapter = next((value for value in (param, activity_id, box_id)
+                        if str(value) in self.chapter_dp_catalog), 0)
+        small = [value for value in (box_id, param) if value != chapter]
+        index = small[0] if small else -1
+        entry = self.chapter_dp_catalog.get(str(chapter)) or {}
+        thresholds = entry.get("dpThresholds") or []
+        rewards = entry.get("dpRewards") or []
+        result = {"code": 13, "boxId": box_id, "type": 7, "param": param,
+                  "activityId": chapter, "rewardData": b""}
+        if not thresholds or not 0 <= index < len(thresholds) or index >= len(rewards):
+            return OutboundMessage("L2C_PickTreasureBox", result)
         try:
             with self.transaction():
-                rewards = self.gifts([entry["gift"]])
-                self._grant(player_id, f"challenge:{task_id}", rewards)
-                self.store.db.execute("UPDATE challenge_task_state SET claimed=1 WHERE player_id=? AND task_id=?",
-                                      (player_id, task_id))
-            return {"code": 10, "taskId": task_id, "type": 3,
-                    "rewardData": self.reward_bytes(rewards)}
+                if self.store.db.execute(
+                        "SELECT 1 FROM task_boxes WHERE player_id=? AND kind=? AND period_start=? AND box_id=?",
+                        (player_id, 7, chapter, index)).fetchone():
+                    return OutboundMessage("L2C_PickTreasureBox", result)
+                if self.chapter_dp(player_id, chapter) < thresholds[index]:
+                    return OutboundMessage("L2C_PickTreasureBox", result)
+                granted = self._grant(player_id, f"chapterdp:{chapter}:{index}",
+                                      {rewards[index]: 1})
+                self.store.db.execute("INSERT OR IGNORE INTO task_boxes VALUES (?,?,?,?)",
+                                      (player_id, 7, chapter, index))
+                result.update(code=10, rewardData=self.reward_bytes(granted))
         except UnresolvedEconomy:
-            return {"code": 13, "taskId": task_id, "type": 3}
+            return OutboundMessage("L2C_PickTreasureBox", result)
+        logging.getLogger("x2.economy").info(
+            "chapter DP box claimed chapter=%s index=%s player=%s", chapter, index, player_id)
+        return OutboundMessage("L2C_PickTreasureBox", result, pushes=self.pushes(player_id))
+
+    def challenge_chain(self, chapter) -> list:
+        """A chapter's 现世复刻 difficulty rows, in difficulty order.
+
+        Rows chain by NextSectionID; a row pointing into a chain already walked
+        is a duplicate (chapter 2010800's unnamed 新月 row) and is skipped, so
+        every real difficulty appears exactly once.
+        """
+        rows = [r for r in self.entry_catalog.sections.values()
+                if r["Type"] == self.MAP_TYPE_CHALLENGE and r["ChapterID"] == chapter]
+        ids = {r["SectionID"] for r in rows}
+        following = {r["SectionID"]: r.get("NextSectionID") for r in rows}
+        heads = sorted(i for i in ids if i not in set(following.values()))
+        chain, seen = [], set()
+        for head in heads:
+            if head in seen or following.get(head) in seen:
+                continue
+            cursor = head
+            while cursor in ids and cursor not in seen:
+                chain.append(cursor)
+                seen.add(cursor)
+                cursor = following.get(cursor)
+        return chain
 
     def task_values(self, player_id, kind):
         self.refresh_online_tasks(player_id)
@@ -487,6 +854,7 @@ class EconomyService:
                 continue
             self.store.db.execute("UPDATE economy_tasks SET progress=MIN(?,progress+?) WHERE player_id=? AND task_id=?",
                 (condition["CompleteNum"], amount, player_id, task_id))
+        self._challenge_event(player_id, key, condition_type, value, amount, value2)
 
     def claim(self, player_id, task_id, kind):
         self.ensure_periods(player_id)
@@ -514,7 +882,8 @@ class EconomyService:
         except UnresolvedEconomy:
             return result
 
-    def settle(self, player_id, run_uuid, section, success, section_type=0, outside_items=()):
+    def settle(self, player_id, run_uuid, section, success, section_type=0,
+               outside_items=(), maze_items=()):
         """Part of BattleService's receipt transaction, including first-clear key."""
         profile = self.section_rewards.get(section)
         config = self.reward_sections.get(section)
@@ -528,8 +897,23 @@ class EconomyService:
         reward_equips: list = []
         sources = {name: [] for name in ("FIRST_CLEAR_FIXED", "NORMAL_CLEAR_FIXED",
             "RUNTIME_BATTLE_DROP", "REPORT_CURRENCY", "SWEEP_REWARD", "EXTRA_DROP",
-            "COMPAT_REWARD", "EQUIP_INSTANCE")}
+            "COMPAT_REWARD", "EQUIP_INSTANCE", "RELIC_COLLECTION")}
         if success:
+            # Relics carried out in the client's mazeItems (checkout field 12)
+            # are collection unlocks, separate from outsideItems rewards.
+            if len(maze_items) > 512:
+                raise UnresolvedEconomy("too many mazeItems")
+            for raw in maze_items:
+                item = OUTSIDE_ITEM.decode(raw)
+                item_id = item.get("id")
+                if (self.items.get(item_id, {}).get("ItemType", {}).get("value") != 4
+                        or item.get("num", 0) <= 0):
+                    continue
+                inserted = self.store.db.execute("""INSERT OR IGNORE INTO inventory
+                    (player_id,item_id,quantity) VALUES (?,?,1)""", (player_id, item_id))
+                if inserted.rowcount:
+                    sources["RELIC_COLLECTION"].append({"item_id": item_id,
+                        "source": "checkout mazeItems"})
             pending = Counter()
             first = not self.store.db.execute(
                 "SELECT 1 FROM economy_clears WHERE player_id=? AND section_id=?", (player_id, section)).fetchone()
@@ -545,6 +929,19 @@ class EconomyService:
                             (run_uuid, player_id, section, group, str(exc)))
                         blocked.append({"gift_group": group, "reason": str(exc)})
                         continue
+                    # A fixed reward naming an 装备部件 (ItemType 10) is a real
+                    # equipment piece (the gift row's own EquibNum says how many):
+                    # materialize instances instead of parking the item forever.
+                    for part_id, part_count in [entry for entry in list(local_pending.items())
+                            if self.items.get(entry[0], {}).get("ItemType", {}).get("value") == 10]:
+                        del local_pending[part_id]
+                        catalogued = (self.equipment_factory is not None and
+                                      str(part_id) in self.equipment_factory.data["equib_base"])
+                        if catalogued:
+                            for _ in range(part_count):
+                                equipment_specs.append({"item_id": part_id, "quality": 1, "quantity": 1})
+                        else:
+                            pending[part_id] += part_count
                     grants.extend(RewardGrant(source, section, run_uuid, item, count,
                         reason=f"SectionTable GiftGroup {group}") for item, count in resolved.items())
                     pending.update(local_pending)
@@ -764,7 +1161,7 @@ class EconomyService:
             mobility["power"] += self.POWER_BUY_AMOUNT
             snapshot["power_buy"] = {"day": day_start, "count": count + 1}
             self.save_snapshot(player_id, snapshot)
-            self._event(player_id, f"power-buy:{day_start}:{count + 1}", 8, 900, 1)
+            self._event(player_id, f"power-buy:{day_start}:{count + 1}", self.TASK_EVENT_BUY_POWER, 900, 1)
         return OutboundMessage("L2C_FetchMobilityPower", {
             "result": 10,
             "rewardData": self.reward_bytes({self.POWER_BUY_ITEM: self.POWER_BUY_AMOUNT})},
@@ -780,13 +1177,29 @@ class EconomyService:
         request = (ECONOMY_SCHEMAS if name in ECONOMY_SCHEMAS else LOBBY_SCHEMAS)[name].decode(packet.body)
         response_name = name.replace("C2L_", "L2C_", 1)
         if name == "C2L_ItemOpt":
-            return self.use_causality_card(context, packet, request)
+            item_id = request.get("id", 0)
+            logging.getLogger("x2.economy").info(
+                "item opt player=%s item=%s opt=%s count=%s", player_id,
+                item_id, request.get("opt", 0), request.get("count", 0))
+            if item_id in self.CAUSALITY_CARDS:
+                return self.use_causality_card(context, packet, request)
+            return self.use_bag_item(context, packet, request)
         if name == "C2L_ItemAll":
             return OutboundMessage(response_name, self.inventory_values(player_id))
         if name == "C2L_QueryMission":
             return OutboundMessage(response_name, self.mission_values(player_id))
         if name in ("C2L_GameTask", "C2L_DailyAndWeekTask"):
             kind = request.get("type", 0)
+            if kind == 7:  # GameTaskType.CHAPTER: the DP the client's chapter gate reads
+                chapter = request.get("chapterId", 0)
+                values = {"code": 10, "type": kind, "chapterId": chapter,
+                          "chapterTaskPoint": self.chapter_dp(player_id, chapter),
+                          "chapterTaskTotalPoint": self.chapter_dp_capacity(chapter),
+                          "boxList": self.chapter_dp_boxes(player_id, chapter)}
+                logging.getLogger("x2.economy").info(
+                    "chapter DP served chapter=%s dp=%s/%s player=%s", chapter,
+                    values["chapterTaskPoint"], values["chapterTaskTotalPoint"], player_id)
+                return OutboundMessage("L2C_GameTask", values)
             return OutboundMessage("L2C_GameTask", self.task_values(player_id, kind) if kind in (1, 2)
                 else self.challenge_values(player_id) if kind == 3
                 else {"code": 10, "type": kind, "chapterId": request.get("chapterId", 0)})
@@ -805,9 +1218,68 @@ class EconomyService:
             # confirmed goods, reject the query before that success-only path.
             return OutboundMessage(response_name, {"code": 13, "shopId": shop})
         if name == "C2L_PickTreasureBox":
+            logging.getLogger("x2.economy").info(
+                "pick treasure box player=%s type=%s box=%s param=%s activity=%s",
+                player_id, request.get("type", 0), request.get("boxId", -1),
+                request.get("param", 0), request.get("activityId", 0))
+            if request.get("type", 0) == self.CHALLENGE_KIND:
+                return self.pick_challenge_box(player_id, request.get("boxId", -1),
+                                               request.get("param", 0), wire=True)
+            if request.get("type", 0) == self.CHAPTER_DP_KIND:
+                return self.pick_chapter_dp_box(player_id, request)
             return self.pick_treasure_box(player_id, request)
         # Known shop routes reply explicitly, never time out or charge for unknown data.
         return OutboundMessage(response_name, {"code": 13, **{k: v for k, v in request.items() if k in ("shopId", "goodsId", "buyNum")}})
+
+    def use_bag_item(self, context, packet, request):
+        """Use any bag item whose Item.Used column names recoverable Gift groups.
+
+        礼物盒/经验卡/宝箱 (ItemType 14/18) carry ``Used`` -> Gift groups: fixed
+        groups resolve as-is, weighted groups draw once per use. A group that
+        stayed unrecoverable (e.g. the damaged 702011 row) is skipped with a log
+        rather than voiding the whole item.
+        """
+        player_id = context.session.player_id
+        item_id, count = request.get("id", 0), request.get("count", 0)
+        rejected = OutboundMessage("L2C_ItemOpt", {"code": 13, "opt": request.get("opt", 0), "itemId": item_id})
+        if (request.get("opt", 0) != 0 or type(count) is not int or not 1 <= count <= 999
+                or item_id not in self.items):
+            return rejected
+        used_groups = self.items[item_id].get("Used") or []
+        if not used_groups:
+            return rejected
+        key = hashlib.sha256(f"{player_id}:{context.session.session_id}:{packet.header.request_id}:item-opt".encode()
+                             + packet.body).hexdigest()
+        try:
+            with self.transaction():
+                row = self.store.db.execute("SELECT response FROM item_opt_receipts WHERE request_key=? AND player_id=?",
+                                            (key, player_id)).fetchone()
+                if row:
+                    return OutboundMessage("L2C_ItemOpt", ECONOMY_SCHEMAS["L2C_ItemOpt"].decode(row[0]),
+                                           pushes=self.pushes(player_id))
+                charged = self.store.db.execute("UPDATE inventory SET quantity=quantity-? "
+                    "WHERE player_id=? AND item_id=? AND quantity>=?", (count, player_id, item_id, count))
+                if not charged.rowcount:
+                    return rejected
+                rewards = Counter()
+                for _ in range(count):
+                    for group in used_groups:
+                        try:
+                            rewards.update(self.gifts([group], allow_daily_random=True))
+                        except UnresolvedEconomy as exc:
+                            logging.getLogger("x2.economy").info(
+                                "item use skipped group=%s item=%s player=%s reason=%s",
+                                group, item_id, player_id, exc)
+                if not rewards:
+                    raise UnresolvedEconomy("item use has no recoverable gift")
+                granted = self._grant(player_id, f"item-opt:{key}", rewards)
+                values = {"code": 10, "opt": 0, "itemId": item_id,
+                          "rewardData": self.reward_bytes(granted)}
+                self.store.db.execute("INSERT INTO item_opt_receipts VALUES (?,?,?)",
+                                      (key, player_id, ECONOMY_SCHEMAS["L2C_ItemOpt"].encode(values)))
+        except UnresolvedEconomy:
+            return rejected
+        return OutboundMessage("L2C_ItemOpt", values, pushes=self.pushes(player_id))
 
     def use_causality_card(self, context, packet, request):
         player_id = context.session.player_id

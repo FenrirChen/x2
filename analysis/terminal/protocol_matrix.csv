@@ -1,0 +1,5 @@
+phase,C2L_name,C2L_ID,request_fields,send_RVA,L2C_name,L2C_ID,response_fields,consumer_RVA,evidence_status
+enter_query,C2L_GameTask,351,"type=6; extraType=0; chapterId=0",0x13C4508,L2C_GameTask,354,"code; type; taskList; boxList; chapterId; chapterTaskPoint; chapterTaskTotalPoint; activityId",0x13C135C/0x18B9B6C,CLIENT_NATIVE_CONFIRMED
+start_analysis,C2L_GameTask,351,"type=6 (FAVORDAILY); extraType=1 (GENMIND); chapterId=0",0x18BC3EC/0x18B9A70/0x13C4508,L2C_GameTask,354,"code=10 or 173; type=6; taskList candidate TaskData",0x13C135C/0x18B9B6C,CLIENT_NATIVE_CONFIRMED
+accept_candidates,C2L_AcceptFavorTask,459,"taskIds: repeated int; type=6",0x18BC410/0x18BA0E8,L2C_AcceptFavorTask,460,code,0x18BA1CC,CLIENT_NATIVE_CONFIRMED
+finish_or_claim,C2L_FinishGameTask,350,"data: repeated ReqFinishTaskData(taskId; type=6; activityId)",0x13C5F1C/0x13C6384,L2C_FinishGameTask,353,"data: repeated RspFinishTaskData(code; taskId; rewardData; type; nextTask; activityId)",0x13C65B4,RELATED_GENERIC_PATH

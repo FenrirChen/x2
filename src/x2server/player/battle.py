@@ -199,6 +199,21 @@ class BattleService:
                 pushes=self.economy.pushes(player_id) if self.economy else ()) if cached["request_hash"] == digest else reject
         snapshot = self.store.get(player_id)["snapshot"]
         heroes = snapshot.get("heroes", [])
+        # The client echoes the selected hero state in checkout.  Preserve a
+        # validated god-equip payload so the next Current Echoes configuration
+        # can see traces carried out of the run.  Older builds omit this field.
+        carried_artifacts = {}
+        for raw_hero in request.get("heros", []):
+            try:
+                wire_hero = FIGHT_HERO.decode(raw_hero)
+                god_raw = wire_hero.get("heroGodEquip", b"")
+                if not god_raw:
+                    continue
+                god = __import__("x2server.messages.core", fromlist=["HERO_GOD_EQUIP"]).HERO_GOD_EQUIP.decode(god_raw)
+                if god.get("id", 0) > 0 and wire_hero.get("id", 0) > 0:
+                    carried_artifacts[int(wire_hero["id"])] = god
+            except (TypeError, ValueError, KeyError):
+                continue
         values = {"result": 10, "success": request.get("success", False), "rewardData": b"",
             "roleLevel": snapshot["level"], "roleExp": snapshot.get("exp", 0), "UpLevelNum": 0,
             "heroIDList": [h["id"] for h in heroes], "heroLevel": [h["level"] for h in heroes],
@@ -208,11 +223,27 @@ class BattleService:
             "favorFullLevel": [False] * len(heroes), "fightTimeLength": fight_seconds}
         try:
             with self.store.db:
+                if carried_artifacts:
+                    current = self.store.get(player_id)["snapshot"]
+                    changed = False
+                    for hero in current.get("heroes", []):
+                        god = carried_artifacts.get(int(hero.get("id", 0)))
+                        if not god or hero.get("state") != 2:
+                            continue
+                        artifact = hero.get("god_equip") or {}
+                        if artifact.get("id") != god.get("id"):
+                            continue
+                        artifact["level"] = int(god.get("level", artifact.get("level", 0)))
+                        artifact["star"] = int(god.get("star", artifact.get("star", 0)))
+                        hero["god_equip"] = artifact
+                        changed = True
+                    if changed:
+                        self.economy.save_snapshot(player_id, current)
                 if self.economy:
                     self.store.db.execute("INSERT OR IGNORE INTO economy_checkouts VALUES (?,?,?)", (player_id, digest, row["uuid"]))
                     values["rewardData"], reward_equips = self.economy.settle(
                         player_id, row["uuid"], section, request.get("success", False), section_type,
-                        request.get("outsideItems", []))
+                        request.get("outsideItems", []), request.get("mazeItems", []))
                     updated = self.store.get(player_id)["snapshot"]
                     values.update(roleExp=updated.get("exp", 0), roleLevel=updated["level"], UpLevelNum=updated["level"]-snapshot["level"])
                 self.store.db.execute("INSERT INTO battle_receipts VALUES (?,?,?,?)",
@@ -328,7 +359,17 @@ class BattleService:
             base_values = battle_hero_base()[str(hero["id"])]
             base = [HERO_ATTR_ADD.encode({"attrId":r["attrId"], "attrValue":base_values[r["name"]]})
                 for r in catalog()["battle_base_1003"]["attributes"]]
-            fight_heroes.append(FIGHT_HERO.encode({**hero_values, "heroGodEquip": b"",
+            artifact = hero.get("god_equip")
+            god_equip = b""
+            if artifact:
+                from x2server.messages.core import HERO_GOD_EQUIP, INT_PAIR, GOD_SLOT_LOCK_INFO
+                god_equip = HERO_GOD_EQUIP.encode({"id": artifact.get("id", 0),
+                    "level": artifact.get("level", 0), "star": artifact.get("star", 0),
+                    "jewel": [INT_PAIR.encode({"Key": int(slot), "Value": int(item)})
+                              for slot, item in artifact.get("jewels", {}).items()],
+                    "godSlotLockInfo": [GOD_SLOT_LOCK_INFO.encode({"slot": int(slot), "state": 1})
+                                        for slot in artifact.get("god_slot_lock", [])]})
+            fight_heroes.append(FIGHT_HERO.encode({**hero_values, "heroGodEquip": god_equip,
                 "heroSkill": skills, "heroAttrCount": attrs, "attrAdd": base}))
         # Official chain (ARM64 2026-09-25): BattleInfo.SetSceneInfo copies
         # FightData.dropData.dropValues -> BattleInfo.dropValues, which JudgeDropItem

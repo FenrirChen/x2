@@ -92,9 +92,7 @@ class AccountStore:
                 cursor = self.db.execute(
                     "INSERT INTO accounts(username,password_hash,created_at,status,player_id) "
                     "VALUES (?,?,?,'active',?)", (username, password_hash, now, player_id))
-                if not existing:
-                    if not insert_system_mail(self.db, player_id, cursor.lastrowid, "welcome", now):
-                        raise sqlite3.IntegrityError("welcome mail was not inserted")
+                insert_system_mail(self.db, player_id, cursor.lastrowid, "welcome", now)
                 self.db.commit()
             except sqlite3.IntegrityError as exc:
                 self.db.rollback()
@@ -106,6 +104,21 @@ class AccountStore:
                 self.db.rollback()
                 raise
         return "created"
+
+    def ensure_welcome_mail(self, player_id: int, now: int) -> bool:
+        with self._lock:
+            try:
+                self.db.execute("BEGIN IMMEDIATE")
+                row = self.db.execute("SELECT account_id FROM accounts WHERE player_id=? AND status='active'",
+                                      (player_id,)).fetchone()
+                if row is None:
+                    raise ValueError("player has no active account")
+                created = insert_system_mail(self.db, player_id, row["account_id"], "welcome", now)
+                self.db.commit()
+                return created
+            except BaseException:
+                self.db.rollback()
+                raise
 
     def ensure_daily_login_mail(self, player_id: int, now: int) -> bool:
         with self._lock:

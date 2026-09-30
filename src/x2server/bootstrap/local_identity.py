@@ -82,6 +82,12 @@ class LocalIdentityService(RecoveredBootstrapService):
             # second JSON-encoded list in channel; Connect splits entry on ':'.
             return self._json([{"channel": json.dumps([{"channel": 1, "free": 1, "limit": 1}]),
                                "entry": self._chat_entry, "nodeType": "local", "token": ""}])
+        # These are optional LoginManager telemetry/notice probes.  Some
+        # client builds surface a transport error when the endpoint is 404,
+        # even though no response data is consumed.  A side-effect-free 200
+        # keeps the login flow moving to /apply/httpLogin.
+        if path in ("/apply/loginStep", "/apply/noticeUrl") and method.upper() == "POST":
+            return self._json({})
         if path not in ("/register", "/login", "/loginwithpw", "/apply/httpLogin"):
             return super().respond(method, target, body)
         if method.upper() != "POST":
@@ -275,3 +281,6 @@ class LocalIdentityService(RecoveredBootstrapService):
 
     def ensure_daily_login_mail(self, player_id: int, now: int) -> bool:
         return self._accounts.ensure_daily_login_mail(player_id, now) if self._accounts is not None else False
+
+    def ensure_welcome_mail(self, player_id: int, now: int) -> bool:
+        return self._accounts.ensure_welcome_mail(player_id, now) if self._accounts is not None else False

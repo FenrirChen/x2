@@ -2,13 +2,15 @@
 Document-Type: Current Knowledge
 Domain: Coverage
 Status: AUTHORITATIVE
-Updated: 2026-09-27
+Updated: 2026-09-29
 Supersedes:
   - (none)
 Evidence-IDs: see evidence/manifests/evidence_manifest.json
 ---
 
-# 当前状态快照（2026-09-27）
+# 当前状态快照（2026-09-29）
+
+- **2026-09-29 头像/任务/欢迎邮件修复**：SeasonIcon 现在合并库存头像与已拥有神格自动解锁的标准头像；DailyTask 630010 的有效神格触摸事件即使当天触摸奖励次数已满也会计入任务并推送任务状态；ChallengeTask 响应恢复 `boxList` 的 `boxId=1..10`（全部 closed，宝箱领取链仍未实现，挑战仍为 PARTIAL）。欢迎邮件对新旧账号统一 ensure，旧键/既有相同内容邮件不补发，首登/重连与 SQLite 唯一键保证幂等。待回归与实机复测。
 
 - **2026-09-28 新号教程修复**：实机日志确认玩家 2 剧情后请求教程关 `FightData(126)`，旧服务端回 `result=13`；其注册快照无英雄，入场校验必然失败。新号此前还预填 `Revival`，GuideStep 374 无 handler，Account opt 3/7 拒绝；隔离库已验证空昵称、英雄 1003、教程战斗入场、Guide 进度与首次命名持久化。用户随后报告全新账号实机测试无问题。活跃库玩家 2 仅只读审计，未修；99% 视觉进度公式仍未静态证明。详见 `tutorial_onboarding.md`。
 

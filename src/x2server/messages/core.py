@@ -16,6 +16,7 @@ from x2server.messages.favor import FAVOR_SCHEMAS
 from x2server.messages.appearance import APPEARANCE_SCHEMAS
 from x2server.messages.mail import MAIL_SCHEMAS
 from x2server.messages.terminal import TERMINAL_SCHEMAS
+from x2server.messages.battle_shop import BATTLE_SHOP_SCHEMAS
 
 C2L_LOGIN = ProtoSchema(
     "C2L_Login",
@@ -114,6 +115,7 @@ CORE_SCHEMAS.update(FAVOR_SCHEMAS)
 CORE_SCHEMAS.update(APPEARANCE_SCHEMAS)
 CORE_SCHEMAS.update(MAIL_SCHEMAS)
 CORE_SCHEMAS.update(TERMINAL_SCHEMAS)
+CORE_SCHEMAS.update(BATTLE_SHOP_SCHEMAS)
 
 # CONFIRMED: MessageReflector registers PlayerDataProto as 1000, independently
 # of its generated get_PID() returning 0. BaseInfo Serialize RVA 0x30A1348.

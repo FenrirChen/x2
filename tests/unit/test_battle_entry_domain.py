@@ -6,7 +6,7 @@ from pathlib import Path
 from tests.unit.test_battle import packet, request
 from tests.unit.test_economy import env
 from tests.unit.test_economy import rewards
-from x2server.messages.battle import CHECKOUT, FIGHT_DATA, FIGHT_PROFILE, PROFILE_HERO
+from x2server.messages.battle import CHECKOUT, FIGHT_DATA, FIGHT_PROFILE, PROFILE_HERO, OUTSIDE_ITEM
 from x2server.messages.lobby import MISSION_PAIR, MISSION_TYPE, LOBBY_SCHEMAS
 from x2server.player.battle import BattleService
 from x2server.player.reward_system import SectionRewardCatalog
@@ -53,6 +53,25 @@ def test_main_entry_regression_and_run_metadata(env):
                            (result.values["uuid"],)).fetchone()
     assert tuple(run) == (0, "MainMission")
     assert store.get(1)["snapshot"]["mobility"]["power"] == 143
+
+
+def test_successful_checkout_collects_maze_relics_once(env):
+    store, economy, ctx = env
+    battle = BattleService(store, economy)
+    assert asyncio.run(battle.enter(ctx, packet(request()))).values["result"] == 10
+    maze = [OUTSIDE_ITEM.encode({"id": item_id, "num": 1, "quality": 3, "eNum": 1})
+            for item_id in (1004007, 1004024, 1004007, 1100001)]
+    checkout = packet({"checkout": CHECKOUT.encode({"chapterId": 2010100,
+        "sectionId": 2110801, "success": True, "fightTime": 100, "mazeItems": maze})},
+        name="C2L_CheckoutMainMissionSign")
+    first = asyncio.run(battle.checkout(ctx, checkout))
+    assert first.values["result"] == 10
+    assert [tuple(row) for row in store.db.execute("""SELECT item_id,quantity FROM inventory
+        WHERE player_id=1 AND item_id IN (1004007,1004024) ORDER BY item_id""")] == [
+            (1004007, 1), (1004024, 1)]
+    assert asyncio.run(battle.checkout(ctx, checkout)).values == first.values
+    assert store.db.execute("SELECT COUNT(*) FROM inventory WHERE player_id=1 AND item_id=1100001").fetchone()[0] == 0
+    assert store.db.execute("SELECT COUNT(*) FROM inventory WHERE player_id=1 AND item_id=1004007").fetchone()[0] == 1
 
 
 def test_daily_entry_uses_static_section_and_compat_policy(env):

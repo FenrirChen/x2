@@ -99,7 +99,11 @@ class AppearanceService:
     def _icon_values(self, player_id):
         items = self._inventory(player_id)
         snapshot = self.store.get(player_id)["snapshot"]
-        heads, scenes = {self.starter_head} | (self.heads & items), self.scenes & items
+        favors = {int(hero["id"]): hero.get("favor", {})
+                  for hero in snapshot.get("heroes", [])}
+        heads = (set(granted_head_icons(snapshot, favors)) | (self.heads & items)
+                 | {self.starter_head})
+        scenes = self.scenes & items
         return {"code": 10,
             "putOnHeadIcon": snapshot.get("head_icon", self.starter_head),
             "putOnSceneIcon": snapshot.get("scene_icon", 0),
@@ -123,6 +127,8 @@ class AppearanceService:
         req = SCHEMAS[name].decode(packet.body) if name in SCHEMAS else {}
         if name == "C2L_Account":
             opt, values = req.get("opt", -1), req.get("values", [])
+            logging.getLogger("x2.appearance").info(
+                "account update player=%s opt=%s values=%s strvals=%s", player_id, opt, values, req.get("strvals", []))
             if opt == 3:
                 if len(values) != 2 or values[0] <= 0 or values[1] < 0:
                     return OutboundMessage("L2C_Account", {"result": 13, "opt": opt})
@@ -155,23 +161,31 @@ class AppearanceService:
                 logging.getLogger("x2.tutorial").info("first name player=%s set=%s", player_id, not current)
                 return OutboundMessage("L2C_Account", {"result": 10, "opt": opt},
                     before_response=(self.economy.pushes(player_id)[0],))
-            if opt not in (1, 2) or len(values) != 1:
+            # The 2.4 avatar picker sends the selected id together with a
+            # second decoration/slot value in ``values``.  The server only
+            # owns the selected id; rejecting the otherwise valid packet
+            # makes every avatar change appear to fail with code 13.
+            if opt not in (1, 2) or not values:
                 return OutboundMessage("L2C_Account", {"result": 13, "opt": opt})
             owned = (self._owned_heroes(player_id) if opt == 1 else
                 set(granted_head_icons(self.store.get(player_id)["snapshot"], {
                     int(hero["id"]): hero.get("favor", {})
                     for hero in self.store.get(player_id)["snapshot"].get("heroes", [])})) |
                 {SEASON_ICON_DATA.decode(x)["id"] for x in self._icon_values(player_id)["headIconList"]})
-            if values[0] not in owned:
+            selected = next((int(value) for value in values if int(value) in owned), None)
+            if selected is None:
                 return OutboundMessage("L2C_Account", {"result": 13, "opt": opt})
             with self.economy.transaction():
                 snapshot = self.store.get(player_id)["snapshot"]
-                snapshot["show" if opt == 1 else "head_icon"] = values[0]
+                snapshot["show" if opt == 1 else "head_icon"] = selected
                 self.economy.save_snapshot(player_id, snapshot)
             update = (self.economy.pushes(player_id)[0],)
+            # The picker marks "in use" from state that the PlayerDataProto push
+            # carries (IconInfo.IconID / Show). Deliver it before the response
+            # frame, like every other Account option, so the open page re-renders
+            # with the new value instead of needing a page re-entry.
             return OutboundMessage("L2C_Account", {"result": 10, "opt": opt},
-                                   before_response=update if opt == 1 else (),
-                                   pushes=() if opt == 1 else update)
+                                   before_response=update)
         if name == "C2L_HeroSkinAll":
             return OutboundMessage("L2C_HeroSkinAll", self.skin_values(player_id))
         if name == "C2L_SeasonIcon":

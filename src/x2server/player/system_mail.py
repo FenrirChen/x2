@@ -16,7 +16,7 @@ def insert_system_mail(db, player_id, account_id, kind, now):
     """Call inside the account transaction; UNIQUE source_key owns idempotence."""
     ensure_mail_schema(db)
     if kind == "welcome":
-        source_key = f"account_welcome:{account_id}"
+        source_key = f"welcome_mail:{account_id}"
         body, rewards = "", {BRILLIANCE: 3600, WISH_COIN: 80}
     elif kind == "daily_login":
         day_start, _ = task_period(1, now)
@@ -25,6 +25,10 @@ def insert_system_mail(db, player_id, account_id, kind, now):
                                         CAUSALITY_CARD: 10}
     else:
         raise ValueError("unknown system mail kind")
+    if kind == "welcome":
+        if db.execute("SELECT 1 FROM player_mail WHERE player_id=? AND source_key IN (?,?) LIMIT 1",
+                      (player_id, source_key, f"account_welcome:{account_id}")).fetchone():
+            return False
     return db.execute("""INSERT OR IGNORE INTO player_mail
         (player_id,sender,title,body,created_at,attachments,source_key)
         VALUES (?,?,?,?,?,?,?)""", (player_id, SENDER, "", body, now,
@@ -52,14 +56,25 @@ def deliver_daily_welfare(store, now):
     return minted, failed
 
 
-async def daily_welfare_watch(store, clock, poll=WELFARE_POLL_SECONDS):
-    """Sweep once at each Beijing day boundary, retrying failed rows."""
+async def daily_welfare_watch(store, clock, poll=WELFARE_POLL_SECONDS, on_new_day=None):
+    """Sweep once at each Beijing day boundary, retrying failed rows.
+
+    ``on_new_day(day_start)`` runs after a fresh boundary is detected (before the
+    completed-day marker is set), so callers can settle daily state - e.g. the
+    month-card allowance - for players that stayed online across midnight.
+    """
     import asyncio
     completed_day = None
     while True:
         now = int(clock())
         day_start, _ = task_period(1, now)
         if completed_day != day_start:
+            if on_new_day is not None:
+                try:
+                    await on_new_day(day_start)
+                except Exception:  # rollover callbacks must not kill the sweep
+                    import logging
+                    logging.getLogger("x2.system_mail").exception("daily rollover callback failed")
             _, failed = deliver_daily_welfare(store, now)
             if not failed:
                 completed_day = day_start

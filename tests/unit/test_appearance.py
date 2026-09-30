@@ -44,7 +44,10 @@ def test_avatar_inventory_and_voice_conditions(env):
     store, economy, context = env
     service = AppearanceService(store, economy)
     icons = invoke(service, context, "SeasonIcon").values
-    assert [SEASON_ICON_DATA.decode(x)["id"] for x in icons["headIconList"]] == [1000001]
+    assert [SEASON_ICON_DATA.decode(x)["id"] for x in icons["headIconList"]] == [1000001, 1270301]
+    assert invoke(service, context, "PutOnOrPutOffSeasonIcon", {"type": 1,
+        "id": 1270301}).values["code"] == 10
+    assert service._icon_values(1)["putOnHeadIcon"] == 1270301
     assert invoke(service, context, "PutOnOrPutOffSeasonIcon", {"type": 1,
         "id": 1270300}).values["code"] == 13
     store.db.execute("INSERT INTO inventory VALUES (1,1270300,1)")
@@ -55,6 +58,9 @@ def test_avatar_inventory_and_voice_conditions(env):
         "values": [1270301]}).values["result"] == 10
     assert invoke(service, context, "Account", {"opt": 2,
         "values": [1270300]}).values["result"] == 10
+    # Avatar UI sends an additional slot/decor value in the repeated field.
+    assert invoke(service, context, "Account", {"opt": 2,
+        "values": [1270300, 0]}).values["result"] == 10
     voices = HERO_DUBBING_DATA.decode(service._voice_values(1)["heroDubbingDatas"][0])["dubbingIds"]
     assert 1350301 in voices  # Official default-unlock condition.
     assert 1350306 not in voices

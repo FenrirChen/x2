@@ -46,10 +46,12 @@ class ShopService:
             self.offers[row["GoodsID"]] = (item_id, row["ItemPrice"], row.get("GoodsTag", {}).get("value", 0))
         if len(self.offers) != 15:
             raise ValueError("shop 809 static goods evidence changed")
-        # The third-party random/friendship catalog is retired by operator decision.
-        # Keep static shop 809 and GiftPackageService separate and available.
-        compat = {"shops": {}}
-        self.retired_shop_ids = set(range(801, 812)) - {self.SHOP_ID}
+        # Restore only the requested random shop. Other speculative community
+        # shop catalogs stay retired; shop 809 keeps its separate static route.
+        random_shop = json.loads(files("x2server").joinpath(
+            "data/random_shop_801.json").read_text(encoding="utf-8"))
+        compat = {"shops": {"801": random_shop["goods"]}}
+        self.retired_shop_ids = set(range(801, 812)) - {self.SHOP_ID, 801}
         self.compat_offers = {}
         self.compat_disabled = []
         for shop_id, rows in compat["shops"].items():
@@ -64,6 +66,13 @@ class ShopService:
                         type(row.get("price")) is not int or row["price"] <= 0):
                     self.compat_disabled.append((int(shop_id), row["goodsId"]))
                     continue
+                if row.get("randomPool"):
+                    pool = random_shop["pools"].get(row["randomPool"], [])
+                    if not pool or any(economy.items.get(i, {}).get("ItemType", {}).get("value") != 12
+                                       for i in pool):
+                        self.compat_disabled.append((int(shop_id), row["goodsId"]))
+                        continue
+                    row["poolItems"] = pool
                 self.compat_offers[(int(shop_id), row["goodsId"])] = row
         with store.db:
             store.db.execute("""CREATE TABLE IF NOT EXISTS shop_purchase_counts (
@@ -75,6 +84,16 @@ class ShopService:
                 player_id INTEGER NOT NULL, shop_id INTEGER NOT NULL, goods_id INTEGER NOT NULL,
                 period TEXT NOT NULL, quantity INTEGER NOT NULL,
                 PRIMARY KEY(player_id,shop_id,goods_id,period))""")
+            # Earlier 801 purchases without a limit were stored for a lifetime.
+            # Count them against today before switching every slot to daily stock.
+            old_counts = store.db.execute("""SELECT player_id, goods_id, quantity
+                FROM shop_compat_counts WHERE shop_id=801 AND period='lifetime'""").fetchall()
+            for player_id, goods_id, quantity in old_counts:
+                store.db.execute("""INSERT INTO shop_compat_counts VALUES (?,?,?,?,?)
+                    ON CONFLICT(player_id,shop_id,goods_id,period)
+                    DO UPDATE SET quantity=quantity+excluded.quantity""",
+                    (player_id, 801, goods_id, self._period(3), quantity))
+            store.db.execute("DELETE FROM shop_compat_counts WHERE shop_id=801 AND period='lifetime'")
 
     def handlers(self):
         return {name: self.handle for name in ("C2L_ShopGoods", "C2L_QueryGoodsInfo",
@@ -105,19 +124,31 @@ class ShopService:
         return "lifetime"
 
     def _compat_count(self, player_id, shop_id, row):
-        period = self._period(row.get("limited")) if row.get("limited") else "lifetime"
+        period = self._compat_period(shop_id, row)
         count = self.store.db.execute("""SELECT quantity FROM shop_compat_counts
             WHERE player_id=? AND shop_id=? AND goods_id=? AND period=?""",
             (player_id, shop_id, row["goodsId"], period)).fetchone()
-        return count[0] if count else 0
+        return min(count[0], 1) if count and shop_id == 801 else (count[0] if count else 0)
+
+    def _compat_period(self, shop_id, row):
+        return self._period(3 if shop_id == 801 else row.get("limited"))
 
     def _compat_goods(self, player_id, shop_id, row):
         price = row["price"]
-        return {"goodsId": row["goodsId"], "itemId": row["itemId"],
+        return {"goodsId": row["goodsId"], "itemId": self._compat_item_id(shop_id, row),
             "num": row["num"], "price": price, "originalPrice": price,
-            "currencyType": row["currency"], "canBuyTimes": 1 if row.get("limited") else self.COMPAT_STOCK,
+            "currencyType": row["currency"], "canBuyTimes": 1 if shop_id == 801 or row.get("limited") else self.COMPAT_STOCK,
             "hasBuyTimes": self._compat_count(player_id, shop_id, row),
-            "goodsTag": row.get("goodsTag") or 0, "limited": row.get("limited") or 0}
+            "goodsTag": row.get("goodsTag") or 0, "limited": 3 if shop_id == 801 else row.get("limited") or 0}
+
+    def _compat_item_id(self, shop_id, row):
+        """Keep a random slot's displayed and delivered shard identical today."""
+        pool = row.get("poolItems")
+        if not pool:
+            return row["itemId"]
+        seed = f"{self._period(3)}:{shop_id}:{row['goodsId']}".encode()
+        index = int.from_bytes(hashlib.sha256(seed).digest()[:8], "big") % len(pool)
+        return pool[index]
 
     async def handle(self, context, packet):
         player_id = context.session.player_id
@@ -160,6 +191,13 @@ class ShopService:
                 "canBuyTimes": offer["canBuyTimes"], "itemNum": offer["num"],
                 "currencyType": offer["currencyType"]})
         if name == "C2L_RefreshShop":
+            if request.get("shopId") == 801:
+                # The original reroll rules are unavailable. Re-send today's
+                # same stock without charging or claiming a new random draw.
+                goods = [GOODS.encode(self._compat_goods(player_id, 801, row))
+                         for (shop_id, _), row in sorted(self.compat_offers.items()) if shop_id == 801]
+                return OutboundMessage(response_name, {"code": 10, "shopId": 801,
+                    "NextRefreshTime": 0, "RefreshTimes": 0, "RefreshPrice": 0, "goods": goods})
             # Shop 809 has no CanManualRefresh rule in ShopConfig.
             return OutboundMessage(response_name, {"code": 13, "shopId": request.get("shopId", 0)})
         return self._buy(context, packet, request)
@@ -218,7 +256,7 @@ class ShopService:
         row = self.compat_offers.get((shop_id, goods_id))
         if not row or type(buy_num) is not int or not 1 <= buy_num <= 99:
             return reject
-        cap = 1 if row.get("limited") else self.COMPAT_STOCK
+        cap = 1 if shop_id == 801 or row.get("limited") else self.COMPAT_STOCK
         key = hashlib.sha256(f"{player_id}:{context.session.session_id}:{packet.header.request_id}:compat-shop".encode()
                              + packet.body).hexdigest()
         schema = ECONOMY_SCHEMAS["L2C_BuyGoods"]
@@ -252,14 +290,15 @@ class ShopService:
                         WHERE player_id=? AND item_id=? AND quantity>=?""", (total, player_id, currency, total))
                     if not paid.rowcount:
                         return reject
-                granted = self.economy._grant(player_id, f"compat-shop:{key}", {row["itemId"]: item_count})
-                period = self._period(row.get("limited")) if row.get("limited") else "lifetime"
+                item_id = self._compat_item_id(shop_id, row)
+                granted = self.economy._grant(player_id, f"compat-shop:{key}", {item_id: item_count})
+                period = self._compat_period(shop_id, row)
                 self.store.db.execute("""INSERT INTO shop_compat_counts VALUES (?,?,?,?,?)
                     ON CONFLICT(player_id,shop_id,goods_id,period)
                     DO UPDATE SET quantity=quantity+excluded.quantity""",
                     (player_id, shop_id, goods_id, period, buy_num))
                 values = {"code": 10, "shopId": shop_id, "goodsId": goods_id,
-                    "itemId": row["itemId"], "itemNum": item_count, "buyNum": buy_num,
+                    "itemId": item_id, "itemNum": item_count, "buyNum": buy_num,
                     "price": row["price"], "originalPrice": row["price"],
                     "hasBuyTimes": self._compat_count(player_id, shop_id, row),
                     "changeItemID": currency, "rewardData": self.economy.reward_bytes(granted)}

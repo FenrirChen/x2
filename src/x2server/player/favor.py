@@ -2,6 +2,7 @@
 from importlib.resources import files
 from datetime import datetime, timedelta, timezone
 import json
+import logging
 import time
 
 from x2server.messages.favor import FAVOR_SCHEMAS, FAVOR_CHANGE_INFO
@@ -9,9 +10,22 @@ from x2server.network.dispatcher import OutboundMessage
 from x2server.protocol.errors import ProtocolError
 from x2server.protocol.registry import CORE_MESSAGE_REGISTRY
 
+LOGGER = logging.getLogger("x2.favor")
+
+_INTERACTION_MAP = None
+
 
 def catalog():
     return json.loads(files("x2server").joinpath("data/favor_catalog.json").read_text(encoding="utf-8"))
+
+
+def interaction_map():
+    """ExpressionAnimStatus InteractiveID -> HeroID for the daily tap."""
+    global _INTERACTION_MAP
+    if _INTERACTION_MAP is None:
+        data = json.loads(files("x2server").joinpath("data/interaction_hero.json").read_text(encoding="utf-8"))
+        _INTERACTION_MAP = data.get("by_interaction", {})
+    return _INTERACTION_MAP
 
 
 def favor_state(hero, initial_level=1):
@@ -43,6 +57,24 @@ class FavorService:
     def _owned(self, player_id, hero_id):
         return next((h for h in self.store.get(player_id)["snapshot"].get("heroes", [])
                      if h["id"] == hero_id and h["state"] == 2 and hero_id in self.heroes), None)
+
+    def _interaction_target(self, player_id, interaction_id):
+        try:
+            hero_id = interaction_map().get(str(int(interaction_id or 0)))
+        except (TypeError, ValueError):
+            return None
+        return self._owned(player_id, int(hero_id)) if hero_id else None
+
+    def _showcase_hero(self, player_id):
+        """Last resort for unmapped taps: the shown god, else any owned god."""
+        snapshot = self.store.get(player_id)["snapshot"]
+        hero = self._owned(player_id, snapshot.get("show", 0)) if snapshot.get("show") else None
+        if hero:
+            return hero
+        for owned in sorted(h["id"] for h in snapshot.get("heroes", [])
+                            if h.get("state") == 2 and h["id"] in self.heroes):
+            return self._owned(player_id, owned)
+        return None
 
     async def handle(self, context, packet):
         player_id = context.session.player_id
@@ -144,11 +176,18 @@ class FavorService:
         hero_id, item_id, num, opt = (req.get("heroId", 0), req.get("optionId", 0),
                                      req.get("num", 0), req.get("opt", -1))
         if opt != 2:
-            # The client uses AddFavor for the daily hero tap animation. Some
-            # builds send heroId=0 and carry the target in optionId; when a
-            # concrete owned hero is already supplied it is authoritative.
-            target_id = hero_id if hero else item_id
-            target = self._owned(player_id, target_id)
+            # The client's daily tap animation arrives as opt=1 with heroId=0
+            # and the interaction id in optionId. ExpressionAnimStatus maps
+            # InteractiveID -> HeroID (data/interaction_hero.json, 36 live
+            # requests all carried heroId=0); without that lookup the touch is
+            # booked against no god and the daily interactive task never moves.
+            target = (hero
+                      or self._interaction_target(player_id, item_id)
+                      or self._interaction_target(player_id, hero_id)
+                      or self._showcase_hero(player_id))
+            target_id = target["id"] if target else 0
+            LOGGER.info("hero interaction player=%s opt=%s optionId=%s heroId=%s num=%s target=%s",
+                        player_id, opt, item_id, hero_id, num, target_id)
             if target is None:
                 return OutboundMessage("L2C_AddFavor", {"code": 13, "opt": opt,
                     "optionId": item_id, "heroId": hero_id})
@@ -157,8 +196,10 @@ class FavorService:
                                         (player_id, target_id, day)).fetchone()
             used = row[0] if row else 0
             if used >= 3:
+                # Still push state so an open task page re-renders, but never
+                # count a rejected tap towards the interactive task.
                 return OutboundMessage("L2C_AddFavor", {"code": 13, "opt": opt,
-                    "optionId": item_id, "heroId": target_id})
+                    "optionId": item_id, "heroId": target_id}, pushes=self.economy.pushes(player_id))
             with self.economy.transaction():
                 self.store.db.execute("INSERT INTO favor_touch_log VALUES (?,?,?,1) "
                                       "ON CONFLICT(player_id,hero_id,day) DO UPDATE SET count=count+1",

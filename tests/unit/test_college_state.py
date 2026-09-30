@@ -62,9 +62,11 @@ def test_growth_base_static_initial_and_persistence(tmp_path):
         packet({}, 4, "C2L_QueryGrowthBase")))
     login_growth = GROWTH_BASE.decode(login.values["growthBase"])
     query_growth = GROWTH_BASE.decode(GROWTH_BASE.encode(query.values))
-    for field in ("buildingList", "exploreList", "trainingList", "civilization",
-                  "buildQueue", "wonderQueue", "prayQueue"):
+    for field in ("buildingList", "civilization"):
         assert field in login_growth
+    for field in ("exploreList", "trainingList", "buildQueue",
+                  "wonderQueue", "prayQueue"):
+        assert field not in login_growth
     assert login_growth["buildingList"] == query_growth["buildingList"]
     assert login_growth["civilization"] == query_growth["civilization"]
     restored_store.close()

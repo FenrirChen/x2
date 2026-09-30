@@ -127,6 +127,7 @@ class ProgressionService:
                 hero = next((h for h in snapshot.get("heroes", []) if h["id"] == req.get("id", req.get("heroId", req.get("heroID")))), None)
                 costs = Counter()
                 event = None
+                events = []
                 if name == "C2L_HeroOpt" and req.get("opt") == 0 and hero is None:
                     prototype = next((r for r in catalog()["hero_unlock"] if r["hero_id"] == req.get("id")), None)
                     if not prototype:
@@ -222,6 +223,9 @@ class ProgressionService:
                         hero["god_equip"] = {**(artifact or {}), "id": prototype["artifact_id"],
                                              "level": next_progress, "star": next_star,
                                              "compat": "REVIVAL_COMPAT"}
+                        # opt=0 (强化) and opt=1 (融合升星) are both 神器升级; opt=2
+                        # (the jewel socket above) is deliberately not counted.
+                        events.append(self.economy.TASK_EVENT_UPGRADE_ARTIFACT)
                 elif name == "C2L_HeroOpt":
                     prototype = next((r for r in catalog()["hero_unlock"] if r["hero_id"] == hero["id"]), None)
                     if not prototype:
@@ -235,6 +239,7 @@ class ProgressionService:
                         costs[1237907] = row["exp_required"]
                         hero["level"] = row["next_level"]
                         event = 7
+                        events.append(self.economy.TASK_EVENT_HERO_LEVEL_UP)
                     elif req.get("opt") == 2:
                         row = next(r for r in catalog()["hero_star"] if r["star"] == hero["star"])
                         options = {prototype["fragment_item_id"]: row["fragment_count_field"],
@@ -271,10 +276,12 @@ class ProgressionService:
                     costs[1237901] += row["gold_cost"]
                     skill["level"] = row["next_level"]
                     hero["skills"] = list(skills.values())
+                    events.append(self.economy.TASK_EVENT_UPGRADE_SKILL)
                 self.spend(player_id, snapshot, costs)
                 self.economy.save_snapshot(player_id, snapshot)
-                if event:
-                    self.economy._event(player_id, "growth:"+key, event, hero["id"], 1)
+                for growth_event in ([event] if event else []) + events:
+                    self.economy._event(player_id, "growth:" + key + ":" + str(growth_event),
+                                        growth_event, hero["id"], 1)
                 values["code"] = 10
                 self.store.db.execute("INSERT INTO progression_receipts VALUES (?,?,?)", (player_id,key,schema.encode(values)))
         except UnresolvedEconomy as exc:

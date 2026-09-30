@@ -191,6 +191,12 @@ class EquipmentService:
             if len(hero["equips"]) == before:
                 return OutboundMessage(response, values)
         self.store.save_snapshot(player_id, snapshot, player["revision"])
+        if name == "C2L_DoEquip" and self.economy is not None:
+            # 穿戴装备 (E_EquipEquip). Keyed by the equip id, so wearing the same
+            # piece a second time cannot pay the condition twice; 卸下 never
+            # counts, the client's own condition is about equipping.
+            self.economy.record_event(player_id, f"equip:{req['equipID']}",
+                                      self.economy.TASK_EVENT_EQUIP_EQUIP, 0, 1)
         from .hero import encode_hero_data
         values["code"] = 10
         pushes = (OutboundMessage("L2C_HeroUpdate", {"code": 10,

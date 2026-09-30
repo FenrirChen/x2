@@ -4,6 +4,7 @@ from __future__ import annotations
 from collections import Counter
 from dataclasses import asdict, dataclass
 import json
+import logging
 from pathlib import Path
 
 from x2server.messages.battle import OUTSIDE_ITEM
@@ -121,7 +122,13 @@ class RuntimeDropResolver:
         if run is None or run["settled"] or run["section_id"] != profile["section_id"]:
             raise UnresolvedEconomy("missing, settled or mismatched battle run")
         if outside_items and not success:
-            raise UnresolvedEconomy("failed battle cannot export outsideItems")
+            # A quit/lost run still reports its in-run items (局内商店 purchases,
+            # picked drops). Acknowledge the run end but grant none of them: the
+            # client clears its own in-stage counters at settlement.
+            logging.getLogger("x2.rewards").info(
+                "failed run section=%s keeps %d outsideItems ungranted",
+                profile["section_id"], len(outside_items))
+            outside_items = []
         if len(outside_items) > 512:
             raise UnresolvedEconomy("too many outsideItems")
         grants, pending, blocked, equipment = [], [], [], []

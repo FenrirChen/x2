@@ -1,0 +1,9 @@
+{
+  "provenance": "Item IDs and reward quantities from client item descriptions; matching Gift groups from recovered Gift table. Used links inferred because compact reward_items export omits them",
+  "items": {
+    "1202023": {"used": [720014], "reward": [1237901, 20000]},
+    "1202025": {"used": [720016], "reward": [1237901, 50000]},
+    "1202071": {"used": [720061], "reward": [1237906, 1000]},
+    "1202072": {"used": [720062], "reward": [1237906, 2000]}
+  }
+}

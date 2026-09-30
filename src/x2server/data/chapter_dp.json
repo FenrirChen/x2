@@ -1,0 +1,270 @@
+{
+ "provenance": {
+  "ChapterInfo": {
+   "source": "table/chapterinfo",
+   "clean_start": 136,
+   "rows": 12,
+   "nested_rows": 12,
+   "fields": [
+    "MapTypeID",
+    "StageID",
+    "ExperienceChapterID",
+    "ChapterName",
+    "ChapterNumber",
+    "ChallengeLevel",
+    "EndlessLevel",
+    "BloodMoonOpenType",
+    "FlowchartName",
+    "IsOpen",
+    "ChapterPic",
+    "ChapterPicName",
+    "ChapterIcon",
+    "DPPic",
+    "DPPoint",
+    "DPReward",
+    "UnlockMapTypeID",
+    "UnlockDPRequest",
+    "PlotReviewBackground",
+    "PlotReviewDesc",
+    "ReviewUnlockRequest",
+    "RequestNum",
+    "ReviewUnlocAward",
+    "ShowReview"
+   ],
+   "note": "field numbers are the client class's declaration order; the inlined first row has lost its MapTypeID and is skipped (recovered thresholds [0])"
+  }
+ },
+ "chapters": {
+  "2010100": {
+   "chapterId": 2010100,
+   "dpThresholds": [
+    20,
+    40,
+    60,
+    80,
+    100
+   ],
+   "dpRewards": [
+    1203836,
+    1203837,
+    1203838,
+    1203839,
+    1203840
+   ],
+   "unlockMapTypeId": 2010000,
+   "unlockDpRequest": null
+  },
+  "2010200": {
+   "chapterId": 2010200,
+   "dpThresholds": [
+    20,
+    40,
+    60,
+    80,
+    100
+   ],
+   "dpRewards": [
+    1203801,
+    1203802,
+    1203803,
+    1203804,
+    1203805
+   ],
+   "unlockMapTypeId": 2010100,
+   "unlockDpRequest": null
+  },
+  "2010300": {
+   "chapterId": 2010300,
+   "dpThresholds": [
+    20,
+    40,
+    60,
+    80,
+    100
+   ],
+   "dpRewards": [
+    1203806,
+    1203807,
+    1203808,
+    1203809,
+    1203810
+   ],
+   "unlockMapTypeId": 2010200,
+   "unlockDpRequest": 10,
+   "thresholdsFromRawBytes": [
+    40,
+    60,
+    80,
+    100
+   ]
+  },
+  "2010400": {
+   "chapterId": 2010400,
+   "dpThresholds": [
+    20,
+    40,
+    60,
+    80,
+    100
+   ],
+   "dpRewards": [
+    1203811,
+    1203812,
+    1203813,
+    1203814,
+    1203815
+   ],
+   "unlockMapTypeId": 2010300,
+   "unlockDpRequest": 20
+  },
+  "2010500": {
+   "chapterId": 2010500,
+   "dpThresholds": [
+    20,
+    40,
+    60,
+    80,
+    100
+   ],
+   "dpRewards": [
+    1203816,
+    1203817,
+    1203818,
+    1203819,
+    1203820
+   ],
+   "unlockMapTypeId": 2010400,
+   "unlockDpRequest": 25
+  },
+  "2010600": {
+   "chapterId": 2010600,
+   "dpThresholds": [
+    20,
+    40,
+    60,
+    80,
+    100
+   ],
+   "dpRewards": [
+    1203821,
+    1203822,
+    1203823,
+    1203824,
+    1203825
+   ],
+   "unlockMapTypeId": 2010500,
+   "unlockDpRequest": 30,
+   "rewardsFromRawBytes": [
+    16,
+    48,
+    1203821,
+    1203822,
+    1203823,
+    1203824,
+    1203825
+   ]
+  },
+  "2010700": {
+   "chapterId": 2010700,
+   "dpThresholds": [
+    20,
+    40,
+    60,
+    80,
+    100
+   ],
+   "dpRewards": [
+    1203826,
+    1203827,
+    1203828,
+    1203829,
+    1203830
+   ],
+   "unlockMapTypeId": 2010600,
+   "unlockDpRequest": 35
+  },
+  "2010800": {
+   "chapterId": 2010800,
+   "dpThresholds": [
+    20,
+    40,
+    60,
+    80,
+    100
+   ],
+   "dpRewards": [
+    1203831,
+    1203832,
+    1203833,
+    1203834,
+    1203835
+   ],
+   "unlockMapTypeId": 2010700,
+   "unlockDpRequest": 40
+  },
+  "2010900": {
+   "chapterId": 2010900,
+   "dpThresholds": [
+    20,
+    40,
+    60,
+    80,
+    100
+   ],
+   "dpRewards": [
+    1203841,
+    1203842,
+    1203843,
+    1203844,
+    1203845
+   ],
+   "unlockMapTypeId": 2010800,
+   "unlockDpRequest": 40
+  },
+  "2011000": {
+   "chapterId": 2011000,
+   "dpThresholds": [
+    20,
+    40,
+    60,
+    80,
+    100
+   ],
+   "dpRewards": [
+    1203846,
+    1203847,
+    1203848,
+    1203849,
+    1203850
+   ],
+   "unlockMapTypeId": 2010900,
+   "unlockDpRequest": null
+  },
+  "2011100": {
+   "chapterId": 2011100,
+   "dpThresholds": [
+    20,
+    40,
+    60,
+    80,
+    100
+   ],
+   "dpRewards": [
+    1203846,
+    1203847,
+    1203848,
+    1203849,
+    1203850
+   ],
+   "unlockMapTypeId": 2010900,
+   "unlockDpRequest": null
+  },
+  "2019900": {
+   "chapterId": 2019900,
+   "dpThresholds": [],
+   "dpRewards": [],
+   "unlockMapTypeId": null,
+   "unlockDpRequest": null
+  }
+ }
+}

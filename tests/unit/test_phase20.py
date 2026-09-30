@@ -81,8 +81,13 @@ def test_four_section_route_refunds_and_persisted_pending_rewards(env):
         assert asyncio.run(battle.checkout(ctx,done)).values == result.values
         assert store.get(1)["snapshot"]["main_section"] == section
     assert store.db.execute("SELECT COUNT(*) FROM economy_clears").fetchone()[0] == 4
+    # Fixed 装备部件 rewards materialize as instances instead of parking in
+    # pending_rewards; nothing else may be parked for these sections.
+    instances = dict(store.db.execute(
+        "SELECT type_id,COUNT(*) FROM equipment_instances WHERE player_id=1 GROUP BY type_id"))
+    assert instances.get(1240002, 0) > 0 and instances.get(1240004, 0) > 0
     pending = dict(store.db.execute("SELECT item_id,SUM(quantity) FROM pending_rewards GROUP BY item_id"))
-    assert pending[1240002] > 0 and pending[1240004] > 0
+    assert 1240002 not in pending and 1240004 not in pending
     # Replaying an older subsection does not regress the frontier; failure refunds once.
     asyncio.run(battle.enter(ctx,packet(request(),10)))
     assert store.get(1)["snapshot"]["mobility"]["power"] == 119

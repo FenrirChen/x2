@@ -1,0 +1,25 @@
+{
+  "provenance": "9.29 community shop 801 observed slots; unsupported special effect and inferred tail slots omitted. Prices, quantities and currencies are Revival compatibility values.",
+  "shopId": 801,
+  "pools": {
+    "godShard": [1201003, 1201004, 1201005, 1201006, 1201007, 1201008, 1201009, 1201010, 1201011, 1201012, 1201013, 1201014, 1201015, 1201016, 1201017, 1201018, 1201019, 1201020, 1201021, 1201022, 1201023, 1201024, 1201025, 1201026, 1201027, 1201028, 1201029, 1201030, 1201031, 1201032, 1201033, 1201034, 1201035, 1201036, 1201039, 1201040, 1201197, 1201198, 1201199]
+  },
+  "goods": [
+    {"goodsId": 1900101, "itemId": 1201003, "num": 3, "price": 22500, "currency": 901, "currencyItemId": 1237901, "limited": 3, "randomPool": "godShard"},
+    {"goodsId": 1900201, "itemId": 1201003, "num": 2, "price": 30000, "currency": 901, "currencyItemId": 1237901, "randomPool": "godShard"},
+    {"goodsId": 1900301, "itemId": 1201003, "num": 1, "price": 35000, "currency": 901, "currencyItemId": 1237901, "randomPool": "godShard"},
+    {"goodsId": 1900302, "itemId": 1203001, "num": 10, "price": 30, "currency": 900, "currencyItemId": 1237900},
+    {"goodsId": 1900303, "itemId": 1203002, "num": 10, "price": 30000, "currency": 901, "currencyItemId": 1237901},
+    {"goodsId": 1900304, "itemId": 1203003, "num": 10, "price": 150, "currency": 900, "currencyItemId": 1237900},
+    {"goodsId": 1900305, "itemId": 1237840, "num": 10, "price": 50, "currency": 900, "currencyItemId": 1237900},
+    {"goodsId": 1900306, "itemId": 1202080, "num": 10, "price": 50, "currency": 900, "currencyItemId": 1237900},
+    {"goodsId": 1900307, "itemId": 1237833, "num": 10, "price": 6000, "currency": 901, "currencyItemId": 1237901},
+    {"goodsId": 1900308, "itemId": 1238106, "num": 10, "price": 9, "currency": 900, "currencyItemId": 1237900},
+    {"goodsId": 1900309, "itemId": 1238107, "num": 10, "price": 11, "currency": 900, "currencyItemId": 1237900},
+    {"goodsId": 1900310, "itemId": 1238108, "num": 10, "price": 17, "currency": 900, "currencyItemId": 1237900},
+    {"goodsId": 1900311, "itemId": 1238109, "num": 10, "price": 46, "currency": 900, "currencyItemId": 1237900},
+    {"goodsId": 1900312, "itemId": 1238110, "num": 10, "price": 58, "currency": 900, "currencyItemId": 1237900},
+    {"goodsId": 1900314, "itemId": 1237901, "num": 10000, "price": 20, "currency": 900, "currencyItemId": 1237900},
+    {"goodsId": 1900315, "itemId": 1101050, "num": 100, "price": 60, "currency": 900, "currencyItemId": 1237900}
+  ]
+}

@@ -113,3 +113,32 @@ def test_gift_charge_rolls_back_when_state_write_fails(env, monkeypatch):
             "heroId": 1003, "num": 1}, name="C2L_AddFavor")))
     assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1204000").fetchone()[0] == 2
     assert "favor" not in store.get(1)["snapshot"]["heroes"][0]
+
+
+def test_tap_interaction_completes_daily_interactive_task(env):
+    """The daily tap sends opt=1, heroId=0, optionId=InteractiveID (46001 -> 1003)."""
+    store, economy, ctx = env
+    service = FavorService(store, economy)
+    from x2server.messages.economy import TASK
+    answer = asyncio.run(service.handle(ctx, packet(
+        {"opt": 1, "optionId": 46001, "heroId": 0, "num": 0}, name="C2L_AddFavor")))
+    assert answer.values["code"] == 10
+    assert answer.values["heroId"] == 1003
+    assert store.db.execute("SELECT count FROM favor_touch_log WHERE player_id=1 AND hero_id=1003"
+                            ).fetchone()[0] == 1
+    task_row = next(TASK.decode(raw) for raw in economy.task_values(1, 1)["taskList"]
+                    if TASK.decode(raw)["taskId"] == 630010)
+    assert task_row["taskProgress"] == 1 and task_row["taskStatus"] == 3
+    # An interaction id whose god is not owned falls back to the showcase hero.
+    fallback = asyncio.run(service.handle(ctx, packet(
+        {"opt": 1, "optionId": 48707, "heroId": 0, "num": 0}, name="C2L_AddFavor")))
+    assert fallback.values["code"] == 10 and fallback.values["heroId"] == 1003
+    # Three taps per day: the fourth is rejected and never advances the task.
+    assert asyncio.run(service.handle(ctx, packet(
+        {"opt": 1, "optionId": 46001, "heroId": 0, "num": 0}, name="C2L_AddFavor"))).values["code"] == 10
+    capped = asyncio.run(service.handle(ctx, packet(
+        {"opt": 1, "optionId": 46001, "heroId": 0, "num": 0}, name="C2L_AddFavor")))
+    assert capped.values["code"] == 13
+    task_row = next(TASK.decode(raw) for raw in economy.task_values(1, 1)["taskList"]
+                    if TASK.decode(raw)["taskId"] == 630010)
+    assert task_row["taskProgress"] == 1  # capped tap must not over-count

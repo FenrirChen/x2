@@ -15,27 +15,17 @@ GROWTH_BASE = ProtoSchema("L2C_QueryGrowthBase", (
     F(7, "exploreList", K.MESSAGE, repeated=True),
     F(8, "trainingList", K.MESSAGE, repeated=True),
     F(9, "civilization", K.MESSAGE, repeated=True),
-    F(10, "buildQueue", K.MESSAGE, repeated=True), F(11, "wonderQueue", K.MESSAGE, repeated=True),
+    F(10, "buildQueue", K.MESSAGE), F(11, "wonderQueue", K.MESSAGE),
     F(12, "prayQueue", K.MESSAGE, repeated=True), F(13, "washingCountDay", K.INT32)))
-
-
-def growth_base_payload(values):
-    """Materialize empty repeated growth collections for the client decoder."""
-    payload = dict(values)
-    for name in ("buildingList", "exploreList", "trainingList", "civilization",
-                 "buildQueue", "wonderQueue", "prayQueue"):
-        if not payload.get(name):
-            payload[name] = [b""]
-    return payload
 
 
 def growth_base_values():
     # Compatibility helper for schema-only callers; production uses CollegeStateRepository.
     from x2server.player.college import initial_state
     state = initial_state()
-    return growth_base_payload({
+    return {
         "buildingList": [BUILDING_BASE_INFO.encode(row) for row in state["buildings"]],
-        "civilization": [BUILDING_BASE_INFO.encode(row) for row in state["wonders"]]})
+        "civilization": [BUILDING_BASE_INFO.encode(row) for row in state["wonders"]]}
 
 LOBBY_IDS = (
     ("QueryTelInfo", 782, 783), ("SeasonIcon", 999, 1001),

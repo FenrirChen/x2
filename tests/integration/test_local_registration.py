@@ -149,7 +149,25 @@ def test_registration_to_tcp_login_roundtrip(tmp_path):
         finally:
             await server.stop()
     asyncio.run(scenario())
-    assert flow.store.get(player_id)["login_count"] == 1
+
+
+def test_existing_account_gets_welcome_mail_on_game_login(tmp_path):
+    flow = AccountFlow(tmp_path)
+    flow.store.login("legacy", 1, 100)
+    from x2server.player.accounts import hash_password
+    with flow.accounts.db:
+        flow.accounts.db.execute("INSERT INTO accounts(username,password_hash,created_at,status,player_id) "
+                                 "VALUES (?,?,?,?,?)", ("legacy", hash_password("pw"), 100, "active", 1))
+    _, login_ctx = flow.game_session("legacy", "pw")
+    economy = EconomyService(flow.store)
+    mail = MailService(flow.store, economy)
+    service = LoginService(flow.identity, flow.store, mail=mail)
+    context = DispatchContext("test", "local", SessionState("test", "session"))
+    asyncio.run(service.login(context, packet({"id": 1, "token": login_ctx["token"]}, name="C2L_Login")))
+    rows = flow.store.db.execute("SELECT source_key FROM player_mail WHERE player_id=1 "
+                                 "AND source_key LIKE 'welcome_mail:%'").fetchall()
+    assert len(rows) == 1
+    assert flow.store.get(1)["login_count"] == 2
 
 
 def test_actual_http_wire_and_relogin_preserve_snapshot(tmp_path):

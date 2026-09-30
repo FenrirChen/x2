@@ -52,6 +52,7 @@ class LoginService:
         now = self.clock.now()
         player = self.store.login(self.identity.account_for_player(values["id"]), values["id"], now)
         if self.mail:
+            self.identity.ensure_welcome_mail(player["id"], now)
             self.identity.ensure_daily_login_mail(player["id"], now)
         context.session.session_id = secrets.token_urlsafe(24)
         context.session.player_id = player["id"]
@@ -62,9 +63,9 @@ class LoginService:
         for name in ("itemAll", "noticeAll", "cardPool", "heroSkinAll",
                      "rechargeNoticeAll", "equipAll", "taskDaily", "taskWeekly", "taskChallenge", "limitTaskChallenge"):
             result[name] = b""
-        from x2server.messages.lobby import GROWTH_BASE, growth_base_payload, growth_base_values
-        growth = self.college.growth_base(player["id"]) if self.college else growth_base_values()
-        result["growthBase"] = GROWTH_BASE.encode(growth_base_payload(growth))
+        from x2server.messages.lobby import GROWTH_BASE, growth_base_values
+        result["growthBase"] = GROWTH_BASE.encode(self.college.growth_base(player["id"])
+                                                  if self.college else growth_base_values())
         result["heroAll"] = encode_hero_all(player["snapshot"])
         if self.equipment:
             from x2server.messages.lobby import LOBBY_SCHEMAS
@@ -154,7 +155,8 @@ class LoginService:
             return OutboundMessage("L2C_ReConnect", {"code": 0})
         context.session.player_id = player["id"]
         now = self.clock.now()
-        mail_created = self.identity.ensure_daily_login_mail(player["id"], now) if self.mail else False
+        welcome_created = self.identity.ensure_welcome_mail(player["id"], now) if self.mail else False
+        daily_created = self.identity.ensure_daily_login_mail(player["id"], now) if self.mail else False
         daily_granted = self.gift_packages.settle_daily(player["id"]) if self.gift_packages else False
         # Same-process reconnect keeps the authenticated transport session supplied
         # by the client; a fresh login is required after identity-service restart.
@@ -162,7 +164,7 @@ class LoginService:
             context.session.session_id = secrets.token_urlsafe(24)
         LOGGER.info("authenticated reconnect player=%s", player["id"])
         pushes = self.economy.pushes(player["id"]) if daily_granted and self.economy else ()
-        if mail_created:
+        if welcome_created or daily_created:
             pushes += (self.mail.list_message(player["id"]),)
         return OutboundMessage("L2C_ReConnect", {"code": 10, "id": player["id"],
             "serverTime": now}, pushes=pushes)

@@ -1,0 +1,4125 @@
+{
+ "provenance": {
+  "structure": "client table/MazeShop (ShopID + FloorInterval -> GroupID slots); pinned by the live request shopID 400201 level 4 section 2110151",
+  "items": "client table/Item, 用途场景 = 迷宫内 (docs/reference_tsv/道具.tsv)",
+  "currency": "client table/CurrencyType TpyeId 903 = 棱镜 (item 1237903); MoneyType carries that TpyeId",
+  "slotMapping": "which GroupID sold which item is not in any client table; slots are paired positionally with 消耗品/义体药剂/圣遗物(中/紫中/大/特) id blocks",
+  "prices": "NOT recovered - every price is declared Revival policy (SLOT_PRICES in tools/build_battle_shop.py); the original server priced these at runtime",
+  "iconFilter": "items whose client table/Item Icon field is empty are excluded; they render as an empty shop card (seen in game for 1003001 物理元素结晶)",
+  "discount": 100
+ },
+ "currency": {
+  "moneyType": 903,
+  "itemId": 1237903,
+  "name": "棱镜"
+ },
+ "slots": [
+  {
+   "slot": 1,
+   "family": "consumable",
+   "price": 30,
+   "itemRange": [
+    1001000,
+    1001999
+   ],
+   "items": [
+    {
+     "itemId": 1001001,
+     "name": "蒙尘血疗试剂",
+     "quality": "无",
+     "star": 1
+    },
+    {
+     "itemId": 1001002,
+     "name": "蒙尘灵魂试剂",
+     "quality": "无",
+     "star": 1
+    },
+    {
+     "itemId": 1001003,
+     "name": "陈旧血疗试剂",
+     "quality": "无",
+     "star": 1
+    },
+    {
+     "itemId": 1001004,
+     "name": "陈旧灵魂试剂",
+     "quality": "无",
+     "star": 1
+    },
+    {
+     "itemId": 1001005,
+     "name": "猩红血疗试剂",
+     "quality": "无",
+     "star": 1
+    },
+    {
+     "itemId": 1001006,
+     "name": "深紫灵魂试剂",
+     "quality": "无",
+     "star": 1
+    },
+    {
+     "itemId": 1001007,
+     "name": "永恒血疗试剂",
+     "quality": "无",
+     "star": 1
+    },
+    {
+     "itemId": 1001008,
+     "name": "永恒灵魂试剂",
+     "quality": "无",
+     "star": 1
+    },
+    {
+     "itemId": 1001015,
+     "name": "蒙尘水银饮剂",
+     "quality": "无",
+     "star": 1
+    },
+    {
+     "itemId": 1001016,
+     "name": "陈旧水银饮剂",
+     "quality": "无",
+     "star": 1
+    },
+    {
+     "itemId": 1001017,
+     "name": "极夜水银饮剂",
+     "quality": "无",
+     "star": 1
+    },
+    {
+     "itemId": 1001018,
+     "name": "永恒水银饮剂",
+     "quality": "无",
+     "star": 1
+    },
+    {
+     "itemId": 1001019,
+     "name": "简易能源供给",
+     "quality": "无",
+     "star": 1
+    },
+    {
+     "itemId": 1001020,
+     "name": "初级能源供给",
+     "quality": "无",
+     "star": 1
+    },
+    {
+     "itemId": 1001021,
+     "name": "高级能源供给",
+     "quality": "无",
+     "star": 1
+    },
+    {
+     "itemId": 1001022,
+     "name": "紧急能源供给",
+     "quality": "无",
+     "star": 1
+    }
+   ]
+  },
+  {
+   "slot": 2,
+   "family": "cyber_potion",
+   "price": 60,
+   "itemRange": [
+    1002000,
+    1002999
+   ],
+   "items": [
+    {
+     "itemId": 1002018,
+     "name": "攻击药剂",
+     "quality": "无",
+     "star": 1
+    },
+    {
+     "itemId": 1002019,
+     "name": "防御药剂",
+     "quality": "无",
+     "star": 1
+    },
+    {
+     "itemId": 1002020,
+     "name": "生命药剂",
+     "quality": "无",
+     "star": 1
+    },
+    {
+     "itemId": 1002021,
+     "name": "锐利药剂",
+     "quality": "无",
+     "star": 1
+    },
+    {
+     "itemId": 1002022,
+     "name": "坚韧药剂",
+     "quality": "无",
+     "star": 1
+    },
+    {
+     "itemId": 1002023,
+     "name": "永恒药剂",
+     "quality": "无",
+     "star": 1
+    },
+    {
+     "itemId": 1002024,
+     "name": "光辉药剂",
+     "quality": "无",
+     "star": 1
+    },
+    {
+     "itemId": 1002025,
+     "name": "暗月药剂",
+     "quality": "无",
+     "star": 1
+    },
+    {
+     "itemId": 1002026,
+     "name": "源初药剂",
+     "quality": "无",
+     "star": 1
+    },
+    {
+     "itemId": 1002027,
+     "name": "异能药剂",
+     "quality": "无",
+     "star": 1
+    },
+    {
+     "itemId": 1002028,
+     "name": "光抗药剂",
+     "quality": "无",
+     "star": 1
+    },
+    {
+     "itemId": 1002029,
+     "name": "暗抗药剂",
+     "quality": "无",
+     "star": 1
+    },
+    {
+     "itemId": 1002030,
+     "name": "源抗药剂",
+     "quality": "无",
+     "star": 1
+    },
+    {
+     "itemId": 1002031,
+     "name": "异抗药剂",
+     "quality": "无",
+     "star": 1
+    },
+    {
+     "itemId": 1002032,
+     "name": "暴率药剂",
+     "quality": "无",
+     "star": 1
+    },
+    {
+     "itemId": 1002033,
+     "name": "暴伤药剂",
+     "quality": "无",
+     "star": 1
+    },
+    {
+     "itemId": 1002034,
+     "name": "真·暴率药剂",
+     "quality": "无",
+     "star": 1
+    },
+    {
+     "itemId": 1002035,
+     "name": "伤害神权修正剂",
+     "quality": "无",
+     "star": 1
+    },
+    {
+     "itemId": 1002036,
+     "name": "急速药剂",
+     "quality": "无",
+     "star": 1
+    }
+   ]
+  },
+  {
+   "slot": 3,
+   "family": "relic_mid",
+   "price": 100,
+   "itemRange": [
+    1004001,
+    1004045
+   ],
+   "items": [
+    {
+     "itemId": 1004001,
+     "name": "血疗吸管（中）",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004002,
+     "name": "血疗烧瓶（中）",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004003,
+     "name": "灵魂吸管（中）",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004004,
+     "name": "灵魂烧瓶（中）",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004005,
+     "name": "勇士吸管（中）",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004006,
+     "name": "勇士烧瓶（中）",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004007,
+     "name": "圣餐之饼（中）",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004008,
+     "name": "圣餐之饵（中）",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004009,
+     "name": "马猴烧酒（中）",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004010,
+     "name": "魔王本体（中）",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004011,
+     "name": "牛顿的苹果（中）",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004012,
+     "name": "图灵的苹果（中）",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004013,
+     "name": "比利王的传承",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004014,
+     "name": "女仆的祝福",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004015,
+     "name": "是男孩子呀！",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004016,
+     "name": "C语言入门",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004017,
+     "name": "Html5入门",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004018,
+     "name": "PHP删库入门",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004019,
+     "name": "开挂入门",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004020,
+     "name": "光辉之球",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004021,
+     "name": "闪耀圣杯（中）",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004022,
+     "name": "染血圣杯（中）",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004023,
+     "name": "暗月之球",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004024,
+     "name": "你的敌人炸了（中）",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004025,
+     "name": "秒速1厘米",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004026,
+     "name": "圣光罩我！（中）",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004027,
+     "name": "伤害追不上我",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004028,
+     "name": "赫尔墨斯biu",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004029,
+     "name": "福尔摩斯biu",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004030,
+     "name": "恭喜你！彩蛋",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004031,
+     "name": "古灵阁的问候",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004032,
+     "name": "金钱等于力量",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004033,
+     "name": "温暖的护盾",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004034,
+     "name": "溜了溜了",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004035,
+     "name": "星之强袭（中）",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004036,
+     "name": "星之守护（中）",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004037,
+     "name": "星之赐福（中）",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004038,
+     "name": "恶魔果实：强袭",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004039,
+     "name": "恶魔果实：守护",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004040,
+     "name": "恶魔果实：赐福",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004041,
+     "name": "甩锅的快乐",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004042,
+     "name": "飞刃风暴",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004043,
+     "name": "小阿保护爸爸",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004044,
+     "name": "2★神迹44",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004045,
+     "name": "金色体验",
+     "quality": "绿",
+     "star": 2
+    }
+   ]
+  },
+  {
+   "slot": 4,
+   "family": "relic_mid_plus",
+   "price": 140,
+   "itemRange": [
+    1004100,
+    1004153
+   ],
+   "items": [
+    {
+     "itemId": 1004100,
+     "name": "元素权能·潮汐",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004101,
+     "name": "元素权能·业火",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004102,
+     "name": "元素权能·湍流",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004103,
+     "name": "元素权能·心火",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004104,
+     "name": "元素权能·余震",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004105,
+     "name": "元素权能·点石",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004106,
+     "name": "元素权能·镰鼬",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004107,
+     "name": "元素权能·御风",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004108,
+     "name": "元素精灵·地精<color=#F9F900>UP</color>",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004109,
+     "name": "元素精灵·水精<color=#F9F900>UP</color>",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004110,
+     "name": "元素精灵·火精<color=#F9F900>UP</color>",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004111,
+     "name": "元素精灵·风精<color=#F9F900>UP</color>",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004112,
+     "name": "双灵·木卫",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004113,
+     "name": "双灵·盈灯",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004116,
+     "name": "双灵·木卫",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004117,
+     "name": "双灵·盈灯",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004120,
+     "name": "双灵·木卫",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004121,
+     "name": "双灵·盈灯",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004124,
+     "name": "双灵·木卫",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004125,
+     "name": "双灵·盈灯",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004128,
+     "name": "双灵·木卫",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004129,
+     "name": "双灵·盈灯",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004132,
+     "name": "关山难越·侵袭",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004133,
+     "name": "念念不忘·风痕",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004134,
+     "name": "关山难越·风暴之中",
+     "quality": "橙",
+     "star": 5
+    },
+    {
+     "itemId": 1004135,
+     "name": "念念不忘·火雨",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004136,
+     "name": "召唤灵强化·爆破",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004137,
+     "name": "同行之中·沥火之痛",
+     "quality": "橙",
+     "star": 5
+    },
+    {
+     "itemId": 1004138,
+     "name": "同行终末·守护之约",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004139,
+     "name": "召唤灵强化·奥义",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004140,
+     "name": "天堑横渊·盛怒",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004141,
+     "name": "天堑横渊·无畏",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004142,
+     "name": "越过关山·宁静",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004143,
+     "name": "关山难越·暴击",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004144,
+     "name": "蔓草之遇·悸动",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004145,
+     "name": "同行之初·易伤",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004146,
+     "name": "召唤灵强化·顺劈",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004147,
+     "name": "召唤灵强化·火轮",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004148,
+     "name": "召唤灵强化·剑舞",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004149,
+     "name": "召唤灵强化·撕裂",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004150,
+     "name": "召唤灵强化·震击",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004151,
+     "name": "召唤灵强化·弹幕",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004152,
+     "name": "召唤灵强化·连发",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004153,
+     "name": "召唤灵强化·炎爆",
+     "quality": "蓝",
+     "star": 3
+    }
+   ]
+  },
+  {
+   "slot": 5,
+   "family": "relic_big",
+   "price": 180,
+   "itemRange": [
+    1004601,
+    1004796
+   ],
+   "items": [
+    {
+     "itemId": 1004601,
+     "name": "血疗吸管（大）",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004602,
+     "name": "血疗烧瓶（大）",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004603,
+     "name": "灵魂吸管（大）",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004604,
+     "name": "灵魂烧瓶（大）",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004605,
+     "name": "勇士吸管（大）",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004606,
+     "name": "勇士烧瓶（大）",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004607,
+     "name": "圣餐之饼（大）",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004608,
+     "name": "圣餐之饵（大）",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004609,
+     "name": "马猴烧酒（大）",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004610,
+     "name": "魔王本体（大）",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004611,
+     "name": "牛顿的苹果（大）",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004612,
+     "name": "图灵的苹果（大）",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004613,
+     "name": "比利王再次传承",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004614,
+     "name": "女仆加倍祝福",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004615,
+     "name": "还是男孩子呀！",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004616,
+     "name": "C语言升级",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004617,
+     "name": "Html5升级",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004618,
+     "name": "PHP删库升级",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004619,
+     "name": "开挂升级",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004620,
+     "name": "混乱圣杯",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004621,
+     "name": "官方挂最为致命",
+     "quality": "橙",
+     "star": 5
+    },
+    {
+     "itemId": 1004622,
+     "name": "斟满酒的圣杯",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004623,
+     "name": "恶魔果实：灵魂",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004624,
+     "name": "源初之球",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004626,
+     "name": "BBQ上你和我",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004627,
+     "name": "圣光罩我！（大）",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004628,
+     "name": "灵魂很重要滴",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004629,
+     "name": "闪电男孩biu",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004630,
+     "name": "很快的银biu",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004631,
+     "name": "恭喜你！大彩蛋",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004632,
+     "name": "无尽黑卡有点小",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004634,
+     "name": "火热的护盾",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004635,
+     "name": "溜了溜了溜了",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004636,
+     "name": "星之强袭（大）",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004637,
+     "name": "星之守护（大）",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004638,
+     "name": "星之赐福（大）",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004639,
+     "name": "魔王果实：强袭",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004640,
+     "name": "魔王果实：守护",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004641,
+     "name": "魔王果实：赐福",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004642,
+     "name": "吸血鬼初拥",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004643,
+     "name": "伏尔甘的伤痕",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004644,
+     "name": "伏尔甘的火球",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004645,
+     "name": "元素精灵·地精",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004646,
+     "name": "元素精灵·水精",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004647,
+     "name": "有穷黑卡",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004648,
+     "name": "天际劫火",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004649,
+     "name": "金色挽歌",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004650,
+     "name": "白金星辰",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004651,
+     "name": "金属回旋",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004652,
+     "name": "不朽钻石",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004700,
+     "name": "官方挂最为致命",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004701,
+     "name": "海洋之力",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004702,
+     "name": "冈格尼尔的战绩",
+     "quality": "橙",
+     "star": 5
+    },
+    {
+     "itemId": 1004703,
+     "name": "陨石遁了遁了",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004704,
+     "name": "彼岸创造",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004705,
+     "name": "老师的速度",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004706,
+     "name": "风儿甚是喧嚣",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004707,
+     "name": "等价交换之权衡",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004708,
+     "name": "等价交换之代换",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004709,
+     "name": "漫游者之力",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004710,
+     "name": "金羊毛",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004711,
+     "name": "月蚀兽之触",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004712,
+     "name": "冈格尼尔的光环",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004713,
+     "name": "山之巨兽的祝福",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004714,
+     "name": "战争女神之圣光",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004715,
+     "name": "有穷黑卡",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004716,
+     "name": "天际劫火",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004717,
+     "name": "金色挽歌",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004718,
+     "name": "金属回旋",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004719,
+     "name": "普通连打",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004720,
+     "name": "老师的微笑",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004721,
+     "name": "老师的祝福",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004722,
+     "name": "光明山之力",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004723,
+     "name": "月蚀兽之灵",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004724,
+     "name": "战争女神之谦逊",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004725,
+     "name": "返还热血之时",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004726,
+     "name": "皮洛斯战斗之力",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004727,
+     "name": "蓝绿修改初模",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004728,
+     "name": "光之印·神罚",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004729,
+     "name": "月蚀兽之眼",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004730,
+     "name": "老师的庇护",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004731,
+     "name": "雷闪",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004732,
+     "name": "我是瑞奇",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004733,
+     "name": "不完整巨化卷轴",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004734,
+     "name": "死点视野",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004735,
+     "name": "独角兽的祝愿",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004736,
+     "name": "双角兽的祝愿",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004737,
+     "name": "凶暴假面",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004738,
+     "name": "化身永恒疾风",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004739,
+     "name": "千面神相-圣杯",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004740,
+     "name": "千面神相-剑柄",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004741,
+     "name": "千面神相-星币",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004742,
+     "name": "千面神相-权杖",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004743,
+     "name": "神相·连击承继",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004744,
+     "name": "神相·魔王本体",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004745,
+     "name": "神相·契合初阶",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004746,
+     "name": "神相·契合中阶",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004747,
+     "name": "神相·契合高阶",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004748,
+     "name": "神相·开挂祝福",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004749,
+     "name": "神相·英灵殿",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004750,
+     "name": "神相·血源传续",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004751,
+     "name": "神相·蓝鲸歌咏",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004752,
+     "name": "神相·战争女神",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004753,
+     "name": "神相·海洋之触",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004754,
+     "name": "神相·赫尔墨斯",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004755,
+     "name": "不杀之刃的磨砺",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004756,
+     "name": "开挂续费",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004757,
+     "name": "灵魂过热保护程序",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004758,
+     "name": "禁断开挂之力",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004759,
+     "name": "机关幻变-霸",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004760,
+     "name": "深海之魂",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004761,
+     "name": "金羊毛骑士之力",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004762,
+     "name": "灵魂区域解放程序",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004763,
+     "name": "灵魂基本输出程序",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004764,
+     "name": "灵魂碎片整理程序",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004765,
+     "name": "伊波恩的魔典·Ⅰ",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004766,
+     "name": "伊波恩的魔典·Ⅱ",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004767,
+     "name": "伊波恩的魔典·Ⅲ",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004768,
+     "name": "哈斯塔的剧目·Ⅰ",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004769,
+     "name": "哈斯塔的剧目·Ⅱ",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004770,
+     "name": "哈斯塔的剧目·Ⅲ",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004771,
+     "name": "廷达罗斯的追猎·Ⅰ",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004772,
+     "name": "廷达罗斯的追猎·Ⅱ",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004773,
+     "name": "廷达罗斯的追猎·Ⅲ",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004774,
+     "name": "拉莱耶的文本·Ⅰ",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004775,
+     "name": "拉莱耶的文本·Ⅱ",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004776,
+     "name": "拉莱耶的文本·Ⅲ",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004777,
+     "name": "偏方三八面体",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004778,
+     "name": "舒该的安魂弥撒",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004779,
+     "name": "银匙的禁断歌谣",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004780,
+     "name": "拜亚基的旅途",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004781,
+     "name": "阿尔哈萨德的油灯",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004782,
+     "name": "非等价交换冲击",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004783,
+     "name": "非等价交换魂能",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004784,
+     "name": "黄金蜜酒的庇护",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004788,
+     "name": "青丘的报恩",
+     "quality": "橙",
+     "star": 5
+    },
+    {
+     "itemId": 1004789,
+     "name": "召唤1",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004790,
+     "name": "召唤2",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004791,
+     "name": "中级统御之力",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004792,
+     "name": "高级统御之力",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004793,
+     "name": "特级统御之力",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004794,
+     "name": "召唤6",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004795,
+     "name": "召唤7",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004796,
+     "name": "召唤8",
+     "quality": "绿",
+     "star": 2
+    }
+   ]
+  },
+  {
+   "slot": 6,
+   "family": "relic_special",
+   "price": 260,
+   "itemRange": [
+    1004800,
+    1004969
+   ],
+   "items": [
+    {
+     "itemId": 1004800,
+     "name": "召唤12",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004801,
+     "name": "临时雇员",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004802,
+     "name": "价值回收",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004803,
+     "name": "砂石之途",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004804,
+     "name": "紊流之途",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004805,
+     "name": "业火之途",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004806,
+     "name": "疾风之途",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004807,
+     "name": "数据之途",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004808,
+     "name": "人力资源",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004809,
+     "name": "召唤21",
+     "quality": "橙",
+     "star": 5
+    },
+    {
+     "itemId": 1004810,
+     "name": "召唤22",
+     "quality": "橙",
+     "star": 5
+    },
+    {
+     "itemId": 1004811,
+     "name": "召唤23",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004812,
+     "name": "召唤24",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004813,
+     "name": "召唤25",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004814,
+     "name": "召唤26",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004815,
+     "name": "召唤27",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004816,
+     "name": "召唤28",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004817,
+     "name": "召唤29",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004818,
+     "name": "开挂续费",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004819,
+     "name": "血之海的微风",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004820,
+     "name": "神行太保",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004821,
+     "name": "姆乔尔尼尔的愤怒",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004822,
+     "name": "姆乔尔尼尔的重击",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004823,
+     "name": "神盾的守御",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004824,
+     "name": "德罗普尼尔的重铸",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004825,
+     "name": "大地的守护者",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004826,
+     "name": "回音击",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004827,
+     "name": "余震",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004828,
+     "name": "烈日灼烤",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004829,
+     "name": "涅槃",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004830,
+     "name": "剑斩斩剑",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004831,
+     "name": "守夜大剑",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004832,
+     "name": "幻影奇袭",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004833,
+     "name": "魅影无形",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004834,
+     "name": "一矢流星",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004835,
+     "name": "阴邪凝视",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004836,
+     "name": "暴风眼",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004837,
+     "name": "天翔龙闪",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004838,
+     "name": "九头龙闪",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004839,
+     "name": "飞天御剑流",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004840,
+     "name": "神速力",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004841,
+     "name": "神速力风暴",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004842,
+     "name": "基金红利",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004843,
+     "name": "加大持仓",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004844,
+     "name": "富裕的权能",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004845,
+     "name": "收割者的眼界",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004846,
+     "name": "实质化力场",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004847,
+     "name": "超滞化力场",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004848,
+     "name": "神宫中继站",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004849,
+     "name": "英魂祝佑",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004850,
+     "name": "星辰爆散",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004851,
+     "name": "快速充能",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004852,
+     "name": "电能溢出",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004853,
+     "name": "超巨大能源",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004854,
+     "name": "赛博宇航服",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004855,
+     "name": "极速冷凝剂",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004856,
+     "name": "临终关照",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004857,
+     "name": "大门大门盾",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004858,
+     "name": "据场力争",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004859,
+     "name": "混乱心智",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004860,
+     "name": "残躯化烈火",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004861,
+     "name": "闪充",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004862,
+     "name": "比卡卡闪电",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004863,
+     "name": "冲锋龙卷风",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004864,
+     "name": "落跑的鬼怪",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004865,
+     "name": "不合格卫生员",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004866,
+     "name": "电浆震荡",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004867,
+     "name": "赫尔墨斯之足",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004868,
+     "name": "随疾风前行",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004869,
+     "name": "身后亦须留心",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004870,
+     "name": "火溶之心",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004871,
+     "name": "本垒打打打",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004872,
+     "name": "沼泽怪兽",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004874,
+     "name": "自信的力量",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004875,
+     "name": "破旧俗",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004876,
+     "name": "除旧岁",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004877,
+     "name": "凤翎烟花",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004878,
+     "name": "龙舞烟花",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004879,
+     "name": "满堂彩",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004880,
+     "name": "爆爆平安",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004881,
+     "name": "千轮烟花",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004886,
+     "name": "莫格尔之力",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004887,
+     "name": "光明海之力",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004888,
+     "name": "光明山之力",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004889,
+     "name": "海洋之力",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004890,
+     "name": "创世者之力",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004891,
+     "name": "黑王子之力",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004892,
+     "name": "俄狄浦斯之力",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004893,
+     "name": "帕拉伊巴之力",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004894,
+     "name": "漫游者之力",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004895,
+     "name": "伊特鲁里亚之力",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004896,
+     "name": "温莎之力",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004897,
+     "name": "皮洛斯之力",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004898,
+     "name": "德古拉之力",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004899,
+     "name": "未知之力",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004901,
+     "name": "血疗吸管（特）",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004902,
+     "name": "血疗烧瓶（特）",
+     "quality": "橙",
+     "star": 5
+    },
+    {
+     "itemId": 1004903,
+     "name": "灵魂吸管（特）",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004904,
+     "name": "灵魂烧瓶（特）",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004905,
+     "name": "勇士吸管（特）",
+     "quality": "橙",
+     "star": 5
+    },
+    {
+     "itemId": 1004906,
+     "name": "勇士烧瓶（特）",
+     "quality": "橙",
+     "star": 5
+    },
+    {
+     "itemId": 1004907,
+     "name": "圣餐之饼（特）",
+     "quality": "橙",
+     "star": 5
+    },
+    {
+     "itemId": 1004908,
+     "name": "圣餐之饵（特）",
+     "quality": "橙",
+     "star": 5
+    },
+    {
+     "itemId": 1004909,
+     "name": "马猴烧酒（特）",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004910,
+     "name": "魔王本体（特）",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004911,
+     "name": "牛顿的苹果（特）",
+     "quality": "橙",
+     "star": 5
+    },
+    {
+     "itemId": 1004912,
+     "name": "图灵的苹果（特）",
+     "quality": "橙",
+     "star": 5
+    },
+    {
+     "itemId": 1004913,
+     "name": "非等价交换强袭",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004914,
+     "name": "非等价交换守护",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004915,
+     "name": "非等价交换生命",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004916,
+     "name": "C语言高阶",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004917,
+     "name": "C++高阶",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004918,
+     "name": "PHP删库高阶",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004919,
+     "name": "PHP奥义高阶",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004920,
+     "name": "风儿甚是喧嚣",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004921,
+     "name": "星爆弃疗叠",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004922,
+     "name": "风太大",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004923,
+     "name": "我也变强了",
+     "quality": "绿",
+     "star": 2
+    },
+    {
+     "itemId": 1004924,
+     "name": "归还灵魂之时",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004925,
+     "name": "异能之球",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004926,
+     "name": "暴风啊！",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004927,
+     "name": "暴雪啊！",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004928,
+     "name": "圣光罩我！（特）",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004929,
+     "name": "月神的善意",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004930,
+     "name": "光环：疾风",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004931,
+     "name": "太阳能充电器",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004932,
+     "name": "砸中特大彩蛋！",
+     "quality": "橙",
+     "star": 5
+    },
+    {
+     "itemId": 1004933,
+     "name": "无尽黑卡还行",
+     "quality": "橙",
+     "star": 5
+    },
+    {
+     "itemId": 1004934,
+     "name": "金羊毛",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004935,
+     "name": "返还热血之时",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004936,
+     "name": "星之强袭（特）",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004937,
+     "name": "星之守护（特）",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004938,
+     "name": "星之赐福（特）",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004939,
+     "name": "魔王果实：开挂",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004940,
+     "name": "染血的金羊毛",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004941,
+     "name": "陨石遁了遁了",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004942,
+     "name": "霜巨人的伤痕",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004943,
+     "name": "月光：礼",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004944,
+     "name": "月光：乐",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004945,
+     "name": "月光：射",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004946,
+     "name": "月光：御",
+     "quality": "橙",
+     "star": 5
+    },
+    {
+     "itemId": 1004947,
+     "name": "月光：书",
+     "quality": "橙",
+     "star": 5
+    },
+    {
+     "itemId": 1004948,
+     "name": "月光：数",
+     "quality": "橙",
+     "star": 5
+    },
+    {
+     "itemId": 1004949,
+     "name": "雷电的舞蹈",
+     "quality": "橙",
+     "star": 5
+    },
+    {
+     "itemId": 1004950,
+     "name": "元素精灵·火精",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004951,
+     "name": "元素精灵·风精",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004952,
+     "name": "光之印·赐福",
+     "quality": "橙",
+     "star": 5
+    },
+    {
+     "itemId": 1004953,
+     "name": "光之印·神罚",
+     "quality": "橙",
+     "star": 5
+    },
+    {
+     "itemId": 1004954,
+     "name": "彼岸创造",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004955,
+     "name": "普通连打",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004956,
+     "name": "“星星”",
+     "quality": "紫",
+     "star": 4
+    },
+    {
+     "itemId": 1004957,
+     "name": "衰竭",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004958,
+     "name": "煎熬",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004959,
+     "name": "贫民",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004960,
+     "name": "濒危",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004961,
+     "name": "坏死",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004962,
+     "name": "手滑",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004963,
+     "name": "懒惰",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004964,
+     "name": "尖刻",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004965,
+     "name": "深渊",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004966,
+     "name": "暴动",
+     "quality": "黑",
+     "star": 6
+    },
+    {
+     "itemId": 1004967,
+     "name": "净化",
+     "quality": "橙",
+     "star": 5
+    },
+    {
+     "itemId": 1004968,
+     "name": "净化",
+     "quality": "橙",
+     "star": 5
+    },
+    {
+     "itemId": 1004969,
+     "name": "净化",
+     "quality": "橙",
+     "star": 5
+    }
+   ]
+  }
+ ],
+ "shops": {
+  "400101": {
+   "floors": {
+    "1": {
+     "id": 1,
+     "groups": [
+      30101,
+      30102,
+      30103,
+      30081,
+      30105,
+      30106
+     ]
+    },
+    "2": {
+     "id": 2,
+     "groups": [
+      30101,
+      30102,
+      30103,
+      30104,
+      30105,
+      30106
+     ]
+    },
+    "3": {
+     "id": 3,
+     "groups": [
+      30101,
+      30102,
+      30103,
+      30104,
+      30105,
+      30106
+     ]
+    },
+    "4": {
+     "id": 4,
+     "groups": [
+      30101,
+      30102,
+      30103,
+      30104,
+      30105,
+      30106
+     ]
+    },
+    "5": {
+     "id": 5,
+     "groups": [
+      30101,
+      30102,
+      30103,
+      30104,
+      30105,
+      30106
+     ]
+    },
+    "6": {
+     "id": 6,
+     "groups": [
+      30101,
+      30102,
+      30103,
+      30104,
+      30105,
+      30106
+     ]
+    },
+    "7": {
+     "id": 7,
+     "groups": [
+      30101,
+      30102,
+      30103,
+      30104,
+      30105,
+      30106
+     ]
+    },
+    "8": {
+     "id": 8,
+     "groups": [
+      30102,
+      30103,
+      30104,
+      30105,
+      30106
+     ]
+    },
+    "9": {
+     "id": 9,
+     "groups": [
+      30101,
+      30102,
+      30103,
+      30104,
+      30105,
+      30106
+     ]
+    },
+    "10": {
+     "id": 50,
+     "groups": [
+      30101,
+      30102,
+      30103,
+      30104,
+      30105,
+      30106
+     ]
+    }
+   }
+  },
+  "400201": {
+   "floors": {
+    "1": {
+     "id": 11,
+     "groups": [
+      30201,
+      30202,
+      30203,
+      30204,
+      30205,
+      30206
+     ]
+    },
+    "2": {
+     "id": 12,
+     "groups": [
+      30201,
+      30202,
+      30203,
+      30204,
+      30205,
+      30206
+     ]
+    },
+    "3": {
+     "id": 13,
+     "groups": [
+      30201,
+      30202,
+      30203,
+      30204,
+      30205,
+      30206
+     ]
+    },
+    "4": {
+     "id": 14,
+     "groups": [
+      30201,
+      30202,
+      30203,
+      30204,
+      30205,
+      30206
+     ]
+    },
+    "5": {
+     "id": 15,
+     "groups": [
+      30201,
+      30202,
+      30203,
+      30204,
+      30205,
+      30206
+     ]
+    },
+    "6": {
+     "id": 16,
+     "groups": [
+      30201,
+      30202,
+      30203,
+      30204,
+      30205,
+      30206
+     ]
+    },
+    "7": {
+     "id": 17,
+     "groups": [
+      30201,
+      30202,
+      30203,
+      30204,
+      30205,
+      30206
+     ]
+    },
+    "8": {
+     "id": 18,
+     "groups": [
+      30201,
+      30202,
+      30203,
+      30204,
+      30205,
+      30206
+     ]
+    },
+    "9": {
+     "id": 19,
+     "groups": [
+      30201,
+      30202,
+      30203,
+      30204,
+      30205,
+      30206
+     ]
+    },
+    "10": {
+     "id": 20,
+     "groups": [
+      30201,
+      30202,
+      30203,
+      30204,
+      30205,
+      30206
+     ]
+    }
+   }
+  },
+  "400301": {
+   "floors": {
+    "1": {
+     "id": 21,
+     "groups": [
+      30301,
+      30302,
+      30303,
+      30304,
+      30305,
+      30306
+     ]
+    },
+    "2": {
+     "id": 22,
+     "groups": [
+      30301,
+      30302,
+      30303,
+      30304,
+      30305,
+      30306
+     ]
+    },
+    "3": {
+     "id": 23,
+     "groups": [
+      30301,
+      30303,
+      30304,
+      30305,
+      30306
+     ]
+    },
+    "4": {
+     "id": 24,
+     "groups": [
+      30301,
+      30302,
+      30303,
+      30304,
+      30305,
+      30306
+     ]
+    },
+    "5": {
+     "id": 25,
+     "groups": [
+      30301,
+      30302,
+      30303,
+      30304,
+      30305,
+      30306
+     ]
+    },
+    "6": {
+     "id": 26,
+     "groups": [
+      30301,
+      30302,
+      30303,
+      30304,
+      30305,
+      30231
+     ]
+    },
+    "7": {
+     "id": 27,
+     "groups": [
+      30301,
+      30302,
+      30303,
+      30304,
+      30305,
+      30306
+     ]
+    },
+    "8": {
+     "id": 28,
+     "groups": [
+      30301,
+      30302,
+      30303,
+      30304,
+      30305,
+      30306
+     ]
+    },
+    "9": {
+     "id": 29,
+     "groups": [
+      30301,
+      30302,
+      30303,
+      30304,
+      30305,
+      30306
+     ]
+    },
+    "10": {
+     "id": 30,
+     "groups": [
+      30301,
+      30302,
+      30303,
+      30304,
+      30305,
+      30306
+     ]
+    }
+   }
+  },
+  "400401": {
+   "floors": {
+    "1": {
+     "id": 31,
+     "groups": [
+      30401,
+      30402,
+      30403,
+      30404,
+      30405,
+      30406
+     ]
+    },
+    "2": {
+     "id": 32,
+     "groups": [
+      30401,
+      30402,
+      30403,
+      30404,
+      30405,
+      30406
+     ]
+    },
+    "3": {
+     "id": 33,
+     "groups": [
+      30401,
+      30402,
+      30403,
+      30404,
+      30405,
+      30406
+     ]
+    },
+    "4": {
+     "id": 34,
+     "groups": [
+      30401,
+      30402,
+      30403,
+      30404,
+      30405,
+      30406
+     ]
+    },
+    "5": {
+     "id": 35,
+     "groups": [
+      30401,
+      30402,
+      30403,
+      30404,
+      30405,
+      30406
+     ]
+    },
+    "6": {
+     "id": 36,
+     "groups": [
+      30401,
+      30402,
+      30403,
+      30404,
+      30405,
+      30406
+     ]
+    },
+    "7": {
+     "id": 37,
+     "groups": [
+      30401,
+      30402,
+      30403,
+      30404,
+      30405,
+      30406
+     ]
+    },
+    "8": {
+     "id": 38,
+     "groups": [
+      30401,
+      30402,
+      30403,
+      30404,
+      30405,
+      30406
+     ]
+    },
+    "9": {
+     "id": 39,
+     "groups": [
+      30401,
+      30402,
+      30403,
+      30404,
+      30405,
+      30406
+     ]
+    },
+    "10": {
+     "id": 40,
+     "groups": [
+      30401,
+      30402,
+      30403,
+      30404,
+      30405,
+      30406
+     ]
+    }
+   }
+  },
+  "400501": {
+   "floors": {
+    "1": {
+     "id": 41,
+     "groups": [
+      30501,
+      30502,
+      30503,
+      30504,
+      30505,
+      30506
+     ]
+    },
+    "2": {
+     "id": 42,
+     "groups": [
+      30501,
+      30502,
+      30503,
+      30504,
+      30505,
+      30506
+     ]
+    },
+    "3": {
+     "id": 43,
+     "groups": [
+      30501,
+      30502,
+      30503,
+      30504,
+      30505,
+      30506
+     ]
+    },
+    "4": {
+     "id": 44,
+     "groups": [
+      30501,
+      30502,
+      30503,
+      30504,
+      30505,
+      30506
+     ]
+    },
+    "5": {
+     "id": 45,
+     "groups": [
+      30501,
+      30502,
+      30503,
+      30504,
+      30505,
+      30506
+     ]
+    },
+    "6": {
+     "id": 46,
+     "groups": [
+      30501,
+      30502,
+      30503,
+      30504,
+      30505,
+      30506
+     ]
+    },
+    "7": {
+     "id": 47,
+     "groups": [
+      30501,
+      30502,
+      30503,
+      30504,
+      30505,
+      30506
+     ]
+    },
+    "8": {
+     "id": 48,
+     "groups": [
+      30501,
+      30502,
+      30503,
+      30504,
+      30505,
+      30506
+     ]
+    },
+    "9": {
+     "id": 49,
+     "groups": [
+      30501,
+      30502,
+      30503,
+      30504,
+      30505,
+      30506
+     ]
+    },
+    "10": {
+     "id": 50,
+     "groups": [
+      30501,
+      30502,
+      30503,
+      30504,
+      30505,
+      30506
+     ]
+    }
+   }
+  },
+  "400601": {
+   "floors": {
+    "1": {
+     "id": 55,
+     "groups": [
+      30601,
+      30602,
+      30603,
+      30604,
+      30605,
+      30606
+     ]
+    },
+    "2": {
+     "id": 56,
+     "groups": [
+      30601,
+      30602,
+      30603,
+      30604,
+      30605,
+      30606
+     ]
+    },
+    "3": {
+     "id": 57,
+     "groups": [
+      30601,
+      30602,
+      30604,
+      30605,
+      30606
+     ]
+    },
+    "4": {
+     "id": 58,
+     "groups": [
+      30601,
+      30602,
+      30603,
+      30604,
+      30605,
+      30606
+     ]
+    },
+    "5": {
+     "id": 59,
+     "groups": [
+      30601,
+      30602,
+      30603,
+      30604,
+      30605,
+      30606
+     ]
+    },
+    "6": {
+     "id": 60,
+     "groups": [
+      30601,
+      30602,
+      30603,
+      30604,
+      30605,
+      30606
+     ]
+    },
+    "7": {
+     "id": 61,
+     "groups": [
+      30601,
+      30602,
+      30603,
+      30604,
+      30605,
+      30606
+     ]
+    },
+    "8": {
+     "id": 62,
+     "groups": [
+      30601,
+      30602,
+      30603,
+      30604,
+      30605,
+      30606
+     ]
+    },
+    "9": {
+     "id": 63,
+     "groups": [
+      30601,
+      30602,
+      30603,
+      30604,
+      30605,
+      30606
+     ]
+    },
+    "10": {
+     "id": 64,
+     "groups": [
+      30601,
+      30602,
+      30604,
+      30605,
+      30606
+     ]
+    }
+   }
+  },
+  "400701": {
+   "floors": {
+    "1": {
+     "id": 65,
+     "groups": [
+      30701,
+      30702,
+      30703,
+      30704,
+      30705,
+      30706
+     ]
+    },
+    "2": {
+     "id": 66,
+     "groups": [
+      30701,
+      30702,
+      30703,
+      30704,
+      30705,
+      30706
+     ]
+    },
+    "3": {
+     "id": 67,
+     "groups": [
+      30701,
+      30702,
+      30703,
+      30704,
+      30705,
+      30706
+     ]
+    },
+    "4": {
+     "id": 68,
+     "groups": [
+      30701,
+      30702,
+      30703,
+      30704,
+      30705,
+      30706
+     ]
+    },
+    "5": {
+     "id": 69,
+     "groups": [
+      30701,
+      30702,
+      30703,
+      30704,
+      30705,
+      30706
+     ]
+    },
+    "6": {
+     "id": 70,
+     "groups": [
+      30701,
+      30702,
+      30703,
+      30704,
+      30705,
+      30706
+     ]
+    },
+    "7": {
+     "id": 71,
+     "groups": [
+      30701,
+      30702,
+      30703,
+      30704,
+      30705,
+      30706
+     ]
+    },
+    "8": {
+     "id": 72,
+     "groups": [
+      30701,
+      30702,
+      30703,
+      30704,
+      30705,
+      30706
+     ]
+    },
+    "9": {
+     "id": 73,
+     "groups": [
+      30701,
+      30702,
+      30703,
+      30704,
+      30705,
+      30706
+     ]
+    },
+    "10": {
+     "id": 74,
+     "groups": [
+      30701,
+      30702,
+      30703,
+      30704,
+      30705,
+      30706
+     ]
+    }
+   }
+  },
+  "400801": {
+   "floors": {
+    "1": {
+     "id": 75,
+     "groups": [
+      30801,
+      30802,
+      30803,
+      30804,
+      30805,
+      30806
+     ]
+    },
+    "2": {
+     "id": 76,
+     "groups": [
+      30801,
+      30802,
+      30803,
+      30804,
+      30805,
+      30806
+     ]
+    },
+    "3": {
+     "id": 77,
+     "groups": [
+      30801,
+      30802,
+      30803,
+      30804,
+      30805,
+      30806
+     ]
+    },
+    "4": {
+     "id": 78,
+     "groups": [
+      30801,
+      30802,
+      30803,
+      30804,
+      30805,
+      30806
+     ]
+    },
+    "5": {
+     "id": 79,
+     "groups": [
+      30801,
+      30802,
+      30803,
+      30804,
+      30805,
+      30806
+     ]
+    },
+    "6": {
+     "id": 80,
+     "groups": [
+      30801,
+      30802,
+      30803,
+      30804,
+      30805,
+      30806
+     ]
+    },
+    "7": {
+     "id": 81,
+     "groups": [
+      30801,
+      30802,
+      30803,
+      30804,
+      30805,
+      30806
+     ]
+    },
+    "8": {
+     "id": 82,
+     "groups": [
+      30801,
+      30802,
+      30803,
+      30804,
+      30805,
+      30806
+     ]
+    },
+    "9": {
+     "id": 83,
+     "groups": [
+      30801,
+      30802,
+      30803,
+      30804,
+      30805,
+      30806
+     ]
+    },
+    "10": {
+     "id": 84,
+     "groups": [
+      30801,
+      30802,
+      30803,
+      30804,
+      30805,
+      30806
+     ]
+    }
+   }
+  },
+  "400802": {
+   "floors": {
+    "1": {
+     "id": 85,
+     "groups": [
+      31201,
+      31202,
+      31203,
+      31204,
+      31205,
+      31206
+     ]
+    },
+    "5": {
+     "id": 86,
+     "groups": [
+      31201,
+      31202,
+      31203,
+      31204,
+      31205,
+      31206
+     ]
+    },
+    "10": {
+     "id": 87,
+     "groups": [
+      31207,
+      31208,
+      31209,
+      31210,
+      31211,
+      31212
+     ]
+    },
+    "15": {
+     "id": 88,
+     "groups": [
+      31213,
+      31214,
+      31215,
+      31216,
+      31217,
+      31218
+     ]
+    }
+   }
+  },
+  "400901": {
+   "floors": {
+    "1": {
+     "id": 89,
+     "groups": [
+      30901,
+      30902,
+      30903,
+      30904,
+      30905,
+      30906
+     ]
+    },
+    "2": {
+     "id": 90,
+     "groups": [
+      30901,
+      30902,
+      30903,
+      30904,
+      30905,
+      30906
+     ]
+    },
+    "3": {
+     "id": 91,
+     "groups": [
+      30901,
+      30902,
+      30903,
+      30904,
+      30905,
+      30906
+     ]
+    },
+    "4": {
+     "id": 92,
+     "groups": [
+      30901,
+      30902,
+      30903,
+      30904,
+      30905,
+      30906
+     ]
+    },
+    "5": {
+     "id": 93,
+     "groups": [
+      30901,
+      30902,
+      30903,
+      30904,
+      30905,
+      30906
+     ]
+    },
+    "6": {
+     "id": 94,
+     "groups": [
+      30901,
+      30902,
+      30903,
+      30904,
+      30905,
+      30906
+     ]
+    },
+    "7": {
+     "id": 95,
+     "groups": [
+      30901,
+      30902,
+      30903,
+      30904,
+      30905,
+      30906
+     ]
+    },
+    "8": {
+     "id": 96,
+     "groups": [
+      30901,
+      30902,
+      30903,
+      30904,
+      30905,
+      30906
+     ]
+    },
+    "9": {
+     "id": 97,
+     "groups": [
+      30901,
+      30902,
+      30903,
+      30904,
+      30905,
+      30906
+     ]
+    },
+    "10": {
+     "id": 98,
+     "groups": [
+      30901,
+      30902,
+      30903,
+      30904,
+      30905,
+      30906
+     ]
+    }
+   }
+  },
+  "401001": {
+   "floors": {
+    "1": {
+     "id": 99,
+     "groups": [
+      31001,
+      31002,
+      31003,
+      31004,
+      31005,
+      31006
+     ]
+    }
+   }
+  },
+  "401002": {
+   "floors": {
+    "2": {
+     "id": 100,
+     "groups": [
+      31001,
+      31002,
+      31003,
+      31004,
+      31005,
+      31006
+     ]
+    }
+   }
+  },
+  "401003": {
+   "floors": {
+    "3": {
+     "id": 101,
+     "groups": [
+      31001,
+      31002,
+      31003,
+      31004,
+      31005,
+      31006
+     ]
+    }
+   }
+  },
+  "401004": {
+   "floors": {
+    "4": {
+     "id": 102,
+     "groups": [
+      31001,
+      31002,
+      31003,
+      31004,
+      31005,
+      31006
+     ]
+    }
+   }
+  },
+  "401005": {
+   "floors": {
+    "5": {
+     "id": 103,
+     "groups": [
+      31001,
+      31002,
+      31003,
+      31004,
+      31005,
+      31006
+     ]
+    }
+   }
+  },
+  "401006": {
+   "floors": {
+    "6": {
+     "id": 104,
+     "groups": [
+      31001,
+      31002,
+      31003,
+      31004,
+      31005,
+      31006
+     ]
+    }
+   }
+  },
+  "401007": {
+   "floors": {
+    "7": {
+     "id": 105,
+     "groups": [
+      31001,
+      31002,
+      31003,
+      31004,
+      31005,
+      31006
+     ]
+    }
+   }
+  },
+  "401008": {
+   "floors": {
+    "8": {
+     "id": 106,
+     "groups": [
+      31001,
+      31002,
+      31003,
+      31004,
+      31005,
+      31006
+     ]
+    }
+   }
+  },
+  "401009": {
+   "floors": {
+    "9": {
+     "id": 107,
+     "groups": [
+      31001,
+      31002,
+      31003,
+      31004,
+      31005,
+      31006
+     ]
+    }
+   }
+  },
+  "401010": {
+   "floors": {
+    "10": {
+     "id": 108,
+     "groups": [
+      31001,
+      31002,
+      31003,
+      31004,
+      31005,
+      31006
+     ]
+    }
+   }
+  },
+  "400202": {
+   "floors": {
+    "20": {
+     "id": 109,
+     "groups": [
+      30207,
+      30208,
+      30209,
+      30210,
+      30211,
+      30212
+     ]
+    }
+   }
+  },
+  "400902": {
+   "floors": {
+    "9": {
+     "id": 111,
+     "groups": [
+      30901,
+      30911,
+      30903,
+      30904,
+      30905,
+      30906
+     ]
+    }
+   }
+  },
+  "400903": {
+   "floors": {
+    "9": {
+     "id": 112,
+     "groups": [
+      30901,
+      30912,
+      30903,
+      30904,
+      30905,
+      30915
+     ]
+    }
+   }
+  },
+  "400904": {
+   "floors": {
+    "9": {
+     "id": 113,
+     "groups": [
+      30901,
+      30913,
+      30903,
+      30904,
+      30919,
+      30920
+     ]
+    }
+   }
+  },
+  "400905": {
+   "floors": {
+    "9": {
+     "id": 114,
+     "groups": [
+      30901,
+      30914,
+      30903,
+      30924,
+      30925,
+      30926
+     ]
+    }
+   }
+  },
+  "401101": {
+   "floors": {
+    "1": {
+     "id": 115,
+     "groups": [
+      30927,
+      30928,
+      30929,
+      30930,
+      30931,
+      30932
+     ]
+    },
+    "2": {
+     "id": 116,
+     "groups": [
+      30927,
+      30928,
+      30929,
+      30930,
+      30931,
+      30932
+     ]
+    },
+    "3": {
+     "id": 117,
+     "groups": [
+      30927,
+      30928,
+      30929,
+      30930,
+      30931,
+      30932
+     ]
+    },
+    "5": {
+     "id": 119,
+     "groups": [
+      30927,
+      30928,
+      30929,
+      30930,
+      30931,
+      30932
+     ]
+    },
+    "6": {
+     "id": 120,
+     "groups": [
+      30927,
+      30928,
+      30929,
+      30930,
+      30931,
+      30932
+     ]
+    },
+    "7": {
+     "id": 121,
+     "groups": [
+      30927,
+      30928,
+      30929,
+      30930,
+      30931,
+      30932
+     ]
+    },
+    "8": {
+     "id": 122,
+     "groups": [
+      30927,
+      30928,
+      30929,
+      30930,
+      30931,
+      30932
+     ]
+    },
+    "9": {
+     "id": 123,
+     "groups": [
+      30927,
+      30928,
+      30929,
+      30930,
+      30931,
+      30932
+     ]
+    },
+    "10": {
+     "id": 124,
+     "groups": [
+      30927,
+      30928,
+      30929,
+      30930,
+      30931,
+      30932
+     ]
+    }
+   }
+  },
+  "401201": {
+   "floors": {
+    "1": {
+     "id": 125,
+     "groups": [
+      30933,
+      30934,
+      30935,
+      30936,
+      30937,
+      30938
+     ]
+    },
+    "2": {
+     "id": 126,
+     "groups": [
+      30933,
+      30934,
+      30935,
+      30936,
+      30937,
+      30938
+     ]
+    },
+    "3": {
+     "id": 127,
+     "groups": [
+      30933,
+      30934,
+      30935,
+      30936,
+      30937,
+      30938
+     ]
+    }
+   }
+  }
+ },
+ "droppedItems": {
+  "consumable": 6,
+  "cyber_potion": 17,
+  "relic_mid_plus": 10,
+  "relic_big": 2
+ },
+ "tableNotes": [
+  "row at 528: payload truncated by one altered byte; its fields are read by pattern instead",
+  "row at 1038: payload truncated by one altered byte; its fields are read by pattern instead",
+  "row at 2058: payload truncated by one altered byte; its fields are read by pattern instead",
+  "row at 2296: payload truncated by one altered byte; its fields are read by pattern instead"
+ ]
+}

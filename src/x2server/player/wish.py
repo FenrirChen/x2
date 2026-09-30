@@ -286,6 +286,12 @@ class WishService:
                 (player_id, key, response_bytes))
             self.store.db.execute("INSERT OR REPLACE INTO wish_last_result VALUES (?,?,?)",
                 (player_id, pool_id, response_bytes))
+        # 许愿 is E_Wish on the challenge pages: one draw is one occurrence, so a
+        # ten-draw pays ten and the condition's own CompleteNum decides how many
+        # are needed. Keyed by the request hash, which the receipt above already
+        # makes unique per accepted draw.
+        if self.economy is not None:
+            self.economy.record_event(player_id, f"wish:{key}", self.economy.TASK_EVENT_WISH, 0, count)
         from .hero import encode_hero_data
         pushes = list(self.economy.pushes(player_id)) if self.economy else []
         if any(1211000 <= prize["item_id"] < 1212000 for prize in prizes):

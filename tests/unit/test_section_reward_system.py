@@ -80,6 +80,25 @@ def test_outside_items_multiple_currency_and_replay(env):
                             (f"battle:{run}",)).fetchone()[0] == 1
 
 
+def test_failed_battle_with_shop_items_settles_without_export(env):
+    store, economy, ctx = env
+    service = BattleService(store, economy)
+    run = enter(service, ctx)
+    before = store.get(1)
+    outside = ({"id": 1237901, "num": 17},)
+    first = checkout(service, ctx, outside=outside, success=False)
+    assert first.values["result"] == 10
+    assert first.values["success"] is False
+    assert rewards(first.values["rewardData"]) == {}
+    assert store.db.execute("SELECT settled FROM economy_runs WHERE uuid=?", (run,)).fetchone()[0] == 1
+    assert store.db.execute("SELECT COUNT(*) FROM battle_receipts WHERE uuid=?", (run,)).fetchone()[0] == 1
+    assert store.get(1)["snapshot"]["gold"] == before["snapshot"]["gold"]
+    replay = checkout(service, ctx, outside=outside, success=False)
+    assert replay.values == first.values
+    assert store.db.execute("SELECT COUNT(*) FROM economy_grants WHERE source=?",
+                            (f"battle:{run}",)).fetchone()[0] == 0
+
+
 def test_invalid_outside_and_battle_currency_do_not_settle(env):
     store, economy, ctx = env
     service = BattleService(store, economy)
@@ -162,9 +181,9 @@ def test_failed_battle_does_not_grant_or_consume_outside(env):
     service = BattleService(store, economy)
     enter(service, ctx)
     before = store.get(1)["snapshot"]["gold"]
-    assert checkout(service, ctx, outside=({"id": 1237901, "num": 5},), success=False).values["result"] == 13
-    result = checkout(service, ctx, success=False)
+    result = checkout(service, ctx, outside=({"id": 1237901, "num": 5},), success=False)
     assert result.values["result"] == 10
+    assert checkout(service, ctx, success=False).values["result"] == 13
     assert store.get(1)["snapshot"]["gold"] == before
 
 
