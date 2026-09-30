@@ -309,21 +309,21 @@ def test_chapter_dp_gate_progression(env):
     assert answer.values["chapterTaskPoint"] == 4  # 1 story + difficulty 1 + difficulty 2
 
 
-def test_test_save_chapter_dp_floor_unlocks_next_chapter(env):
+def test_legacy_dp_floor_does_not_stack_with_official_tasks(env):
     store, economy, context = env
     with store.db:
         store.db.execute("""INSERT INTO chapter_dp_floors VALUES
             (1,2010200,10,'test-save chapter 2 skip')""")
     answer = asyncio.run(economy.handle(context, packet(
         {"type": 7, "chapterId": 2010200}, name="C2L_GameTask")))
-    assert answer.values["chapterTaskPoint"] == 10
+    assert answer.values["chapterTaskPoint"] == 0
     assert economy.chapter_dp(1, 2010100) == 0
     chain = economy.challenge_chain(2010200)
     with store.db:
         for index, section in enumerate(chain[:5]):
             store.db.execute("INSERT INTO economy_clears VALUES (?,?,?)",
                              (1, section, f"challenge-{index}"))
-    assert economy.chapter_dp(1, 2010200) == 15  # real progress can exceed the floor later
+    assert economy.chapter_dp(1, 2010200) == economy.chapter_dp_from_clears(set(chain[:5]), 2010200)
 
 
 def test_fixed_equipment_part_reward_becomes_instance(env):
@@ -367,10 +367,12 @@ def test_chapter_dp_box_claim_flow(env):
         for offset, section in enumerate([*story_sections, *chain]):
             store.db.execute("INSERT OR IGNORE INTO economy_clears VALUES (1,?,?)",
                              (section, f"uuid-{offset}"))
-    # Full chapter clear: DP 61 clears the first thresholds (20/40/60); the
-    # 80/100 thresholds of this chapter stay unreachable under the Revival DP
-    # rule (the community rule targeted the unlock gates, max 40).
-    assert economy.chapter_dp(1, chapter) == 61
+    assert economy.chapter_dp(1, chapter) == 8  # only official clear objectives
+    with store.db:
+        for task in economy.dp.chapters[str(chapter)]["tasks"]:
+            store.db.execute("INSERT INTO chapter_objectives VALUES (?,?,?,?) ON CONFLICT(player_id,chapter_id,task_id) DO UPDATE SET progress=excluded.progress",
+                (1, chapter, task["taskId"], task.get("completeNum", 1)))
+    assert economy.chapter_dp(1, chapter) == 64
     boxes = [TREASURE_BOX.decode(raw) for raw in economy.chapter_dp_boxes(1, chapter)]
     assert boxes and all(b["activityId"] == chapter for b in boxes)
     assert [b["pickStatus"] for b in boxes] == [1, 1, 1, 0, 0]

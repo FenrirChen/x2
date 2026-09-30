@@ -200,6 +200,9 @@ class EconomyService:
                     snapshot.update(main_section=current, main_chapter=self.sections[current]["ChapterID"])
                     self.save_snapshot(player[0], snapshot)
 
+        from .chapter_dp import ChapterDP
+        self.dp = ChapterDP(self)
+
     @contextmanager
     def transaction(self):
         # Nested reward/task operations must never commit the battle receipt early.
@@ -227,7 +230,9 @@ class EconomyService:
                     for task_id, task in self.tasks.items():
                         if task["RefreshCycle"]["value"] == kind and task["AcceptLevel"] <= snapshot["level"]:
                             self.store.db.execute("INSERT OR IGNORE INTO economy_tasks(player_id,task_id) VALUES (?,?)", (player_id, task_id))
-                            self.store.db.execute("UPDATE economy_tasks SET progress=MAX(progress,?) WHERE player_id=? AND task_id=? AND claimed=1",
+                            if self.store.db.execute("SELECT 1 FROM economy_grants WHERE player_id=? AND source=?", (player_id, f"task:{kind}:{previous[0]}:{task_id}")).fetchone():
+                                self.store.db.execute("UPDATE economy_tasks SET claimed=1 WHERE player_id=? AND task_id=?", (player_id, task_id))
+                            self.store.db.execute("UPDATE economy_tasks SET progress=MAX(progress,CASE WHEN claimed<>0 THEN ? ELSE 0 END),claimed=CASE WHEN claimed<>0 THEN 1 ELSE 0 END WHERE player_id=? AND task_id=?",
                                                   (self.catalog["task_conditions"][str(task_id)]["CompleteNum"], player_id, task_id))
                     continue  # Clock rollback must not mint a second period.
                 ids = [i for i, t in self.tasks.items() if t["RefreshCycle"]["value"] == kind]
@@ -391,7 +396,20 @@ class EconomyService:
                     (player_id, item)).fetchone()[0]
                 if quantity > 2**31 - 1:
                     raise UnresolvedEconomy("currency overflow")
-            elif kind not in self.STACKABLE_REWARD_TYPES and item != 1260015:
+            elif kind == 15 and source.startswith("chapterdp:"):
+                from .progression import catalog as progression_catalog
+                hero_id = item - 1210000
+                proto = next((r for r in progression_catalog()["hero_unlock"] if r["hero_id"] == hero_id), None)
+                if not proto:
+                    raise UnresolvedEconomy("DP hero prototype missing")
+                if any(h["id"] == hero_id and h.get("state") == 2 for h in snapshot.get("heroes", [])):
+                    for compensation, quantity in ((proto["fragment_item_id"], proto["fragment_count"]),
+                            (proto["duplicate_ticket_item_id"], proto["duplicate_ticket_count"])):
+                        self.store.db.execute("INSERT INTO inventory VALUES (?,?,?) ON CONFLICT(player_id,item_id) DO UPDATE SET quantity=quantity+excluded.quantity", (player_id, compensation, quantity * count))
+                else:
+                    snapshot.setdefault("heroes", []).append({"id": hero_id, "state": 2, "level": proto["level"],
+                        "star": proto["star"], "exp": 0, "skills": [{"id": i, "level": 1} for i in proto["initial_skills"]]})
+            elif kind not in self.STACKABLE_REWARD_TYPES and item != 1260015 and not (kind == 11 and source.startswith("chapterdp:")):
                 raise UnresolvedEconomy("unrecovered reward destination")
             else:
                 self.store.db.execute("""INSERT INTO inventory VALUES (?,?,?)
@@ -415,8 +433,12 @@ class EconomyService:
         return rewards
 
     def inventory_values(self, player_id):
+        from .appearance import avatar_frames
+        items = dict(self.store.db.execute("SELECT item_id,quantity FROM inventory WHERE player_id=?", (player_id,)))
+        for frame in avatar_frames():
+            items[frame] = max(1, items.get(frame, 0))
         return {"items": [ITEM.encode({"id": r[0], "num": r[1], "locked": False, "dayGet": 0})
-            for r in self.store.db.execute("SELECT item_id,quantity FROM inventory WHERE player_id=? ORDER BY item_id", (player_id,))]}
+            for r in sorted(items.items())]}
 
     # -- 挑战任务 (challenge, GameTaskType 3) ------------------------------
     #
@@ -652,36 +674,18 @@ class EconomyService:
     # refusal reads "白夜崩解的DP到10才解锁", exactly chapter 2010300's gate
     # (after 2010200, DP 10). The DP it checks is L2C_GameTask.chapterTaskPoint.
     #
-    # TEMPORARY_COMPAT: the original DP bookkeeping is not recoverable. 2.4 ships
-    # chapter tasks (table/taskchapter) only for chapters 2010900+, so chapters
-    # 1-8 have no task table left to derive DP from, and a plain cleared-stage
-    # count cannot reach chapter 2010800's gate of 40 (that chapter has 19
-    # stages). Revival rule (community package, operator-reviewed):
-    #     DP = cleared 剧情模式 stages of the chapter
-    #          + sum of the difficulty levels (1..10) of its cleared 现世复刻 stages
+    # Official recovered objectives replace the old clear-count formula.
+    # Existing box claims remain in task_boxes(kind=7, period_start=chapter).
     def chapter_dp(self, player_id, chapter) -> int:
-        clears = {row[0] for row in self.store.db.execute(
-            "SELECT section_id FROM economy_clears WHERE player_id=?", (player_id,))}
-        derived = self.chapter_dp_from_clears(clears, chapter)
-        floor = self.store.db.execute("""SELECT minimum_dp FROM chapter_dp_floors
-            WHERE player_id=? AND chapter_id=?""", (player_id, chapter)).fetchone()
-        return max(derived, floor[0]) if floor else derived
+        return self.dp.points(player_id, chapter)
 
     def chapter_dp_from_clears(self, clears, chapter) -> int:
-        story = sum(1 for section in clears
-                    if self.entry_catalog.sections.get(section, {}).get("Type") == 0
-                    and self.entry_catalog.sections[section]["ChapterID"] == chapter)
-        challenge = sum(level for level, section in enumerate(self.challenge_chain(chapter), start=1)
-                        if section in clears)
-        return story + challenge
+        return sum(t["dp"] for t in self.dp.chapters.get(str(chapter), {}).get("tasks", [])
+                   if t.get("completeType") == "E_BeatSection" and t.get("completeValue1") in clears)
 
     def chapter_dp_capacity(self, chapter) -> int:
         """Most DP the chapter can reach under the same rule (the client's total)."""
-        story = sum(1 for row in self.entry_catalog.sections.values()
-                    if row["Type"] == 0 and row["ChapterID"] == chapter)
-        capacity = story + sum(range(1, len(self.challenge_chain(chapter)) + 1))
-        thresholds = (self.chapter_dp_catalog.get(str(chapter)) or {}).get("dpThresholds") or []
-        return min(capacity, thresholds[-1]) if thresholds else capacity
+        return sum(t["dp"] for t in self.dp.chapters.get(str(chapter), {}).get("tasks", []))
 
     def chapter_dp_boxes(self, player_id, chapter) -> list:
         """The chapter page's DP 宝箱 (ChapterInfo.dpThresholds/dpRewards).
@@ -698,7 +702,8 @@ class EconomyService:
             (player_id, self.CHAPTER_DP_KIND, chapter))}  # kind 7 = GameTaskType.CHAPTER
         dp = self.chapter_dp(player_id, chapter)
         return [TREASURE_BOX.encode({"boxId": index, "activityId": chapter,
-            "pickStatus": 2 if index in picked else 1 if dp >= threshold else 0})
+            "pickStatus": 2 if index in picked else 1 if dp >= threshold and
+                self.dp.boxes.get(str((entry.get("dpRewards") or [])[index]), {}).get("supported") else 0})
             for index, threshold in enumerate(thresholds)]
 
     def pick_chapter_dp_box(self, player_id, request):
@@ -729,11 +734,12 @@ class EconomyService:
                     return OutboundMessage("L2C_PickTreasureBox", result)
                 if self.chapter_dp(player_id, chapter) < thresholds[index]:
                     return OutboundMessage("L2C_PickTreasureBox", result)
-                granted = self._grant(player_id, f"chapterdp:{chapter}:{index}",
-                                      {rewards[index]: 1})
+                if self.store.db.execute("SELECT 1 FROM economy_grants WHERE player_id=? AND source=?", (player_id, f"chapterdp:{chapter}:{index}")).fetchone():
+                    return OutboundMessage("L2C_PickTreasureBox", result)
+                reward_data = self.dp.grant_box(player_id, chapter, index, rewards[index])
                 self.store.db.execute("INSERT OR IGNORE INTO task_boxes VALUES (?,?,?,?)",
                                       (player_id, 7, chapter, index))
-                result.update(code=10, rewardData=self.reward_bytes(granted))
+                result.update(code=10, rewardData=reward_data)
         except UnresolvedEconomy:
             return OutboundMessage("L2C_PickTreasureBox", result)
         logging.getLogger("x2.economy").info(
@@ -981,6 +987,9 @@ class EconomyService:
                         {"instance_id": instance["id"], "type_id": instance["typeId"],
                          "star": instance["star"], "marker": instance["marker"]})
             self.mark_section_cleared(player_id, section, run_uuid, section_type)
+            self.dp.equipment(player_id, config["ChapterID"], run_uuid,
+                [{"star": spec["quality"], "item_id": spec["item_id"]} for spec in equipment_specs for _ in range(spec["quantity"])])
+            self.dp.refresh(player_id, config["ChapterID"])
             self._event(player_id, f"clear:{run_uuid}", 3, section, 1)
             spent = self.store.db.execute("SELECT amount FROM battle_costs WHERE uuid=? AND player_id=?",
                 (run_uuid, player_id)).fetchone()
@@ -1204,6 +1213,7 @@ class EconomyService:
                 values = {"code": 10, "type": kind, "chapterId": chapter,
                           "chapterTaskPoint": self.chapter_dp(player_id, chapter),
                           "chapterTaskTotalPoint": self.chapter_dp_capacity(chapter),
+                          "taskList": self.dp.task_list(player_id, chapter),
                           "boxList": self.chapter_dp_boxes(player_id, chapter)}
                 logging.getLogger("x2.economy").info(
                     "chapter DP served chapter=%s dp=%s/%s player=%s", chapter,

@@ -205,6 +205,15 @@ class BattleShopService:
                                   (player_id, shop_id, level, item_id, offer["num"],
                                    offer["price"], offer["moneyType"], section or 0,
                                    int(time.time())))
+            if self.economy:
+                run = self.store.db.execute("SELECT uuid,section_id FROM economy_runs WHERE player_id=? AND settled=0 ORDER BY rowid DESC LIMIT 1", (player_id,)).fetchone()
+                if run and (not section or section == run["section_id"]):
+                    static = self.economy.entry_catalog.sections.get(run["section_id"], {})
+                    chapter = static.get("ChapterID", 0)
+                    key = f"{run['uuid']}:shop:{shop_id}:{level}:{item_id}:{wallet}"
+                    self.economy.dp.observe(player_id, chapter, key, "buy", item_id, offer["num"])
+                    self.economy.dp.observe(player_id, chapter, key, "spend", offer["moneyType"], offer["price"])
+                    self.economy.dp.refresh(player_id, chapter)
         LOGGER.info("in-battle purchase shop=%s level=%s item=%s x%s price=%s type=%s wallet=%s player=%s",
                     shop_id, level, item_id, offer["num"], offer["price"], offer["moneyType"],
                     wallet, player_id)

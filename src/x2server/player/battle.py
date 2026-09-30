@@ -140,7 +140,17 @@ class BattleService:
                             by_type[kind] = by_type.get(kind, 0) + count
                 if 0 < total <= 100_000:
                     with self.economy.transaction():
+                        chapter = self.catalog.sections[section]["ChapterID"]
+                        for raw in request["datas"]:
+                            report = FIGHT_KILL_DATA.decode(raw)
+                            units, counts = report.get("unitId", []), report.get("num", [])
+                            if len(units) == len(counts) and len(units) <= 512:
+                                for unit, count in zip(units, counts):
+                                    if 0 < count <= 10_000:
+                                        self.economy.dp.observe(context.session.player_id, chapter,
+                                            row["uuid"], "kill", unit, count, report.get("heroId", 0))
                         self.economy._event(context.session.player_id, f"kills:{row['uuid']}", 1, 0, total)
+                        self.economy.dp.refresh(context.session.player_id, chapter)
                         for kind, count in by_type.items():
                             self.economy._event(context.session.player_id,
                                 f"kills:{row['uuid']}:type:{kind}", 2, kind, count)
@@ -295,6 +305,12 @@ class BattleService:
                      "scene_id": request.get("sceneId", 0), "section_type": static["Type"]})
         except Exception:
             logging.getLogger("x2.battle").exception("264 observation failed")
+        if self.economy:
+            try:
+                with self.economy.transaction():
+                    self.economy.dp.report(context.session.player_id, static["ChapterID"], entry["uuid"], request)
+            except Exception:
+                logging.getLogger("x2.battle").exception("264 DP observation failed")
         # Official chain (ARM64 2026-09-25): FightModule.OnFightDropData(0x1447E1C)
         # checks result==10, deserializes response.data as FightDropData and feeds its
         # dropValues into the running battle as LogicX2Command.UpdateDropValue
@@ -405,7 +421,7 @@ class BattleService:
                               for slot, item in artifact.get("jewels", {}).items()],
                     "godSlotLockInfo": [GOD_SLOT_LOCK_INFO.encode({"slot": int(slot), "state": 1})
                                         for slot in artifact.get("god_slot_lock", [])]})
-            skin = self.store.db.execute("SELECT skin_id FROM appearance_wear WHERE player_id=? AND hero_id=? AND type=1", (player_id, hero["id"])).fetchone() if self.store.db.execute("SELECT 1 FROM sqlite_master WHERE name='appearance_wear'").fetchone() else None
+            skin = self.store.db.execute("SELECT skin_id FROM appearance_wear WHERE player_id=? AND hero_id=? AND type=1", (player["id"], hero["id"])).fetchone() if self.store.db.execute("SELECT 1 FROM sqlite_master WHERE name='appearance_wear'").fetchone() else None
             fight_heroes.append(FIGHT_HERO.encode({**hero_values, "heroGodEquip": god_equip, "battleSkinId": skin[0] if skin else 0,
                 "heroSkill": skills, "heroAttrCount": attrs, "attrAdd": base}))
         # Official chain (ARM64 2026-09-25): BattleInfo.SetSceneInfo copies

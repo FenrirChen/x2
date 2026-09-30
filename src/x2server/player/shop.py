@@ -245,6 +245,7 @@ class ShopService:
                                       (request_key, player_id, schema.encode(values)))
                 self.economy._event(player_id, f"shop-buy:{request_key}", 24,
                                     goods_id, buy_num, self.SHOP_ID)
+                self.economy.dp.shop(player_id, item_id, self.CURRENCY_TYPE, buy_num, cost, request_key)
         except UnresolvedEconomy as exc:
             LOGGER.info("purchase rejected goods=%s reason=%s", goods_id, exc)
             return reject
@@ -305,6 +306,7 @@ class ShopService:
                 self.store.db.execute("INSERT INTO shop_receipts VALUES (?,?,?)",
                                       (key, player_id, schema.encode(values)))
                 self.economy._event(player_id, f"compat-shop:{key}", 24, goods_id, buy_num, shop_id)
+                self.economy.dp.shop(player_id, item_id, row["currency"], buy_num, total, key)
         except UnresolvedEconomy as exc:
             LOGGER.info("compat purchase rejected goods=%s reason=%s", goods_id, exc)
             return reject

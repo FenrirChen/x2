@@ -1,0 +1,1275 @@
+{
+ "provenance": {
+  "source": "table/item (ItemType 18 container rows) + table/language",
+  "itemFields": [
+   "ItemID",
+   "NameID",
+   "DescID",
+   "HistoryID",
+   "ItemUseScence",
+   "ItemType",
+   "ItemQuality",
+   "PileCount",
+   "ItemValue",
+   "AddADCGroup",
+   "IMQualityLevel",
+   "DropLimit",
+   "DropLimitParam",
+   "NeedLevel",
+   "ItemShow",
+   "Used",
+   "Purchased",
+   "Gain",
+   "Composed",
+   "Recover",
+   "FunctionEff",
+   "EffData",
+   "Return",
+   "Icon",
+   "EffectIcon",
+   "Model",
+   "Effect",
+   "IfShowName",
+   "DropSound",
+   "PickSound",
+   "QuickBuyID"
+  ],
+  "rewardItems": 55,
+  "note": "the container row has no structured payload; its DescID text is the game's own contents list. A part that does not resolve to exactly one item leaves the box unsupported, so a claim refuses instead of paying part of the reward. '章节专属N星兽主xM' becomes an `equib` block (suit + star + pieces) because 兽主 are instances, not bag ids.",
+  "unresolved": [
+   {
+    "itemId": 1203846,
+    "reason": "no contents text",
+    "desc": ""
+   },
+   {
+    "itemId": 1203847,
+    "reason": "no contents text",
+    "desc": ""
+   },
+   {
+    "itemId": 1203848,
+    "reason": "no contents text",
+    "desc": ""
+   },
+   {
+    "itemId": 1203849,
+    "reason": "no contents text",
+    "desc": ""
+   },
+   {
+    "itemId": 1203850,
+    "reason": "no contents text",
+    "desc": ""
+   }
+  ]
+ },
+ "boxes": {
+  "1203801": {
+   "name": "DP宝箱·一阶",
+   "chapterId": 2010200,
+   "contentsText": "浮士德碎片x10/魂石源质x5/金币x20000",
+   "contents": [
+    {
+     "itemId": 1201004,
+     "num": 10,
+     "name": "浮士德碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 5,
+     "name": "魂石源质"
+    },
+    {
+     "itemId": 1237901,
+     "num": 20000,
+     "name": "金币"
+    }
+   ],
+   "supported": true
+  },
+  "1203802": {
+   "name": "DP宝箱·二阶",
+   "chapterId": 2010200,
+   "contentsText": "浮士德碎片x20/魂石源质x5/章节专属4星兽主x6",
+   "contents": [
+    {
+     "itemId": 1201004,
+     "num": 20,
+     "name": "浮士德碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 5,
+     "name": "魂石源质"
+    }
+   ],
+   "supported": true,
+   "equib": {
+    "suit": 401,
+    "suitName": "九头蛇套装",
+    "star": 4,
+    "count": 6,
+    "parts": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ]
+   }
+  },
+  "1203803": {
+   "name": "DP宝箱·三阶",
+   "chapterId": 2010200,
+   "contentsText": "浮士德碎片x30/魂石源质x5/兽魂x666/祈神符x5/神格经验x666",
+   "contents": [
+    {
+     "itemId": 1201004,
+     "num": 30,
+     "name": "浮士德碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 5,
+     "name": "魂石源质"
+    },
+    {
+     "itemId": 1237906,
+     "num": 666,
+     "name": "兽魂"
+    },
+    {
+     "itemId": 1237840,
+     "num": 5,
+     "name": "祈神符"
+    },
+    {
+     "itemId": 1237907,
+     "num": 666,
+     "name": "神格经验"
+    }
+   ],
+   "supported": true
+  },
+  "1203804": {
+   "name": "DP宝箱·四阶",
+   "chapterId": 2010200,
+   "contentsText": "浮士德碎片x60/魂石源质x5/3星太阳石",
+   "contents": [
+    {
+     "itemId": 1201004,
+     "num": 60,
+     "name": "浮士德碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 5,
+     "name": "魂石源质"
+    },
+    {
+     "itemId": 1250073,
+     "num": 1,
+     "name": "太阳石★3"
+    }
+   ],
+   "supported": true
+  },
+  "1203805": {
+   "name": "DP宝箱·五阶",
+   "chapterId": 2010200,
+   "contentsText": "浮士德碎片x60/魂石源质x10/许愿币x3",
+   "contents": [
+    {
+     "itemId": 1201004,
+     "num": 60,
+     "name": "浮士德碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 10,
+     "name": "魂石源质"
+    },
+    {
+     "itemId": 1237914,
+     "num": 3,
+     "name": "许愿币"
+    }
+   ],
+   "supported": true
+  },
+  "1203806": {
+   "name": "DP宝箱·一阶",
+   "chapterId": 2010300,
+   "contentsText": "伊瑞绮嘉拉碎片x10/魂石源质x5/金币x20000",
+   "contents": [
+    {
+     "itemId": 1201198,
+     "num": 10,
+     "name": "伊瑞绮嘉拉碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 5,
+     "name": "魂石源质"
+    },
+    {
+     "itemId": 1237901,
+     "num": 20000,
+     "name": "金币"
+    }
+   ],
+   "supported": true
+  },
+  "1203807": {
+   "name": "DP宝箱·二阶",
+   "chapterId": 2010300,
+   "contentsText": "伊瑞绮嘉拉碎片x20/魂石源质x5/章节专属4星兽主x6",
+   "contents": [
+    {
+     "itemId": 1201198,
+     "num": 20,
+     "name": "伊瑞绮嘉拉碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 5,
+     "name": "魂石源质"
+    }
+   ],
+   "supported": true,
+   "equib": {
+    "suit": 409,
+    "suitName": "雷兽套装",
+    "star": 4,
+    "count": 6,
+    "parts": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ]
+   }
+  },
+  "1203808": {
+   "name": "DP宝箱·三阶",
+   "chapterId": 2010300,
+   "contentsText": "伊瑞绮嘉拉碎片x30/魂石源质x5/兽魂x666/祈神符x5/神格经验x666",
+   "contents": [
+    {
+     "itemId": 1201198,
+     "num": 30,
+     "name": "伊瑞绮嘉拉碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 5,
+     "name": "魂石源质"
+    },
+    {
+     "itemId": 1237906,
+     "num": 666,
+     "name": "兽魂"
+    },
+    {
+     "itemId": 1237840,
+     "num": 5,
+     "name": "祈神符"
+    },
+    {
+     "itemId": 1237907,
+     "num": 666,
+     "name": "神格经验"
+    }
+   ],
+   "supported": true
+  },
+  "1203809": {
+   "name": "DP宝箱·四阶",
+   "chapterId": 2010300,
+   "contentsText": "伊瑞绮嘉拉碎片x60/魂石源质x5/3星月光石",
+   "contents": [
+    {
+     "itemId": 1201198,
+     "num": 60,
+     "name": "伊瑞绮嘉拉碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 5,
+     "name": "魂石源质"
+    },
+    {
+     "itemId": 1250083,
+     "num": 1,
+     "name": "月光石★3"
+    }
+   ],
+   "supported": true
+  },
+  "1203810": {
+   "name": "DP宝箱·五阶",
+   "chapterId": 2010300,
+   "contentsText": "伊瑞绮嘉拉碎片x60/魂石源质x10/许愿币x3",
+   "contents": [
+    {
+     "itemId": 1201198,
+     "num": 60,
+     "name": "伊瑞绮嘉拉碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 10,
+     "name": "魂石源质"
+    },
+    {
+     "itemId": 1237914,
+     "num": 3,
+     "name": "许愿币"
+    }
+   ],
+   "supported": true
+  },
+  "1203811": {
+   "name": "DP宝箱·一阶",
+   "chapterId": 2010400,
+   "contentsText": "涂山初玖碎片x10/魂石源质x5/金币x20000",
+   "contents": [
+    {
+     "itemId": 1201010,
+     "num": 10,
+     "name": "涂山初玖碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 5,
+     "name": "魂石源质"
+    },
+    {
+     "itemId": 1237901,
+     "num": 20000,
+     "name": "金币"
+    }
+   ],
+   "supported": true
+  },
+  "1203812": {
+   "name": "DP宝箱·二阶",
+   "chapterId": 2010400,
+   "contentsText": "涂山初玖碎片x20/魂石源质x5/章节专属4星兽主x6",
+   "contents": [
+    {
+     "itemId": 1201010,
+     "num": 20,
+     "name": "涂山初玖碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 5,
+     "name": "魂石源质"
+    }
+   ],
+   "supported": true,
+   "equib": {
+    "suit": 404,
+    "suitName": "独角兽套装",
+    "star": 4,
+    "count": 6,
+    "parts": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ]
+   }
+  },
+  "1203813": {
+   "name": "DP宝箱·三阶",
+   "chapterId": 2010400,
+   "contentsText": "涂山初玖碎片x30/魂石源质x5/兽魂x666/祈神符x5/神格经验x666",
+   "contents": [
+    {
+     "itemId": 1201010,
+     "num": 30,
+     "name": "涂山初玖碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 5,
+     "name": "魂石源质"
+    },
+    {
+     "itemId": 1237906,
+     "num": 666,
+     "name": "兽魂"
+    },
+    {
+     "itemId": 1237840,
+     "num": 5,
+     "name": "祈神符"
+    },
+    {
+     "itemId": 1237907,
+     "num": 666,
+     "name": "神格经验"
+    }
+   ],
+   "supported": true
+  },
+  "1203814": {
+   "name": "DP宝箱·四阶",
+   "chapterId": 2010400,
+   "contentsText": "涂山初玖碎片x60/魂石源质x5/3星猫眼宝石",
+   "contents": [
+    {
+     "itemId": 1201010,
+     "num": 60,
+     "name": "涂山初玖碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 5,
+     "name": "魂石源质"
+    },
+    {
+     "itemId": 1250093,
+     "num": 1,
+     "name": "猫眼宝石★3"
+    }
+   ],
+   "supported": true
+  },
+  "1203815": {
+   "name": "DP宝箱·五阶",
+   "chapterId": 2010400,
+   "contentsText": "涂山初玖碎片x60/魂石源质x10/许愿币x3",
+   "contents": [
+    {
+     "itemId": 1201010,
+     "num": 60,
+     "name": "涂山初玖碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 10,
+     "name": "魂石源质"
+    },
+    {
+     "itemId": 1237914,
+     "num": 3,
+     "name": "许愿币"
+    }
+   ],
+   "supported": true
+  },
+  "1203816": {
+   "name": "DP宝箱·一阶",
+   "chapterId": 2010500,
+   "contentsText": "阿努比斯碎片x10/魂石源质x5/金币x20000",
+   "contents": [
+    {
+     "itemId": 1201017,
+     "num": 10,
+     "name": "阿努比斯碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 5,
+     "name": "魂石源质"
+    },
+    {
+     "itemId": 1237901,
+     "num": 20000,
+     "name": "金币"
+    }
+   ],
+   "supported": true
+  },
+  "1203817": {
+   "name": "DP宝箱·二阶",
+   "chapterId": 2010500,
+   "contentsText": "阿努比斯碎片x20/魂石源质x5/章节专属4星兽主x6",
+   "contents": [
+    {
+     "itemId": 1201017,
+     "num": 20,
+     "name": "阿努比斯碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 5,
+     "name": "魂石源质"
+    }
+   ],
+   "supported": true,
+   "equib": {
+    "suit": 406,
+    "suitName": "北海巨妖套装",
+    "star": 4,
+    "count": 6,
+    "parts": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ]
+   }
+  },
+  "1203818": {
+   "name": "DP宝箱·三阶",
+   "chapterId": 2010500,
+   "contentsText": "阿努比斯碎片x30/魂石源质x5/兽魂x666/祈神符x5/神格经验x666",
+   "contents": [
+    {
+     "itemId": 1201017,
+     "num": 30,
+     "name": "阿努比斯碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 5,
+     "name": "魂石源质"
+    },
+    {
+     "itemId": 1237906,
+     "num": 666,
+     "name": "兽魂"
+    },
+    {
+     "itemId": 1237840,
+     "num": 5,
+     "name": "祈神符"
+    },
+    {
+     "itemId": 1237907,
+     "num": 666,
+     "name": "神格经验"
+    }
+   ],
+   "supported": true
+  },
+  "1203819": {
+   "name": "DP宝箱·四阶",
+   "chapterId": 2010500,
+   "contentsText": "阿努比斯碎片x60/魂石源质x5/3星绿幽灵",
+   "contents": [
+    {
+     "itemId": 1201017,
+     "num": 60,
+     "name": "阿努比斯碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 5,
+     "name": "魂石源质"
+    },
+    {
+     "itemId": 1250103,
+     "num": 1,
+     "name": "绿幽灵★3"
+    }
+   ],
+   "supported": true
+  },
+  "1203820": {
+   "name": "DP宝箱·五阶",
+   "chapterId": 2010500,
+   "contentsText": "阿努比斯碎片x60/魂石源质x10/许愿币x3",
+   "contents": [
+    {
+     "itemId": 1201017,
+     "num": 60,
+     "name": "阿努比斯碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 10,
+     "name": "魂石源质"
+    },
+    {
+     "itemId": 1237914,
+     "num": 3,
+     "name": "许愿币"
+    }
+   ],
+   "supported": true
+  },
+  "1203821": {
+   "name": "DP宝箱·一阶",
+   "chapterId": 2010600,
+   "contentsText": "阿斯莫德碎片x10/魂石源质x5/金币x20000",
+   "contents": [
+    {
+     "itemId": 1201011,
+     "num": 10,
+     "name": "阿斯莫德碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 5,
+     "name": "魂石源质"
+    },
+    {
+     "itemId": 1237901,
+     "num": 20000,
+     "name": "金币"
+    }
+   ],
+   "supported": true
+  },
+  "1203822": {
+   "name": "DP宝箱·二阶",
+   "chapterId": 2010600,
+   "contentsText": "阿斯莫德碎片x20/魂石源质x5/章节专属4星兽主x6",
+   "contents": [
+    {
+     "itemId": 1201011,
+     "num": 20,
+     "name": "阿斯莫德碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 5,
+     "name": "魂石源质"
+    }
+   ],
+   "supported": true,
+   "equib": {
+    "suit": 412,
+    "suitName": "斯芬克斯套装",
+    "star": 4,
+    "count": 6,
+    "parts": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ]
+   }
+  },
+  "1203823": {
+   "name": "DP宝箱·三阶",
+   "chapterId": 2010600,
+   "contentsText": "阿斯莫德碎片x30/魂石源质x5/兽魂x666/祈神符x5/神格经验x666",
+   "contents": [
+    {
+     "itemId": 1201011,
+     "num": 30,
+     "name": "阿斯莫德碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 5,
+     "name": "魂石源质"
+    },
+    {
+     "itemId": 1237906,
+     "num": 666,
+     "name": "兽魂"
+    },
+    {
+     "itemId": 1237840,
+     "num": 5,
+     "name": "祈神符"
+    },
+    {
+     "itemId": 1237907,
+     "num": 666,
+     "name": "神格经验"
+    }
+   ],
+   "supported": true
+  },
+  "1203824": {
+   "name": "DP宝箱·四阶",
+   "chapterId": 2010600,
+   "contentsText": "阿斯莫德碎片x60/魂石源质x5/3星太阳石",
+   "contents": [
+    {
+     "itemId": 1201011,
+     "num": 60,
+     "name": "阿斯莫德碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 5,
+     "name": "魂石源质"
+    },
+    {
+     "itemId": 1250073,
+     "num": 1,
+     "name": "太阳石★3"
+    }
+   ],
+   "supported": true
+  },
+  "1203825": {
+   "name": "DP宝箱·五阶",
+   "chapterId": 2010600,
+   "contentsText": "阿斯莫德碎片x60/魂石源质x10/许愿币x3",
+   "contents": [
+    {
+     "itemId": 1201011,
+     "num": 60,
+     "name": "阿斯莫德碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 10,
+     "name": "魂石源质"
+    },
+    {
+     "itemId": 1237914,
+     "num": 3,
+     "name": "许愿币"
+    }
+   ],
+   "supported": true
+  },
+  "1203826": {
+   "name": "DP宝箱·一阶",
+   "chapterId": 2010700,
+   "contentsText": "忒提丝碎片x10/魂石源质x5/金币x20000",
+   "contents": [
+    {
+     "itemId": 1201007,
+     "num": 10,
+     "name": "忒提丝碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 5,
+     "name": "魂石源质"
+    },
+    {
+     "itemId": 1237901,
+     "num": 20000,
+     "name": "金币"
+    }
+   ],
+   "supported": true
+  },
+  "1203827": {
+   "name": "DP宝箱·二阶",
+   "chapterId": 2010700,
+   "contentsText": "忒提丝碎片x20/魂石源质x5/章节专属4星兽主x6",
+   "contents": [
+    {
+     "itemId": 1201007,
+     "num": 20,
+     "name": "忒提丝碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 5,
+     "name": "魂石源质"
+    }
+   ],
+   "supported": true,
+   "equib": {
+    "suit": 414,
+    "suitName": "小精灵套装",
+    "star": 4,
+    "count": 6,
+    "parts": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ]
+   }
+  },
+  "1203828": {
+   "name": "DP宝箱·三阶",
+   "chapterId": 2010700,
+   "contentsText": "忒提丝碎片x30/魂石源质x5/兽魂x666/祈神符x5/神格经验x666",
+   "contents": [
+    {
+     "itemId": 1201007,
+     "num": 30,
+     "name": "忒提丝碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 5,
+     "name": "魂石源质"
+    },
+    {
+     "itemId": 1237906,
+     "num": 666,
+     "name": "兽魂"
+    },
+    {
+     "itemId": 1237840,
+     "num": 5,
+     "name": "祈神符"
+    },
+    {
+     "itemId": 1237907,
+     "num": 666,
+     "name": "神格经验"
+    }
+   ],
+   "supported": true
+  },
+  "1203829": {
+   "name": "DP宝箱·四阶",
+   "chapterId": 2010700,
+   "contentsText": "忒提丝碎片x60/魂石源质x5/3星月光石",
+   "contents": [
+    {
+     "itemId": 1201007,
+     "num": 60,
+     "name": "忒提丝碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 5,
+     "name": "魂石源质"
+    },
+    {
+     "itemId": 1250083,
+     "num": 1,
+     "name": "月光石★3"
+    }
+   ],
+   "supported": true
+  },
+  "1203830": {
+   "name": "DP宝箱·五阶",
+   "chapterId": 2010700,
+   "contentsText": "忒提丝碎片x60/魂石源质x10/许愿币x3",
+   "contents": [
+    {
+     "itemId": 1201007,
+     "num": 60,
+     "name": "忒提丝碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 10,
+     "name": "魂石源质"
+    },
+    {
+     "itemId": 1237914,
+     "num": 3,
+     "name": "许愿币"
+    }
+   ],
+   "supported": true
+  },
+  "1203831": {
+   "name": "DP宝箱·一阶",
+   "chapterId": 2010800,
+   "contentsText": "孟章碎片x10/魂石源质x5/金币x20000",
+   "contents": [
+    {
+     "itemId": 1201021,
+     "num": 10,
+     "name": "孟章碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 5,
+     "name": "魂石源质"
+    },
+    {
+     "itemId": 1237901,
+     "num": 20000,
+     "name": "金币"
+    }
+   ],
+   "supported": true
+  },
+  "1203832": {
+   "name": "DP宝箱·二阶",
+   "chapterId": 2010800,
+   "contentsText": "孟章碎片x20/魂石源质x5/章节专属4星兽主x6",
+   "contents": [
+    {
+     "itemId": 1201021,
+     "num": 20,
+     "name": "孟章碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 5,
+     "name": "魂石源质"
+    }
+   ],
+   "supported": true,
+   "equib": {
+    "suit": 415,
+    "suitName": "霸下套装",
+    "star": 4,
+    "count": 6,
+    "parts": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ]
+   }
+  },
+  "1203833": {
+   "name": "DP宝箱·三阶",
+   "chapterId": 2010800,
+   "contentsText": "孟章碎片x30/魂石源质x5/兽魂x666/祈神符x5/神格经验x666",
+   "contents": [
+    {
+     "itemId": 1201021,
+     "num": 30,
+     "name": "孟章碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 5,
+     "name": "魂石源质"
+    },
+    {
+     "itemId": 1237906,
+     "num": 666,
+     "name": "兽魂"
+    },
+    {
+     "itemId": 1237840,
+     "num": 5,
+     "name": "祈神符"
+    },
+    {
+     "itemId": 1237907,
+     "num": 666,
+     "name": "神格经验"
+    }
+   ],
+   "supported": true
+  },
+  "1203834": {
+   "name": "DP宝箱·四阶",
+   "chapterId": 2010800,
+   "contentsText": "孟章碎片x60/魂石源质x5/3星猫眼宝石",
+   "contents": [
+    {
+     "itemId": 1201021,
+     "num": 60,
+     "name": "孟章碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 5,
+     "name": "魂石源质"
+    },
+    {
+     "itemId": 1250093,
+     "num": 1,
+     "name": "猫眼宝石★3"
+    }
+   ],
+   "supported": true
+  },
+  "1203835": {
+   "name": "DP宝箱·五阶",
+   "chapterId": 2010800,
+   "contentsText": "孟章碎片x60/魂石源质x10/许愿币x3",
+   "contents": [
+    {
+     "itemId": 1201021,
+     "num": 60,
+     "name": "孟章碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 10,
+     "name": "魂石源质"
+    },
+    {
+     "itemId": 1237914,
+     "num": 3,
+     "name": "许愿币"
+    }
+   ],
+   "supported": true
+  },
+  "1203836": {
+   "name": "DP宝箱·一阶",
+   "chapterId": 2010100,
+   "contentsText": "贝黑莫斯碎片x10/魂石源质x5/金币x20000",
+   "contents": [
+    {
+     "itemId": 1201003,
+     "num": 10,
+     "name": "贝黑莫斯碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 5,
+     "name": "魂石源质"
+    },
+    {
+     "itemId": 1237901,
+     "num": 20000,
+     "name": "金币"
+    }
+   ],
+   "supported": true
+  },
+  "1203837": {
+   "name": "DP宝箱·二阶",
+   "chapterId": 2010100,
+   "contentsText": "贝黑莫斯碎片x20/魂石源质x5/章节专属4星兽主x6",
+   "contents": [
+    {
+     "itemId": 1201003,
+     "num": 20,
+     "name": "贝黑莫斯碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 5,
+     "name": "魂石源质"
+    }
+   ],
+   "supported": true,
+   "equib": {
+    "suit": 413,
+    "suitName": "独眼巨人套装",
+    "star": 4,
+    "count": 6,
+    "parts": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ]
+   }
+  },
+  "1203838": {
+   "name": "DP宝箱·三阶",
+   "chapterId": 2010100,
+   "contentsText": "贝黑莫斯碎片x30/魂石源质x5/兽魂x666/祈神符x5/神格经验x666",
+   "contents": [
+    {
+     "itemId": 1201003,
+     "num": 30,
+     "name": "贝黑莫斯碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 5,
+     "name": "魂石源质"
+    },
+    {
+     "itemId": 1237906,
+     "num": 666,
+     "name": "兽魂"
+    },
+    {
+     "itemId": 1237840,
+     "num": 5,
+     "name": "祈神符"
+    },
+    {
+     "itemId": 1237907,
+     "num": 666,
+     "name": "神格经验"
+    }
+   ],
+   "supported": true
+  },
+  "1203839": {
+   "name": "DP宝箱·四阶",
+   "chapterId": 2010100,
+   "contentsText": "贝黑莫斯碎片x60/魂石源质x5/3星绿幽灵",
+   "contents": [
+    {
+     "itemId": 1201003,
+     "num": 60,
+     "name": "贝黑莫斯碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 5,
+     "name": "魂石源质"
+    },
+    {
+     "itemId": 1250103,
+     "num": 1,
+     "name": "绿幽灵★3"
+    }
+   ],
+   "supported": true
+  },
+  "1203840": {
+   "name": "DP宝箱·五阶",
+   "chapterId": 2010100,
+   "contentsText": "贝黑莫斯碎片x60/魂石源质x10/许愿币x3",
+   "contents": [
+    {
+     "itemId": 1201003,
+     "num": 60,
+     "name": "贝黑莫斯碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 10,
+     "name": "魂石源质"
+    },
+    {
+     "itemId": 1237914,
+     "num": 3,
+     "name": "许愿币"
+    }
+   ],
+   "supported": true
+  },
+  "1203841": {
+   "name": "DP宝箱·一阶",
+   "chapterId": 2010900,
+   "contentsText": "卡恩斯x10/魂石源质x5/金币x20000",
+   "contents": [
+    {
+     "itemId": 1211013,
+     "num": 10,
+     "name": "卡恩斯"
+    },
+    {
+     "itemId": 1237905,
+     "num": 5,
+     "name": "魂石源质"
+    },
+    {
+     "itemId": 1237901,
+     "num": 20000,
+     "name": "金币"
+    }
+   ],
+   "supported": true
+  },
+  "1203842": {
+   "name": "DP宝箱·二阶",
+   "chapterId": 2010900,
+   "contentsText": "卡恩斯碎片x20/魂石源质x5/章节专属4星兽主x6",
+   "contents": [
+    {
+     "itemId": 1201013,
+     "num": 20,
+     "name": "卡恩斯碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 5,
+     "name": "魂石源质"
+    }
+   ],
+   "supported": true,
+   "equib": {
+    "suit": 418,
+    "suitName": "乌洛波罗斯套装",
+    "star": 4,
+    "count": 6,
+    "parts": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ]
+   }
+  },
+  "1203843": {
+   "name": "DP宝箱·三阶",
+   "chapterId": 2010900,
+   "contentsText": "卡恩斯碎片x30/魂石源质x5/兽魂x666/祈神符x5/神格经验x666",
+   "contents": [
+    {
+     "itemId": 1201013,
+     "num": 30,
+     "name": "卡恩斯碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 5,
+     "name": "魂石源质"
+    },
+    {
+     "itemId": 1237906,
+     "num": 666,
+     "name": "兽魂"
+    },
+    {
+     "itemId": 1237840,
+     "num": 5,
+     "name": "祈神符"
+    },
+    {
+     "itemId": 1237907,
+     "num": 666,
+     "name": "神格经验"
+    }
+   ],
+   "supported": true
+  },
+  "1203844": {
+   "name": "DP宝箱·四阶",
+   "chapterId": 2010900,
+   "contentsText": "卡恩斯碎片x60/魂石源质x5/3星绿幽灵",
+   "contents": [
+    {
+     "itemId": 1201013,
+     "num": 60,
+     "name": "卡恩斯碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 5,
+     "name": "魂石源质"
+    },
+    {
+     "itemId": 1250103,
+     "num": 1,
+     "name": "绿幽灵★3"
+    }
+   ],
+   "supported": true
+  },
+  "1203845": {
+   "name": "DP宝箱`五阶",
+   "chapterId": 2010900,
+   "contentsText": "卡恩斯碎片x60/魂石源质x10/许愿币x3",
+   "contents": [
+    {
+     "itemId": 1201013,
+     "num": 60,
+     "name": "卡恩斯碎片"
+    },
+    {
+     "itemId": 1237905,
+     "num": 10,
+     "name": "魂石源质"
+    },
+    {
+     "itemId": 1237914,
+     "num": 3,
+     "name": "许愿币"
+    }
+   ],
+   "supported": true
+  }
+ }
+}
