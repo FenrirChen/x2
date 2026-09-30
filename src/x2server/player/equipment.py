@@ -197,7 +197,16 @@ class EquipmentService:
         req = EQUIPMENT_SCHEMAS[name].decode(packet.body)
         response = name.replace("C2L_", "L2C_", 1)
         values = {"code": 13, **{k: v for k, v in req.items() if k in ("equipID", "heroID", "posIdx")}}
-        if req.get("optType") != 1:
+        # BagModule_SendDoUnEquip maps its third argument to this field as
+        # ``arg3 == 0 ? 1 : 2``.  The bag page (BagMainPage_DoUnequip) always sends
+        # 1, but the hero page (HeroMainEquipSubPage_EquipChange) sends
+        # ``isState(4) & 1``, and FSM state 4 is UIEquipPageStatus.SeasonEquipPlanList
+        # - the 兽主 page - so unequipping a 兽主 arrives as optType 2.  Rejecting
+        # anything but 1 therefore dropped every 兽主 removal, and the client shows
+        # no error for a non-10 L2C_DoUnEquip, so it just looked like the button did
+        # nothing.  posIdx / heroID carry the actual semantics; the type only says
+        # which page asked, so both pages are accepted here.
+        if req.get("optType") not in (1, 2):
             return OutboundMessage(response, values)
         player = self.store.get(player_id)
         snapshot = player["snapshot"]
