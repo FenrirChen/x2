@@ -395,7 +395,8 @@ class BattleService:
                               for slot, item in artifact.get("jewels", {}).items()],
                     "godSlotLockInfo": [GOD_SLOT_LOCK_INFO.encode({"slot": int(slot), "state": 1})
                                         for slot in artifact.get("god_slot_lock", [])]})
-            fight_heroes.append(FIGHT_HERO.encode({**hero_values, "heroGodEquip": god_equip,
+            skin = self.store.db.execute("SELECT skin_id FROM appearance_wear WHERE player_id=? AND hero_id=? AND type=1", (player_id, hero["id"])).fetchone() if self.store.db.execute("SELECT 1 FROM sqlite_master WHERE name='appearance_wear'").fetchone() else None
+            fight_heroes.append(FIGHT_HERO.encode({**hero_values, "heroGodEquip": god_equip, "battleSkinId": skin[0] if skin else 0,
                 "heroSkill": skills, "heroAttrCount": attrs, "attrAdd": base}))
         # Official chain (ARM64 2026-09-25): BattleInfo.SetSceneInfo copies
         # FightData.dropData.dropValues -> BattleInfo.dropValues, which JudgeDropItem

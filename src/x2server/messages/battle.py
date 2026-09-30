@@ -8,7 +8,7 @@ HERO_ATTR_ADD = S("HeroAttrAdd", (F(1, "attrId", K.INT32), F(2, "attrValue", K.I
 FIGHT_HERO = S("FightHero", (
     F(1, "id", K.INT32), F(2, "state", K.INT32), F(3, "level", K.INT32), F(4, "star", K.INT32),
     F(5, "heroGodEquip", K.MESSAGE), F(7, "exp", K.INT32), F(8, "heroSkill", K.MESSAGE, repeated=True),
-    F(9, "attrAdd", K.MESSAGE, repeated=True), F(12, "heroAttrCount", K.MESSAGE)))
+    F(9, "attrAdd", K.MESSAGE, repeated=True), F(10, "battleSkinId", K.INT32), F(12, "heroAttrCount", K.MESSAGE)))
 # FightData deliberately starts at field 2 (Serialize 0x350E1C0).
 FIGHT_DATA = S("FightData", (F(2, "fightHeros", K.MESSAGE, repeated=True), F(3, "missionId", K.INT32),
     F(4, "dropData", K.MESSAGE), F(6, "expertMode", K.BOOL), F(7, "CRIDmg", K.INT32)))
