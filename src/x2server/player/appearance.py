@@ -22,6 +22,15 @@ def head_icon_catalog():
 
 
 def granted_head_icons(snapshot, favors=None):
+    return json.loads(files("x2server").joinpath("data/appearance_catalog.json").read_text(encoding="utf-8"))["head_icons"]
+
+
+def avatar_frames():
+    return {r["ItemID"] for r in json.loads(files("x2server").joinpath("data/reward_items.json").read_text(encoding="utf-8"))
+            if r.get("ItemType", {}).get("value") == 20}
+
+
+def _legacy_granted_head_icons(snapshot, favors=None):
     catalog = head_icon_catalog()
     favors = favors or {}
     q_icons, standard_icons = [], []
@@ -46,7 +55,7 @@ def granted_head_icons(snapshot, favors=None):
 def head_icon_info(snapshot, favors=None):
     icons = granted_head_icons(snapshot, favors)
     return ICON_INFO.encode({"IconType": 1, "IconID": int(snapshot.get("head_icon", DEFAULT_HEAD_ICON) or DEFAULT_HEAD_ICON),
-        "OrnamentID": 0, "PictureID": [PICTURE_ID_ENTRY.encode({"Key": i, "Value": value})
+        "OrnamentID": snapshot.get("avatar_frame", 0), "PictureID": [PICTURE_ID_ENTRY.encode({"Key": i, "Value": value})
             for i, value in enumerate(icons)]})
 
 
@@ -101,9 +110,8 @@ class AppearanceService:
         snapshot = self.store.get(player_id)["snapshot"]
         favors = {int(hero["id"]): hero.get("favor", {})
                   for hero in snapshot.get("heroes", [])}
-        heads = (set(granted_head_icons(snapshot, favors)) | (self.heads & items)
-                 | {self.starter_head})
-        scenes = self.scenes & items
+        heads = self.heads | {self.starter_head}
+        scenes = self.scenes
         return {"code": 10,
             "putOnHeadIcon": snapshot.get("head_icon", self.starter_head),
             "putOnSceneIcon": snapshot.get("scene_icon", 0),
@@ -167,6 +175,15 @@ class AppearanceService:
             # makes every avatar change appear to fail with code 13.
             if opt not in (1, 2) or not values:
                 return OutboundMessage("L2C_Account", {"result": 13, "opt": opt})
+            if opt == 2 and len(values) == 3 and values[0] == 1:
+                frame = values[2]
+                if frame != 0 and frame not in avatar_frames():
+                    return OutboundMessage("L2C_Account", {"result": 13, "opt": opt})
+                with self.economy.transaction():
+                    snapshot = self.store.get(player_id)["snapshot"]
+                    snapshot["avatar_frame"] = frame
+                    self.economy.save_snapshot(player_id, snapshot)
+                return OutboundMessage("L2C_Account", {"result": 10, "opt": opt}, before_response=(self.economy.pushes(player_id)[0],))
             owned = (self._owned_heroes(player_id) if opt == 1 else
                 set(granted_head_icons(self.store.get(player_id)["snapshot"], {
                     int(hero["id"]): hero.get("favor", {})
