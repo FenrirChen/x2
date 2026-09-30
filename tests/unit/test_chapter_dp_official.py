@@ -52,3 +52,22 @@ def test_old_floor_archived_not_added(env):
     assert economy.chapter_dp(1, 2010200) == 0
     assert '2010200' in store.db.execute("SELECT legacy_floors FROM chapter_dp_migrations").fetchone()[0]
     assert economy.pick_chapter_dp_box(1, {"type": 7, "param": 2010200, "boxId": 0}).values["code"] == 13
+
+
+def test_dp_box_instances_and_hero_update_pushes(env):
+    store, economy, _ = env
+    for chapter in (2010200, 2010900):
+        with store.db:
+            for task in economy.dp.chapters[str(chapter)]["tasks"]:
+                store.db.execute("INSERT INTO chapter_objectives VALUES (?,?,?,?)", (1, chapter, task["taskId"], task.get("completeNum", 1)))
+    equips = economy.pick_chapter_dp_box(1, {"type": 7, "param": 2010200, "boxId": 1})
+    assert equips.values["code"] == 10
+    assert len(next(p for p in equips.pushes if p.message_name == "L2C_EquipUpdate").values["equip"]) == 6
+    assert any(p.message_name == "L2C_TreasureBoxUpdate" for p in equips.pushes)
+    hero = economy.pick_chapter_dp_box(1, {"type": 7, "param": 2010900, "boxId": 0})
+    assert hero.values["code"] == 10
+    assert any(p.message_name == "L2C_HeroUpdate" for p in hero.pushes)
+    assert sum(h["id"] == 1013 for h in store.get(1)["snapshot"]["heroes"]) == 1
+    from x2server.player.progression import catalog
+    prototype = next(h for h in catalog()["hero_unlock"] if h["hero_id"] == 1013)
+    assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=?", (prototype["fragment_item_id"],)).fetchone()[0] == 9 * prototype["fragment_count"]

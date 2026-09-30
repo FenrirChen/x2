@@ -155,6 +155,7 @@ class ChapterDP:
         if not box or not box.get("supported"):
             raise UnresolvedEconomy("DP box contents unavailable")
         source = f"chapterdp:{chapter}:{index}"
+        owned = {h["id"] for h in self.economy.store.get(player)["snapshot"].get("heroes", []) if h.get("state") == 2}
         grants = [RewardGrant("CHAPTER_DP_BOX", 0, source, row["itemId"], row["num"], reason=f"DP box {item_id}") for row in box["contents"]]
         equips = []
         spec = box.get("equib")
@@ -171,5 +172,10 @@ class ChapterDP:
         raw = self.economy.reward_bytes(rewards, equips)
         if any(1211000 <= item < 1212000 for item in rewards):
             from .wish import WishService
+            from x2server.messages.economy import REWARD, REWARD_ITEM
+            decoded = REWARD.decode(raw)
+            decoded["rewardItem"] = [REWARD_ITEM.encode({"itemId": item, "itemNum": count,
+                "transform": 1211000 <= item < 1212000 and item - 1210000 in owned}) for item, count in sorted(rewards.items())]
+            raw = REWARD.encode(decoded)
             raw = WishService._reward_with_transform_heroes(raw)
         return raw

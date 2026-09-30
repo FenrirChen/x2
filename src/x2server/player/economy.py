@@ -407,8 +407,17 @@ class EconomyService:
                             (proto["duplicate_ticket_item_id"], proto["duplicate_ticket_count"])):
                         self.store.db.execute("INSERT INTO inventory VALUES (?,?,?) ON CONFLICT(player_id,item_id) DO UPDATE SET quantity=quantity+excluded.quantity", (player_id, compensation, quantity * count))
                 else:
-                    snapshot.setdefault("heroes", []).append({"id": hero_id, "state": 2, "level": proto["level"],
-                        "star": proto["star"], "exp": 0, "skills": [{"id": i, "level": 1} for i in proto["initial_skills"]]})
+                    new_hero = {"id": hero_id, "state": 2, "level": proto["level"],
+                        "star": proto["star"], "exp": 0, "skills": [{"id": i, "level": 1} for i in proto["initial_skills"]]}
+                    existing = next((h for h in snapshot.get("heroes", []) if h["id"] == hero_id), None)
+                    if existing is not None:
+                        existing.update(new_hero)
+                    else:
+                        snapshot.setdefault("heroes", []).append(new_hero)
+                    if count > 1:
+                        for compensation, quantity in ((proto["fragment_item_id"], proto["fragment_count"]),
+                                (proto["duplicate_ticket_item_id"], proto["duplicate_ticket_count"])):
+                            self.store.db.execute("INSERT INTO inventory VALUES (?,?,?) ON CONFLICT(player_id,item_id) DO UPDATE SET quantity=quantity+excluded.quantity", (player_id, compensation, quantity * (count - 1)))
             elif kind not in self.STACKABLE_REWARD_TYPES and item != 1260015 and not (kind == 11 and source.startswith("chapterdp:")):
                 raise UnresolvedEconomy("unrecovered reward destination")
             else:
@@ -744,7 +753,14 @@ class EconomyService:
             return OutboundMessage("L2C_PickTreasureBox", result)
         logging.getLogger("x2.economy").info(
             "chapter DP box claimed chapter=%s index=%s player=%s", chapter, index, player_id)
-        return OutboundMessage("L2C_PickTreasureBox", result, pushes=self.pushes(player_id))
+        from .hero import encode_hero_data
+        reward = REWARD.decode(result["rewardData"])
+        extra = [OutboundMessage("L2C_TreasureBoxUpdate", {"type": 7, "boxList": self.chapter_dp_boxes(player_id, chapter)})]
+        if reward.get("rewardEquip"):
+            extra.append(OutboundMessage("L2C_EquipUpdate", {"code": 10, "equip": reward["rewardEquip"]}))
+        if reward.get("transformHero"):
+            extra.append(OutboundMessage("L2C_HeroUpdate", {"code": 10, "heros": [encode_hero_data(h) for h in self.store.get(player_id)["snapshot"]["heroes"]]}))
+        return OutboundMessage("L2C_PickTreasureBox", result, pushes=self.pushes(player_id) + tuple(extra))
 
     def challenge_chain(self, chapter) -> list:
         """A chapter's 现世复刻 difficulty rows, in difficulty order.
