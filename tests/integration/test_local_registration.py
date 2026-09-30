@@ -263,31 +263,34 @@ def test_http_mail_page_uses_game_token_and_isolates_accounts(tmp_path):
     assert query("invalid")[0] == 401
 
 
-def test_real_client_bare_bearer_mail_requires_local_single_online_player(tmp_path):
+def test_real_client_bare_bearer_mail_resolves_database_user(tmp_path):
     flow = AccountFlow(tmp_path)
     flow.register("nova", "pw")
     flow.register("orbit", "pw")
     _, first = flow.game_session("nova", "pw")
-    flow.game_session("orbit", "pw")
+    _, second = flow.game_session("orbit", "pw")
     player_id = first["playerID"]
-    flow.identity.allow_local_mail_without_token = True
-    flow.identity.active_mail_players = lambda: {player_id}
     args = {"appid": flow.identity.contract.web_config.service_app_id,
             "userid": str(player_id), "page": 1, "page_num": 20, "state": -1}
-    def query(values):
-        return flow.identity.respond("POST", "/MailService.GetMailPage",
-            json.dumps(values).encode(), authorization="Bearer")
-    response = query(args)
+
+    def query(path, values):
+        return flow.identity.respond("POST", path, json.dumps(values).encode(), authorization="Bearer")
+
+    response = query("/MailService.GetMailPage", args)
     assert response.status == 200
     data = json.loads(response.body)
     assert data["code"] == 0 and data["data"]["total"] == 1
-    assert len(data["data"]["mails"]) == 1
-    assert query(dict(args, userid="2")).status == 401
-    flow.identity.active_mail_players = lambda: {1, 2}
-    assert query(args).status == 401
-    flow.identity.allow_local_mail_without_token = False
-    flow.identity.active_mail_players = lambda: {player_id}
-    assert query(args).status == 401
+    mail_id = data["data"]["mails"][0]["id"]
+    detail = query("/MailService.GetMail", {
+        "appid": args["appid"], "userid": args["userid"], "id": mail_id})
+    assert detail.status == 200
+    assert json.loads(detail.body)["data"]["mail"]["id"] == mail_id
+    assert query("/MailService.GetMailPage", dict(args, userid=str(second["playerID"]))).status == 200
+    assert query("/MailService.GetMailPage", dict(args, userid="999999")).status == 401
+    assert query("/MailService.GetMailPage", dict(args, userid="0")).status == 400
+    with flow.accounts.db:
+        flow.accounts.db.execute("UPDATE accounts SET status='disabled' WHERE player_id=?", (player_id,))
+    assert query("/MailService.GetMailPage", args).status == 401
 
 
 def test_bare_bearer_mail_over_http_after_authenticated_tcp_login(tmp_path):
@@ -299,8 +302,6 @@ def test_bare_bearer_mail_over_http_after_authenticated_tcp_login(tmp_path):
     async def scenario():
         service = LoginService(flow.identity, flow.store)
         tcp = X2TCPServer(Settings(tcp_port=0), Dispatcher({"C2L_Login": service.login}))
-        flow.identity.allow_local_mail_without_token = True
-        flow.identity.active_mail_players = tcp.authenticated_player_ids
         http = BootstrapHTTPServer("127.0.0.1", 0, flow.identity)
         await tcp.start()
         await http.start()

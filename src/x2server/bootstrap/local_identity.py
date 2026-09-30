@@ -12,8 +12,9 @@ TokenCtx, LoginCtx and IsCreate (analysis/account_registration/current_auth_flow
 from __future__ import annotations
 
 import json
-import sqlite3
+import logging
 import secrets
+import sqlite3
 import time
 from collections.abc import Callable
 from dataclasses import dataclass
@@ -23,6 +24,7 @@ from .models import RecoveredBootstrapContract, RecoveredControlInfo
 from .service import HTTPResponse, RecoveredBootstrapService
 
 TOKEN_LIFETIME = 3600
+LOGGER = logging.getLogger("x2.bootstrap.identity")
 
 
 @dataclass
@@ -43,8 +45,6 @@ class LocalIdentityService(RecoveredBootstrapService):
         self, contract: RecoveredBootstrapContract, *, account: str | None = None,
         password: str | None = None, accounts=None, players=None,
         chat_entry: str = "10.0.2.2:29001",
-        allow_local_mail_without_token: bool = False,
-        active_mail_players: Callable[[], set[int]] | None = None,
         clock: Callable[[], float] = time.time,
     ) -> None:
         super().__init__(contract, RecoveredControlInfo(update="LEBIAN"))
@@ -55,8 +55,6 @@ class LocalIdentityService(RecoveredBootstrapService):
         self._accounts = accounts
         self._players = players
         self._chat_entry = chat_entry
-        self.allow_local_mail_without_token = allow_local_mail_without_token
-        self.active_mail_players = active_mail_players
         self._clock = clock
         self._account_token = secrets.token_urlsafe(32)
         self._game_token = secrets.token_urlsafe(32)
@@ -126,13 +124,13 @@ class LocalIdentityService(RecoveredBootstrapService):
                     return self._json({"error": "unauthorized"}, 401)
                 if requested_player != player_id:
                     return self._json({"error": "forbidden"}, 403)
-            elif authorization.strip() == "Bearer" and self.allow_local_mail_without_token:
-                # The 2.4 client sends exactly "Bearer" for PBS mail requests.
-                # Only a loopback listener with one authenticated game player may
-                # resolve this credential-free legacy request.
-                active = self.active_mail_players() if self.active_mail_players else set()
-                if active != {requested_player}:
+                LOGGER.info("mail auth mode=token userid=%s", requested_player)
+            elif authorization.strip() == "Bearer":
+                account = self._accounts.get_by_player(requested_player)
+                if (account is None or account["status"] != "active" or
+                        account["player_id"] != requested_player):
                     return self._json({"error": "unauthorized"}, 401)
+                LOGGER.info("mail auth mode=revival_bare_bearer userid=%s", requested_player)
             else:
                 return self._json({"error": "unauthorized"}, 401)
             if args.get("appid") != self.contract.web_config.service_app_id:

@@ -52,8 +52,7 @@ async def run(database: Path, seconds: float) -> None:
     accounts = AccountStore(store)
     identity = LocalIdentityService(contract, account=os.environ.get("X2_LOCAL_ACCOUNT"),
         password=os.environ.get("X2_LOCAL_PASSWORD"), accounts=accounts, players=store,
-        chat_entry=f"{endpoints.public_host}:{endpoints.chat_port}",
-        allow_local_mail_without_token=endpoints.bind_host in ("127.0.0.1", "::1"))
+        chat_entry=f"{endpoints.public_host}:{endpoints.chat_port}")
     clock = ServerClock()
     college = CollegeStateRepository(store, clock)
     economy = EconomyService(store, clock=clock.now)
@@ -76,7 +75,6 @@ async def run(database: Path, seconds: float) -> None:
                     "C2L_ServerTableConfig": login.server_config}))
     chat = X2TCPServer(Settings(tcp_host=endpoints.bind_host, tcp_port=endpoints.chat_port, read_timeout=120),
                        Dispatcher(SilentChatService().handlers()))
-    identity.active_mail_players = tcp.authenticated_player_ids
     mail_task = None
     welfare_task = None
 

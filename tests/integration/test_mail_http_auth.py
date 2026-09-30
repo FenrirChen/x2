@@ -21,12 +21,15 @@ from x2server.protocol.headers import RequestHeader, ResponseHeader
 from x2server.protocol.registry import CORE_MESSAGE_REGISTRY
 
 
-def post(base, path, values, token=None):
+def post(base, path, values, token=None, *, bare_bearer=False):
     headers = {}
     if path.startswith("/MailService."):
         body = json.dumps(values).encode()
         headers["Content-Type"] = "application/json"
-        if token is not None:
+        if bare_bearer:
+            headers["Authorization"] = "Bearer"
+            assert len(headers["Authorization"]) == 6
+        elif token is not None:
             headers["Authorization"] = "Bearer " + token
     else:
         body = urllib.parse.urlencode(values).encode()
@@ -39,7 +42,8 @@ def post(base, path, values, token=None):
         return response.code, json.load(response)
 
 
-def test_account_token_reads_only_own_mail_and_tcp_claim_survives_relogin(tmp_path):
+def test_account_token_reads_only_own_mail_and_tcp_claim_survives_relogin(tmp_path, caplog):
+    caplog.set_level("INFO", logger="x2.bootstrap.identity")
     flow = AccountFlow(tmp_path)
     assert flow.register("nova", "pw") == {"success": True}
     assert flow.register("orbit", "pw") == {"success": True}
@@ -55,8 +59,9 @@ def test_account_token_reads_only_own_mail_and_tcp_claim_survives_relogin(tmp_pa
         await tcp.start()
         try:
             base = f"http://127.0.0.1:{http.bound_port}"
-            async def http_post(path, values, token=None):
-                return await asyncio.to_thread(post, base, path, values, token)
+            async def http_post(path, values, token=None, *, bare_bearer=False):
+                return await asyncio.to_thread(post, base, path, values, token,
+                                               bare_bearer=bare_bearer)
 
             status, account = await http_post("/loginwithpw", {"account": "nova", "password": "pw"})
             assert status == 200 and account["code"] == "ok"
@@ -91,12 +96,33 @@ def test_account_token_reads_only_own_mail_and_tcp_claim_survives_relogin(tmp_pa
             assert any(row["body"] == "" and row["state"] == 0 for row in page["data"]["mails"])
             welcome = next(row for row in page["data"]["mails"] if row["body"] == "")
             assert (await http_post("/MailService.GetMailPage", args, game["token"]))[0] == 200
+            bare_status, bare_page = await http_post(
+                "/MailService.GetMailPage", args, bare_bearer=True)
+            assert bare_status == 200 and bare_page["data"]["total"] == 2
+            bare_get_status, bare_get = await http_post(
+                "/MailService.GetMail", {"appid": args["appid"], "userid": args["userid"],
+                                          "id": welcome["id"]}, bare_bearer=True)
+            assert bare_get_status == 200 and bare_get["data"]["mail"]["id"] == welcome["id"]
+            token_get_status, token_get = await http_post(
+                "/MailService.GetMail", {"appid": args["appid"], "userid": args["userid"],
+                                          "id": welcome["id"]}, game["token"])
+            assert token_get_status == 200 and token_get["data"]["mail"]["id"] == welcome["id"]
+            assert (await http_post("/MailService.GetMail", {"appid": args["appid"],
+                "userid": args["userid"], "id": welcome["id"]}, "abc"))[0] == 401
             assert (await http_post("/MailService.GetMailPage", args))[0] == 401
             assert (await http_post("/MailService.GetMailPage", args, "abc"))[0] == 401
             assert (await http_post("/MailService.GetMailPage", args,
                                     other_account["token"]))[0] == 403
             assert (await http_post("/MailService.GetMailPage", dict(args, userid=str(other_id)),
                                     account["token"]))[0] == 403
+            assert (await http_post("/MailService.GetMailPage", dict(args, userid="999999"),
+                                    bare_bearer=True))[0] == 401
+            assert (await http_post("/MailService.GetMailPage", dict(args, userid="0"),
+                                    bare_bearer=True))[0] == 400
+            assert "mail auth mode=token" in caplog.text
+            assert f"mail auth mode=revival_bare_bearer userid={player_id}" in caplog.text
+            assert account["token"] not in caplog.text
+            assert game["token"] not in caplog.text
             assert (await http_post("/MailService.GetMail", {"appid": args["appid"],
                 "userid": args["userid"], "id": welcome["id"]}, account["token"]))[1]["data"]["mail"]["id"] == welcome["id"]
 
