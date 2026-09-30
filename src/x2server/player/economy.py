@@ -410,8 +410,14 @@ class EconomyService:
         return rewards
 
     def inventory_values(self, player_id):
+        # quantity > 0 only: a stack spent to zero is gone as far as the client is
+        # concerned.  Without the filter a leftover 0-row ships as num=0 and the bag
+        # keeps rendering the ghost slot ("用了还在背包里").  _purge_empty_stacks
+        # deletes those rows and announces them through L2C_ItemRemove; this filter
+        # is the belt to that braces and also covers C2L_ItemAll (打开背包), which
+        # does not go through pushes().
         return {"items": [ITEM.encode({"id": r[0], "num": r[1], "locked": False, "dayGet": 0})
-            for r in self.store.db.execute("SELECT item_id,quantity FROM inventory WHERE player_id=? ORDER BY item_id", (player_id,))]}
+            for r in self.store.db.execute("SELECT item_id,quantity FROM inventory WHERE player_id=? AND quantity>0 ORDER BY item_id", (player_id,))]}
 
     # -- 挑战任务 (challenge, GameTaskType 3) ------------------------------
     #
@@ -1129,14 +1135,39 @@ class EconomyService:
             self.save_snapshot(player_id, snapshot)
             self.store.db.execute("UPDATE battle_costs SET refunded=1 WHERE uuid=?", (run_uuid,))
 
+    def _purge_empty_stacks(self, player_id):
+        """Delete spent-to-zero inventory rows; return their ids for L2C_ItemRemove.
+
+        Every spend path (因果卡, 通用道具使用, 商店, 送礼, ...) decrements with
+        ``quantity = quantity - n``, so the last use leaves a row at 0 rather than
+        removing it.  That row used to ride L2C_ItemUpdate as ``num=0`` and the
+        client kept the slot on screen, which is exactly the reported "用了还在背包
+        里、再点就提示操作失败".  Doing the cleanup here, in the shared push builder,
+        covers every spend path at once.  It is safe for the row to disappear:
+        _grant rejects count <= 0, so nothing legitimate is ever stored at 0, and
+        every caller of pushes() does so outside its own transaction.
+        """
+        rows = self.store.db.execute(
+            "SELECT item_id FROM inventory WHERE player_id=? AND quantity<=0", (player_id,)).fetchall()
+        if not rows:
+            return ()
+        self.store.db.execute("DELETE FROM inventory WHERE player_id=? AND quantity<=0", (player_id,))
+        return tuple(int(row[0]) for row in rows)
+
     def pushes(self, player_id):
         from .login import LoginService
         self.refresh_stamina(player_id)
         self.ensure_periods(player_id)
-        return (LoginService.snapshot_push(self.store.get(player_id), self.store),
-            OutboundMessage("L2C_ItemUpdate", {"code": 10, **self.inventory_values(player_id)}),
-            *(OutboundMessage("L2C_TaskUpdate", {"type": k, "taskList": self.task_values(player_id, k)["taskList"]}) for k in (1, 2)),
-            OutboundMessage("L2C_TaskUpdate", {"type": 3, "taskList": self.challenge_values(player_id)["taskList"]}))
+        removed = self._purge_empty_stacks(player_id)
+        pushes = [LoginService.snapshot_push(self.store.get(player_id), self.store),
+            OutboundMessage("L2C_ItemUpdate", {"code": 10, **self.inventory_values(player_id)})]
+        if removed:
+            pushes.append(OutboundMessage("L2C_ItemRemove", {"ids": list(removed)}))
+        pushes.extend(OutboundMessage("L2C_TaskUpdate",
+            {"type": k, "taskList": self.task_values(player_id, k)["taskList"]}) for k in (1, 2))
+        pushes.append(OutboundMessage("L2C_TaskUpdate",
+            {"type": 3, "taskList": self.challenge_values(player_id)["taskList"]}))
+        return tuple(pushes)
 
     def handlers(self):
         return {"C2L_FetchMobilityPower": self.fetch_mobility_power,

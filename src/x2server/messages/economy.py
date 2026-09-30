@@ -40,6 +40,17 @@ ECONOMY_SCHEMAS = {s.name: s for s in (
     S("C2L_ItemAll", ()),
     S("L2C_ItemAll", (F(1, "items", K.MESSAGE, repeated=True),)),
     S("L2C_ItemUpdate", (F(1, "code", K.ENUM), F(2, "items", K.MESSAGE, repeated=True))),
+    # 背包格子移除 (L2C_ItemRemove, 554).  "ids" is the field name from the client's
+    # own metadata (analysis/protocol/protocol_catalog.json entry 554) and this is
+    # the message the bag page actually listens to for a slot disappearing: its
+    # handler BagModule_OnReceiveItemRemoveMsg (0x019BD708) walks this list, removes
+    # each id from the bag's own SortedList and then refreshes the grid.
+    # L2C_ItemUpdate cannot express a removal - BagModule_OnReceiveItemUpdateMsg
+    # (0x019BC6B4) dispatches to BagModule_UpdateItem only when the key already
+    # exists and to BagModule_AddItem otherwise, with no delete branch - so a stack
+    # spent down to zero has to be announced here or the slot stays on screen as a
+    # 0-count ghost.
+    S("L2C_ItemRemove", (F(1, "ids", K.INT32, repeated=True),)),
     ints("C2L_ShopGoods", "shopId"), ints("C2L_RefreshShop", "shopId"),
     ints("C2L_BuyGoods", "shopId goodsId buyNum"), ints("C2L_QueryGoodsInfo", "goodsId"),
     S("C2L_QueryReCommendShop", ()),

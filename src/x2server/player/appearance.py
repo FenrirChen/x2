@@ -11,6 +11,16 @@ from x2server.protocol.registry import CORE_MESSAGE_REGISTRY
 
 DEFAULT_HEAD_ICON = 1000001
 HEAD_ICON_Q_FAVOR_LEVEL = 10
+# SeasonIconData.rankId is not a display value - the client only compares it with
+# zero: AccountInfoModule_OnReceiveSeasonIconMsg marks an entry "新" when rankId ==
+# 0, and RefreshPictureFrameBadge / RefreshSceneIconBadge then light the whole 头像
+# badge (BadgeViewMgr, accumulated through AccountInfoModule and read by
+# MainPage_RefresRedDot), which is what makes the 头像 and 任务 entries show a red
+# dot at the same time.  This server has no rank table, so every icon used to be
+# encoded without the field at all, i.e. as 0, leaving that red dot lit with
+# nothing for the player to clear.  A non-zero rank reads as "已看过" and it is the
+# only thing the client inspects here.
+SEASON_ICON_RANK = 1
 _HEAD_ICON_CATALOG = None
 
 
@@ -107,8 +117,10 @@ class AppearanceService:
         return {"code": 10,
             "putOnHeadIcon": snapshot.get("head_icon", self.starter_head),
             "putOnSceneIcon": snapshot.get("scene_icon", 0),
-            "headIconList": [SEASON_ICON_DATA.encode({"id": i}) for i in sorted(heads)],
-            "sceneIconList": [SEASON_ICON_DATA.encode({"id": i}) for i in sorted(scenes)]}
+            "headIconList": [SEASON_ICON_DATA.encode({"id": i, "rankId": SEASON_ICON_RANK})
+                             for i in sorted(heads)],
+            "sceneIconList": [SEASON_ICON_DATA.encode({"id": i, "rankId": SEASON_ICON_RANK})
+                              for i in sorted(scenes)]}
 
     def _voice_values(self, player_id):
         heroes = self._owned_heroes(player_id)
