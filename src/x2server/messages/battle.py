@@ -14,7 +14,7 @@ FIGHT_DATA = S("FightData", (F(2, "fightHeros", K.MESSAGE, repeated=True), F(3, 
     F(4, "dropData", K.MESSAGE), F(6, "expertMode", K.BOOL), F(7, "CRIDmg", K.INT32)))
 DROP_DATA = S("FightDropData", (F(1, "dropValues", K.INT32, repeated=True), F(2, "missionId", K.INT32)))
 FIGHT_PROFILE = S("FightDataProfile", (F(1, "missionId", K.INT32), F(2, "layer", K.INT32),
-    F(7, "chapterId", K.INT32), F(8, "expertMode", K.BOOL), F(10, "randomSeed", K.INT32), F(13, "sceneId", K.INT32),
+    F(7, "chapterId", K.INT32), F(8, "expertMode", K.BOOL), F(9, "relicList", K.INT32, repeated=True), F(10, "randomSeed", K.INT32), F(13, "sceneId", K.INT32),
     F(20, "isProfileValid", K.BOOL)))
 OUTSIDE_ITEM = S("ItemDataP", (F(1, "id", K.INT32), F(2, "num", K.INT32),
     F(3, "quality", K.INT32), F(4, "eNum", K.INT32)))
@@ -65,9 +65,9 @@ BATTLE_SCHEMAS = {
     "L2C_DelFightProfile": S("L2C_DelFightProfile", (F(1, "code", K.ENUM), F(2, "sectionID", K.INT32))),
     "C2L_FightData": S("C2L_FightData", (F(1, "heros", K.MESSAGE, repeated=True), F(2, "missionId", K.INT32),
         F(3, "chapter", K.INT32), F(4, "expertMode", K.BOOL), F(5, "checkGm", K.BOOL),
-        F(6, "isFromProfile", K.BOOL), F(11, "randomSeed", K.INT32), F(13, "sceneId", K.INT32))),
+        F(6, "isFromProfile", K.BOOL), F(10, "selectedRelicList", K.INT32, repeated=True), F(11, "randomSeed", K.INT32), F(13, "sceneId", K.INT32))),
     "L2C_FightData": S("L2C_FightData", (F(1, "result", K.ENUM), F(2, "uuid", K.STRING),
         F(3, "sign", K.BYTES), F(4, "data", K.BYTES), F(5, "fightDataProfile", K.MESSAGE),
-        F(16, "monsterInitLevel", K.INT32),
+        F(9, "selectedRelicList", K.INT32, repeated=True), F(16, "monsterInitLevel", K.INT32),
         F(19, "playerLevel", K.INT32))),
 }

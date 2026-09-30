@@ -1,5 +1,6 @@
 """Persisted test equipment instances sent through the existing EquipAll protocol."""
 import json
+import logging
 import random
 import secrets
 from pathlib import Path
@@ -220,18 +221,23 @@ class EquipmentService:
             hero["equips"].append({"position": part, "equip_id": req["equipID"]})
         else:
             slot = req.get("posIdx")
-            if type(slot) is not int or not 0 <= slot < 6:
+            # BagModule.UnloadAllEquip sends -1; 0..5 address one slot.
+            if type(slot) is not int or not -1 <= slot < 6:
                 return OutboundMessage(response, values)
             changed = False
             for field in ("equips", "season_equips"):
                 previous = hero.get(field, [])
-                remaining = [e for e in previous if e["position"] != slot]
+                remaining = [] if slot == -1 else [e for e in previous if e["position"] != slot]
                 if len(remaining) != len(previous):
                     hero[field] = remaining
                     changed = True
-            if not changed:
+            if not changed and slot != -1:
                 return OutboundMessage(response, values)
-        self.store.save_snapshot(player_id, snapshot, player["revision"])
+        if name == "C2L_DoEquip" or changed:
+            self.store.save_snapshot(player_id, snapshot, player["revision"])
+        logging.getLogger("x2.equipment").info(
+            "equipment operation=%s player=%s hero=%s posIdx=%s optType=%s code=10",
+            name, player_id, req.get("heroID"), req.get("posIdx"), req.get("optType"))
         if name == "C2L_DoEquip" and self.economy is not None:
             # 穿戴装备 (E_EquipEquip). Keyed by the equip id, so wearing the same
             # piece a second time cannot pay the condition twice; 卸下 never
@@ -244,4 +250,5 @@ class EquipmentService:
                      "heros": [encode_hero_data(h) for h in snapshot["heroes"]]}),
                   OutboundMessage("L2C_EquipUpdate", {"code": 10,
                      "equip": self.values(player_id)["equip"]}))
-        return OutboundMessage(response, values, pushes=pushes)
+        # The success callback immediately reads hero wearing state.
+        return OutboundMessage(response, values, before_response=pushes)

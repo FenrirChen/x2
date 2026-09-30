@@ -356,10 +356,10 @@ class BattleService:
         request = BATTLE_SCHEMAS["C2L_FightData"].decode(packet.body)
         section = request.get("missionId", 0)
         logging.getLogger("x2.battle").info(
-            "battle entry section=%s chapter=%s scene=%s expert=%s gm=%s profile=%s",
+            "battle entry section=%s chapter=%s scene=%s expert=%s gm=%s profile=%s selectedRelicList=%s",
             section, request.get("chapter"), request.get("sceneId"),
             request.get("expertMode", False), request.get("checkGm", False),
-            request.get("isFromProfile", False))
+            request.get("isFromProfile", False), request.get("selectedRelicList", []))
         reject = OutboundMessage("L2C_FightData", {"result": 13})
         player = self.store.get(context.session.player_id)
         snapshot = player["snapshot"]
@@ -401,6 +401,25 @@ class BattleService:
                                       (player["id"], key)).fetchone()
         if cached:
             return OutboundMessage("L2C_FightData", BATTLE_SCHEMAS["L2C_FightData"].decode(cached[0]))
+        selected_relics = request.get("selectedRelicList", [])
+        if selected_relics:
+            from .login import relic_item_ids
+            from importlib.resources import files
+            # Client MiracleChooseModule also adds StarDefultRelic. These are
+            # canonical built-ins, not collected bag items; never grant them.
+            defaults = set(json.loads(files("x2server").joinpath(
+                "data/battle_relic_defaults.json").read_text(encoding="utf-8"))["StarDefultRelic"])
+            collected = set()
+            if self.store.db.execute("SELECT 1 FROM sqlite_master WHERE name='inventory'").fetchone():
+                collected = {r[0] for r in self.store.db.execute(
+                    "SELECT item_id FROM inventory WHERE player_id=? AND quantity>0", (player["id"],))
+                    if r[0] in relic_item_ids()}
+            if (len(set(selected_relics)) != len(selected_relics)
+                    or not set(selected_relics) <= collected | defaults):
+                logging.getLogger("x2.battle").info(
+                    "battle entry denied section=%s reason=invalid/unowned selectedRelicList=%s",
+                    section, selected_relics)
+                return reject
         fight_heroes = []
         for hero in heroes:
             stat_hero = {**hero, "id": hero.get("battle_base_id", hero["id"])}
@@ -438,11 +457,14 @@ class BattleService:
                                                                 "missionId": section}),
                                   "CRIDmg": 15000})
         profile = FIGHT_PROFILE.encode({"missionId": section, "chapterId": chapter, "layer": 0,
+            "relicList": selected_relics,
             "expertMode": request.get("expertMode", False),
             "sceneId": scene, "randomSeed": secrets.randbelow(2**30), "isProfileValid": False})
         values = {"result": 10, "uuid": str(uuid.uuid4()), "sign": secrets.token_bytes(32),
                   "data": data, "fightDataProfile": profile, "playerLevel": snapshot["level"],
                   "monsterInitLevel": self.monster_levels.get(scene, 0)}
+        if selected_relics:
+            values["selectedRelicList"] = selected_relics
         logging.getLogger("x2.battle").info(
             "battle difficulty section=%s scene=%s tier=%s expert=%s monsterInitLevel=%s",
             section, scene, self.catalog.sections[section].get("DifficultyLevel", 0),

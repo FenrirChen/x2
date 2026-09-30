@@ -45,3 +45,4 @@ dist/
 *.egg-info/
 analysis/dp_client/raw/
 analysis/bag_client/raw/
+analysis/relic_client/raw/
