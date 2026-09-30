@@ -224,6 +224,11 @@ class EconomyService:
                 start, end = task_period(kind, int(self.clock()))
                 previous = self.store.db.execute("SELECT start,end FROM task_periods WHERE player_id=? AND kind=?", (player_id, kind)).fetchone()
                 if previous and previous[0] >= start:
+                    for task_id, task in self.tasks.items():
+                        if task["RefreshCycle"]["value"] == kind and task["AcceptLevel"] <= snapshot["level"]:
+                            self.store.db.execute("INSERT OR IGNORE INTO economy_tasks(player_id,task_id) VALUES (?,?)", (player_id, task_id))
+                            self.store.db.execute("UPDATE economy_tasks SET progress=MAX(progress,?) WHERE player_id=? AND task_id=? AND claimed=1",
+                                                  (self.catalog["task_conditions"][str(task_id)]["CompleteNum"], player_id, task_id))
                     continue  # Clock rollback must not mint a second period.
                 ids = [i for i, t in self.tasks.items() if t["RefreshCycle"]["value"] == kind]
                 if previous:
