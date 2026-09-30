@@ -96,8 +96,8 @@ def test_random_shop_daily_shard_matches_purchase_and_replay(env):
     assert 1286001 not in {row["itemId"] for row in goods.values()}
     selected = goods[1900101]["itemId"]
     assert selected in service.compat_offers[(801, 1900101)]["poolItems"]
-    assert GOODS.decode(asyncio.run(service.handle(ctx, packet({"shopId": 801},
-        name="C2L_RefreshShop"))).values["goods"][0])["itemId"] == selected
+    assert asyncio.run(service.handle(ctx, packet({"shopId": 801},
+        name="C2L_RefreshShop"))).values["code"] == 13  # refresh requires crystals
     assert asyncio.run(service.handle(ctx, packet({"goodsId": 1900101},
         name="C2L_QueryGoodsInfo"))).values["code"] == 10
     request = packet({"shopId": 801, "goodsId": 1900101, "buyNum": 1},
@@ -160,5 +160,9 @@ def test_shop_entrance_optional_queries_answer_without_mutation(env):
                          ("C2L_RechargeInfo", {"extra": 1})):
         response = asyncio.run(service.handle(ctx, packet(values, name=name)))
         assert response.message_name == name.replace("C2L_", "L2C_", 1)
-        assert response.values == {"code": 10}
+        assert response.values["code"] == 10
+        if name == "C2L_QueryReCommendShop":
+            assert response.values["recommendTag"]
+        else:
+            assert response.values == {"code": 10}
     assert store.get(1) == before

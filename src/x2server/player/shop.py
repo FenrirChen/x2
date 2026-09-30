@@ -94,6 +94,9 @@ class ShopService:
                     DO UPDATE SET quantity=quantity+excluded.quantity""",
                     (player_id, 801, goods_id, self._period(3), quantity))
             store.db.execute("DELETE FROM shop_compat_counts WHERE shop_id=801 AND period='lifetime'")
+            store.db.execute("""CREATE TABLE IF NOT EXISTS shop_refreshes (
+                player_id INTEGER, shop_id INTEGER, period TEXT, count INTEGER,
+                PRIMARY KEY(player_id,shop_id,period))""")
 
     def handlers(self):
         return {name: self.handle for name in ("C2L_ShopGoods", "C2L_QueryGoodsInfo",
@@ -134,20 +137,43 @@ class ShopService:
         return self._period(3 if shop_id == 801 else row.get("limited"))
 
     def _compat_goods(self, player_id, shop_id, row):
+        row = self._stock_row(player_id, shop_id, row)
         price = row["price"]
-        return {"goodsId": row["goodsId"], "itemId": self._compat_item_id(shop_id, row),
+        return {"goodsId": row["goodsId"], "itemId": self._compat_item_id(shop_id, row, player_id),
             "num": row["num"], "price": price, "originalPrice": price,
             "currencyType": row["currency"], "canBuyTimes": 1 if shop_id == 801 or row.get("limited") else self.COMPAT_STOCK,
             "hasBuyTimes": self._compat_count(player_id, shop_id, row),
             "goodsTag": row.get("goodsTag") or 0, "limited": 3 if shop_id == 801 else row.get("limited") or 0}
 
-    def _compat_item_id(self, shop_id, row):
+    def _refresh_count(self, player, shop):
+        row = self.store.db.execute("SELECT count FROM shop_refreshes WHERE player_id=? AND shop_id=? AND period=?", (player, shop, self._period(3))).fetchone()
+        return row[0] if row else 0
+
+    def _refresh_price(self, player, shop):
+        count = self._refresh_count(player, shop)
+        config = self.economy.shops[shop]
+        intervals = config["RefreshInterval"]
+        tier = max((i for i, start in enumerate(intervals) if count + 1 >= start), default=0)
+        return config["RefreshPrice"][tier]
+
+    def _stock_row(self, player, shop, row):
+        # Slot identity and daily purchase count stay fixed; the full content,
+        # quantity and pricing tuple rotates together, excluding exchange slots.
+        if shop != 801 or row.get("poolItems") or row["itemId"] in self.economy.CURRENCIES:
+            return row
+        rows = [r for (s, _), r in sorted(self.compat_offers.items()) if s == shop
+                and not r.get("poolItems") and r["itemId"] not in self.economy.CURRENCIES]
+        index = next(i for i, r in enumerate(rows) if r["goodsId"] == row["goodsId"])
+        donor = rows[(index + self._refresh_count(player, shop)) % len(rows)]
+        return {**donor, "goodsId": row["goodsId"]}
+
+    def _compat_item_id(self, shop_id, row, player_id=0):
         """Keep a random slot's displayed and delivered shard identical today."""
         pool = row.get("poolItems")
         if not pool:
             return row["itemId"]
         seed = f"{self._period(3)}:{shop_id}:{row['goodsId']}".encode()
-        index = int.from_bytes(hashlib.sha256(seed).digest()[:8], "big") % len(pool)
+        index = (int.from_bytes(hashlib.sha256(seed).digest()[:8], "big") + self._refresh_count(player_id, shop_id)) % len(pool)
         return pool[index]
 
     async def handle(self, context, packet):
@@ -176,7 +202,8 @@ class ShopService:
                 if shop_id == self.SHOP_ID else [GOODS.encode(self._compat_goods(player_id, shop_id, row))
                 for (id_, _), row in sorted(self.compat_offers.items()) if id_ == shop_id])
             return OutboundMessage(response_name, {"code": 10, "shopId": shop_id,
-                "NextRefreshTime": 0, "RefreshTimes": 0, "RefreshPrice": 0, "goods": goods})
+                "NextRefreshTime": 0, "RefreshTimes": self._refresh_count(player_id, shop_id),
+                "RefreshPrice": self._refresh_price(player_id, shop_id) if shop_id == 801 else 0, "goods": goods})
         if name == "C2L_QueryGoodsInfo":
             goods_id = request.get("goodsId", 0)
             if goods_id in self.offers:
@@ -195,12 +222,26 @@ class ShopService:
                 "currencyType": offer["currencyType"]})
         if name == "C2L_RefreshShop":
             if request.get("shopId") == 801:
-                # The original reroll rules are unavailable. Re-send today's
-                # same stock without charging or claiming a new random draw.
-                goods = [GOODS.encode(self._compat_goods(player_id, 801, row))
-                         for (shop_id, _), row in sorted(self.compat_offers.items()) if shop_id == 801]
-                return OutboundMessage(response_name, {"code": 10, "shopId": 801,
-                    "NextRefreshTime": 0, "RefreshTimes": 0, "RefreshPrice": 0, "goods": goods})
+                key = hashlib.sha256(f"{player_id}:{context.session.session_id}:{packet.header.request_id}:refresh".encode() + packet.body).hexdigest()
+                schema = ECONOMY_SCHEMAS[response_name]
+                cached = self.store.db.execute("SELECT response FROM shop_receipts WHERE request_key=? AND player_id=?", (key, player_id)).fetchone()
+                if cached:
+                    return OutboundMessage(response_name, schema.decode(cached[0]), pushes=self.economy.pushes(player_id))
+                with self.economy.transaction():
+                    snapshot = self.store.get(player_id)["snapshot"]
+                    cost = self._refresh_price(player_id, 801)
+                    if snapshot.get("crystal", 0) < cost:
+                        return OutboundMessage(response_name, {"code": 13, "shopId": 801})
+                    snapshot["crystal"] -= cost
+                    self.economy.save_snapshot(player_id, snapshot)
+                    self.store.db.execute("INSERT INTO shop_refreshes VALUES (?,?,?,1) ON CONFLICT(player_id,shop_id,period) DO UPDATE SET count=count+1", (player_id, 801, self._period(3)))
+                    goods = [GOODS.encode(self._compat_goods(player_id, 801, row))
+                             for (shop_id, _), row in sorted(self.compat_offers.items()) if shop_id == 801]
+                    values = {"code": 10, "shopId": 801, "NextRefreshTime": 0,
+                        "RefreshTimes": self._refresh_count(player_id, 801),
+                        "RefreshPrice": self._refresh_price(player_id, 801), "goods": goods}
+                    self.store.db.execute("INSERT INTO shop_receipts VALUES (?,?,?)", (key, player_id, schema.encode(values)))
+                return OutboundMessage(response_name, values, pushes=self.economy.pushes(player_id))
             # Shop 809 has no CanManualRefresh rule in ShopConfig.
             return OutboundMessage(response_name, {"code": 13, "shopId": request.get("shopId", 0)})
         return self._buy(context, packet, request)
@@ -258,6 +299,8 @@ class ShopService:
         player_id = context.session.player_id
         shop_id, goods_id, buy_num = request.get("shopId", 0), request.get("goodsId", 0), request.get("buyNum", 0)
         row = self.compat_offers.get((shop_id, goods_id))
+        if row:
+            row = self._stock_row(player_id, shop_id, row)
         if not row or type(buy_num) is not int or not 1 <= buy_num <= 99:
             return reject
         cap = 1 if shop_id == 801 or row.get("limited") else self.COMPAT_STOCK
@@ -294,7 +337,7 @@ class ShopService:
                         WHERE player_id=? AND item_id=? AND quantity>=?""", (total, player_id, currency, total))
                     if not paid.rowcount:
                         return reject
-                item_id = self._compat_item_id(shop_id, row)
+                item_id = self._compat_item_id(shop_id, row, player_id)
                 granted = self.economy._grant(player_id, f"compat-shop:{key}", {item_id: item_count})
                 period = self._compat_period(shop_id, row)
                 self.store.db.execute("""INSERT INTO shop_compat_counts VALUES (?,?,?,?,?)
