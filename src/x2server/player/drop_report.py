@@ -3,6 +3,7 @@ import hashlib
 import json
 import time
 from x2server.messages.battle import DROP_REPORT_ITEM, DROP_REPORT_NPC, DROP_REPORT_SPAN
+from x2server.protocol.errors import ProtobufDecodeError
 
 
 def json_values(value):
@@ -47,7 +48,10 @@ class FightDropRecorder:
                 entries = [entries]
             for index, raw in enumerate(entries):
                 schema = DROP_REPORT_NPC if field == "npcData" else DROP_REPORT_SPAN
-                decoded = schema.decode(raw) if field != "antiCheat" else {"hex": raw.hex()}
+                try:
+                    decoded = schema.decode(raw) if field != "antiCheat" else {"hex": raw.hex()}
+                except (ProtobufDecodeError, ValueError, TypeError):
+                    decoded = {"hex": raw.hex(), "decodeError": True}
                 self.db.execute("INSERT INTO fight_drop_claims VALUES (?,?,?,?)",
                     (report, field, index, json.dumps(decoded, sort_keys=True)))
         return True

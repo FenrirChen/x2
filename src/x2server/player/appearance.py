@@ -30,28 +30,6 @@ def avatar_frames():
             if r.get("ItemType", {}).get("value") == 20}
 
 
-def _legacy_granted_head_icons(snapshot, favors=None):
-    catalog = head_icon_catalog()
-    favors = favors or {}
-    q_icons, standard_icons = [], []
-    for hero in sorted(h["id"] for h in snapshot.get("heroes", []) if h.get("state") == 2):
-        entry = catalog.get("by_hero", {}).get(str(hero))
-        if not entry:
-            continue
-        favor = favors.get(hero, {})
-        level = int(favor.get("level", favor[0] if isinstance(favor, (tuple, list)) else 1))
-        if entry.get("q") and level >= HEAD_ICON_Q_FAVOR_LEVEL:
-            q_icons.append(int(entry["q"]))
-        if entry.get("standard"):
-            standard_icons.append(int(entry["standard"]))
-    ordered = []
-    for icon in [snapshot.get("head_icon", DEFAULT_HEAD_ICON), catalog.get("default", DEFAULT_HEAD_ICON), *q_icons, *standard_icons]:
-        icon = int(icon or 0)
-        if icon > 0 and icon not in ordered:
-            ordered.append(icon)
-    return ordered
-
-
 def head_icon_info(snapshot, favors=None):
     icons = granted_head_icons(snapshot, favors)
     return ICON_INFO.encode({"IconType": 1, "IconID": int(snapshot.get("head_icon", DEFAULT_HEAD_ICON) or DEFAULT_HEAD_ICON),

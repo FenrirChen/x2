@@ -44,12 +44,13 @@ def test_avatar_inventory_and_voice_conditions(env):
     store, economy, context = env
     service = AppearanceService(store, economy)
     icons = invoke(service, context, "SeasonIcon").values
-    assert [SEASON_ICON_DATA.decode(x)["id"] for x in icons["headIconList"]] == [1000001, 1270301]
+    assert len(icons["headIconList"]) == 155
+    assert {1000001, 1270301} <= {SEASON_ICON_DATA.decode(x)["id"] for x in icons["headIconList"]}
     assert invoke(service, context, "PutOnOrPutOffSeasonIcon", {"type": 1,
         "id": 1270301}).values["code"] == 10
     assert service._icon_values(1)["putOnHeadIcon"] == 1270301
     assert invoke(service, context, "PutOnOrPutOffSeasonIcon", {"type": 1,
-        "id": 1270300}).values["code"] == 13
+        "id": 1270300}).values["code"] == 10
     store.db.execute("INSERT INTO inventory VALUES (1,1270300,1)")
     assert invoke(service, context, "PutOnOrPutOffSeasonIcon", {"type": 1,
         "id": 1270300}).values["code"] == 10

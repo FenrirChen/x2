@@ -4,6 +4,7 @@ from datetime import datetime, timedelta, timezone
 import json
 import logging
 import time
+from collections import Counter
 
 from x2server.messages.favor import FAVOR_SCHEMAS, FAVOR_CHANGE_INFO
 from x2server.network.dispatcher import OutboundMessage
@@ -43,6 +44,12 @@ class FavorService:
                           for r in data["sendgiftcontrol"]}
         self.files = {r["FilesID"]: r for r in data["favorabilityfiles"]}
         self.dairy = data["favorabilitydairy"]
+        step_fields = ("Level", "FavorabilityLevel", "StarLevel", "HeroLevel", "CurrencyNum")
+        candidates = Counter(tuple(tuple(r[key]) for key in step_fields)
+            for r in data["favorabilityfetters"] if r.get("CurrencyID") == 901
+            and all(len(r.get(key, [])) == 10 and all(type(v) is int and v > 0 for v in r[key]) for key in step_fields))
+        self.fetter_steps = dict(zip(step_fields, candidates.most_common(1)[0][0])) if candidates else {}
+        self.fetter_steps["CurrencyID"] = 901
         with store.db:
             store.db.execute("""CREATE TABLE IF NOT EXISTS favor_touch_log (
                 player_id INTEGER NOT NULL, hero_id INTEGER NOT NULL, day TEXT NOT NULL,
@@ -137,10 +144,11 @@ class FavorService:
             hero = next((h for h in snapshot.get("heroes", [])
                          if h["id"] == hero_id and h.get("state") == 2), None)
             level = hero.get("favor_fetters", {}).get(str(position), 0) if hero else -1
-            fields = ("Level", "FavorabilityLevel", "StarLevel", "HeroLevel", "CurrencyNum")
-            if not row or not hero or not 0 <= level < 10 or any(
-                    len(row.get(key, [])) != 10 for key in fields):
+            if not row or not hero or not 0 <= level < 10 or "Level" not in self.fetter_steps:
                 return OutboundMessage("L2C_UpgradeFetters", values)
+            # The shared ten-step table is the canonical consensus. Individual
+            # damaged exports do not make an otherwise valid position unusable.
+            row = self.fetter_steps
             favor = favor_state(hero, self.heroes[hero_id]["InitialLevel"])["level"]
             if (favor < row["FavorabilityLevel"][level]
                     or hero["star"] < row["StarLevel"][level]

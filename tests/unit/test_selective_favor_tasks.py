@@ -29,3 +29,18 @@ def test_period_repair_preserves_claims_and_progress(env):
     economy.ensure_periods(1)
     assert store.db.execute("SELECT COUNT(*) FROM economy_tasks WHERE player_id=1 AND task_id=630006").fetchone()[0] == 1
     assert tuple(store.db.execute("SELECT progress,claimed FROM economy_tasks WHERE player_id=1 AND task_id=630019").fetchone()) == (1000, 1)
+
+
+def test_task_repair_restores_claim_from_same_period_receipt(env):
+    store, economy, _ = env
+    economy.record_event(1, "login-test", 5)
+    assert economy.claim(1, 630019, 1)["code"] == 10
+    before = store.get(1)
+    with store.db:
+        store.db.execute("DELETE FROM economy_tasks WHERE player_id=1 AND task_id=630019")
+        store.db.execute("UPDATE economy_tasks SET progress=-10 WHERE player_id=1 AND task_id=630006")
+    economy.ensure_periods(1)
+    assert store.db.execute("SELECT claimed FROM economy_tasks WHERE player_id=1 AND task_id=630019").fetchone()[0] == 1
+    assert store.db.execute("SELECT progress FROM economy_tasks WHERE player_id=1 AND task_id=630006").fetchone()[0] == 0
+    economy.claim(1, 630019, 1)
+    assert store.get(1) == before
