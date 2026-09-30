@@ -1,10 +1,11 @@
 """Persisted test equipment instances sent through the existing EquipAll protocol."""
 import json
+import random
 import secrets
 from pathlib import Path
 
 from x2server.messages.equipment import EQUIP_PARAM, HERO_EQUIP, EQUIPMENT_SCHEMAS
-from x2server.player.equipment_factory import load_equipment_tables
+from x2server.player.equipment_factory import load_equipment_tables, roll_value_sec
 from x2server.network.dispatcher import OutboundMessage
 from x2server.protocol.errors import ProtocolError
 from x2server.protocol.registry import CORE_MESSAGE_REGISTRY
@@ -17,8 +18,10 @@ class EquipmentService:
         self.economy = economy
         # Canonical part/suit map: every EquibBase row (all part-level 1240xxx),
         # not just the seeded test presets.
+        tables = load_equipment_tables()
         self.parts = {int(type_id): row["part"]
-                      for type_id, row in load_equipment_tables()["equib_base"].items()}
+                      for type_id, row in tables["equib_base"].items()}
+        self.main_growth = tables["equib_attrib"]
         increments = Path(__file__).resolve().parents[3] / "analysis/progression/equipment_strengthen_catalog.json"
         self.increments = {(r["quality"], r["attribute"]): r["value_range"]
                            for r in json.loads(increments.read_text(encoding="utf-8"))["rows"]}
@@ -36,6 +39,10 @@ class EquipmentService:
                 player_id INTEGER NOT NULL, equip_id INTEGER NOT NULL,
                 level INTEGER NOT NULL, attribute_slot INTEGER NOT NULL, bonus INTEGER NOT NULL,
                 PRIMARY KEY(player_id,equip_id,level))""")
+            store.db.execute("""CREATE TABLE IF NOT EXISTS equipment_main_growth (
+                equip_id INTEGER PRIMARY KEY, player_id INTEGER NOT NULL,
+                star INTEGER NOT NULL, main_type INTEGER NOT NULL,
+                growth_value INTEGER NOT NULL)""")
 
     def values(self, player_id):
         instances = []
@@ -105,6 +112,8 @@ class EquipmentService:
                 self.store.db.execute(f"DELETE FROM equipment_instances WHERE player_id=? AND id IN ({placeholders})",
                                       (player_id, *ids))
                 rewards = self.economy._grant(player_id, "equip_reclaim:" + ",".join(map(str, sorted(ids))), rewards)
+                self.store.db.execute(f"DELETE FROM equipment_main_growth WHERE player_id=? AND equip_id IN ({placeholders})",
+                                      (player_id, *ids))
         except UnresolvedEconomy:
             return reject
         removed = OutboundMessage("L2C_EquipRemove", {"ids": ids})
@@ -134,6 +143,10 @@ class EquipmentService:
                 return OutboundMessage("L2C_EquipStrengthen", result)
             next_level = cost["next_level"]
             param = json.loads(row[2])
+            main_type = param.get("at1", 0)
+            growth_ladder = self.main_growth.get(str(row[1]), {}).get("1", {}).get(str(main_type))
+            if growth_ladder is None:
+                return OutboundMessage("L2C_EquipStrengthen", result)
             if next_level % 3 == 0:
                 candidates = [slot for slot in range(2, 7) if param.get(f"at{slot}") and
                               (row[1], param[f"at{slot}"]) in self.increments]
@@ -145,6 +158,22 @@ class EquipmentService:
                 param[f"av{slot}"] += bonus
                 self.store.db.execute("INSERT INTO equipment_enhancements VALUES (?,?,?,?,?)",
                                       (player_id, equip_id, next_level, slot, bonus))
+            saved_growth = self.store.db.execute(
+                "SELECT growth_value FROM equipment_main_growth WHERE equip_id=? AND player_id=? AND star=? AND main_type=?",
+                (equip_id, player_id, row[1], main_type)).fetchone()
+            if saved_growth is None:
+                # src1 is the official per-level main growth ladder. Select its
+                # tier once using the existing Revival sequential-chain rule;
+                # server-side official tier selection is not recoverable.
+                growth = roll_value_sec(growth_ladder["value_sec"], growth_ladder["chance_sec"],
+                                        random.SystemRandom())
+                self.store.db.execute("INSERT OR REPLACE INTO equipment_main_growth VALUES (?,?,?,?,?)",
+                                      (equip_id, player_id, row[1], main_type, growth))
+            else:
+                growth = saved_growth[0]
+            # Only this new level grows Av1. Historical missing growth is not
+            # backfilled; all existing minor values and events are preserved.
+            param["av1"] += growth
             snapshot["equip_exp"] -= cost["exp_required"]
             snapshot["gold"] -= cost["gold_cost"]
             self.store.db.execute("UPDATE equipment_instances SET level=?,param=? WHERE player_id=? AND id=?",

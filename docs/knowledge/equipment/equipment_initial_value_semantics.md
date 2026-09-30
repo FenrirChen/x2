@@ -93,6 +93,11 @@ CollegeModule 两个 consumer 的调用对）：
    **REVIVAL_COMPATIBILITY/USER_DECISION（2026-09-25，
    decisions/compatibility/equip_valuesec_tier_roll.md），非官方算法。**
 2. 掉落件条数档选择：65/35（USER_DECISION 2026-09-25）。
-3. 主属性是否随等级成长（src1 的生成期用法）——Revival 暂不实现成长，Lv0 定值。
+3. 主属性成长（2026-09-30 修复）：每次成功升级在 Av1 上增加
+   `EquibAttrib[star, src1, type]` 的每级成长值；每件首次强化按已有逐段链
+   兼容规则取档并保存到 `equipment_main_growth`，后续等级与重启沿用同一值。
+   新掉落 Lv0 兽主满足 `Av1 = 初始值 + 成长值 × Level`。
+   按用户本轮缩小后的范围，不补算历史缺失成长、不改写已强化兽主；
+   旧兽主从下一次成功升级开始增加主属性。副属性的事件、选择、增量算法均保持现状。
 4. 强化增量 roll：按 src3 阶梯逐段升级链（每事件一掷）——实施时替换现行 min-max 均匀 roll
    （后者同为兼容实现，见 equipment_strengthen_catalog.json interpretation）。

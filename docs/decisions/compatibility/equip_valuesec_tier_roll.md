@@ -17,6 +17,8 @@ EquibAttrib.ValueSec 三档取值采用**逐段升级链**随机（Revival 兼�
 
 适用范围：
 - 主属性初始值：`EquibAttrib[star, src0, type]`；
+- 主属性每级成长值（2026-09-30 新增）：`EquibAttrib[star, src1, type]`，
+  每件首次成功强化选一次并持久化，随后每级累加同一值；
 - 副词条初始值：`EquibAttrib[star, src2, type]`；
 - 强化增量：`EquibAttrib[star, src3, type]`（逐次强化事件各掷一次链）。
 
