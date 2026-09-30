@@ -217,3 +217,37 @@ def test_budget_carriers_follow_policy(env):
 def _load_entry_catalog():
     import json
     return json.load(open("src/x2server/data/battle_entry_catalog.json", encoding="utf-8"))
+
+
+@pytest.mark.parametrize("level,budget", [(i, 1000 if i <= 3 else 3000 if i <= 6 else 5000)
+                                         for i in range(1, 11)])
+def test_first_chapter_moon_budget_carriers(env, level, budget):
+    from x2server.messages.battle import FIGHT_DATA, DROP_DATA
+    store, _, ctx = env
+    battle = BattleService(store)
+    section = 2110850 + level
+    values = request()
+    values.update(missionId=section, chapter=2010100, sceneId=2210850 + level)
+    entered = asyncio.run(battle.enter(ctx, packet(values)))
+    assert entered.values["result"] == 10
+    data = FIGHT_DATA.decode(entered.values["data"])
+    assert DROP_DATA.decode(data["dropData"])["dropValues"] == [budget] * 27
+    drops = asyncio.run(battle.drop_data(ctx, packet(
+        {"missionId": section, "chapterId": 2010100}, name="C2L_FightDropData")))
+    assert drops.values["result"] == 10
+    assert DROP_DATA.decode(drops.values["data"])["dropValues"] == [budget] * 27
+
+
+@pytest.mark.parametrize("state", ["missing", "expired", "different_mission"])
+def test_drop_query_rejects_invalid_entry_without_exception(env, state):
+    store, _, ctx = env
+    battle = BattleService(store)
+    if state != "missing":
+        entered = asyncio.run(battle.enter(ctx, packet(request())))
+        assert entered.values["result"] == 10
+    if state == "expired":
+        store.db.execute("UPDATE battle_entries SET created_at=0")
+    section = 2110851 if state == "different_mission" else 2110801
+    drops = asyncio.run(battle.drop_data(ctx, packet(
+        {"missionId": section, "chapterId": 2010100}, name="C2L_FightDropData")))
+    assert drops.values == {"result": 13}

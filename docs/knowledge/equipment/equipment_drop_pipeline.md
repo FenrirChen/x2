@@ -41,8 +41,8 @@ RuntimeDropResolver 分流 E_Equip → EquipmentInstanceFactory
 - **载体**：`BattleInfo.dropValues`（+0xC0，List<int>，按 AddADCGroup 索引）。
 - **灌入（次通道）**：130 入场响应 `FightData.dropData.dropValues` →
   `BattleInfo.SetSceneInfo(0x19A25B4)` 清空后 AddRange。
-- **更新（主通道）**：客户端战斗中上报 **264 C2L_FightDropData**（类 13422 仅
-  `{dropValues, missionId}` 两字段——protocol_catalog 中 264 的长字段列表是目录构建错配）
+- **更新（主通道）**：客户端战斗中上报 **264 C2L_FightDropData**（类 13430，
+  包含 missionId/chapterId/layer 等字段；13422 是内嵌 FightDropData，不能混淆）
   → 服务器应答 **266 L2C_FightDropData{result:10, data=FightDropData{dropValues,missionId}}** →
   `FightModule.OnFightDropData(0x1447E1C)` 校验 result==10 → 反序列化 data →
   `LogicX2Command.UpdateDropValue`（字段 0x18=dropValues）→ `LogicBattle.OnInput(0x1448224)`
@@ -92,11 +92,23 @@ RuntimeDropResolver 分流 E_Equip → EquipmentInstanceFactory
   很可能就是 264/266 预算（及掉落计划）的配置来源（B 级推断）。
 - **官方数值形态推断**：每组预算 ≈ 该关卡设计的掉落总价值上限
   （兽主本组 5 ≈ 设计件数 × 每件星级加权价值）。精确数值在官方服务器数据中，已失传。
-- **Revival 取值**：27 组 × 1,000,000（等效不限量，让客户端自身 DropProp/ADC 权重分布
-  成为唯一限制）——REVIVAL_COMPATIBILITY/USER_DECISION。
+- **Revival 当前取值**：难度 1–3 为每组 1000、4–6 为 3000、7+ 为 5000；
+  无难度默认 3000，共 27 组——REVIVAL_COMPATIBILITY/USER_DECISION。
+  旧 27 组 × 1,000,000 已于 2026-09-26 废弃。
   若未来要做"官方量级"预算，需按关卡配置预算表（如 组5 = 设计件数 × 560）。
 
 ## 4. 残留未知 / 注意事项
+
+### 2026-09-30 第一章月相核对
+
+原 APK SectionTable 的 2110851..2110860 星级范围依次为
+`[1,3], [1,3], [2,4], [2,4], [2,5], [3,5], [3,6], [3,6], [3,6], [3,6]`。
+预算分别为 `1000×3, 3000×3, 5000×4`（每组值）。预算限制累计价值，
+不直接抽取星级；高月相允许 6★，不保证每件都是 6★。
+服务端将客户端 outsideItems.quality 原样作为实例 star 落库并下发，不重抽星级。
+十个月相的入场及 264 查询预算一致性回归通过。
+修复掉落查询在缺少、过期或关卡不匹配的战斗记录下调用未定义函数的问题，
+现在正常返回 result=13，并记录拒绝原因及正常查询的难度、实际预算。
 
 1. **低星来源矛盾（新）**：实机 [1,3] 带本掉出 1★×73 / 2★×9 / 3★×21——
    `IdentifyItem` 只能产出 3-6★（DropBase 6/5/4、兜底 3），1-2★ 必然来自另一条

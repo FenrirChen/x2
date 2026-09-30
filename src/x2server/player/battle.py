@@ -270,9 +270,14 @@ class BattleService:
         request = BATTLE_SCHEMAS["C2L_FightDropData"].decode(packet.body)
         section = request.get("missionId", 0)
         reject = OutboundMessage("L2C_FightDropData", {"result": 13})
+        def reject_with(reason):
+            logging.getLogger("x2.battle").info(
+                "battle drop rejected section=%s reason=%s", section, reason)
+            return reject
+
         static = self.catalog.sections.get(section)
         if (not static or request.get("chapterId") != static["ChapterID"]):
-            return reject
+            return reject_with('static/chapter gate')
         row = self.store.db.execute("SELECT response, created_at FROM battle_entries WHERE player_id=? ORDER BY rowid DESC LIMIT 1",
                                     (context.session.player_id,)).fetchone()
         if not row or int(time.time()) - row["created_at"] > 3600:
@@ -290,8 +295,10 @@ class BattleService:
         # (docs/decisions/compatibility/equip_dropvalues_budget.md).
         drop_values = self.drop_budget.budget_for(section)
         tier, known = self.drop_budget.tier_for(section)
-        logging.getLogger("x2.battle").info("battle drop query section=%s tier=%s known=%s budget_groups=%d",
-            section, tier, known, len(drop_values))
+        logging.getLogger("x2.battle").info(
+            "battle drop query section=%s difficulty=%s tier=%s known=%s budget_per_group=%s budget_groups=%d",
+            section, static.get("DifficultyLevel", 0), tier, known,
+            drop_values[0], len(drop_values))
         return OutboundMessage("L2C_FightDropData", {"result": 10, "uuid": entry["uuid"],
             "sign": entry["sign"], "data": DROP_DATA.encode({"dropValues": drop_values,
                                                              "missionId": section})})
