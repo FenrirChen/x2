@@ -73,6 +73,9 @@ class LocalIdentityService(RecoveredBootstrapService):
 
     def respond(self, method: str, target: str, body: bytes = b"", *, authorization: str = "") -> HTTPResponse:
         path = urlsplit(target).path
+        if path.startswith("/gifticon/"):
+            from x2server.player.recommendations import banner_response
+            return banner_response(method, path)
         if path in ("/MailService.GetMailPage", "/MailService.GetMail"):
             return self._mail_http(method, path, body, authorization)
         if path == "/apply/chatNode" and method.upper() == "POST":

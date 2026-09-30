@@ -157,7 +157,10 @@ class ShopService:
         name = CORE_MESSAGE_REGISTRY.name_for(packet.message_id)
         request = ECONOMY_SCHEMAS[name].decode(packet.body)
         response_name = name.replace("C2L_", "L2C_", 1)
-        if name in ("C2L_QueryReCommendShop", "C2L_PaymentStore", "C2L_RechargeInfo"):
+        if name == "C2L_QueryReCommendShop":
+            from .recommendations import recommend
+            return OutboundMessage(response_name, recommend(self.economy, player_id))
+        if name in ("C2L_PaymentStore", "C2L_RechargeInfo"):
             # Optional catalogues have no recoverable local entries. Respond so the
             # shop page does not wait indefinitely for an unregistered request.
             return OutboundMessage(response_name, {"code": 10})

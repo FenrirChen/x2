@@ -1,0 +1,30 @@
+{
+  "2700000": {
+    "name": "第 7 次领纯晶石",
+    "jumpId": 29123,
+    "image": "gifticon/2700000.png",
+    "imageRule": "fallback",
+    "donor": "LiBao_YueKa"
+  },
+  "2700001": {
+    "name": "月卡·2022补给箱",
+    "jumpId": 29125,
+    "image": "gifticon/2700001.png",
+    "imageRule": "exact",
+    "donor": "LiBao_YueKa"
+  },
+  "2700017": {
+    "name": "光辉礼包Lv.80",
+    "jumpId": 29126,
+    "image": "gifticon/2700017.png",
+    "imageRule": "exact",
+    "donor": "LiBao_Buy_01"
+  },
+  "2700033": {
+    "name": "免费礼包Lv.80",
+    "jumpId": 29124,
+    "image": "gifticon/2700033.png",
+    "imageRule": "exact",
+    "donor": "LiBao_Free_01"
+  }
+}
