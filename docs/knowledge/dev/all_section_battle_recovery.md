@@ -2,7 +2,7 @@
 Document-Type: Current Knowledge
 Domain: Dev
 Status: AUTHORITATIVE
-Updated: 2026-09-25
+Updated: 2026-09-30
 Supersedes:
   - (none; still authoritative)
 ---
@@ -13,6 +13,7 @@ Supersedes:
 
 ## 入场
 
+- 2026-09-30 难度传递修复：旧服务虽然接受请求的 `expertMode`，却在 `FightData` 与 `FightDataProfile` 回包中遗漏它，客户端收到默认 false。原客户端 ARM64 `FightData.Serialize(0x350E1C0)` 将偏移 0x29 的 bool 写为 field 6（tag 0x30）；`FightDataProfile.Serialize(0x351177C)` 将偏移 0x3C 的 bool 写为 field 8（tag 0x40）。`ChapterModule.ConvertFightData(0x16C24D4)` 把前者复制到逻辑战斗数据偏移 0x31，`LogicBattle.CheckExpert(0x18FE3F0)` 读取它。现在两个回包均保留请求标志。月相仍使用各自 SectionID/Maps，未新增怪物属性倍率；隔离测试覆盖白夜崩解 10 档月相和切回普通剧情，实机战斗难度待用户复测。
 - `C2L_FightData(126)` 对所有 24 种已知 SectionType 使用同一经过实测的战斗入场合同。按 SectionID、ChapterID、Map、已拥有且有战斗属性的队伍、已知等级/前置关卡校验；地图和 Chapter 不匹配仍拒绝。
 - 实机挑战关 `2110851` 的正常入口发送 `expertMode=true`。旧代码错误地把此标志判作未支持模式并返回 13；现在全类型共用入场、掉落和结算路径均接受它，仍校验 Section/Chapter/Map。`checkGm` 与旧战斗档恢复另列为未实现。
 - `ManualValue` 存在时入场扣对应体力，失败或下一次入场替换未结 run 时按现有事务退款；没有 `ManualValue` 的类型不猜体力费用，入场费记 0（`NO_KNOWN_COST`）。`OpenType=3/4` 等尚未恢复的特殊门槛只标识未知，不以未知规则封锁入口。资源本的开放日与次数继续沿用既有已声明的 Revival 兼容策略。

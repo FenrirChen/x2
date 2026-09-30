@@ -2,7 +2,7 @@ import asyncio
 
 import pytest
 
-from x2server.messages.battle import CHECKOUT, DROP_DATA, PROFILE_HERO, FIGHT_DATA, FIGHT_HERO, HERO_ATTR
+from x2server.messages.battle import CHECKOUT, DROP_DATA, PROFILE_HERO, FIGHT_DATA, FIGHT_PROFILE, FIGHT_HERO, HERO_ATTR
 from x2server.network.dispatcher import DispatchContext
 from x2server.network.session import SessionState
 from x2server.player.battle import BattleService
@@ -20,6 +20,34 @@ def packet(values, request_id=1, name="C2L_FightData"):
 def request(**changes):
     return dict(missionId=2110801, chapter=2010100, sceneId=2210801,
                 heros=[PROFILE_HERO.encode({"heroId": 1003, "leader": 1})], **changes)
+
+
+def test_moon_phase_entries_preserve_selected_scene_and_expert_mode(tmp_path):
+    store = PlayerStore(tmp_path / "moon-phases.db")
+    player = store.login("moon-phases", 1, 0)
+    store.save_snapshot(1, dict(player["snapshot"], level=60,
+        heroes=[{"id": 1003, "state": 2, "level": 1, "star": 1}]), player["revision"])
+    context = DispatchContext("test", "local", SessionState("test", "moon-phases", player_id=1))
+    service = BattleService(store)
+    for difficulty, section in enumerate(range(2110151, 2110161), start=1):
+        static = service.catalog.sections[section]
+        assert static["DifficultyLevel"] == difficulty
+        values = request(expertMode=True)
+        values.update(missionId=section, chapter=static["ChapterID"], sceneId=static["Maps"][0])
+        result = asyncio.run(service.enter(context, packet(values, difficulty)))
+        assert result.values["result"] == 10
+        fight = FIGHT_DATA.decode(result.values["data"])
+        profile = FIGHT_PROFILE.decode(result.values["fightDataProfile"])
+        assert fight["missionId"] == profile["missionId"] == section
+        assert profile["sceneId"] == static["Maps"][0]
+        assert fight["expertMode"] is True and profile["expertMode"] is True
+        assert asyncio.run(service.enter(context, packet(values, difficulty))).values == result.values
+    # Switching back to a normal story entry must also reach the client.
+    result = asyncio.run(service.enter(context, packet(request(expertMode=False), 11)))
+    assert result.values["result"] == 10
+    assert FIGHT_DATA.decode(result.values["data"])["expertMode"] is False
+    assert FIGHT_PROFILE.decode(result.values["fightDataProfile"])["expertMode"] is False
+    store.close()
 
 
 def test_entry_replay_persistence_and_no_economy_changes(tmp_path):

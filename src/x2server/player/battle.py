@@ -397,10 +397,12 @@ class BattleService:
         # budget values are lost with the official server data.
         drop_values = self.drop_budget.budget_for(section)
         data = FIGHT_DATA.encode({"fightHeros": fight_heroes, "missionId": section,
+                                  "expertMode": request.get("expertMode", False),
                                   "dropData": DROP_DATA.encode({"dropValues": drop_values,
                                                                 "missionId": section}),
                                   "CRIDmg": 15000})
         profile = FIGHT_PROFILE.encode({"missionId": section, "chapterId": chapter, "layer": 0,
+            "expertMode": request.get("expertMode", False),
             "sceneId": scene, "randomSeed": secrets.randbelow(2**30), "isProfileValid": False})
         values = {"result": 10, "uuid": str(uuid.uuid4()), "sign": secrets.token_bytes(32),
                   "data": data, "fightDataProfile": profile, "playerLevel": snapshot["level"]}
