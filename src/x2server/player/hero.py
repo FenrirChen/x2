@@ -37,6 +37,8 @@ def encode_hero_data(hero: dict) -> bytes:
     return HERO_DATA.encode({**values, "godEquip": god_equip,
         "equips": [INT_PAIR.encode({"Key": e["position"], "Value": e["equip_id"]})
                    for e in hero.get("equips", [])],
+        "seasonEquips": [INT_PAIR.encode({"Key": e["position"], "Value": e["equip_id"]})
+                         for e in hero.get("season_equips", [])],
         "heroSkills": [HERO_SKILL.encode(s) for s in hero_skills(hero)],
         "fetters": fetters, "archives": archives})
 

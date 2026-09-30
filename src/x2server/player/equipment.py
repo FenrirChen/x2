@@ -197,7 +197,11 @@ class EquipmentService:
         req = EQUIPMENT_SCHEMAS[name].decode(packet.body)
         response = name.replace("C2L_", "L2C_", 1)
         values = {"code": 13, **{k: v for k, v in req.items() if k in ("equipID", "heroID", "posIdx")}}
-        if req.get("optType") != 1:
+        # USER_DECISION: unload clears both normal and season slots, including
+        # the season-page request (2). Season acquisition/equipping is not yet
+        # implemented; do not interpret a season equip as a normal equip.
+        allowed = (1,) if name == "C2L_DoEquip" else (1, 2)
+        if req.get("optType") not in allowed:
             return OutboundMessage(response, values)
         player = self.store.get(player_id)
         snapshot = player["snapshot"]
@@ -215,9 +219,17 @@ class EquipmentService:
             hero["equips"] = [e for e in hero.get("equips", []) if e["position"] != part]
             hero["equips"].append({"position": part, "equip_id": req["equipID"]})
         else:
-            before = len(hero.get("equips", []))
-            hero["equips"] = [e for e in hero.get("equips", []) if e["position"] != req.get("posIdx")]
-            if len(hero["equips"]) == before:
+            slot = req.get("posIdx")
+            if type(slot) is not int or not 0 <= slot < 6:
+                return OutboundMessage(response, values)
+            changed = False
+            for field in ("equips", "season_equips"):
+                previous = hero.get(field, [])
+                remaining = [e for e in previous if e["position"] != slot]
+                if len(remaining) != len(previous):
+                    hero[field] = remaining
+                    changed = True
+            if not changed:
                 return OutboundMessage(response, values)
         self.store.save_snapshot(player_id, snapshot, player["revision"])
         if name == "C2L_DoEquip" and self.economy is not None:

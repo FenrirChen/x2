@@ -116,6 +116,9 @@ class EconomyService:
         self.section_rewards = SectionRewardCatalog()
         self.tasks = {r["DailyTaskID"]: r for r in self.catalog["tasks"] if r.get("IsUse", {}).get("value") == 1}
         self.items = {r["ItemID"]: r for r in self.catalog["items"]}
+        self.bag_catalog = json.loads(files("x2server").joinpath("data/bag_client_catalog.json").read_text(encoding="utf-8"))
+        for item_id, link in self.bag_catalog["items"].items():
+            self.items[int(item_id)]["Used"] = link["used"]
         player_levels = json.loads(files("x2server").joinpath("data/progression_catalog.json").read_text(encoding="utf-8"))["player_level"]
         self.power_caps = {row["level"]: row["power_cap"] for row in player_levels}
         self.equipment_factory = EquipmentInstanceFactory()
@@ -365,7 +368,7 @@ class EconomyService:
             for i, n in sorted(rewards.items())],
             "rewardEquip": reward_equips})
 
-    def _grant(self, player_id, source, rewards):
+    def _grant(self, player_id, source, rewards, *, stackable_types=()):
         """Called inside the owner's transaction; never commits independently."""
         existing = self.store.db.execute("SELECT rewards FROM economy_grants WHERE player_id=? AND source=?",
                                          (player_id, source)).fetchone()
@@ -396,7 +399,8 @@ class EconomyService:
                     (player_id, item)).fetchone()[0]
                 if quantity > 2**31 - 1:
                     raise UnresolvedEconomy("currency overflow")
-            elif kind not in self.STACKABLE_REWARD_TYPES and item != 1260015 and not (kind == 11 and source.startswith("chapterdp:")):
+            elif (kind not in self.STACKABLE_REWARD_TYPES and kind not in stackable_types
+                    and item != 1260015 and not (kind == 11 and source.startswith("chapterdp:"))):
                 raise UnresolvedEconomy("unrecovered reward destination")
             else:
                 self.store.db.execute("""INSERT INTO inventory VALUES (?,?,?)
@@ -421,7 +425,7 @@ class EconomyService:
 
     def inventory_values(self, player_id):
         from .appearance import avatar_frames
-        items = dict(self.store.db.execute("SELECT item_id,quantity FROM inventory WHERE player_id=?", (player_id,)))
+        items = dict(self.store.db.execute("SELECT item_id,quantity FROM inventory WHERE player_id=? AND quantity>0", (player_id,)))
         for frame in avatar_frames():
             items[frame] = max(1, items.get(frame, 0))
         return {"items": [ITEM.encode({"id": r[0], "num": r[1], "locked": False, "dayGet": 0})
@@ -1142,13 +1146,24 @@ class EconomyService:
         from .login import LoginService
         self.refresh_stamina(player_id)
         self.ensure_periods(player_id)
+        # Keep zero rows as durable tombstones. Constructing (or discarding) a
+        # push must never delete them or start an implicit SQLite transaction.
+        # Repeating removal is safe; refilling the stack naturally ends it.
+        from .appearance import avatar_frames
+        permanent = set(avatar_frames())
+        removed = [row[0] for row in self.store.db.execute(
+            "SELECT item_id FROM inventory WHERE player_id=? AND quantity<=0 ORDER BY item_id", (player_id,))
+            if row[0] not in permanent]
         return (LoginService.snapshot_push(self.store.get(player_id), self.store),
             OutboundMessage("L2C_ItemUpdate", {"code": 10, **self.inventory_values(player_id)}),
+            *((OutboundMessage("L2C_ItemRemove", {"ids": removed}),) if removed else ()),
             *(OutboundMessage("L2C_TaskUpdate", {"type": k, "taskList": self.task_values(player_id, k)["taskList"]}) for k in (1, 2)),
             OutboundMessage("L2C_TaskUpdate", {"type": 3, "taskList": self.challenge_values(player_id)["taskList"]}))
 
     def handlers(self):
-        return {"C2L_FetchMobilityPower": self.fetch_mobility_power,
+        from .bag_items import BagItemService
+        return {**BagItemService(self.store, self).handlers(),
+                "C2L_FetchMobilityPower": self.fetch_mobility_power,
                 **{name: self.handle for name in ("C2L_ItemAll", "C2L_ItemOpt", "C2L_ShopGoods", "C2L_RefreshShop", "C2L_BuyGoods",
             "C2L_QueryGoodsInfo", "C2L_GameTask", "C2L_DailyAndWeekTask", "C2L_FinishGameTask",
             "C2L_FinishGameTaskAsync", "C2L_PickTreasureBox", "C2L_QueryMission")}}
@@ -1249,9 +1264,8 @@ class EconomyService:
         """Use any bag item whose Item.Used column names recoverable Gift groups.
 
         礼物盒/经验卡/宝箱 (ItemType 14/18) carry ``Used`` -> Gift groups: fixed
-        groups resolve as-is, weighted groups draw once per use. A group that
-        stayed unrecoverable (e.g. the damaged 702011 row) is skipped with a log
-        rather than voiding the whole item.
+        Canonical groups resolve in full. An invalid group rolls back the whole
+        use; never charge for a partially reconstructed box.
         """
         player_id = context.session.player_id
         item_id, count = request.get("id", 0), request.get("count", 0)
@@ -1269,31 +1283,30 @@ class EconomyService:
                 row = self.store.db.execute("SELECT response FROM item_opt_receipts WHERE request_key=? AND player_id=?",
                                             (key, player_id)).fetchone()
                 if row:
+                    from .bag_items import bag_pushes
                     return OutboundMessage("L2C_ItemOpt", ECONOMY_SCHEMAS["L2C_ItemOpt"].decode(row[0]),
-                                           pushes=self.pushes(player_id))
+                                           before_response=bag_pushes(self, player_id))
                 charged = self.store.db.execute("UPDATE inventory SET quantity=quantity-? "
                     "WHERE player_id=? AND item_id=? AND quantity>=?", (count, player_id, item_id, count))
                 if not charged.rowcount:
                     return rejected
                 rewards = Counter()
+                from .bag_items import resolve_bag_gifts, grant_bag_rewards
                 for _ in range(count):
-                    for group in used_groups:
-                        try:
-                            rewards.update(self.gifts([group], allow_daily_random=True))
-                        except UnresolvedEconomy as exc:
-                            logging.getLogger("x2.economy").info(
-                                "item use skipped group=%s item=%s player=%s reason=%s",
-                                group, item_id, player_id, exc)
-                if not rewards:
-                    raise UnresolvedEconomy("item use has no recoverable gift")
-                granted = self._grant(player_id, f"item-opt:{key}", rewards)
+                    rewards.update(resolve_bag_gifts(self, item_id, used_groups,
+                        request.get("selectedItemIndexList", [])))
+                # Canonical random Gifts can intentionally draw zero. Preserve
+                # that outcome rather than rolling back into a free reroll.
+                reward_data = grant_bag_rewards(self, player_id, f"item-opt:{key}", rewards, item_id)
                 values = {"code": 10, "opt": 0, "itemId": item_id,
-                          "rewardData": self.reward_bytes(granted)}
+                          "rewardData": reward_data}
                 self.store.db.execute("INSERT INTO item_opt_receipts VALUES (?,?,?)",
                                       (key, player_id, ECONOMY_SCHEMAS["L2C_ItemOpt"].encode(values)))
-        except UnresolvedEconomy:
+        except UnresolvedEconomy as exc:
+            logging.getLogger("x2.economy").info("item use rejected item=%s player=%s reason=%s", item_id, player_id, exc)
             return rejected
-        return OutboundMessage("L2C_ItemOpt", values, pushes=self.pushes(player_id))
+        from .bag_items import bag_pushes
+        return OutboundMessage("L2C_ItemOpt", values, before_response=bag_pushes(self, player_id))
 
     def use_causality_card(self, context, packet, request):
         player_id = context.session.player_id

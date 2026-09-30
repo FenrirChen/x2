@@ -44,3 +44,4 @@ revival_client/logs/
 dist/
 *.egg-info/
 analysis/dp_client/raw/
+analysis/bag_client/raw/

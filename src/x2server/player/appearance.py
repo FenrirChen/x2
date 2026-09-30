@@ -93,8 +93,10 @@ class AppearanceService:
         return {"code": 10,
             "putOnHeadIcon": snapshot.get("head_icon", self.starter_head),
             "putOnSceneIcon": snapshot.get("scene_icon", 0),
-            "headIconList": [SEASON_ICON_DATA.encode({"id": i}) for i in sorted(heads)],
-            "sceneIconList": [SEASON_ICON_DATA.encode({"id": i}) for i in sorted(scenes)]}
+            # Compatibility: permanently opened catalogs are already seen.
+            # Client AccountInfoModule marks rankId == 0 as new.
+            "headIconList": [SEASON_ICON_DATA.encode({"id": i, "rankId": 1}) for i in sorted(heads)],
+            "sceneIconList": [SEASON_ICON_DATA.encode({"id": i, "rankId": 1}) for i in sorted(scenes)]}
 
     def _voice_values(self, player_id):
         heroes = self._owned_heroes(player_id)
