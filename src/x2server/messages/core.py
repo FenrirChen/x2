@@ -6,6 +6,7 @@ schemas are required by a later milestone. This file defines no handlers.
 
 from x2server.protocol.protobuf import FieldKind, ProtoField, ProtoSchema
 from x2server.messages.lobby import LOBBY_SCHEMAS
+from x2server.messages.achievements import ACHIEVEMENT_SCHEMAS
 from x2server.messages.chat import CHAT_SCHEMAS
 from x2server.messages.battle import BATTLE_SCHEMAS
 from x2server.messages.economy import ECONOMY_SCHEMAS
@@ -105,6 +106,7 @@ CORE_SCHEMAS = {
     )
 }
 CORE_SCHEMAS.update(LOBBY_SCHEMAS)
+CORE_SCHEMAS.update(ACHIEVEMENT_SCHEMAS)
 CORE_SCHEMAS.update(CHAT_SCHEMAS)
 CORE_SCHEMAS.update(BATTLE_SCHEMAS)
 CORE_SCHEMAS.update(ECONOMY_SCHEMAS)

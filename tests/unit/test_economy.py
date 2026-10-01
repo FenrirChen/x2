@@ -217,7 +217,7 @@ def test_task_claim_wire_and_event_filters(env):
     economy.record_event(1, "login:initial", 5)
     result = asyncio.run(economy.handle(ctx, packet({"data": [FINISH_REQUEST.encode({"taskId": 630019, "type": 1})]}, name="C2L_FinishGameTask")))
     assert FINISH_RESULT.decode(result.values["data"][0])["code"] == 10
-    assert {p.message_name for p in result.pushes} == {"L2C_ItemUpdate", "L2C_TaskUpdate", "PlayerDataProto"}
+    assert {p.message_name for p in result.pushes} == {"L2C_ItemUpdate", "L2C_TaskUpdate", "PlayerDataProto", "L2C_AchvUpdate"}
     replay = asyncio.run(economy.handle(ctx, packet({"taskId": 630019, "type": 1}, name="C2L_FinishGameTaskAsync")))
     assert FINISH_RESULT.decode(replay.values["data"])["code"] == 10
     assert store.get(1)["snapshot"]["gold"] == 800

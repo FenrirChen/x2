@@ -275,6 +275,7 @@ class FavorService:
             count = (previous.get("count", 0) if previous.get("day") == day else 0) + num
             target["favor_gifts"] = {"day": day, "count": count}
             self.economy.save_snapshot(player_id, snapshot)
+            self.economy.achievements.record(player_id, f'gift:{hero_id}:{day}:{count}', 18, num)
         values.update(code=10, newExp=state["exp"], newLevel=state["level"], giftsTimes=count)
         change = FAVOR_CHANGE_INFO.encode({"beforeLevel": before["level"], "beforeExp": before["exp"],
             "afterLevel": state["level"], "afterExp": state["exp"], "heroID": hero_id, "type": 7})

@@ -1,0 +1,6122 @@
+{
+  "source": {
+    "Achievement": {
+      "source": "assets/bin/Data/fe6c300f97d2bf04fb51f2d6e73d44e7",
+      "record_count": 318,
+      "fields": [
+        "AchievementID",
+        "AchievementName",
+        "AchievementDescribe",
+        "AchievementConditionType",
+        "AchievementConditionID",
+        "ShowLevel",
+        "LastAchievement",
+        "AchievementGroup",
+        "GiftGroup",
+        "IsUse"
+      ]
+    },
+    "AchievementCondition": {
+      "source": "assets/bin/Data/32eb0e92316bd2144a3549e37d376983",
+      "record_count": 461,
+      "fields": [
+        "AchievementConditionID",
+        "CompleteNum"
+      ]
+    },
+    "AchievementConditionLine": {
+      "source": "assets/bin/Data/7c65b5758a8196a429d27997dadc809c",
+      "record_count": 71,
+      "fields": [
+        "AchievementConditionID",
+        "CompleteNum"
+      ]
+    },
+    "TaskControl": {
+      "source": "assets/bin/Data/ed2d8be6f9f17924c9f2532627d10336",
+      "record_count": 1,
+      "fields": [
+        "ID",
+        "DailyRefresh",
+        "WeeklyRefresh",
+        "DailyActiveValueNumber",
+        "DailyGiftGroup",
+        "DailyGiftGroupSeason",
+        "WeeklyActiveValueNumber",
+        "WeeklyGiftGroup",
+        "CompleteAchievementNumber",
+        "CompleteAchievementNumberGiftGroup",
+        "ChallengeTaskGroupID",
+        "ChallengeTaskGiftGroup",
+        "ActivityActiveValueNumber",
+        "ActivityGiftGroup",
+        "BpActiveValueNumber",
+        "BpGiftGroup",
+        "CompleteBpAchievementNumber",
+        "CompleteBpAchievementNumberGiftGroup"
+      ]
+    },
+    "Language": {
+      "source": "assets/bin/Data/844762d28a77f85408b631eb3f0186bc",
+      "record_count": 28996,
+      "fields": [
+        "Key",
+        "Chinese",
+        "ChineseFT",
+        "LanguageKor",
+        "LanguageJpn"
+      ]
+    },
+    "UnitBase": {
+      "source": "assets/bin/Data/5c993e6912a40e541be49a4f5ed7abd7",
+      "record_count": 1912,
+      "fields": [
+        "ID",
+        "Name",
+        "Desc",
+        "NameTitle",
+        "NameEnglish",
+        "Icon",
+        "DC",
+        "AttackTime",
+        "AttackDistance",
+        "ManorArea",
+        "WarningArea",
+        "VisionArea",
+        "HitRangeRe",
+        "ActionFileID",
+        "AIBehaviac",
+        "HatredWeight",
+        "Prefab",
+        "PrefabRadius",
+        "ShowPrefab",
+        "UnitType",
+        "UnitTag",
+        "SKill",
+        "SkillChance",
+        "AttackUpDec",
+        "Skill1UpDec",
+        "Skill2UpDec",
+        "Skill3UpDec",
+        "WeaponEffect",
+        "WeaponPickupEffect",
+        "EndureMaterial",
+        "NoChangeMaterial",
+        "CanBaoBai",
+        "FlashWhiteParams",
+        "DeadWithParent",
+        "Property",
+        "HaloScale",
+        "BornBubbleID",
+        "DeadBubbleID",
+        "PreloadSummonedID",
+        "PreloadEffect",
+        "XPEffect",
+        "ButtonEvent",
+        "AutoEvent",
+        "EventCameraAction",
+        "EventNotice",
+        "BehaviorManager",
+        "PassiveList",
+        "AppearanceList",
+        "Expression",
+        "TowerHp",
+        "DisplayName",
+        "PurifyProgress"
+      ]
+    },
+    "Item": {
+      "source": "assets/bin/Data/e49ddfae661db9147b8823552f01df41",
+      "record_count": 3026,
+      "fields": [
+        "ItemID",
+        "NameID",
+        "DescID",
+        "HistoryID",
+        "ItemUseScence",
+        "ItemType",
+        "ItemQuality",
+        "PileCount",
+        "ItemValue",
+        "AddADCGroup",
+        "IMQualityLevel",
+        "DropLimit",
+        "DropLimitParam",
+        "NeedLevel",
+        "ItemShow",
+        "Used",
+        "Purchased",
+        "Gain",
+        "Composed",
+        "Recover",
+        "FunctionEff",
+        "EffData",
+        "Return",
+        "Icon",
+        "EffectIcon",
+        "Model",
+        "Effect",
+        "IfShowName",
+        "DropSound",
+        "PickSound",
+        "QuickBuyID"
+      ]
+    },
+    "JewelBase": {
+      "source": "assets/bin/Data/7ff84de059bfbd74c889797c784b3962",
+      "record_count": 115,
+      "fields": [
+        "JewelID",
+        "Type",
+        "TypeID",
+        "JewelType",
+        "StarLevel",
+        "JewelEffect1",
+        "EffectValue1",
+        "JewelEffect2",
+        "JewelInfo",
+        "DustValue",
+        "SenDustValue",
+        "JewelDrawing",
+        "PaintingBg",
+        "PaintingPosition",
+        "PaintingBgPosition",
+        "PaintingScale",
+        "EnglishNameID",
+        "DetailDescID",
+        "WishDescID",
+        "WishColor",
+        "TypeIcon"
+      ]
+    },
+    "ChapterInfo": {
+      "source": "assets/bin/Data/d120a4578bab38d49ac0a683ca05a471",
+      "record_count": 13,
+      "fields": [
+        "MapTypeID",
+        "StageID",
+        "ExperienceChapterID",
+        "ChapterName",
+        "ChapterNumber",
+        "ChallengeLevel",
+        "EndlessLevel",
+        "BloodMoonOpenType",
+        "FlowchartName",
+        "IsOpen",
+        "ChapterPic",
+        "ChapterPicName",
+        "ChapterIcon",
+        "DPPic",
+        "DPPoint",
+        "DPReward",
+        "UnlockMapTypeID",
+        "UnlockDPRequest",
+        "PlotReviewBackground",
+        "PlotReviewDesc",
+        "ReviewUnlockRequest",
+        "RequestNum",
+        "ReviewUnlocAward",
+        "ShowReview"
+      ]
+    },
+    "CollegeBuilding": {
+      "source": "assets/bin/Data/870bc082a16956a45b9a9ec1640d3075",
+      "record_count": 16,
+      "fields": [
+        "ID",
+        "BaseType",
+        "BuildType",
+        "NameID",
+        "NameEnID",
+        "DescID",
+        "HelpDescID",
+        "Icon",
+        "BuildingOpen",
+        "InitialLevel",
+        "InitialStar",
+        "LevelLimited",
+        "StarLimited",
+        "LevelID",
+        "StarID",
+        "PrayItem",
+        "PrayItemNum",
+        "PrayWaitTimes",
+        "DescEnID"
+      ]
+    },
+    "EquibSuit": {
+      "source": "assets/bin/Data/c5bbfdf9eae360a4ebbb13ced97b8422",
+      "record_count": 20,
+      "fields": [
+        "SuitId",
+        "NameID",
+        "SuitIcon",
+        "AttribType1",
+        "Value1",
+        "PassiveID",
+        "SuitAttr1ID",
+        "SuitAttr2ID",
+        "CombatSuitAttr2ID",
+        "BuffID",
+        "IsOpen"
+      ]
+    },
+    "EquibBase": {
+      "source": "assets/bin/Data/92f5b9b03d582384daf4ab179249bade",
+      "record_count": 126,
+      "fields": [
+        "EquibId",
+        "EquibPart",
+        "EquibSuit",
+        "MainAttrType",
+        "MainAttrChance",
+        "MinorAttrType",
+        "MinorAttrChance"
+      ]
+    },
+    "SectionTable": {
+      "source": "assets/bin/Data/cca5f3cc8525b59459bdebf586c887fb",
+      "record_count": 3203,
+      "fields": [
+        "SectionID",
+        "NextSectionID",
+        "SectionNumberID",
+        "NumerChina",
+        "GameplayNotice",
+        "Maps",
+        "ChapterID",
+        "Type",
+        "CollisionDetectionRadius",
+        "IfBossBattle",
+        "Name",
+        "NameChina",
+        "NameMore",
+        "NameMoreChina",
+        "ChallengeName",
+        "ChallengeDesc",
+        "ChallengeReward1",
+        "StageIcon",
+        "LevelDisplay",
+        "RecommendedAbility",
+        "RecommendedLevel",
+        "DifficultyLevel",
+        "Profession",
+        "EnemyDisplay",
+        "DroopLimit",
+        "DroopLimit2",
+        "DroopLimit3",
+        "DroopDisplay",
+        "DroopDisplayProbability",
+        "OpenType",
+        "OpenParam",
+        "HeroLimit",
+        "TimeLimit",
+        "StartParam",
+        "WinCondition",
+        "WinParam",
+        "ExitCountDown",
+        "FailCondition",
+        "FailParam",
+        "FailTips",
+        "AgainSwitch",
+        "FailShowSwitch",
+        "Open",
+        "ManualValue",
+        "FirVReward",
+        "ExpertChestReward",
+        "ChestReward",
+        "VReward",
+        "MopReward",
+        "DropValueID",
+        "SectionRelicList",
+        "PlayerPassive",
+        "MonsterPassive",
+        "GoblinRate",
+        "GoblinIdList",
+        "GoblinChance",
+        "AssistType",
+        "AssistParam",
+        "BehaviorManager",
+        "IsAutoFightMode",
+        "AutoFightCondition",
+        "ContinueFightID",
+        "ContinueFightConsume",
+        "AutoFightMode",
+        "ChangeSceneColor",
+        "ChangeSceneFog",
+        "IsSeriesSection",
+        "IsShowWinTips",
+        "IsSaveGame",
+        "Favorability",
+        "PlotReviewBackground",
+        "PlotReviewStoryID",
+        "PlotReviewDesc",
+        "GamePlayType",
+        "GamePlayValue",
+        "GamePlayValue2",
+        "SwitchValue",
+        "BattlepassEquib",
+        "BattlepassEquibInto",
+        "StartLevelByItem"
+      ]
+    }
+  },
+  "binding_policy": "Revival interpretation of client descriptions; unknown conditions remain incomplete",
+  "achievements": {
+    "660001": {
+      "group": 3,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        790001
+      ],
+      "description": "在世界频道发言 {0} 次",
+      "rule": {
+        "kind": "unsupported"
+      }
+    },
+    "660010": {
+      "group": 3,
+      "previous": 0,
+      "targets": [
+        100,
+        500,
+        1000,
+        2000,
+        5000,
+        10000,
+        20000,
+        50000,
+        100000
+      ],
+      "gifts": [
+        790010,
+        790011,
+        790012,
+        790013,
+        790014,
+        790015,
+        790016,
+        790017,
+        790018
+      ],
+      "description": "累计获得友情点 {0} 点",
+      "rule": {
+        "kind": "unsupported"
+      }
+    },
+    "660030": {
+      "group": 3,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        790030
+      ],
+      "description": "拥有友情级别1级的好友 1 个",
+      "rule": {
+        "kind": "unsupported"
+      }
+    },
+    "660031": {
+      "group": 3,
+      "previous": 660030,
+      "targets": [
+        3
+      ],
+      "gifts": [
+        790031
+      ],
+      "description": "拥有友情级别1级的好友 3 个",
+      "rule": {
+        "kind": "unsupported"
+      }
+    },
+    "660032": {
+      "group": 3,
+      "previous": 660031,
+      "targets": [
+        5
+      ],
+      "gifts": [
+        790032
+      ],
+      "description": "拥有友情级别1级的好友 5 个",
+      "rule": {
+        "kind": "unsupported"
+      }
+    },
+    "660033": {
+      "group": 3,
+      "previous": 660032,
+      "targets": [
+        10
+      ],
+      "gifts": [
+        790033
+      ],
+      "description": "拥有友情级别1级的好友 10 个",
+      "rule": {
+        "kind": "unsupported"
+      }
+    },
+    "660034": {
+      "group": 3,
+      "previous": 660033,
+      "targets": [
+        10
+      ],
+      "gifts": [
+        790034
+      ],
+      "description": "拥有友情级别2级的好友 10 个",
+      "rule": {
+        "kind": "unsupported"
+      }
+    },
+    "660035": {
+      "group": 3,
+      "previous": 660034,
+      "targets": [
+        15
+      ],
+      "gifts": [
+        790035
+      ],
+      "description": "拥有友情级别2级的好友 15 个",
+      "rule": {
+        "kind": "unsupported"
+      }
+    },
+    "660036": {
+      "group": 3,
+      "previous": 660035,
+      "targets": [
+        20
+      ],
+      "gifts": [
+        790036
+      ],
+      "description": "拥有友情级别2级的好友 20 个",
+      "rule": {
+        "kind": "unsupported"
+      }
+    },
+    "660037": {
+      "group": 3,
+      "previous": 660036,
+      "targets": [
+        10
+      ],
+      "gifts": [
+        790037
+      ],
+      "description": "拥有友情级别3级的好友 10 个",
+      "rule": {
+        "kind": "unsupported"
+      }
+    },
+    "660038": {
+      "group": 3,
+      "previous": 660037,
+      "targets": [
+        15
+      ],
+      "gifts": [
+        790038
+      ],
+      "description": "拥有友情级别3级的好友 15 个",
+      "rule": {
+        "kind": "unsupported"
+      }
+    },
+    "660039": {
+      "group": 3,
+      "previous": 660038,
+      "targets": [
+        20
+      ],
+      "gifts": [
+        790039
+      ],
+      "description": "拥有友情级别3级的好友 20 个",
+      "rule": {
+        "kind": "unsupported"
+      }
+    },
+    "660250": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        790250
+      ],
+      "description": "拥有 1 个默契度达到5级的神格",
+      "rule": {
+        "kind": "favor_count",
+        "minimum": 5
+      }
+    },
+    "660251": {
+      "group": 4,
+      "previous": 660250,
+      "targets": [
+        3
+      ],
+      "gifts": [
+        790251
+      ],
+      "description": "拥有 3 个默契度达到5级的神格",
+      "rule": {
+        "kind": "favor_count",
+        "minimum": 5
+      }
+    },
+    "660252": {
+      "group": 4,
+      "previous": 660251,
+      "targets": [
+        6
+      ],
+      "gifts": [
+        790252
+      ],
+      "description": "拥有 6 个默契度达到5级的神格",
+      "rule": {
+        "kind": "favor_count",
+        "minimum": 5
+      }
+    },
+    "660253": {
+      "group": 4,
+      "previous": 660252,
+      "targets": [
+        3
+      ],
+      "gifts": [
+        790253
+      ],
+      "description": "拥有 3 个默契度达到10级的神格",
+      "rule": {
+        "kind": "favor_count",
+        "minimum": 10
+      }
+    },
+    "660254": {
+      "group": 4,
+      "previous": 660253,
+      "targets": [
+        6
+      ],
+      "gifts": [
+        790254
+      ],
+      "description": "拥有 6 个默契度达到10级的神格",
+      "rule": {
+        "kind": "favor_count",
+        "minimum": 10
+      }
+    },
+    "660255": {
+      "group": 4,
+      "previous": 660254,
+      "targets": [
+        9
+      ],
+      "gifts": [
+        790255
+      ],
+      "description": "拥有 9 个默契度达到10级的神格",
+      "rule": {
+        "kind": "favor_count",
+        "minimum": 10
+      }
+    },
+    "660256": {
+      "group": 4,
+      "previous": 660255,
+      "targets": [
+        12
+      ],
+      "gifts": [
+        790256
+      ],
+      "description": "拥有 12 个默契度达到10级的神格",
+      "rule": {
+        "kind": "favor_count",
+        "minimum": 10
+      }
+    },
+    "660257": {
+      "group": 4,
+      "previous": 660256,
+      "targets": [
+        15
+      ],
+      "gifts": [
+        790257
+      ],
+      "description": "拥有 15 个默契度达到10级的神格",
+      "rule": {
+        "kind": "favor_count",
+        "minimum": 10
+      }
+    },
+    "660270": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        1,
+        10,
+        50,
+        100,
+        500,
+        1000
+      ],
+      "gifts": [
+        790270,
+        790271,
+        790272,
+        790273,
+        790274,
+        790275
+      ],
+      "description": "与神格点击交谈 {0} 次",
+      "rule": {
+        "kind": "event",
+        "event": 19
+      }
+    },
+    "660280": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        3,
+        5,
+        10,
+        20,
+        50,
+        100,
+        200,
+        500,
+        1000
+      ],
+      "gifts": [
+        790280,
+        790281,
+        790282,
+        790283,
+        790284,
+        790285,
+        790286,
+        790287,
+        790288
+      ],
+      "description": "通过终端，累计完成 {0} 个心愿任务",
+      "rule": {
+        "kind": "unsupported"
+      }
+    },
+    "660290": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        1,
+        10,
+        50,
+        100,
+        200,
+        500,
+        1000
+      ],
+      "gifts": [
+        790290,
+        790291,
+        790292,
+        790293,
+        790294,
+        790295,
+        790296
+      ],
+      "description": "累计赠送神格礼物达到 {0} 次",
+      "rule": {
+        "kind": "event",
+        "event": 18
+      }
+    },
+    "660310": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790310,
+        790311
+      ],
+      "description": "贝黑莫斯默契度达到 {0} 级",
+      "rule": {
+        "kind": "hero_favor",
+        "hero": 100303
+      }
+    },
+    "660320": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790320,
+        790321
+      ],
+      "description": "浮士德默契度达到 {0} 级",
+      "rule": {
+        "kind": "hero_favor",
+        "hero": 1335
+      }
+    },
+    "660330": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790330,
+        790331
+      ],
+      "description": "雅典娜默契度达到 {0} 级",
+      "rule": {
+        "kind": "hero_favor",
+        "hero": 1005
+      }
+    },
+    "660340": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790340,
+        790341
+      ],
+      "description": "流云默契度达到 {0} 级",
+      "rule": {
+        "kind": "hero_favor",
+        "hero": 1206
+      }
+    },
+    "660350": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790350,
+        790351
+      ],
+      "description": "忒提丝默契度达到 {0} 级",
+      "rule": {
+        "kind": "hero_favor",
+        "hero": 1314
+      }
+    },
+    "660360": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790360,
+        790361
+      ],
+      "description": "莉莉丝默契度达到 {0} 级",
+      "rule": {
+        "kind": "hero_favor",
+        "hero": 100802
+      }
+    },
+    "660370": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790370,
+        790371
+      ],
+      "description": "瓦尔基里默契度达到 {0} 级",
+      "rule": {
+        "kind": "hero_favor",
+        "hero": 1009
+      }
+    },
+    "660380": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790380,
+        790381
+      ],
+      "description": "涂山初玖默契度达到 {0} 级",
+      "rule": {
+        "kind": "hero_favor",
+        "hero": 101003
+      }
+    },
+    "660390": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790390,
+        790391
+      ],
+      "description": "阿斯莫德默契度达到 {0} 级",
+      "rule": {
+        "kind": "hero_favor",
+        "hero": 101101
+      }
+    },
+    "660400": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790400,
+        790401
+      ],
+      "description": "托尔默契度达到 {0} 级",
+      "rule": {
+        "kind": "hero_favor",
+        "hero": 101201
+      }
+    },
+    "660410": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790410,
+        790411
+      ],
+      "description": "卡恩斯默契度达到 {0} 级",
+      "rule": {
+        "kind": "hero_favor",
+        "hero": 1013
+      }
+    },
+    "660420": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790420,
+        790421
+      ],
+      "description": "少姜默契度达到 {0} 级",
+      "rule": {
+        "kind": "hero_favor",
+        "hero": 101402
+      }
+    },
+    "660430": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790430,
+        790431
+      ],
+      "description": "长庚默契度达到 {0} 级",
+      "rule": {
+        "kind": "hero_favor",
+        "hero": 101501
+      }
+    },
+    "660440": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790440,
+        790441
+      ],
+      "description": "赛特默契度达到 {0} 级",
+      "rule": {
+        "kind": "hero_favor",
+        "hero": 101601
+      }
+    },
+    "660450": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790450,
+        790451
+      ],
+      "description": "阿努比斯默契度达到 {0} 级",
+      "rule": {
+        "kind": "hero_favor",
+        "hero": 101702
+      }
+    },
+    "660460": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790460,
+        790461
+      ],
+      "description": "贝斯特默契度达到 {0} 级",
+      "rule": {
+        "kind": "hero_favor",
+        "hero": 101801
+      }
+    },
+    "660470": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790470,
+        790471
+      ],
+      "description": "伊南娜默契度达到 {0} 级",
+      "rule": {
+        "kind": "hero_favor",
+        "hero": 101903
+      }
+    },
+    "660480": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790480,
+        790481
+      ],
+      "description": "少昊默契度达到 {0} 级",
+      "rule": {
+        "kind": "hero_favor",
+        "hero": 102001
+      }
+    },
+    "660490": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790490,
+        790491
+      ],
+      "description": "孟章默契度达到 {0} 级",
+      "rule": {
+        "kind": "hero_favor",
+        "hero": 102101
+      }
+    },
+    "660500": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790500,
+        790501
+      ],
+      "description": "源氏默契度达到 {0} 级",
+      "rule": {
+        "kind": "hero_favor",
+        "hero": 102202
+      }
+    },
+    "660510": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790510,
+        790511
+      ],
+      "description": "木花石长姬默契度达到 {0} 级",
+      "rule": {
+        "kind": "hero_favor",
+        "hero": 102301
+      }
+    },
+    "660520": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790520,
+        790521
+      ],
+      "description": "霍德尔默契度达到 {0} 级",
+      "rule": {
+        "kind": "hero_favor",
+        "hero": 102401
+      }
+    },
+    "660530": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790530,
+        790531
+      ],
+      "description": "计都默契度达到 {0} 级",
+      "rule": {
+        "kind": "hero_favor",
+        "hero": 1197
+      }
+    },
+    "660540": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790540,
+        790541
+      ],
+      "description": "伊瑞绮嘉拉默契度达到 {0} 级",
+      "rule": {
+        "kind": "hero_favor",
+        "hero": 1198
+      }
+    },
+    "660550": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790550,
+        790551
+      ],
+      "description": "奈芙蒂斯默契度达到 {0} 级",
+      "rule": {
+        "kind": "hero_favor",
+        "hero": 1199
+      }
+    },
+    "660560": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790560,
+        790561
+      ],
+      "description": "月读默契度达到 {0} 级",
+      "rule": {
+        "kind": "hero_favor",
+        "hero": 102501
+      }
+    },
+    "660570": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790570,
+        790571
+      ],
+      "description": "天照默契度达到 {0} 级",
+      "rule": {
+        "kind": "hero_favor",
+        "hero": 1026
+      }
+    },
+    "660580": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790580,
+        790581
+      ],
+      "description": "精卫默契度达到 {0} 级",
+      "rule": {
+        "kind": "hero_favor",
+        "hero": 102701
+      }
+    },
+    "660590": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790590,
+        790591
+      ],
+      "description": "月羲九默契度达到 {0} 级",
+      "rule": {
+        "kind": "hero_favor",
+        "hero": 102802
+      }
+    },
+    "660600": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790600,
+        790601
+      ],
+      "description": "伊邪那美默契度达到 {0} 级",
+      "rule": {
+        "kind": "hero_favor",
+        "hero": 102901
+      }
+    },
+    "660610": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790610,
+        790611
+      ],
+      "description": "伊邪纳岐默契度达到 {0} 级",
+      "rule": {
+        "kind": "hero_favor",
+        "hero": 103001
+      }
+    },
+    "660620": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790620,
+        790621
+      ],
+      "description": "监兵默契度达到 {0} 级",
+      "rule": {
+        "kind": "hero_favor",
+        "hero": 1331
+      }
+    },
+    "660630": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790630,
+        790631
+      ],
+      "description": "共工默契度达到 {0} 级",
+      "rule": {
+        "kind": "hero_favor",
+        "hero": 103201
+      }
+    },
+    "660640": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790640,
+        790641
+      ],
+      "description": "海拉默契度达到 {0} 级",
+      "rule": {
+        "kind": "hero_favor",
+        "hero": 1033
+      }
+    },
+    "660650": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790650,
+        790651
+      ],
+      "description": "朱雀默契度达到 {0} 级",
+      "rule": {
+        "kind": "unsupported"
+      }
+    },
+    "660660": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790660,
+        790661
+      ],
+      "description": "奥西里斯默契度达到 {0} 级",
+      "rule": {
+        "kind": "hero_favor",
+        "hero": 103501
+      }
+    },
+    "660670": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790670,
+        790671
+      ],
+      "description": "吉尔达默契度达到 {0} 级",
+      "rule": {
+        "kind": "hero_favor",
+        "hero": 103601
+      }
+    },
+    "660690": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790690,
+        790691
+      ],
+      "description": "斩念源氏默契度达到 {0} 级",
+      "rule": {
+        "kind": "hero_favor",
+        "hero": 1339
+      }
+    },
+    "660700": {
+      "group": 4,
+      "previous": 0,
+      "targets": [
+        5,
+        10
+      ],
+      "gifts": [
+        790700,
+        790701
+      ],
+      "description": "微风莉莉丝默契度达到 {0} 级",
+      "rule": {
+        "kind": "hero_favor",
+        "hero": 1040
+      }
+    },
+    "661000": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        10,
+        15,
+        20,
+        25,
+        30,
+        35,
+        40,
+        45,
+        50,
+        55,
+        60,
+        65,
+        70,
+        75,
+        80
+      ],
+      "gifts": [
+        791000,
+        791001,
+        791002,
+        791003,
+        791004,
+        791005,
+        791006,
+        791007,
+        791008,
+        791009,
+        791010,
+        791011,
+        791012,
+        791013,
+        791014
+      ],
+      "description": "解神者等级达到 {0} 级",
+      "rule": {
+        "kind": "account_level"
+      }
+    },
+    "661030": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        3
+      ],
+      "gifts": [
+        791030
+      ],
+      "description": "拥有 3 位神格",
+      "rule": {
+        "kind": "hero_count"
+      }
+    },
+    "661031": {
+      "group": 1,
+      "previous": 661030,
+      "targets": [
+        5
+      ],
+      "gifts": [
+        791031
+      ],
+      "description": "拥有 5 位神格",
+      "rule": {
+        "kind": "hero_count"
+      }
+    },
+    "661032": {
+      "group": 1,
+      "previous": 661031,
+      "targets": [
+        10
+      ],
+      "gifts": [
+        791032
+      ],
+      "description": "拥有 10 位神格",
+      "rule": {
+        "kind": "hero_count"
+      }
+    },
+    "661033": {
+      "group": 1,
+      "previous": 661032,
+      "targets": [
+        15
+      ],
+      "gifts": [
+        791033
+      ],
+      "description": "拥有 15 位神格",
+      "rule": {
+        "kind": "hero_count"
+      }
+    },
+    "661034": {
+      "group": 1,
+      "previous": 661033,
+      "targets": [
+        20
+      ],
+      "gifts": [
+        791034
+      ],
+      "description": "拥有 20 位神格",
+      "rule": {
+        "kind": "hero_count"
+      }
+    },
+    "661050": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        3
+      ],
+      "gifts": [
+        791050
+      ],
+      "description": "拥有3名 10 级及以上的神格",
+      "rule": {
+        "kind": "hero_level",
+        "minimum": 10
+      }
+    },
+    "661051": {
+      "group": 1,
+      "previous": 661050,
+      "targets": [
+        3
+      ],
+      "gifts": [
+        791051
+      ],
+      "description": "拥有3名 15 级及以上的神格",
+      "rule": {
+        "kind": "hero_level",
+        "minimum": 15
+      }
+    },
+    "661052": {
+      "group": 1,
+      "previous": 661051,
+      "targets": [
+        3
+      ],
+      "gifts": [
+        791052
+      ],
+      "description": "拥有3名 20 级及以上的神格",
+      "rule": {
+        "kind": "hero_level",
+        "minimum": 20
+      }
+    },
+    "661053": {
+      "group": 1,
+      "previous": 661052,
+      "targets": [
+        3
+      ],
+      "gifts": [
+        791053
+      ],
+      "description": "拥有3名 25 级及以上的神格",
+      "rule": {
+        "kind": "hero_level",
+        "minimum": 25
+      }
+    },
+    "661054": {
+      "group": 1,
+      "previous": 661053,
+      "targets": [
+        3
+      ],
+      "gifts": [
+        791054
+      ],
+      "description": "拥有3名 30 级及以上的神格",
+      "rule": {
+        "kind": "hero_level",
+        "minimum": 30
+      }
+    },
+    "661055": {
+      "group": 1,
+      "previous": 661054,
+      "targets": [
+        6
+      ],
+      "gifts": [
+        791055
+      ],
+      "description": "拥有6名 30 级及以上的神格",
+      "rule": {
+        "kind": "hero_level",
+        "minimum": 30
+      }
+    },
+    "661056": {
+      "group": 1,
+      "previous": 661055,
+      "targets": [
+        6
+      ],
+      "gifts": [
+        791056
+      ],
+      "description": "拥有6名 35 级及以上的神格",
+      "rule": {
+        "kind": "hero_level",
+        "minimum": 35
+      }
+    },
+    "661057": {
+      "group": 1,
+      "previous": 661056,
+      "targets": [
+        6
+      ],
+      "gifts": [
+        791057
+      ],
+      "description": "拥有6名 40 级及以上的神格",
+      "rule": {
+        "kind": "hero_level",
+        "minimum": 40
+      }
+    },
+    "661058": {
+      "group": 1,
+      "previous": 661057,
+      "targets": [
+        9
+      ],
+      "gifts": [
+        791058
+      ],
+      "description": "拥有9名 40 级及以上的神格",
+      "rule": {
+        "kind": "hero_level",
+        "minimum": 40
+      }
+    },
+    "661059": {
+      "group": 1,
+      "previous": 661058,
+      "targets": [
+        9
+      ],
+      "gifts": [
+        791059
+      ],
+      "description": "拥有9名 45 级及以上的神格",
+      "rule": {
+        "kind": "hero_level",
+        "minimum": 45
+      }
+    },
+    "661060": {
+      "group": 1,
+      "previous": 661059,
+      "targets": [
+        9
+      ],
+      "gifts": [
+        791060
+      ],
+      "description": "拥有9名 50 级及以上的神格",
+      "rule": {
+        "kind": "hero_level",
+        "minimum": 50
+      }
+    },
+    "661061": {
+      "group": 1,
+      "previous": 661060,
+      "targets": [
+        12
+      ],
+      "gifts": [
+        791061
+      ],
+      "description": "拥有12名 50 级及以上的神格",
+      "rule": {
+        "kind": "hero_level",
+        "minimum": 50
+      }
+    },
+    "661062": {
+      "group": 1,
+      "previous": 661061,
+      "targets": [
+        12
+      ],
+      "gifts": [
+        791062
+      ],
+      "description": "拥有12名 55 级及以上的神格",
+      "rule": {
+        "kind": "hero_level",
+        "minimum": 55
+      }
+    },
+    "661063": {
+      "group": 1,
+      "previous": 661062,
+      "targets": [
+        12
+      ],
+      "gifts": [
+        791063
+      ],
+      "description": "拥有12名 60 级及以上的神格",
+      "rule": {
+        "kind": "hero_level",
+        "minimum": 60
+      }
+    },
+    "661064": {
+      "group": 1,
+      "previous": 661063,
+      "targets": [
+        15
+      ],
+      "gifts": [
+        791064
+      ],
+      "description": "拥有15名 60 级及以上的神格",
+      "rule": {
+        "kind": "hero_level",
+        "minimum": 60
+      }
+    },
+    "661065": {
+      "group": 1,
+      "previous": 661064,
+      "targets": [
+        15
+      ],
+      "gifts": [
+        791065
+      ],
+      "description": "拥有15名 65 级及以上的神格",
+      "rule": {
+        "kind": "hero_level",
+        "minimum": 65
+      }
+    },
+    "661066": {
+      "group": 1,
+      "previous": 661065,
+      "targets": [
+        15
+      ],
+      "gifts": [
+        791066
+      ],
+      "description": "拥有15名 70 级及以上的神格",
+      "rule": {
+        "kind": "hero_level",
+        "minimum": 70
+      }
+    },
+    "661067": {
+      "group": 1,
+      "previous": 661066,
+      "targets": [
+        18
+      ],
+      "gifts": [
+        791067
+      ],
+      "description": "拥有18名 70 级及以上的神格",
+      "rule": {
+        "kind": "hero_level",
+        "minimum": 70
+      }
+    },
+    "661068": {
+      "group": 1,
+      "previous": 661067,
+      "targets": [
+        18
+      ],
+      "gifts": [
+        791068
+      ],
+      "description": "拥有18名 75 级及以上的神格",
+      "rule": {
+        "kind": "hero_level",
+        "minimum": 75
+      }
+    },
+    "661069": {
+      "group": 1,
+      "previous": 661068,
+      "targets": [
+        18
+      ],
+      "gifts": [
+        791069
+      ],
+      "description": "拥有18名 80 级及以上的神格",
+      "rule": {
+        "kind": "hero_level",
+        "minimum": 80
+      }
+    },
+    "661080": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791080
+      ],
+      "description": "拥有 1 名3★及以上的神格",
+      "rule": {
+        "kind": "hero_star",
+        "minimum": 3
+      }
+    },
+    "661081": {
+      "group": 1,
+      "previous": 661080,
+      "targets": [
+        3
+      ],
+      "gifts": [
+        791081
+      ],
+      "description": "拥有 3 名3★及以上的神格",
+      "rule": {
+        "kind": "hero_star",
+        "minimum": 3
+      }
+    },
+    "661082": {
+      "group": 1,
+      "previous": 661081,
+      "targets": [
+        5
+      ],
+      "gifts": [
+        791082
+      ],
+      "description": "拥有 5 名3★及以上的神格",
+      "rule": {
+        "kind": "hero_star",
+        "minimum": 3
+      }
+    },
+    "661083": {
+      "group": 1,
+      "previous": 661082,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791083
+      ],
+      "description": "拥有 1 名4★及以上的神格",
+      "rule": {
+        "kind": "hero_star",
+        "minimum": 4
+      }
+    },
+    "661084": {
+      "group": 1,
+      "previous": 661083,
+      "targets": [
+        3
+      ],
+      "gifts": [
+        791084
+      ],
+      "description": "拥有 3 名4★及以上的神格",
+      "rule": {
+        "kind": "hero_star",
+        "minimum": 4
+      }
+    },
+    "661085": {
+      "group": 1,
+      "previous": 661084,
+      "targets": [
+        5
+      ],
+      "gifts": [
+        791085
+      ],
+      "description": "拥有 5 名4★及以上的神格",
+      "rule": {
+        "kind": "hero_star",
+        "minimum": 4
+      }
+    },
+    "661086": {
+      "group": 1,
+      "previous": 661085,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791086
+      ],
+      "description": "拥有 1 名5★及以上的神格",
+      "rule": {
+        "kind": "hero_star",
+        "minimum": 5
+      }
+    },
+    "661087": {
+      "group": 1,
+      "previous": 661086,
+      "targets": [
+        3
+      ],
+      "gifts": [
+        791087
+      ],
+      "description": "拥有 3 名5★及以上的神格",
+      "rule": {
+        "kind": "hero_star",
+        "minimum": 5
+      }
+    },
+    "661088": {
+      "group": 1,
+      "previous": 661087,
+      "targets": [
+        5
+      ],
+      "gifts": [
+        791088
+      ],
+      "description": "拥有 5 名5★及以上的神格",
+      "rule": {
+        "kind": "hero_star",
+        "minimum": 5
+      }
+    },
+    "661089": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791089
+      ],
+      "description": "拥有 1 名6★神格",
+      "rule": {
+        "kind": "hero_star",
+        "minimum": 6
+      }
+    },
+    "661090": {
+      "group": 1,
+      "previous": 661089,
+      "targets": [
+        2
+      ],
+      "gifts": [
+        791090
+      ],
+      "description": "拥有 2 名6★神格",
+      "rule": {
+        "kind": "hero_star",
+        "minimum": 6
+      }
+    },
+    "661091": {
+      "group": 1,
+      "previous": 661090,
+      "targets": [
+        3
+      ],
+      "gifts": [
+        791091
+      ],
+      "description": "拥有 3 名6★神格",
+      "rule": {
+        "kind": "hero_star",
+        "minimum": 6
+      }
+    },
+    "661092": {
+      "group": 1,
+      "previous": 661091,
+      "targets": [
+        4
+      ],
+      "gifts": [
+        791092
+      ],
+      "description": "拥有 4 名6★神格",
+      "rule": {
+        "kind": "hero_star",
+        "minimum": 6
+      }
+    },
+    "661093": {
+      "group": 1,
+      "previous": 661092,
+      "targets": [
+        5
+      ],
+      "gifts": [
+        791093
+      ],
+      "description": "拥有 5 名6★神格",
+      "rule": {
+        "kind": "hero_star",
+        "minimum": 6
+      }
+    },
+    "661094": {
+      "group": 1,
+      "previous": 661093,
+      "targets": [
+        6
+      ],
+      "gifts": [
+        791094
+      ],
+      "description": "拥有 6 名6★神格",
+      "rule": {
+        "kind": "hero_star",
+        "minimum": 6
+      }
+    },
+    "661095": {
+      "group": 1,
+      "previous": 661094,
+      "targets": [
+        7
+      ],
+      "gifts": [
+        791095
+      ],
+      "description": "拥有 7 名6★神格",
+      "rule": {
+        "kind": "hero_star",
+        "minimum": 6
+      }
+    },
+    "661096": {
+      "group": 1,
+      "previous": 661095,
+      "targets": [
+        8
+      ],
+      "gifts": [
+        791096
+      ],
+      "description": "拥有 8 名6★神格",
+      "rule": {
+        "kind": "hero_star",
+        "minimum": 6
+      }
+    },
+    "661097": {
+      "group": 1,
+      "previous": 661096,
+      "targets": [
+        9
+      ],
+      "gifts": [
+        791097
+      ],
+      "description": "拥有 9 名6★神格",
+      "rule": {
+        "kind": "hero_star",
+        "minimum": 6
+      }
+    },
+    "661110": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        6
+      ],
+      "gifts": [
+        791110
+      ],
+      "description": "拥有 6 件兽主",
+      "rule": {
+        "kind": "equipment_count"
+      }
+    },
+    "661111": {
+      "group": 1,
+      "previous": 661110,
+      "targets": [
+        12
+      ],
+      "gifts": [
+        791111
+      ],
+      "description": "拥有 12 件兽主",
+      "rule": {
+        "kind": "equipment_count"
+      }
+    },
+    "661112": {
+      "group": 1,
+      "previous": 661111,
+      "targets": [
+        18
+      ],
+      "gifts": [
+        791112
+      ],
+      "description": "拥有 18 件兽主",
+      "rule": {
+        "kind": "equipment_count"
+      }
+    },
+    "661120": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        6
+      ],
+      "gifts": [
+        791120
+      ],
+      "description": "拥有 6 件6级及以上兽主",
+      "rule": {
+        "kind": "equipment_level",
+        "minimum": 6
+      }
+    },
+    "661121": {
+      "group": 1,
+      "previous": 661120,
+      "targets": [
+        12
+      ],
+      "gifts": [
+        791121
+      ],
+      "description": "拥有 12 件6级及以上兽主",
+      "rule": {
+        "kind": "equipment_level",
+        "minimum": 6
+      }
+    },
+    "661122": {
+      "group": 1,
+      "previous": 661121,
+      "targets": [
+        18
+      ],
+      "gifts": [
+        791122
+      ],
+      "description": "拥有 18 件6级及以上兽主",
+      "rule": {
+        "kind": "equipment_level",
+        "minimum": 6
+      }
+    },
+    "661123": {
+      "group": 1,
+      "previous": 661122,
+      "targets": [
+        6
+      ],
+      "gifts": [
+        791123
+      ],
+      "description": "拥有 6 件12级及以上兽主",
+      "rule": {
+        "kind": "equipment_level",
+        "minimum": 12
+      }
+    },
+    "661124": {
+      "group": 1,
+      "previous": 661123,
+      "targets": [
+        12
+      ],
+      "gifts": [
+        791124
+      ],
+      "description": "拥有 12 件12级及以上兽主",
+      "rule": {
+        "kind": "equipment_level",
+        "minimum": 12
+      }
+    },
+    "661125": {
+      "group": 1,
+      "previous": 661124,
+      "targets": [
+        18
+      ],
+      "gifts": [
+        791125
+      ],
+      "description": "拥有 18 件12级及以上兽主",
+      "rule": {
+        "kind": "equipment_level",
+        "minimum": 12
+      }
+    },
+    "661126": {
+      "group": 1,
+      "previous": 661125,
+      "targets": [
+        6
+      ],
+      "gifts": [
+        791126
+      ],
+      "description": "拥有 6 件15级兽主",
+      "rule": {
+        "kind": "equipment_level",
+        "minimum": 15
+      }
+    },
+    "661127": {
+      "group": 1,
+      "previous": 661126,
+      "targets": [
+        12
+      ],
+      "gifts": [
+        791127
+      ],
+      "description": "拥有 12 件15级兽主",
+      "rule": {
+        "kind": "equipment_level",
+        "minimum": 15
+      }
+    },
+    "661128": {
+      "group": 1,
+      "previous": 661127,
+      "targets": [
+        18
+      ],
+      "gifts": [
+        791128
+      ],
+      "description": "拥有 18 件15级兽主",
+      "rule": {
+        "kind": "equipment_level",
+        "minimum": 15
+      }
+    },
+    "661140": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791140
+      ],
+      "description": "拥有 1 件4★及以上兽主",
+      "rule": {
+        "kind": "equipment_star",
+        "minimum": 4
+      }
+    },
+    "661141": {
+      "group": 1,
+      "previous": 661140,
+      "targets": [
+        6
+      ],
+      "gifts": [
+        791141
+      ],
+      "description": "拥有 6 件4★及以上兽主",
+      "rule": {
+        "kind": "equipment_star",
+        "minimum": 4
+      }
+    },
+    "661142": {
+      "group": 1,
+      "previous": 661141,
+      "targets": [
+        12
+      ],
+      "gifts": [
+        791142
+      ],
+      "description": "拥有 12 件4★及以上兽主",
+      "rule": {
+        "kind": "equipment_star",
+        "minimum": 4
+      }
+    },
+    "661143": {
+      "group": 1,
+      "previous": 661142,
+      "targets": [
+        18
+      ],
+      "gifts": [
+        791143
+      ],
+      "description": "拥有 18 件4★及以上兽主",
+      "rule": {
+        "kind": "equipment_star",
+        "minimum": 4
+      }
+    },
+    "661150": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791150
+      ],
+      "description": "拥有 1 件5★及以上兽主",
+      "rule": {
+        "kind": "equipment_star",
+        "minimum": 5
+      }
+    },
+    "661151": {
+      "group": 1,
+      "previous": 661150,
+      "targets": [
+        6
+      ],
+      "gifts": [
+        791151
+      ],
+      "description": "拥有 6 件5★及以上兽主",
+      "rule": {
+        "kind": "equipment_star",
+        "minimum": 5
+      }
+    },
+    "661152": {
+      "group": 1,
+      "previous": 661151,
+      "targets": [
+        12
+      ],
+      "gifts": [
+        791152
+      ],
+      "description": "拥有 12 件5★及以上兽主",
+      "rule": {
+        "kind": "equipment_star",
+        "minimum": 5
+      }
+    },
+    "661153": {
+      "group": 1,
+      "previous": 661152,
+      "targets": [
+        18
+      ],
+      "gifts": [
+        791153
+      ],
+      "description": "拥有 18 件5★及以上兽主",
+      "rule": {
+        "kind": "equipment_star",
+        "minimum": 5
+      }
+    },
+    "661160": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791160
+      ],
+      "description": "拥有 1 件6星兽主",
+      "rule": {
+        "kind": "equipment_star",
+        "minimum": 6
+      }
+    },
+    "661161": {
+      "group": 1,
+      "previous": 661160,
+      "targets": [
+        6
+      ],
+      "gifts": [
+        791161
+      ],
+      "description": "拥有 6 件6★兽主",
+      "rule": {
+        "kind": "equipment_star",
+        "minimum": 6
+      }
+    },
+    "661162": {
+      "group": 1,
+      "previous": 661161,
+      "targets": [
+        12
+      ],
+      "gifts": [
+        791162
+      ],
+      "description": "拥有 12 件6★兽主",
+      "rule": {
+        "kind": "equipment_star",
+        "minimum": 6
+      }
+    },
+    "661163": {
+      "group": 1,
+      "previous": 661162,
+      "targets": [
+        18
+      ],
+      "gifts": [
+        791163
+      ],
+      "description": "拥有 18 件6★兽主",
+      "rule": {
+        "kind": "equipment_star",
+        "minimum": 6
+      }
+    },
+    "661170": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791170
+      ],
+      "description": "1 名神格的魂器达到2星及以上",
+      "rule": {
+        "kind": "artifact_star",
+        "minimum": 2
+      }
+    },
+    "661171": {
+      "group": 1,
+      "previous": 661170,
+      "targets": [
+        3
+      ],
+      "gifts": [
+        791171
+      ],
+      "description": "3 名神格的魂器达到2星及以上",
+      "rule": {
+        "kind": "artifact_star",
+        "minimum": 2
+      }
+    },
+    "661172": {
+      "group": 1,
+      "previous": 661171,
+      "targets": [
+        6
+      ],
+      "gifts": [
+        791172
+      ],
+      "description": "6 名神格的魂器达到2星及以上",
+      "rule": {
+        "kind": "artifact_star",
+        "minimum": 2
+      }
+    },
+    "661173": {
+      "group": 1,
+      "previous": 661172,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791173
+      ],
+      "description": "1 名神格的魂器达到3星及以上",
+      "rule": {
+        "kind": "artifact_star",
+        "minimum": 3
+      }
+    },
+    "661174": {
+      "group": 1,
+      "previous": 661173,
+      "targets": [
+        3
+      ],
+      "gifts": [
+        791174
+      ],
+      "description": "3 名神格的魂器达到3星及以上",
+      "rule": {
+        "kind": "artifact_star",
+        "minimum": 3
+      }
+    },
+    "661175": {
+      "group": 1,
+      "previous": 661174,
+      "targets": [
+        6
+      ],
+      "gifts": [
+        791175
+      ],
+      "description": "6 名神格的魂器达到3星及以上",
+      "rule": {
+        "kind": "artifact_star",
+        "minimum": 3
+      }
+    },
+    "661176": {
+      "group": 1,
+      "previous": 661175,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791176
+      ],
+      "description": "1 名神格的魂器达到4星及以上",
+      "rule": {
+        "kind": "artifact_star",
+        "minimum": 4
+      }
+    },
+    "661177": {
+      "group": 1,
+      "previous": 661176,
+      "targets": [
+        3
+      ],
+      "gifts": [
+        791177
+      ],
+      "description": "3 名神格的魂器达到4星及以上",
+      "rule": {
+        "kind": "artifact_star",
+        "minimum": 4
+      }
+    },
+    "661178": {
+      "group": 1,
+      "previous": 661177,
+      "targets": [
+        6
+      ],
+      "gifts": [
+        791178
+      ],
+      "description": "6 名神格的魂器达到4星及以上",
+      "rule": {
+        "kind": "artifact_star",
+        "minimum": 4
+      }
+    },
+    "661179": {
+      "group": 1,
+      "previous": 661178,
+      "targets": [
+        9
+      ],
+      "gifts": [
+        791179
+      ],
+      "description": "9 名神格的魂器达到4星及以上",
+      "rule": {
+        "kind": "artifact_star",
+        "minimum": 4
+      }
+    },
+    "661180": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791180
+      ],
+      "description": "1 名神格的魂器达到5星及以上",
+      "rule": {
+        "kind": "artifact_star",
+        "minimum": 5
+      }
+    },
+    "661181": {
+      "group": 1,
+      "previous": 661180,
+      "targets": [
+        3
+      ],
+      "gifts": [
+        791181
+      ],
+      "description": "3 名神格的魂器达到5星及以上",
+      "rule": {
+        "kind": "artifact_star",
+        "minimum": 5
+      }
+    },
+    "661182": {
+      "group": 1,
+      "previous": 661181,
+      "targets": [
+        6
+      ],
+      "gifts": [
+        791182
+      ],
+      "description": "6 名神格的魂器达到5星及以上",
+      "rule": {
+        "kind": "artifact_star",
+        "minimum": 5
+      }
+    },
+    "661183": {
+      "group": 1,
+      "previous": 661182,
+      "targets": [
+        9
+      ],
+      "gifts": [
+        791183
+      ],
+      "description": "9 名神格的魂器达到5星及以上",
+      "rule": {
+        "kind": "artifact_star",
+        "minimum": 5
+      }
+    },
+    "661184": {
+      "group": 1,
+      "previous": 661183,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791184
+      ],
+      "description": "1 名神格的魂器达到6星",
+      "rule": {
+        "kind": "artifact_star",
+        "minimum": 6
+      }
+    },
+    "661185": {
+      "group": 1,
+      "previous": 661184,
+      "targets": [
+        2
+      ],
+      "gifts": [
+        791185
+      ],
+      "description": "2 名神格的魂器达到6星",
+      "rule": {
+        "kind": "artifact_star",
+        "minimum": 6
+      }
+    },
+    "661186": {
+      "group": 1,
+      "previous": 661185,
+      "targets": [
+        3
+      ],
+      "gifts": [
+        791186
+      ],
+      "description": "3 名神格的魂器达到6星",
+      "rule": {
+        "kind": "artifact_star",
+        "minimum": 6
+      }
+    },
+    "661187": {
+      "group": 1,
+      "previous": 661186,
+      "targets": [
+        4
+      ],
+      "gifts": [
+        791187
+      ],
+      "description": "4 名神格的魂器达到6星",
+      "rule": {
+        "kind": "artifact_star",
+        "minimum": 6
+      }
+    },
+    "661188": {
+      "group": 1,
+      "previous": 661187,
+      "targets": [
+        5
+      ],
+      "gifts": [
+        791188
+      ],
+      "description": "5 名神格的魂器达到6星",
+      "rule": {
+        "kind": "artifact_star",
+        "minimum": 6
+      }
+    },
+    "661189": {
+      "group": 1,
+      "previous": 661188,
+      "targets": [
+        6
+      ],
+      "gifts": [
+        791189
+      ],
+      "description": "6 名神格的魂器达到6星",
+      "rule": {
+        "kind": "artifact_star",
+        "minimum": 6
+      }
+    },
+    "661190": {
+      "group": 1,
+      "previous": 661189,
+      "targets": [
+        7
+      ],
+      "gifts": [
+        791190
+      ],
+      "description": "7 名神格的魂器达到6星",
+      "rule": {
+        "kind": "artifact_star",
+        "minimum": 6
+      }
+    },
+    "661191": {
+      "group": 1,
+      "previous": 661190,
+      "targets": [
+        8
+      ],
+      "gifts": [
+        791191
+      ],
+      "description": "8 名神格的魂器达到6星",
+      "rule": {
+        "kind": "artifact_star",
+        "minimum": 6
+      }
+    },
+    "661192": {
+      "group": 1,
+      "previous": 661191,
+      "targets": [
+        9
+      ],
+      "gifts": [
+        791192
+      ],
+      "description": "9 名神格的魂器达到6星",
+      "rule": {
+        "kind": "artifact_star",
+        "minimum": 6
+      }
+    },
+    "661210": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791210
+      ],
+      "description": "拥有1件6星兽主：奇美拉",
+      "rule": {
+        "kind": "equipment_named",
+        "parts": {
+          "1240001": 1,
+          "1240002": 2,
+          "1240003": 3,
+          "1240004": 4,
+          "1240005": 5,
+          "1240006": 6
+        }
+      }
+    },
+    "661211": {
+      "group": 1,
+      "previous": 661210,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791211
+      ],
+      "description": "收集1套6星兽主：奇美拉",
+      "rule": {
+        "kind": "equipment_set",
+        "parts": {
+          "1240001": 1,
+          "1240002": 2,
+          "1240003": 3,
+          "1240004": 4,
+          "1240005": 5,
+          "1240006": 6
+        }
+      }
+    },
+    "661220": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791220
+      ],
+      "description": "拥有1件6星兽主：九头蛇",
+      "rule": {
+        "kind": "equipment_named",
+        "parts": {
+          "1240011": 1,
+          "1240012": 2,
+          "1240013": 3,
+          "1240014": 4,
+          "1240015": 5,
+          "1240016": 6
+        }
+      }
+    },
+    "661221": {
+      "group": 1,
+      "previous": 661220,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791221
+      ],
+      "description": "收集1套6星兽主：九头蛇",
+      "rule": {
+        "kind": "equipment_set",
+        "parts": {
+          "1240011": 1,
+          "1240012": 2,
+          "1240013": 3,
+          "1240014": 4,
+          "1240015": 5,
+          "1240016": 6
+        }
+      }
+    },
+    "661230": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791230
+      ],
+      "description": "拥有1件6星兽主：狮鹫",
+      "rule": {
+        "kind": "equipment_named",
+        "parts": {
+          "1240021": 1,
+          "1240022": 2,
+          "1240023": 3,
+          "1240024": 4,
+          "1240025": 5,
+          "1240026": 6
+        }
+      }
+    },
+    "661231": {
+      "group": 1,
+      "previous": 661230,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791231
+      ],
+      "description": "收集1套6星兽主：狮鹫",
+      "rule": {
+        "kind": "equipment_set",
+        "parts": {
+          "1240021": 1,
+          "1240022": 2,
+          "1240023": 3,
+          "1240024": 4,
+          "1240025": 5,
+          "1240026": 6
+        }
+      }
+    },
+    "661240": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791240
+      ],
+      "description": "拥有1件6星兽主：斯芬克斯",
+      "rule": {
+        "kind": "equipment_named",
+        "parts": {
+          "1240121": 1,
+          "1240122": 2,
+          "1240123": 3,
+          "1240124": 4,
+          "1240125": 5,
+          "1240126": 6
+        }
+      }
+    },
+    "661241": {
+      "group": 1,
+      "previous": 661240,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791241
+      ],
+      "description": "收集1套6星兽主：斯芬克斯",
+      "rule": {
+        "kind": "equipment_set",
+        "parts": {
+          "1240121": 1,
+          "1240122": 2,
+          "1240123": 3,
+          "1240124": 4,
+          "1240125": 5,
+          "1240126": 6
+        }
+      }
+    },
+    "661250": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791250
+      ],
+      "description": "拥有1件6星兽主：独角兽",
+      "rule": {
+        "kind": "equipment_named",
+        "parts": {
+          "1240041": 1,
+          "1240042": 2,
+          "1240043": 3,
+          "1240044": 4,
+          "1240045": 5,
+          "1240046": 6
+        }
+      }
+    },
+    "661251": {
+      "group": 1,
+      "previous": 661250,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791251
+      ],
+      "description": "收集1套6星兽主：独角兽",
+      "rule": {
+        "kind": "equipment_set",
+        "parts": {
+          "1240041": 1,
+          "1240042": 2,
+          "1240043": 3,
+          "1240044": 4,
+          "1240045": 5,
+          "1240046": 6
+        }
+      }
+    },
+    "661260": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791260
+      ],
+      "description": "拥有1件6星兽主：混沌",
+      "rule": {
+        "kind": "equipment_named",
+        "parts": {
+          "1240051": 1,
+          "1240052": 2,
+          "1240053": 3,
+          "1240054": 4,
+          "1240055": 5,
+          "1240056": 6
+        }
+      }
+    },
+    "661261": {
+      "group": 1,
+      "previous": 661260,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791261
+      ],
+      "description": "收集1套6星兽主：混沌",
+      "rule": {
+        "kind": "equipment_set",
+        "parts": {
+          "1240051": 1,
+          "1240052": 2,
+          "1240053": 3,
+          "1240054": 4,
+          "1240055": 5,
+          "1240056": 6
+        }
+      }
+    },
+    "661270": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791270
+      ],
+      "description": "拥有1件6星兽主：北海巨妖",
+      "rule": {
+        "kind": "equipment_named",
+        "parts": {
+          "1240061": 1,
+          "1240062": 2,
+          "1240063": 3,
+          "1240064": 4,
+          "1240065": 5,
+          "1240066": 6
+        }
+      }
+    },
+    "661271": {
+      "group": 1,
+      "previous": 661270,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791271
+      ],
+      "description": "收集1套6星兽主：北海巨妖",
+      "rule": {
+        "kind": "equipment_set",
+        "parts": {
+          "1240061": 1,
+          "1240062": 2,
+          "1240063": 3,
+          "1240064": 4,
+          "1240065": 5,
+          "1240066": 6
+        }
+      }
+    },
+    "661280": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791280
+      ],
+      "description": "拥有1件6星兽主：小精灵",
+      "rule": {
+        "kind": "equipment_named",
+        "parts": {
+          "1240141": 1,
+          "1240142": 2,
+          "1240143": 3,
+          "1240144": 4,
+          "1240145": 5,
+          "1240146": 6
+        }
+      }
+    },
+    "661281": {
+      "group": 1,
+      "previous": 661280,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791281
+      ],
+      "description": "收集1套6星兽主：小精灵",
+      "rule": {
+        "kind": "equipment_set",
+        "parts": {
+          "1240141": 1,
+          "1240142": 2,
+          "1240143": 3,
+          "1240144": 4,
+          "1240145": 5,
+          "1240146": 6
+        }
+      }
+    },
+    "661290": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791290
+      ],
+      "description": "拥有1件6星兽主：饕餮",
+      "rule": {
+        "kind": "equipment_named",
+        "parts": {
+          "1240101": 1,
+          "1240102": 2,
+          "1240103": 3,
+          "1240104": 4,
+          "1240105": 5,
+          "1240106": 6
+        }
+      }
+    },
+    "661291": {
+      "group": 1,
+      "previous": 661290,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791291
+      ],
+      "description": "收集1套6星兽主：饕餮",
+      "rule": {
+        "kind": "equipment_set",
+        "parts": {
+          "1240101": 1,
+          "1240102": 2,
+          "1240103": 3,
+          "1240104": 4,
+          "1240105": 5,
+          "1240106": 6
+        }
+      }
+    },
+    "661300": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791300
+      ],
+      "description": "拥有1件6星兽主：刻耳柏洛斯",
+      "rule": {
+        "kind": "equipment_named",
+        "parts": {
+          "1240171": 1,
+          "1240172": 2,
+          "1240173": 3,
+          "1240174": 4,
+          "1240175": 5,
+          "1240176": 6
+        }
+      }
+    },
+    "661301": {
+      "group": 1,
+      "previous": 661300,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791301
+      ],
+      "description": "收集1套6星兽主：刻耳柏洛斯",
+      "rule": {
+        "kind": "equipment_set",
+        "parts": {
+          "1240171": 1,
+          "1240172": 2,
+          "1240173": 3,
+          "1240174": 4,
+          "1240175": 5,
+          "1240176": 6
+        }
+      }
+    },
+    "661310": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791310
+      ],
+      "description": "拥有1件6星兽主：独眼巨人",
+      "rule": {
+        "kind": "equipment_named",
+        "parts": {
+          "1240131": 1,
+          "1240132": 2,
+          "1240133": 3,
+          "1240134": 4,
+          "1240135": 5,
+          "1240136": 6
+        }
+      }
+    },
+    "661311": {
+      "group": 1,
+      "previous": 661310,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791311
+      ],
+      "description": "收集1套6星兽主：独眼巨人",
+      "rule": {
+        "kind": "equipment_set",
+        "parts": {
+          "1240131": 1,
+          "1240132": 2,
+          "1240133": 3,
+          "1240134": 4,
+          "1240135": 5,
+          "1240136": 6
+        }
+      }
+    },
+    "661320": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791320
+      ],
+      "description": "拥有1件6星兽主：雷兽",
+      "rule": {
+        "kind": "equipment_named",
+        "parts": {
+          "1240091": 1,
+          "1240092": 2,
+          "1240093": 3,
+          "1240094": 4,
+          "1240095": 5,
+          "1240096": 6
+        }
+      }
+    },
+    "661321": {
+      "group": 1,
+      "previous": 661320,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791321
+      ],
+      "description": "收集1套6星兽主：雷兽",
+      "rule": {
+        "kind": "equipment_set",
+        "parts": {
+          "1240091": 1,
+          "1240092": 2,
+          "1240093": 3,
+          "1240094": 4,
+          "1240095": 5,
+          "1240096": 6
+        }
+      }
+    },
+    "661330": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791330
+      ],
+      "description": "拥有1件6星兽主：霸下",
+      "rule": {
+        "kind": "equipment_named",
+        "parts": {
+          "1240151": 1,
+          "1240152": 2,
+          "1240153": 3,
+          "1240154": 4,
+          "1240155": 5,
+          "1240156": 6
+        }
+      }
+    },
+    "661331": {
+      "group": 1,
+      "previous": 661330,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791331
+      ],
+      "description": "收集1套6星兽主：霸下",
+      "rule": {
+        "kind": "equipment_set",
+        "parts": {
+          "1240151": 1,
+          "1240152": 2,
+          "1240153": 3,
+          "1240154": 4,
+          "1240155": 5,
+          "1240156": 6
+        }
+      }
+    },
+    "661340": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791340
+      ],
+      "description": "拥有1件6星兽主：米诺陶诺斯",
+      "rule": {
+        "kind": "equipment_named",
+        "parts": {
+          "1240031": 1,
+          "1240032": 2,
+          "1240033": 3,
+          "1240034": 4,
+          "1240035": 5,
+          "1240036": 6,
+          "1240111": 1,
+          "1240112": 2,
+          "1240113": 3,
+          "1240114": 4,
+          "1240115": 5,
+          "1240116": 6
+        }
+      }
+    },
+    "661341": {
+      "group": 1,
+      "previous": 661340,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791341
+      ],
+      "description": "收集1套6星兽主：米诺陶诺斯",
+      "rule": {
+        "kind": "equipment_set",
+        "parts": {
+          "1240031": 1,
+          "1240032": 2,
+          "1240033": 3,
+          "1240034": 4,
+          "1240035": 5,
+          "1240036": 6,
+          "1240111": 1,
+          "1240112": 2,
+          "1240113": 3,
+          "1240114": 4,
+          "1240115": 5,
+          "1240116": 6
+        }
+      }
+    },
+    "661350": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791350
+      ],
+      "description": "拥有1件6星兽主：不死鸟",
+      "rule": {
+        "kind": "equipment_named",
+        "parts": {
+          "1240161": 1,
+          "1240162": 2,
+          "1240163": 3,
+          "1240164": 4,
+          "1240165": 5,
+          "1240166": 6
+        }
+      }
+    },
+    "661351": {
+      "group": 1,
+      "previous": 661350,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791351
+      ],
+      "description": "收集1套6星兽主：不死鸟",
+      "rule": {
+        "kind": "equipment_set",
+        "parts": {
+          "1240161": 1,
+          "1240162": 2,
+          "1240163": 3,
+          "1240164": 4,
+          "1240165": 5,
+          "1240166": 6
+        }
+      }
+    },
+    "661360": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791360
+      ],
+      "description": "拥有1件6星兽主：乌洛波罗斯",
+      "rule": {
+        "kind": "equipment_named",
+        "parts": {
+          "1240181": 1,
+          "1240182": 2,
+          "1240183": 3,
+          "1240184": 4,
+          "1240185": 5,
+          "1240186": 6
+        }
+      }
+    },
+    "661361": {
+      "group": 1,
+      "previous": 661360,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791361
+      ],
+      "description": "收集1套6星兽主：乌洛波罗斯",
+      "rule": {
+        "kind": "equipment_set",
+        "parts": {
+          "1240181": 1,
+          "1240182": 2,
+          "1240183": 3,
+          "1240184": 4,
+          "1240185": 5,
+          "1240186": 6
+        }
+      }
+    },
+    "661370": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791370
+      ],
+      "description": "拥有1件6星兽主：珀伽索斯",
+      "rule": {
+        "kind": "equipment_named",
+        "parts": {
+          "1240191": 1,
+          "1240192": 2,
+          "1240193": 3,
+          "1240194": 4,
+          "1240195": 5,
+          "1240196": 6
+        }
+      }
+    },
+    "661371": {
+      "group": 1,
+      "previous": 661370,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791371
+      ],
+      "description": "收集1套6星兽主：珀伽索斯",
+      "rule": {
+        "kind": "equipment_set",
+        "parts": {
+          "1240191": 1,
+          "1240192": 2,
+          "1240193": 3,
+          "1240194": 4,
+          "1240195": 5,
+          "1240196": 6
+        }
+      }
+    },
+    "661500": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791500
+      ],
+      "description": "收集 1 颗 红宝石★2",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1250011
+        ]
+      }
+    },
+    "661501": {
+      "group": 1,
+      "previous": 661500,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791501
+      ],
+      "description": "收集 1 颗 红宝石★3",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1250012
+        ]
+      }
+    },
+    "661502": {
+      "group": 1,
+      "previous": 661501,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791502
+      ],
+      "description": "收集 1 颗 红宝石★4",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1250013
+        ]
+      }
+    },
+    "661503": {
+      "group": 1,
+      "previous": 661502,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791503
+      ],
+      "description": "收集 1 颗 红尖晶★3",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1250041
+        ]
+      }
+    },
+    "661504": {
+      "group": 1,
+      "previous": 661503,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791504
+      ],
+      "description": "收集 1 颗 红尖晶★4",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1250042
+        ]
+      }
+    },
+    "661505": {
+      "group": 1,
+      "previous": 661504,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791505
+      ],
+      "description": "收集 1 颗 红尖晶★5",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1250043
+        ]
+      }
+    },
+    "661506": {
+      "group": 1,
+      "previous": 661505,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791506
+      ],
+      "description": "收集 1 颗 月光石★3",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1250083
+        ]
+      }
+    },
+    "661507": {
+      "group": 1,
+      "previous": 661506,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791507
+      ],
+      "description": "收集 1 颗 月光石★4",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1250084
+        ]
+      }
+    },
+    "661508": {
+      "group": 1,
+      "previous": 661507,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791508
+      ],
+      "description": "收集 1 颗 月光石★5",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1250085
+        ]
+      }
+    },
+    "661510": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        5
+      ],
+      "gifts": [
+        791510
+      ],
+      "description": "拥有 5 颗2★普通宝石",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1250011,
+          1250021,
+          1250031,
+          1250040,
+          1250050,
+          1250060,
+          1250072,
+          1250082,
+          1250092,
+          1250102
+        ]
+      }
+    },
+    "661511": {
+      "group": 1,
+      "previous": 661510,
+      "targets": [
+        5
+      ],
+      "gifts": [
+        791511
+      ],
+      "description": "拥有 5 颗3★普通宝石",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1250012,
+          1250022,
+          1250032,
+          1250041,
+          1250051,
+          1250061,
+          1250073,
+          1250083,
+          1250093,
+          1250103
+        ]
+      }
+    },
+    "661512": {
+      "group": 1,
+      "previous": 661511,
+      "targets": [
+        5
+      ],
+      "gifts": [
+        791512
+      ],
+      "description": "拥有 5 颗4★普通宝石",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1250013,
+          1250023,
+          1250033,
+          1250042,
+          1250052,
+          1250062,
+          1250074,
+          1250084,
+          1250094,
+          1250104
+        ]
+      }
+    },
+    "661513": {
+      "group": 1,
+      "previous": 661512,
+      "targets": [
+        10
+      ],
+      "gifts": [
+        791513
+      ],
+      "description": "拥有 10 颗3★普通宝石",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1250012,
+          1250022,
+          1250032,
+          1250041,
+          1250051,
+          1250061,
+          1250073,
+          1250083,
+          1250093,
+          1250103
+        ]
+      }
+    },
+    "661514": {
+      "group": 1,
+      "previous": 661513,
+      "targets": [
+        10
+      ],
+      "gifts": [
+        791514
+      ],
+      "description": "拥有 10 颗4★普通宝石",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1250013,
+          1250023,
+          1250033,
+          1250042,
+          1250052,
+          1250062,
+          1250074,
+          1250084,
+          1250094,
+          1250104
+        ]
+      }
+    },
+    "661515": {
+      "group": 1,
+      "previous": 661514,
+      "targets": [
+        10
+      ],
+      "gifts": [
+        791515
+      ],
+      "description": "拥有 10 颗5★普通宝石",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1250014,
+          1250024,
+          1250034,
+          1250043,
+          1250053,
+          1250063,
+          1250075,
+          1250085,
+          1250095,
+          1250105
+        ]
+      }
+    },
+    "661516": {
+      "group": 1,
+      "previous": 661515,
+      "targets": [
+        15
+      ],
+      "gifts": [
+        791516
+      ],
+      "description": "拥有 15 颗3★普通宝石",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1250012,
+          1250022,
+          1250032,
+          1250041,
+          1250051,
+          1250061,
+          1250073,
+          1250083,
+          1250093,
+          1250103
+        ]
+      }
+    },
+    "661517": {
+      "group": 1,
+      "previous": 661516,
+      "targets": [
+        15
+      ],
+      "gifts": [
+        791517
+      ],
+      "description": "拥有 15 颗4★普通宝石",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1250013,
+          1250023,
+          1250033,
+          1250042,
+          1250052,
+          1250062,
+          1250074,
+          1250084,
+          1250094,
+          1250104
+        ]
+      }
+    },
+    "661518": {
+      "group": 1,
+      "previous": 661517,
+      "targets": [
+        15
+      ],
+      "gifts": [
+        791518
+      ],
+      "description": "拥有 15 颗5★普通宝石",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1250014,
+          1250024,
+          1250034,
+          1250043,
+          1250053,
+          1250063,
+          1250075,
+          1250085,
+          1250095,
+          1250105
+        ]
+      }
+    },
+    "661530": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791530
+      ],
+      "description": "拥有宝石姬：光明之海",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251014,
+          1251015,
+          1251016
+        ]
+      }
+    },
+    "661531": {
+      "group": 1,
+      "previous": 661530,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791531
+      ],
+      "description": "拥有1颗 5 星宝石姬：光明之海",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251015
+        ]
+      }
+    },
+    "661532": {
+      "group": 1,
+      "previous": 661531,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791532
+      ],
+      "description": "拥有1颗 6 星宝石姬：光明之海",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251016
+        ]
+      }
+    },
+    "661540": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791540
+      ],
+      "description": "拥有宝石姬：光明之山",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251024,
+          1251025,
+          1251026
+        ]
+      }
+    },
+    "661541": {
+      "group": 1,
+      "previous": 661540,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791541
+      ],
+      "description": "拥有1颗 5 星宝石姬：光明之山",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251025
+        ]
+      }
+    },
+    "661542": {
+      "group": 1,
+      "previous": 661541,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791542
+      ],
+      "description": "拥有1颗 6 星宝石姬：光明之山",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251026
+        ]
+      }
+    },
+    "661550": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791550
+      ],
+      "description": "拥有宝石姬：海洋之心",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251034,
+          1251035,
+          1251036
+        ]
+      }
+    },
+    "661551": {
+      "group": 1,
+      "previous": 661550,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791551
+      ],
+      "description": "拥有1颗 5 星宝石姬：海洋之心",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251035
+        ]
+      }
+    },
+    "661552": {
+      "group": 1,
+      "previous": 661551,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791552
+      ],
+      "description": "拥有1颗 6 星宝石姬：海洋之心",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251036
+        ]
+      }
+    },
+    "661560": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791560
+      ],
+      "description": "拥有宝石姬：创世者之眼",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251044,
+          1251045,
+          1251046
+        ]
+      }
+    },
+    "661561": {
+      "group": 1,
+      "previous": 661560,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791561
+      ],
+      "description": "拥有1颗 5 星宝石姬：创世者之眼",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251045
+        ]
+      }
+    },
+    "661562": {
+      "group": 1,
+      "previous": 661561,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791562
+      ],
+      "description": "拥有1颗 6 星宝石姬：创世者之眼",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251046
+        ]
+      }
+    },
+    "661570": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791570
+      ],
+      "description": "拥有宝石姬：黑王子",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251054,
+          1251055,
+          1251056
+        ]
+      }
+    },
+    "661571": {
+      "group": 1,
+      "previous": 661570,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791571
+      ],
+      "description": "拥有1颗 5 星宝石姬：黑王子",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251055
+        ]
+      }
+    },
+    "661572": {
+      "group": 1,
+      "previous": 661571,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791572
+      ],
+      "description": "拥有1颗 6 星宝石姬：黑王子",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251056
+        ]
+      }
+    },
+    "661580": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791580
+      ],
+      "description": "拥有宝石姬：俄狄浦斯之眼",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251064,
+          1251065,
+          1251066
+        ]
+      }
+    },
+    "661581": {
+      "group": 1,
+      "previous": 661580,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791581
+      ],
+      "description": "拥有1颗 5 星宝石姬：俄狄浦斯之眼",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251065
+        ]
+      }
+    },
+    "661582": {
+      "group": 1,
+      "previous": 661581,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791582
+      ],
+      "description": "拥有1颗 6 星宝石姬：俄狄浦斯之眼",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251066
+        ]
+      }
+    },
+    "661590": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791590
+      ],
+      "description": "拥有宝石姬：帕拉伊巴的花冠",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251074,
+          1251075,
+          1251076
+        ]
+      }
+    },
+    "661591": {
+      "group": 1,
+      "previous": 661590,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791591
+      ],
+      "description": "拥有1颗 5 星宝石姬：帕拉伊巴的花冠",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251075
+        ]
+      }
+    },
+    "661592": {
+      "group": 1,
+      "previous": 661591,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791592
+      ],
+      "description": "拥有1颗 6 星宝石姬：帕拉伊巴的花冠",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251076
+        ]
+      }
+    },
+    "661600": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791600
+      ],
+      "description": "拥有宝石姬：拉帕琳娜•漫游者",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251084,
+          1251085,
+          1251086
+        ]
+      }
+    },
+    "661601": {
+      "group": 1,
+      "previous": 661600,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791601
+      ],
+      "description": "拥有1颗 5 星宝石姬：拉帕琳娜•漫游者",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251085
+        ]
+      }
+    },
+    "661602": {
+      "group": 1,
+      "previous": 661601,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791602
+      ],
+      "description": "拥有1颗 6 星宝石姬：拉帕琳娜•漫游者",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251086
+        ]
+      }
+    },
+    "661610": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791610
+      ],
+      "description": "拥有宝石姬：伊特鲁里亚红宝石",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251094,
+          1251095,
+          1251096
+        ]
+      }
+    },
+    "661611": {
+      "group": 1,
+      "previous": 661610,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791611
+      ],
+      "description": "拥有1颗 5 星宝石姬：伊特鲁里亚红宝石",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251095
+        ]
+      }
+    },
+    "661612": {
+      "group": 1,
+      "previous": 661611,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791612
+      ],
+      "description": "拥有1颗 6 星宝石姬：伊特鲁里亚红宝石",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251096
+        ]
+      }
+    },
+    "661620": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791620
+      ],
+      "description": "拥有宝石姬：蓝色晨曦的猎豹",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251104,
+          1251105,
+          1251106
+        ]
+      }
+    },
+    "661621": {
+      "group": 1,
+      "previous": 661620,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791621
+      ],
+      "description": "拥有1颗 5 星宝石姬：蓝色晨曦的猎豹",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251105
+        ]
+      }
+    },
+    "661622": {
+      "group": 1,
+      "previous": 661621,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791622
+      ],
+      "description": "拥有1颗 6 星宝石姬：蓝色晨曦的猎豹",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251106
+        ]
+      }
+    },
+    "661630": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791630
+      ],
+      "description": "拥有宝石姬：皮洛斯战斗之印",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251114,
+          1251115,
+          1251116
+        ]
+      }
+    },
+    "661631": {
+      "group": 1,
+      "previous": 661630,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791631
+      ],
+      "description": "拥有1颗 5 星宝石姬：皮洛斯战斗之印",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251115
+        ]
+      }
+    },
+    "661632": {
+      "group": 1,
+      "previous": 661631,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791632
+      ],
+      "description": "拥有1颗 6 星宝石姬：皮洛斯战斗之印",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251116
+        ]
+      }
+    },
+    "661640": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791640
+      ],
+      "description": "拥有宝石姬：德古拉的情人",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251124,
+          1251125,
+          1251126
+        ]
+      }
+    },
+    "661641": {
+      "group": 1,
+      "previous": 661640,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791641
+      ],
+      "description": "拥有1颗 5 星宝石姬：德古拉的情人",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251125
+        ]
+      }
+    },
+    "661642": {
+      "group": 1,
+      "previous": 661641,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791642
+      ],
+      "description": "拥有1颗 6 星宝石姬：德古拉的情人",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251126
+        ]
+      }
+    },
+    "661650": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791650
+      ],
+      "description": "拥有宝石姬：金羊毛骑士红宝石",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251134,
+          1251135,
+          1251136
+        ]
+      }
+    },
+    "661651": {
+      "group": 1,
+      "previous": 661650,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791651
+      ],
+      "description": "拥有1颗 5 星宝石姬：金羊毛骑士红宝石",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251135
+        ]
+      }
+    },
+    "661652": {
+      "group": 1,
+      "previous": 661651,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791652
+      ],
+      "description": "拥有1颗 6 星宝石姬：金羊毛骑士红宝石",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251136
+        ]
+      }
+    },
+    "661660": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791660
+      ],
+      "description": "拥有宝石姬：荷鲁斯之眼",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251144,
+          1251145,
+          1251146
+        ]
+      }
+    },
+    "661661": {
+      "group": 1,
+      "previous": 661660,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791661
+      ],
+      "description": "拥有1颗 5 星宝石姬：荷鲁斯之眼",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251145
+        ]
+      }
+    },
+    "661662": {
+      "group": 1,
+      "previous": 661661,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791662
+      ],
+      "description": "拥有1颗 6 星宝石姬：荷鲁斯之眼",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251146
+        ]
+      }
+    },
+    "661670": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791670
+      ],
+      "description": "拥有宝石姬：琅玕玉树",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251154,
+          1251155,
+          1251156
+        ]
+      }
+    },
+    "661671": {
+      "group": 1,
+      "previous": 661670,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791671
+      ],
+      "description": "拥有1颗 5 星宝石姬：琅玕玉树",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251155
+        ]
+      }
+    },
+    "661672": {
+      "group": 1,
+      "previous": 661671,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791672
+      ],
+      "description": "拥有1颗 6 星宝石姬：琅玕玉树",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251156
+        ]
+      }
+    },
+    "661680": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791680
+      ],
+      "description": "拥有宝石姬：希望之光",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251164,
+          1251165,
+          1251166
+        ]
+      }
+    },
+    "661681": {
+      "group": 1,
+      "previous": 661680,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791681
+      ],
+      "description": "拥有1颗 5 星宝石姬：希望之光",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251165
+        ]
+      }
+    },
+    "661682": {
+      "group": 1,
+      "previous": 661681,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791682
+      ],
+      "description": "拥有1颗 6 星宝石姬：希望之光",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251166
+        ]
+      }
+    },
+    "661690": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791690
+      ],
+      "description": "拥有宝石姬：贵霜的余晖",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251174,
+          1251175,
+          1251176
+        ]
+      }
+    },
+    "661691": {
+      "group": 1,
+      "previous": 661690,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791691
+      ],
+      "description": "拥有1颗 5 星宝石姬：贵霜的余晖",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251175
+        ]
+      }
+    },
+    "661692": {
+      "group": 1,
+      "previous": 661691,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791692
+      ],
+      "description": "拥有1颗 6 星宝石姬：贵霜的余晖",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251176
+        ]
+      }
+    },
+    "661700": {
+      "group": 1,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791700
+      ],
+      "description": "拥有宝石姬：乘雷之玉",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251184,
+          1251185,
+          1251186
+        ]
+      }
+    },
+    "661701": {
+      "group": 1,
+      "previous": 661700,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791701
+      ],
+      "description": "拥有1颗 5 星宝石姬：乘雷之玉",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251185
+        ]
+      }
+    },
+    "661702": {
+      "group": 1,
+      "previous": 661701,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        791702
+      ],
+      "description": "拥有1颗 6 星宝石姬：乘雷之玉",
+      "rule": {
+        "kind": "item_count",
+        "ids": [
+          1251186
+        ]
+      }
+    },
+    "662000": {
+      "group": 2,
+      "previous": 0,
+      "targets": [
+        2,
+        3,
+        5,
+        7,
+        10,
+        15,
+        30,
+        50,
+        100,
+        200,
+        300,
+        400,
+        500,
+        600,
+        700,
+        800,
+        900,
+        1000
+      ],
+      "gifts": [
+        792000,
+        792001,
+        792002,
+        792003,
+        792004,
+        792005,
+        792006,
+        792007,
+        792008,
+        792009,
+        792010,
+        792011,
+        792012,
+        792013,
+        792014,
+        792015,
+        792016,
+        792017
+      ],
+      "description": "累计登录 {0} 天",
+      "rule": {
+        "kind": "login_days"
+      }
+    },
+    "662050": {
+      "group": 2,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        792050
+      ],
+      "description": "通关剧情章节1：群星跃迁之时",
+      "rule": {
+        "kind": "sections_clear",
+        "ids": [
+          2110804
+        ]
+      }
+    },
+    "662051": {
+      "group": 2,
+      "previous": 662050,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        792051
+      ],
+      "description": "通关剧情章节2：白夜崩解",
+      "rule": {
+        "kind": "sections_clear",
+        "ids": [
+          2110106
+        ]
+      }
+    },
+    "662052": {
+      "group": 2,
+      "previous": 662051,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        792052
+      ],
+      "description": "通关剧情章节3：寂灭之墟",
+      "rule": {
+        "kind": "sections_clear",
+        "ids": [
+          2110208
+        ]
+      }
+    },
+    "662053": {
+      "group": 2,
+      "previous": 662052,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        792053
+      ],
+      "description": "通关剧情章节4：饕餮盛宴",
+      "rule": {
+        "kind": "sections_clear",
+        "ids": [
+          2110308
+        ]
+      }
+    },
+    "662054": {
+      "group": 2,
+      "previous": 662053,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        792054
+      ],
+      "description": "通关剧情章节5：黑暗金字塔",
+      "rule": {
+        "kind": "sections_clear",
+        "ids": [
+          2110410
+        ]
+      }
+    },
+    "662055": {
+      "group": 2,
+      "previous": 662054,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        792055
+      ],
+      "description": "通关剧情章节6：火剑之路",
+      "rule": {
+        "kind": "sections_clear",
+        "ids": [
+          2110509
+        ]
+      }
+    },
+    "662056": {
+      "group": 2,
+      "previous": 662055,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        792056
+      ],
+      "description": "通关剧情章节7：云中电玩城",
+      "rule": {
+        "kind": "sections_clear",
+        "ids": [
+          2110608
+        ]
+      }
+    },
+    "662057": {
+      "group": 2,
+      "previous": 662056,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        792057
+      ],
+      "description": "通关剧情章节8：四神学院",
+      "rule": {
+        "kind": "sections_clear",
+        "ids": [
+          2110709
+        ]
+      }
+    },
+    "662058": {
+      "group": 2,
+      "previous": 662057,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        792058
+      ],
+      "description": "通关剧情章节9：愚人船",
+      "rule": {
+        "kind": "sections_clear",
+        "ids": [
+          2110910
+        ]
+      }
+    },
+    "662070": {
+      "group": 2,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        792070
+      ],
+      "description": "6 分钟内通关现世复刻：群星跃迁之时（新月难度）",
+      "rule": {
+        "kind": "timed_clear",
+        "ids": [
+          2110851
+        ],
+        "seconds": 360
+      }
+    },
+    "662071": {
+      "group": 2,
+      "previous": 662070,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        792071
+      ],
+      "description": "6 分钟内通关现世复刻：白夜崩解（新月难度）",
+      "rule": {
+        "kind": "timed_clear",
+        "ids": [
+          2110151
+        ],
+        "seconds": 360
+      }
+    },
+    "662072": {
+      "group": 2,
+      "previous": 662071,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        792072
+      ],
+      "description": "6 分钟内通关现世复刻：寂灭之墟（新月难度）",
+      "rule": {
+        "kind": "timed_clear",
+        "ids": [
+          2110251
+        ],
+        "seconds": 360
+      }
+    },
+    "662073": {
+      "group": 2,
+      "previous": 662072,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        792073
+      ],
+      "description": "6 分钟内通关现世复刻：饕餮盛宴（新月难度）",
+      "rule": {
+        "kind": "timed_clear",
+        "ids": [
+          2110351
+        ],
+        "seconds": 360
+      }
+    },
+    "662074": {
+      "group": 2,
+      "previous": 662073,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        792074
+      ],
+      "description": "6 分钟内通关现世复刻：黑暗金字塔（新月难度）",
+      "rule": {
+        "kind": "timed_clear",
+        "ids": [
+          2110451
+        ],
+        "seconds": 360
+      }
+    },
+    "662075": {
+      "group": 2,
+      "previous": 662074,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        792075
+      ],
+      "description": "6 分钟内通关现世复刻：火剑之路（新月难度）",
+      "rule": {
+        "kind": "timed_clear",
+        "ids": [
+          2110551
+        ],
+        "seconds": 360
+      }
+    },
+    "662076": {
+      "group": 2,
+      "previous": 662075,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        792076
+      ],
+      "description": "6 分钟内通关现世复刻：云中电玩城（新月难度）",
+      "rule": {
+        "kind": "timed_clear",
+        "ids": [
+          2110651
+        ],
+        "seconds": 360
+      }
+    },
+    "662077": {
+      "group": 2,
+      "previous": 662076,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        792077
+      ],
+      "description": "6 分钟内通关现世复刻：四神学院（新月难度）",
+      "rule": {
+        "kind": "timed_clear",
+        "ids": [
+          2110751
+        ],
+        "seconds": 360
+      }
+    },
+    "662078": {
+      "group": 2,
+      "previous": 662077,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        792078
+      ],
+      "description": "6 分钟内通关现世复刻：愚人船（新月难度）",
+      "rule": {
+        "kind": "timed_clear",
+        "ids": [
+          2110951
+        ],
+        "seconds": 360
+      }
+    },
+    "662120": {
+      "group": 2,
+      "previous": 0,
+      "targets": [
+        2,
+        5,
+        10,
+        15,
+        20,
+        25,
+        30
+      ],
+      "gifts": [
+        792120,
+        792121,
+        792122,
+        792123,
+        792124,
+        792125,
+        792126
+      ],
+      "description": "白夜大厅等级达到 {0} 级",
+      "rule": {
+        "kind": "building_level",
+        "id": 701
+      }
+    },
+    "662140": {
+      "group": 2,
+      "previous": 0,
+      "targets": [
+        2,
+        5,
+        10,
+        15,
+        20,
+        25,
+        30
+      ],
+      "gifts": [
+        792140,
+        792141,
+        792142,
+        792143,
+        792144,
+        792145,
+        792146
+      ],
+      "description": "启明之塔等级达到 {0} 级",
+      "rule": {
+        "kind": "building_level",
+        "id": 702
+      }
+    },
+    "662160": {
+      "group": 2,
+      "previous": 0,
+      "targets": [
+        2,
+        5,
+        10,
+        15,
+        20,
+        25,
+        30
+      ],
+      "gifts": [
+        792160,
+        792161,
+        792162,
+        792163,
+        792164,
+        792165,
+        792166
+      ],
+      "description": "时空回廊等级达到 {0} 级",
+      "rule": {
+        "kind": "building_level",
+        "id": 703
+      }
+    },
+    "662180": {
+      "group": 2,
+      "previous": 0,
+      "targets": [
+        2,
+        5,
+        10,
+        15,
+        20,
+        25,
+        30
+      ],
+      "gifts": [
+        792180,
+        792181,
+        792182,
+        792183,
+        792184,
+        792185,
+        792186
+      ],
+      "description": "光之密室等级达到 {0} 级",
+      "rule": {
+        "kind": "building_level",
+        "id": 704
+      }
+    },
+    "662200": {
+      "group": 2,
+      "previous": 0,
+      "targets": [
+        2,
+        5,
+        10,
+        15,
+        20,
+        25,
+        30
+      ],
+      "gifts": [
+        792200,
+        792201,
+        792202,
+        792203,
+        792204,
+        792205,
+        792206
+      ],
+      "description": "时空之门等级达到 {0} 级",
+      "rule": {
+        "kind": "building_level",
+        "id": 705
+      }
+    },
+    "662220": {
+      "group": 2,
+      "previous": 0,
+      "targets": [
+        2,
+        5,
+        10,
+        15,
+        20,
+        25,
+        30
+      ],
+      "gifts": [
+        792220,
+        792221,
+        792222,
+        792223,
+        792224,
+        792225,
+        792226
+      ],
+      "description": "镜面立方等级达到 {0} 级",
+      "rule": {
+        "kind": "building_level",
+        "id": 706
+      }
+    },
+    "662240": {
+      "group": 2,
+      "previous": 0,
+      "targets": [
+        2,
+        5,
+        10,
+        15,
+        20,
+        25,
+        30
+      ],
+      "gifts": [
+        792240,
+        792241,
+        792242,
+        792243,
+        792244,
+        792245,
+        792246
+      ],
+      "description": "逆位螺旋等级达到 {0} 级",
+      "rule": {
+        "kind": "building_level",
+        "id": 707
+      }
+    },
+    "662300": {
+      "group": 2,
+      "previous": 0,
+      "targets": [
+        100000,
+        1000000,
+        5000000,
+        8000000,
+        14000000,
+        21000000,
+        28000000,
+        38000000,
+        50000000
+      ],
+      "gifts": [
+        792300,
+        792301,
+        792302,
+        792303,
+        792304,
+        792305,
+        792306,
+        792307,
+        792308
+      ],
+      "description": "在炼金实验室中，收获金币数量达到 {0} ",
+      "rule": {
+        "kind": "unsupported"
+      }
+    },
+    "662310": {
+      "group": 2,
+      "previous": 0,
+      "targets": [
+        1,
+        5,
+        10,
+        20,
+        50,
+        100,
+        200,
+        500,
+        1000
+      ],
+      "gifts": [
+        792310,
+        792311,
+        792312,
+        792313,
+        792314,
+        792315,
+        792316,
+        792317,
+        792318
+      ],
+      "description": "在白夜大厅中，累计派遣神格探险 {0} 次",
+      "rule": {
+        "kind": "unsupported"
+      }
+    },
+    "662320": {
+      "group": 2,
+      "previous": 0,
+      "targets": [
+        1,
+        5,
+        10,
+        20,
+        50,
+        100,
+        200,
+        500,
+        1000
+      ],
+      "gifts": [
+        792320,
+        792321,
+        792322,
+        792323,
+        792324,
+        792325,
+        792326,
+        792327,
+        792328
+      ],
+      "description": "在光之密室中，累计派遣神格训练 {0} 次",
+      "rule": {
+        "kind": "unsupported"
+      }
+    },
+    "662330": {
+      "group": 2,
+      "previous": 0,
+      "targets": [
+        50,
+        200,
+        400,
+        700,
+        1200,
+        2000,
+        2800,
+        3600,
+        5000
+      ],
+      "gifts": [
+        792330,
+        792331,
+        792332,
+        792333,
+        792334,
+        792335,
+        792336,
+        792337,
+        792338
+      ],
+      "description": "在炼金实验室中，累计完成 {0} 次交易",
+      "rule": {
+        "kind": "unsupported"
+      }
+    },
+    "662340": {
+      "group": 2,
+      "previous": 0,
+      "targets": [
+        3,
+        10,
+        20,
+        50,
+        80,
+        120,
+        160,
+        220,
+        300
+      ],
+      "gifts": [
+        792340,
+        792341,
+        792342,
+        792343,
+        792344,
+        792345,
+        792346,
+        792347,
+        792348
+      ],
+      "description": "在炼金实验室中，累计完成 {0} 次任务",
+      "rule": {
+        "kind": "unsupported"
+      }
+    },
+    "662400": {
+      "group": 2,
+      "previous": 0,
+      "targets": [
+        2,
+        5,
+        10,
+        15,
+        20,
+        25,
+        30
+      ],
+      "gifts": [
+        792400,
+        792401,
+        792402,
+        792403,
+        792404,
+        792405,
+        792406
+      ],
+      "description": "天坛等级达到 {0} 级",
+      "rule": {
+        "kind": "building_level",
+        "id": 721
+      }
+    },
+    "662410": {
+      "group": 2,
+      "previous": 0,
+      "targets": [
+        2,
+        5,
+        10,
+        15,
+        20,
+        25,
+        30
+      ],
+      "gifts": [
+        792410,
+        792411,
+        792412,
+        792413,
+        792414,
+        792415,
+        792416
+      ],
+      "description": "姬路城等级达到 {0} 级",
+      "rule": {
+        "kind": "building_level",
+        "id": 722
+      }
+    },
+    "662420": {
+      "group": 2,
+      "previous": 0,
+      "targets": [
+        2,
+        5,
+        10,
+        15,
+        20,
+        25,
+        30
+      ],
+      "gifts": [
+        792420,
+        792421,
+        792422,
+        792423,
+        792424,
+        792425,
+        792426
+      ],
+      "description": "阿斯加德等级达到 {0} 级",
+      "rule": {
+        "kind": "building_level",
+        "id": 723
+      }
+    },
+    "662430": {
+      "group": 2,
+      "previous": 0,
+      "targets": [
+        2,
+        5,
+        10,
+        15,
+        20,
+        25,
+        30
+      ],
+      "gifts": [
+        792430,
+        792431,
+        792432,
+        792433,
+        792434,
+        792435,
+        792436
+      ],
+      "description": "帕特农神庙等级达到 {0} 级",
+      "rule": {
+        "kind": "building_level",
+        "id": 724
+      }
+    },
+    "662440": {
+      "group": 2,
+      "previous": 0,
+      "targets": [
+        2,
+        5,
+        10,
+        15,
+        20,
+        25,
+        30
+      ],
+      "gifts": [
+        792440,
+        792441,
+        792442,
+        792443,
+        792444,
+        792445,
+        792446
+      ],
+      "description": "胡夫金字塔等级达到 {0} 级",
+      "rule": {
+        "kind": "building_level",
+        "id": 725
+      }
+    },
+    "662450": {
+      "group": 2,
+      "previous": 0,
+      "targets": [
+        2,
+        5,
+        10,
+        15,
+        20,
+        25,
+        30
+      ],
+      "gifts": [
+        792450,
+        792451,
+        792452,
+        792453,
+        792454,
+        792455,
+        792456
+      ],
+      "description": "巴别塔等级达到 {0} 级",
+      "rule": {
+        "kind": "building_level",
+        "id": 726
+      }
+    },
+    "662460": {
+      "group": 2,
+      "previous": 0,
+      "targets": [
+        2,
+        5,
+        10,
+        15,
+        20,
+        25,
+        30
+      ],
+      "gifts": [
+        792460,
+        792461,
+        792462,
+        792463,
+        792464,
+        792465,
+        792466
+      ],
+      "description": "科隆大教堂等级达到 {0} 级",
+      "rule": {
+        "kind": "building_level",
+        "id": 727
+      }
+    },
+    "662600": {
+      "group": 2,
+      "previous": 0,
+      "targets": [
+        1,
+        5,
+        10,
+        50,
+        100,
+        200,
+        500,
+        1000
+      ],
+      "gifts": [
+        792600,
+        792601,
+        792602,
+        792603,
+        792604,
+        792605,
+        792606,
+        792607
+      ],
+      "description": "在位面奇迹中，累计祈神 {0} 次",
+      "rule": {
+        "kind": "unsupported"
+      }
+    },
+    "662700": {
+      "group": 2,
+      "previous": 0,
+      "targets": [
+        10,
+        50,
+        100,
+        200,
+        400,
+        600,
+        800,
+        1000
+      ],
+      "gifts": [
+        792700,
+        792701,
+        792702,
+        792703,
+        792704,
+        792705,
+        792706,
+        792707
+      ],
+      "description": "白夜补给中购买 {0} 件商品",
+      "rule": {
+        "kind": "unsupported"
+      }
+    },
+    "662710": {
+      "group": 2,
+      "previous": 0,
+      "targets": [
+        100,
+        200,
+        500,
+        1000,
+        2000,
+        5000,
+        10000,
+        50000,
+        100000
+      ],
+      "gifts": [
+        792710,
+        792711,
+        792712,
+        792713,
+        792714,
+        792715,
+        792716,
+        792717,
+        792718
+      ],
+      "description": "累计击败 {0} 只普通怪物",
+      "rule": {
+        "kind": "unsupported"
+      }
+    },
+    "662720": {
+      "group": 2,
+      "previous": 0,
+      "targets": [
+        10,
+        20,
+        50,
+        100,
+        200,
+        500,
+        1000,
+        5000,
+        10000
+      ],
+      "gifts": [
+        792720,
+        792721,
+        792722,
+        792723,
+        792724,
+        792725,
+        792726,
+        792727,
+        792728
+      ],
+      "description": "累计击败 {0} 只精英怪物",
+      "rule": {
+        "kind": "unsupported"
+      }
+    },
+    "662730": {
+      "group": 2,
+      "previous": 0,
+      "targets": [
+        5,
+        10,
+        20,
+        50,
+        100,
+        200,
+        500,
+        1000
+      ],
+      "gifts": [
+        792730,
+        792731,
+        792732,
+        792733,
+        792734,
+        792735,
+        792736,
+        792737
+      ],
+      "description": "累计击败 {0} 只BOSS",
+      "rule": {
+        "kind": "unsupported"
+      }
+    },
+    "662900": {
+      "group": 2,
+      "previous": 0,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        792900
+      ],
+      "description": "通关现世复刻（血月难度）：群星跃迁之时",
+      "rule": {
+        "kind": "sections_clear",
+        "ids": [
+          2110860
+        ]
+      }
+    },
+    "662901": {
+      "group": 2,
+      "previous": 662900,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        792901
+      ],
+      "description": "通关现世复刻（血月难度）：白夜崩解",
+      "rule": {
+        "kind": "sections_clear",
+        "ids": [
+          2110160
+        ]
+      }
+    },
+    "662902": {
+      "group": 2,
+      "previous": 662901,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        792902
+      ],
+      "description": "通关现世复刻（血月难度）：寂灭之墟",
+      "rule": {
+        "kind": "sections_clear",
+        "ids": [
+          2110260
+        ]
+      }
+    },
+    "662903": {
+      "group": 2,
+      "previous": 662902,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        792903
+      ],
+      "description": "通关现世复刻（血月难度）：饕餮盛宴",
+      "rule": {
+        "kind": "sections_clear",
+        "ids": [
+          2110360
+        ]
+      }
+    },
+    "662904": {
+      "group": 2,
+      "previous": 662903,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        792904
+      ],
+      "description": "通关现世复刻（血月难度）：黑暗金字塔",
+      "rule": {
+        "kind": "sections_clear",
+        "ids": [
+          2110460
+        ]
+      }
+    },
+    "662905": {
+      "group": 2,
+      "previous": 662904,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        792905
+      ],
+      "description": "通关现世复刻（血月难度）：火剑之路",
+      "rule": {
+        "kind": "sections_clear",
+        "ids": [
+          2110560
+        ]
+      }
+    },
+    "662906": {
+      "group": 2,
+      "previous": 662905,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        792906
+      ],
+      "description": "通关现世复刻（血月难度）：云中电玩城",
+      "rule": {
+        "kind": "sections_clear",
+        "ids": [
+          2110660
+        ]
+      }
+    },
+    "662907": {
+      "group": 2,
+      "previous": 662906,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        792907
+      ],
+      "description": "通关现世复刻（血月难度）：四神学院",
+      "rule": {
+        "kind": "sections_clear",
+        "ids": [
+          2110760
+        ]
+      }
+    },
+    "662908": {
+      "group": 2,
+      "previous": 662907,
+      "targets": [
+        1
+      ],
+      "gifts": [
+        792908
+      ],
+      "description": "通关现世复刻（血月难度）：愚人船",
+      "rule": {
+        "kind": "sections_clear",
+        "ids": [
+          2110960
+        ]
+      }
+    }
+  },
+  "point_targets": [
+    10,
+    20,
+    30,
+    50,
+    80,
+    120,
+    160,
+    200,
+    250,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550
+  ],
+  "point_gifts": [
+    760081,
+    760082,
+    760083,
+    760084,
+    760085,
+    760086,
+    760087,
+    760088,
+    760089,
+    760090,
+    760091,
+    760092,
+    760093,
+    760094,
+    760095
+  ]
+}

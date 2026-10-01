@@ -205,6 +205,8 @@ class EconomyService:
 
         from .chapter_dp import ChapterDP
         self.dp = ChapterDP(self)
+        from .achievements import AchievementService
+        self.achievements = AchievementService(self)
 
     @contextmanager
     def transaction(self):
@@ -257,6 +259,7 @@ class EconomyService:
                 self.store.db.execute("UPDATE players SET snapshot=?,revision=revision+1 WHERE id=?", (json.dumps(snapshot, ensure_ascii=False, sort_keys=True), player_id))
 
     def login_event(self, player_id):
+        self.achievements.login(player_id)
         self.refresh_stamina(player_id)
         self.ensure_periods(player_id)
         self.record_event(player_id, "login", 5)
@@ -1159,11 +1162,12 @@ class EconomyService:
             OutboundMessage("L2C_ItemUpdate", {"code": 10, **self.inventory_values(player_id)}),
             *((OutboundMessage("L2C_ItemRemove", {"ids": removed}),) if removed else ()),
             *(OutboundMessage("L2C_TaskUpdate", {"type": k, "taskList": self.task_values(player_id, k)["taskList"]}) for k in (1, 2)),
-            OutboundMessage("L2C_TaskUpdate", {"type": 3, "taskList": self.challenge_values(player_id)["taskList"]}))
+            OutboundMessage("L2C_TaskUpdate", {"type": 3, "taskList": self.challenge_values(player_id)["taskList"]}),
+            self.achievements.update(player_id))
 
     def handlers(self):
         from .bag_items import BagItemService
-        return {**BagItemService(self.store, self).handlers(),
+        return {**BagItemService(self.store, self).handlers(), **self.achievements.handlers(),
                 "C2L_FetchMobilityPower": self.fetch_mobility_power,
                 **{name: self.handle for name in ("C2L_ItemAll", "C2L_ItemOpt", "C2L_ShopGoods", "C2L_RefreshShop", "C2L_BuyGoods",
             "C2L_QueryGoodsInfo", "C2L_GameTask", "C2L_DailyAndWeekTask", "C2L_FinishGameTask",
