@@ -1,9 +1,11 @@
 """Explicit local empty-state queries; no purchases, rewards or progression mutations."""
 import logging
 import time
+import json
+from importlib.resources import files
 from .server_clock import ServerClock
 
-from x2server.messages.lobby import LOBBY_IDS, LOBBY_SCHEMAS, growth_base_values
+from x2server.messages.lobby import LOBBY_IDS, LOBBY_SCHEMAS, growth_base_values, ACTIVITY_DATA
 from x2server.network.dispatcher import DispatchContext, OutboundMessage
 from x2server.protocol.errors import ProtocolError
 from x2server.protocol.registry import CORE_MESSAGE_REGISTRY
@@ -29,6 +31,20 @@ class LobbyService:
             return OutboundMessage("L2C_QueryGrowthBase", growth)
         if name == "C2L_UnlockExploreRuin":
             return OutboundMessage("L2C_UnlockExploreRuin", {"code": 13})
+        if name == "C2L_QueryActivity":
+            row = json.loads(files("x2server").joinpath("data/sweep_activity.json").read_text(encoding="utf-8"))
+            # Revive only the client's sweep tab; the original event dates expired.
+            values = {"actId": row["ActivityID"], "state": 1,
+                "activityParentType": row["ActivityParentType"]["value"],
+                "actType": row["ActivityType"]["value"], "startTime": 1, "endTime": 2147483647,
+                "openLever": row["OpenLever"], "activityShow": row["ActivityShow"],
+                "activityGroup": row["ActivityGroup"], "activityName": row["ActivityName"],
+                "param1": row["ActivityParam1"], "activityTaps": row["ActivityTaps"],
+                "activityDescription": row["ActivityDescription"]}
+            logging.getLogger("x2.lobby").info("sweep activity advertised player=%s activity=%s type=%s",
+                context.session.player_id, values["actId"], values["actType"])
+            return OutboundMessage("L2C_QueryActivity", {"code": 10,
+                "activityData": [ACTIVITY_DATA.encode(values)]})
         # These describe a dedicated local account with no online activities.
         states = {
             "C2L_QueryTelInfo": {"code": 10, "telNumber": "", "lastBindTime": 0},
@@ -44,7 +60,6 @@ class LobbyService:
             "C2L_EquipAll": {},
             "C2L_QueryMission": {},
             "C2L_QueryCollectionAward": {},
-            "C2L_QueryActivity": {"code": 10},
             "C2L_QueryWorldBossOpenTime": {"code": 208},  # E_ACTIVITY_REAL_NOT_OPEN
             "C2L_QueryActivityDrawInfo": {"code": 10},
             "C2L_QueryStarPrivilegeReward": {"code": 10},

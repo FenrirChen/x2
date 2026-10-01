@@ -1,6 +1,15 @@
 """Read-only lobby queries recovered from 2.4 ERequestTypes and Serialize methods."""
 from x2server.protocol.protobuf import FieldKind as K, ProtoField as F, ProtoSchema
 
+# ActivityData.Serialize 0x1dc97c8: client activity-center tab contract.
+ACTIVITY_DATA = ProtoSchema("ActivityData", (
+    *(F(i, name, K.INT32) for i, name in enumerate(("actId", "state", "activityParentType",
+        "actType", "startTime", "endTime", "openLever", "activityShow", "activityGroup", "activityName"), 1)),
+    *(F(i, name, K.INT32, repeated=True) for i, name in enumerate(("param1", "param2", "param3", "param4"), 11)),
+    F(15, "activityDescription", K.STRING), F(16, "activityReward", K.INT32, repeated=True),
+    F(17, "activityDataItems", K.MESSAGE, repeated=True), F(18, "activityTaps", K.STRING),
+    F(19, "openType", K.INT32), F(20, "openParam", K.INT32, repeated=True)))
+
 MISSION_PAIR = ProtoSchema("KeyValuePair_Int32_Int32", (F(1, "Key", K.INT32), F(2, "Value", K.INT32)))
 MISSION_TYPE = ProtoSchema("MissionTypeData", (F(1, "type", K.INT32),
     F(2, "missionData", K.MESSAGE, repeated=True),

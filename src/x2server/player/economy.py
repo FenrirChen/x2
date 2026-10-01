@@ -1008,8 +1008,8 @@ class EconomyService:
 
     def settle_sweep(self, player_id, section, count, request_key):
         """Only MopReward; the stage must already be cleared and cost is per sweep."""
-        self.refresh_stamina(player_id)
-        if type(count) is not int or not 1 <= count <= 10:
+        # SectionSweepView.RefreshView 0x176dfb8 caps its quantity selector at 99.
+        if type(count) is not int or not 1 <= count <= 99:
             raise UnresolvedEconomy("invalid sweep count")
         profile = self.section_rewards.get(section)
         config = self.reward_sections.get(section)
@@ -1021,6 +1021,7 @@ class EconomyService:
         cost = config.get("ManualValue")
         if type(cost) is not int or cost < 0:
             raise UnresolvedEconomy("sweep cost unknown")
+        self.refresh_stamina(player_id)
         snapshot = self.store.get(player_id)["snapshot"]
         if snapshot.get("mobility", {}).get("power", 0) < cost * count:
             raise UnresolvedEconomy("insufficient sweep stamina")

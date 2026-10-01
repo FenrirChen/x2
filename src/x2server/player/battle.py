@@ -106,8 +106,9 @@ class BattleService:
                     (key, player_id, section, schema.encode(values)))
         except UnresolvedEconomy as exc:
             logging.getLogger("x2.battle").info(
-                "checkout rejected section=%s reason=settle: %s", section, exc)
+                "sweep rejected player=%s section=%s count=%s reason=%s", player_id, section, count, exc)
             return reject
+        logging.getLogger("x2.battle").info("sweep accepted player=%s section=%s count=%s", player_id, section, count)
         return OutboundMessage("L2C_SecSweep", values, pushes=self.economy.pushes(player_id))
 
     async def kill_info(self, context, packet):

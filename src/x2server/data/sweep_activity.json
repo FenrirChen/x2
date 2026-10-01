@@ -1,0 +1,22 @@
+{
+  "ActivityID": 73010,
+  "ActivityParentType": {
+    "value": 2,
+    "enum": "E_DailyEvent"
+  },
+  "ActivityType": {
+    "value": 71,
+    "enum": "E_ActivityMop"
+  },
+  "ActivityGroup": 24,
+  "ActivityName": 730101,
+  "ActivityShow": 1,
+  "OpenLever": 10,
+  "OpenTime": 115275600,
+  "EndTime": 115707599,
+  "ActivityParam1": [
+    3
+  ],
+  "ActivityDescription": "",
+  "ActivityTaps": "UIAltas/Activity/SaiJiSaoDang"
+}
