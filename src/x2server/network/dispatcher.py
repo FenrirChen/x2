@@ -24,6 +24,7 @@ class DispatchContext:
     connection_id: str
     peer: str
     session: SessionState
+    send: Any = None
 
 
 @dataclass(frozen=True, slots=True)

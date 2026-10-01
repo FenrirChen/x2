@@ -84,6 +84,7 @@ async def run(database: Path, seconds: float) -> None:
                        Dispatcher(SilentChatService().handlers()))
     mail_task = None
     welfare_task = None
+    world_boss_task = None
 
     async def settle_monthcards(day_start):
         """Pay the month-card allowance at the local midnight, even online."""
@@ -99,6 +100,7 @@ async def run(database: Path, seconds: float) -> None:
         await tcp.start()
         await chat.start()
         mail_task = asyncio.create_task(mail.watch(tcp), name="local-mail-push")
+        world_boss_task = asyncio.create_task(economy.world_boss.watch(),name="local-world-boss")
         welfare_task = asyncio.create_task(daily_welfare_watch(store, clock.now,
             on_new_day=settle_monthcards), name="local-daily-welfare")
         logging.getLogger("x2.local").info(
@@ -110,7 +112,7 @@ async def run(database: Path, seconds: float) -> None:
         else:
             await asyncio.sleep(seconds)
     finally:
-        for task in (mail_task, welfare_task):
+        for task in (mail_task, welfare_task, world_boss_task):
             if task:
                 task.cancel()
                 await asyncio.gather(task, return_exceptions=True)

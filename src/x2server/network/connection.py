@@ -92,7 +92,7 @@ class X2Connection:
                     self.session.record_request(
                         packet.header.request_id, packet.header.session_id
                     )
-                    context = DispatchContext(self.connection_id, self.peer, self.session)
+                    context = DispatchContext(self.connection_id, self.peer, self.session, self.send_response)
                     outcome = await self.dispatcher.dispatch(context, packet)
                     LOGGER.info("handler status=%s response=%s code=%s pushes=%s", outcome.status.value,
                                 outcome.response.message_name if outcome.response else "-",

@@ -20,6 +20,7 @@ from x2server.messages.terminal import TERMINAL_SCHEMAS
 from x2server.messages.battle_shop import BATTLE_SHOP_SCHEMAS
 from x2server.messages.star_chart import STAR_CHART_SCHEMAS
 from x2server.messages.medals import MEDAL_SCHEMAS
+from x2server.messages.world_boss import WORLD_BOSS_SCHEMAS
 
 C2L_LOGIN = ProtoSchema(
     "C2L_Login",
@@ -110,6 +111,7 @@ CORE_SCHEMAS = {
 CORE_SCHEMAS.update(LOBBY_SCHEMAS)
 CORE_SCHEMAS.update(ACHIEVEMENT_SCHEMAS)
 CORE_SCHEMAS.update(MEDAL_SCHEMAS)
+CORE_SCHEMAS.update(WORLD_BOSS_SCHEMAS)
 CORE_SCHEMAS.update(CHAT_SCHEMAS)
 CORE_SCHEMAS.update(BATTLE_SCHEMAS)
 CORE_SCHEMAS.update(ECONOMY_SCHEMAS)
@@ -171,6 +173,7 @@ PLAYER_DATA = ProtoSchema("PlayerDataProto", (
     ProtoField(1, "BaseInfo", FieldKind.MESSAGE),
     ProtoField(2, "Mobility", FieldKind.MESSAGE),
     ProtoField(3, "Daily", FieldKind.MESSAGE),
+    ProtoField(5, "WorldBossSearch", FieldKind.MESSAGE),
     ProtoField(7, "MedalSystem", FieldKind.MESSAGE),
     ProtoField(8, "StarMap", FieldKind.MESSAGE),
     ProtoField(11, "RelicPack", FieldKind.MESSAGE, repeated=True),

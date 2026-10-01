@@ -11,7 +11,7 @@ from x2server.player.accounts import AccountStore, hash_password
 from x2server.player.economy import EconomyService
 from x2server.player.mail import MailService
 from x2server.player.store import PlayerStore
-from x2server.player.system_mail import BRILLIANCE, WISH_COIN, CAUSALITY_CARD
+from x2server.player.system_mail import BRILLIANCE, WISH_COIN, CAUSALITY_CARD, PURE_CRYSTAL
 from x2server.player.system_mail import HERO_CHOICE_BOX, deliver_hero_choice
 
 
@@ -107,6 +107,8 @@ def test_welcome_daily_claim_and_restart(tmp_path):
     assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=? AND item_id=?",
                             (player_id, CAUSALITY_CARD)).fetchone()[0] == 10
     assert BRILLIANCE == 1237902
+    assert store.db.execute('SELECT quantity FROM inventory WHERE player_id=? AND item_id=?',
+                            (player_id, PURE_CRYSTAL)).fetchone()[0] == 10
     accounts.close()
     store.close()
     reopened = PlayerStore(path)

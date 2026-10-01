@@ -160,10 +160,12 @@ class AchievementService:
             group = req.get('achvType', 0); start = req.get('startIndex', 0); end = req.get('endIndex', 0)
             values = {'code': 13, 'achvType': group, 'achvDataList': []}
             if group in range(1, 5) and 0 <= start <= end and end - start <= 30:
-                # Native client uses [start,start+30) and requests a final empty page.
+                # Native GetDetailData treats an absent protobuf list as another
+                # full page. Code 97 is its explicit end-of-list branch.
                 visible = [i for i, r in sorted(self.rows.items()) if r['group'] == group
                     and (not r['previous'] or states.get(r['previous'], (0, 0))[1] == len(self.rows[r['previous']]['targets']))]
-                values.update(code=10, achvDataList=[ACHV.encode(self.value(i, states[i])) for i in visible[start:end]])
+                page=[ACHV.encode(self.value(i, states[i])) for i in visible[start:end]]
+                values.update(code=10 if page else 97, achvDataList=page)
             return OutboundMessage(reply, values)
         point = name == 'C2L_AchvPointReward'; field = 'achvPointId' if point else 'achvId'; target = req.get(field, 0 if point else -1)
         values = {'code': 13, field: target, 'status': 0}

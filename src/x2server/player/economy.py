@@ -207,6 +207,10 @@ class EconomyService:
         self.dp = ChapterDP(self)
         from .achievements import AchievementService
         self.achievements = AchievementService(self)
+        from .endless import EndlessService
+        self.endless = EndlessService(self)
+        from .world_boss import WorldBossService
+        self.world_boss = WorldBossService(self)
         from .pending_delivery import recover
         for row in store.db.execute("SELECT id FROM players").fetchall():
             recover(self, row[0])
@@ -1180,7 +1184,7 @@ class EconomyService:
     def handlers(self):
         from .bag_items import BagItemService
         from .medals import MedalService
-        return {**MedalService(self).handlers(), **BagItemService(self.store, self).handlers(), **self.achievements.handlers(),
+        return {**self.world_boss.handlers(), **self.endless.handlers(), **MedalService(self).handlers(), **BagItemService(self.store, self).handlers(), **self.achievements.handlers(),
                 "C2L_FetchMobilityPower": self.fetch_mobility_power,
                 **{name: self.handle for name in ("C2L_ItemAll", "C2L_ItemOpt", "C2L_ShopGoods", "C2L_RefreshShop", "C2L_BuyGoods",
             "C2L_QueryGoodsInfo", "C2L_GameTask", "C2L_DailyAndWeekTask", "C2L_FinishGameTask",
@@ -1236,6 +1240,8 @@ class EconomyService:
             return OutboundMessage(response_name, self.mission_values(player_id))
         if name in ("C2L_GameTask", "C2L_DailyAndWeekTask"):
             kind = request.get("type", 0)
+            if kind == 12:
+                return OutboundMessage("L2C_GameTask", self.endless.task_values(player_id, request.get("chapterId", 2060101)))
             if kind == 7:  # GameTaskType.CHAPTER: the DP the client's chapter gate reads
                 chapter = request.get("chapterId", 0)
                 values = {"code": 10, "type": kind, "chapterId": chapter,
@@ -1255,6 +1261,7 @@ class EconomyService:
             if len(requests) > 40:
                 raise ProtocolError("too many task claims")
             results = [FINISH_RESULT.encode(
+                self.endless.claim(player_id, r.get("taskId", 0), context.session.session_id + ":" + str(packet.header.request_id)) if r.get("type", 0) == 12 else
                 self.claim_challenge(player_id, r.get("taskId", 0)) if r.get("type", 0) == 3 else
                 self.claim(player_id, r.get("taskId", 0), r.get("type", 0))
                 if not r.get("activityId") else {"code": 13, "taskId": r.get("taskId", 0), "type": r.get("type", 0)}) for r in requests]

@@ -133,7 +133,62 @@ class BagItemService:
                 PRIMARY KEY(player_id,hero_id))""")
 
     def handlers(self):
-        return {"C2L_JewelCompose": self.compose, "C2L_GodEquipJewelDot": self.jewel_seen}
+        return {"C2L_JewelCompose": self.compose, "C2L_GodEqupJewelCompose": self.compose_equipped,
+                "C2L_GodEquipJewelDot": self.jewel_seen}
+
+    async def compose_equipped(self, context, packet):
+        from .progression import ProgressionService, jewel_ids
+        from .hero import encode_hero_data
+        player = context.session.player_id
+        if player is None:
+            raise ProtocolError('equipped compose before login')
+        req = ECONOMY_SCHEMAS['C2L_GodEqupJewelCompose'].decode(packet.body)
+        recipe = self.economy.bag_catalog['recipes'].get(str(req.get('RecipeID', 0)))
+        slot = req.get('HoleIsID', -1)
+        schema = ECONOMY_SCHEMAS['L2C_GodEqupJewelCompose']
+        failure = OutboundMessage(schema.name, {'result': 13, 'ID': 0})
+        if (not recipe or recipe['type'] != 1 or slot not in range(6)
+                or recipe['product'] not in jewel_ids() or recipe['productNum'] != 1
+                or recipe['otherProduct'] or recipe['power'] or recipe['gold'] < 0):
+            return failure
+        key = hashlib.sha256(f'{player}:{context.session.session_id}:{packet.header.request_id}:equipped-compose'.encode() + packet.body).hexdigest()
+        try:
+            with self.economy.transaction():
+                cached = self.store.db.execute('SELECT response FROM bag_operation_receipts WHERE player_id=? AND request_key=?', (player, key)).fetchone()
+                if cached:
+                    values = schema.decode(cached[0])
+                else:
+                    snapshot = self.store.get(player)['snapshot']
+                    hero = next((h for h in snapshot.get('heroes', []) if h['id'] == req.get('HeroID') and h['state'] == 2), None)
+                    artifact = hero.get('god_equip') if hero else None
+                    old = artifact.get('jewels', {}).get(str(slot), 0) if artifact else 0
+                    costs = Counter()
+                    for item, count in recipe['costs']:
+                        if count <= 0:
+                            raise UnresolvedEconomy('invalid equipped compose cost')
+                        costs[item] += count
+                    if not old or old not in costs:
+                        raise UnresolvedEconomy('equipped jewel does not match recipe')
+                    if recipe['unlockType'] and (recipe['unlockType'] != 1 or not self.store.db.execute(
+                            'SELECT 1 FROM economy_clears WHERE player_id=? AND section_id=?', (player, recipe['unlockParam'])).fetchone()):
+                        raise UnresolvedEconomy('recipe not unlocked')
+                    # One ingredient is worn; the remainder comes from the bag.
+                    costs[old] -= 1
+                    costs[1237901] += recipe['gold']
+                    spender = object.__new__(ProgressionService)
+                    spender.store, spender.economy = self.store, self.economy
+                    spender.spend(player, snapshot, {i: n for i, n in costs.items() if n})
+                    artifact['jewels'][str(slot)] = recipe['product']
+                    self.economy.save_snapshot(player, snapshot)
+                    values = {'result': 10, 'ID': recipe['product']}
+                    self.store.db.execute('INSERT INTO bag_operation_receipts VALUES (?,?,?)', (player, key, schema.encode(values)))
+        except UnresolvedEconomy as exc:
+            logging.getLogger('x2.economy').info('equipped compose rejected player=%s request=%s reason=%s', player, req, exc)
+            return failure
+        logging.getLogger('x2.economy').info('equipped compose accepted player=%s request=%s product=%s', player, req, values['ID'])
+        heroes = [encode_hero_data(h) for h in self.store.get(player)['snapshot']['heroes']]
+        return OutboundMessage(schema.name, values, before_response=(
+            OutboundMessage('L2C_HeroUpdate', {'code': 10, 'heros': heroes}), *self.economy.pushes(player)))
 
     async def jewel_seen(self, context, packet):
         player = context.session.player_id

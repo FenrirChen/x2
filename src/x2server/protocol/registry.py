@@ -11,6 +11,7 @@ from x2server.messages.appearance import APPEARANCE_IDS
 from x2server.messages.mail import MAIL_IDS
 from x2server.messages.terminal import TERMINAL_IDS
 from x2server.messages.star_chart import STAR_CHART_IDS
+from x2server.messages.world_boss import WORLD_BOSS_IDS
 
 from dataclasses import dataclass
 from enum import Enum
@@ -72,6 +73,8 @@ class MessageRegistry:
 # Deliberately absent: L2C_CheckoutMainMissionSign does not exist in the client.
 CORE_MESSAGE_REGISTRY = MessageRegistry(
     (
+        *(MessageEntry(name, pid, Direction.CLIENT_TO_SERVER if name.startswith(("C2L_", "C2W_"))
+                        else Direction.SERVER_TO_CLIENT) for name, pid in WORLD_BOSS_IDS),
         *(MessageEntry(name, pid, Direction.CLIENT_TO_SERVER if name.startswith("C2L_")
                         else Direction.SERVER_TO_CLIENT) for name, pid in STAR_CHART_IDS),
         MessageEntry("C2L_MedalOpt", 411, Direction.CLIENT_TO_SERVER),

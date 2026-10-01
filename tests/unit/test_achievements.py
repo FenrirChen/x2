@@ -57,7 +57,7 @@ def test_overview_native_point_status_array_and_paginated_lists(env):
     ids = []
     for start in range(0, 400, 30):
         values = call(env, 'C2L_AchvDetialData', {'achvType': 1, 'startIndex': start, 'endIndex': start+30}).values
-        assert values['code'] == 10 and len(values['achvDataList']) <= 30
+        assert values['code'] == (10 if values['achvDataList'] else 97) and len(values['achvDataList']) <= 30
         ids.extend(ACHV.decode(v)['achvId'] for v in values['achvDataList'])
     assert len(ids) == len(set(ids)) and 661000 in ids
     for data in ({'achvType': 0}, {'achvType': 1, 'startIndex': -1, 'endIndex': 30},

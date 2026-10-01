@@ -62,6 +62,11 @@ class BattleEntryCatalog:
         if section_type not in SECTION_TYPES:
             raise EntryDenied("unknown SectionType")
         source = "MainMission" if section_type == 0 else SECTION_TYPES[section_type]
+        if section_type == 6 and economy:
+            try:
+                economy.world_boss.battle_admission(player_id,section_id,selected_ids,allow_bound=True)
+            except ValueError as exc:
+                raise EntryDenied(str(exc)) from exc
         if section_type == 5:
             from .star_chart import catalog, unlocked, state, skill_level
             ability = next(a for a in catalog()['abilities'] if a['ID'] == 39100)

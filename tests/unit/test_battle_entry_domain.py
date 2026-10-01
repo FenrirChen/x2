@@ -1,6 +1,7 @@
 """Battle entry variants share run creation while preserving main progression."""
 import asyncio
 import json
+import pytest
 from pathlib import Path
 
 from tests.unit.test_battle import packet, request
@@ -13,6 +14,7 @@ from x2server.player.reward_system import SectionRewardCatalog
 from x2server.player.economy import EconomyService
 from x2server.player.login import LoginService
 from x2server.player.store import PlayerStore
+from tests.unit.test_world_boss import admit_fixture
 from x2server.messages.core import BASE_INFO, PLAYER_DATA, INT_PAIR
 
 
@@ -204,6 +206,8 @@ def test_each_static_section_type_enters_and_settles_without_invented_reward(env
                 store.db.execute("INSERT OR IGNORE INTO economy_clears VALUES (?,?,?)",
                                  (1, row["OpenParam"], "static-prerequisite"))
         section = row["SectionID"]
+        if section_type == 6:
+            admit_fixture(economy, section)
         chapter = row["ChapterID"]
         entry = asyncio.run(service.enter(ctx, packet(
             daily(section, chapter, row["Maps"][0]), 400 + section_type)))
@@ -238,6 +242,13 @@ def test_all_extracted_sections_resolve_with_satisfied_static_prerequisites(env)
             store.db.execute("INSERT OR IGNORE INTO economy_clears VALUES (?,?,?)",
                              (1, section, "daily-prerequisite"))
     for section, row in service.catalog.sections.items():
+        if row["Type"] == 6 and admit_fixture(economy, section) is None:
+            from x2server.player.battle_entry import EntryDenied
+            with pytest.raises(EntryDenied):
+                service.catalog.resolve(player_id=1, request={"missionId":section,
+                    "chapter":row["ChapterID"],"sceneId":row["Maps"][0]},
+                    snapshot=snapshot,selected_ids=[1003],store=store,economy=economy)
+            continue  # Unreleased Boss stages have no WorldBossInfo entry.
         for expert_mode in (False, True):
             resolved = service.catalog.resolve(player_id=1, request={"missionId": section,
                 "chapter": row["ChapterID"], "sceneId": row["Maps"][0],

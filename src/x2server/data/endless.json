@@ -1,0 +1,995 @@
+{
+  "sources": {
+    "WeeklyDungeon": {
+      "source": "assets/bin/Data/6a01f5bccf4af314c86f5bdec01a388e",
+      "record_count": 5,
+      "fields": [
+        "ID",
+        "EndlessDesc",
+        "HistoryID",
+        "OpenCycle",
+        "SectionList",
+        "LevelLimit",
+        "DiffInfo",
+        "DropInfo",
+        "EndlessWeekVowLimit",
+        "NextActive",
+        "ShowPic",
+        "ChapterPic",
+        "ChapterTxt",
+        "ChapterTxtBG",
+        "EndlessTaskType"
+      ]
+    },
+    "TaskEndlessWeek": {
+      "source": "assets/bin/Data/a8b9629e99e4b39459bd15ff7e991ae3",
+      "record_count": 54,
+      "fields": [
+        "EndlessWeekTaskID",
+        "TaskName",
+        "TaskDescribe",
+        "TaskConditionID",
+        "TaskConditionType",
+        "AcceptLevel",
+        "LastTask",
+        "NextTask",
+        "ChapterId",
+        "ResetType",
+        "VomLimit",
+        "GiftGroup",
+        "OrderIndex",
+        "IsShowRate"
+      ]
+    },
+    "EndlessDungeonTask": {
+      "source": "assets/bin/Data/1db9fc4bb337e3045b5b6de257d84d47",
+      "record_count": 17,
+      "fields": [
+        "EndlessDungeonTaskID",
+        "TaskName",
+        "TaskDescribe",
+        "TaskConditionID",
+        "TaskConditionType",
+        "AcceptLevel",
+        "ChapterId",
+        "VomLimit",
+        "GiftGroup",
+        "OrderIndex",
+        "IsShowRate"
+      ]
+    },
+    "TaskCondition": {
+      "source": "assets/bin/Data/3ee9401d542d7bf43b6b6786500040ed",
+      "record_count": 1728,
+      "fields": [
+        "TaskConditionID",
+        "CompleteType",
+        "CompleteValue1",
+        "CompleteValue2",
+        "CompleteNum"
+      ]
+    },
+    "TaskConditionLine": {
+      "source": "assets/bin/Data/1510c6aef8f5ed841956ca11d84948ae",
+      "record_count": 139,
+      "fields": [
+        "AchievementConditionID",
+        "CompleteType",
+        "CompleteValue1",
+        "CompleteValue2",
+        "CompleteNum"
+      ]
+    }
+  },
+  "weekly": [
+    {
+      "ID": 2050101,
+      "EndlessDesc": 20501011,
+      "HistoryID": 20501012,
+      "OpenCycle": [
+        147,
+        150
+      ],
+      "SectionList": [
+        2110291,
+        2110292,
+        2110293,
+        2110294
+      ],
+      "LevelLimit": [
+        22,
+        33,
+        39,
+        44
+      ],
+      "DropInfo": 2050112,
+      "EndlessWeekVowLimit": 880,
+      "NextActive": 2050301,
+      "ShowPic": "UIAltas/ChapterBG/WuJinGuan_DiTu",
+      "ChapterPic": "Chapter02",
+      "ChapterTxt": "Adventure_YuanSuZhiZhang",
+      "ChapterTxtBG": "GuanQiaZhuTu02",
+      "EndlessTaskType": 4
+    },
+    {
+      "ID": 2050201,
+      "EndlessDesc": 20502011,
+      "HistoryID": 20502012,
+      "OpenCycle": [
+        151,
+        154
+      ],
+      "SectionList": [
+        2110291,
+        2110292,
+        2110293,
+        2110294
+      ],
+      "LevelLimit": [
+        22,
+        33,
+        39,
+        44
+      ],
+      "DropInfo": 2050112,
+      "EndlessWeekVowLimit": 880,
+      "NextActive": 2050301,
+      "ShowPic": "UIAltas/ChapterBG/WuJinGuan_DiTu",
+      "ChapterPic": "Chapter02",
+      "ChapterTxt": "Adventure_YuanSuZhiZhang",
+      "ChapterTxtBG": "GuanQiaZhuTu02",
+      "EndlessTaskType": 4
+    },
+    {
+      "ID": 2050301,
+      "EndlessDesc": 20501011,
+      "HistoryID": 20501012,
+      "OpenCycle": [
+        155,
+        158
+      ],
+      "SectionList": [
+        2110191,
+        2110192,
+        2110193,
+        2110194
+      ],
+      "LevelLimit": [
+        22,
+        33,
+        39,
+        44
+      ],
+      "DropInfo": 2050112,
+      "EndlessWeekVowLimit": 880,
+      "NextActive": 2060101,
+      "ShowPic": "UIAltas/ChapterBG/WuJinGuan_DiTu",
+      "ChapterPic": "Chapter02",
+      "ChapterTxt": "Adventure_YuanSuZhiZhang",
+      "ChapterTxtBG": "GuanQiaZhuTu02",
+      "EndlessTaskType": 4
+    },
+    {
+      "ID": 2060101,
+      "EndlessDesc": 20501011,
+      "HistoryID": 20501012,
+      "OpenCycle": [
+        272,
+        275
+      ],
+      "SectionList": [
+        2110291,
+        2110292,
+        2110293,
+        2110294
+      ],
+      "LevelLimit": [
+        22,
+        33,
+        39,
+        44
+      ],
+      "DropInfo": 2050112,
+      "EndlessWeekVowLimit": 880,
+      "NextActive": 2060201,
+      "ShowPic": "UIAltas/ChapterBG/WuJinGuan_DiTu",
+      "ChapterPic": "Chapter02",
+      "ChapterTxt": "Adventure_YuanSuZhiZhang",
+      "ChapterTxtBG": "GuanQiaZhuTu02",
+      "EndlessTaskType": 12
+    },
+    {
+      "ID": 2060201,
+      "EndlessDesc": 20501011,
+      "HistoryID": 20501012,
+      "OpenCycle": [
+        268,
+        271
+      ],
+      "SectionList": [
+        2110191,
+        2110192,
+        2110193,
+        2110194
+      ],
+      "LevelLimit": [
+        22,
+        33,
+        39,
+        44
+      ],
+      "DropInfo": 2050112,
+      "EndlessWeekVowLimit": 880,
+      "NextActive": 2060101,
+      "ShowPic": "UIAltas/ChapterBG/WuJinGuan_DiTu",
+      "ChapterPic": "Chapter02",
+      "ChapterTxt": "Adventure_YuanSuZhiZhang",
+      "ChapterTxtBG": "GuanQiaZhuTu02",
+      "EndlessTaskType": 12
+    }
+  ],
+  "tasks": [
+    {
+      "EndlessDungeonTaskID": 100001,
+      "TaskName": 6800001,
+      "TaskDescribe": 6800002,
+      "TaskConditionID": 611631,
+      "TaskConditionType": {
+        "value": 1,
+        "enum": "E_Line"
+      },
+      "AcceptLevel": 21,
+      "ChapterId": [
+        2060101,
+        2060201
+      ],
+      "VomLimit": [
+        10,
+        10,
+        10
+      ],
+      "GiftGroup": [
+        796001,
+        796002,
+        796003
+      ],
+      "OrderIndex": 1,
+      "IsShowRate": 1,
+      "condition": {
+        "AchievementConditionID": 611631,
+        "CompleteType": {
+          "value": 1,
+          "enum": "E_KillMonster"
+        },
+        "CompleteValue1": [
+          3023
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": [
+          100,
+          300,
+          500
+        ]
+      }
+    },
+    {
+      "EndlessDungeonTaskID": 100002,
+      "TaskName": 6800051,
+      "TaskDescribe": 6800052,
+      "TaskConditionID": 611636,
+      "TaskConditionType": {
+        "value": 1,
+        "enum": "E_Line"
+      },
+      "AcceptLevel": 21,
+      "ChapterId": [
+        2060101,
+        2060201
+      ],
+      "VomLimit": [
+        10,
+        10,
+        10
+      ],
+      "GiftGroup": [
+        796004,
+        796005,
+        796006
+      ],
+      "OrderIndex": 6,
+      "IsShowRate": 1,
+      "condition": {
+        "AchievementConditionID": 611636,
+        "CompleteType": {
+          "value": 1,
+          "enum": "E_KillMonster"
+        },
+        "CompleteValue1": [
+          5016
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": [
+          2,
+          5,
+          10
+        ]
+      }
+    },
+    {
+      "EndlessDungeonTaskID": 100003,
+      "TaskName": 6800061,
+      "TaskDescribe": 6800062,
+      "TaskConditionID": 611637,
+      "TaskConditionType": {
+        "value": 1,
+        "enum": "E_Line"
+      },
+      "AcceptLevel": 21,
+      "ChapterId": [
+        2060101,
+        2060201
+      ],
+      "VomLimit": [
+        10,
+        10,
+        10
+      ],
+      "GiftGroup": [
+        796007,
+        796008,
+        796009
+      ],
+      "OrderIndex": 7,
+      "IsShowRate": 1,
+      "condition": {
+        "AchievementConditionID": 611637,
+        "CompleteType": {
+          "value": 1,
+          "enum": "E_KillMonster"
+        },
+        "CompleteValue1": [
+          5017
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": [
+          2,
+          5,
+          10
+        ]
+      }
+    },
+    {
+      "EndlessDungeonTaskID": 100004,
+      "TaskName": 6800071,
+      "TaskDescribe": 6800072,
+      "TaskConditionID": 611638,
+      "TaskConditionType": {
+        "value": 1,
+        "enum": "E_Line"
+      },
+      "AcceptLevel": 21,
+      "ChapterId": [
+        2060101,
+        2060201
+      ],
+      "VomLimit": [
+        10,
+        10,
+        10
+      ],
+      "GiftGroup": [
+        796010,
+        796011,
+        796012
+      ],
+      "OrderIndex": 8,
+      "IsShowRate": 1,
+      "condition": {
+        "AchievementConditionID": 611638,
+        "CompleteType": {
+          "value": 1,
+          "enum": "E_KillMonster"
+        },
+        "CompleteValue1": [
+          5913
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": [
+          2,
+          5,
+          10
+        ]
+      }
+    },
+    {
+      "EndlessDungeonTaskID": 100005,
+      "TaskName": 6800171,
+      "TaskDescribe": 6800172,
+      "TaskConditionID": 611831,
+      "TaskConditionType": {
+        "value": 2,
+        "enum": "E_Change"
+      },
+      "AcceptLevel": 22,
+      "ChapterId": [
+        2060101,
+        2060201
+      ],
+      "VomLimit": [
+        10
+      ],
+      "GiftGroup": [
+        796013
+      ],
+      "OrderIndex": 18,
+      "IsShowRate": 1,
+      "condition": {
+        "AchievementConditionID": 611831,
+        "CompleteType": {
+          "value": 63,
+          "enum": "E_ThreeHero"
+        },
+        "CompleteValue1": [
+          2110191,
+          2110192,
+          2110193,
+          2110194,
+          2110291,
+          2110292,
+          2110293,
+          2110294
+        ],
+        "CompleteValue2": [
+          1,
+          2,
+          3
+        ],
+        "CompleteNum": [
+          1
+        ]
+      }
+    },
+    {
+      "EndlessDungeonTaskID": 100006,
+      "TaskName": 6800181,
+      "TaskDescribe": 6800182,
+      "TaskConditionID": 611832,
+      "TaskConditionType": {
+        "value": 2,
+        "enum": "E_Change"
+      },
+      "AcceptLevel": 22,
+      "ChapterId": [
+        2060101,
+        2060201
+      ],
+      "VomLimit": [
+        20
+      ],
+      "GiftGroup": [
+        796014
+      ],
+      "OrderIndex": 19,
+      "condition": {
+        "TaskConditionID": 611832,
+        "CompleteType": {
+          "value": 63,
+          "enum": "E_ThreeHero"
+        },
+        "CompleteValue1": [
+          2110191,
+          2110291
+        ],
+        "CompleteValue2": [
+          1,
+          2,
+          3
+        ],
+        "CompleteNum": [
+          1
+        ]
+      }
+    },
+    {
+      "EndlessDungeonTaskID": 100007,
+      "TaskName": 6800191,
+      "TaskDescribe": 6800192,
+      "TaskConditionID": 611833,
+      "TaskConditionType": {
+        "value": 2,
+        "enum": "E_Change"
+      },
+      "AcceptLevel": 33,
+      "ChapterId": [
+        2060101,
+        2060201
+      ],
+      "VomLimit": [
+        20
+      ],
+      "GiftGroup": [
+        796015
+      ],
+      "OrderIndex": 20,
+      "condition": {
+        "TaskConditionID": 611833,
+        "CompleteType": {
+          "value": 63,
+          "enum": "E_ThreeHero"
+        },
+        "CompleteValue1": [
+          2110192,
+          2110292
+        ],
+        "CompleteValue2": [
+          1,
+          2,
+          3
+        ],
+        "CompleteNum": [
+          1
+        ]
+      }
+    },
+    {
+      "EndlessDungeonTaskID": 100008,
+      "TaskName": 6800201,
+      "TaskDescribe": 6800202,
+      "TaskConditionID": 611834,
+      "TaskConditionType": {
+        "value": 2,
+        "enum": "E_Change"
+      },
+      "AcceptLevel": 39,
+      "ChapterId": [
+        2060101,
+        2060201
+      ],
+      "VomLimit": [
+        20
+      ],
+      "GiftGroup": [
+        796016
+      ],
+      "OrderIndex": 21,
+      "condition": {
+        "TaskConditionID": 611834,
+        "CompleteType": {
+          "value": 63,
+          "enum": "E_ThreeHero"
+        },
+        "CompleteValue1": [
+          2110193,
+          2110293
+        ],
+        "CompleteValue2": [
+          1,
+          2,
+          3
+        ],
+        "CompleteNum": [
+          1
+        ]
+      }
+    },
+    {
+      "EndlessDungeonTaskID": 100009,
+      "TaskName": 6800211,
+      "TaskDescribe": 6800212,
+      "TaskConditionID": 611835,
+      "TaskConditionType": {
+        "value": 2,
+        "enum": "E_Change"
+      },
+      "AcceptLevel": 44,
+      "ChapterId": [
+        2060101,
+        2060201
+      ],
+      "VomLimit": [
+        20
+      ],
+      "GiftGroup": [
+        796017
+      ],
+      "OrderIndex": 22,
+      "condition": {
+        "TaskConditionID": 611835,
+        "CompleteType": {
+          "value": 63,
+          "enum": "E_ThreeHero"
+        },
+        "CompleteValue1": [
+          2110194,
+          2110294
+        ],
+        "CompleteValue2": [
+          1,
+          2,
+          3
+        ],
+        "CompleteNum": [
+          1
+        ]
+      }
+    },
+    {
+      "EndlessDungeonTaskID": 100010,
+      "TaskName": 6800221,
+      "TaskDescribe": 6800222,
+      "TaskConditionID": 611836,
+      "TaskConditionType": {
+        "value": 2,
+        "enum": "E_Change"
+      },
+      "AcceptLevel": 22,
+      "ChapterId": [
+        2060101,
+        2060201
+      ],
+      "VomLimit": [
+        20
+      ],
+      "GiftGroup": [
+        796018
+      ],
+      "OrderIndex": 23,
+      "condition": {
+        "TaskConditionID": 611836,
+        "CompleteType": {
+          "value": 63,
+          "enum": "E_ThreeHero"
+        },
+        "CompleteValue1": [
+          2110191,
+          2110291
+        ],
+        "CompleteValue2": [
+          3
+        ],
+        "CompleteNum": [
+          1
+        ]
+      }
+    },
+    {
+      "EndlessDungeonTaskID": 100011,
+      "TaskName": 6800231,
+      "TaskDescribe": 6800232,
+      "TaskConditionID": 611837,
+      "TaskConditionType": {
+        "value": 2,
+        "enum": "E_Change"
+      },
+      "AcceptLevel": 33,
+      "ChapterId": [
+        2060101,
+        2060201
+      ],
+      "VomLimit": [
+        20
+      ],
+      "GiftGroup": [
+        796019
+      ],
+      "OrderIndex": 24,
+      "condition": {
+        "TaskConditionID": 611837,
+        "CompleteType": {
+          "value": 63,
+          "enum": "E_ThreeHero"
+        },
+        "CompleteValue1": [
+          2110192,
+          2110292
+        ],
+        "CompleteValue2": [
+          3
+        ],
+        "CompleteNum": [
+          1
+        ]
+      }
+    },
+    {
+      "EndlessDungeonTaskID": 100012,
+      "TaskName": 6800241,
+      "TaskDescribe": 6800242,
+      "TaskConditionID": 611838,
+      "TaskConditionType": {
+        "value": 2,
+        "enum": "E_Change"
+      },
+      "AcceptLevel": 39,
+      "ChapterId": [
+        2060101,
+        2060201
+      ],
+      "VomLimit": [
+        20
+      ],
+      "GiftGroup": [
+        796020
+      ],
+      "OrderIndex": 25,
+      "condition": {
+        "TaskConditionID": 611838,
+        "CompleteType": {
+          "value": 63,
+          "enum": "E_ThreeHero"
+        },
+        "CompleteValue1": [
+          2110193,
+          2110293
+        ],
+        "CompleteValue2": [
+          3
+        ],
+        "CompleteNum": [
+          1
+        ]
+      }
+    },
+    {
+      "EndlessDungeonTaskID": 100013,
+      "TaskName": 6800251,
+      "TaskDescribe": 6800252,
+      "TaskConditionID": 611839,
+      "TaskConditionType": {
+        "value": 2,
+        "enum": "E_Change"
+      },
+      "AcceptLevel": 44,
+      "ChapterId": [
+        2060101,
+        2060201
+      ],
+      "VomLimit": [
+        20
+      ],
+      "GiftGroup": [
+        796021
+      ],
+      "OrderIndex": 26,
+      "condition": {
+        "TaskConditionID": 611839,
+        "CompleteType": {
+          "value": 63,
+          "enum": "E_ThreeHero"
+        },
+        "CompleteValue1": [
+          2110194,
+          2110294
+        ],
+        "CompleteValue2": [
+          3
+        ],
+        "CompleteNum": [
+          1
+        ]
+      }
+    },
+    {
+      "EndlessDungeonTaskID": 100014,
+      "TaskName": 6800261,
+      "TaskDescribe": 6800262,
+      "TaskConditionID": 615931,
+      "TaskConditionType": {
+        "value": 1,
+        "enum": "E_Line"
+      },
+      "AcceptLevel": 21,
+      "ChapterId": [
+        2060101,
+        2060201
+      ],
+      "VomLimit": [
+        10,
+        10,
+        10
+      ],
+      "GiftGroup": [
+        796022,
+        796023,
+        796024
+      ],
+      "OrderIndex": 27,
+      "IsShowRate": 1,
+      "condition": {
+        "AchievementConditionID": 615931,
+        "CompleteType": {
+          "value": 59,
+          "enum": "E_SectionLayer"
+        },
+        "CompleteValue1": [
+          2110191,
+          2110192,
+          2110193,
+          2110194,
+          2110291,
+          2110292,
+          2110293,
+          2110294
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": [
+          30,
+          80,
+          150
+        ]
+      }
+    },
+    {
+      "EndlessDungeonTaskID": 100016,
+      "TaskName": 6800461,
+      "TaskDescribe": 6800462,
+      "TaskConditionID": 616531,
+      "TaskConditionType": {
+        "value": 1,
+        "enum": "E_Line"
+      },
+      "AcceptLevel": 21,
+      "ChapterId": [
+        2060101,
+        2060201
+      ],
+      "VomLimit": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "GiftGroup": [
+        796025,
+        796026,
+        796027,
+        796028,
+        796029,
+        796030,
+        796031,
+        796032,
+        796033,
+        796034
+      ],
+      "OrderIndex": 47,
+      "IsShowRate": 1,
+      "condition": {
+        "AchievementConditionID": 616531,
+        "CompleteType": {
+          "value": 65,
+          "enum": "E_ElementExp"
+        },
+        "CompleteValue1": [
+          0
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": [
+          100,
+          300,
+          600,
+          1000,
+          1500,
+          2100,
+          2800,
+          3600,
+          4500,
+          5500
+        ]
+      }
+    },
+    {
+      "EndlessDungeonTaskID": 100017,
+      "TaskName": 6800571,
+      "TaskDescribe": 6800572,
+      "TaskConditionID": 616131,
+      "TaskConditionType": {
+        "value": 1,
+        "enum": "E_Line"
+      },
+      "AcceptLevel": 21,
+      "ChapterId": [
+        2060101,
+        2060201
+      ],
+      "VomLimit": [
+        15,
+        15,
+        15,
+        15
+      ],
+      "GiftGroup": [
+        796035,
+        796036,
+        796037,
+        796038
+      ],
+      "OrderIndex": 58,
+      "IsShowRate": 1,
+      "condition": {
+        "AchievementConditionID": 616131,
+        "CompleteType": {
+          "value": 61,
+          "enum": "E_Element"
+        },
+        "CompleteValue1": [
+          0
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": [
+          20,
+          50,
+          120,
+          300
+        ]
+      }
+    },
+    {
+      "EndlessDungeonTaskID": 100018,
+      "TaskName": 6800611,
+      "TaskDescribe": 6800612,
+      "TaskConditionID": 611336,
+      "TaskConditionType": {
+        "value": 1,
+        "enum": "E_Line"
+      },
+      "AcceptLevel": 21,
+      "ChapterId": [
+        2060101,
+        2060201
+      ],
+      "VomLimit": [
+        10,
+        10,
+        10,
+        10
+      ],
+      "GiftGroup": [
+        796039,
+        796040,
+        796041,
+        796042
+      ],
+      "OrderIndex": 62,
+      "IsShowRate": 1,
+      "condition": {
+        "AchievementConditionID": 611336,
+        "CompleteType": {
+          "value": 38,
+          "enum": "E_GetMoney"
+        },
+        "CompleteValue1": [
+          913
+        ],
+        "CompleteValue2": [
+          0
+        ],
+        "CompleteNum": [
+          600,
+          1200,
+          1800,
+          2400
+        ]
+      }
+    }
+  ]
+}

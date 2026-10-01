@@ -34,6 +34,15 @@ class LobbyService:
             return OutboundMessage("L2C_QueryGrowthBase", growth)
         if name == "C2L_UnlockExploreRuin":
             return OutboundMessage("L2C_UnlockExploreRuin", {"code": 13})
+        if name == "C2L_QueryWorldBossOpenTime":
+            # Main-screen 时序之门 is WorldBoss, not EndlessWeekly.
+            # WorldBossModule.OnHandleQueryOpenState treats code=10 as Open;
+            # the 17:00-23:00 text is the client's fallback for any other code.
+            # USER_DECISION 2026-10-01: keep this entry open all day.
+            logging.getLogger("x2.lobby").info(
+                "temporal gate WorldBoss open query player=%s policy=always-open",
+                context.session.player_id)
+            return OutboundMessage("L2C_QueryWorldBossOpenTime", {"code": 10})
         if name == "C2L_QueryActivity":
             if not self.sweep_enabled:
                 return OutboundMessage('L2C_QueryActivity', {'code': 10})
@@ -68,7 +77,6 @@ class LobbyService:
             "C2L_EquipAll": {},
             "C2L_QueryMission": {},
             "C2L_QueryCollectionAward": {},
-            "C2L_QueryWorldBossOpenTime": {"code": 208},  # E_ACTIVITY_REAL_NOT_OPEN
             "C2L_QueryActivityDrawInfo": {"code": 10},
             "C2L_QueryStarPrivilegeReward": {"code": 10},
             "C2L_QueryStarPrivilegeInfo": {"code": 10, "id": 0, "buyTime": 0},
