@@ -22,8 +22,13 @@ def export():
     for name in names[:3]:
         assert meta[name]['source'].startswith('assets/bin/Data/')
     language = {r['Key']: r.get('Chinese', '') for r in data['Language']}
+    # UnitBase also contains same-name combat/assist variants. Only the
+    # favorability catalog's account heroes can own persistent favor levels.
+    favor = json.loads(Path('src/x2server/data/favor_catalog.json').read_text(encoding='utf-8'))
+    account_ids = {row['HeroID'] for row in favor['favorabilityhero']}
     heroes = {language.get(r.get('Name')): r['ID'] for r in data['UnitBase']
-              if r.get('UnitType', {}).get('value') == 1}
+              if r['ID'] in account_ids}
+    heroes['朱雀'] = heroes['陵光']
     item_names = {r['ItemID']: language.get(r.get('NameID'), '') for r in data['Item']}
     buildings = {language.get(r['NameID']): r['ID'] for r in data['CollegeBuilding']}
     chapters = {language.get(r.get('ChapterName')): r for r in data['ChapterInfo']}

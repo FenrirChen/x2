@@ -29,6 +29,26 @@ def call(env, name, data, request_id=1):
     return asyncio.run(economy.achievements.handle(ctx, packet(data, name=name, request_id=request_id)))
 
 
+def test_favor_bindings_use_account_heroes_and_zhuque_alias(env):
+    store, economy, _ = env
+    service = economy.achievements
+    player = store.get(1)
+    heroes = [{'id': hero_id, 'level': 1, 'star': 1, 'state': 2}
+              for hero_id in service.initial_favor]
+    next(h for h in heroes if h['id'] == 1028)['favor'] = {'level': 4, 'exp': 850}
+    store.save_snapshot(1, dict(player['snapshot'], heroes=heroes), player['revision'])
+    states = service.states(1)
+    for achv_id, row in service.rows.items():
+        rule = row['rule']
+        if rule['kind'] != 'hero_favor':
+            continue
+        assert rule['hero'] in service.initial_favor
+        expected = 4 if rule['hero'] == 1028 else service.initial_favor[rule['hero']]
+        assert states[achv_id][0] == min(expected, row['targets'][-1])
+    # Canonical UnitBase hero 1034 is named 陵光; achievement calls her 朱雀.
+    assert service.rows[660650]['rule'] == {'kind': 'hero_favor', 'hero': 1034}
+
+
 def test_overview_native_point_status_array_and_paginated_lists(env):
     answer = call(env, 'C2L_AchvOverView', {}).values
     assert answer['code'] == 10 and len(answer['achvOverViewData']) == 4

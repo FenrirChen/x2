@@ -92,7 +92,7 @@ class AchievementService:
                 if receipt.get('result') == 10 and checkout.get('success') and checkout.get('sectionId') == run[0] and seconds > 0:
                     timed_clears[run[0]] = min(seconds, timed_clears.get(run[0], seconds))
         def favor(h):
-            return h.get('favor', {}).get('level', self.initial_favor.get(h['id'], 0))
+            return h.get('favor', {}).get('level', self.initial_favor.get(h['id'], 1))
         with self.economy.transaction():
             for achv_id, row in self.rows.items():
                 rule = row['rule']; kind = rule['kind']; minimum = rule.get('minimum', 0)

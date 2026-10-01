@@ -763,7 +763,7 @@
       "description": "贝黑莫斯默契度达到 {0} 级",
       "rule": {
         "kind": "hero_favor",
-        "hero": 100303
+        "hero": 1003
       }
     },
     "660320": {
@@ -780,7 +780,7 @@
       "description": "浮士德默契度达到 {0} 级",
       "rule": {
         "kind": "hero_favor",
-        "hero": 1335
+        "hero": 1004
       }
     },
     "660330": {
@@ -814,7 +814,7 @@
       "description": "流云默契度达到 {0} 级",
       "rule": {
         "kind": "hero_favor",
-        "hero": 1206
+        "hero": 1006
       }
     },
     "660350": {
@@ -831,7 +831,7 @@
       "description": "忒提丝默契度达到 {0} 级",
       "rule": {
         "kind": "hero_favor",
-        "hero": 1314
+        "hero": 1007
       }
     },
     "660360": {
@@ -848,7 +848,7 @@
       "description": "莉莉丝默契度达到 {0} 级",
       "rule": {
         "kind": "hero_favor",
-        "hero": 100802
+        "hero": 1008
       }
     },
     "660370": {
@@ -882,7 +882,7 @@
       "description": "涂山初玖默契度达到 {0} 级",
       "rule": {
         "kind": "hero_favor",
-        "hero": 101003
+        "hero": 1010
       }
     },
     "660390": {
@@ -899,7 +899,7 @@
       "description": "阿斯莫德默契度达到 {0} 级",
       "rule": {
         "kind": "hero_favor",
-        "hero": 101101
+        "hero": 1011
       }
     },
     "660400": {
@@ -916,7 +916,7 @@
       "description": "托尔默契度达到 {0} 级",
       "rule": {
         "kind": "hero_favor",
-        "hero": 101201
+        "hero": 1012
       }
     },
     "660410": {
@@ -950,7 +950,7 @@
       "description": "少姜默契度达到 {0} 级",
       "rule": {
         "kind": "hero_favor",
-        "hero": 101402
+        "hero": 1014
       }
     },
     "660430": {
@@ -967,7 +967,7 @@
       "description": "长庚默契度达到 {0} 级",
       "rule": {
         "kind": "hero_favor",
-        "hero": 101501
+        "hero": 1015
       }
     },
     "660440": {
@@ -984,7 +984,7 @@
       "description": "赛特默契度达到 {0} 级",
       "rule": {
         "kind": "hero_favor",
-        "hero": 101601
+        "hero": 1016
       }
     },
     "660450": {
@@ -1001,7 +1001,7 @@
       "description": "阿努比斯默契度达到 {0} 级",
       "rule": {
         "kind": "hero_favor",
-        "hero": 101702
+        "hero": 1017
       }
     },
     "660460": {
@@ -1018,7 +1018,7 @@
       "description": "贝斯特默契度达到 {0} 级",
       "rule": {
         "kind": "hero_favor",
-        "hero": 101801
+        "hero": 1018
       }
     },
     "660470": {
@@ -1035,7 +1035,7 @@
       "description": "伊南娜默契度达到 {0} 级",
       "rule": {
         "kind": "hero_favor",
-        "hero": 101903
+        "hero": 1019
       }
     },
     "660480": {
@@ -1052,7 +1052,7 @@
       "description": "少昊默契度达到 {0} 级",
       "rule": {
         "kind": "hero_favor",
-        "hero": 102001
+        "hero": 1020
       }
     },
     "660490": {
@@ -1069,7 +1069,7 @@
       "description": "孟章默契度达到 {0} 级",
       "rule": {
         "kind": "hero_favor",
-        "hero": 102101
+        "hero": 1021
       }
     },
     "660500": {
@@ -1086,7 +1086,7 @@
       "description": "源氏默契度达到 {0} 级",
       "rule": {
         "kind": "hero_favor",
-        "hero": 102202
+        "hero": 1022
       }
     },
     "660510": {
@@ -1103,7 +1103,7 @@
       "description": "木花石长姬默契度达到 {0} 级",
       "rule": {
         "kind": "hero_favor",
-        "hero": 102301
+        "hero": 1023
       }
     },
     "660520": {
@@ -1120,7 +1120,7 @@
       "description": "霍德尔默契度达到 {0} 级",
       "rule": {
         "kind": "hero_favor",
-        "hero": 102401
+        "hero": 1024
       }
     },
     "660530": {
@@ -1188,7 +1188,7 @@
       "description": "月读默契度达到 {0} 级",
       "rule": {
         "kind": "hero_favor",
-        "hero": 102501
+        "hero": 1025
       }
     },
     "660570": {
@@ -1222,7 +1222,7 @@
       "description": "精卫默契度达到 {0} 级",
       "rule": {
         "kind": "hero_favor",
-        "hero": 102701
+        "hero": 1027
       }
     },
     "660590": {
@@ -1239,7 +1239,7 @@
       "description": "月羲九默契度达到 {0} 级",
       "rule": {
         "kind": "hero_favor",
-        "hero": 102802
+        "hero": 1028
       }
     },
     "660600": {
@@ -1256,7 +1256,7 @@
       "description": "伊邪那美默契度达到 {0} 级",
       "rule": {
         "kind": "hero_favor",
-        "hero": 102901
+        "hero": 1029
       }
     },
     "660610": {
@@ -1273,7 +1273,7 @@
       "description": "伊邪纳岐默契度达到 {0} 级",
       "rule": {
         "kind": "hero_favor",
-        "hero": 103001
+        "hero": 1030
       }
     },
     "660620": {
@@ -1290,7 +1290,7 @@
       "description": "监兵默契度达到 {0} 级",
       "rule": {
         "kind": "hero_favor",
-        "hero": 1331
+        "hero": 1031
       }
     },
     "660630": {
@@ -1307,7 +1307,7 @@
       "description": "共工默契度达到 {0} 级",
       "rule": {
         "kind": "hero_favor",
-        "hero": 103201
+        "hero": 1032
       }
     },
     "660640": {
@@ -1340,7 +1340,8 @@
       ],
       "description": "朱雀默契度达到 {0} 级",
       "rule": {
-        "kind": "unsupported"
+        "kind": "hero_favor",
+        "hero": 1034
       }
     },
     "660660": {
@@ -1357,7 +1358,7 @@
       "description": "奥西里斯默契度达到 {0} 级",
       "rule": {
         "kind": "hero_favor",
-        "hero": 103501
+        "hero": 1035
       }
     },
     "660670": {
@@ -1374,7 +1375,7 @@
       "description": "吉尔达默契度达到 {0} 级",
       "rule": {
         "kind": "hero_favor",
-        "hero": 103601
+        "hero": 1036
       }
     },
     "660690": {
@@ -1391,7 +1392,7 @@
       "description": "斩念源氏默契度达到 {0} 级",
       "rule": {
         "kind": "hero_favor",
-        "hero": 1339
+        "hero": 1039
       }
     },
     "660700": {

@@ -1,5 +1,15 @@
 # 扫荡入口恢复
 
+## 后续用户决定：暂时关闭（2026-10-01）
+
+用户确认目前不需要扫荡，要求先关闭活动入口。LobbyService 默认
+sweep_enabled=False：QueryActivity 返回空列表，EntryidStatus 下发
+Key=19/Value=2，关闭 ActivityNoticeModule 的服务端功能开关。
+保留原生配置、扫荡接口与测试，后续明确要求恢复时可开启。
+左上角第二个日历入口实际为 RookieSignModule（七日签到），并非扫荡
+活动中心；第三个文件夹为活动中心。RookieSignModule.Show 在签到不可用时
+显示语言 Key 13101015“暂未解锁”，不能通过捏造签到数据解决扫荡入口。
+
 ## 原因与客户端证据
 
 服务端 C2L_QueryActivity 仅返回 code=10、空 activityData。

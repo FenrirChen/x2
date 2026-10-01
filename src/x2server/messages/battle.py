@@ -5,10 +5,14 @@ PROFILE_HERO = S("ProfileHero", (F(1, "heroId", K.INT32), F(2, "leader", K.INT32
 HERO_SKILL = S("HeroSkill", (F(1, "id", K.INT32), F(2, "level", K.INT32)))
 HERO_ATTR = S("HeroAttrCount", tuple(F(n, name, K.INT64) for n, name in enumerate(("atk", "def", "hp", "sp"), 1)))
 HERO_ATTR_ADD = S("HeroAttrAdd", (F(1, "attrId", K.INT32), F(2, "attrValue", K.INT64)))
+EQUIP_SUIT_ATTR = S("EquipSuitAttr", (F(1, "suitId", K.INT32), F(2, "suitNum", K.INT32),
+    F(3, "attribType1", K.INT32), F(4, "value1", K.INT64), F(5, "passiveID", K.INT32, repeated=True)))
 FIGHT_HERO = S("FightHero", (
     F(1, "id", K.INT32), F(2, "state", K.INT32), F(3, "level", K.INT32), F(4, "star", K.INT32),
-    F(5, "heroGodEquip", K.MESSAGE), F(7, "exp", K.INT32), F(8, "heroSkill", K.MESSAGE, repeated=True),
-    F(9, "attrAdd", K.MESSAGE, repeated=True), F(10, "battleSkinId", K.INT32), F(12, "heroAttrCount", K.MESSAGE)))
+    F(5, "heroGodEquip", K.MESSAGE), F(6, "heroEquip", K.MESSAGE, repeated=True),
+    F(7, "exp", K.INT32), F(8, "heroSkill", K.MESSAGE, repeated=True),
+    F(9, "attrAdd", K.MESSAGE, repeated=True), F(10, "battleSkinId", K.INT32),
+    F(11, "equipSuitAttr", K.MESSAGE, repeated=True), F(12, "heroAttrCount", K.MESSAGE)))
 # FightData deliberately starts at field 2 (Serialize 0x350E1C0).
 FIGHT_DATA = S("FightData", (F(2, "fightHeros", K.MESSAGE, repeated=True), F(3, "missionId", K.INT32),
     F(4, "dropData", K.MESSAGE), F(6, "expertMode", K.BOOL), F(7, "CRIDmg", K.INT32)))

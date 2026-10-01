@@ -1,0 +1,185 @@
+{
+  "source": {
+    "source": "assets/bin/Data/c5bbfdf9eae360a4ebbb13ced97b8422",
+    "record_count": 20,
+    "fields": [
+      "SuitId",
+      "NameID",
+      "SuitIcon",
+      "AttribType1",
+      "Value1",
+      "PassiveID",
+      "SuitAttr1ID",
+      "SuitAttr2ID",
+      "CombatSuitAttr2ID",
+      "BuffID",
+      "IsOpen"
+    ]
+  },
+  "suits": {
+    "400": {
+      "attribute": 108,
+      "value": 300,
+      "passives": [
+        241000,
+        241006
+      ]
+    },
+    "401": {
+      "attribute": 103,
+      "value": 300,
+      "passives": [
+        241001,
+        241002,
+        241003
+      ]
+    },
+    "402": {
+      "attribute": 101,
+      "value": 300,
+      "passives": [
+        241004,
+        241005
+      ]
+    },
+    "403": {
+      "attribute": 101,
+      "value": 300,
+      "passives": [
+        241051,
+        241052,
+        241053
+      ]
+    },
+    "404": {
+      "attribute": 108,
+      "value": 300,
+      "passives": [
+        241007
+      ]
+    },
+    "405": {
+      "attribute": 101,
+      "value": 300,
+      "passives": [
+        241038,
+        241039,
+        241040
+      ]
+    },
+    "406": {
+      "attribute": 108,
+      "value": 300,
+      "passives": [
+        241009,
+        241012
+      ]
+    },
+    "407": {
+      "attribute": 103,
+      "value": 300,
+      "passives": [
+        241010
+      ]
+    },
+    "408": {
+      "attribute": 108,
+      "value": 300,
+      "passives": [
+        241014
+      ]
+    },
+    "409": {
+      "attribute": 101,
+      "value": 300,
+      "passives": [
+        241015,
+        241017
+      ]
+    },
+    "410": {
+      "attribute": 101,
+      "value": 300,
+      "passives": [
+        241011
+      ]
+    },
+    "411": {
+      "attribute": 108,
+      "value": 300,
+      "passives": [
+        241030
+      ]
+    },
+    "412": {
+      "attribute": 108,
+      "value": 300,
+      "passives": [
+        241041,
+        241044
+      ]
+    },
+    "413": {
+      "attribute": 101,
+      "value": 300,
+      "passives": [
+        241010
+      ]
+    },
+    "414": {
+      "attribute": 108,
+      "value": 300,
+      "passives": [
+        241047,
+        241048,
+        241049
+      ]
+    },
+    "415": {
+      "attribute": 101,
+      "value": 300,
+      "passives": [
+        241057,
+        241058
+      ]
+    },
+    "416": {
+      "attribute": 103,
+      "value": 300,
+      "passives": [
+        241036,
+        241037
+      ]
+    },
+    "417": {
+      "attribute": 101,
+      "value": 300,
+      "passives": [
+        241045
+      ]
+    },
+    "418": {
+      "attribute": 101,
+      "value": 300,
+      "passives": [
+        241064,
+        241065,
+        241066,
+        241067,
+        241068,
+        241069
+      ]
+    },
+    "419": {
+      "attribute": 103,
+      "value": 300,
+      "passives": [
+        241070,
+        241071,
+        241072,
+        241073,
+        241074
+      ]
+    }
+  }
+}

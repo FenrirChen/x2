@@ -5,7 +5,7 @@ import json
 from importlib.resources import files
 from .server_clock import ServerClock
 
-from x2server.messages.lobby import LOBBY_IDS, LOBBY_SCHEMAS, growth_base_values, ACTIVITY_DATA
+from x2server.messages.lobby import LOBBY_IDS, LOBBY_SCHEMAS, growth_base_values, ACTIVITY_DATA, MISSION_PAIR
 from x2server.network.dispatcher import DispatchContext, OutboundMessage
 from x2server.protocol.errors import ProtocolError
 from x2server.protocol.registry import CORE_MESSAGE_REGISTRY
@@ -13,9 +13,12 @@ from x2server.protocol.types import DecodedPacket
 
 
 class LobbyService:
-    def __init__(self, clock=None, college=None):
+    def __init__(self, clock=None, college=None, *, sweep_enabled=False):
         self.clock = clock or ServerClock()
         self.college = college
+        # USER_DECISION 2026-10-01: disable the activity entry for now, retain
+        # the recovered sweep implementation for a future explicit reopening.
+        self.sweep_enabled = sweep_enabled
 
     def handlers(self):
         return {"C2L_" + name: self.query for name, _, _ in LOBBY_IDS}
@@ -32,6 +35,8 @@ class LobbyService:
         if name == "C2L_UnlockExploreRuin":
             return OutboundMessage("L2C_UnlockExploreRuin", {"code": 13})
         if name == "C2L_QueryActivity":
+            if not self.sweep_enabled:
+                return OutboundMessage('L2C_QueryActivity', {'code': 10})
             row = json.loads(files("x2server").joinpath("data/sweep_activity.json").read_text(encoding="utf-8"))
             # Revive only the client's sweep tab; the original event dates expired.
             values = {"actId": row["ActivityID"], "state": 1,
@@ -56,7 +61,10 @@ class LobbyService:
             "C2L_QueryReturnInfo": {"code": 10, "hasReturn": False, "hasReciveReward": False, "hasDraw": False},
             "C2L_SystemInfo": {"code": 10, "serverTime": self.clock.now()},
             "C2L_GameTask": {"code": 10, "type": request.get("type", 0), "chapterId": request.get("chapterId", 0)},
-            "C2L_EntryidStatus": {"code": 10},
+            # MainModule.InitServerFunctionOpenData: Value=2 closes a function.
+            # ActivityNoticeModule.Show checks function 19 before opening UI.
+            "C2L_EntryidStatus": {"code": 10, "entryidStatus": [] if self.sweep_enabled else
+                [MISSION_PAIR.encode({'Key': 19, 'Value': 2})]},
             "C2L_EquipAll": {},
             "C2L_QueryMission": {},
             "C2L_QueryCollectionAward": {},

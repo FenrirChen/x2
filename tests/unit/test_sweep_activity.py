@@ -5,7 +5,7 @@ import pytest
 
 from tests.unit.test_battle import packet
 from tests.unit.test_economy import env, rewards  # noqa: F401
-from x2server.messages.lobby import ACTIVITY_DATA, LOBBY_SCHEMAS
+from x2server.messages.lobby import ACTIVITY_DATA, LOBBY_SCHEMAS, MISSION_PAIR
 from x2server.player.battle import BattleService
 from x2server.player.lobby import LobbyService
 
@@ -13,7 +13,7 @@ from x2server.player.lobby import LobbyService
 def test_activity_directory_contains_native_sweep_tab_without_other_events(env):
     store, economy, ctx = env
     before = '\n'.join(store.db.iterdump())
-    reply = asyncio.run(LobbyService().query(ctx, packet({}, name='C2L_QueryActivity')))
+    reply = asyncio.run(LobbyService(sweep_enabled=True).query(ctx, packet({}, name='C2L_QueryActivity')))
     wire = LOBBY_SCHEMAS['L2C_QueryActivity'].encode(reply.values)
     values = LOBBY_SCHEMAS['L2C_QueryActivity'].decode(wire)
     assert len(values['activityData']) == 1
@@ -25,6 +25,16 @@ def test_activity_directory_contains_native_sweep_tab_without_other_events(env):
     assert data['activityTaps'] == 'UIAltas/Activity/SaiJiSaoDang'
     # Native serializer tags for actType and param1, not an arbitrary UI flag.
     assert b'\x20\x47' in values['activityData'][0] and b'\x58\x03' in values['activityData'][0]
+    assert '\n'.join(store.db.iterdump()) == before
+
+
+def test_activity_entry_disabled_by_user_decision(env):
+    store, _, ctx = env
+    before = '\n'.join(store.db.iterdump())
+    lobby = LobbyService()
+    assert asyncio.run(lobby.query(ctx, packet({}, name='C2L_QueryActivity'))).values == {'code': 10}
+    status = asyncio.run(lobby.query(ctx, packet({}, name='C2L_EntryidStatus'))).values
+    assert [MISSION_PAIR.decode(v) for v in status['entryidStatus']] == [{'Key': 19, 'Value': 2}]
     assert '\n'.join(store.db.iterdump()) == before
 
 

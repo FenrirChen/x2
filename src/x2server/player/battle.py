@@ -424,6 +424,13 @@ class BattleService:
                 return reject
         fight_heroes = []
         for hero in heroes:
+            from .battle_equipment import battle_equipment
+            try:
+                equipped, suit_effects = battle_equipment(self.store, player['id'], hero)
+            except (ValueError, KeyError, TypeError) as exc:
+                logging.getLogger('x2.battle').warning(
+                    'battle entry denied player=%s hero=%s equipment=%s', player['id'], hero['id'], exc)
+                return reject
             stat_hero = {**hero, "id": hero.get("battle_base_id", hero["id"])}
             attrs = HERO_ATTR.encode(hero_attributes(stat_hero))
             skills = [HERO_SKILL.encode(s) for s in hero_skills(stat_hero)]
@@ -444,10 +451,12 @@ class BattleService:
                                         for slot in artifact.get("god_slot_lock", [])]})
             skin = self.store.db.execute("SELECT skin_id FROM appearance_wear WHERE player_id=? AND hero_id=? AND type=1", (player["id"], hero["id"])).fetchone() if self.store.db.execute("SELECT 1 FROM sqlite_master WHERE name='appearance_wear'").fetchone() else None
             logging.getLogger("x2.battle").info(
-                "battle hero player=%s section=%s hero=%s battleSkinId=%s database=%s",
-                player["id"], section, hero["id"], skin[0] if skin else 0, self.store.path.resolve())
+                "battle hero player=%s section=%s hero=%s battleSkinId=%s beastlords=%s suits=%s database=%s",
+                player["id"], section, hero["id"], skin[0] if skin else 0,
+                len(equipped), len(suit_effects), self.store.path.resolve())
             fight_heroes.append(FIGHT_HERO.encode({**hero_values, "heroGodEquip": god_equip, "battleSkinId": skin[0] if skin else 0,
-                "heroSkill": skills, "heroAttrCount": attrs, "attrAdd": base}))
+                "heroSkill": skills, "heroAttrCount": attrs, "attrAdd": base,
+                "heroEquip": equipped, "equipSuitAttr": suit_effects}))
         # Official chain (ARM64 2026-09-25): BattleInfo.SetSceneInfo copies
         # FightData.dropData.dropValues -> BattleInfo.dropValues, which JudgeDropItem
         # consumes as the per-AddADCGroup drop value budget (equipment = group 5).
