@@ -4,6 +4,7 @@
 
 - `StarChartModule.UpdateAbilityData` RVA `0x1720018` 从 PlayerData.StarMap.StarAbility 初始化能力；`UpdateSkillData` `0x1720358` 读取 StarSkill。服务器过去均未发送。
 - PlayerDataProto 第8字段 StarMap：StarAbility=1、StarSkill=2（ContainerIntIntProto），AIPoint=3。DailyProto 第18字段 AddAIPointCount；BaseInfoProto 第44字段 AIPointAutoAdd。
+- 2026-10-01实机修正：`PlayerDbDataMerge.Merge(StarMap)` RVA `0x1247a5c` 将 StarAbility 的 ContainerIntIntProto.idx 作为 List<int> 下标、val 作为能力ID；因此发送 `{idx:0,val:39000}`、`{idx:1,val:39100}`。上一版发送 `{idx:39000,val:1}` 使客户端最终能力列表成为 `[1,1]`，导致已有通关记录仍显示锁定。StarSkill 是字典，仍发送 idx=技能ID、val=等级。补充客户端合并行为测试及登录实际回包日志。
 - 升级请求 413/414：skillID=1、targetLevel=2（回包 code=1、skillID=2、targetLevel=3）。客户端 `UpSkillLevel` `0x1721a48` 按当前等级下标读取消耗，并请求当前等级+1。
 - 661/662 自动充能开关，663/664 充能请求；成功回调读取已同步的 NetSyncData，因此先推送状态、背包变化再发送响应。
 - `StarChartsBase` 仅5种 OpenType=1 的能力开放。UnlockDescID 文案要求完成章节1..5，对应 ChapterInfo.StageID 的最后一幕（ChapterNumber 包含序章）。直接依据现有 economy_clears 推导，无人工修改存档。

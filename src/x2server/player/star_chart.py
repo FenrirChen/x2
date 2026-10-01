@@ -51,7 +51,10 @@ def snapshot_fields(store, player_id, snapshot, now):
     allowed_skills = {skill for a in catalog()['abilities'] if a['ID'] in abilities
                       for skill in a.get('SkillID', [])}
     return {'StarMap': STAR_MAP.encode({
-        'StarAbility': [STAR_PAIR.encode({'Key': i, 'Value': 1}) for i in sorted(abilities)],
+        # PlayerDbDataMerge.Merge(StarMap), RVA 0x1247a5c: idx indexes
+        # List<int>; val is the ability ID. StarSkill instead indexes a dict.
+        'StarAbility': [STAR_PAIR.encode({'Key': index, 'Value': ability_id})
+                        for index, ability_id in enumerate(sorted(abilities))],
         # Include explicit level zero entries: the client dictionary and its
         # protobuf dirty-field merger must initialize unlearned skills too.
         'StarSkill': [STAR_PAIR.encode({'Key': i, 'Value': skill_level(current, i)})

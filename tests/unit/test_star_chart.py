@@ -207,4 +207,26 @@ def test_chapter_clear_unlock_arrives_before_checkout_callback(env):
     result = asyncio.run(battle.checkout(ctx, checkout))
     assert result.values['result'] == 10
     chart = STAR_MAP.decode(result.before_response[0].values['StarMap'])
-    assert 39000 in [STAR_PAIR.decode(r)['Key'] for r in chart['StarAbility']]
+    assert 39000 in [STAR_PAIR.decode(r)['Value'] for r in chart['StarAbility']]
+
+
+def test_ability_wire_merges_as_native_indexed_list_not_dictionary(env):
+    store, economy, ctx = env
+    seed(store, economy, (39000, 39100))
+    push = LoginService.snapshot_push(store.get(1), store)
+    pairs = [STAR_PAIR.decode(r) for r in STAR_MAP.decode(push.values['StarMap'])['StarAbility']]
+    assert pairs == [{'Key': 0, 'Value': 39000}, {'Key': 1, 'Value': 39100}]
+    # Native StarMap merge pads the indexed list with -1, assigns val at idx,
+    # then removes all -1 entries. Reproduce that consumer, including recovery
+    # of an already-connected client's malformed [1,1] from the previous code.
+    for native in ([], [1, 1]):
+        for pair in pairs:
+            idx = pair['Key']
+            if idx >= 65536:
+                continue
+            while len(native) <= idx:
+                native.append(-1)
+            native[idx] = pair['Value']
+        native = [value for value in native if value != -1]
+        assert native == [39000, 39100]
+        assert all(value in {r['ID'] for r in catalog()['abilities']} for value in native)

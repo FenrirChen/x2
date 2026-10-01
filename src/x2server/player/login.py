@@ -104,6 +104,11 @@ class LoginService:
         LOGGER.info("authenticated login response prepared player=%s login_count=%s",
                     player["id"], player["login_count"])
         push = self.snapshot_push(player, self.store if self.economy else None, now)
+        from x2server.messages.star_chart import STAR_MAP, STAR_PAIR
+        star = STAR_MAP.decode(push.values['StarMap'])
+        LOGGER.info('login star map player=%s abilities=%s skill_levels=%s AI_points=%s',
+            player['id'], [STAR_PAIR.decode(r) for r in star.get('StarAbility', [])],
+            [STAR_PAIR.decode(r) for r in star.get('StarSkill', [])], star.get('AIPoint', 0))
         pushes = (push,)
         if self.appearance:
             pushes += (OutboundMessage("L2C_QueryHeroDubbing",
