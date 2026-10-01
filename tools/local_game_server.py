@@ -49,6 +49,8 @@ async def run(database: Path, seconds: float) -> None:
             lb_pbs_server=(guest_http,), lb_login_server=(guest_http,), lb_esweb_server=(guest_http,), area_id="local"),
         RecoveredServerAddressConfig((ServerAddressEntry(endpoints.public_host, endpoints.game_port),)))
     store = PlayerStore(database)
+    logging.getLogger("x2.local").info("active database=%s server_source=%s",
+        store.path.resolve(), Path(__file__).resolve())
     accounts = AccountStore(store)
     identity = LocalIdentityService(contract, account=os.environ.get("X2_LOCAL_ACCOUNT"),
         password=os.environ.get("X2_LOCAL_PASSWORD"), accounts=accounts, players=store,

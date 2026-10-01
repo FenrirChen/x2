@@ -400,6 +400,7 @@ class BattleService:
         cached = self.store.db.execute("SELECT response FROM battle_entries WHERE player_id=? AND request_key=?",
                                       (player["id"], key)).fetchone()
         if cached:
+            logging.getLogger("x2.battle").info("battle entry replay player=%s section=%s", player["id"], section)
             return OutboundMessage("L2C_FightData", BATTLE_SCHEMAS["L2C_FightData"].decode(cached[0]))
         selected_relics = request.get("selectedRelicList", [])
         if selected_relics:
@@ -441,6 +442,9 @@ class BattleService:
                     "godSlotLockInfo": [GOD_SLOT_LOCK_INFO.encode({"slot": int(slot), "state": 1})
                                         for slot in artifact.get("god_slot_lock", [])]})
             skin = self.store.db.execute("SELECT skin_id FROM appearance_wear WHERE player_id=? AND hero_id=? AND type=1", (player["id"], hero["id"])).fetchone() if self.store.db.execute("SELECT 1 FROM sqlite_master WHERE name='appearance_wear'").fetchone() else None
+            logging.getLogger("x2.battle").info(
+                "battle hero player=%s section=%s hero=%s battleSkinId=%s database=%s",
+                player["id"], section, hero["id"], skin[0] if skin else 0, self.store.path.resolve())
             fight_heroes.append(FIGHT_HERO.encode({**hero_values, "heroGodEquip": god_equip, "battleSkinId": skin[0] if skin else 0,
                 "heroSkill": skills, "heroAttrCount": attrs, "attrAdd": base}))
         # Official chain (ARM64 2026-09-25): BattleInfo.SetSceneInfo copies

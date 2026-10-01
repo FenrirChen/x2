@@ -211,11 +211,17 @@ class AppearanceService:
             valid = (kind in (1, 3) and skin in self._owned_skins(player_id) and
                      self.skins[skin]["hero_id"] == hero)
             if not valid:
+                logging.getLogger("x2.appearance").info(
+                    "skin wear denied player=%s hero=%s skin=%s type=%s reason=invalid_or_unowned",
+                    player_id, hero, skin, kind)
                 return OutboundMessage("L2C_HeroWearSkin", {"code": 13,
                     "heroId": hero or 0, "skinId": skin or 0, "type": kind or 0})
             with self.economy.transaction():
                 self.store.db.execute("INSERT OR REPLACE INTO appearance_wear VALUES (?,?,?,?)",
                                       (player_id, hero, kind, skin))
+            logging.getLogger("x2.appearance").info(
+                "skin wear saved player=%s hero=%s skin=%s type=%s database=%s",
+                player_id, hero, skin, kind, self.store.path.resolve())
             # The client handles wear success by firing a UI event only. Its
             # equipped-skin cache is updated by L2C_HeroSkinUpdate, so deliver
             # the new HeroSkin before the success event is processed.

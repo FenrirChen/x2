@@ -1,6 +1,7 @@
 """Persistent local wish pools with Beijing-time server rotations."""
 import hashlib
 import json
+import logging
 import secrets
 from importlib.resources import files
 from datetime import datetime
@@ -12,6 +13,8 @@ from x2server.network.dispatcher import OutboundMessage
 from x2server.protocol.errors import ProtocolError
 from .progression import catalog
 from .server_clock import BEIJING, ServerClock
+
+LOGGER = logging.getLogger("x2.wish")
 
 
 class WishService:
@@ -142,7 +145,23 @@ class WishService:
         req = WISH_SCHEMAS["C2L_CardPool"].decode(packet.body)
         if req.get("drawPos") != 1:
             return OutboundMessage("L2C_CardPool", {"code": 13})
-        return OutboundMessage("L2C_CardPool", self.values(context.session.player_id))
+        return OutboundMessage("L2C_CardPool", self.values(context.session.player_id),
+            before_response=self._balance_sync(context.session.player_id))
+
+    def _balance_sync(self, player_id):
+        if self.economy is None:
+            return ()
+        from .login import LoginService
+        # Full inventory also clears stale client stacks missing from this DB.
+        return (LoginService.snapshot_push(self.store.get(player_id), self.store),
+            OutboundMessage("L2C_ItemAll", self.economy.inventory_values(player_id)))
+
+    def _reject_draw(self, player_id, pool_id, draw_type, reason, **details):
+        LOGGER.info("wish denied player=%s pool=%s drawType=%s reason=%s details=%s",
+            player_id, pool_id, draw_type, reason, details)
+        return OutboundMessage("L2C_LuckDraw", {"code": 13, "drawnId": pool_id},
+            pushes=self._balance_sync(player_id) +
+                (OutboundMessage("L2C_CardPool", self.values(player_id)),))
 
     def _pick(self, pool_id, group="common"):
         prizes = self.catalog[str(pool_id)]["groups"][group]
@@ -177,45 +196,52 @@ class WishService:
         req = WISH_SCHEMAS["C2L_LuckDraw"].decode(packet.body)
         pool_id = req.get("drawnId", 0)
         count = {0: 1, 1: 10}.get(req.get("drawType", 0))
-        failure = {"code": 13, "drawnId": pool_id}
-        if pool_id not in self.active_periods(player_id=player_id) or count is None:
-            return OutboundMessage("L2C_LuckDraw", failure)
+        if count is None:
+            return self._reject_draw(player_id, pool_id, req.get("drawType"), "invalid_draw_type")
+        if pool_id not in self.active_periods(player_id=player_id):
+            return self._reject_draw(player_id, pool_id, req.get("drawType"), "pool_closed")
         key = hashlib.sha256(f"{context.session.session_id}:{packet.header.request_id}:wish".encode() + packet.body).hexdigest()
         cached = self.store.db.execute("SELECT response FROM wish_receipts WHERE player_id=? AND request_key=?", (player_id, key)).fetchone()
         if cached:
-            return OutboundMessage("L2C_LuckDraw", WISH_SCHEMAS["L2C_LuckDraw"].decode(cached[0]))
+            return OutboundMessage("L2C_LuckDraw", WISH_SCHEMAS["L2C_LuckDraw"].decode(cached[0]),
+                pushes=self._balance_sync(player_id))
         if pool_id == self.POOL_ID and self.state(player_id, pool_id)[0] + count > 10:
-            return OutboundMessage("L2C_LuckDraw", failure)
+            return self._reject_draw(player_id, pool_id, req.get("drawType"), "beginner_draw_limit",
+                total=self.state(player_id, pool_id)[0], requested=count)
         with self.store.db:
             snapshot = self.store.get(player_id)["snapshot"]
             config = self.catalog[str(pool_id)]
             ticket_id = config["ticket_item_id"]
             power_light_id = 1237913
             crystal_id = 1237902
-            tiers = ((ticket_id, count * config["one_ticket"]),
-                     (power_light_id, count * (0 if config["type"] == "E_Jewel" else 300)),
-                     (crystal_id, count * config["one_crystal"]))
-            paid = None
-            for item_id, cost in tiers:
-                if not cost:
+            tiers = ((ticket_id, config["one_ticket"]),
+                     (power_light_id, config["one_power_of_light"]),
+                     (crystal_id, config["one_crystal"]))
+            balances = dict(self.store.db.execute(
+                "SELECT item_id,quantity FROM inventory WHERE player_id=?", (player_id,)))
+            balances[crystal_id] = snapshot.get("crystal", 0)
+            remaining, payments = count, []
+            # Native CheckCanDrawCard (0x1a7e0dc) uses floor(balance/unit)
+            # and subtracts covered draws before testing the next currency.
+            # Plan everything first: insufficient mixed funds must spend none.
+            for item_id, unit_cost in tiers:
+                if unit_cost <= 0 or remaining == 0:
                     continue
+                covered = min(remaining, max(0, balances.get(item_id, 0)) // unit_cost)
+                if covered:
+                    payments.append((item_id, covered * unit_cost))
+                    remaining -= covered
+            if remaining:
+                return self._reject_draw(player_id, pool_id, req.get("drawType"), "insufficient_resources",
+                    balances={i: balances.get(i, 0) for i, _ in tiers},
+                    unit_costs=tiers, missing_draws=remaining)
+            for item_id, cost in payments:
                 if item_id == crystal_id:
-                    if snapshot.get("crystal", 0) >= cost:
-                        snapshot["crystal"] -= cost
-                        paid = (item_id, cost)
+                    snapshot["crystal"] -= cost
                 else:
-                    held = self.store.db.execute(
-                        "SELECT quantity FROM inventory WHERE player_id=? AND item_id=?",
-                        (player_id, item_id)).fetchone()
-                    if held and held[0] >= cost:
-                        self.store.db.execute(
-                            "UPDATE inventory SET quantity=quantity-? WHERE player_id=? AND item_id=?",
-                            (cost, player_id, item_id))
-                        paid = (item_id, cost)
-                if paid:
-                    break
-            if paid is None:
-                return OutboundMessage("L2C_LuckDraw", failure)
+                    self.store.db.execute(
+                        "UPDATE inventory SET quantity=quantity-? WHERE player_id=? AND item_id=?",
+                        (cost, player_id, item_id))
             total, singles, tens, since_hero, since_top, first_three_star, since_featured = self.state(player_id,pool_id)
             prizes, transforms = [], []
             prototypes = {r["hero_id"]: r for r in catalog()["hero_unlock"]}
@@ -298,7 +324,11 @@ class WishService:
         if self.economy is not None:
             self.economy.record_event(player_id, f"wish:{key}", self.economy.TASK_EVENT_WISH, 0, count)
         from .hero import encode_hero_data
+        LOGGER.info("wish accepted player=%s pool=%s count=%s payments=%s", player_id, pool_id, count, payments)
         pushes = list(self.economy.pushes(player_id)) if self.economy else []
+        # The draw callback can update client-side currency/rewards. Send the
+        # authoritative full bag afterwards, including removal of stale stacks.
+        pushes.extend(self._balance_sync(player_id)[1:])
         if any(1211000 <= prize["item_id"] < 1212000 for prize in prizes):
             pushes.insert(0, OutboundMessage("L2C_HeroUpdate", {"code": 10,
                 "heros": [encode_hero_data(h) for h in self.store.get(player_id)["snapshot"]["heroes"]]}))
