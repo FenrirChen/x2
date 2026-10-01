@@ -34,7 +34,7 @@ class EconomyService:
     # Item.EffData -> BaseInfoProto; only supported currency destinations.
     CURRENCIES = {1237901: "gold", 1237902: "crystal", 1237906: "equip_exp", 1237907: "hero_exp",
                   1237908: "exp", 1237910: "daily_activity", 1237911: "week_activity"}
-    STACKABLE_REWARD_TYPES = frozenset((5, 12, 13, 14, 17, 18, 22, 23, 24, 25, 33, 34, 40, 41))
+    STACKABLE_REWARD_TYPES = frozenset((5, 12, 13, 14, 17, 18, 22, 23, 24, 25, 26, 33, 34, 40, 41))
     ACTIVITY_FIELDS = {1: "daily_activity", 2: "week_activity"}
     MAP_TYPE_CHALLENGE = 2  # 现世复刻: the difficulty stages of a chapter
     # TaskCondition CompleteType enums that server events can authoritatively fire.

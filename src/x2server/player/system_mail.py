@@ -9,12 +9,14 @@ WELFARE_POLL_SECONDS = 300.0
 BRILLIANCE = 1237902  # Item E_Currency, EffData 902
 WISH_COIN = 1237914  # Item E_Currency, EffData 914
 CAUSALITY_CARD = 1202014  # Client Item.Used 720004 -> 100 power; closest existing card to 120.
+HERO_CHOICE_BOX = 1290005
 SENDER = "解神者 Revival"
 
 
 def insert_system_mail(db, player_id, account_id, kind, now):
     """Call inside the account transaction; UNIQUE source_key owns idempotence."""
     ensure_mail_schema(db)
+    title = ""
     if kind == "welcome":
         source_key = f"welcome_mail:{account_id}"
         body, rewards = "", {BRILLIANCE: 3600, WISH_COIN: 80}
@@ -23,6 +25,11 @@ def insert_system_mail(db, player_id, account_id, kind, now):
         source_key = f"daily_login:{account_id}:{day_start}"
         body, rewards = "祝您玩的开心", {BRILLIANCE: 200, WISH_COIN: 10,
                                         CAUSALITY_CARD: 10}
+    elif kind == "hero_choice":
+        # Stable per player even when a legacy save is later bound to an account.
+        source_key = f"hero_choice_1290005:{player_id}"
+        title = "自选3★神格赠礼"
+        body, rewards = "为您送上1个自选3★神格箱。", {HERO_CHOICE_BOX: 1}
     else:
         raise ValueError("unknown system mail kind")
     if kind == "welcome":
@@ -31,7 +38,7 @@ def insert_system_mail(db, player_id, account_id, kind, now):
             return False
     return db.execute("""INSERT OR IGNORE INTO player_mail
         (player_id,sender,title,body,created_at,attachments,source_key)
-        VALUES (?,?,?,?,?,?,?)""", (player_id, SENDER, "", body, now,
+        VALUES (?,?,?,?,?,?,?)""", (player_id, SENDER, title, body, now,
                                 json.dumps(rewards, sort_keys=True), source_key)).rowcount == 1
 
 
@@ -40,6 +47,20 @@ def eligible_accounts(db):
     return db.execute("""SELECT p.id, a.account_id FROM players p
         LEFT JOIN accounts a ON a.player_id=p.id
         WHERE a.status IS NULL OR a.status='active'""").fetchall()
+
+
+def deliver_hero_choice(store, now):
+    """Backfill offline/legacy players; deleted or claimed mail keeps its key."""
+    minted, failed = 0, []
+    for player_id, account_id in store.db.execute("""SELECT p.id, a.account_id FROM players p
+            LEFT JOIN accounts a ON a.player_id=p.id""").fetchall():
+        try:
+            with store.db:
+                minted += insert_system_mail(store.db, player_id, account_id or player_id,
+                                              "hero_choice", int(now))
+        except Exception as exc:
+            failed.append((player_id, str(exc)))
+    return minted, failed
 
 
 def deliver_daily_welfare(store, now):

@@ -93,6 +93,7 @@ class AccountStore:
                     "INSERT INTO accounts(username,password_hash,created_at,status,player_id) "
                     "VALUES (?,?,?,'active',?)", (username, password_hash, now, player_id))
                 insert_system_mail(self.db, player_id, cursor.lastrowid, "welcome", now)
+                insert_system_mail(self.db, player_id, cursor.lastrowid, "hero_choice", now)
                 self.db.commit()
             except sqlite3.IntegrityError as exc:
                 self.db.rollback()
@@ -114,6 +115,21 @@ class AccountStore:
                 if row is None:
                     raise ValueError("player has no active account")
                 created = insert_system_mail(self.db, player_id, row["account_id"], "welcome", now)
+                self.db.commit()
+                return created
+            except BaseException:
+                self.db.rollback()
+                raise
+
+    def ensure_hero_choice_mail(self, player_id: int, now: int) -> bool:
+        with self._lock:
+            try:
+                self.db.execute("BEGIN IMMEDIATE")
+                row = self.db.execute("SELECT account_id FROM accounts WHERE player_id=? AND status='active'",
+                                      (player_id,)).fetchone()
+                if row is None:
+                    raise ValueError("player has no active account")
+                created = insert_system_mail(self.db, player_id, row["account_id"], "hero_choice", now)
                 self.db.commit()
                 return created
             except BaseException:

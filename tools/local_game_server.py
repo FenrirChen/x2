@@ -36,7 +36,7 @@ from x2server.player.appearance import AppearanceService
 from x2server.player.mail import MailService
 from x2server.player.terminal import TerminalService
 from x2server.player.college import CollegeStateRepository
-from x2server.player.system_mail import daily_welfare_watch
+from x2server.player.system_mail import daily_welfare_watch, deliver_hero_choice
 from x2server.player.tutorial import TutorialService
 from x2server.player.star_chart import StarChartService
 
@@ -57,6 +57,9 @@ async def run(database: Path, seconds: float) -> None:
         password=os.environ.get("X2_LOCAL_PASSWORD"), accounts=accounts, players=store,
         chat_entry=f"{endpoints.public_host}:{endpoints.chat_port}")
     clock = ServerClock()
+    choice_minted, choice_failed = deliver_hero_choice(store, clock.now())
+    logging.getLogger("x2.system_mail").info(
+        "hero choice mail backfill minted=%s failed=%s", choice_minted, choice_failed)
     college = CollegeStateRepository(store, clock)
     economy = EconomyService(store, clock=clock.now)
     star_chart = StarChartService(store, economy)
