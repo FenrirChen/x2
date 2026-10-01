@@ -901,6 +901,13 @@ class EconomyService:
         profile = self.section_rewards.get(section)
         config = self.reward_sections.get(section)
         run = self.store.db.execute("SELECT * FROM economy_runs WHERE uuid=?", (run_uuid,)).fetchone()
+        if (section_type == 5 and run is not None and run['player_id'] == player_id
+                and run['section_id'] == section and run['section_type'] == 5 and not run['settled']
+                and self.entry_catalog.sections.get(section, {}).get('Type') == 5):
+            # Training may echo transient battle pickups. They never become bag
+            # items, relic collection unlocks, XP, DP or a main-mission clear.
+            self.store.db.execute('UPDATE economy_runs SET settled=1 WHERE uuid=?', (run_uuid,))
+            return self.reward_bytes({}), []
         if (profile is None or config is None or profile["section_type"] != section_type
                 or run is None or run["player_id"] != player_id or run["section_id"] != section
                 or run["settled"]):
@@ -1158,7 +1165,7 @@ class EconomyService:
         removed = [row[0] for row in self.store.db.execute(
             "SELECT item_id FROM inventory WHERE player_id=? AND quantity<=0 ORDER BY item_id", (player_id,))
             if row[0] not in permanent]
-        return (LoginService.snapshot_push(self.store.get(player_id), self.store),
+        return (LoginService.snapshot_push(self.store.get(player_id), self.store, int(self.clock())),
             OutboundMessage("L2C_ItemUpdate", {"code": 10, **self.inventory_values(player_id)}),
             *((OutboundMessage("L2C_ItemRemove", {"ids": removed}),) if removed else ()),
             *(OutboundMessage("L2C_TaskUpdate", {"type": k, "taskList": self.task_values(player_id, k)["taskList"]}) for k in (1, 2)),

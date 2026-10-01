@@ -18,6 +18,7 @@ from x2server.messages.appearance import APPEARANCE_SCHEMAS
 from x2server.messages.mail import MAIL_SCHEMAS
 from x2server.messages.terminal import TERMINAL_SCHEMAS
 from x2server.messages.battle_shop import BATTLE_SHOP_SCHEMAS
+from x2server.messages.star_chart import STAR_CHART_SCHEMAS
 
 C2L_LOGIN = ProtoSchema(
     "C2L_Login",
@@ -118,6 +119,7 @@ CORE_SCHEMAS.update(APPEARANCE_SCHEMAS)
 CORE_SCHEMAS.update(MAIL_SCHEMAS)
 CORE_SCHEMAS.update(TERMINAL_SCHEMAS)
 CORE_SCHEMAS.update(BATTLE_SHOP_SCHEMAS)
+CORE_SCHEMAS.update(STAR_CHART_SCHEMAS)
 
 # CONFIRMED: MessageReflector registers PlayerDataProto as 1000, independently
 # of its generated get_PID() returning 0. BaseInfo Serialize RVA 0x30A1348.
@@ -143,6 +145,7 @@ BASE_INFO = ProtoSchema("BaseInfoProto", (
     ProtoField(37, "EquipSeniorChip", FieldKind.INT32),
     ProtoField(42, "RechargeExp", FieldKind.INT32),
     ProtoField(43, "AICoin", FieldKind.INT32),
+    ProtoField(44, "AIPointAutoAdd", FieldKind.INT32),
     ProtoField(47, "SkinCoupon", FieldKind.INT32),
     ProtoField(56, "GuildScore", FieldKind.INT32),
     ProtoField(59, "RMBCrystal", FieldKind.INT32),
@@ -165,6 +168,8 @@ MOBILITY = ProtoSchema("MobilityProto", (
 PLAYER_DATA = ProtoSchema("PlayerDataProto", (
     ProtoField(1, "BaseInfo", FieldKind.MESSAGE),
     ProtoField(2, "Mobility", FieldKind.MESSAGE),
+    ProtoField(3, "Daily", FieldKind.MESSAGE),
+    ProtoField(8, "StarMap", FieldKind.MESSAGE),
     ProtoField(11, "RelicPack", FieldKind.MESSAGE, repeated=True),
     ProtoField(15, "favor", FieldKind.MESSAGE, repeated=True),
 ))

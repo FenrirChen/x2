@@ -48,6 +48,7 @@ class BattleService:
             self._add_column("battle_entries", "entry_source", "TEXT NOT NULL DEFAULT 'MainMission'")
             self._add_column("battle_entries", "map_id", "INTEGER NOT NULL DEFAULT 0")
             self._add_column("battle_entries", "team_json", "TEXT NOT NULL DEFAULT '[]'")
+            self._add_column("battle_entries", "ai_cost", "INTEGER NOT NULL DEFAULT 0")
             if economy:
                 self._add_column("economy_runs", "section_type", "INTEGER NOT NULL DEFAULT 0")
                 self._add_column("economy_runs", "entry_source", "TEXT NOT NULL DEFAULT 'MainMission'")
@@ -121,7 +122,8 @@ class BattleService:
         accepted = bool(row and int(time.time()) - row["created_at"] <= 3600
             and FIGHT_DATA.decode(BATTLE_SCHEMAS["L2C_FightData"].decode(row["response"])["data"])["missionId"] == section)
         credited = False
-        if accepted and self.economy and request.get("datas"):
+        if (accepted and self.economy and request.get("datas")
+                and self.catalog.sections.get(section, {}).get('Type') != 5):
             receipt = self.store.db.execute("SELECT response FROM battle_receipts WHERE uuid=?", (row["uuid"],)).fetchone()
             settled = BATTLE_SCHEMAS["L2C_CheckoutMainMission"].decode(receipt[0]) if receipt else {}
             if settled.get("result") == 10 and settled.get("success"):
@@ -191,7 +193,7 @@ class BattleService:
                 or request.get("checkGm")
                 or not 0 <= request.get("fightTime", 0) <= 3600):
             return reject_with('static/chapter/checkGm/fightTime gate')
-        row = self.store.db.execute("SELECT uuid, created_at, response FROM battle_entries WHERE player_id=? ORDER BY rowid DESC LIMIT 1",
+        row = self.store.db.execute("SELECT uuid, created_at, response, ai_cost FROM battle_entries WHERE player_id=? ORDER BY rowid DESC LIMIT 1",
                                     (player_id,)).fetchone()
         if not row or int(time.time()) - row["created_at"] > 3600:
             return reject_with('no/expired battle entry')
@@ -210,8 +212,11 @@ class BattleService:
         cached = self.store.db.execute("SELECT request_hash, response FROM battle_receipts WHERE uuid=?", (row["uuid"],)).fetchone()
         schema = BATTLE_SCHEMAS["L2C_CheckoutMainMission"]
         if cached:
+            if cached['request_hash'] != digest:
+                return reject
+            before, pushes = self._checkout_star_sync(self.economy.pushes(player_id) if self.economy else ())
             return OutboundMessage("L2C_CheckoutMainMission", schema.decode(cached["response"]),
-                pushes=self.economy.pushes(player_id) if self.economy else ()) if cached["request_hash"] == digest else reject
+                                   before_response=before, pushes=pushes)
         snapshot = self.store.get(player_id)["snapshot"]
         heroes = snapshot.get("heroes", [])
         # The client echoes the selected hero state in checkout.  Preserve a
@@ -238,7 +243,7 @@ class BattleService:
             "favorFullLevel": [False] * len(heroes), "fightTimeLength": fight_seconds}
         try:
             with self.store.db:
-                if carried_artifacts:
+                if carried_artifacts and section_type != 5:
                     current = self.store.get(player_id)["snapshot"]
                     changed = False
                     for hero in current.get("heroes", []):
@@ -255,6 +260,9 @@ class BattleService:
                     if changed:
                         self.economy.save_snapshot(player_id, current)
                 if self.economy:
+                    if request.get('useAIPoint') and row['ai_cost'] == 0:
+                        from .star_chart import consume_battle_ai
+                        consume_battle_ai(self.economy, player_id, section)
                     self.store.db.execute("INSERT OR IGNORE INTO economy_checkouts VALUES (?,?,?)", (player_id, digest, row["uuid"]))
                     values["rewardData"], reward_equips = self.economy.settle(
                         player_id, row["uuid"], section, request.get("success", False), section_type,
@@ -275,7 +283,25 @@ class BattleService:
             # equipment ledger updates via EquipUpdate, not via 152.rewardEquip.
             pushes = (OutboundMessage("L2C_EquipUpdate",
                                       {"code": 10, "equip": reward_equips}),) + tuple(pushes)
-        return OutboundMessage("L2C_CheckoutMainMission", values, pushes=pushes)
+        # StarChartModule.OnCheckOutMainMission reads StarMap during this
+        # response callback. Publish it first so a chapter completion unlocks
+        # its ability immediately without requiring another login.
+        star_before, pushes = self._checkout_star_sync(pushes)
+        return OutboundMessage("L2C_CheckoutMainMission", values, pushes=pushes,
+                               before_response=star_before)
+
+    @staticmethod
+    def _checkout_star_sync(pushes):
+        before, after = [], []
+        for push in pushes:
+            if push.message_name == 'PlayerDataProto' and 'StarMap' in push.values:
+                before.append(OutboundMessage('PlayerDataProto', {'StarMap': push.values['StarMap']},
+                                              data_version=push.data_version))
+                after.append(OutboundMessage('PlayerDataProto',
+                    {k: v for k, v in push.values.items() if k != 'StarMap'}, data_version=push.data_version))
+            else:
+                after.append(push)
+        return tuple(before), tuple(after)
 
     async def drop_data(self, context, packet):
         if context.session.player_id is None:
@@ -321,6 +347,8 @@ class BattleService:
         # Budget VALUES are REVIVAL_COMPATIBILITY tiers
         # (docs/decisions/compatibility/equip_dropvalues_budget.md).
         drop_values = self.drop_budget.budget_for(section)
+        if self.catalog.sections.get(section, {}).get('Type') == 5:
+            drop_values = [0] * len(drop_values)
         tier, known = self.drop_budget.tier_for(section)
         logging.getLogger("x2.battle").info(
             "battle drop query section=%s difficulty=%s tier=%s known=%s budget_per_group=%s budget_groups=%d",
@@ -402,7 +430,8 @@ class BattleService:
                                       (player["id"], key)).fetchone()
         if cached:
             logging.getLogger("x2.battle").info("battle entry replay player=%s section=%s", player["id"], section)
-            return OutboundMessage("L2C_FightData", BATTLE_SCHEMAS["L2C_FightData"].decode(cached[0]))
+            return OutboundMessage("L2C_FightData", BATTLE_SCHEMAS["L2C_FightData"].decode(cached[0]),
+                pushes=self.economy.pushes(player['id']) if self.economy else ())
         selected_relics = request.get("selectedRelicList", [])
         if selected_relics:
             from .login import relic_item_ids
@@ -474,6 +503,8 @@ class BattleService:
         # Values: REVIVAL_COMPATIBILITY tiers (drop_budget.py) — official per-group
         # budget values are lost with the official server data.
         drop_values = self.drop_budget.budget_for(section)
+        if entry_context.section_type == 5:
+            drop_values = [0] * len(drop_values)
         data = FIGHT_DATA.encode({"fightHeros": fight_heroes, "missionId": section,
                                   "expertMode": request.get("expertMode", False),
                                   "dropData": DROP_DATA.encode({"dropValues": drop_values,
@@ -500,7 +531,12 @@ class BattleService:
                         self.economy.refund_battle(player["id"], old[0])
                         self.store.db.execute("UPDATE economy_runs SET settled=1 WHERE uuid=?", (old[0],))
                     self.economy.charge_battle(player["id"], values["uuid"], section, entry_context.stamina_cost)
-                    self.economy._event(player["id"], f"entry:{values['uuid']}", 87, section, 1)
+                    ai_cost = 0
+                    if request.get('useAIPoint'):
+                        from .star_chart import consume_battle_ai
+                        ai_cost = consume_battle_ai(self.economy, player['id'], section)
+                    if entry_context.section_type != 5:
+                        self.economy._event(player["id"], f"entry:{values['uuid']}", 87, section, 1)
                     self.store.db.execute("""INSERT INTO economy_runs
                         (uuid,player_id,session_id,section_id,section_type,entry_source) VALUES (?,?,?,?,?,?)""",
                         (values["uuid"], player["id"], context.session.session_id, section,
@@ -510,6 +546,9 @@ class BattleService:
                     VALUES (?,?,?,?,?,?,?,?,?)""", (player["id"], key, values["uuid"], int(time.time()),
                     BATTLE_SCHEMAS["L2C_FightData"].encode(values), entry_context.section_type,
                     entry_context.entry_source, entry_context.map_id, json.dumps(entry_context.hero_ids)))
+                if self.economy:
+                    self.store.db.execute('UPDATE battle_entries SET ai_cost=? WHERE uuid=?',
+                                          (ai_cost, values['uuid']))
         except UnresolvedEconomy as exc:
             logging.getLogger("x2.battle").info(
                 "checkout rejected section=%s reason=settle: %s", section, exc)

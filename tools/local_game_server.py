@@ -38,6 +38,7 @@ from x2server.player.terminal import TerminalService
 from x2server.player.college import CollegeStateRepository
 from x2server.player.system_mail import daily_welfare_watch
 from x2server.player.tutorial import TutorialService
+from x2server.player.star_chart import StarChartService
 
 
 async def run(database: Path, seconds: float) -> None:
@@ -58,6 +59,7 @@ async def run(database: Path, seconds: float) -> None:
     clock = ServerClock()
     college = CollegeStateRepository(store, clock)
     economy = EconomyService(store, clock=clock.now)
+    star_chart = StarChartService(store, economy)
     equipment = EquipmentService(store, economy)
     wish = WishService(store, economy, clock=clock)
     shop = ShopService(store, economy)
@@ -72,7 +74,7 @@ async def run(database: Path, seconds: float) -> None:
                          mail=mail, gift_packages=gift_packages, college=college)
     http = BootstrapHTTPServer(endpoints.bind_host, endpoints.http_port, identity)
     tcp = X2TCPServer(Settings(tcp_host=endpoints.bind_host, tcp_port=endpoints.game_port, read_timeout=120),
-        Dispatcher({**LobbyService(clock, college).handlers(), **TutorialService(store).handlers(), **BirthdayService(store).handlers(), **economy.handlers(), **shop.handlers(), **gift_packages.handlers(), **collection.handlers(), **favor.handlers(), **appearance.handlers(), **appearance_shop.handlers(), **mail.handlers(), **terminal.handlers(), **equipment.handlers(), **wish.handlers(), **ProgressionService(store, economy, appearance).handlers(), **BattleService(store, economy).handlers(), **BattleShopService(store, economy).handlers(), "C2L_HeroAll": HeroService(store).query_all,
+        Dispatcher({**star_chart.handlers(), **LobbyService(clock, college).handlers(), **TutorialService(store).handlers(), **BirthdayService(store).handlers(), **economy.handlers(), **shop.handlers(), **gift_packages.handlers(), **collection.handlers(), **favor.handlers(), **appearance.handlers(), **appearance_shop.handlers(), **mail.handlers(), **terminal.handlers(), **equipment.handlers(), **wish.handlers(), **ProgressionService(store, economy, appearance).handlers(), **BattleService(store, economy).handlers(), **BattleShopService(store, economy).handlers(), "C2L_HeroAll": HeroService(store).query_all,
                     "C2L_Login": login.login, "C2L_ReConnect": login.reconnect,
                     "C2L_ServerTableConfig": login.server_config}))
     chat = X2TCPServer(Settings(tcp_host=endpoints.bind_host, tcp_port=endpoints.chat_port, read_timeout=120),

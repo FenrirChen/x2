@@ -62,6 +62,14 @@ class BattleEntryCatalog:
         if section_type not in SECTION_TYPES:
             raise EntryDenied("unknown SectionType")
         source = "MainMission" if section_type == 0 else SECTION_TYPES[section_type]
+        if section_type == 5:
+            from .star_chart import catalog, unlocked, state, skill_level
+            ability = next(a for a in catalog()['abilities'] if a['ID'] == 39100)
+            skill = next(s for s in catalog()['skills'] if s['SkillID'] == 391001)
+            level = skill_level(state(snapshot, economy.clock() if economy else 0), 391001)
+            if (ability['ID'] not in unlocked(store, player_id)
+                    or section_id not in skill['Param2'][:level + 1]):
+                raise EntryDenied("star training locked/level unavailable")
         cost = row.get("ManualValue", 0) if economy else 0
         if type(cost) is not int or cost < 0:
             raise EntryDenied("invalid static stamina cost")

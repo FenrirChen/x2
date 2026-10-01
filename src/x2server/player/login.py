@@ -102,7 +102,7 @@ class LoginService:
                 self.economy.challenge_values(player["id"]))
         LOGGER.info("authenticated login response prepared player=%s login_count=%s",
                     player["id"], player["login_count"])
-        push = self.snapshot_push(player, self.store if self.economy else None)
+        push = self.snapshot_push(player, self.store if self.economy else None, now)
         pushes = (push,)
         if self.appearance:
             pushes += (OutboundMessage("L2C_QueryHeroDubbing",
@@ -112,7 +112,7 @@ class LoginService:
         return OutboundMessage("L2C_Login", result, pushes=pushes)
 
     @staticmethod
-    def snapshot_push(player: dict[str, Any], store: PlayerStore | None = None) -> OutboundMessage:
+    def snapshot_push(player: dict[str, Any], store: PlayerStore | None = None, now: int | None = None) -> OutboundMessage:
         snapshot = player["snapshot"]
         owned_ids = [hero["id"] for hero in snapshot.get("heroes", []) if hero.get("state") == 2]
         selected = snapshot.get("show")
@@ -136,6 +136,7 @@ class LoginService:
             "Birthday": snapshot.get("birthday", 0),
             "MainChapter": snapshot.get("main_chapter", 0),
             "MainSection": snapshot.get("main_section", 0),
+            "AIPointAutoAdd": int(snapshot.get("star_chart", {}).get("auto_add", False)),
             "QuestIDs": [INT_PAIR.encode({"Key": int(k), "Value": int(v)})
                 for k, v in sorted(snapshot.get("guide_groups", {}).items(), key=lambda p: int(p[0]))],
             **currency_balances,
@@ -143,9 +144,12 @@ class LoginService:
                 int(hero["id"]): hero.get("favor", {})
                 for hero in snapshot.get("heroes", [])})})
         initial = {r["HeroID"]: r["InitialLevel"] for r in catalog()["favorabilityhero"]}
+        from .star_chart import snapshot_fields
         values = {"BaseInfo": base, "favor": [FAVOR_MAP_ENTRY.encode({"Key": hero["id"],
             "Value": FAVOR.encode(favor_state(hero, initial.get(hero["id"], 1)))})
             for hero in snapshot.get("heroes", []) if hero.get("state") == 2]}
+        values.update(snapshot_fields(store, player["id"], snapshot,
+                                     int(time.time()) if now is None else now))
         if store is not None:
             relic_ids = relic_item_ids()
             owned_relics = [item_id for item_id, quantity in store.db.execute(

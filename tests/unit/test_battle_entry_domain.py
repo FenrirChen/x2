@@ -187,6 +187,9 @@ def test_each_static_section_type_enters_and_settles_without_invented_reward(env
     snapshot["level"] = 100
     snapshot["mobility"]["power"] = 9999
     store.save_snapshot(1, snapshot, player["revision"])
+    with store.db:
+        # 星图空间 requires completion of chapter 2 in the native client.
+        store.db.execute("INSERT OR IGNORE INTO economy_clears VALUES (1,2110106,'star-prerequisite')")
     representatives = {}
     for row in service.catalog.sections.values():
         representatives.setdefault(row["Type"], row)
@@ -220,6 +223,8 @@ def test_all_extracted_sections_resolve_with_satisfied_static_prerequisites(env)
     player = store.get(1)
     snapshot = player["snapshot"]
     snapshot["level"] = 100
+    snapshot['star_chart'] = {'skills': {'391001': 3}}
+    store.db.execute("INSERT OR IGNORE INTO economy_clears VALUES (1,2110106,'star-prerequisite')")
     for row in service.catalog.sections.values():
         if row.get("OpenType", {}).get("value") == 2 and row.get("OpenParam"):
             store.db.execute("INSERT OR IGNORE INTO economy_clears VALUES (?,?,?)",

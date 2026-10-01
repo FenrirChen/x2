@@ -1,0 +1,2815 @@
+{
+  "provenance": "CONFIRMED_CLIENT_STATIC; unlock chapters from UnlockDescID text",
+  "sources": {
+    "StarChartsBase": {
+      "source": "assets/bin/Data/6ee0271ca453b1040aeec012a04d470b",
+      "record_count": 10,
+      "fields": [
+        "ID",
+        "PreviousID",
+        "NameID",
+        "NameEnglishID",
+        "DescID",
+        "UnlockDescID",
+        "Icon",
+        "StarIcon",
+        "StarIconBG",
+        "StarIconBGBig",
+        "StarIconOffset",
+        "Order",
+        "PowerType",
+        "OpenType",
+        "SkillID"
+      ]
+    },
+    "StarChartsSkill": {
+      "source": "assets/bin/Data/b813c6fd963e21f4d9c65d1c7a1868cd",
+      "record_count": 17,
+      "fields": [
+        "SkillID",
+        "NameID",
+        "DescStoryID",
+        "DescID",
+        "Icon",
+        "SkillLevel",
+        "MaxLevelID",
+        "MaxLevelNum",
+        "SkillEffect",
+        "Param1",
+        "Param2"
+      ]
+    },
+    "StarChartsParam": {
+      "source": "assets/bin/Data/5e12a2bf37c396540b268eb31cfe916a",
+      "record_count": 1,
+      "fields": [
+        "ID",
+        "DefultOrder",
+        "DefultRelic",
+        "DefultConsume"
+      ]
+    },
+    "ChapterInfo": {
+      "source": "assets/bin/Data/d120a4578bab38d49ac0a683ca05a471",
+      "record_count": 13,
+      "fields": [
+        "MapTypeID",
+        "StageID",
+        "ExperienceChapterID",
+        "ChapterName",
+        "ChapterNumber",
+        "ChallengeLevel",
+        "EndlessLevel",
+        "BloodMoonOpenType",
+        "FlowchartName",
+        "IsOpen",
+        "ChapterPic",
+        "ChapterPicName",
+        "ChapterIcon",
+        "DPPic",
+        "DPPoint",
+        "DPReward",
+        "UnlockMapTypeID",
+        "UnlockDPRequest",
+        "PlotReviewBackground",
+        "PlotReviewDesc",
+        "ReviewUnlockRequest",
+        "RequestNum",
+        "ReviewUnlocAward",
+        "ShowReview"
+      ]
+    },
+    "SectionTable": {
+      "source": "assets/bin/Data/cca5f3cc8525b59459bdebf586c887fb",
+      "record_count": 3203,
+      "fields": [
+        "SectionID",
+        "NextSectionID",
+        "SectionNumberID",
+        "NumerChina",
+        "GameplayNotice",
+        "Maps",
+        "ChapterID",
+        "Type",
+        "CollisionDetectionRadius",
+        "IfBossBattle",
+        "Name",
+        "NameChina",
+        "NameMore",
+        "NameMoreChina",
+        "ChallengeName",
+        "ChallengeDesc",
+        "ChallengeReward1",
+        "StageIcon",
+        "LevelDisplay",
+        "RecommendedAbility",
+        "RecommendedLevel",
+        "DifficultyLevel",
+        "Profession",
+        "EnemyDisplay",
+        "DroopLimit",
+        "DroopLimit2",
+        "DroopLimit3",
+        "DroopDisplay",
+        "DroopDisplayProbability",
+        "OpenType",
+        "OpenParam",
+        "HeroLimit",
+        "TimeLimit",
+        "StartParam",
+        "WinCondition",
+        "WinParam",
+        "ExitCountDown",
+        "FailCondition",
+        "FailParam",
+        "FailTips",
+        "AgainSwitch",
+        "FailShowSwitch",
+        "Open",
+        "ManualValue",
+        "FirVReward",
+        "ExpertChestReward",
+        "ChestReward",
+        "VReward",
+        "MopReward",
+        "DropValueID",
+        "SectionRelicList",
+        "PlayerPassive",
+        "MonsterPassive",
+        "GoblinRate",
+        "GoblinIdList",
+        "GoblinChance",
+        "AssistType",
+        "AssistParam",
+        "BehaviorManager",
+        "IsAutoFightMode",
+        "AutoFightCondition",
+        "ContinueFightID",
+        "ContinueFightConsume",
+        "AutoFightMode",
+        "ChangeSceneColor",
+        "ChangeSceneFog",
+        "IsSeriesSection",
+        "IsShowWinTips",
+        "IsSaveGame",
+        "Favorability",
+        "PlotReviewBackground",
+        "PlotReviewStoryID",
+        "PlotReviewDesc",
+        "GamePlayType",
+        "GamePlayValue",
+        "GamePlayValue2",
+        "SwitchValue",
+        "BattlepassEquib",
+        "BattlepassEquibInto",
+        "StartLevelByItem"
+      ]
+    }
+  },
+  "abilities": [
+    {
+      "ID": 39000,
+      "NameID": 390001,
+      "NameEnglishID": 390002,
+      "DescID": 390003,
+      "UnlockDescID": 390004,
+      "Icon": "DynamicSystem/ZhuJueNengLi_LingHunLianJie",
+      "StarIcon": "UIAltas/StarCharts/ZhuJueNengLi_LingHunLianJie_da",
+      "StarIconBG": "UIAltas/StarCharts/ZhuJueNengLi_LingHunLianJie_Xing_xiao",
+      "StarIconBGBig": "UIAltas/StarCharts/ZhuJueNengLi_LingHunLianJie_Xing_Da",
+      "StarIconOffset": -100,
+      "Order": 1,
+      "PowerType": {
+        "value": 1,
+        "enum": "E_Power01"
+      },
+      "OpenType": {
+        "value": 1,
+        "enum": "E_Yes"
+      },
+      "SkillID": [
+        390001,
+        390002,
+        390003,
+        390004
+      ],
+      "unlock_section": 2110804
+    },
+    {
+      "ID": 39100,
+      "PreviousID": 39000,
+      "NameID": 391001,
+      "NameEnglishID": 391002,
+      "DescID": 391003,
+      "UnlockDescID": 391004,
+      "Icon": "DynamicSystem/ZhuJueNengLi_XingTuKongJian",
+      "StarIcon": "UIAltas/StarCharts/ZhuJueNengLi_XingTuKongJianDi_da",
+      "StarIconBG": "UIAltas/StarCharts/ZhuJueNengLi_XingTuKongJianDi_Xing_Xiao",
+      "StarIconBGBig": "UIAltas/StarCharts/ZhuJueNengLi_XingTuKongJianDi_Xing_Da",
+      "Order": 2,
+      "PowerType": {
+        "value": 4,
+        "enum": "E_Power04"
+      },
+      "OpenType": {
+        "value": 1,
+        "enum": "E_Yes"
+      },
+      "SkillID": [
+        391001,
+        391002,
+        391003,
+        391004
+      ],
+      "unlock_section": 2110106
+    },
+    {
+      "ID": 39200,
+      "PreviousID": 39100,
+      "NameID": 392001,
+      "NameEnglishID": 392002,
+      "DescID": 392003,
+      "UnlockDescID": 392004,
+      "Icon": "DynamicSystem/ZhuJueNengLi_LingHunLianJie",
+      "StarIcon": "UIAltas/StarCharts/ZhuJueNengLi_ShiKongHuiSu_da",
+      "StarIconBG": "UIAltas/StarCharts/ZhuJueNengLi_ShiKongHuiSu_Xiao_Xing",
+      "StarIconBGBig": "UIAltas/StarCharts/ZhuJueNengLi_ShiKongHuiSu_Da_Xing",
+      "Order": 3,
+      "PowerType": {
+        "value": 3,
+        "enum": "E_Power03"
+      },
+      "OpenType": {
+        "value": 1,
+        "enum": "E_Yes"
+      },
+      "SkillID": [
+        392002,
+        392003
+      ],
+      "unlock_section": 2110208
+    },
+    {
+      "ID": 39300,
+      "PreviousID": 39400,
+      "NameID": 393001,
+      "NameEnglishID": 393002,
+      "DescID": 393003,
+      "UnlockDescID": 393004,
+      "Icon": "DynamicSystem/ZhuJueNnegLi_ShiKongHuiShu",
+      "StarIcon": "UIAltas/StarCharts/ZhuJueNengLi_ShiKongHuiShuDi",
+      "Order": 5,
+      "PowerType": {
+        "value": 2,
+        "enum": "E_Power02"
+      },
+      "OpenType": {
+        "value": 1,
+        "enum": "E_Yes"
+      },
+      "unlock_section": 2110410
+    },
+    {
+      "ID": 39400,
+      "PreviousID": 39200,
+      "NameID": 394001,
+      "NameEnglishID": 394002,
+      "DescID": 394003,
+      "UnlockDescID": 394004,
+      "Icon": "DynamicSystem/ZhuJueNengLi_XingTuKongJian",
+      "StarIcon": "UIAltas/StarCharts/ZhuJueNengLi_LingHunLianJie_da",
+      "Order": 4,
+      "PowerType": {
+        "value": 6,
+        "enum": "E_Power06"
+      },
+      "OpenType": {
+        "value": 1,
+        "enum": "E_Yes"
+      },
+      "SkillID": [
+        394001,
+        394002,
+        394003,
+        394004,
+        394005
+      ],
+      "unlock_section": 2110308
+    }
+  ],
+  "skills": [
+    {
+      "SkillID": 390001,
+      "NameID": 3900011,
+      "DescStoryID": 3900012,
+      "DescID": [
+        3900013,
+        3900013,
+        3900014,
+        3900015,
+        3900016,
+        3900017
+      ],
+      "Icon": "DynamicSystem/ZhuJueNnegLi_icon1",
+      "SkillLevel": 5,
+      "MaxLevelID": [
+        {
+          "Items": [
+            1237916,
+            1237901
+          ]
+        },
+        {
+          "Items": [
+            1237916,
+            1237901
+          ]
+        },
+        {
+          "Items": [
+            1237916,
+            1237901
+          ]
+        },
+        {
+          "Items": [
+            1237916,
+            1237901
+          ]
+        },
+        {
+          "Items": [
+            1237916,
+            1237901
+          ]
+        }
+      ],
+      "MaxLevelNum": [
+        {
+          "Items": [
+            1,
+            1000
+          ]
+        },
+        {
+          "Items": [
+            1,
+            2000
+          ]
+        },
+        {
+          "Items": [
+            1,
+            3000
+          ]
+        },
+        {
+          "Items": [
+            1,
+            4000
+          ]
+        },
+        {
+          "Items": [
+            1,
+            5000
+          ]
+        }
+      ],
+      "SkillEffect": {
+        "value": 5,
+        "enum": "E_ChangeCD"
+      },
+      "Param1": [
+        35000,
+        30000,
+        25000,
+        20000,
+        15000,
+        10000
+      ]
+    },
+    {
+      "SkillID": 390002,
+      "NameID": 3900021,
+      "DescStoryID": 3900022,
+      "DescID": [
+        3900024,
+        3900024,
+        3900025,
+        3900026,
+        3900027,
+        3900028
+      ],
+      "Icon": "DynamicSystem/ZhuJueNnegLi_icon2",
+      "SkillLevel": 5,
+      "MaxLevelID": [
+        {
+          "Items": [
+            1237916,
+            1237901
+          ]
+        },
+        {
+          "Items": [
+            1237916,
+            1237901
+          ]
+        },
+        {
+          "Items": [
+            1237916,
+            1237901
+          ]
+        },
+        {
+          "Items": [
+            1237916,
+            1237901
+          ]
+        },
+        {
+          "Items": [
+            1237916,
+            1237901
+          ]
+        }
+      ],
+      "MaxLevelNum": [
+        {
+          "Items": [
+            1,
+            1000
+          ]
+        },
+        {
+          "Items": [
+            1,
+            2000
+          ]
+        },
+        {
+          "Items": [
+            1,
+            3000
+          ]
+        },
+        {
+          "Items": [
+            1,
+            4000
+          ]
+        },
+        {
+          "Items": [
+            1,
+            5000
+          ]
+        }
+      ],
+      "SkillEffect": {
+        "value": 6,
+        "enum": "E_InjuryRelief"
+      },
+      "Param1": [
+        400,
+        350,
+        300,
+        250,
+        200,
+        150
+      ]
+    },
+    {
+      "SkillID": 390003,
+      "NameID": 3900031,
+      "DescStoryID": 3900032,
+      "DescID": [
+        3900033,
+        3900033,
+        3900034,
+        3900035
+      ],
+      "Icon": "DynamicSystem/ZhuJueNnegLi_icon3",
+      "SkillLevel": 3,
+      "MaxLevelID": [
+        {
+          "Items": [
+            1237916,
+            1237901
+          ]
+        },
+        {
+          "Items": [
+            1237916,
+            1237901
+          ]
+        },
+        {
+          "Items": [
+            1237916,
+            1237901
+          ]
+        }
+      ],
+      "MaxLevelNum": [
+        {
+          "Items": [
+            1,
+            1000
+          ]
+        },
+        {
+          "Items": [
+            1,
+            2000
+          ]
+        },
+        {
+          "Items": [
+            1,
+            3000
+          ]
+        }
+      ],
+      "SkillEffect": {
+        "value": 7,
+        "enum": "E_TrapRelief"
+      },
+      "Param1": [
+        245000,
+        245001,
+        245002,
+        245003
+      ]
+    },
+    {
+      "SkillID": 390004,
+      "NameID": 3900041,
+      "DescStoryID": 3900042,
+      "DescID": [
+        3900043,
+        3900043
+      ],
+      "Icon": "DynamicSystem/ZhuJueNnegLi_icon4",
+      "SkillLevel": 1,
+      "MaxLevelID": [
+        {
+          "Items": [
+            1237901
+          ]
+        }
+      ],
+      "MaxLevelNum": [
+        {
+          "Items": [
+            1000
+          ]
+        }
+      ],
+      "SkillEffect": {
+        "value": 8,
+        "enum": "E_Story"
+      }
+    },
+    {
+      "SkillID": 391001,
+      "NameID": 3910011,
+      "DescStoryID": 3910012,
+      "DescID": [
+        3910013,
+        3910013,
+        3910014,
+        3910015
+      ],
+      "Icon": "DynamicSystem/ZhuJueNnegLi_icon5",
+      "SkillLevel": 3,
+      "MaxLevelID": [
+        {
+          "Items": [
+            1237916,
+            1237901
+          ]
+        },
+        {
+          "Items": [
+            1237916,
+            1237901
+          ]
+        },
+        {
+          "Items": [
+            1237916,
+            1237901
+          ]
+        }
+      ],
+      "MaxLevelNum": [
+        {
+          "Items": [
+            1,
+            2000
+          ]
+        },
+        {
+          "Items": [
+            1,
+            4000
+          ]
+        },
+        {
+          "Items": [
+            1,
+            6000
+          ]
+        }
+      ],
+      "SkillEffect": {
+        "value": 4,
+        "enum": "E_Hero"
+      },
+      "Param1": [
+        2019900,
+        2019900,
+        2019900,
+        2019900
+      ],
+      "Param2": [
+        2119900,
+        2119901,
+        2119902,
+        2119903
+      ]
+    },
+    {
+      "SkillID": 391002,
+      "NameID": 3910021,
+      "DescStoryID": 3910022,
+      "DescID": [
+        3910023,
+        3910023
+      ],
+      "Icon": "DynamicSystem/ZhuJueNnegLi_icon6",
+      "SkillLevel": 1,
+      "MaxLevelID": [
+        {
+          "Items": [
+            1237916,
+            1237901
+          ]
+        }
+      ],
+      "MaxLevelNum": [
+        {
+          "Items": [
+            1,
+            10000
+          ]
+        }
+      ],
+      "SkillEffect": {
+        "value": 1,
+        "enum": "E_DPS"
+      }
+    },
+    {
+      "SkillID": 391003,
+      "NameID": 3910031,
+      "DescStoryID": 3910032,
+      "DescID": [
+        3910033,
+        3910033
+      ],
+      "Icon": "DynamicSystem/ZhuJueNnegLi_icon7",
+      "SkillLevel": 1,
+      "MaxLevelID": [
+        {
+          "Items": [
+            1237916,
+            1237901
+          ]
+        }
+      ],
+      "MaxLevelNum": [
+        {
+          "Items": [
+            1,
+            10000
+          ]
+        }
+      ],
+      "SkillEffect": {
+        "value": 2,
+        "enum": "E_Skill"
+      }
+    },
+    {
+      "SkillID": 391004,
+      "NameID": 3910041,
+      "DescStoryID": 3910042,
+      "DescID": [
+        3910043,
+        3910043
+      ],
+      "Icon": "DynamicSystem/ZhuJueNnegLi_icon8",
+      "SkillLevel": 1,
+      "MaxLevelID": [
+        {
+          "Items": [
+            1237916,
+            1237901
+          ]
+        }
+      ],
+      "MaxLevelNum": [
+        {
+          "Items": [
+            1,
+            10000
+          ]
+        }
+      ],
+      "SkillEffect": {
+        "value": 3,
+        "enum": "E_Rogue"
+      },
+      "Param1": [
+        9,
+        9
+      ]
+    },
+    {
+      "SkillID": 392001,
+      "NameID": 3920011,
+      "DescStoryID": 3920012,
+      "DescID": [
+        3920013,
+        3920013
+      ],
+      "Icon": "DynamicSystem/ZhuJueNnegLi_icon9",
+      "SkillLevel": 1,
+      "MaxLevelID": [
+        {
+          "Items": [
+            1237916,
+            1237901
+          ]
+        }
+      ],
+      "MaxLevelNum": [
+        {
+          "Items": [
+            1,
+            1000
+          ]
+        }
+      ]
+    },
+    {
+      "SkillID": 392002,
+      "NameID": 3920021,
+      "DescStoryID": 3920022,
+      "DescID": [
+        3920023,
+        3920023
+      ],
+      "Icon": "DynamicSystem/ZhuJueNnegLi_icon10",
+      "SkillLevel": 1,
+      "MaxLevelID": [
+        {
+          "Items": [
+            1237916,
+            1237901
+          ]
+        }
+      ],
+      "MaxLevelNum": [
+        {
+          "Items": [
+            1,
+            10000
+          ]
+        }
+      ],
+      "SkillEffect": {
+        "value": 10,
+        "enum": "E_HeroGift"
+      }
+    },
+    {
+      "SkillID": 392003,
+      "NameID": 3920031,
+      "DescStoryID": 3920032,
+      "DescID": [
+        3920033,
+        3920033
+      ],
+      "Icon": "DynamicSystem/ZhuJueNnegLi_icon11",
+      "SkillLevel": 1,
+      "MaxLevelID": [
+        {
+          "Items": [
+            1237901
+          ]
+        }
+      ],
+      "MaxLevelNum": [
+        {
+          "Items": [
+            1000
+          ]
+        }
+      ],
+      "SkillEffect": {
+        "value": 8,
+        "enum": "E_Story"
+      }
+    },
+    {
+      "SkillID": 392004,
+      "NameID": 3920041,
+      "DescStoryID": 3920042,
+      "DescID": [
+        3920043,
+        3920043
+      ],
+      "Icon": "DynamicSystem/ZhuJueNnegLi_icon12",
+      "SkillLevel": 1,
+      "MaxLevelID": [
+        {
+          "Items": [
+            1237901
+          ]
+        }
+      ],
+      "MaxLevelNum": [
+        {
+          "Items": [
+            1000
+          ]
+        }
+      ],
+      "SkillEffect": {
+        "value": 8,
+        "enum": "E_Story"
+      }
+    },
+    {
+      "SkillID": 394001,
+      "NameID": 3940011,
+      "DescStoryID": 3940012,
+      "DescID": [
+        3940013,
+        3940013,
+        3940014,
+        3940015
+      ],
+      "Icon": "DynamicSystem/ZhuJueNnegLi_icon8",
+      "SkillLevel": 3,
+      "MaxLevelID": [
+        {
+          "Items": [
+            1237916,
+            1237901
+          ]
+        },
+        {
+          "Items": [
+            1237916,
+            1237901
+          ]
+        },
+        {
+          "Items": [
+            1237916,
+            1237901
+          ]
+        }
+      ],
+      "MaxLevelNum": [
+        {
+          "Items": [
+            1,
+            3000
+          ]
+        },
+        {
+          "Items": [
+            1,
+            6000
+          ]
+        },
+        {
+          "Items": [
+            1,
+            9000
+          ]
+        }
+      ],
+      "SkillEffect": {
+        "value": 11,
+        "enum": "E_AI01"
+      },
+      "Param1": [
+        3,
+        5,
+        7,
+        10
+      ]
+    },
+    {
+      "SkillID": 394002,
+      "NameID": 3940021,
+      "DescStoryID": 3940022,
+      "DescID": [
+        3940023,
+        3940023,
+        3940024,
+        3940025
+      ],
+      "Icon": "DynamicSystem/ZhuJueNnegLi_icon2",
+      "SkillLevel": 3,
+      "MaxLevelID": [
+        {
+          "Items": [
+            1237916,
+            1237901
+          ]
+        },
+        {
+          "Items": [
+            1237916,
+            1237901
+          ]
+        },
+        {
+          "Items": [
+            1237916,
+            1237901
+          ]
+        }
+      ],
+      "MaxLevelNum": [
+        {
+          "Items": [
+            1,
+            3000
+          ]
+        },
+        {
+          "Items": [
+            1,
+            6000
+          ]
+        },
+        {
+          "Items": [
+            1,
+            9000
+          ]
+        }
+      ],
+      "SkillEffect": {
+        "value": 12,
+        "enum": "E_AI02"
+      },
+      "Param1": [
+        0,
+        2,
+        6,
+        10
+      ]
+    },
+    {
+      "SkillID": 394003,
+      "NameID": 3940031,
+      "DescStoryID": 3940032,
+      "DescID": [
+        3940033,
+        3940033,
+        3940034,
+        3940035
+      ],
+      "Icon": "DynamicSystem/ZhuJueNnegLi_icon7",
+      "SkillLevel": 3,
+      "MaxLevelID": [
+        {
+          "Items": [
+            1237916,
+            1237901
+          ]
+        },
+        {
+          "Items": [
+            1237916,
+            1237901
+          ]
+        },
+        {
+          "Items": [
+            1237916,
+            1237901
+          ]
+        }
+      ],
+      "MaxLevelNum": [
+        {
+          "Items": [
+            1,
+            3000
+          ]
+        },
+        {
+          "Items": [
+            1,
+            6000
+          ]
+        },
+        {
+          "Items": [
+            1,
+            9000
+          ]
+        }
+      ],
+      "SkillEffect": {
+        "value": 13,
+        "enum": "E_AI03"
+      },
+      "Param1": [
+        100,
+        120,
+        135,
+        150
+      ]
+    },
+    {
+      "SkillID": 394004,
+      "NameID": 3940041,
+      "DescStoryID": 3940042,
+      "DescID": [
+        3940043,
+        3940043,
+        3940044,
+        3940045
+      ],
+      "Icon": "DynamicSystem/ZhuJueNnegLi_icon9",
+      "SkillLevel": 3,
+      "MaxLevelID": [
+        {
+          "Items": [
+            1237916,
+            1237901
+          ]
+        },
+        {
+          "Items": [
+            1237916,
+            1237901
+          ]
+        },
+        {
+          "Items": [
+            1237916,
+            1237901
+          ]
+        }
+      ],
+      "MaxLevelNum": [
+        {
+          "Items": [
+            1,
+            3000
+          ]
+        },
+        {
+          "Items": [
+            1,
+            6000
+          ]
+        },
+        {
+          "Items": [
+            1,
+            9000
+          ]
+        }
+      ],
+      "SkillEffect": {
+        "value": 14,
+        "enum": "E_AI04"
+      },
+      "Param1": [
+        150,
+        200,
+        250,
+        300
+      ]
+    },
+    {
+      "SkillID": 394005,
+      "NameID": 3940051,
+      "DescStoryID": 3940052,
+      "DescID": [
+        3940053,
+        3940053
+      ],
+      "Icon": "DynamicSystem/ZhuJueNnegLi_icon12",
+      "SkillLevel": 1,
+      "MaxLevelID": [
+        {
+          "Items": [
+            1237916,
+            1237901
+          ]
+        }
+      ],
+      "MaxLevelNum": [
+        {
+          "Items": [
+            1,
+            10000
+          ]
+        }
+      ],
+      "SkillEffect": {
+        "value": 15,
+        "enum": "E_AI05"
+      }
+    }
+  ],
+  "charge_costs": [
+    10,
+    20,
+    30,
+    30,
+    40,
+    40,
+    50,
+    50,
+    60,
+    60
+  ],
+  "auto_sections": {
+    "2110151": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110152": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110153": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110154": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110155": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110156": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110157": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110158": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110159": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110160": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110191": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2110192": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2110193": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2110194": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2110251": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110252": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110253": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110254": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110255": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110256": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110257": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110258": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110259": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110260": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110291": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2110292": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2110293": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2110294": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2110351": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110352": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110353": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110354": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110355": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110356": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110357": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110358": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110359": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110360": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110451": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110452": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110453": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110454": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110455": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110456": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110457": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110458": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110459": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110460": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110551": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110552": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110553": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110554": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110555": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110556": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110557": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110558": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110559": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110560": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110651": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110652": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110653": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110654": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110655": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110656": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110657": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110658": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110659": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110660": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110751": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110752": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110753": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110754": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110755": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110756": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110757": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110758": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110759": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110760": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110851": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110852": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110853": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110854": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110855": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110856": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110857": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110858": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110859": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110860": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110900": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2110951": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110952": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110953": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110954": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110955": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110956": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110957": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110958": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110959": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2110960": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2111051": {
+      "condition": 0,
+      "cost": 0
+    },
+    "2111151": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2111152": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2111153": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2111154": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2111155": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2111156": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2111157": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2111158": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2111159": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2111160": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2112751": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2119900": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2119901": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2119902": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2119903": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2130101": {
+      "condition": 2,
+      "cost": 6
+    },
+    "2130102": {
+      "condition": 2,
+      "cost": 8
+    },
+    "2130103": {
+      "condition": 2,
+      "cost": 10
+    },
+    "2130104": {
+      "condition": 2,
+      "cost": 12
+    },
+    "2130105": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2130106": {
+      "condition": 2,
+      "cost": 6
+    },
+    "2130107": {
+      "condition": 2,
+      "cost": 8
+    },
+    "2130108": {
+      "condition": 2,
+      "cost": 10
+    },
+    "2130109": {
+      "condition": 2,
+      "cost": 12
+    },
+    "2130110": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2130201": {
+      "condition": 2,
+      "cost": 6
+    },
+    "2130202": {
+      "condition": 2,
+      "cost": 8
+    },
+    "2130203": {
+      "condition": 2,
+      "cost": 10
+    },
+    "2130204": {
+      "condition": 2,
+      "cost": 12
+    },
+    "2130205": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2130501": {
+      "condition": 2,
+      "cost": 10
+    },
+    "2130502": {
+      "condition": 2,
+      "cost": 12
+    },
+    "2130503": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2130601": {
+      "condition": 2,
+      "cost": 10
+    },
+    "2130602": {
+      "condition": 2,
+      "cost": 12
+    },
+    "2130603": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2130701": {
+      "condition": 2,
+      "cost": 10
+    },
+    "2130702": {
+      "condition": 2,
+      "cost": 12
+    },
+    "2130703": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2131201": {
+      "condition": 2,
+      "cost": 10
+    },
+    "2131202": {
+      "condition": 2,
+      "cost": 12
+    },
+    "2131203": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2131301": {
+      "condition": 2,
+      "cost": 8
+    },
+    "2131302": {
+      "condition": 2,
+      "cost": 10
+    },
+    "2131303": {
+      "condition": 2,
+      "cost": 12
+    },
+    "2131304": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2132001": {
+      "condition": 2,
+      "cost": 6
+    },
+    "2132002": {
+      "condition": 2,
+      "cost": 8
+    },
+    "2132003": {
+      "condition": 2,
+      "cost": 10
+    },
+    "2132004": {
+      "condition": 2,
+      "cost": 12
+    },
+    "2132005": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2132101": {
+      "condition": 2,
+      "cost": 6
+    },
+    "2132102": {
+      "condition": 2,
+      "cost": 8
+    },
+    "2132103": {
+      "condition": 2,
+      "cost": 10
+    },
+    "2132104": {
+      "condition": 2,
+      "cost": 12
+    },
+    "2132105": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133101": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133102": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133103": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133104": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133105": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133106": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133107": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133108": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133109": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133110": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133201": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133202": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133203": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133204": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133205": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133206": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133207": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133208": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133209": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133210": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133301": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133302": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133303": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133304": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133305": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133306": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133307": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133308": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133309": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133310": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133401": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133402": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133403": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133404": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133405": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133406": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133407": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133408": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133409": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133410": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133501": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133502": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133503": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133504": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133505": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133506": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133507": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133508": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133509": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133510": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133601": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133602": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133603": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133604": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133605": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133606": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133607": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133608": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133609": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133610": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133701": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133702": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133703": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133704": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133705": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133706": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133707": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133708": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133709": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133710": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133801": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133802": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133803": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133804": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133805": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133806": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133807": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133808": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133809": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133810": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133901": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133902": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133903": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133904": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133905": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133906": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133907": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133908": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133909": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2133910": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2134101": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2134102": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2134103": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2134104": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2134105": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2134106": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2134107": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2134108": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2134109": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2134110": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2139701": {
+      "condition": 2,
+      "cost": 0
+    },
+    "2139702": {
+      "condition": 2,
+      "cost": 8
+    },
+    "2139703": {
+      "condition": 2,
+      "cost": 6
+    },
+    "2139751": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2140101": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2140102": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2140103": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2140104": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2140105": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2140106": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2140107": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2140108": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2140201": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2140202": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2140203": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2160101": {
+      "condition": 2,
+      "cost": 6
+    },
+    "2160102": {
+      "condition": 2,
+      "cost": 8
+    },
+    "2160103": {
+      "condition": 2,
+      "cost": 10
+    },
+    "2160104": {
+      "condition": 2,
+      "cost": 12
+    },
+    "2160105": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2160111": {
+      "condition": 2,
+      "cost": 9
+    },
+    "2160112": {
+      "condition": 2,
+      "cost": 9
+    },
+    "2160113": {
+      "condition": 2,
+      "cost": 12
+    },
+    "2160114": {
+      "condition": 2,
+      "cost": 12
+    },
+    "2160214": {
+      "condition": 2,
+      "cost": 9
+    },
+    "2160215": {
+      "condition": 2,
+      "cost": 9
+    },
+    "2160216": {
+      "condition": 2,
+      "cost": 9
+    },
+    "2160223": {
+      "condition": 2,
+      "cost": 12
+    },
+    "2160224": {
+      "condition": 2,
+      "cost": 12
+    },
+    "2160232": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2160250": {
+      "condition": 2,
+      "cost": 9
+    },
+    "2160254": {
+      "condition": 2,
+      "cost": 9
+    },
+    "2160255": {
+      "condition": 2,
+      "cost": 9
+    },
+    "2160256": {
+      "condition": 2,
+      "cost": 9
+    },
+    "2160260": {
+      "condition": 2,
+      "cost": 9
+    },
+    "2160263": {
+      "condition": 2,
+      "cost": 12
+    },
+    "2160264": {
+      "condition": 2,
+      "cost": 12
+    },
+    "2160267": {
+      "condition": 2,
+      "cost": 12
+    },
+    "2160268": {
+      "condition": 2,
+      "cost": 12
+    },
+    "2160270": {
+      "condition": 2,
+      "cost": 9
+    },
+    "2160272": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2160274": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2160412": {
+      "condition": 2,
+      "cost": 9
+    },
+    "2160422": {
+      "condition": 2,
+      "cost": 9
+    },
+    "2160432": {
+      "condition": 2,
+      "cost": 12
+    },
+    "2160442": {
+      "condition": 2,
+      "cost": 12
+    },
+    "2160452": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2160491": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2160512": {
+      "condition": 2,
+      "cost": 6
+    },
+    "2160514": {
+      "condition": 2,
+      "cost": 6
+    },
+    "2160522": {
+      "condition": 2,
+      "cost": 9
+    },
+    "2160524": {
+      "condition": 2,
+      "cost": 9
+    },
+    "2160532": {
+      "condition": 2,
+      "cost": 12
+    },
+    "2160534": {
+      "condition": 2,
+      "cost": 12
+    },
+    "2160542": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2160544": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2160552": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2160554": {
+      "condition": 2,
+      "cost": 0
+    },
+    "2160812": {
+      "condition": 2,
+      "cost": 6
+    },
+    "2160814": {
+      "condition": 2,
+      "cost": 6
+    },
+    "2160822": {
+      "condition": 2,
+      "cost": 9
+    },
+    "2160824": {
+      "condition": 2,
+      "cost": 9
+    },
+    "2160832": {
+      "condition": 2,
+      "cost": 12
+    },
+    "2160834": {
+      "condition": 2,
+      "cost": 12
+    },
+    "2160842": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2160844": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2160852": {
+      "condition": 2,
+      "cost": 18
+    },
+    "2160854": {
+      "condition": 2,
+      "cost": 18
+    },
+    "2160912": {
+      "condition": 2,
+      "cost": 6
+    },
+    "2160922": {
+      "condition": 2,
+      "cost": 6
+    },
+    "2160932": {
+      "condition": 2,
+      "cost": 9
+    },
+    "2160942": {
+      "condition": 2,
+      "cost": 9
+    },
+    "2160952": {
+      "condition": 2,
+      "cost": 12
+    },
+    "2160962": {
+      "condition": 2,
+      "cost": 12
+    },
+    "2160972": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2160982": {
+      "condition": 2,
+      "cost": 0
+    },
+    "2161031": {
+      "condition": 1,
+      "cost": 6
+    },
+    "2161032": {
+      "condition": 1,
+      "cost": 9
+    },
+    "2161033": {
+      "condition": 1,
+      "cost": 12
+    },
+    "2161034": {
+      "condition": 1,
+      "cost": 15
+    },
+    "2161035": {
+      "condition": 1,
+      "cost": 6
+    },
+    "2161036": {
+      "condition": 1,
+      "cost": 9
+    },
+    "2161037": {
+      "condition": 1,
+      "cost": 12
+    },
+    "2161038": {
+      "condition": 1,
+      "cost": 15
+    },
+    "2161121": {
+      "condition": 2,
+      "cost": 9
+    },
+    "2161122": {
+      "condition": 2,
+      "cost": 12
+    },
+    "2161123": {
+      "condition": 2,
+      "cost": 12
+    },
+    "2161124": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2161125": {
+      "condition": 2,
+      "cost": 15
+    },
+    "2161201": {
+      "condition": 2,
+      "cost": 9
+    },
+    "2161202": {
+      "condition": 2,
+      "cost": 9
+    },
+    "2161203": {
+      "condition": 2,
+      "cost": 9
+    },
+    "2161204": {
+      "condition": 2,
+      "cost": 9
+    },
+    "2161205": {
+      "condition": 2,
+      "cost": 9
+    },
+    "2161206": {
+      "condition": 2,
+      "cost": 9
+    },
+    "2161207": {
+      "condition": 2,
+      "cost": 9
+    },
+    "2161208": {
+      "condition": 2,
+      "cost": 9
+    },
+    "2161209": {
+      "condition": 2,
+      "cost": 9
+    },
+    "2161210": {
+      "condition": 2,
+      "cost": 9
+    },
+    "2161321": {
+      "condition": 1,
+      "cost": 6
+    },
+    "2161322": {
+      "condition": 1,
+      "cost": 9
+    },
+    "2161323": {
+      "condition": 1,
+      "cost": 12
+    },
+    "2161324": {
+      "condition": 1,
+      "cost": 15
+    },
+    "2161325": {
+      "condition": 1,
+      "cost": 6
+    },
+    "2161326": {
+      "condition": 1,
+      "cost": 9
+    },
+    "2161327": {
+      "condition": 1,
+      "cost": 12
+    },
+    "2161328": {
+      "condition": 1,
+      "cost": 15
+    },
+    "2170001": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170002": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170003": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170004": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170005": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170006": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170007": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170008": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170009": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170010": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170011": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170012": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170013": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170014": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170015": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170016": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170017": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170018": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170019": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170020": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170021": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170022": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170023": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170024": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170025": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170026": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170027": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170028": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170029": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170030": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170031": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170032": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170033": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170034": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170035": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170036": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170037": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170038": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170039": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170040": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170041": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170042": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170043": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170044": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170045": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170046": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170047": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170048": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170049": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170050": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170051": {
+      "condition": 1,
+      "cost": 0
+    },
+    "2170052": {
+      "condition": 1,
+      "cost": 0
+    }
+  }
+}
