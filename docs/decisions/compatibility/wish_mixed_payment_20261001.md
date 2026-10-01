@@ -29,7 +29,9 @@ BagModule.OnRefreshAllItemData（0x19bb5cc）先 Clear 再重建物品缓存，
 
 本地存档穿戴表和最近入场回包均有 hero=1028、battleSkinId=1222804。
 测试也确认 type=1 战斗皮肤在保存、重启后通过 FightHero 字段 10 入场，
-type=3 外观不会替代战斗皮肤。客户端 ConvertSingleFightHeroData
+初次测试将 type=3 误认为仅外观；该假设已在随后客户端反汇编核对中纠正，
+正确类型为 1=局内、2=局外、3=同步，详见 skin_apply_types_20261001.md。
+客户端 ConvertSingleFightHeroData
 （0x16c2b4c）复制 battleSkinId 后经 AppearanceManager 获取模型 UnitID。
 
 用户补充日志只有按钮点击和 264 掉落查询，不能证明线上换肤保存或入场字段。
@@ -37,7 +39,7 @@ type=3 外观不会替代战斗皮肤。客户端 ConvertSingleFightHeroData
 新增 skin wear saved/denied、battle hero battleSkinId、active database 日志。
 tools/diagnose_wish_skin.py 以 SQLite mode=ro 读取实际 DB 路径、代码提交、
 抽卡余额、穿戴表和最近五次持久化入场回包，不初始化服务或迁移数据库。
-线上皮肤问题需要该输出或包含换肤和 126 入场的日志才能继续定位。
+随后线上诊断已证只有 type=3，且战斗回包 ID=0，现已定位并修正类型映射。
 
 ## 验证
 

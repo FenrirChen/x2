@@ -52,6 +52,13 @@ class AppearanceService:
             store.db.execute("""CREATE TABLE IF NOT EXISTS appearance_voice_unlock (
                 player_id INTEGER NOT NULL, dubbing_id INTEGER NOT NULL,
                 PRIMARY KEY(player_id,dubbing_id))""")
+            # Native SendApplySkin: 1=battle, 2=outer, 3=both. Earlier
+            # compatibility code mistakenly persisted 3 as an outer-only slot.
+            # Preserve explicit slots (their relative write order is unknown).
+            for slot in (1, 2):
+                store.db.execute("""INSERT OR IGNORE INTO appearance_wear
+                    SELECT player_id,hero_id,?,skin_id FROM appearance_wear WHERE type=3""", (slot,))
+            store.db.execute("DELETE FROM appearance_wear WHERE type=3")
 
     def handlers(self):
         return {"C2L_" + name: self.handle for name in (
@@ -80,7 +87,7 @@ class AppearanceService:
             "SELECT hero_id,type,skin_id FROM appearance_wear WHERE player_id=?", (player_id,))}
         return {"skinList": [HERO_SKIN.encode({"heroId": hero,
             "skinIds": sorted(i for i in owned if self.skins[i]["hero_id"] == hero),
-            "battleSkin": worn.get((hero, 1), 0), "outerSkin": worn.get((hero, 3), 0)})
+            "battleSkin": worn.get((hero, 1), 0), "outerSkin": worn.get((hero, 2), 0)})
             for hero in sorted(self._owned_heroes(player_id))]}
 
     def _icon_values(self, player_id):
@@ -208,7 +215,7 @@ class AppearanceService:
                 "heroDubbingDatas": self._voice_values(player_id)["heroDubbingDatas"] if allowed else []})
         if name == "C2L_HeroWearSkin":
             hero, skin, kind = req.get("heroId"), req.get("skinId"), req.get("type")
-            valid = (kind in (1, 3) and skin in self._owned_skins(player_id) and
+            valid = (kind in (1, 2, 3) and skin in self._owned_skins(player_id) and
                      self.skins[skin]["hero_id"] == hero)
             if not valid:
                 logging.getLogger("x2.appearance").info(
@@ -217,8 +224,9 @@ class AppearanceService:
                 return OutboundMessage("L2C_HeroWearSkin", {"code": 13,
                     "heroId": hero or 0, "skinId": skin or 0, "type": kind or 0})
             with self.economy.transaction():
-                self.store.db.execute("INSERT OR REPLACE INTO appearance_wear VALUES (?,?,?,?)",
-                                      (player_id, hero, kind, skin))
+                for slot in ((1, 2) if kind == 3 else (kind,)):
+                    self.store.db.execute("INSERT OR REPLACE INTO appearance_wear VALUES (?,?,?,?)",
+                                          (player_id, hero, slot, skin))
             logging.getLogger("x2.appearance").info(
                 "skin wear saved player=%s hero=%s skin=%s type=%s database=%s",
                 player_id, hero, skin, kind, self.store.path.resolve())

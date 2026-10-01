@@ -95,7 +95,7 @@ def test_worn_battle_skin_survives_restart_and_is_serialized_into_entry(env, cap
     assert 'skin wear saved player=1 hero=1003 skin=1220303 type=1' in caplog.text
     # Outer skin is independently chosen and must not replace the battle skin.
     asyncio.run(appearance.handle(ctx, packet(
-        {'heroId': 1003, 'skinId': 1220301, 'type': 3}, name='C2L_HeroWearSkin')))
+        {'heroId': 1003, 'skinId': 1220301, 'type': 2}, name='C2L_HeroWearSkin')))
     path = store.path
     store.close()
     reopened = PlayerStore(path)
