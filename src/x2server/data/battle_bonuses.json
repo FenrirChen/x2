@@ -1,0 +1,11947 @@
+{
+  "provenance": "CONFIRMED_CLIENT_STATIC; ClientProperty 0x1491e48/0x1492df8/0x1492520",
+  "sources": {
+    "ArtifactBase": {
+      "source": "assets/bin/Data/810d774cf33b0e349a5507fa7588b32d",
+      "record_count": 40,
+      "fields": [
+        "ArtifactID",
+        "NameID",
+        "ArtifactDesc",
+        "ArtifactDetail",
+        "FuseLevel",
+        "ArtifactDrawing",
+        "Effect",
+        "ArtifactIcon",
+        "ArtifactAttr1",
+        "AttrValue1",
+        "ArtifactAttr2",
+        "AttrValue2",
+        "ArtifactAttr3",
+        "AttrValue3",
+        "SeniorAttr1",
+        "SenAttrValue1",
+        "SeniorAttr2",
+        "SenAttrValue2"
+      ]
+    },
+    "ArtifactFuse": {
+      "source": "assets/bin/Data/c338962ae8f5e1148aa9badc4f13d966",
+      "record_count": 28,
+      "fields": [
+        "FuseID",
+        "ProfEnum",
+        "HeroStage",
+        "AttrRate",
+        "MaxAttrRate",
+        "AdvancedItem",
+        "AdvancedItemNum",
+        "FuseValue",
+        "AdvancedConsume",
+        "FuseItem",
+        "FuseItemNum",
+        "FuseConsume",
+        "HoleIsOpen"
+      ]
+    },
+    "JewelBase": {
+      "source": "assets/bin/Data/7ff84de059bfbd74c889797c784b3962",
+      "record_count": 115,
+      "fields": [
+        "JewelID",
+        "Type",
+        "TypeID",
+        "JewelType",
+        "StarLevel",
+        "JewelEffect1",
+        "EffectValue1",
+        "JewelEffect2",
+        "JewelInfo",
+        "DustValue",
+        "SenDustValue",
+        "JewelDrawing",
+        "PaintingBg",
+        "PaintingPosition",
+        "PaintingBgPosition",
+        "PaintingScale",
+        "EnglishNameID",
+        "DetailDescID",
+        "WishDescID",
+        "WishColor",
+        "TypeIcon"
+      ]
+    },
+    "PlayerAttrib": {
+      "source": "assets/bin/Data/1e3805e55669ff94d90568f68e2219a7",
+      "record_count": 1182,
+      "fields": [
+        "ID",
+        "Profession",
+        "Origin",
+        "ProfEnum",
+        "OriginNum",
+        "Level",
+        "DefaultStage",
+        "ExchangeChip",
+        "Compensate",
+        "IsOpen",
+        "ChipPropID",
+        "UnLockedItemID",
+        "WeapenId",
+        "RelicExp",
+        "HPMax",
+        "HPCount",
+        "SPMax",
+        "Damage",
+        "Defense",
+        "MoveSpeed",
+        "HPMaxCOR",
+        "SPMaxCOR",
+        "DamageCOR",
+        "DefenseCOR",
+        "Critical",
+        "CriticalDamage",
+        "PhysicalRist",
+        "IceRist",
+        "FireRiset",
+        "LightningRist",
+        "PoisonRist",
+        "SkillAbility",
+        "SuperArmor",
+        "WeakArmor",
+        "WeakArmorIncRate",
+        "DamageCoefficient",
+        "DamageUPCoefficient",
+        "DefenseCoefficient",
+        "Duration",
+        "BloodMoonParam",
+        "PrayBouns"
+      ]
+    },
+    "CollegeBuilding": {
+      "source": "assets/bin/Data/870bc082a16956a45b9a9ec1640d3075",
+      "record_count": 16,
+      "fields": [
+        "ID",
+        "BaseType",
+        "BuildType",
+        "NameID",
+        "NameEnID",
+        "DescID",
+        "HelpDescID",
+        "Icon",
+        "BuildingOpen",
+        "InitialLevel",
+        "InitialStar",
+        "LevelLimited",
+        "StarLimited",
+        "LevelID",
+        "StarID",
+        "PrayItem",
+        "PrayItemNum",
+        "PrayWaitTimes",
+        "DescEnID"
+      ]
+    },
+    "CollegeStarLevel": {
+      "source": "assets/bin/Data/74d9f4cc6d9212c46a1bf1cf05d9c587",
+      "record_count": 95,
+      "fields": [
+        "BuildID",
+        "BaseType",
+        "BuildType",
+        "BuildingStar",
+        "NextStarDescID",
+        "LimitLevel",
+        "PreconditionType",
+        "PreconditionValue",
+        "Consume",
+        "ConsumeNum",
+        "StarEffectType1",
+        "StarEffectValue1",
+        "StarEffectType2",
+        "StarEffectValue2"
+      ]
+    },
+    "CollegeWonderSkill": {
+      "source": "assets/bin/Data/444a871d0c5d5804985ed82659b4f24b",
+      "record_count": 54,
+      "fields": [
+        "AddID",
+        "NameID",
+        "DescID",
+        "Icon",
+        "AttributeType",
+        "AttributeValue"
+      ]
+    },
+    "FavorabilityFetters": {
+      "source": "assets/bin/Data/91e5c83acbd11f444a51fe98708d86df",
+      "record_count": 156,
+      "fields": [
+        "HeroID",
+        "FettersID",
+        "Fetters",
+        "Level",
+        "FavorabilityLevel",
+        "StarLevel",
+        "HeroLevel",
+        "CurrencyID",
+        "CurrencyNum",
+        "Attribid",
+        "AttribValue",
+        "IsOpen"
+      ]
+    }
+  },
+  "inversion_skills": [
+    26901,
+    26902,
+    26903,
+    26904,
+    26905,
+    26906
+  ],
+  "heroes": {
+    "1003": {
+      "profession": 303,
+      "origin": 7
+    },
+    "1004": {
+      "profession": 302,
+      "origin": 7
+    },
+    "1005": {
+      "profession": 301,
+      "origin": 4
+    },
+    "1006": {
+      "profession": 303,
+      "origin": 7
+    },
+    "1007": {
+      "profession": 304,
+      "origin": 4
+    },
+    "1008": {
+      "profession": 302,
+      "origin": 6
+    },
+    "1009": {
+      "profession": 304,
+      "origin": 3
+    },
+    "1010": {
+      "profession": 301,
+      "origin": 1
+    },
+    "1011": {
+      "profession": 303,
+      "origin": 7
+    },
+    "1012": {
+      "profession": 302,
+      "origin": 3
+    },
+    "1013": {
+      "profession": 304,
+      "origin": 4
+    },
+    "1014": {
+      "profession": 302,
+      "origin": 1
+    },
+    "1015": {
+      "profession": 304,
+      "origin": 1
+    },
+    "1016": {
+      "profession": 301,
+      "origin": 5
+    },
+    "1017": {
+      "profession": 303,
+      "origin": 5
+    },
+    "1018": {
+      "profession": 302,
+      "origin": 5
+    },
+    "1019": {
+      "profession": 304,
+      "origin": 6
+    },
+    "1020": {
+      "profession": 303,
+      "origin": 1
+    },
+    "1021": {
+      "profession": 303,
+      "origin": 1
+    },
+    "1022": {
+      "profession": 304,
+      "origin": 2
+    },
+    "1023": {
+      "profession": 301,
+      "origin": 2
+    },
+    "1024": {
+      "profession": 302,
+      "origin": 3
+    },
+    "1025": {
+      "profession": 301,
+      "origin": 2
+    },
+    "1026": {
+      "profession": 302,
+      "origin": 2
+    },
+    "1027": {
+      "profession": 304,
+      "origin": 1
+    },
+    "1028": {
+      "profession": 301,
+      "origin": 1
+    },
+    "1029": {
+      "profession": 301,
+      "origin": 2
+    },
+    "1030": {
+      "profession": 301,
+      "origin": 2
+    },
+    "1031": {
+      "profession": 303,
+      "origin": 1
+    },
+    "1032": {
+      "profession": 302,
+      "origin": 1
+    },
+    "1033": {
+      "profession": 302,
+      "origin": 3
+    },
+    "1034": {
+      "profession": 302,
+      "origin": 1
+    },
+    "1035": {
+      "profession": 304,
+      "origin": 5
+    },
+    "1036": {
+      "profession": 302,
+      "origin": 3
+    },
+    "1039": {
+      "profession": 303,
+      "origin": 9
+    },
+    "1040": {
+      "profession": 302,
+      "origin": 9
+    },
+    "1041": {
+      "profession": 303,
+      "origin": 9
+    },
+    "1197": {
+      "profession": 301,
+      "origin": 8
+    },
+    "1198": {
+      "profession": 301,
+      "origin": 6
+    },
+    "1199": {
+      "profession": 303,
+      "origin": 5
+    },
+    "1206": {
+      "profession": 303,
+      "origin": 1
+    },
+    "1207": {
+      "profession": 304,
+      "origin": 4
+    },
+    "1210": {
+      "profession": 303,
+      "origin": 5
+    },
+    "1214": {
+      "profession": 302,
+      "origin": 1
+    },
+    "1215": {
+      "profession": 302,
+      "origin": 1
+    },
+    "1216": {
+      "profession": 301,
+      "origin": 5
+    },
+    "1219": {
+      "profession": 304,
+      "origin": 6
+    },
+    "1220": {
+      "profession": 303,
+      "origin": 5
+    },
+    "1303": {
+      "profession": 303,
+      "origin": 7
+    },
+    "1307": {
+      "profession": 304,
+      "origin": 4
+    },
+    "1310": {
+      "profession": 301,
+      "origin": 1
+    },
+    "1311": {
+      "profession": 303,
+      "origin": 9
+    },
+    "1312": {
+      "profession": 302,
+      "origin": 5
+    },
+    "1313": {
+      "profession": 302,
+      "origin": 1
+    },
+    "1314": {
+      "profession": 304,
+      "origin": 4
+    },
+    "1315": {
+      "profession": 304,
+      "origin": 1
+    },
+    "1316": {
+      "profession": 302,
+      "origin": 1
+    },
+    "1317": {
+      "profession": 303,
+      "origin": 1
+    },
+    "1318": {
+      "profession": 303,
+      "origin": 1
+    },
+    "1327": {
+      "profession": 304,
+      "origin": 0
+    },
+    "1328": {
+      "profession": 301,
+      "origin": 0
+    },
+    "1329": {
+      "profession": 304,
+      "origin": 6
+    },
+    "1330": {
+      "profession": 302,
+      "origin": 1
+    },
+    "1331": {
+      "profession": 303,
+      "origin": 0
+    },
+    "1332": {
+      "profession": 302,
+      "origin": 3
+    },
+    "1333": {
+      "profession": 302,
+      "origin": 1
+    },
+    "1334": {
+      "profession": 301,
+      "origin": 5
+    },
+    "1335": {
+      "profession": 302,
+      "origin": 7
+    },
+    "1336": {
+      "profession": 304,
+      "origin": 0
+    },
+    "1337": {
+      "profession": 303,
+      "origin": 0
+    },
+    "1338": {
+      "profession": 303,
+      "origin": 0
+    },
+    "1339": {
+      "profession": 303,
+      "origin": 9
+    },
+    "2078": {
+      "profession": 303,
+      "origin": 0
+    },
+    "2190": {
+      "profession": 303,
+      "origin": 0
+    },
+    "2193": {
+      "profession": 303,
+      "origin": 0
+    },
+    "2196": {
+      "profession": 300,
+      "origin": 0
+    },
+    "2197": {
+      "profession": 300,
+      "origin": 0
+    },
+    "2198": {
+      "profession": 300,
+      "origin": 0
+    },
+    "2336": {
+      "profession": 303,
+      "origin": 0
+    },
+    "2337": {
+      "profession": 303,
+      "origin": 0
+    },
+    "2338": {
+      "profession": 303,
+      "origin": 0
+    },
+    "2366": {
+      "profession": 303,
+      "origin": 0
+    },
+    "2381": {
+      "profession": 303,
+      "origin": 0
+    },
+    "2382": {
+      "profession": 303,
+      "origin": 0
+    },
+    "2383": {
+      "profession": 303,
+      "origin": 0
+    },
+    "2384": {
+      "profession": 303,
+      "origin": 0
+    },
+    "2385": {
+      "profession": 303,
+      "origin": 0
+    },
+    "2404": {
+      "profession": 303,
+      "origin": 0
+    },
+    "2602": {
+      "profession": 303,
+      "origin": 0
+    },
+    "2949": {
+      "profession": 303,
+      "origin": 0
+    },
+    "2950": {
+      "profession": 303,
+      "origin": 0
+    },
+    "2951": {
+      "profession": 302,
+      "origin": 0
+    },
+    "2952": {
+      "profession": 304,
+      "origin": 0
+    },
+    "2953": {
+      "profession": 302,
+      "origin": 0
+    },
+    "2962": {
+      "profession": 302,
+      "origin": 0
+    },
+    "2963": {
+      "profession": 302,
+      "origin": 0
+    },
+    "2964": {
+      "profession": 302,
+      "origin": 0
+    },
+    "2965": {
+      "profession": 302,
+      "origin": 0
+    },
+    "2966": {
+      "profession": 302,
+      "origin": 0
+    },
+    "2967": {
+      "profession": 302,
+      "origin": 0
+    },
+    "2992": {
+      "profession": 302,
+      "origin": 0
+    },
+    "2993": {
+      "profession": 302,
+      "origin": 0
+    },
+    "2994": {
+      "profession": 302,
+      "origin": 0
+    },
+    "2999": {
+      "profession": 300,
+      "origin": 0
+    },
+    "3000": {
+      "profession": 300,
+      "origin": 0
+    },
+    "3001": {
+      "profession": 300,
+      "origin": 0
+    },
+    "3002": {
+      "profession": 300,
+      "origin": 0
+    },
+    "3003": {
+      "profession": 300,
+      "origin": 0
+    },
+    "3004": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3005": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3006": {
+      "profession": 301,
+      "origin": 0
+    },
+    "3007": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3008": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3009": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3010": {
+      "profession": 301,
+      "origin": 0
+    },
+    "3011": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3012": {
+      "profession": 301,
+      "origin": 0
+    },
+    "3013": {
+      "profession": 301,
+      "origin": 0
+    },
+    "3014": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3015": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3016": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3017": {
+      "profession": 301,
+      "origin": 0
+    },
+    "3018": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3019": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3020": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3021": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3022": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3023": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3024": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3025": {
+      "profession": 301,
+      "origin": 0
+    },
+    "3026": {
+      "profession": 301,
+      "origin": 0
+    },
+    "3027": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3028": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3029": {
+      "profession": 301,
+      "origin": 0
+    },
+    "3030": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3031": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3032": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3033": {
+      "profession": 301,
+      "origin": 0
+    },
+    "3034": {
+      "profession": 301,
+      "origin": 0
+    },
+    "3035": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3036": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3037": {
+      "profession": 301,
+      "origin": 0
+    },
+    "3038": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3039": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3040": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3041": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3042": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3043": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3044": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3045": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3046": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3047": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3048": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3049": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3050": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3051": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3052": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3053": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3054": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3055": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3056": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3057": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3058": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3059": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3060": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3061": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3062": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3063": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3064": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3065": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3066": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3067": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3068": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3069": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3070": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3071": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3090": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3091": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3092": {
+      "profession": 301,
+      "origin": 0
+    },
+    "3093": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3094": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3095": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3096": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3097": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3098": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3099": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3100": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3101": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3102": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3105": {
+      "profession": 301,
+      "origin": 0
+    },
+    "3106": {
+      "profession": 301,
+      "origin": 0
+    },
+    "3110": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3111": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3112": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3115": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3116": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3120": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3121": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3122": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3123": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3125": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3126": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3130": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3131": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3132": {
+      "profession": 301,
+      "origin": 0
+    },
+    "3135": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3136": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3137": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3138": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3139": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3140": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3141": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3142": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3143": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3144": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3150": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3155": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3156": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3157": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3158": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3159": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3160": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3161": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3162": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3163": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3164": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3165": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3166": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3167": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3168": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3169": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3170": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3171": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3172": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3173": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3174": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3175": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3176": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3177": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3178": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3179": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3180": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3181": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3182": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3183": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3184": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3185": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3186": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3187": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3188": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3189": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3190": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3191": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3192": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3193": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3194": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3195": {
+      "profession": 301,
+      "origin": 0
+    },
+    "3196": {
+      "profession": 301,
+      "origin": 0
+    },
+    "3197": {
+      "profession": 301,
+      "origin": 0
+    },
+    "3198": {
+      "profession": 301,
+      "origin": 0
+    },
+    "3199": {
+      "profession": 301,
+      "origin": 0
+    },
+    "3200": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3201": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3202": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3203": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3204": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3601": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3602": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3603": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3604": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3605": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3606": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3607": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3608": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3609": {
+      "profession": 301,
+      "origin": 0
+    },
+    "3610": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3611": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3612": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3613": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3614": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3615": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3616": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3617": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3618": {
+      "profession": 301,
+      "origin": 0
+    },
+    "3619": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3620": {
+      "profession": 300,
+      "origin": 0
+    },
+    "3621": {
+      "profession": 300,
+      "origin": 0
+    },
+    "3622": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3623": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3624": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3625": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3626": {
+      "profession": 301,
+      "origin": 0
+    },
+    "3627": {
+      "profession": 301,
+      "origin": 0
+    },
+    "3628": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3629": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3630": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3631": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3632": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3633": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3634": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3635": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3636": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3637": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3638": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3639": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3640": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3641": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3642": {
+      "profession": 303,
+      "origin": 0
+    },
+    "3643": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3644": {
+      "profession": 301,
+      "origin": 0
+    },
+    "3645": {
+      "profession": 302,
+      "origin": 0
+    },
+    "3646": {
+      "profession": 301,
+      "origin": 0
+    },
+    "3647": {
+      "profession": 301,
+      "origin": 0
+    },
+    "3648": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3649": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3650": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3651": {
+      "profession": 304,
+      "origin": 0
+    },
+    "3652": {
+      "profession": 301,
+      "origin": 0
+    },
+    "3653": {
+      "profession": 301,
+      "origin": 0
+    },
+    "3654": {
+      "profession": 301,
+      "origin": 0
+    },
+    "3655": {
+      "profession": 301,
+      "origin": 0
+    },
+    "3656": {
+      "profession": 301,
+      "origin": 0
+    },
+    "3657": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4001": {
+      "profession": 300,
+      "origin": 0
+    },
+    "4002": {
+      "profession": 300,
+      "origin": 0
+    },
+    "4003": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4004": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4005": {
+      "profession": 302,
+      "origin": 0
+    },
+    "4006": {
+      "profession": 302,
+      "origin": 0
+    },
+    "4007": {
+      "profession": 302,
+      "origin": 0
+    },
+    "4008": {
+      "profession": 302,
+      "origin": 0
+    },
+    "4009": {
+      "profession": 303,
+      "origin": 0
+    },
+    "4010": {
+      "profession": 303,
+      "origin": 0
+    },
+    "4011": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4012": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4013": {
+      "profession": 303,
+      "origin": 0
+    },
+    "4014": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4015": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4016": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4017": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4018": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4019": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4020": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4021": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4022": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4023": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4024": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4025": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4026": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4027": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4028": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4029": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4030": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4031": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4032": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4033": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4034": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4035": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4036": {
+      "profession": 302,
+      "origin": 0
+    },
+    "4037": {
+      "profession": 303,
+      "origin": 0
+    },
+    "4038": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4039": {
+      "profession": 303,
+      "origin": 0
+    },
+    "4040": {
+      "profession": 302,
+      "origin": 0
+    },
+    "4041": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4042": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4043": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4044": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4045": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4046": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4047": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4048": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4049": {
+      "profession": 302,
+      "origin": 0
+    },
+    "4050": {
+      "profession": 302,
+      "origin": 0
+    },
+    "4051": {
+      "profession": 302,
+      "origin": 0
+    },
+    "4052": {
+      "profession": 302,
+      "origin": 0
+    },
+    "4054": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4055": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4056": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4057": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4058": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4059": {
+      "profession": 302,
+      "origin": 0
+    },
+    "4060": {
+      "profession": 302,
+      "origin": 0
+    },
+    "4061": {
+      "profession": 303,
+      "origin": 0
+    },
+    "4062": {
+      "profession": 302,
+      "origin": 0
+    },
+    "4063": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4064": {
+      "profession": 303,
+      "origin": 0
+    },
+    "4065": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4066": {
+      "profession": 303,
+      "origin": 0
+    },
+    "4067": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4068": {
+      "profession": 303,
+      "origin": 0
+    },
+    "4069": {
+      "profession": 302,
+      "origin": 0
+    },
+    "4070": {
+      "profession": 302,
+      "origin": 0
+    },
+    "4071": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4072": {
+      "profession": 303,
+      "origin": 0
+    },
+    "4073": {
+      "profession": 303,
+      "origin": 0
+    },
+    "4074": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4075": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4076": {
+      "profession": 303,
+      "origin": 0
+    },
+    "4077": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4078": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4079": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4080": {
+      "profession": 303,
+      "origin": 0
+    },
+    "4081": {
+      "profession": 302,
+      "origin": 0
+    },
+    "4082": {
+      "profession": 303,
+      "origin": 0
+    },
+    "4083": {
+      "profession": 303,
+      "origin": 0
+    },
+    "4084": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4085": {
+      "profession": 302,
+      "origin": 0
+    },
+    "4086": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4087": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4088": {
+      "profession": 302,
+      "origin": 0
+    },
+    "4089": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4100": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4101": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4110": {
+      "profession": 303,
+      "origin": 0
+    },
+    "4111": {
+      "profession": 303,
+      "origin": 0
+    },
+    "4112": {
+      "profession": 303,
+      "origin": 0
+    },
+    "4115": {
+      "profession": 303,
+      "origin": 0
+    },
+    "4120": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4121": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4122": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4123": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4124": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4125": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4126": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4127": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4128": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4129": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4130": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4131": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4132": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4133": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4134": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4135": {
+      "profession": 303,
+      "origin": 0
+    },
+    "4136": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4137": {
+      "profession": 302,
+      "origin": 0
+    },
+    "4138": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4139": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4140": {
+      "profession": 303,
+      "origin": 0
+    },
+    "4601": {
+      "profession": 303,
+      "origin": 0
+    },
+    "4602": {
+      "profession": 303,
+      "origin": 0
+    },
+    "4603": {
+      "profession": 302,
+      "origin": 0
+    },
+    "4604": {
+      "profession": 302,
+      "origin": 0
+    },
+    "4605": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4606": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4607": {
+      "profession": 303,
+      "origin": 0
+    },
+    "4608": {
+      "profession": 302,
+      "origin": 0
+    },
+    "4609": {
+      "profession": 302,
+      "origin": 0
+    },
+    "4610": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4611": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4612": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4613": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4614": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4615": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4616": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4617": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4618": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4619": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4620": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4621": {
+      "profession": 301,
+      "origin": 0
+    },
+    "4622": {
+      "profession": 302,
+      "origin": 0
+    },
+    "4623": {
+      "profession": 302,
+      "origin": 0
+    },
+    "4624": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4625": {
+      "profession": 304,
+      "origin": 0
+    },
+    "4626": {
+      "profession": 303,
+      "origin": 0
+    },
+    "4627": {
+      "profession": 302,
+      "origin": 0
+    },
+    "4701": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5001": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5002": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5003": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5004": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5005": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5006": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5007": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5008": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5009": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5010": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5011": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5012": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5013": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5014": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5015": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5016": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5017": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5018": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5019": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5020": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5021": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5022": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5023": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5024": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5025": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5026": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5027": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5028": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5029": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5030": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5031": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5032": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5033": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5034": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5035": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5036": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5037": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5038": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5039": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5040": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5041": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5042": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5043": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5044": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5045": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5046": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5047": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5094": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5095": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5096": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5097": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5098": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5099": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5100": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5101": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5102": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5103": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5104": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5105": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5106": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5107": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5108": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5109": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5110": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5111": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5112": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5113": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5114": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5115": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5301": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5302": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5303": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5304": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5305": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5306": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5307": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5308": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5400": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5401": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5402": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5403": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5404": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5410": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5411": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5412": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5420": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5421": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5422": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5423": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5424": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5430": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5431": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5432": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5433": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5434": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5435": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5436": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5437": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5438": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5439": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5440": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5441": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5442": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5443": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5444": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5445": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5446": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5447": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5448": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5449": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5450": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5451": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5452": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5453": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5454": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5455": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5456": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5457": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5458": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5459": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5460": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5501": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5502": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5503": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5504": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5505": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5506": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5507": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5508": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5509": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5510": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5511": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5512": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5513": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5514": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5515": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5516": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5517": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5518": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5519": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5520": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5521": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5522": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5523": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5524": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5525": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5526": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5527": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5528": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5529": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5530": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5531": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5532": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5533": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5534": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5535": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5536": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5537": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5538": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5539": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5540": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5541": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5542": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5543": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5601": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5602": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5603": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5604": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5605": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5606": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5607": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5608": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5609": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5610": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5611": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5612": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5613": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5614": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5615": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5616": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5617": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5618": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5619": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5620": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5621": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5622": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5623": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5624": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5625": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5626": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5627": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5628": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5629": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5630": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5631": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5632": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5633": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5634": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5635": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5636": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5637": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5638": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5639": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5640": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5641": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5642": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5643": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5644": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5645": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5646": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5647": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5648": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5649": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5650": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5651": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5652": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5653": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5697": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5698": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5699": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5703": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5704": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5705": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5706": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5707": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5708": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5709": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5710": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5711": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5712": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5713": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5714": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5715": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5716": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5717": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5718": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5719": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5720": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5721": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5722": {
+      "profession": 300,
+      "origin": 0
+    },
+    "5727": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5728": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5732": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5795": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5796": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5797": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5801": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5802": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5803": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5804": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5805": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5806": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5807": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5808": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5809": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5810": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5811": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5812": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5813": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5814": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5815": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5816": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5817": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5818": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5819": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5820": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5821": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5822": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5823": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5824": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5825": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5826": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5827": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5828": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5829": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5830": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5831": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5832": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5833": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5834": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5835": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5836": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5837": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5838": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5839": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5840": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5841": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5842": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5843": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5844": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5845": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5846": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5847": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5848": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5849": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5850": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5851": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5852": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5901": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5902": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5903": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5904": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5905": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5906": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5907": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5909": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5910": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5911": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5912": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5913": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5914": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5915": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5916": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5917": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5918": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5919": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5920": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5921": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5922": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5923": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5924": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5925": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5926": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5927": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5928": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5929": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5930": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5931": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5932": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5933": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5934": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5935": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5936": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5937": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5938": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5939": {
+      "profession": 303,
+      "origin": 0
+    },
+    "5940": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5941": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5942": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5943": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5944": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5945": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5946": {
+      "profession": 301,
+      "origin": 0
+    },
+    "5947": {
+      "profession": 304,
+      "origin": 0
+    },
+    "5948": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5949": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5950": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5951": {
+      "profession": 302,
+      "origin": 0
+    },
+    "5952": {
+      "profession": 303,
+      "origin": 0
+    },
+    "6001": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6200": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6201": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6202": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6203": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6204": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6205": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6206": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6207": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6208": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6209": {
+      "profession": 302,
+      "origin": 0
+    },
+    "6210": {
+      "profession": 302,
+      "origin": 0
+    },
+    "6211": {
+      "profession": 302,
+      "origin": 0
+    },
+    "6212": {
+      "profession": 302,
+      "origin": 0
+    },
+    "6213": {
+      "profession": 302,
+      "origin": 0
+    },
+    "6214": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6215": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6216": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6217": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6218": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6219": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6220": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6221": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6222": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6223": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6224": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6225": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6226": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6227": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6228": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6229": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6230": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6231": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6232": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6233": {
+      "profession": 304,
+      "origin": 0
+    },
+    "6234": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6235": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6236": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6237": {
+      "profession": 302,
+      "origin": 0
+    },
+    "6238": {
+      "profession": 302,
+      "origin": 0
+    },
+    "6239": {
+      "profession": 302,
+      "origin": 0
+    },
+    "6240": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6241": {
+      "profession": 304,
+      "origin": 0
+    },
+    "6242": {
+      "profession": 304,
+      "origin": 0
+    },
+    "6243": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6244": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6245": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6246": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6247": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6248": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6249": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6250": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6251": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6252": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6253": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6254": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6255": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6256": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6257": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6258": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6259": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6260": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6261": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6262": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6263": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6264": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6265": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6266": {
+      "profession": 302,
+      "origin": 0
+    },
+    "6267": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6268": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6269": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6270": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6271": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6274": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6275": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6401": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6402": {
+      "profession": 300,
+      "origin": 0
+    },
+    "6501": {
+      "profession": 303,
+      "origin": 0
+    },
+    "6502": {
+      "profession": 302,
+      "origin": 0
+    },
+    "6503": {
+      "profession": 304,
+      "origin": 0
+    },
+    "6504": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6505": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6510": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6511": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6512": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6513": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6514": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6515": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6516": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6517": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6518": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6519": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6520": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6521": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6522": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6523": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6524": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6525": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6526": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6527": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6528": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6529": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6530": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6531": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6532": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6533": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6534": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6574": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6575": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6576": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6577": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6578": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6579": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6580": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6581": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6582": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6583": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6584": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6585": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6586": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6587": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6588": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6589": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6590": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6591": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6592": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6593": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6594": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6595": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6596": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6597": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6598": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6599": {
+      "profession": 301,
+      "origin": 0
+    },
+    "6701": {
+      "profession": 303,
+      "origin": 0
+    },
+    "7001": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7002": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7003": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7004": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7005": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7006": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7007": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7008": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7009": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7010": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7011": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7012": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7013": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7014": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7015": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7016": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7017": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7018": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7019": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7020": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7021": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7022": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7023": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7024": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7025": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7026": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7027": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7029": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7030": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7031": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7032": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7033": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7034": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7035": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7036": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7037": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7038": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7039": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7040": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7041": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7042": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7043": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7044": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7045": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7046": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7047": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7048": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7049": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7050": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7051": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7052": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7053": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7054": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7055": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7056": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7057": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7058": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7059": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7060": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7061": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7062": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7063": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7064": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7066": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7067": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7068": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7069": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7070": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7071": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7072": {
+      "profession": 301,
+      "origin": 0
+    },
+    "7073": {
+      "profession": 301,
+      "origin": 0
+    },
+    "7074": {
+      "profession": 301,
+      "origin": 0
+    },
+    "7075": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7076": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7077": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7078": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7079": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7080": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7082": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7083": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7084": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7085": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7086": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7087": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7088": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7089": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7090": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7091": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7092": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7093": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7094": {
+      "profession": 304,
+      "origin": 0
+    },
+    "7095": {
+      "profession": 304,
+      "origin": 0
+    },
+    "7096": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7097": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7098": {
+      "profession": 302,
+      "origin": 0
+    },
+    "7099": {
+      "profession": 303,
+      "origin": 0
+    },
+    "7100": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7101": {
+      "profession": 301,
+      "origin": 0
+    },
+    "7102": {
+      "profession": 301,
+      "origin": 0
+    },
+    "7103": {
+      "profession": 301,
+      "origin": 0
+    },
+    "7104": {
+      "profession": 301,
+      "origin": 0
+    },
+    "7105": {
+      "profession": 301,
+      "origin": 0
+    },
+    "7106": {
+      "profession": 303,
+      "origin": 0
+    },
+    "7107": {
+      "profession": 303,
+      "origin": 0
+    },
+    "7108": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7109": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7110": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7111": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7112": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7113": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7114": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7115": {
+      "profession": 301,
+      "origin": 0
+    },
+    "7116": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7117": {
+      "profession": 300,
+      "origin": 0
+    },
+    "7118": {
+      "profession": 302,
+      "origin": 0
+    },
+    "8001": {
+      "profession": 301,
+      "origin": 0
+    },
+    "8002": {
+      "profession": 301,
+      "origin": 0
+    },
+    "8003": {
+      "profession": 301,
+      "origin": 0
+    },
+    "8004": {
+      "profession": 301,
+      "origin": 0
+    },
+    "8005": {
+      "profession": 301,
+      "origin": 0
+    },
+    "8006": {
+      "profession": 301,
+      "origin": 0
+    },
+    "8007": {
+      "profession": 301,
+      "origin": 0
+    },
+    "8008": {
+      "profession": 301,
+      "origin": 0
+    },
+    "8009": {
+      "profession": 301,
+      "origin": 0
+    },
+    "8010": {
+      "profession": 301,
+      "origin": 0
+    },
+    "8011": {
+      "profession": 301,
+      "origin": 0
+    },
+    "8012": {
+      "profession": 304,
+      "origin": 0
+    },
+    "8013": {
+      "profession": 303,
+      "origin": 0
+    },
+    "8014": {
+      "profession": 301,
+      "origin": 0
+    },
+    "8101": {
+      "profession": 301,
+      "origin": 0
+    },
+    "8102": {
+      "profession": 301,
+      "origin": 0
+    },
+    "8103": {
+      "profession": 301,
+      "origin": 0
+    },
+    "8104": {
+      "profession": 301,
+      "origin": 0
+    },
+    "8105": {
+      "profession": 304,
+      "origin": 0
+    },
+    "8106": {
+      "profession": 301,
+      "origin": 0
+    },
+    "8201": {
+      "profession": 301,
+      "origin": 0
+    },
+    "8202": {
+      "profession": 301,
+      "origin": 0
+    },
+    "8203": {
+      "profession": 301,
+      "origin": 0
+    },
+    "8204": {
+      "profession": 301,
+      "origin": 0
+    },
+    "8301": {
+      "profession": 301,
+      "origin": 0
+    },
+    "8302": {
+      "profession": 301,
+      "origin": 0
+    },
+    "8311": {
+      "profession": 301,
+      "origin": 0
+    },
+    "8312": {
+      "profession": 301,
+      "origin": 0
+    },
+    "8313": {
+      "profession": 301,
+      "origin": 0
+    },
+    "8321": {
+      "profession": 301,
+      "origin": 0
+    },
+    "8322": {
+      "profession": 301,
+      "origin": 0
+    },
+    "8331": {
+      "profession": 301,
+      "origin": 0
+    },
+    "8332": {
+      "profession": 301,
+      "origin": 0
+    },
+    "8341": {
+      "profession": 301,
+      "origin": 0
+    },
+    "8351": {
+      "profession": 301,
+      "origin": 0
+    },
+    "9000": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9001": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9002": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9003": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9004": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9005": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9006": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9007": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9008": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9009": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9010": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9011": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9012": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9013": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9014": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9015": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9016": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9017": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9018": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9019": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9020": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9024": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9025": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9027": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9029": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9030": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9031": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9032": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9033": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9034": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9035": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9036": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9038": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9042": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9047": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9050": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9051": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9055": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9056": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9057": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9061": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9100": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9102": {
+      "profession": 303,
+      "origin": 0
+    },
+    "9104": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9106": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9111": {
+      "profession": 303,
+      "origin": 0
+    },
+    "9112": {
+      "profession": 302,
+      "origin": 0
+    },
+    "9201": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9203": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9204": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9205": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9206": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9207": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9208": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9209": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9210": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9211": {
+      "profession": 303,
+      "origin": 0
+    },
+    "9212": {
+      "profession": 303,
+      "origin": 0
+    },
+    "9213": {
+      "profession": 303,
+      "origin": 0
+    },
+    "9215": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9216": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9902": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9903": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9904": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9905": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9906": {
+      "profession": 303,
+      "origin": 0
+    },
+    "9907": {
+      "profession": 300,
+      "origin": 0
+    },
+    "9908": {
+      "profession": 303,
+      "origin": 0
+    },
+    "9909": {
+      "profession": 303,
+      "origin": 0
+    },
+    "9910": {
+      "profession": 303,
+      "origin": 0
+    },
+    "9911": {
+      "profession": 303,
+      "origin": 0
+    },
+    "9912": {
+      "profession": 303,
+      "origin": 0
+    },
+    "9913": {
+      "profession": 303,
+      "origin": 0
+    },
+    "9919": {
+      "profession": 303,
+      "origin": 0
+    },
+    "9920": {
+      "profession": 303,
+      "origin": 0
+    },
+    "9921": {
+      "profession": 303,
+      "origin": 0
+    },
+    "9923": {
+      "profession": 303,
+      "origin": 0
+    },
+    "9939": {
+      "profession": 303,
+      "origin": 0
+    },
+    "9940": {
+      "profession": 303,
+      "origin": 0
+    },
+    "9941": {
+      "profession": 303,
+      "origin": 0
+    },
+    "9942": {
+      "profession": 303,
+      "origin": 0
+    },
+    "900301": {
+      "profession": 300,
+      "origin": 0
+    },
+    "905001": {
+      "profession": 300,
+      "origin": 0
+    }
+  },
+  "artifacts": {
+    "1503": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 24,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 22,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 182,
+      "SeniorAttr1": 101,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 125,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        480,
+        720
+      ]
+    },
+    "1504": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 25,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 17,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 174,
+      "SeniorAttr1": 101,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 122,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        480,
+        720
+      ]
+    },
+    "1505": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 22,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 23,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 205,
+      "SeniorAttr1": 103,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 133,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        48,
+        72
+      ]
+    },
+    "1506": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 28,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 17,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 163,
+      "SeniorAttr1": 101,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 122,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        480,
+        720
+      ]
+    },
+    "1507": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 26,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 18,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 182,
+      "SeniorAttr1": 101,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 131,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        480,
+        720
+      ]
+    },
+    "1508": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 23,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 22,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 196,
+      "SeniorAttr1": 108,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 125,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        480,
+        720
+      ]
+    },
+    "1509": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 24,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 22,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 182,
+      "SeniorAttr1": 101,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 122,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        480,
+        720
+      ]
+    },
+    "1510": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 22,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 23,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 205,
+      "SeniorAttr1": 108,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 128,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        480,
+        720
+      ]
+    },
+    "1511": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 25,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 20,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 178,
+      "SeniorAttr1": 101,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 125,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        480,
+        720
+      ]
+    },
+    "1512": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 25,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 17,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 175,
+      "SeniorAttr1": 101,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 131,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        480,
+        720
+      ]
+    },
+    "1513": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 25,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 20,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 179,
+      "SeniorAttr1": 101,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 131,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        480,
+        720
+      ]
+    },
+    "1514": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 25,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 17,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 175,
+      "SeniorAttr1": 108,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 128,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        480,
+        720
+      ]
+    },
+    "1515": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 26,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 19,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 183,
+      "SeniorAttr1": 101,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 128,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        480,
+        720
+      ]
+    },
+    "1516": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 23,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 22,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 197,
+      "SeniorAttr1": 101,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 131,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        480,
+        720
+      ]
+    },
+    "1517": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 28,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 17,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 163,
+      "SeniorAttr1": 101,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 122,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        480,
+        720
+      ]
+    },
+    "1518": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 23,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 22,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 196,
+      "SeniorAttr1": 101,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 122,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        480,
+        720
+      ]
+    },
+    "1519": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 26,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 19,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 183,
+      "SeniorAttr1": 101,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 122,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        480,
+        720
+      ]
+    },
+    "1520": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 28,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 17,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 164,
+      "SeniorAttr1": 101,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 105,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        45,
+        72
+      ]
+    },
+    "1521": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 24,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 22,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 182,
+      "SeniorAttr1": 101,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 128,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        480,
+        720
+      ]
+    },
+    "1522": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 24,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 22,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 182,
+      "SeniorAttr1": 101,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 113,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        563,
+        900
+      ]
+    },
+    "1523": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 25,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 17,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 175,
+      "SeniorAttr1": 101,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 128,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        480,
+        720
+      ]
+    },
+    "1524": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 24,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 22,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 182,
+      "SeniorAttr1": 101,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 125,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        480,
+        720
+      ]
+    },
+    "1525": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 23,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 22,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 196,
+      "SeniorAttr1": 108,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 133,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        48,
+        72
+      ]
+    },
+    "1526": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 23,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 22,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 196,
+      "SeniorAttr1": 101,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 128,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        480,
+        720
+      ]
+    },
+    "1527": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 26,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 18,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 182,
+      "SeniorAttr1": 101,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 128,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        480,
+        720
+      ]
+    },
+    "1528": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 28,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 17,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 164,
+      "SeniorAttr1": 101,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 125,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        480,
+        720
+      ]
+    },
+    "1529": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 28,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 17,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 164,
+      "SeniorAttr1": 101,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 131,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        480,
+        720
+      ]
+    },
+    "1530": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 25,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 17,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 176,
+      "SeniorAttr1": 108,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 131,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        480,
+        720
+      ]
+    },
+    "1531": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 25,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 17,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 164,
+      "SeniorAttr1": 101,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 122,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        480,
+        720
+      ]
+    },
+    "1532": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 23,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 22,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 196,
+      "SeniorAttr1": 108,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 133,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        48,
+        72
+      ]
+    },
+    "1533": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 25,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 17,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 176,
+      "SeniorAttr1": 101,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 125,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        480,
+        720
+      ]
+    },
+    "1534": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 25,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 17,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 176,
+      "SeniorAttr1": 101,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 131,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        480,
+        720
+      ]
+    },
+    "1535": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 26,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 20,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 180,
+      "SeniorAttr1": 101,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 122,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        480,
+        720
+      ]
+    },
+    "1536": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 26,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 20,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 180,
+      "SeniorAttr1": 101,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 128,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        480,
+        720
+      ]
+    },
+    "1539": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 26,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 20,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 180,
+      "SeniorAttr1": 101,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 125,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        480,
+        720
+      ]
+    },
+    "1540": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 26,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 20,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 180,
+      "SeniorAttr1": 101,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 128,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        480,
+        720
+      ]
+    },
+    "1541": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 26,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 20,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 180,
+      "SeniorAttr1": 101,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 128,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        480,
+        720
+      ]
+    },
+    "1697": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 24,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 22,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 182,
+      "SeniorAttr1": 101,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 122,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        480,
+        720
+      ]
+    },
+    "1698": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 22,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 23,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 205,
+      "SeniorAttr1": 101,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 125,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        480,
+        720
+      ]
+    },
+    "1699": {
+      "ArtifactAttr1": 100,
+      "AttrValue1": 25,
+      "ArtifactAttr2": 102,
+      "AttrValue2": 17,
+      "ArtifactAttr3": 104,
+      "AttrValue3": 174,
+      "SeniorAttr1": 101,
+      "SenAttrValue1": [
+        0,
+        0,
+        0,
+        300,
+        500,
+        800,
+        1200
+      ],
+      "SeniorAttr2": 131,
+      "SenAttrValue2": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        480,
+        720
+      ]
+    }
+  },
+  "fuses": {
+    "0:301": {
+      "AttrRate": 0,
+      "MaxAttrRate": 0
+    },
+    "1:301": {
+      "AttrRate": 1000,
+      "MaxAttrRate": 2000
+    },
+    "2:301": {
+      "AttrRate": 2500,
+      "MaxAttrRate": 4000
+    },
+    "3:301": {
+      "AttrRate": 5600,
+      "MaxAttrRate": 8000
+    },
+    "4:301": {
+      "AttrRate": 9000,
+      "MaxAttrRate": 14000
+    },
+    "5:301": {
+      "AttrRate": 15500,
+      "MaxAttrRate": 23000
+    },
+    "6:301": {
+      "AttrRate": 25000,
+      "MaxAttrRate": 36000
+    },
+    "0:302": {
+      "AttrRate": 0,
+      "MaxAttrRate": 0
+    },
+    "1:302": {
+      "AttrRate": 1000,
+      "MaxAttrRate": 2000
+    },
+    "2:302": {
+      "AttrRate": 2500,
+      "MaxAttrRate": 4000
+    },
+    "3:302": {
+      "AttrRate": 5600,
+      "MaxAttrRate": 8000
+    },
+    "4:302": {
+      "AttrRate": 9000,
+      "MaxAttrRate": 14000
+    },
+    "5:302": {
+      "AttrRate": 15500,
+      "MaxAttrRate": 23000
+    },
+    "6:302": {
+      "AttrRate": 25000,
+      "MaxAttrRate": 36000
+    },
+    "0:303": {
+      "AttrRate": 0,
+      "MaxAttrRate": 0
+    },
+    "1:303": {
+      "AttrRate": 1000,
+      "MaxAttrRate": 2000
+    },
+    "2:303": {
+      "AttrRate": 2500,
+      "MaxAttrRate": 4000
+    },
+    "3:303": {
+      "AttrRate": 5600,
+      "MaxAttrRate": 8000
+    },
+    "4:303": {
+      "AttrRate": 9000,
+      "MaxAttrRate": 14000
+    },
+    "5:303": {
+      "AttrRate": 15500,
+      "MaxAttrRate": 23000
+    },
+    "6:303": {
+      "AttrRate": 25000,
+      "MaxAttrRate": 36000
+    },
+    "0:304": {
+      "AttrRate": 0,
+      "MaxAttrRate": 0
+    },
+    "1:304": {
+      "AttrRate": 1000,
+      "MaxAttrRate": 2000
+    },
+    "2:304": {
+      "AttrRate": 2500,
+      "MaxAttrRate": 4000
+    },
+    "3:304": {
+      "AttrRate": 5600,
+      "MaxAttrRate": 8000
+    },
+    "4:304": {
+      "AttrRate": 9000,
+      "MaxAttrRate": 14000
+    },
+    "5:304": {
+      "AttrRate": 15500,
+      "MaxAttrRate": 23000
+    },
+    "6:304": {
+      "AttrRate": 25000,
+      "MaxAttrRate": 36000
+    }
+  },
+  "jewels": {
+    "1250011": {
+      "JewelEffect1": 100,
+      "EffectValue1": 102,
+      "JewelEffect2": []
+    },
+    "1250012": {
+      "JewelEffect1": 100,
+      "EffectValue1": 145,
+      "JewelEffect2": []
+    },
+    "1250013": {
+      "JewelEffect1": 100,
+      "EffectValue1": 225,
+      "JewelEffect2": []
+    },
+    "1250014": {
+      "JewelEffect1": 100,
+      "EffectValue1": 336,
+      "JewelEffect2": []
+    },
+    "1250015": {
+      "JewelEffect1": 100,
+      "EffectValue1": 490,
+      "JewelEffect2": []
+    },
+    "1250021": {
+      "JewelEffect1": 102,
+      "EffectValue1": 92,
+      "JewelEffect2": []
+    },
+    "1250022": {
+      "JewelEffect1": 102,
+      "EffectValue1": 128,
+      "JewelEffect2": []
+    },
+    "1250023": {
+      "JewelEffect1": 102,
+      "EffectValue1": 200,
+      "JewelEffect2": []
+    },
+    "1250024": {
+      "JewelEffect1": 102,
+      "EffectValue1": 300,
+      "JewelEffect2": []
+    },
+    "1250025": {
+      "JewelEffect1": 102,
+      "EffectValue1": 435,
+      "JewelEffect2": []
+    },
+    "1250031": {
+      "JewelEffect1": 104,
+      "EffectValue1": 769,
+      "JewelEffect2": []
+    },
+    "1250032": {
+      "JewelEffect1": 104,
+      "EffectValue1": 1080,
+      "JewelEffect2": []
+    },
+    "1250033": {
+      "JewelEffect1": 104,
+      "EffectValue1": 1700,
+      "JewelEffect2": []
+    },
+    "1250034": {
+      "JewelEffect1": 104,
+      "EffectValue1": 2540,
+      "JewelEffect2": []
+    },
+    "1250035": {
+      "JewelEffect1": 104,
+      "EffectValue1": 3690,
+      "JewelEffect2": []
+    },
+    "1250040": {
+      "JewelEffect1": 101,
+      "EffectValue1": 125,
+      "JewelEffect2": []
+    },
+    "1250041": {
+      "JewelEffect1": 101,
+      "EffectValue1": 175,
+      "JewelEffect2": []
+    },
+    "1250042": {
+      "JewelEffect1": 101,
+      "EffectValue1": 275,
+      "JewelEffect2": []
+    },
+    "1250043": {
+      "JewelEffect1": 101,
+      "EffectValue1": 413,
+      "JewelEffect2": []
+    },
+    "1250044": {
+      "JewelEffect1": 101,
+      "EffectValue1": 600,
+      "JewelEffect2": []
+    },
+    "1250050": {
+      "JewelEffect1": 103,
+      "EffectValue1": 125,
+      "JewelEffect2": []
+    },
+    "1250051": {
+      "JewelEffect1": 103,
+      "EffectValue1": 175,
+      "JewelEffect2": []
+    },
+    "1250052": {
+      "JewelEffect1": 103,
+      "EffectValue1": 275,
+      "JewelEffect2": []
+    },
+    "1250053": {
+      "JewelEffect1": 103,
+      "EffectValue1": 413,
+      "JewelEffect2": []
+    },
+    "1250054": {
+      "JewelEffect1": 103,
+      "EffectValue1": 600,
+      "JewelEffect2": []
+    },
+    "1250060": {
+      "JewelEffect1": 108,
+      "EffectValue1": 125,
+      "JewelEffect2": []
+    },
+    "1250061": {
+      "JewelEffect1": 108,
+      "EffectValue1": 175,
+      "JewelEffect2": []
+    },
+    "1250062": {
+      "JewelEffect1": 108,
+      "EffectValue1": 275,
+      "JewelEffect2": []
+    },
+    "1250063": {
+      "JewelEffect1": 108,
+      "EffectValue1": 413,
+      "JewelEffect2": []
+    },
+    "1250064": {
+      "JewelEffect1": 108,
+      "EffectValue1": 600,
+      "JewelEffect2": []
+    },
+    "1250072": {
+      "JewelEffect1": 122,
+      "EffectValue1": 120,
+      "JewelEffect2": []
+    },
+    "1250073": {
+      "JewelEffect1": 122,
+      "EffectValue1": 168,
+      "JewelEffect2": []
+    },
+    "1250074": {
+      "JewelEffect1": 122,
+      "EffectValue1": 264,
+      "JewelEffect2": []
+    },
+    "1250075": {
+      "JewelEffect1": 122,
+      "EffectValue1": 396,
+      "JewelEffect2": []
+    },
+    "1250076": {
+      "JewelEffect1": 122,
+      "EffectValue1": 576,
+      "JewelEffect2": []
+    },
+    "1250082": {
+      "JewelEffect1": 125,
+      "EffectValue1": 120,
+      "JewelEffect2": []
+    },
+    "1250083": {
+      "JewelEffect1": 125,
+      "EffectValue1": 168,
+      "JewelEffect2": []
+    },
+    "1250084": {
+      "JewelEffect1": 125,
+      "EffectValue1": 264,
+      "JewelEffect2": []
+    },
+    "1250085": {
+      "JewelEffect1": 125,
+      "EffectValue1": 396,
+      "JewelEffect2": []
+    },
+    "1250086": {
+      "JewelEffect1": 125,
+      "EffectValue1": 576,
+      "JewelEffect2": []
+    },
+    "1250092": {
+      "JewelEffect1": 128,
+      "EffectValue1": 120,
+      "JewelEffect2": []
+    },
+    "1250093": {
+      "JewelEffect1": 128,
+      "EffectValue1": 168,
+      "JewelEffect2": []
+    },
+    "1250094": {
+      "JewelEffect1": 128,
+      "EffectValue1": 264,
+      "JewelEffect2": []
+    },
+    "1250095": {
+      "JewelEffect1": 128,
+      "EffectValue1": 396,
+      "JewelEffect2": []
+    },
+    "1250096": {
+      "JewelEffect1": 128,
+      "EffectValue1": 576,
+      "JewelEffect2": []
+    },
+    "1250102": {
+      "JewelEffect1": 131,
+      "EffectValue1": 120,
+      "JewelEffect2": []
+    },
+    "1250103": {
+      "JewelEffect1": 131,
+      "EffectValue1": 168,
+      "JewelEffect2": []
+    },
+    "1250104": {
+      "JewelEffect1": 131,
+      "EffectValue1": 264,
+      "JewelEffect2": []
+    },
+    "1250105": {
+      "JewelEffect1": 131,
+      "EffectValue1": 396,
+      "JewelEffect2": []
+    },
+    "1250106": {
+      "JewelEffect1": 131,
+      "EffectValue1": 576,
+      "JewelEffect2": []
+    },
+    "1250153": {
+      "JewelEffect1": 144,
+      "EffectValue1": 350,
+      "JewelEffect2": []
+    },
+    "1250154": {
+      "JewelEffect1": 144,
+      "EffectValue1": 700,
+      "JewelEffect2": []
+    },
+    "1250155": {
+      "JewelEffect1": 144,
+      "EffectValue1": 1100,
+      "JewelEffect2": []
+    },
+    "1250193": {
+      "JewelEffect1": 145,
+      "EffectValue1": 500,
+      "JewelEffect2": []
+    },
+    "1250203": {
+      "JewelEffect1": 146,
+      "EffectValue1": 500,
+      "JewelEffect2": []
+    },
+    "1250213": {
+      "JewelEffect1": 147,
+      "EffectValue1": 500,
+      "JewelEffect2": []
+    },
+    "1250223": {
+      "JewelEffect1": 148,
+      "EffectValue1": 500,
+      "JewelEffect2": []
+    },
+    "1250224": {
+      "JewelEffect1": 148,
+      "EffectValue1": 1200,
+      "JewelEffect2": []
+    },
+    "1251004": {
+      "JewelEffect1": 102,
+      "EffectValue1": 176,
+      "JewelEffect2": [
+        241211,
+        241210
+      ]
+    },
+    "1251005": {
+      "JewelEffect1": 102,
+      "EffectValue1": 290,
+      "JewelEffect2": [
+        241212,
+        241210
+      ]
+    },
+    "1251006": {
+      "JewelEffect1": 102,
+      "EffectValue1": 352,
+      "JewelEffect2": [
+        241213,
+        241210
+      ]
+    },
+    "1251014": {
+      "JewelEffect1": 104,
+      "EffectValue1": 1230,
+      "JewelEffect2": [
+        241201
+      ]
+    },
+    "1251015": {
+      "JewelEffect1": 104,
+      "EffectValue1": 2029,
+      "JewelEffect2": [
+        241202
+      ]
+    },
+    "1251016": {
+      "JewelEffect1": 104,
+      "EffectValue1": 2460,
+      "JewelEffect2": [
+        241203
+      ]
+    },
+    "1251024": {
+      "JewelEffect1": 104,
+      "EffectValue1": 1230,
+      "JewelEffect2": [
+        241243
+      ]
+    },
+    "1251025": {
+      "JewelEffect1": 104,
+      "EffectValue1": 2029,
+      "JewelEffect2": [
+        241245
+      ]
+    },
+    "1251026": {
+      "JewelEffect1": 104,
+      "EffectValue1": 2460,
+      "JewelEffect2": [
+        241247
+      ]
+    },
+    "1251034": {
+      "JewelEffect1": 100,
+      "EffectValue1": 163,
+      "JewelEffect2": [
+        241283
+      ]
+    },
+    "1251035": {
+      "JewelEffect1": 100,
+      "EffectValue1": 269,
+      "JewelEffect2": [
+        241284
+      ]
+    },
+    "1251036": {
+      "JewelEffect1": 100,
+      "EffectValue1": 327,
+      "JewelEffect2": [
+        241285
+      ]
+    },
+    "1251044": {
+      "JewelEffect1": 104,
+      "EffectValue1": 1230,
+      "JewelEffect2": [
+        241258
+      ]
+    },
+    "1251045": {
+      "JewelEffect1": 104,
+      "EffectValue1": 2029,
+      "JewelEffect2": [
+        241259
+      ]
+    },
+    "1251046": {
+      "JewelEffect1": 104,
+      "EffectValue1": 2460,
+      "JewelEffect2": [
+        241260,
+        241261
+      ]
+    },
+    "1251054": {
+      "JewelEffect1": 102,
+      "EffectValue1": 176,
+      "JewelEffect2": [
+        241249,
+        241301,
+        241304
+      ]
+    },
+    "1251055": {
+      "JewelEffect1": 102,
+      "EffectValue1": 290,
+      "JewelEffect2": [
+        241250,
+        241302,
+        241305
+      ]
+    },
+    "1251056": {
+      "JewelEffect1": 102,
+      "EffectValue1": 352,
+      "JewelEffect2": [
+        241251,
+        241303,
+        241306
+      ]
+    },
+    "1251064": {
+      "JewelEffect1": 104,
+      "EffectValue1": 1230,
+      "JewelEffect2": [
+        241214
+      ]
+    },
+    "1251065": {
+      "JewelEffect1": 104,
+      "EffectValue1": 2029,
+      "JewelEffect2": [
+        241215
+      ]
+    },
+    "1251066": {
+      "JewelEffect1": 104,
+      "EffectValue1": 2460,
+      "JewelEffect2": [
+        241216
+      ]
+    },
+    "1251074": {
+      "JewelEffect1": 100,
+      "EffectValue1": 163,
+      "JewelEffect2": [
+        241286
+      ]
+    },
+    "1251075": {
+      "JewelEffect1": 100,
+      "EffectValue1": 269,
+      "JewelEffect2": [
+        241287
+      ]
+    },
+    "1251076": {
+      "JewelEffect1": 100,
+      "EffectValue1": 327,
+      "JewelEffect2": [
+        241288
+      ]
+    },
+    "1251084": {
+      "JewelEffect1": 102,
+      "EffectValue1": 176,
+      "JewelEffect2": [
+        241217
+      ]
+    },
+    "1251085": {
+      "JewelEffect1": 102,
+      "EffectValue1": 290,
+      "JewelEffect2": [
+        241218
+      ]
+    },
+    "1251086": {
+      "JewelEffect1": 102,
+      "EffectValue1": 352,
+      "JewelEffect2": [
+        241219
+      ]
+    },
+    "1251094": {
+      "JewelEffect1": 104,
+      "EffectValue1": 1230,
+      "JewelEffect2": [
+        241307,
+        241308,
+        241309
+      ]
+    },
+    "1251095": {
+      "JewelEffect1": 104,
+      "EffectValue1": 2029,
+      "JewelEffect2": [
+        241307,
+        241308,
+        241309,
+        241313
+      ]
+    },
+    "1251096": {
+      "JewelEffect1": 104,
+      "EffectValue1": 2460,
+      "JewelEffect2": [
+        241310,
+        241311,
+        241312,
+        241313
+      ]
+    },
+    "1251104": {
+      "JewelEffect1": 104,
+      "EffectValue1": 1230,
+      "JewelEffect2": [
+        241314,
+        241315
+      ]
+    },
+    "1251105": {
+      "JewelEffect1": 104,
+      "EffectValue1": 2029,
+      "JewelEffect2": [
+        241316,
+        241317
+      ]
+    },
+    "1251106": {
+      "JewelEffect1": 104,
+      "EffectValue1": 2460,
+      "JewelEffect2": [
+        241318,
+        241319
+      ]
+    },
+    "1251114": {
+      "JewelEffect1": 100,
+      "EffectValue1": 163,
+      "JewelEffect2": [
+        241298
+      ]
+    },
+    "1251115": {
+      "JewelEffect1": 100,
+      "EffectValue1": 269,
+      "JewelEffect2": [
+        241299
+      ]
+    },
+    "1251116": {
+      "JewelEffect1": 100,
+      "EffectValue1": 327,
+      "JewelEffect2": [
+        241300
+      ]
+    },
+    "1251124": {
+      "JewelEffect1": 100,
+      "EffectValue1": 163,
+      "JewelEffect2": [
+        241347,
+        241348
+      ]
+    },
+    "1251125": {
+      "JewelEffect1": 100,
+      "EffectValue1": 269,
+      "JewelEffect2": [
+        241349,
+        241350
+      ]
+    },
+    "1251126": {
+      "JewelEffect1": 100,
+      "EffectValue1": 327,
+      "JewelEffect2": [
+        241351,
+        241352
+      ]
+    },
+    "1251134": {
+      "JewelEffect1": 104,
+      "EffectValue1": 1230,
+      "JewelEffect2": [
+        241290
+      ]
+    },
+    "1251135": {
+      "JewelEffect1": 104,
+      "EffectValue1": 2029,
+      "JewelEffect2": [
+        241292
+      ]
+    },
+    "1251136": {
+      "JewelEffect1": 104,
+      "EffectValue1": 2460,
+      "JewelEffect2": [
+        241294
+      ]
+    },
+    "1251144": {
+      "JewelEffect1": 100,
+      "EffectValue1": 163,
+      "JewelEffect2": [
+        241320,
+        241323,
+        241326,
+        241335
+      ]
+    },
+    "1251145": {
+      "JewelEffect1": 100,
+      "EffectValue1": 269,
+      "JewelEffect2": [
+        241321,
+        241324,
+        241327,
+        241336
+      ]
+    },
+    "1251146": {
+      "JewelEffect1": 100,
+      "EffectValue1": 327,
+      "JewelEffect2": [
+        241322,
+        241325,
+        241328,
+        241337
+      ]
+    },
+    "1251154": {
+      "JewelEffect1": 104,
+      "EffectValue1": 1230,
+      "JewelEffect2": [
+        241220,
+        241338
+      ]
+    },
+    "1251155": {
+      "JewelEffect1": 104,
+      "EffectValue1": 2029,
+      "JewelEffect2": [
+        241221,
+        241339
+      ]
+    },
+    "1251156": {
+      "JewelEffect1": 104,
+      "EffectValue1": 2460,
+      "JewelEffect2": [
+        241222,
+        241340
+      ]
+    },
+    "1251164": {
+      "JewelEffect1": 100,
+      "EffectValue1": 163,
+      "JewelEffect2": [
+        241341,
+        241342
+      ]
+    },
+    "1251165": {
+      "JewelEffect1": 100,
+      "EffectValue1": 269,
+      "JewelEffect2": [
+        241343,
+        241344
+      ]
+    },
+    "1251166": {
+      "JewelEffect1": 100,
+      "EffectValue1": 327,
+      "JewelEffect2": [
+        241345,
+        241346
+      ]
+    },
+    "1251174": {
+      "JewelEffect1": 102,
+      "EffectValue1": 176,
+      "JewelEffect2": [
+        241353,
+        241355
+      ]
+    },
+    "1251175": {
+      "JewelEffect1": 102,
+      "EffectValue1": 290,
+      "JewelEffect2": [
+        241357,
+        241358,
+        241359
+      ]
+    },
+    "1251176": {
+      "JewelEffect1": 102,
+      "EffectValue1": 352,
+      "JewelEffect2": [
+        241361,
+        241362,
+        241363
+      ]
+    },
+    "1251184": {
+      "JewelEffect1": 104,
+      "EffectValue1": 1230,
+      "JewelEffect2": [
+        241365
+      ]
+    },
+    "1251185": {
+      "JewelEffect1": 104,
+      "EffectValue1": 2029,
+      "JewelEffect2": [
+        241366
+      ]
+    },
+    "1251186": {
+      "JewelEffect1": 104,
+      "EffectValue1": 2460,
+      "JewelEffect2": [
+        241367
+      ]
+    }
+  },
+  "fetters": {
+    "1003:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1004:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1005:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1006:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1007:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1008:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1009:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1010:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1011:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1012:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1013:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1014:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1015:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1016:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1017:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1018:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1019:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1020:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1021:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1022:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1023:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1024:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1025:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1026:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1027:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1028:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1029:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1030:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1031:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1032:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1033:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1034:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1035:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1036:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1039:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1040:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1197:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1198:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1199:1": {
+      "IsOpen": 1,
+      "Attribid": 101,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1003:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1004:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1005:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1006:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1007:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1008:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1009:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1010:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1011:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1012:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1013:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1014:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1015:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1016:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1017:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1018:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1019:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1020:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1021:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1022:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1023:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1024:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1025:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1026:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1027:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1028:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1029:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1030:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1031:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1032:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1033:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1034:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1035:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1036:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1039:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1040:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1197:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1198:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1199:2": {
+      "IsOpen": 1,
+      "Attribid": 103,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1003:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1004:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1005:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1006:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1007:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1008:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1009:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1010:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1011:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1012:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1013:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1014:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1015:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1016:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1017:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1018:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1019:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1020:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1021:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1022:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1023:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1024:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1025:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1026:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1027:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1028:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1029:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1030:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1031:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1032:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1033:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1034:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1035:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1036:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1039:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1040:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1197:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1198:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1199:3": {
+      "IsOpen": 1,
+      "Attribid": 108,
+      "AttribValue": [
+        100,
+        150,
+        240,
+        340,
+        480,
+        630,
+        820,
+        1020,
+        1230,
+        1500
+      ]
+    },
+    "1003:4": {
+      "IsOpen": 0,
+      "Attribid": 124,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    },
+    "1004:4": {
+      "IsOpen": 0,
+      "Attribid": 121,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    },
+    "1005:4": {
+      "IsOpen": 0,
+      "Attribid": 127,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    },
+    "1006:4": {
+      "IsOpen": 0,
+      "Attribid": 130,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    },
+    "1007:4": {
+      "IsOpen": 0,
+      "Attribid": 124,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    },
+    "1008:4": {
+      "IsOpen": 0,
+      "Attribid": 121,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    },
+    "1009:4": {
+      "IsOpen": 0,
+      "Attribid": 127,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    },
+    "1010:4": {
+      "IsOpen": 0,
+      "Attribid": 130,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    },
+    "1011:4": {
+      "IsOpen": 0,
+      "Attribid": 124,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    },
+    "1012:4": {
+      "IsOpen": 0,
+      "Attribid": 121,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    },
+    "1013:4": {
+      "IsOpen": 0,
+      "Attribid": 127,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    },
+    "1014:4": {
+      "IsOpen": 0,
+      "Attribid": 130,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    },
+    "1015:4": {
+      "IsOpen": 0,
+      "Attribid": 124,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    },
+    "1016:4": {
+      "IsOpen": 0,
+      "Attribid": 121,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    },
+    "1017:4": {
+      "IsOpen": 0,
+      "Attribid": 127,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    },
+    "1018:4": {
+      "IsOpen": 0,
+      "Attribid": 130,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    },
+    "1019:4": {
+      "IsOpen": 0,
+      "Attribid": 124,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    },
+    "1020:4": {
+      "IsOpen": 0,
+      "Attribid": 121,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    },
+    "1021:4": {
+      "IsOpen": 0,
+      "Attribid": 127,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    },
+    "1022:4": {
+      "IsOpen": 0,
+      "Attribid": 130,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    },
+    "1023:4": {
+      "IsOpen": 0,
+      "Attribid": 124,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    },
+    "1024:4": {
+      "IsOpen": 0,
+      "Attribid": 121,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    },
+    "1025:4": {
+      "IsOpen": 0,
+      "Attribid": 121,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    },
+    "1026:4": {
+      "IsOpen": 0,
+      "Attribid": 121,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    },
+    "1027:4": {
+      "IsOpen": 0,
+      "Attribid": 121,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    },
+    "1028:4": {
+      "IsOpen": 0,
+      "Attribid": 121,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    },
+    "1029:4": {
+      "IsOpen": 0,
+      "Attribid": 121,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    },
+    "1030:4": {
+      "IsOpen": 0,
+      "Attribid": 121,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    },
+    "1031:4": {
+      "IsOpen": 0,
+      "Attribid": 121,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    },
+    "1032:4": {
+      "IsOpen": 0,
+      "Attribid": 121,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    },
+    "1033:4": {
+      "IsOpen": 0,
+      "Attribid": 121,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    },
+    "1034:4": {
+      "IsOpen": 0,
+      "Attribid": 121,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    },
+    "1035:4": {
+      "IsOpen": 0,
+      "Attribid": 121,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    },
+    "1036:4": {
+      "IsOpen": 0,
+      "Attribid": 121,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    },
+    "1039:4": {
+      "IsOpen": 0,
+      "Attribid": 121,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    },
+    "1040:4": {
+      "IsOpen": 0,
+      "Attribid": 121,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    },
+    "1197:4": {
+      "IsOpen": 0,
+      "Attribid": 127,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    },
+    "1198:4": {
+      "IsOpen": 0,
+      "Attribid": 130,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    },
+    "1199:4": {
+      "IsOpen": 0,
+      "Attribid": 130,
+      "AttribValue": [
+        60,
+        80,
+        120,
+        170,
+        240,
+        320,
+        420,
+        530,
+        650,
+        800
+      ]
+    }
+  },
+  "wonders": {
+    "721": {
+      "origin": 1,
+      "stars": [
+        27211,
+        27212,
+        27213,
+        27214,
+        27215,
+        27216
+      ]
+    },
+    "722": {
+      "origin": 2,
+      "stars": [
+        27221,
+        27222,
+        27223,
+        27224,
+        27225,
+        27226
+      ]
+    },
+    "723": {
+      "origin": 3,
+      "stars": [
+        27231,
+        27232,
+        27233,
+        27234,
+        27235,
+        27236
+      ]
+    },
+    "724": {
+      "origin": 4,
+      "stars": [
+        27241,
+        27242,
+        27243,
+        27244,
+        27245,
+        27246
+      ]
+    },
+    "725": {
+      "origin": 5,
+      "stars": [
+        27251,
+        27252,
+        27253,
+        27254,
+        27255,
+        27256
+      ]
+    },
+    "726": {
+      "origin": 6,
+      "stars": [
+        27261,
+        27262,
+        27263,
+        27264,
+        27265,
+        27266
+      ]
+    },
+    "727": {
+      "origin": 7,
+      "stars": [
+        27271,
+        27272,
+        27273,
+        27274,
+        27275,
+        27276
+      ]
+    }
+  },
+  "wonder_stars": {
+    "27211": [
+      26101
+    ],
+    "27212": [
+      26101,
+      26102
+    ],
+    "27213": [
+      26101,
+      26102,
+      26103
+    ],
+    "27214": [
+      26101,
+      26102,
+      26103,
+      26104
+    ],
+    "27215": [
+      26101,
+      26102,
+      26103,
+      26104,
+      26105
+    ],
+    "27216": [
+      26101,
+      26102,
+      26103,
+      26104,
+      26105,
+      26106
+    ],
+    "27221": [
+      26201
+    ],
+    "27222": [
+      26201,
+      26202
+    ],
+    "27223": [
+      26201,
+      26202,
+      26203
+    ],
+    "27224": [
+      26201,
+      26202,
+      26203,
+      26204
+    ],
+    "27225": [
+      26201,
+      26202,
+      26203,
+      26204,
+      26205
+    ],
+    "27226": [
+      26201,
+      26202,
+      26203,
+      26204,
+      26205,
+      26206
+    ],
+    "27231": [
+      26301
+    ],
+    "27232": [
+      26301,
+      26302
+    ],
+    "27233": [
+      26301,
+      26302,
+      26303
+    ],
+    "27234": [
+      26301,
+      26302,
+      26303,
+      26304
+    ],
+    "27235": [
+      26301,
+      26302,
+      26303,
+      26304,
+      26305
+    ],
+    "27236": [
+      26301,
+      26302,
+      26303,
+      26304,
+      26305,
+      26306
+    ],
+    "27241": [
+      26401
+    ],
+    "27242": [
+      26401,
+      26402
+    ],
+    "27243": [
+      26401,
+      26402,
+      26403
+    ],
+    "27244": [
+      26401,
+      26402,
+      26403,
+      26404
+    ],
+    "27245": [
+      26401,
+      26402,
+      26403,
+      26404,
+      26405
+    ],
+    "27246": [
+      26401,
+      26402,
+      26403,
+      26404,
+      26405,
+      26406
+    ],
+    "27251": [
+      26501
+    ],
+    "27252": [
+      26501,
+      26502
+    ],
+    "27253": [
+      26501,
+      26502,
+      26503
+    ],
+    "27254": [
+      26501,
+      26502,
+      26503,
+      26504
+    ],
+    "27255": [
+      26501,
+      26502,
+      26503,
+      26504,
+      26505
+    ],
+    "27256": [
+      26501,
+      26502,
+      26503,
+      26504,
+      26505,
+      26506
+    ],
+    "27261": [
+      26601
+    ],
+    "27262": [
+      26601,
+      26602
+    ],
+    "27263": [
+      26601,
+      26602,
+      26603
+    ],
+    "27264": [
+      26601,
+      26602,
+      26603,
+      26604
+    ],
+    "27265": [
+      26601,
+      26602,
+      26603,
+      26604,
+      26605
+    ],
+    "27266": [
+      26601,
+      26602,
+      26603,
+      26604,
+      26605,
+      26606
+    ],
+    "27271": [
+      26701
+    ],
+    "27272": [
+      26701,
+      26702
+    ],
+    "27273": [
+      26701,
+      26702,
+      26703
+    ],
+    "27274": [
+      26701,
+      26702,
+      26703,
+      26704
+    ],
+    "27275": [
+      26701,
+      26702,
+      26703,
+      26704,
+      26705
+    ],
+    "27276": [
+      26701,
+      26702,
+      26703,
+      26704,
+      26705,
+      26706
+    ],
+    "27281": [
+      26801
+    ],
+    "27282": [
+      26801,
+      26802
+    ],
+    "27283": [
+      26801,
+      26802,
+      26803
+    ],
+    "27284": [
+      26801,
+      26802,
+      26803,
+      26804
+    ],
+    "27285": [
+      26801,
+      26802,
+      26803,
+      26804,
+      26805
+    ],
+    "27286": [
+      26801,
+      26802,
+      26803,
+      26804,
+      26805,
+      26806
+    ]
+  },
+  "wonder_skills": {
+    "26101": {
+      "attribute": 100,
+      "values": [
+        52,
+        71,
+        92,
+        114,
+        137,
+        162,
+        189,
+        216,
+        246,
+        277,
+        309,
+        344,
+        379,
+        416,
+        455,
+        496,
+        537,
+        580,
+        623,
+        669,
+        715,
+        762,
+        811,
+        860,
+        909,
+        960,
+        1011,
+        1062,
+        1114,
+        1165,
+        1217,
+        1269,
+        1321,
+        1373,
+        1425,
+        1477,
+        1529,
+        1581,
+        1633,
+        1685
+      ]
+    },
+    "26102": {
+      "attribute": 104,
+      "values": [
+        238,
+        238,
+        238,
+        238,
+        238,
+        238,
+        425,
+        619,
+        830,
+        1049,
+        1276,
+        1520,
+        1771,
+        2031,
+        2306,
+        2590,
+        2882,
+        3183,
+        3491,
+        3815,
+        4140,
+        4472,
+        4813,
+        5162,
+        5511,
+        5868,
+        6224,
+        6589,
+        6955,
+        7320,
+        7655,
+        7990,
+        8325,
+        8660,
+        8995,
+        9330,
+        9665,
+        10000,
+        10335,
+        10670
+      ]
+    },
+    "26103": {
+      "attribute": 102,
+      "values": [
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        102,
+        135,
+        170,
+        206,
+        244,
+        283,
+        323,
+        363,
+        406,
+        450,
+        494,
+        539,
+        585,
+        631,
+        679,
+        726,
+        775,
+        823,
+        872,
+        912,
+        952,
+        992,
+        1032,
+        1072,
+        1112,
+        1152,
+        1192,
+        1232,
+        1272
+      ]
+    },
+    "26104": {
+      "attribute": 108,
+      "values": [
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        280,
+        340,
+        410,
+        470,
+        540,
+        610,
+        680,
+        750,
+        820,
+        900,
+        970,
+        1040,
+        1120,
+        1200,
+        1255,
+        1310,
+        1365,
+        1420,
+        1475,
+        1530,
+        1585,
+        1640,
+        1695,
+        1750
+      ]
+    },
+    "26105": {
+      "attribute": 103,
+      "values": [
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        530,
+        610,
+        690,
+        770,
+        850,
+        940,
+        1020,
+        1110,
+        1200,
+        1255,
+        1310,
+        1365,
+        1420,
+        1475,
+        1530,
+        1585,
+        1640,
+        1695,
+        1750
+      ]
+    },
+    "26106": {
+      "attribute": 101,
+      "values": [
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        900,
+        1000,
+        1100,
+        1200,
+        1255,
+        1310,
+        1365,
+        1420,
+        1475,
+        1530,
+        1585,
+        1640,
+        1695,
+        1750
+      ]
+    },
+    "26201": {
+      "attribute": 100,
+      "values": [
+        52,
+        71,
+        92,
+        114,
+        137,
+        162,
+        189,
+        216,
+        246,
+        277,
+        309,
+        344,
+        379,
+        416,
+        455,
+        496,
+        537,
+        580,
+        623,
+        669,
+        715,
+        762,
+        811,
+        860,
+        909,
+        960,
+        1011,
+        1062,
+        1114,
+        1165,
+        1217,
+        1269,
+        1321,
+        1373,
+        1425,
+        1477,
+        1529,
+        1581,
+        1633,
+        1685
+      ]
+    },
+    "26202": {
+      "attribute": 104,
+      "values": [
+        238,
+        238,
+        238,
+        238,
+        238,
+        238,
+        425,
+        619,
+        830,
+        1049,
+        1276,
+        1520,
+        1771,
+        2031,
+        2306,
+        2590,
+        2882,
+        3183,
+        3491,
+        3815,
+        4140,
+        4472,
+        4813,
+        5162,
+        5511,
+        5868,
+        6224,
+        6589,
+        6955,
+        7320,
+        7655,
+        7990,
+        8325,
+        8660,
+        8995,
+        9330,
+        9665,
+        10000,
+        10335,
+        10670
+      ]
+    },
+    "26203": {
+      "attribute": 102,
+      "values": [
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        102,
+        135,
+        170,
+        206,
+        244,
+        283,
+        323,
+        363,
+        406,
+        450,
+        494,
+        539,
+        585,
+        631,
+        679,
+        726,
+        775,
+        823,
+        872,
+        912,
+        952,
+        992,
+        1032,
+        1072,
+        1112,
+        1152,
+        1192,
+        1232,
+        1272
+      ]
+    },
+    "26204": {
+      "attribute": 108,
+      "values": [
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        280,
+        340,
+        410,
+        470,
+        540,
+        610,
+        680,
+        750,
+        820,
+        900,
+        970,
+        1040,
+        1120,
+        1200,
+        1255,
+        1310,
+        1365,
+        1420,
+        1475,
+        1530,
+        1585,
+        1640,
+        1695,
+        1750
+      ]
+    },
+    "26205": {
+      "attribute": 103,
+      "values": [
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        530,
+        610,
+        690,
+        770,
+        850,
+        940,
+        1020,
+        1110,
+        1200,
+        1255,
+        1310,
+        1365,
+        1420,
+        1475,
+        1530,
+        1585,
+        1640,
+        1695,
+        1750
+      ]
+    },
+    "26206": {
+      "attribute": 101,
+      "values": [
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        900,
+        1000,
+        1100,
+        1200,
+        1255,
+        1310,
+        1365,
+        1420,
+        1475,
+        1530,
+        1585,
+        1640,
+        1695,
+        1750
+      ]
+    },
+    "26301": {
+      "attribute": 100,
+      "values": [
+        52,
+        71,
+        92,
+        114,
+        137,
+        162,
+        189,
+        216,
+        246,
+        277,
+        309,
+        344,
+        379,
+        416,
+        455,
+        496,
+        537,
+        580,
+        623,
+        669,
+        715,
+        762,
+        811,
+        860,
+        909,
+        960,
+        1011,
+        1062,
+        1114,
+        1165,
+        1217,
+        1269,
+        1321,
+        1373,
+        1425,
+        1477,
+        1529,
+        1581,
+        1633,
+        1685
+      ]
+    },
+    "26302": {
+      "attribute": 104,
+      "values": [
+        238,
+        238,
+        238,
+        238,
+        238,
+        238,
+        425,
+        619,
+        830,
+        1049,
+        1276,
+        1520,
+        1771,
+        2031,
+        2306,
+        2590,
+        2882,
+        3183,
+        3491,
+        3815,
+        4140,
+        4472,
+        4813,
+        5162,
+        5511,
+        5868,
+        6224,
+        6589,
+        6955,
+        7320,
+        7655,
+        7990,
+        8325,
+        8660,
+        8995,
+        9330,
+        9665,
+        10000,
+        10335,
+        10670
+      ]
+    },
+    "26303": {
+      "attribute": 102,
+      "values": [
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        102,
+        135,
+        170,
+        206,
+        244,
+        283,
+        323,
+        363,
+        406,
+        450,
+        494,
+        539,
+        585,
+        631,
+        679,
+        726,
+        775,
+        823,
+        872,
+        912,
+        952,
+        992,
+        1032,
+        1072,
+        1112,
+        1152,
+        1192,
+        1232,
+        1272
+      ]
+    },
+    "26304": {
+      "attribute": 108,
+      "values": [
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        280,
+        340,
+        410,
+        470,
+        540,
+        610,
+        680,
+        750,
+        820,
+        900,
+        970,
+        1040,
+        1120,
+        1200,
+        1255,
+        1310,
+        1365,
+        1420,
+        1475,
+        1530,
+        1585,
+        1640,
+        1695,
+        1750
+      ]
+    },
+    "26305": {
+      "attribute": 103,
+      "values": [
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        530,
+        610,
+        690,
+        770,
+        850,
+        940,
+        1020,
+        1110,
+        1200,
+        1255,
+        1310,
+        1365,
+        1420,
+        1475,
+        1530,
+        1585,
+        1640,
+        1695,
+        1750
+      ]
+    },
+    "26306": {
+      "attribute": 101,
+      "values": [
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        900,
+        1000,
+        1100,
+        1200,
+        1255,
+        1310,
+        1365,
+        1420,
+        1475,
+        1530,
+        1585,
+        1640,
+        1695,
+        1750
+      ]
+    },
+    "26401": {
+      "attribute": 100,
+      "values": [
+        52,
+        71,
+        92,
+        114,
+        137,
+        162,
+        189,
+        216,
+        246,
+        277,
+        309,
+        344,
+        379,
+        416,
+        455,
+        496,
+        537,
+        580,
+        623,
+        669,
+        715,
+        762,
+        811,
+        860,
+        909,
+        960,
+        1011,
+        1062,
+        1114,
+        1165,
+        1217,
+        1269,
+        1321,
+        1373,
+        1425,
+        1477,
+        1529,
+        1581,
+        1633,
+        1685
+      ]
+    },
+    "26402": {
+      "attribute": 104,
+      "values": [
+        238,
+        238,
+        238,
+        238,
+        238,
+        238,
+        425,
+        619,
+        830,
+        1049,
+        1276,
+        1520,
+        1771,
+        2031,
+        2306,
+        2590,
+        2882,
+        3183,
+        3491,
+        3815,
+        4140,
+        4472,
+        4813,
+        5162,
+        5511,
+        5868,
+        6224,
+        6589,
+        6955,
+        7320,
+        7655,
+        7990,
+        8325,
+        8660,
+        8995,
+        9330,
+        9665,
+        10000,
+        10335,
+        10670
+      ]
+    },
+    "26403": {
+      "attribute": 102,
+      "values": [
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        102,
+        135,
+        170,
+        206,
+        244,
+        283,
+        323,
+        363,
+        406,
+        450,
+        494,
+        539,
+        585,
+        631,
+        679,
+        726,
+        775,
+        823,
+        872,
+        912,
+        952,
+        992,
+        1032,
+        1072,
+        1112,
+        1152,
+        1192,
+        1232,
+        1272
+      ]
+    },
+    "26404": {
+      "attribute": 108,
+      "values": [
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        280,
+        340,
+        410,
+        470,
+        540,
+        610,
+        680,
+        750,
+        820,
+        900,
+        970,
+        1040,
+        1120,
+        1200,
+        1255,
+        1310,
+        1365,
+        1420,
+        1475,
+        1530,
+        1585,
+        1640,
+        1695,
+        1750
+      ]
+    },
+    "26405": {
+      "attribute": 103,
+      "values": [
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        530,
+        610,
+        690,
+        770,
+        850,
+        940,
+        1020,
+        1110,
+        1200,
+        1255,
+        1310,
+        1365,
+        1420,
+        1475,
+        1530,
+        1585,
+        1640,
+        1695,
+        1750
+      ]
+    },
+    "26406": {
+      "attribute": 101,
+      "values": [
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        900,
+        1000,
+        1100,
+        1200,
+        1255,
+        1310,
+        1365,
+        1420,
+        1475,
+        1530,
+        1585,
+        1640,
+        1695,
+        1750
+      ]
+    },
+    "26501": {
+      "attribute": 100,
+      "values": [
+        52,
+        71,
+        92,
+        114,
+        137,
+        162,
+        189,
+        216,
+        246,
+        277,
+        309,
+        344,
+        379,
+        416,
+        455,
+        496,
+        537,
+        580,
+        623,
+        669,
+        715,
+        762,
+        811,
+        860,
+        909,
+        960,
+        1011,
+        1062,
+        1114,
+        1165,
+        1217,
+        1269,
+        1321,
+        1373,
+        1425,
+        1477,
+        1529,
+        1581,
+        1633,
+        1685
+      ]
+    },
+    "26502": {
+      "attribute": 104,
+      "values": [
+        238,
+        238,
+        238,
+        238,
+        238,
+        238,
+        425,
+        619,
+        830,
+        1049,
+        1276,
+        1520,
+        1771,
+        2031,
+        2306,
+        2590,
+        2882,
+        3183,
+        3491,
+        3815,
+        4140,
+        4472,
+        4813,
+        5162,
+        5511,
+        5868,
+        6224,
+        6589,
+        6955,
+        7320,
+        7655,
+        7990,
+        8325,
+        8660,
+        8995,
+        9330,
+        9665,
+        10000,
+        10335,
+        10670
+      ]
+    },
+    "26503": {
+      "attribute": 102,
+      "values": [
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        102,
+        135,
+        170,
+        206,
+        244,
+        283,
+        323,
+        363,
+        406,
+        450,
+        494,
+        539,
+        585,
+        631,
+        679,
+        726,
+        775,
+        823,
+        872,
+        912,
+        952,
+        992,
+        1032,
+        1072,
+        1112,
+        1152,
+        1192,
+        1232,
+        1272
+      ]
+    },
+    "26504": {
+      "attribute": 108,
+      "values": [
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        280,
+        340,
+        410,
+        470,
+        540,
+        610,
+        680,
+        750,
+        820,
+        900,
+        970,
+        1040,
+        1120,
+        1200,
+        1255,
+        1310,
+        1365,
+        1420,
+        1475,
+        1530,
+        1585,
+        1640,
+        1695,
+        1750
+      ]
+    },
+    "26505": {
+      "attribute": 103,
+      "values": [
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        530,
+        610,
+        690,
+        770,
+        850,
+        940,
+        1020,
+        1110,
+        1200,
+        1255,
+        1310,
+        1365,
+        1420,
+        1475,
+        1530,
+        1585,
+        1640,
+        1695,
+        1750
+      ]
+    },
+    "26506": {
+      "attribute": 101,
+      "values": [
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        900,
+        1000,
+        1100,
+        1200,
+        1255,
+        1310,
+        1365,
+        1420,
+        1475,
+        1530,
+        1585,
+        1640,
+        1695,
+        1750
+      ]
+    },
+    "26601": {
+      "attribute": 100,
+      "values": [
+        52,
+        71,
+        92,
+        114,
+        137,
+        162,
+        189,
+        216,
+        246,
+        277,
+        309,
+        344,
+        379,
+        416,
+        455,
+        496,
+        537,
+        580,
+        623,
+        669,
+        715,
+        762,
+        811,
+        860,
+        909,
+        960,
+        1011,
+        1062,
+        1114,
+        1165,
+        1217,
+        1269,
+        1321,
+        1373,
+        1425,
+        1477,
+        1529,
+        1581,
+        1633,
+        1685
+      ]
+    },
+    "26602": {
+      "attribute": 104,
+      "values": [
+        238,
+        238,
+        238,
+        238,
+        238,
+        238,
+        425,
+        619,
+        830,
+        1049,
+        1276,
+        1520,
+        1771,
+        2031,
+        2306,
+        2590,
+        2882,
+        3183,
+        3491,
+        3815,
+        4140,
+        4472,
+        4813,
+        5162,
+        5511,
+        5868,
+        6224,
+        6589,
+        6955,
+        7320,
+        7655,
+        7990,
+        8325,
+        8660,
+        8995,
+        9330,
+        9665,
+        10000,
+        10335,
+        10670
+      ]
+    },
+    "26603": {
+      "attribute": 102,
+      "values": [
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        102,
+        135,
+        170,
+        206,
+        244,
+        283,
+        323,
+        363,
+        406,
+        450,
+        494,
+        539,
+        585,
+        631,
+        679,
+        726,
+        775,
+        823,
+        872,
+        912,
+        952,
+        992,
+        1032,
+        1072,
+        1112,
+        1152,
+        1192,
+        1232,
+        1272
+      ]
+    },
+    "26604": {
+      "attribute": 108,
+      "values": [
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        280,
+        340,
+        410,
+        470,
+        540,
+        610,
+        680,
+        750,
+        820,
+        900,
+        970,
+        1040,
+        1120,
+        1200,
+        1255,
+        1310,
+        1365,
+        1420,
+        1475,
+        1530,
+        1585,
+        1640,
+        1695,
+        1750
+      ]
+    },
+    "26605": {
+      "attribute": 103,
+      "values": [
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        530,
+        610,
+        690,
+        770,
+        850,
+        940,
+        1020,
+        1110,
+        1200,
+        1255,
+        1310,
+        1365,
+        1420,
+        1475,
+        1530,
+        1585,
+        1640,
+        1695,
+        1750
+      ]
+    },
+    "26606": {
+      "attribute": 101,
+      "values": [
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        900,
+        1000,
+        1100,
+        1200,
+        1255,
+        1310,
+        1365,
+        1420,
+        1475,
+        1530,
+        1585,
+        1640,
+        1695,
+        1750
+      ]
+    },
+    "26701": {
+      "attribute": 100,
+      "values": [
+        52,
+        71,
+        92,
+        114,
+        137,
+        162,
+        189,
+        216,
+        246,
+        277,
+        309,
+        344,
+        379,
+        416,
+        455,
+        496,
+        537,
+        580,
+        623,
+        669,
+        715,
+        762,
+        811,
+        860,
+        909,
+        960,
+        1011,
+        1062,
+        1114,
+        1165,
+        1217,
+        1269,
+        1321,
+        1373,
+        1425,
+        1477,
+        1529,
+        1581,
+        1633,
+        1685
+      ]
+    },
+    "26702": {
+      "attribute": 104,
+      "values": [
+        238,
+        238,
+        238,
+        238,
+        238,
+        238,
+        425,
+        619,
+        830,
+        1049,
+        1276,
+        1520,
+        1771,
+        2031,
+        2306,
+        2590,
+        2882,
+        3183,
+        3491,
+        3815,
+        4140,
+        4472,
+        4813,
+        5162,
+        5511,
+        5868,
+        6224,
+        6589,
+        6955,
+        7320,
+        7655,
+        7990,
+        8325,
+        8660,
+        8995,
+        9330,
+        9665,
+        10000,
+        10335,
+        10670
+      ]
+    },
+    "26703": {
+      "attribute": 102,
+      "values": [
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        102,
+        135,
+        170,
+        206,
+        244,
+        283,
+        323,
+        363,
+        406,
+        450,
+        494,
+        539,
+        585,
+        631,
+        679,
+        726,
+        775,
+        823,
+        872,
+        912,
+        952,
+        992,
+        1032,
+        1072,
+        1112,
+        1152,
+        1192,
+        1232,
+        1272
+      ]
+    },
+    "26704": {
+      "attribute": 108,
+      "values": [
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        280,
+        340,
+        410,
+        470,
+        540,
+        610,
+        680,
+        750,
+        820,
+        900,
+        970,
+        1040,
+        1120,
+        1200,
+        1255,
+        1310,
+        1365,
+        1420,
+        1475,
+        1530,
+        1585,
+        1640,
+        1695,
+        1750
+      ]
+    },
+    "26705": {
+      "attribute": 103,
+      "values": [
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        530,
+        610,
+        690,
+        770,
+        850,
+        940,
+        1020,
+        1110,
+        1200,
+        1255,
+        1310,
+        1365,
+        1420,
+        1475,
+        1530,
+        1585,
+        1640,
+        1695,
+        1750
+      ]
+    },
+    "26706": {
+      "attribute": 101,
+      "values": [
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        900,
+        1000,
+        1100,
+        1200,
+        1255,
+        1310,
+        1365,
+        1420,
+        1475,
+        1530,
+        1585,
+        1640,
+        1695,
+        1750
+      ]
+    },
+    "26801": {
+      "attribute": 100,
+      "values": [
+        52,
+        71,
+        92,
+        114,
+        137,
+        162,
+        189,
+        216,
+        246,
+        277,
+        309,
+        344,
+        379,
+        416,
+        455,
+        496,
+        537,
+        580,
+        623,
+        669,
+        715,
+        762,
+        811,
+        860,
+        909,
+        960,
+        1011,
+        1062,
+        1114,
+        1165,
+        1217,
+        1269,
+        1321,
+        1373,
+        1425,
+        1477,
+        1529,
+        1581,
+        1633,
+        1685
+      ]
+    },
+    "26802": {
+      "attribute": 104,
+      "values": [
+        238,
+        238,
+        238,
+        238,
+        238,
+        238,
+        425,
+        619,
+        830,
+        1049,
+        1276,
+        1520,
+        1771,
+        2031,
+        2306,
+        2590,
+        2882,
+        3183,
+        3491,
+        3815,
+        4140,
+        4472,
+        4813,
+        5162,
+        5511,
+        5868,
+        6224,
+        6589,
+        6955,
+        7320,
+        7655,
+        7990,
+        8325,
+        8660,
+        8995,
+        9330,
+        9665,
+        10000,
+        10335,
+        10670
+      ]
+    },
+    "26803": {
+      "attribute": 102,
+      "values": [
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        102,
+        135,
+        170,
+        206,
+        244,
+        283,
+        323,
+        363,
+        406,
+        450,
+        494,
+        539,
+        585,
+        631,
+        679,
+        726,
+        775,
+        823,
+        872,
+        912,
+        952,
+        992,
+        1032,
+        1072,
+        1112,
+        1152,
+        1192,
+        1232,
+        1272
+      ]
+    },
+    "26804": {
+      "attribute": 108,
+      "values": [
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        220,
+        280,
+        340,
+        410,
+        470,
+        540,
+        610,
+        680,
+        750,
+        820,
+        900,
+        970,
+        1040,
+        1120,
+        1200,
+        1255,
+        1310,
+        1365,
+        1420,
+        1475,
+        1530,
+        1585,
+        1640,
+        1695,
+        1750
+      ]
+    },
+    "26805": {
+      "attribute": 103,
+      "values": [
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        450,
+        530,
+        610,
+        690,
+        770,
+        850,
+        940,
+        1020,
+        1110,
+        1200,
+        1255,
+        1310,
+        1365,
+        1420,
+        1475,
+        1530,
+        1585,
+        1640,
+        1695,
+        1750
+      ]
+    },
+    "26806": {
+      "attribute": 101,
+      "values": [
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        810,
+        900,
+        1000,
+        1100,
+        1200,
+        1255,
+        1310,
+        1365,
+        1420,
+        1475,
+        1530,
+        1585,
+        1640,
+        1695,
+        1750
+      ]
+    },
+    "26901": {
+      "attribute": 100,
+      "values": [
+        1685
+      ]
+    },
+    "26902": {
+      "attribute": 104,
+      "values": [
+        10670
+      ]
+    },
+    "26903": {
+      "attribute": 102,
+      "values": [
+        1272
+      ]
+    },
+    "26904": {
+      "attribute": 108,
+      "values": [
+        1750
+      ]
+    },
+    "26905": {
+      "attribute": 103,
+      "values": [
+        1750
+      ]
+    },
+    "26906": {
+      "attribute": 101,
+      "values": [
+        1750
+      ]
+    }
+  }
+}

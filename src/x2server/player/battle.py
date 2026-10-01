@@ -425,8 +425,11 @@ class BattleService:
         fight_heroes = []
         for hero in heroes:
             from .battle_equipment import battle_equipment
+            from .battle_bonuses import artifact_attributes, other_attributes
             try:
                 equipped, suit_effects = battle_equipment(self.store, player['id'], hero)
+                artifact_bonus = artifact_attributes(hero)
+                other_bonus = other_attributes(self.store, player['id'], hero)
             except (ValueError, KeyError, TypeError) as exc:
                 logging.getLogger('x2.battle').warning(
                     'battle entry denied player=%s hero=%s equipment=%s', player['id'], hero['id'], exc)
@@ -437,23 +440,29 @@ class BattleService:
             hero_values = {k:v for k,v in hero.items() if k in ("id", "state", "level", "star", "exp")}
             # Raw bases are keyed by the selected hero; the client applies growth.
             base_values = battle_hero_base()[str(stat_hero["id"])]
-            base = [HERO_ATTR_ADD.encode({"attrId":r["attrId"], "attrValue":base_values[r["name"]]})
-                for r in catalog()["battle_base_1003"]["attributes"]]
+            raw_attributes = {r["attrId"]: base_values[r["name"]]
+                              for r in catalog()["battle_base_1003"]["attributes"]}
+            for attr_id, value in other_bonus.items():
+                raw_attributes[attr_id] = raw_attributes.get(attr_id, 0) + value
+            base = [HERO_ATTR_ADD.encode({"attrId": attr_id, "attrValue": value})
+                    for attr_id, value in sorted(raw_attributes.items())]
             artifact = hero.get("god_equip")
             god_equip = b""
             if artifact:
                 from x2server.messages.core import HERO_GOD_EQUIP, INT_PAIR, GOD_SLOT_LOCK_INFO
                 god_equip = HERO_GOD_EQUIP.encode({"id": artifact.get("id", 0),
                     "level": artifact.get("level", 0), "star": artifact.get("star", 0),
+                    "godEquipAttr": artifact_bonus,
                     "jewel": [INT_PAIR.encode({"Key": int(slot), "Value": int(item)})
                               for slot, item in artifact.get("jewels", {}).items()],
                     "godSlotLockInfo": [GOD_SLOT_LOCK_INFO.encode({"slot": int(slot), "state": 1})
                                         for slot in artifact.get("god_slot_lock", [])]})
             skin = self.store.db.execute("SELECT skin_id FROM appearance_wear WHERE player_id=? AND hero_id=? AND type=1", (player["id"], hero["id"])).fetchone() if self.store.db.execute("SELECT 1 FROM sqlite_master WHERE name='appearance_wear'").fetchone() else None
             logging.getLogger("x2.battle").info(
-                "battle hero player=%s section=%s hero=%s battleSkinId=%s beastlords=%s suits=%s database=%s",
+                "battle hero player=%s section=%s hero=%s battleSkinId=%s beastlords=%s suits=%s baseStats=%s artifactAttrBytes=%s otherBonuses=%s database=%s",
                 player["id"], section, hero["id"], skin[0] if skin else 0,
-                len(equipped), len(suit_effects), self.store.path.resolve())
+                len(equipped), len(suit_effects), hero_attributes(stat_hero),
+                len(artifact_bonus), other_bonus, self.store.path.resolve())
             fight_heroes.append(FIGHT_HERO.encode({**hero_values, "heroGodEquip": god_equip, "battleSkinId": skin[0] if skin else 0,
                 "heroSkill": skills, "heroAttrCount": attrs, "attrAdd": base,
                 "heroEquip": equipped, "equipSuitAttr": suit_effects}))
