@@ -88,6 +88,8 @@ def test_every_main_section_enters_including_trial_and_missing_level_gate(env):
         section = row["SectionID"]
         values = request()
         values.update(missionId=section, chapter=row["ChapterID"], sceneId=row["Maps"][0])
+        if row.get("AssistType", {}).get("value") == 1:
+            values["heros"] = [PROFILE_HERO.encode({"heroId": row["AssistParam"][0], "leader": 1})]
         reply = asyncio.run(battle.enter(ctx, packet(values, 1000 + index)))
         assert reply.values["result"] == 10, section
 
@@ -173,6 +175,8 @@ def test_every_catalogued_main_section_has_an_entry_response(env):
         row = service.catalog.sections[section]
         values = request()
         values.update(missionId=section, chapter=row["ChapterID"], sceneId=row["Maps"][0])
+        if row.get("AssistType", {}).get("value") == 1:
+            values["heros"] = [PROFILE_HERO.encode({"heroId": row["AssistParam"][0], "leader": 1})]
         entry = asyncio.run(service.enter(ctx, packet(values, 200 + index)))
         assert entry.values["result"] == 10, section
         assert FIGHT_DATA.decode(entry.values["data"])["missionId"] == section

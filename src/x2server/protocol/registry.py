@@ -74,6 +74,8 @@ CORE_MESSAGE_REGISTRY = MessageRegistry(
     (
         *(MessageEntry(name, pid, Direction.CLIENT_TO_SERVER if name.startswith("C2L_")
                         else Direction.SERVER_TO_CLIENT) for name, pid in STAR_CHART_IDS),
+        MessageEntry("C2L_MedalOpt", 411, Direction.CLIENT_TO_SERVER),
+        MessageEntry("L2C_MedalOpt", 412, Direction.SERVER_TO_CLIENT),
         MessageEntry("C2L_Login", 54, Direction.CLIENT_TO_SERVER),
         MessageEntry("C2L_HeroOpt", 109, Direction.CLIENT_TO_SERVER),
         MessageEntry("L2C_HeroOpt", 110, Direction.SERVER_TO_CLIENT),

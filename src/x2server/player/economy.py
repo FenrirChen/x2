@@ -34,7 +34,7 @@ class EconomyService:
     # Item.EffData -> BaseInfoProto; only supported currency destinations.
     CURRENCIES = {1237901: "gold", 1237902: "crystal", 1237906: "equip_exp", 1237907: "hero_exp",
                   1237908: "exp", 1237910: "daily_activity", 1237911: "week_activity"}
-    STACKABLE_REWARD_TYPES = frozenset((5, 12, 13, 14, 17, 18, 22, 23, 24, 25, 26, 33, 34, 40, 41))
+    STACKABLE_REWARD_TYPES = frozenset((5, 12, 13, 14, 17, 18, 20, 22, 23, 24, 25, 26, 33, 34, 40, 41))
     ACTIVITY_FIELDS = {1: "daily_activity", 2: "week_activity"}
     MAP_TYPE_CHALLENGE = 2  # 现世复刻: the difficulty stages of a chapter
     # TaskCondition CompleteType enums that server events can authoritatively fire.
@@ -207,6 +207,9 @@ class EconomyService:
         self.dp = ChapterDP(self)
         from .achievements import AchievementService
         self.achievements = AchievementService(self)
+        from .pending_delivery import recover
+        for row in store.db.execute("SELECT id FROM players").fetchall():
+            recover(self, row[0])
 
     @contextmanager
     def transaction(self):
@@ -383,6 +386,8 @@ class EconomyService:
             if type(count) is not int or count <= 0 or item not in self.items:
                 raise UnresolvedEconomy("invalid reward")
             kind = self.items[item].get("ItemType", {}).get("value")
+            if kind == 20:
+                snapshot.setdefault("medal_earned", {}).setdefault(str(item), int(self.clock()))
             if item in self.CURRENCIES:
                 field = self.CURRENCIES[item]
                 snapshot[field] = snapshot.get(field, 0) + count
@@ -1174,7 +1179,8 @@ class EconomyService:
 
     def handlers(self):
         from .bag_items import BagItemService
-        return {**BagItemService(self.store, self).handlers(), **self.achievements.handlers(),
+        from .medals import MedalService
+        return {**MedalService(self).handlers(), **BagItemService(self.store, self).handlers(), **self.achievements.handlers(),
                 "C2L_FetchMobilityPower": self.fetch_mobility_power,
                 **{name: self.handle for name in ("C2L_ItemAll", "C2L_ItemOpt", "C2L_ShopGoods", "C2L_RefreshShop", "C2L_BuyGoods",
             "C2L_QueryGoodsInfo", "C2L_GameTask", "C2L_DailyAndWeekTask", "C2L_FinishGameTask",

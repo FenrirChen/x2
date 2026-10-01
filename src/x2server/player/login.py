@@ -154,6 +154,8 @@ class LoginService:
         values = {"BaseInfo": base, "favor": [FAVOR_MAP_ENTRY.encode({"Key": hero["id"],
             "Value": FAVOR.encode(favor_state(hero, initial.get(hero["id"], 1)))})
             for hero in snapshot.get("heroes", []) if hero.get("state") == 2]}
+        from .medals import snapshot_value
+        values['MedalSystem'] = snapshot_value(store, player['id'], snapshot)
         values.update(snapshot_fields(store, player["id"], snapshot,
                                      int(time.time()) if now is None else now))
         if store is not None:

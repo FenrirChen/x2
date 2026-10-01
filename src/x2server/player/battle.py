@@ -243,7 +243,8 @@ class BattleService:
             "favorFullLevel": [False] * len(heroes), "fightTimeLength": fight_seconds}
         try:
             with self.store.db:
-                if carried_artifacts and section_type != 5:
+                if (self.economy and carried_artifacts and section_type != 5
+                        and self.economy.sections.get(section, {}).get("AssistType", {}).get("value") != 1):
                     current = self.store.get(player_id)["snapshot"]
                     changed = False
                     for hero in current.get("heroes", []):
@@ -398,21 +399,17 @@ class BattleService:
         from .progression import battle_hero_base, hero_attributes, hero_skills, catalog
         owned = {h["id"]: h for h in snapshot.get("heroes", [])}
         section_config = self.economy.sections.get(section) if self.economy else None
-        trial_base = None
-        if (section_config and self.catalog.sections.get(section, {}).get("Type") == 0
-                and section_config.get("AssistType", {}).get("value") == 1):
-            trial_units = [unit for unit in section_config.get("AssistParam", []) if unit > 0]
-            if trial_units:
-                trial_base = 1000 + trial_units[0] % 100
+        trial_unit = None
+        if section_config and section_config.get("AssistType", {}).get("value") == 1:
+            trial_unit = next((unit for unit in section_config.get("AssistParam", []) if unit > 0), None)
         heroes = []
         for selected_hero in selected:
             hero_id = selected_hero.get("heroId")
-            hero = owned.get(hero_id)
-            if (trial_base is not None and hero_id in (trial_base, trial_units[0])
-                    and (hero is None or hero.get("state") != 2)):
-                hero = {"id": hero_id, "battle_base_id": trial_base, "state": 2,
-                        "level": min(120, max(1, section_config.get("RecommendedLevel", 1))),
-                        "star": 1, "exp": 0}
+            if trial_unit is not None:
+                from .trial_units import trial_hero
+                hero = trial_hero(trial_unit, hero_id)
+            else:
+                hero = owned.get(hero_id)
             heroes.append(hero)
         if any(not h or h["state"] != 2 or str(h.get("battle_base_id", h["id"])) not in battle_hero_base()
                or not 1 <= h["level"] <= 120 or not 1 <= h["star"] <= 46 for h in heroes):
@@ -456,9 +453,15 @@ class BattleService:
             from .battle_equipment import battle_equipment
             from .battle_bonuses import artifact_attributes, other_attributes
             try:
-                equipped, suit_effects = battle_equipment(self.store, player['id'], hero)
-                artifact_bonus = artifact_attributes(hero)
-                other_bonus = other_attributes(self.store, player['id'], hero)
+                stat_hero = {**hero, "id": hero.get("battle_base_id", hero["id"])}
+                if hero.get('trial_unit'):
+                    from .trial_units import equipment
+                    equipped, suit_effects = equipment(hero)
+                    other_bonus = {}
+                else:
+                    equipped, suit_effects = battle_equipment(self.store, player['id'], hero)
+                    other_bonus = other_attributes(self.store, player['id'], hero)
+                artifact_bonus = artifact_attributes(stat_hero)
             except (ValueError, KeyError, TypeError) as exc:
                 logging.getLogger('x2.battle').warning(
                     'battle entry denied player=%s hero=%s equipment=%s', player['id'], hero['id'], exc)
@@ -492,7 +495,7 @@ class BattleService:
                 player["id"], section, hero["id"], skin[0] if skin else 0,
                 len(equipped), len(suit_effects), hero_attributes(stat_hero),
                 len(artifact_bonus), other_bonus, self.store.path.resolve())
-            fight_heroes.append(FIGHT_HERO.encode({**hero_values, "heroGodEquip": god_equip, "battleSkinId": skin[0] if skin else 0,
+            fight_heroes.append(FIGHT_HERO.encode({**hero_values, "heroGodEquip": god_equip, "battleSkinId": hero.get("trial_skin", skin[0] if skin else 0),
                 "heroSkill": skills, "heroAttrCount": attrs, "attrAdd": base,
                 "heroEquip": equipped, "equipSuitAttr": suit_effects}))
         # Official chain (ARM64 2026-09-25): BattleInfo.SetSceneInfo copies
