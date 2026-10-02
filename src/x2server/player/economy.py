@@ -65,6 +65,12 @@ class EconomyService:
     POWER_BUY_ITEM = 1237900
     POWER_BUY_AMOUNT = 120
     POWER_BUY_CURRENCY = 1237902
+    # 星图 -> 剧情回顾 -> 主线: every ChapterInfo/POVChapterInfo row carries
+    # ReviewUnlockRequest=1237916 (技能点, the currency StarChartsSkill already
+    # spends), RequestNum=1 and ReviewUnlocAward=760066 (Gift -> 1x 许愿币).
+    STORY_REVIEW_UNLOCK_ITEM = 1237916
+    STORY_REVIEW_UNLOCK_NUM = 1
+    STORY_REVIEW_AWARD = 760066
     # REVIVAL_COMPATIBILITY ladder retained from the community fix package.
     POWER_BUY_PRICES = (20, 20, 40, 60, 80, 100, 120, 150, 180, 220,
                         260, 300, 350, 400, 460, 520, 600, 700, 800, 1000)
@@ -185,6 +191,9 @@ class EconomyService:
             store.db.execute("""CREATE TABLE IF NOT EXISTS chapter_dp_floors (
                 player_id INTEGER NOT NULL, chapter_id INTEGER NOT NULL,
                 minimum_dp INTEGER NOT NULL CHECK(minimum_dp>=0), reason TEXT NOT NULL,
+                PRIMARY KEY(player_id,chapter_id))""")
+            store.db.execute("""CREATE TABLE IF NOT EXISTS story_reviews (
+                player_id INTEGER NOT NULL, chapter_id INTEGER NOT NULL,
                 PRIMARY KEY(player_id,chapter_id))""")
             # Phase19 recorded clears but did not advance BaseInfo. Adopt only
             # existing consecutive clears, without replaying rewards or charges.
@@ -1108,7 +1117,64 @@ class EconomyService:
             by_type.setdefault(section_type, []).append(MISSION_PAIR.encode({"Key": chapter, "Value": frontier}))
         other.extend(MISSION_TYPE.encode({"type": section_type, "missionData": pairs})
                      for section_type, pairs in sorted(by_type.items()))
-        return {"mainMission": sorted(clears & self.sections.keys()), "OtherChapter": other}
+        # story: 星图 -> 剧情回顾 -> 主线. The client's ChapterModule keeps this
+        # List<int32> and its CheckStoryOpen(id) is only `story.Contains(id)` - a
+        # chapter whose id is absent is drawn locked behind the 解锁 button, and a
+        # null list locks every chapter. Filling it here is what actually opens
+        # 剧情回顾; the unlock reply (L2C_UnlockStory) repeats it for the row the
+        # player just paid for.
+        return {"mainMission": sorted(clears & self.sections.keys()), "OtherChapter": other,
+                "story": self.story_ids(player_id)}
+
+    def story_ids(self, player_id):
+        """chapterIds whose 剧情回顾 has been unlocked, for ChapterModule.CheckStoryOpen.
+
+        Deliberately NOT derived from economy_clears: the client already receives its
+        own cleared list as mainMission, so a review state it could compute locally
+        would not need a server field. ChapterInfo instead pairs ReviewUnlockRequest
+        =1237916 (技能点, the currency StarChartsSkill spends) with ReviewUnlocAward
+        =760066, i.e. a real pay-and-be-rewarded unlock, so a chapter only enters this
+        list through C2L_UnlockStory - which is what the 解锁 button sends.
+        """
+        return sorted(row[0] for row in self.store.db.execute(
+            "SELECT chapter_id FROM story_reviews WHERE player_id=? ORDER BY chapter_id",
+            (player_id,)))
+
+    def unlock_story(self, player_id, request):
+        """C2L_UnlockStory (667) -> L2C_UnlockStory (668): pay 1 技能点, get 760066.
+
+        Mirrors the client contract exactly: the reply must carry the same `story`
+        list the query does, because the client stores it straight into its own
+        chapter list - that reply is what makes the row just clicked replayable
+        without waiting for the next query.
+        """
+        chapter_id = request.get("chapterId", 0)
+        result = {"code": 13, "story": self.story_ids(player_id)}
+        if chapter_id <= 0:
+            return OutboundMessage("L2C_UnlockStory", result)
+        try:
+            rewards = self.gifts([self.STORY_REVIEW_AWARD])
+            with self.transaction():
+                if self.store.db.execute(
+                        "SELECT 1 FROM story_reviews WHERE player_id=? AND chapter_id=?",
+                        (player_id, chapter_id)).fetchone():
+                    return OutboundMessage("L2C_UnlockStory", result)
+                charged = self.store.db.execute("UPDATE inventory SET quantity=quantity-? "
+                    "WHERE player_id=? AND item_id=? AND quantity>=?",
+                    (self.STORY_REVIEW_UNLOCK_NUM, player_id, self.STORY_REVIEW_UNLOCK_ITEM,
+                     self.STORY_REVIEW_UNLOCK_NUM))
+                if not charged.rowcount:
+                    return OutboundMessage("L2C_UnlockStory", result)
+                self.store.db.execute("INSERT INTO story_reviews VALUES (?,?)", (player_id, chapter_id))
+                rewards = self._grant(player_id, f"story:{chapter_id}", rewards)
+                result.update(code=10, rewardData=self.reward_bytes(rewards))
+        except UnresolvedEconomy:
+            return OutboundMessage("L2C_UnlockStory", result)
+        result["story"] = self.story_ids(player_id)
+        logging.getLogger("x2.economy").info(
+            "story review unlocked chapter=%s player=%s rewards=%s",
+            chapter_id, player_id, dict(sorted(rewards.items())))
+        return OutboundMessage("L2C_UnlockStory", result, pushes=self.pushes(player_id))
 
     def save_snapshot(self, player_id, snapshot):
         self.store.db.execute("UPDATE players SET snapshot=?,revision=revision+1 WHERE id=?",
@@ -1188,7 +1254,8 @@ class EconomyService:
                 "C2L_FetchMobilityPower": self.fetch_mobility_power,
                 **{name: self.handle for name in ("C2L_ItemAll", "C2L_ItemOpt", "C2L_ShopGoods", "C2L_RefreshShop", "C2L_BuyGoods",
             "C2L_QueryGoodsInfo", "C2L_GameTask", "C2L_DailyAndWeekTask", "C2L_FinishGameTask",
-            "C2L_FinishGameTaskAsync", "C2L_PickTreasureBox", "C2L_QueryMission")}}
+            "C2L_FinishGameTaskAsync", "C2L_PickTreasureBox", "C2L_QueryMission",
+            "C2L_UnlockStory")}}
 
     async def fetch_mobility_power(self, context, packet):
         player_id = context.session.player_id
@@ -1238,6 +1305,8 @@ class EconomyService:
             return OutboundMessage(response_name, self.inventory_values(player_id))
         if name == "C2L_QueryMission":
             return OutboundMessage(response_name, self.mission_values(player_id))
+        if name == "C2L_UnlockStory":
+            return self.unlock_story(player_id, request)
         if name in ("C2L_GameTask", "C2L_DailyAndWeekTask"):
             kind = request.get("type", 0)
             if kind == 12:
