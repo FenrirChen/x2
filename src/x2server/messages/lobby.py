@@ -53,6 +53,14 @@ LOBBY_IDS = (
     ("ButtonClick", 376, 377),
     ("CheckFightProfile", 447, 448), ("CommercialShopGoods", 523, 524),
     ("QueryGiftPackage", 531, 532),
+    # 星图 -> 剧情回顾 -> 主线. The chapter row's 解锁-button callback calls
+    # ChapterModule.QueryUnLockStory(chapterId, chapterType), which sends
+    # C2L_UnlockStory (667) and waits for L2C_UnlockStory (668). The client's own
+    # ChapterModule.CheckStoryOpen(id) is just `story.Contains(id)`, where `story`
+    # is the List<int32> carried on both L2C_QueryMission.story (field 3, declared
+    # above) and L2C_UnlockStory.story (field 3). Nothing ever filled that field,
+    # so every 剧情回顾 chapter rendered locked with a 解锁 button.
+    ("UnlockStory", 667, 668),
 )
 LOBBY_SCHEMAS = {
     "C2L_" + name: ProtoSchema("C2L_" + name,
@@ -69,6 +77,9 @@ for name, fields in {
     "CheckFightProfile": (F(1, "profileType", K.ENUM), F(2, "checkID", K.INT32)),
     "CommercialShopGoods": (F(1, "shopType", K.ENUM),),
     "QueryGiftPackage": (F(1, "playerID", K.INT64),),
+    # ChapterInfo.ReviewUnlockRequest / POVChapterInfo.ReviewUnlockRequest hold
+    # chapterType, so the request is exactly (chapterId, chapterType).
+    "UnlockStory": (F(1, "chapterId", K.INT32), F(2, "chapterType", K.INT32)),
 }.items():
     LOBBY_SCHEMAS["C2L_" + name] = ProtoSchema("C2L_" + name, fields)
 for name, fields in {
@@ -115,6 +126,12 @@ for name, fields in {
     "CommercialShopGoods": (F(1, "code", K.ENUM), F(2, "goods", K.MESSAGE, repeated=True),
                             F(3, "shopType", K.ENUM)),
     "QueryGiftPackage": (F(1, "code", K.ENUM), F(2, "datas", K.MESSAGE, repeated=True)),
+    # Field run taken from the client's own type (L2C_UnlockStory { code @0x10,
+    # rewardData @0x18, story @0x20 }); the client stores `story` straight into
+    # ChapterModule.field_0xF0, the list CheckStoryOpen consults, so 668 is also
+    # how the chapter just unlocked becomes replayable without a fresh query.
+    "UnlockStory": (F(1, "code", K.ENUM), F(2, "rewardData", K.MESSAGE),
+                    F(3, "story", K.INT32, repeated=True)),
 }.items():
     LOBBY_SCHEMAS["L2C_" + name] = ProtoSchema("L2C_" + name, fields)
 

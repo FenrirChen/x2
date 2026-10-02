@@ -457,3 +457,36 @@ def test_currency_cards_consume_grant_and_replay(env, item_id, currency, amount)
     assert store.get(1)["snapshot"].get(balance_field, 0) == balance
     assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=?",
                             (item_id,)).fetchone()[0] == 1
+
+
+def test_story_review_unlock_pays_skill_point_and_stays_unlocked(env):
+    """星图 -> 剧情回顾 -> 主线: L2C_QueryMission.story plus C2L_UnlockStory(667)."""
+    store, economy, context = env
+    from tests.unit.test_battle import packet as pkt
+    # A null/empty story list is what renders every 剧情回顾 chapter locked.
+    assert economy.mission_values(1)["story"] == []
+    # Without ChapterInfo.ReviewUnlockRequest (技能点 1237916) the button is rejected.
+    broke = pkt({"chapterId": 2010101, "chapterType": 0}, name="C2L_UnlockStory")
+    assert asyncio.run(economy.handle(context, broke)).values == {"code": 13, "story": []}
+    with store.db:
+        store.db.execute("INSERT INTO inventory VALUES (1, ?, 1)",
+                         (economy.STORY_REVIEW_UNLOCK_ITEM,))
+    answer = asyncio.run(economy.handle(context, pkt({"chapterId": 2010101, "chapterType": 0},
+                                                     name="C2L_UnlockStory")))
+    assert answer.values["code"] == 10
+    # RequestNum=1 spent, ReviewUnlocAward=760066 pays 1x 许愿币 into the bag ledger.
+    assert rewards(answer.values["rewardData"]) == {1237914: 1}
+    assert answer.values["story"] == [2010101]
+    assert economy.mission_values(1)["story"] == [2010101]
+    assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=?",
+                            (economy.STORY_REVIEW_UNLOCK_ITEM,)).fetchone()[0] == 0
+    assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1237914",
+                            ).fetchone()[0] == 1
+    # Re-clicking an unlocked row must not charge or pay again.
+    replay = asyncio.run(economy.handle(context, pkt({"chapterId": 2010101, "chapterType": 0},
+                                                      name="C2L_UnlockStory")))
+    assert replay.values == {"code": 13, "story": [2010101]}
+    assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1237914",
+                            ).fetchone()[0] == 1
+    # The unlock survives a restart, matching the rest of the service.
+    assert EconomyService(store).mission_values(1)["story"] == [2010101]
