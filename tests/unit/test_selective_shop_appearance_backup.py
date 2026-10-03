@@ -15,14 +15,17 @@ def test_refresh_changes_full_stock_keeps_daily_limits_and_receipt(env):
     p = store.get(1)
     store.save_snapshot(1, dict(p["snapshot"], crystal=1000), p["revision"])
     with store.db:
-        store.db.execute("INSERT INTO shop_compat_counts VALUES (1,801,1900101,?,1)", (service._period(3),))
-    before = service._compat_goods(1, 801, service.compat_offers[(801, 1900101)])
+        store.db.execute("INSERT INTO shop_compat_counts VALUES (1,801,1899001,?,1)", (service._period(3),))
+    before = service._compat_goods(1, 801, service.compat_offers[(801, 1899001)])
+    assert before["canBuyTimes"] == 3 and before["hasBuyTimes"] == 1
     request = packet({"shopId": 801}, name="C2L_RefreshShop", request_id=92)
     answer = asyncio.run(service.handle(ctx, request))
     assert answer.values["code"] == 10
-    after = GOODS.decode(answer.values["goods"][0])
-    assert after["itemId"] != before["itemId"]
-    assert after["canBuyTimes"] == after["hasBuyTimes"] == 1
+    after = next(GOODS.decode(raw) for raw in answer.values["goods"]
+                 if GOODS.decode(raw)["goodsId"] == 1899001)
+    assert after["itemId"] != before["itemId"]   # refresh rerolls the displayed shard
+    assert after["canBuyTimes"] == 3             # the daily limit is not rerolled
+    assert after["hasBuyTimes"] == 1             # the day's buy count is kept
     assert store.get(1)["snapshot"]["crystal"] == 950
     assert asyncio.run(service.handle(ctx, request)).values == answer.values
     assert service._refresh_count(1, 801) == 1
