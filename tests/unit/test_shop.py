@@ -5,8 +5,9 @@ from pathlib import Path
 
 from tests.unit.test_battle import packet
 from tests.unit.test_economy import env, rewards
-from x2server.messages.economy import GOODS
+from x2server.messages.economy import GOODS, REWARD
 from x2server.messages.core import BASE_INFO
+from x2server.messages.equipment import HERO_EQUIP
 from x2server.player.economy import EconomyService
 from x2server.player.login import LoginService
 from x2server.player.shop import ShopService
@@ -68,7 +69,7 @@ def test_shop_currency_balances_follow_inventory(env):
     base = BASE_INFO.decode(LoginService.snapshot_push(store.get(1), store).values["BaseInfo"])
     assert {field: base[field] for field, _ in currencies.values()} == {
         field: balance for field, balance in currencies.values()}
-    assert all(shop_id == 801 for shop_id, _ in service.compat_offers)
+    assert {shop_id for shop_id, _ in service.compat_offers} == {801, 804}
 
 
 def test_unresolved_shop_goods_and_invalid_purchase_never_charge(env):
@@ -91,31 +92,41 @@ def test_random_shop_daily_shard_matches_purchase_and_replay(env):
     service = ShopService(store, economy)
     listing = asyncio.run(service.handle(ctx, packet({"shopId": 801}, name="C2L_ShopGoods")))
     goods = {row["goodsId"]: row for row in map(GOODS.decode, listing.values["goods"])}
-    assert listing.values["code"] == 10 and len(goods) == 16
-    assert all(row["canBuyTimes"] == 1 and row["limited"] == 3 for row in goods.values())
+    assert listing.values["code"] == 10 and len(goods) == 21
+    # The three god-shard random cards lead the shop and cap at three per day.
+    assert [row["goodsId"] for row in map(GOODS.decode,
+        listing.values["goods"])][:3] == [1899001, 1899002, 1899003]
+    shard = goods[1899001]
+    assert (shard["canBuyTimes"], shard["limited"]) == (3, 3)
+    assert shard["originalPrice"] == shard["price"] == 22500
     assert 1286001 not in {row["itemId"] for row in goods.values()}
-    selected = goods[1900101]["itemId"]
-    assert selected in service.compat_offers[(801, 1900101)]["poolItems"]
+    selected = shard["itemId"]
+    assert selected in service.compat_offers[(801, 1899001)]["poolItems"]
     assert asyncio.run(service.handle(ctx, packet({"shopId": 801},
         name="C2L_RefreshShop"))).values["code"] == 13  # refresh requires crystals
-    assert asyncio.run(service.handle(ctx, packet({"goodsId": 1900101},
+    assert asyncio.run(service.handle(ctx, packet({"goodsId": 1899001},
         name="C2L_QueryGoodsInfo"))).values["code"] == 10
-    request = packet({"shopId": 801, "goodsId": 1900101, "buyNum": 1},
+    request = packet({"shopId": 801, "goodsId": 1899001, "buyNum": 1},
                      request_id=77, name="C2L_BuyGoods")
     p = store.get(1)
-    store.save_snapshot(1, dict(p["snapshot"], gold=100000), p["revision"])
+    store.save_snapshot(1, dict(p["snapshot"], gold=200000), p["revision"])
     first = asyncio.run(service.handle(ctx, request))
     assert first.values["code"] == 10 and first.values["itemId"] == selected
     assert rewards(first.values["rewardData"]) == {selected: 3}
-    assert store.get(1)["snapshot"]["gold"] == 77500
+    assert store.get(1)["snapshot"]["gold"] == 177500
     assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=?",
                             (selected,)).fetchone()[0] == 3
     assert asyncio.run(service.handle(ctx, request)).values == first.values
-    assert store.get(1)["snapshot"]["gold"] == 77500
-    assert asyncio.run(service.handle(ctx, packet({"shopId": 801, "goodsId": 1900101,
-        "buyNum": 1}, request_id=78, name="C2L_BuyGoods"))).values["code"] == 13
+    assert store.get(1)["snapshot"]["gold"] == 177500
+    # Two more purchases reach the daily cap of three; the fourth is refused.
+    for request_id in (78, 79):
+        assert asyncio.run(service.handle(ctx, packet({"shopId": 801, "goodsId": 1899001,
+            "buyNum": 1}, request_id=request_id, name="C2L_BuyGoods"))).values["code"] == 10
+    assert store.get(1)["snapshot"]["gold"] == 132500
+    assert asyncio.run(service.handle(ctx, packet({"shopId": 801, "goodsId": 1899001,
+        "buyNum": 1}, request_id=80, name="C2L_BuyGoods"))).values["code"] == 13
     assert GOODS.decode(asyncio.run(service.handle(ctx, packet({"shopId": 801},
-        name="C2L_ShopGoods"))).values["goods"][0])["hasBuyTimes"] == 1
+        name="C2L_ShopGoods"))).values["goods"][0])["hasBuyTimes"] == 3
     economy.clock = lambda: datetime(2026, 10, 1, 12, tzinfo=timezone.utc).timestamp()
     assert GOODS.decode(asyncio.run(service.handle(ctx, packet({"shopId": 801},
         name="C2L_ShopGoods"))).values["goods"][0])["hasBuyTimes"] == 0
@@ -127,20 +138,55 @@ def test_random_shop_unlimited_history_becomes_today_purchase(env):
     economy.clock = lambda: datetime(2026, 9, 30, 12, tzinfo=timezone.utc).timestamp()
     ShopService(store, economy)
     with store.db:
-        store.db.execute("INSERT INTO shop_compat_counts VALUES (1,801,1900301,'lifetime',2)")
+        store.db.execute("INSERT INTO shop_compat_counts VALUES (1,801,1899001,'lifetime',2)")
     service = ShopService(store, economy)
     assert store.db.execute("""SELECT quantity FROM shop_compat_counts
-        WHERE player_id=1 AND shop_id=801 AND goods_id=1900301
+        WHERE player_id=1 AND shop_id=801 AND goods_id=1899001
         AND period='day:2026-09-30'""").fetchone()[0] == 2
     assert store.db.execute("""SELECT COUNT(*) FROM shop_compat_counts
         WHERE shop_id=801 AND period='lifetime'""").fetchone()[0] == 0
-    info = asyncio.run(service.handle(ctx, packet({"goodsId": 1900301}, name="C2L_QueryGoodsInfo")))
-    assert (info.values["canBuyTimes"], info.values["hasBuyTimes"]) == (1, 1)
-    assert asyncio.run(service.handle(ctx, packet({"shopId": 801, "goodsId": 1900301,
-        "buyNum": 1}, request_id=79, name="C2L_BuyGoods"))).values["code"] == 13
+    info = asyncio.run(service.handle(ctx, packet({"goodsId": 1899001}, name="C2L_QueryGoodsInfo")))
+    assert (info.values["canBuyTimes"], info.values["hasBuyTimes"]) == (3, 2)
+    assert asyncio.run(service.handle(ctx, packet({"shopId": 801, "goodsId": 1899001,
+        "buyNum": 2}, request_id=81, name="C2L_BuyGoods"))).values["code"] == 13
     economy.clock = lambda: datetime(2026, 10, 1, 12, tzinfo=timezone.utc).timestamp()
-    info = asyncio.run(service.handle(ctx, packet({"goodsId": 1900301}, name="C2L_QueryGoodsInfo")))
-    assert (info.values["canBuyTimes"], info.values["hasBuyTimes"]) == (1, 0)
+    info = asyncio.run(service.handle(ctx, packet({"goodsId": 1899001}, name="C2L_QueryGoodsInfo")))
+    assert (info.values["canBuyTimes"], info.values["hasBuyTimes"]) == (3, 0)
+
+
+def test_moon_diamond_shop_rolls_equipment_instances(env):
+    store, economy, ctx = env
+    service = ShopService(store, economy)
+    listing = asyncio.run(service.handle(ctx, packet({"shopId": 804}, name="C2L_ShopGoods")))
+    goods = [GOODS.decode(raw) for raw in listing.values["goods"]]
+    assert listing.values["code"] == 10 and len(goods) == 6
+    assert [row["goodsId"] for row in goods] == [1912101, 1912201, 1912301,
+                                                 1912401, 1912501, 1912601]
+    assert [row["price"] for row in goods] == [210, 180, 130, 135, 150, 165]
+    assert all(row["currencyType"] == 912 and row["num"] == 1 for row in goods)
+    # 狮鹫(402) part 6 = 1240026 is back in the part-6 pool (deprecated 407/408 excluded).
+    pool6 = service.compat_offers[(804, 1912601)]["pool"]
+    assert 1240026 in pool6
+    assert pool6 == [1240006, 1240016, 1240026, 1240036, 1240046, 1240056, 1240066, 1240096,
+                     1240106, 1240116, 1240126, 1240136, 1240146, 1240156, 1240166, 1240176,
+                     1240186, 1240196]
+    with store.db:
+        store.db.execute("INSERT INTO inventory VALUES (1,1237912,1000)")  # 月钻
+    request = packet({"shopId": 804, "goodsId": 1912601, "buyNum": 1},
+                     request_id=90, name="C2L_BuyGoods")
+    first = asyncio.run(service.handle(ctx, request))
+    assert first.values["code"] == 10
+    assert rewards(first.values["rewardData"]) == {}
+    equips = [HERO_EQUIP.decode(raw) for raw in
+              REWARD.decode(first.values["rewardData"]).get("rewardEquip", [])]
+    assert len(equips) == 1
+    assert equips[0]["typeId"] in pool6
+    assert 3 <= equips[0]["star"] <= 6
+    assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1237912").fetchone()[0] == 835
+    # Unlimited stock: a second distinct purchase still succeeds, replay stays cached.
+    assert asyncio.run(service.handle(ctx, packet({"shopId": 804, "goodsId": 1912601,
+        "buyNum": 1}, request_id=91, name="C2L_BuyGoods"))).values["code"] == 10
+    assert asyncio.run(service.handle(ctx, request)).values == first.values
 
 
 def test_other_compat_shops_remain_retired(env):

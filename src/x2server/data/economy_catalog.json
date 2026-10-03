@@ -41280,6 +41280,44 @@
       }
     },
     {
+      "ItemID": 1237831,
+      "NameID": 12378311,
+      "DescID": 12378312,
+      "HistoryID": 12378313,
+      "ItemUseScence": {
+        "value": 1,
+        "enum": "E_Outside"
+      },
+      "ItemType": {
+        "value": 13,
+        "enum": "E_Common"
+      },
+      "ItemQuality": {
+        "value": 1,
+        "enum": "E_White"
+      },
+      "PileCount": 999,
+      "ItemValue": 10,
+      "IMQualityLevel": 10,
+      "ItemShow": {
+        "value": 1,
+        "enum": "E_AllYes"
+      },
+      "FunctionEff": {
+        "value": 8,
+        "enum": "E_SpeedUp"
+      },
+      "EffData": [
+        600
+      ],
+      "Icon": "Item03/Ico_Item_1237831",
+      "Model": "",
+      "IfShowName": {
+        "value": 1,
+        "enum": "E_True"
+      }
+    },
+{
       "ItemID": 1237832,
       "NameID": 12378321,
       "DescID": 12378322,
