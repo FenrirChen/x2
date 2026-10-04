@@ -32,6 +32,41 @@ def test_dp_cumulative_reports_and_restart(env):
     assert EconomyService(store).chapter_dp(1, 2010100) == task["dp"]
 
 
+def test_per_run_prism_counts_gained_not_balance(env):
+    """650110 (E_GetMoneyPer, 4500 棱镜) counts prism *gained* during the run, the
+    same figure the client's CheckGetMoney reads. Spending prism in the in-stage
+    shop lowers currentNum, so reading only the balance left the objective
+    incomplete after a run the client showed as done."""
+    store, economy, _ = env
+    from x2server.messages.economy import TASK
+    from x2server.player.endless import PROFILE_CURRENCY
+    with economy.transaction():
+        economy.dp.report(1, 2010100, "run-prism", {"currency": [
+            PROFILE_CURRENCY.encode({"pickupNum": 4500, "currentNum": 3500, "consumeNum": 1000, "typeId": 903})]})
+    progress = dict(store.db.execute(
+        "SELECT task_id,progress FROM chapter_objectives WHERE player_id=1 AND chapter_id=2010100"))
+    assert progress[650110] == 4500
+    assert economy.chapter_dp(1, 2010100) == 2
+    task = next(t for t in map(TASK.decode, economy.dp.task_list(1, 2010100)) if t['taskId'] == 650110)
+    assert (task['taskProgress'], task['taskStatus']) == (4500, 3)
+
+
+def test_per_run_prism_counts_buff_granted_prism(env):
+    """特大彩蛋 (item 1004932, action 41008) tops the in-stage prism up directly.
+    That grant lands in currentNum but is not necessarily a pickup, so 3500
+    ground pickups + a 1000 grant minus 1000 spent must still clear the 4500
+    objective in one run."""
+    store, economy, _ = env
+    from x2server.player.endless import PROFILE_CURRENCY
+    with economy.transaction():
+        economy.dp.report(1, 2010100, "run-buff", {"currency": [
+            PROFILE_CURRENCY.encode({"pickupNum": 3500, "currentNum": 3500, "consumeNum": 1000, "typeId": 903})]})
+    progress = dict(store.db.execute(
+        "SELECT task_id,progress FROM chapter_objectives WHERE player_id=1 AND chapter_id=2010100"))
+    assert progress[650110] == 4500
+    assert economy.chapter_dp(1, 2010100) == 2
+
+
 def test_claim_atomic_and_duplicate_does_not_pay(env):
     store, economy, _ = env
     with economy.transaction():

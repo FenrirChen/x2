@@ -114,13 +114,28 @@ class ChapterDP:
         return result
 
     def report(self, player, chapter, run, values):
-        from x2server.messages.battle import DROP_REPORT_ITEM, DROP_REPORT_NPC, DROP_REPORT_SPAN
+        from x2server.messages.battle import DROP_REPORT_ITEM, DROP_REPORT_NPC
+        from x2server.player.endless import PROFILE_CURRENCY
         for raw in values.get("npcData", []):
             row = DROP_REPORT_NPC.decode(raw)
             self.observe(player, chapter, run, "npc", row.get("id", 0), row.get("count", 0))
         for raw in values.get("currency", []):
-            row = DROP_REPORT_SPAN.decode(raw)
-            self.observe(player, chapter, run, "money", row.get("field4", 0), row.get("field3", 0))
+            # ProfileCurrency: 1 consumeNum, 2 pickupNum, 3 currentNum, 4 typeId.
+            # E_GetMoneyPer means "一局游戏中累积获得 N <货币>" (650110 = 4500 棱镜).
+            # The client's TaskCheckCondition_CheckGetMoney reads StatsManager's
+            # *gained* total (getMoneyData), not the live balance. In-stage money
+            # starts at 0, so gained == currentNum + consumeNum; that form also
+            # survives two real cases the balance alone does not:
+            #   * prism spent in the in-stage shop (consumeNum), and
+            #   * prism granted straight into the balance by a relic such as
+            #     特大彩蛋 (item 1004932, action 41008), which may never be a
+            #     "pickup". Keep pickupNum too and take the larger, so neither
+            #     source can leave a client-complete objective short.
+            currency = PROFILE_CURRENCY.decode(raw)
+            gained = max(currency.get("pickupNum", 0),
+                         currency.get("currentNum", 0) + currency.get("consumeNum", 0))
+            self.observe(player, chapter, run, "money",
+                         currency.get("typeId", 0), gained)
         relics = set(values.get("relicList", []))
         items, qualities = Counter(), Counter()
         for raw in values.get("dropItem", []):
