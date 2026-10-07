@@ -176,6 +176,18 @@ class ShopService:
         index = (int.from_bytes(hashlib.sha256(seed).digest()[:8], "big") + self._refresh_count(player_id, shop_id)) % len(pool)
         return pool[index]
 
+    # Purchasing gold/expedition (item 1237901/1237900) must also tick the matching
+    # daily task: 630018 E_BuyGold (CompleteType 9, value 901) / 630017 E_BuyPower
+    # (CompleteType 8, value 900). The value is the item's Item.EffData entry. The
+    # client only tracks this locally, so without a server event the "buy gold" row
+    # reverts to 0/N on the next task query.
+    CURRENCY_TASK_EVENTS = {1237901: (9, 901), 1237900: (8, 900)}
+
+    def _fire_currency_task(self, player_id, item_id, buy_num, key):
+        event = self.CURRENCY_TASK_EVENTS.get(item_id)
+        if event is not None:
+            self.economy._event(player_id, f"buy-currency:{key}", event[0], event[1], buy_num)
+
     async def handle(self, context, packet):
         player_id = context.session.player_id
         if player_id is None:
@@ -289,6 +301,7 @@ class ShopService:
                                       (request_key, player_id, schema.encode(values)))
                 self.economy._event(player_id, f"shop-buy:{request_key}", 24,
                                     goods_id, buy_num, self.SHOP_ID)
+                self._fire_currency_task(player_id, item_id, buy_num, request_key)
                 self.economy.dp.shop(player_id, item_id, self.CURRENCY_TYPE, buy_num, cost, request_key)
         except UnresolvedEconomy as exc:
             LOGGER.info("purchase rejected goods=%s reason=%s", goods_id, exc)
@@ -352,6 +365,7 @@ class ShopService:
                 self.store.db.execute("INSERT INTO shop_receipts VALUES (?,?,?)",
                                       (key, player_id, schema.encode(values)))
                 self.economy._event(player_id, f"compat-shop:{key}", 24, goods_id, buy_num, shop_id)
+                self._fire_currency_task(player_id, item_id, buy_num, key)
                 self.economy.dp.shop(player_id, item_id, row["currency"], buy_num, total, key)
         except UnresolvedEconomy as exc:
             LOGGER.info("compat purchase rejected goods=%s reason=%s", goods_id, exc)
