@@ -21,6 +21,7 @@ from x2server.messages.battle_shop import BATTLE_SHOP_SCHEMAS
 from x2server.messages.star_chart import STAR_CHART_SCHEMAS
 from x2server.messages.medals import MEDAL_SCHEMAS
 from x2server.messages.world_boss import WORLD_BOSS_SCHEMAS
+from x2server.messages.equip_plan import EQUIP_PLAN_SCHEMAS
 
 C2L_LOGIN = ProtoSchema(
     "C2L_Login",
@@ -124,6 +125,10 @@ CORE_SCHEMAS.update(MAIL_SCHEMAS)
 CORE_SCHEMAS.update(TERMINAL_SCHEMAS)
 CORE_SCHEMAS.update(BATTLE_SHOP_SCHEMAS)
 CORE_SCHEMAS.update(STAR_CHART_SCHEMAS)
+# 兽主套装预设 (EquipPlan, 423-430 四对). PlayerDataProto 的第 9 号成员由本表之外的
+# EquipPlanProto 形状下发，见 messages/equip_plan.py。没有这些 schema 和下面的
+# handler，客户端每次保存/置顶/删除/应用预设都收不到回包，功能等于没有。
+CORE_SCHEMAS.update(EQUIP_PLAN_SCHEMAS)
 
 # CONFIRMED: MessageReflector registers PlayerDataProto as 1000, independently
 # of its generated get_PID() returning 0. BaseInfo Serialize RVA 0x30A1348.
@@ -176,6 +181,11 @@ PLAYER_DATA = ProtoSchema("PlayerDataProto", (
     ProtoField(5, "WorldBossSearch", FieldKind.MESSAGE),
     ProtoField(7, "MedalSystem", FieldKind.MESSAGE),
     ProtoField(8, "StarMap", FieldKind.MESSAGE),
+    # Field 9 = EquipPlan (EquipPlanProto, 兽主套装预设). 客户端 EquipModule 只在登录
+    # 收到的 PlayerData 里初始化预设列表，此后每次保存/置顶/删除/应用都靠服务端再推
+    # 一份 PlayerData 来刷新；这个成员缺席时预设页永远是空的，保存也拿不到回包。形状见
+    # messages/equip_plan.py，值由 player/equip_plans.snapshot_value 生成。
+    ProtoField(9, "EquipPlan", FieldKind.MESSAGE),
     ProtoField(11, "RelicPack", FieldKind.MESSAGE, repeated=True),
     ProtoField(15, "favor", FieldKind.MESSAGE, repeated=True),
 ))

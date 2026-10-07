@@ -173,6 +173,11 @@ class LoginService:
                 (player["id"],)) if quantity > 0 and item_id in relic_ids]
             values["RelicPack"] = [INT_PAIR.encode({"Key": index, "Value": item_id})
                                    for index, item_id in enumerate(owned_relics)]
+            # f9 EquipPlan (兽主套装预设). 客户端 EquipModule 只在 PlayerData 里认识
+            # 预设列表，所以每次带 store 的推送都要带上它（含删除墓碑），否则保存/置顶/
+            # 删除之后页面不会刷新。读取自快照自己的 'equip_plans'，与设备无关。
+            from .equip_plans import snapshot_value as equip_plan_value
+            values["EquipPlan"] = equip_plan_value(snapshot)
         if "mobility" in snapshot:
             mobility = snapshot["mobility"]
             values["Mobility"] = MOBILITY.encode({

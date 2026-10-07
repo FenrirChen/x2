@@ -12,6 +12,7 @@ from x2server.messages.mail import MAIL_IDS
 from x2server.messages.terminal import TERMINAL_IDS
 from x2server.messages.star_chart import STAR_CHART_IDS
 from x2server.messages.world_boss import WORLD_BOSS_IDS
+from x2server.messages.equip_plan import EQUIP_PLAN_IDS
 
 from dataclasses import dataclass
 from enum import Enum
@@ -108,6 +109,10 @@ CORE_MESSAGE_REGISTRY = MessageRegistry(
         MessageEntry("C2L_EquipReclaim", 114, Direction.CLIENT_TO_SERVER),
         MessageEntry("L2C_EquipReclaim", 116, Direction.SERVER_TO_CLIENT),
         MessageEntry("L2C_EquipRemove", 537, Direction.SERVER_TO_CLIENT),
+        # 兽主套装预设 (EquipPlan): C2L_UpdateEquipPlan 423 … C2L_UseEquipPlan 429
+        # 与各自的 L2C_ 回包 (424/426/428/430)。见 messages/equip_plan.py。
+        *(MessageEntry(name, mid, Direction.CLIENT_TO_SERVER if name.startswith("C2L_")
+                        else Direction.SERVER_TO_CLIENT) for name, mid in EQUIP_PLAN_IDS),
         MessageEntry("C2L_CardPool", 305, Direction.CLIENT_TO_SERVER),
         MessageEntry("L2C_CardPool", 307, Direction.SERVER_TO_CLIENT),
         MessageEntry("C2L_LuckDraw", 303, Direction.CLIENT_TO_SERVER),
