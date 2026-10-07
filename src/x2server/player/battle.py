@@ -203,8 +203,20 @@ class BattleService:
         # server-side start of this run, so use elapsed time for that case.
         fight_seconds = request.get("fightTime", 0) or max(1, min(3600, int(time.time()) - row["created_at"]))
         entry = BATTLE_SCHEMAS["L2C_FightData"].decode(row["response"])
-        if FIGHT_DATA.decode(entry["data"])["missionId"] != section:
+        fight = FIGHT_DATA.decode(entry["data"])
+        if fight["missionId"] != section:
             return reject_with('entry missionId mismatch')
+        # 本次出战队伍。心愿任务 E_CarryHeroCustomsPass(11) 数的是「队伍里带着某位神格通关
+        # 指定关卡」, 而队伍只存在于入场那一包里(客户端 checkout 不回传队伍), 所以从存下来的
+        # L2C_FightData 里解出来交给结算。fightHeros 是 repeated message, 解码器把嵌套
+        # message 原样交给调用方(bytes), 必须再用 FIGHT_HERO 逐条拆开 —— 直接 h["id"] 会
+        # AttributeError, 抛在 handler 里会连着整个连接一起断掉, 客户端就卡在「正在连接中...」。
+        carried_heroes = []
+        for raw_hero in fight.get("fightHeros", ()):
+            hero = (FIGHT_HERO.decode(raw_hero) if isinstance(raw_hero, (bytes, bytearray))
+                    else raw_hero)
+            if hero.get("id", 0) > 0:
+                carried_heroes.append(hero["id"])
         if self.economy:
             run = self.store.db.execute("SELECT * FROM economy_runs WHERE uuid=?", (row["uuid"],)).fetchone()
             if not run or run["player_id"] != player_id or run["section_type"] != section_type:
@@ -269,7 +281,8 @@ class BattleService:
                     self.store.db.execute("INSERT OR IGNORE INTO economy_checkouts VALUES (?,?,?)", (player_id, digest, row["uuid"]))
                     values["rewardData"], reward_equips = self.economy.settle(
                         player_id, row["uuid"], section, request.get("success", False), section_type,
-                        request.get("outsideItems", []), request.get("mazeItems", []))
+                        request.get("outsideItems", []), request.get("mazeItems", []),
+                        carried_heroes)
                     if section_type == 6:
                         self.economy.world_boss.finish_battle(player_id,row['uuid'],request.get('success',False),confirmed=True)
                     updated = self.store.get(player_id)["snapshot"]

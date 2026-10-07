@@ -30,7 +30,10 @@ ECONOMY_IDS = (("FetchMobilityPower", 134, 137), ("ShopGoods", 221, 225), ("Refr
     ("BuyGoods", 219, 222), ("QueryGoodsInfo", 301, 302),
     ("QueryReCommendShop", 693, 694), ("PaymentStore", 451, 452),
     ("RechargeInfo", 822, 823),
-    ("FinishGameTask", 350, 353), ("FinishGameTaskAsync", 814, 815), ("PickTreasureBox", 310, 314))
+    ("FinishGameTask", 350, 353), ("FinishGameTaskAsync", 814, 815), ("PickTreasureBox", 310, 314),
+    # 好感日常任务 (心愿任务) 的接取, 由许愿页签的「选择页」确认键发出. 客户端自己声明的是
+    # C2L_AcceptFavorTask(list<int> taskIds, GameTaskType type) -> L2C_AcceptFavorTask(code).
+    ("AcceptFavorTask", 459, 460))
 ECONOMY_SCHEMAS = {s.name: s for s in (
     S("C2L_GodEqupJewelCompose", (F(1, "HeroID", K.INT32), F(2, "HoleIsID", K.INT32), F(3, "RecipeID", K.INT32))),
     S("L2C_GodEqupJewelCompose", (F(1, "result", K.ENUM), F(2, "ID", K.INT32))),
@@ -68,6 +71,12 @@ ECONOMY_SCHEMAS = {s.name: s for s in (
         F(7, "hasBuyTimes", K.INT32), F(8, "rewardData", K.MESSAGE), F(9, "buyNum", K.INT32),
         F(10, "changeItemID", K.INT32), F(11, "shopId", K.INT32))),
     ints("C2L_DailyAndWeekTask", "type"),
+    # 心愿任务的第二步. 回包只有 code, 没有任务清单: 客户端拿到 10 之后自己把页面切到
+    # 「我的任务」并重查 C2L_GameTask(type=6, extraType=0), 所以那一份列表走
+    # L2C_GameTask 推回去, 而不是这个回包 (FavorWishModule 只注册了 L2C_GameTask 的
+    # 处理器). 元数据把 repeated int32 的元素名写成 AppConfig, 与其它扁平清单同一占位。
+    S("C2L_AcceptFavorTask", (F(1, "taskIds", K.INT32, repeated=True), F(2, "type", K.ENUM))),
+    S("L2C_AcceptFavorTask", (F(1, "code", K.ENUM),)),
     S("C2L_FinishGameTask", (F(1, "data", K.MESSAGE, repeated=True),)),
     S("L2C_FinishGameTask", (F(1, "data", K.MESSAGE, repeated=True),)),
     ints("C2L_FinishGameTaskAsync", "taskId type"),

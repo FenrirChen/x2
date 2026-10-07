@@ -1,0 +1,7316 @@
+{
+ "_说明": "好感日常任务表 —— 服务端用它回答 C2L_GameTask(type=6) 的 taskList、C2L_AcceptFavorTask 的接取判定和 C2L_FinishGameTask(type=6) 的领取。type=6 的 extraType 把同一个请求分成两问: 0 = 已接的任务(启动页/任务页), 1 = GENMIND「开始分析」(生成候选, 进选择页)。候选与已接列表都由服务端下发, 客户端只用自己的本表取文案/跳转/奖励(表里没有另一份候选清单)。",
+ "_来源": "table/FavorabilityDailyTask.bin(TaskCondition/HeroID/FavorabilityGift/GiftGroup/JumpID) + table/TaskCondition.bin(CompleteType/CompleteValue1/CompleteValue2/CompleteNum) + gift_contents.json 校验礼包组。FavorabilityGift 是加到该英雄身上的好感经验(50/60/75), 走与触摸/送礼同一条好感曲线; GiftGroup 是道具獎勵(780002/780003/780004 都只给 1237908 账号经验)。track=event 由服务端真实事件推进; track=unwired(67 远征/69 特训/25 难度通关)在本服没有事件源, 进度停在 0。",
+ "provenance": {
+  "event_sources": {
+   "11": "E_CarryHeroCustomsPass",
+   "68": "E_SendDesignativeHeroGift"
+  },
+  "unwired_types": {
+   "25": "E_CarryHeroDifficultyPass",
+   "67": "E_DesignativeHeroAdventure",
+   "69": "E_DesignativeHeroTrain"
+  },
+  "complete_type_counts": {
+   "11": 224,
+   "25": 9,
+   "67": 44,
+   "68": 52,
+   "69": 16
+  },
+  "track_counts": {
+   "event": 276,
+   "unwired": 69
+  },
+  "heroes": 39,
+  "daily_limit": 3,
+  "daily_limit_source": "复活设定: 客户端只标 isFull, 上限数字无表可查, 也没有抓到过 C2L_AcceptFavorTask"
+ },
+ "dailyLimit": 3,
+ "tasks": {
+  "635030": {
+   "hero": 1003,
+   "condition": 635030,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29021,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1003
+   ],
+   "value2": [
+    2130501,
+    2130502,
+    2130503,
+    2130601,
+    2130602,
+    2130603,
+    2130701,
+    2130702,
+    2130703,
+    2131201,
+    2131202,
+    2131203,
+    2131301,
+    2131302,
+    2131303,
+    2131304
+   ],
+   "track": "event"
+  },
+  "635031": {
+   "hero": 1003,
+   "condition": 635031,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29011,
+   "completeType": 69,
+   "completeNum": 1,
+   "value1": [
+    1003
+   ],
+   "value2": [],
+   "track": "unwired"
+  },
+  "635032": {
+   "hero": 1003,
+   "condition": 635032,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29032,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1003
+   ],
+   "value2": [
+    2110291,
+    2110292,
+    2110293,
+    2110294,
+    2110191,
+    2110192,
+    2110193,
+    2110194
+   ],
+   "track": "event"
+  },
+  "635033": {
+   "hero": 1003,
+   "condition": 635033,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29033,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1003
+   ],
+   "value2": [
+    1204002
+   ],
+   "track": "event"
+  },
+  "635034": {
+   "hero": 1003,
+   "condition": 635034,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29025,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1003
+   ],
+   "value2": [
+    2110851,
+    2110852,
+    2110853,
+    2110854,
+    2110855,
+    2110856,
+    2110857,
+    2110858,
+    2110859,
+    2110860
+   ],
+   "track": "event"
+  },
+  "635035": {
+   "hero": 1003,
+   "condition": 635035,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29025,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1003
+   ],
+   "value2": [
+    2110856,
+    2110857,
+    2110858,
+    2110859,
+    2110860
+   ],
+   "track": "event"
+  },
+  "635036": {
+   "hero": 1003,
+   "condition": 635036,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29033,
+   "completeType": 68,
+   "completeNum": 1,
+   "value1": [
+    1003
+   ],
+   "value2": [
+    1204010
+   ],
+   "track": "event"
+  },
+  "635037": {
+   "hero": 1003,
+   "condition": 635037,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29021,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1003
+   ],
+   "value2": [
+    2130502,
+    2130503,
+    2130602,
+    2130603,
+    2130702,
+    2130703,
+    2131202,
+    2131203,
+    2131302,
+    2131303,
+    2131304
+   ],
+   "track": "event"
+  },
+  "635038": {
+   "hero": 1003,
+   "condition": 635038,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29025,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1003
+   ],
+   "value2": [
+    2110858,
+    2110859,
+    2110860
+   ],
+   "track": "event"
+  },
+  "635040": {
+   "hero": 1004,
+   "condition": 635040,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1004
+   ],
+   "value2": [
+    2132102,
+    2132103,
+    2132104,
+    2132105
+   ],
+   "track": "event"
+  },
+  "635041": {
+   "hero": 1004,
+   "condition": 635041,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29025,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1004
+   ],
+   "value2": [
+    2110851,
+    2110852,
+    2110853,
+    2110854,
+    2110855,
+    2110856,
+    2110857,
+    2110858,
+    2110859,
+    2110860
+   ],
+   "track": "event"
+  },
+  "635042": {
+   "hero": 1004,
+   "condition": 635042,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1004
+   ],
+   "value2": [
+    34001,
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635043": {
+   "hero": 1004,
+   "condition": 635043,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29034,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1004
+   ],
+   "value2": [
+    1204000
+   ],
+   "track": "event"
+  },
+  "635044": {
+   "hero": 1004,
+   "condition": 635044,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29001,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1004
+   ],
+   "value2": [
+    2110151,
+    2110152,
+    2110153,
+    2110154,
+    2110155,
+    2110156,
+    2110157,
+    2110158,
+    2110159,
+    2110160
+   ],
+   "track": "event"
+  },
+  "635046": {
+   "hero": 1004,
+   "condition": 635046,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29025,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1004
+   ],
+   "value2": [
+    2110856,
+    2110857,
+    2110858,
+    2110859,
+    2110860
+   ],
+   "track": "event"
+  },
+  "635047": {
+   "hero": 1004,
+   "condition": 635047,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29034,
+   "completeType": 68,
+   "completeNum": 1,
+   "value1": [
+    1004
+   ],
+   "value2": [
+    1204009
+   ],
+   "track": "event"
+  },
+  "635048": {
+   "hero": 1004,
+   "condition": 635048,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29001,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1004
+   ],
+   "value2": [
+    2110156,
+    2110157,
+    2110158,
+    2110159,
+    2110160
+   ],
+   "track": "event"
+  },
+  "635051": {
+   "hero": 1005,
+   "condition": 635051,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29001,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1005
+   ],
+   "value2": [
+    2110151,
+    2110152,
+    2110153,
+    2110154,
+    2110155,
+    2110156,
+    2110157,
+    2110158,
+    2110159,
+    2110160
+   ],
+   "track": "event"
+  },
+  "635052": {
+   "hero": 1005,
+   "condition": 635052,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1005
+   ],
+   "value2": [
+    2132101,
+    2132102,
+    2132103,
+    2132104,
+    2132105
+   ],
+   "track": "event"
+  },
+  "635053": {
+   "hero": 1005,
+   "condition": 635053,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29011,
+   "completeType": 69,
+   "completeNum": 1,
+   "value1": [
+    1005
+   ],
+   "value2": [],
+   "track": "unwired"
+  },
+  "635054": {
+   "hero": 1005,
+   "condition": 635054,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29035,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1005
+   ],
+   "value2": [
+    1204002
+   ],
+   "track": "event"
+  },
+  "635055": {
+   "hero": 1005,
+   "condition": 635055,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29021,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1005
+   ],
+   "value2": [
+    2130601,
+    2130602,
+    2130603
+   ],
+   "track": "event"
+  },
+  "635056": {
+   "hero": 1005,
+   "condition": 635056,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29001,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1005
+   ],
+   "value2": [
+    2110154,
+    2110155,
+    2110156,
+    2110157,
+    2110158,
+    2110159,
+    2110160
+   ],
+   "track": "event"
+  },
+  "635057": {
+   "hero": 1005,
+   "condition": 635057,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1005
+   ],
+   "value2": [
+    2132103,
+    2132104,
+    2132105
+   ],
+   "track": "event"
+  },
+  "635058": {
+   "hero": 1005,
+   "condition": 635058,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29001,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1005
+   ],
+   "value2": [
+    2110156,
+    2110157,
+    2110158,
+    2110159,
+    2110160
+   ],
+   "track": "event"
+  },
+  "635060": {
+   "hero": 1006,
+   "condition": 635060,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29001,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1006
+   ],
+   "value2": [
+    2110151,
+    2110152,
+    2110153,
+    2110154,
+    2110155,
+    2110156,
+    2110157,
+    2110158,
+    2110159,
+    2110160
+   ],
+   "track": "event"
+  },
+  "635061": {
+   "hero": 1006,
+   "condition": 635061,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29021,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1006
+   ],
+   "value2": [
+    2130501,
+    2130502,
+    2130503,
+    2130601,
+    2130602,
+    2130603,
+    2130701,
+    2130702,
+    2130703,
+    2131201,
+    2131202,
+    2131203,
+    2131301,
+    2131302,
+    2131303,
+    2131304
+   ],
+   "track": "event"
+  },
+  "635062": {
+   "hero": 1006,
+   "condition": 635062,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29011,
+   "completeType": 69,
+   "completeNum": 1,
+   "value1": [
+    1006
+   ],
+   "value2": [],
+   "track": "unwired"
+  },
+  "635063": {
+   "hero": 1006,
+   "condition": 635063,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29036,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1006
+   ],
+   "value2": [
+    1204002
+   ],
+   "track": "event"
+  },
+  "635064": {
+   "hero": 1006,
+   "condition": 635064,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29026,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1006
+   ],
+   "value2": [
+    2110253,
+    2110254,
+    2110255,
+    2110256,
+    2110257,
+    2110258,
+    2110259,
+    2110260
+   ],
+   "track": "event"
+  },
+  "635065": {
+   "hero": 1006,
+   "condition": 635065,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29036,
+   "completeType": 68,
+   "completeNum": 1,
+   "value1": [
+    1006
+   ],
+   "value2": [
+    1204010
+   ],
+   "track": "event"
+  },
+  "635066": {
+   "hero": 1006,
+   "condition": 635066,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29021,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1006
+   ],
+   "value2": [
+    2130502,
+    2130503,
+    2130602,
+    2130603,
+    2130702,
+    2130703,
+    2131202,
+    2131203,
+    2131302,
+    2131303,
+    2131304
+   ],
+   "track": "event"
+  },
+  "635067": {
+   "hero": 1006,
+   "condition": 635067,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29001,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1006
+   ],
+   "value2": [
+    2110156,
+    2110157,
+    2110158,
+    2110159,
+    2110160
+   ],
+   "track": "event"
+  },
+  "635068": {
+   "hero": 1006,
+   "condition": 635068,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29026,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1006
+   ],
+   "value2": [
+    2110251,
+    2110252,
+    2110253,
+    2110254,
+    2110255,
+    2110256,
+    2110257,
+    2110258,
+    2110259,
+    2110260
+   ],
+   "track": "event"
+  },
+  "635070": {
+   "hero": 1007,
+   "condition": 635070,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1007
+   ],
+   "value2": [
+    2130101,
+    2130102,
+    2130103,
+    2130104,
+    2130105
+   ],
+   "track": "event"
+  },
+  "635071": {
+   "hero": 1007,
+   "condition": 635071,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29011,
+   "completeType": 69,
+   "completeNum": 1,
+   "value1": [
+    1007
+   ],
+   "value2": [],
+   "track": "unwired"
+  },
+  "635072": {
+   "hero": 1007,
+   "condition": 635072,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29037,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1007
+   ],
+   "value2": [
+    1204001
+   ],
+   "track": "event"
+  },
+  "635073": {
+   "hero": 1007,
+   "condition": 635073,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1007
+   ],
+   "value2": [
+    34001,
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635074": {
+   "hero": 1007,
+   "condition": 635074,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29025,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1007
+   ],
+   "value2": [
+    2110856,
+    2110857,
+    2110858,
+    2110859,
+    2110860
+   ],
+   "track": "event"
+  },
+  "635075": {
+   "hero": 1007,
+   "condition": 635075,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29037,
+   "completeType": 68,
+   "completeNum": 1,
+   "value1": [
+    1007
+   ],
+   "value2": [
+    1204005
+   ],
+   "track": "event"
+  },
+  "635076": {
+   "hero": 1007,
+   "condition": 635076,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1007
+   ],
+   "value2": [
+    2130103,
+    2130104,
+    2130105
+   ],
+   "track": "event"
+  },
+  "635077": {
+   "hero": 1007,
+   "condition": 635077,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1007
+   ],
+   "value2": [
+    2130104,
+    2130105
+   ],
+   "track": "event"
+  },
+  "635078": {
+   "hero": 1007,
+   "condition": 635078,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29025,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1007
+   ],
+   "value2": [
+    2110858,
+    2110859,
+    2110860
+   ],
+   "track": "event"
+  },
+  "635080": {
+   "hero": 1008,
+   "condition": 635080,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1008
+   ],
+   "value2": [
+    2130201,
+    2130202,
+    2130203,
+    2130204,
+    2130205
+   ],
+   "track": "event"
+  },
+  "635081": {
+   "hero": 1008,
+   "condition": 635081,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29026,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1008
+   ],
+   "value2": [
+    2110253,
+    2110254,
+    2110255,
+    2110256,
+    2110257,
+    2110258,
+    2110259,
+    2110260
+   ],
+   "track": "event"
+  },
+  "635082": {
+   "hero": 1008,
+   "condition": 635082,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29011,
+   "completeType": 69,
+   "completeNum": 1,
+   "value1": [
+    1008
+   ],
+   "value2": [],
+   "track": "unwired"
+  },
+  "635083": {
+   "hero": 1008,
+   "condition": 635083,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29038,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1008
+   ],
+   "value2": [
+    1204001
+   ],
+   "track": "event"
+  },
+  "635084": {
+   "hero": 1008,
+   "condition": 635084,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1008
+   ],
+   "value2": [
+    2132101,
+    2132102,
+    2132103,
+    2132104,
+    2132105
+   ],
+   "track": "event"
+  },
+  "635085": {
+   "hero": 1008,
+   "condition": 635085,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29026,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1008
+   ],
+   "value2": [
+    2110255,
+    2110256,
+    2110257,
+    2110258,
+    2110259,
+    2110260
+   ],
+   "track": "event"
+  },
+  "635086": {
+   "hero": 1008,
+   "condition": 635086,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1008
+   ],
+   "value2": [
+    2132102,
+    2132103,
+    2132104,
+    2132105
+   ],
+   "track": "event"
+  },
+  "635087": {
+   "hero": 1008,
+   "condition": 635087,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1008
+   ],
+   "value2": [
+    2130203,
+    2130204,
+    2130205
+   ],
+   "track": "event"
+  },
+  "635088": {
+   "hero": 1008,
+   "condition": 635088,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1008
+   ],
+   "value2": [
+    2130204,
+    2130205
+   ],
+   "track": "event"
+  },
+  "635090": {
+   "hero": 1009,
+   "condition": 635090,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29001,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1009
+   ],
+   "value2": [
+    2110151,
+    2110152,
+    2110153,
+    2110154,
+    2110155,
+    2110156,
+    2110157,
+    2110158,
+    2110159,
+    2110160
+   ],
+   "track": "event"
+  },
+  "635091": {
+   "hero": 1009,
+   "condition": 635091,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29021,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1009
+   ],
+   "value2": [
+    2130501,
+    2130502,
+    2130503,
+    2130601,
+    2130602,
+    2130603,
+    2130701,
+    2130702,
+    2130703,
+    2131201,
+    2131202,
+    2131203,
+    2131301,
+    2131302,
+    2131303,
+    2131304
+   ],
+   "track": "event"
+  },
+  "635092": {
+   "hero": 1009,
+   "condition": 635092,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1009
+   ],
+   "value2": [
+    34001,
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635093": {
+   "hero": 1009,
+   "condition": 635093,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29039,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1009
+   ],
+   "value2": [
+    1204002
+   ],
+   "track": "event"
+  },
+  "635094": {
+   "hero": 1009,
+   "condition": 635094,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29025,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1009
+   ],
+   "value2": [
+    2110851,
+    2110852,
+    2110853,
+    2110854,
+    2110855,
+    2110856,
+    2110857,
+    2110858,
+    2110859,
+    2110860
+   ],
+   "track": "event"
+  },
+  "635095": {
+   "hero": 1009,
+   "condition": 635095,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29001,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1009
+   ],
+   "value2": [
+    2110154,
+    2110155,
+    2110156,
+    2110157,
+    2110158,
+    2110159,
+    2110160
+   ],
+   "track": "event"
+  },
+  "635096": {
+   "hero": 1009,
+   "condition": 635096,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29039,
+   "completeType": 68,
+   "completeNum": 1,
+   "value1": [
+    1009
+   ],
+   "value2": [
+    1204007
+   ],
+   "track": "event"
+  },
+  "635097": {
+   "hero": 1009,
+   "condition": 635097,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29001,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1009
+   ],
+   "value2": [
+    2110156,
+    2110157,
+    2110158,
+    2110159,
+    2110160
+   ],
+   "track": "event"
+  },
+  "635100": {
+   "hero": 1010,
+   "condition": 635100,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29027,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1010
+   ],
+   "value2": [
+    2110351,
+    2110352,
+    2110353,
+    2110354,
+    2110355,
+    2110356,
+    2110357,
+    2110358,
+    2110359,
+    2110360
+   ],
+   "track": "event"
+  },
+  "635102": {
+   "hero": 1010,
+   "condition": 635102,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1010
+   ],
+   "value2": [
+    34001,
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635103": {
+   "hero": 1010,
+   "condition": 635103,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1010
+   ],
+   "value2": [
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635104": {
+   "hero": 1010,
+   "condition": 635104,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1010
+   ],
+   "value2": [
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635105": {
+   "hero": 1010,
+   "condition": 635105,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29005,
+   "completeType": 25,
+   "completeNum": 1,
+   "value1": [
+    1010
+   ],
+   "value2": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ],
+   "track": "unwired"
+  },
+  "635106": {
+   "hero": 1010,
+   "condition": 635106,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29005,
+   "completeType": 25,
+   "completeNum": 1,
+   "value1": [
+    1010
+   ],
+   "value2": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ],
+   "track": "unwired"
+  },
+  "635107": {
+   "hero": 1010,
+   "condition": 635107,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29005,
+   "completeType": 25,
+   "completeNum": 1,
+   "value1": [
+    1010
+   ],
+   "value2": [
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ],
+   "track": "unwired"
+  },
+  "635108": {
+   "hero": 1010,
+   "condition": 635108,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29040,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1010
+   ],
+   "value2": [
+    1204001
+   ],
+   "track": "event"
+  },
+  "635110": {
+   "hero": 1011,
+   "condition": 635110,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29005,
+   "completeType": 25,
+   "completeNum": 1,
+   "value1": [
+    1011
+   ],
+   "value2": [
+    -1
+   ],
+   "track": "unwired"
+  },
+  "635111": {
+   "hero": 1011,
+   "condition": 635111,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29021,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1011
+   ],
+   "value2": [
+    2130601,
+    2130602,
+    2130603
+   ],
+   "track": "event"
+  },
+  "635112": {
+   "hero": 1011,
+   "condition": 635112,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29011,
+   "completeType": 69,
+   "completeNum": 1,
+   "value1": [
+    1011
+   ],
+   "value2": [],
+   "track": "unwired"
+  },
+  "635113": {
+   "hero": 1011,
+   "condition": 635113,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29041,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1011
+   ],
+   "value2": [
+    1204002
+   ],
+   "track": "event"
+  },
+  "635114": {
+   "hero": 1011,
+   "condition": 635114,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1011
+   ],
+   "value2": [
+    34001,
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635115": {
+   "hero": 1011,
+   "condition": 635115,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1011
+   ],
+   "value2": [
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635116": {
+   "hero": 1011,
+   "condition": 635116,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29001,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1011
+   ],
+   "value2": [
+    2110154,
+    2110155,
+    2110156,
+    2110157,
+    2110158,
+    2110159,
+    2110160
+   ],
+   "track": "event"
+  },
+  "635117": {
+   "hero": 1011,
+   "condition": 635117,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29021,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1011
+   ],
+   "value2": [
+    2130602,
+    2130603
+   ],
+   "track": "event"
+  },
+  "635118": {
+   "hero": 1011,
+   "condition": 635118,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29026,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1011
+   ],
+   "value2": [
+    2110255,
+    2110256,
+    2110257,
+    2110258,
+    2110259,
+    2110260
+   ],
+   "track": "event"
+  },
+  "635120": {
+   "hero": 1012,
+   "condition": 635120,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29001,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1012
+   ],
+   "value2": [
+    2110151,
+    2110152,
+    2110153,
+    2110154,
+    2110155,
+    2110156,
+    2110157,
+    2110158,
+    2110159,
+    2110160
+   ],
+   "track": "event"
+  },
+  "635121": {
+   "hero": 1012,
+   "condition": 635121,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1012
+   ],
+   "value2": [
+    2132101,
+    2132102,
+    2132103,
+    2132104,
+    2132105
+   ],
+   "track": "event"
+  },
+  "635122": {
+   "hero": 1012,
+   "condition": 635122,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29011,
+   "completeType": 69,
+   "completeNum": 1,
+   "value1": [
+    1012
+   ],
+   "value2": [],
+   "track": "unwired"
+  },
+  "635123": {
+   "hero": 1012,
+   "condition": 635123,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29042,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1012
+   ],
+   "value2": [
+    1204001
+   ],
+   "track": "event"
+  },
+  "635124": {
+   "hero": 1012,
+   "condition": 635124,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29028,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1012
+   ],
+   "value2": [
+    2110451,
+    2110452,
+    2110453,
+    2110454,
+    2110455,
+    2110456,
+    2110457,
+    2110458,
+    2110459,
+    2110460
+   ],
+   "track": "event"
+  },
+  "635125": {
+   "hero": 1012,
+   "condition": 635125,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1012
+   ],
+   "value2": [
+    2132102,
+    2132103,
+    2132104,
+    2132105
+   ],
+   "track": "event"
+  },
+  "635126": {
+   "hero": 1012,
+   "condition": 635126,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29001,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1012
+   ],
+   "value2": [
+    2110154,
+    2110155,
+    2110156,
+    2110157,
+    2110158,
+    2110159,
+    2110160
+   ],
+   "track": "event"
+  },
+  "635127": {
+   "hero": 1012,
+   "condition": 635127,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1012
+   ],
+   "value2": [
+    2132103,
+    2132104,
+    2132105
+   ],
+   "track": "event"
+  },
+  "635128": {
+   "hero": 1012,
+   "condition": 635128,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29001,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1012
+   ],
+   "value2": [
+    2110156,
+    2110157,
+    2110158,
+    2110159,
+    2110160
+   ],
+   "track": "event"
+  },
+  "635130": {
+   "hero": 1013,
+   "condition": 635130,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1013
+   ],
+   "value2": [
+    2132001,
+    2132002,
+    2132003,
+    2132004,
+    2132005
+   ],
+   "track": "event"
+  },
+  "635131": {
+   "hero": 1013,
+   "condition": 635131,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29026,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1013
+   ],
+   "value2": [
+    2110251,
+    2110252,
+    2110253,
+    2110254,
+    2110255,
+    2110256,
+    2110257,
+    2110258,
+    2110259,
+    2110260
+   ],
+   "track": "event"
+  },
+  "635132": {
+   "hero": 1013,
+   "condition": 635132,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29011,
+   "completeType": 69,
+   "completeNum": 1,
+   "value1": [
+    1013
+   ],
+   "value2": [],
+   "track": "unwired"
+  },
+  "635133": {
+   "hero": 1013,
+   "condition": 635133,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29043,
+   "completeType": 68,
+   "completeNum": 1,
+   "value1": [
+    1013
+   ],
+   "value2": [
+    1204005
+   ],
+   "track": "event"
+  },
+  "635134": {
+   "hero": 1013,
+   "condition": 635134,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29027,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1013
+   ],
+   "value2": [
+    2110351,
+    2110352,
+    2110353,
+    2110354,
+    2110355,
+    2110356,
+    2110357,
+    2110358,
+    2110359,
+    2110360
+   ],
+   "track": "event"
+  },
+  "635135": {
+   "hero": 1013,
+   "condition": 635135,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1013
+   ],
+   "value2": [
+    2132003,
+    2132004,
+    2132005
+   ],
+   "track": "event"
+  },
+  "635136": {
+   "hero": 1013,
+   "condition": 635136,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29026,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1013
+   ],
+   "value2": [
+    2110253,
+    2110254,
+    2110255,
+    2110256,
+    2110257,
+    2110258,
+    2110259,
+    2110260
+   ],
+   "track": "event"
+  },
+  "635137": {
+   "hero": 1013,
+   "condition": 635137,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1013
+   ],
+   "value2": [
+    2132004,
+    2132005
+   ],
+   "track": "event"
+  },
+  "635138": {
+   "hero": 1013,
+   "condition": 635138,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29027,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1013
+   ],
+   "value2": [
+    2110353,
+    2110354,
+    2110355,
+    2110356,
+    2110357,
+    2110358,
+    2110359,
+    2110360
+   ],
+   "track": "event"
+  },
+  "635140": {
+   "hero": 1014,
+   "condition": 635140,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29027,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1014
+   ],
+   "value2": [
+    2110351,
+    2110352,
+    2110353,
+    2110354,
+    2110355,
+    2110356,
+    2110357,
+    2110358,
+    2110359,
+    2110360
+   ],
+   "track": "event"
+  },
+  "635141": {
+   "hero": 1014,
+   "condition": 635141,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29021,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1014
+   ],
+   "value2": [
+    2130501,
+    2130502,
+    2130503
+   ],
+   "track": "event"
+  },
+  "635142": {
+   "hero": 1014,
+   "condition": 635142,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29044,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1014
+   ],
+   "value2": [
+    1204002
+   ],
+   "track": "event"
+  },
+  "635143": {
+   "hero": 1014,
+   "condition": 635143,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29011,
+   "completeType": 69,
+   "completeNum": 1,
+   "value1": [
+    1014
+   ],
+   "value2": [],
+   "track": "unwired"
+  },
+  "635144": {
+   "hero": 1014,
+   "condition": 635144,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29032,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1014
+   ],
+   "value2": [
+    2110291,
+    2110292,
+    2110293,
+    2110294,
+    2110191,
+    2110192,
+    2110193,
+    2110194
+   ],
+   "track": "event"
+  },
+  "635145": {
+   "hero": 1014,
+   "condition": 635145,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29027,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1014
+   ],
+   "value2": [
+    2110352,
+    2110353,
+    2110354,
+    2110355,
+    2110356,
+    2110357,
+    2110358,
+    2110359,
+    2110360
+   ],
+   "track": "event"
+  },
+  "635146": {
+   "hero": 1014,
+   "condition": 635146,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29044,
+   "completeType": 68,
+   "completeNum": 1,
+   "value1": [
+    1014
+   ],
+   "value2": [
+    1204011
+   ],
+   "track": "event"
+  },
+  "635147": {
+   "hero": 1014,
+   "condition": 635147,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29021,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1014
+   ],
+   "value2": [
+    2130502,
+    2130503
+   ],
+   "track": "event"
+  },
+  "635148": {
+   "hero": 1014,
+   "condition": 635148,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29027,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1014
+   ],
+   "value2": [
+    2110353,
+    2110354,
+    2110355,
+    2110451,
+    2110357,
+    2110358,
+    2110359,
+    2110360
+   ],
+   "track": "event"
+  },
+  "635150": {
+   "hero": 1015,
+   "condition": 635150,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1015
+   ],
+   "value2": [
+    34001,
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635151": {
+   "hero": 1015,
+   "condition": 635151,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29021,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1015
+   ],
+   "value2": [
+    2131201,
+    2131202,
+    2131203
+   ],
+   "track": "event"
+  },
+  "635152": {
+   "hero": 1015,
+   "condition": 635152,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29045,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1015
+   ],
+   "value2": [
+    1204002
+   ],
+   "track": "event"
+  },
+  "635153": {
+   "hero": 1015,
+   "condition": 635153,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29025,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1015
+   ],
+   "value2": [
+    2110851,
+    2110852,
+    2110853,
+    2110854,
+    2110855,
+    2110856,
+    2110857,
+    2110858,
+    2110859,
+    2110860
+   ],
+   "track": "event"
+  },
+  "635154": {
+   "hero": 1015,
+   "condition": 635154,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29026,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1015
+   ],
+   "value2": [
+    2110251,
+    2110252,
+    2110253,
+    2110254,
+    2110255,
+    2110256,
+    2110257,
+    2110258,
+    2110259,
+    2110260
+   ],
+   "track": "event"
+  },
+  "635155": {
+   "hero": 1015,
+   "condition": 635155,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1015
+   ],
+   "value2": [
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635156": {
+   "hero": 1015,
+   "condition": 635156,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29045,
+   "completeType": 68,
+   "completeNum": 1,
+   "value1": [
+    1015
+   ],
+   "value2": [
+    1204011
+   ],
+   "track": "event"
+  },
+  "635157": {
+   "hero": 1015,
+   "condition": 635157,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29025,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1015
+   ],
+   "value2": [
+    2110858,
+    2110859,
+    2110860
+   ],
+   "track": "event"
+  },
+  "635158": {
+   "hero": 1015,
+   "condition": 635158,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29021,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1015
+   ],
+   "value2": [
+    2131202,
+    2131203
+   ],
+   "track": "event"
+  },
+  "635160": {
+   "hero": 1016,
+   "condition": 635160,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1016
+   ],
+   "value2": [
+    2130201,
+    2130202,
+    2130203,
+    2130204,
+    2130205
+   ],
+   "track": "event"
+  },
+  "635161": {
+   "hero": 1016,
+   "condition": 635161,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1016
+   ],
+   "value2": [
+    34001,
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635162": {
+   "hero": 1016,
+   "condition": 635162,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1016
+   ],
+   "value2": [
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635163": {
+   "hero": 1016,
+   "condition": 635163,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29021,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1016
+   ],
+   "value2": [
+    2130601,
+    2130602,
+    2130603
+   ],
+   "track": "event"
+  },
+  "635164": {
+   "hero": 1016,
+   "condition": 635164,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29046,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1016
+   ],
+   "value2": [
+    1204001
+   ],
+   "track": "event"
+  },
+  "635165": {
+   "hero": 1016,
+   "condition": 635165,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29001,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1016
+   ],
+   "value2": [
+    2110151,
+    2110152,
+    2110153,
+    2110154,
+    2110155,
+    2110156,
+    2110157,
+    2110158,
+    2110159,
+    2110160
+   ],
+   "track": "event"
+  },
+  "635166": {
+   "hero": 1016,
+   "condition": 635166,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29046,
+   "completeType": 68,
+   "completeNum": 1,
+   "value1": [
+    1016
+   ],
+   "value2": [
+    1204004
+   ],
+   "track": "event"
+  },
+  "635167": {
+   "hero": 1016,
+   "condition": 635167,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29021,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1016
+   ],
+   "value2": [
+    2130602,
+    2130603
+   ],
+   "track": "event"
+  },
+  "635168": {
+   "hero": 1016,
+   "condition": 635168,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29001,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1016
+   ],
+   "value2": [
+    2110156,
+    2110157,
+    2110158,
+    2110159,
+    2110160
+   ],
+   "track": "event"
+  },
+  "635170": {
+   "hero": 1017,
+   "condition": 635170,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29028,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1017
+   ],
+   "value2": [
+    2110451,
+    2110452,
+    2110453,
+    2110454,
+    2110455,
+    2110456,
+    2110457,
+    2110458,
+    2110459,
+    2110460
+   ],
+   "track": "event"
+  },
+  "635171": {
+   "hero": 1017,
+   "condition": 635171,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1017
+   ],
+   "value2": [
+    2130101,
+    2130102,
+    2130103,
+    2130104,
+    2130105
+   ],
+   "track": "event"
+  },
+  "635172": {
+   "hero": 1017,
+   "condition": 635172,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29011,
+   "completeType": 69,
+   "completeNum": 1,
+   "value1": [
+    1017
+   ],
+   "value2": [],
+   "track": "unwired"
+  },
+  "635173": {
+   "hero": 1017,
+   "condition": 635173,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29047,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1017
+   ],
+   "value2": [
+    1204001
+   ],
+   "track": "event"
+  },
+  "635174": {
+   "hero": 1017,
+   "condition": 635174,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29032,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1017
+   ],
+   "value2": [
+    2110191,
+    2110192,
+    2110193,
+    2110194,
+    2110291,
+    2110292,
+    2110293,
+    2110294
+   ],
+   "track": "event"
+  },
+  "635175": {
+   "hero": 1017,
+   "condition": 635175,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1017
+   ],
+   "value2": [
+    2130103,
+    2130104,
+    2130105
+   ],
+   "track": "event"
+  },
+  "635176": {
+   "hero": 1017,
+   "condition": 635176,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29047,
+   "completeType": 68,
+   "completeNum": 1,
+   "value1": [
+    1017
+   ],
+   "value2": [
+    1204003
+   ],
+   "track": "event"
+  },
+  "635177": {
+   "hero": 1017,
+   "condition": 635177,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29028,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1017
+   ],
+   "value2": [
+    2110452,
+    2110453,
+    2110454,
+    2110455,
+    2110456,
+    2110457,
+    2110458,
+    2110459,
+    2110460
+   ],
+   "track": "event"
+  },
+  "635178": {
+   "hero": 1017,
+   "condition": 635178,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1017
+   ],
+   "value2": [
+    2130104,
+    2130105
+   ],
+   "track": "event"
+  },
+  "635180": {
+   "hero": 1018,
+   "condition": 635180,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1018
+   ],
+   "value2": [
+    2130101,
+    2130102,
+    2130103,
+    2130104,
+    2130105
+   ],
+   "track": "event"
+  },
+  "635181": {
+   "hero": 1018,
+   "condition": 635181,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29027,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1018
+   ],
+   "value2": [
+    2110352,
+    2110353,
+    2110354,
+    2110355,
+    2110356,
+    2110357,
+    2110358,
+    2110359,
+    2110360
+   ],
+   "track": "event"
+  },
+  "635182": {
+   "hero": 1018,
+   "condition": 635182,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1018
+   ],
+   "value2": [
+    34001,
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635183": {
+   "hero": 1018,
+   "condition": 635183,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29048,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1018
+   ],
+   "value2": [
+    1204002
+   ],
+   "track": "event"
+  },
+  "635184": {
+   "hero": 1018,
+   "condition": 635184,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29026,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1018
+   ],
+   "value2": [
+    2110251,
+    2110252,
+    2110253,
+    2110254,
+    2110255,
+    2110256,
+    2110257,
+    2110258,
+    2110259,
+    2110260
+   ],
+   "track": "event"
+  },
+  "635185": {
+   "hero": 1018,
+   "condition": 635185,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29026,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1018
+   ],
+   "value2": [
+    2110253,
+    2110254,
+    2110255,
+    2110256,
+    2110257,
+    2110258,
+    2110259,
+    2110260
+   ],
+   "track": "event"
+  },
+  "635186": {
+   "hero": 1018,
+   "condition": 635186,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1018
+   ],
+   "value2": [
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635187": {
+   "hero": 1018,
+   "condition": 635187,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29027,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1018
+   ],
+   "value2": [
+    2110353,
+    2110354,
+    2110355,
+    2110356,
+    2110357,
+    2110358,
+    2110359,
+    2110360
+   ],
+   "track": "event"
+  },
+  "635188": {
+   "hero": 1018,
+   "condition": 635188,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1018
+   ],
+   "value2": [
+    2130104,
+    2130105
+   ],
+   "track": "event"
+  },
+  "635190": {
+   "hero": 1019,
+   "condition": 635190,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29026,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1019
+   ],
+   "value2": [
+    2110251,
+    2110252,
+    2110253,
+    2110254,
+    2110255,
+    2110256,
+    2110257,
+    2110258,
+    2110259,
+    2110260
+   ],
+   "track": "event"
+  },
+  "635191": {
+   "hero": 1019,
+   "condition": 635191,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29049,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1019
+   ],
+   "value2": [
+    1204000
+   ],
+   "track": "event"
+  },
+  "635192": {
+   "hero": 1019,
+   "condition": 635192,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1019
+   ],
+   "value2": [
+    34001,
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635193": {
+   "hero": 1019,
+   "condition": 635193,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29021,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1019
+   ],
+   "value2": [
+    2130701,
+    2130702,
+    2130703
+   ],
+   "track": "event"
+  },
+  "635194": {
+   "hero": 1019,
+   "condition": 635194,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1019
+   ],
+   "value2": [
+    2130101,
+    2130102,
+    2130103,
+    2130104,
+    2130105
+   ],
+   "track": "event"
+  },
+  "635195": {
+   "hero": 1019,
+   "condition": 635195,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1019
+   ],
+   "value2": [
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635196": {
+   "hero": 1019,
+   "condition": 635196,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1019
+   ],
+   "value2": [
+    2130103,
+    2130104,
+    2130105
+   ],
+   "track": "event"
+  },
+  "635197": {
+   "hero": 1019,
+   "condition": 635197,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29021,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1019
+   ],
+   "value2": [
+    2130702,
+    2130703
+   ],
+   "track": "event"
+  },
+  "635198": {
+   "hero": 1019,
+   "condition": 635198,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29026,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1019
+   ],
+   "value2": [
+    2110255,
+    2110256,
+    2110257,
+    2110258,
+    2110259,
+    2110260
+   ],
+   "track": "event"
+  },
+  "635200": {
+   "hero": 1020,
+   "condition": 635200,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29005,
+   "completeType": 25,
+   "completeNum": 1,
+   "value1": [
+    1020
+   ],
+   "value2": [
+    -1
+   ],
+   "track": "unwired"
+  },
+  "635201": {
+   "hero": 1020,
+   "condition": 635201,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29027,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1020
+   ],
+   "value2": [
+    2110351,
+    2110352,
+    2110353,
+    2110354,
+    2110355,
+    2110356,
+    2110357,
+    2110358,
+    2110359,
+    2110360
+   ],
+   "track": "event"
+  },
+  "635202": {
+   "hero": 1020,
+   "condition": 635202,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29050,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1020
+   ],
+   "value2": [
+    1204000
+   ],
+   "track": "event"
+  },
+  "635203": {
+   "hero": 1020,
+   "condition": 635203,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1020
+   ],
+   "value2": [
+    2132101,
+    2132102,
+    2132103,
+    2132104,
+    2132105
+   ],
+   "track": "event"
+  },
+  "635204": {
+   "hero": 1020,
+   "condition": 635204,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1020
+   ],
+   "value2": [
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635206": {
+   "hero": 1020,
+   "condition": 635206,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29027,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1020
+   ],
+   "value2": [
+    2110352,
+    2110353,
+    2110354,
+    2110355,
+    2110356,
+    2110357,
+    2110358,
+    2110359,
+    2110360
+   ],
+   "track": "event"
+  },
+  "635207": {
+   "hero": 1020,
+   "condition": 635207,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29005,
+   "completeType": 25,
+   "completeNum": 1,
+   "value1": [
+    1020
+   ],
+   "value2": [
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ],
+   "track": "unwired"
+  },
+  "635210": {
+   "hero": 1021,
+   "condition": 635210,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29021,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1021
+   ],
+   "value2": [
+    2130501,
+    2130502,
+    2130503,
+    2130601,
+    2130602,
+    67142315,
+    2130701,
+    2130702,
+    2130703,
+    2131201,
+    2131202,
+    2131203,
+    2131301,
+    2131302,
+    2131303,
+    2131304
+   ],
+   "track": "event"
+  },
+  "635211": {
+   "hero": 1021,
+   "condition": 635211,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29027,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1021
+   ],
+   "value2": [
+    2110351,
+    2110352,
+    2110353,
+    2110354,
+    2110355,
+    2110356,
+    2110357,
+    2110358,
+    2110359,
+    2110360
+   ],
+   "track": "event"
+  },
+  "635212": {
+   "hero": 1021,
+   "condition": 635212,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29011,
+   "completeType": 69,
+   "completeNum": 1,
+   "value1": [
+    1021
+   ],
+   "value2": [],
+   "track": "unwired"
+  },
+  "635213": {
+   "hero": 1021,
+   "condition": 635213,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29051,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1021
+   ],
+   "value2": [
+    1204002
+   ],
+   "track": "event"
+  },
+  "635214": {
+   "hero": 1021,
+   "condition": 635214,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1021
+   ],
+   "value2": [
+    2130201,
+    2130202,
+    2130203,
+    2130204,
+    2130205
+   ],
+   "track": "event"
+  },
+  "635215": {
+   "hero": 1021,
+   "condition": 635215,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29027,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1021
+   ],
+   "value2": [
+    2110352,
+    2110353,
+    2110354,
+    2110355,
+    2110356,
+    2110357,
+    2110358,
+    2110359,
+    2110360
+   ],
+   "track": "event"
+  },
+  "635216": {
+   "hero": 1021,
+   "condition": 635216,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1021
+   ],
+   "value2": [
+    2130203,
+    2130204,
+    2130205
+   ],
+   "track": "event"
+  },
+  "635217": {
+   "hero": 1021,
+   "condition": 635217,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29027,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1021
+   ],
+   "value2": [
+    2110353,
+    2110354,
+    2110355,
+    2110356,
+    2110357,
+    2110358,
+    2110359,
+    2110360
+   ],
+   "track": "event"
+  },
+  "635218": {
+   "hero": 1021,
+   "condition": 635218,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29021,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1021
+   ],
+   "value2": [
+    2130502,
+    2130503,
+    2130602,
+    2130603,
+    2130702,
+    2130703,
+    2131202,
+    2131203,
+    2131302,
+    2131303,
+    2131304
+   ],
+   "track": "event"
+  },
+  "635220": {
+   "hero": 1022,
+   "condition": 635220,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29001,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1022
+   ],
+   "value2": [
+    2110151,
+    2110152,
+    2110153,
+    2110154,
+    2110155,
+    2110156,
+    2110157,
+    2110158,
+    2110159,
+    2110160
+   ],
+   "track": "event"
+  },
+  "635221": {
+   "hero": 1022,
+   "condition": 635221,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29027,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1022
+   ],
+   "value2": [
+    2110351,
+    2110352,
+    2110353,
+    2110354,
+    2110355,
+    2110356,
+    2110357,
+    2110358,
+    2110359,
+    2110360
+   ],
+   "track": "event"
+  },
+  "635222": {
+   "hero": 1022,
+   "condition": 635222,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29021,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1022
+   ],
+   "value2": [
+    2131201,
+    2131202,
+    2131203
+   ],
+   "track": "event"
+  },
+  "635223": {
+   "hero": 1022,
+   "condition": 635223,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1022
+   ],
+   "value2": [
+    34001,
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635224": {
+   "hero": 1022,
+   "condition": 635224,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29052,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1022
+   ],
+   "value2": [
+    1204002
+   ],
+   "track": "event"
+  },
+  "635225": {
+   "hero": 1022,
+   "condition": 635225,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1022
+   ],
+   "value2": [
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635226": {
+   "hero": 1022,
+   "condition": 635226,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29021,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1022
+   ],
+   "value2": [
+    2131202,
+    2131203
+   ],
+   "track": "event"
+  },
+  "635227": {
+   "hero": 1022,
+   "condition": 635227,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29001,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1022
+   ],
+   "value2": [
+    2110154,
+    2110155,
+    2110156,
+    2110157,
+    2110158,
+    2110159,
+    2110160
+   ],
+   "track": "event"
+  },
+  "635228": {
+   "hero": 1022,
+   "condition": 635228,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29027,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1022
+   ],
+   "value2": [
+    2110353,
+    2110354,
+    2110355,
+    2110356,
+    2110357,
+    2110358,
+    2110359,
+    2110360
+   ],
+   "track": "event"
+  },
+  "635230": {
+   "hero": 1023,
+   "condition": 635230,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29027,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1023
+   ],
+   "value2": [
+    2110351,
+    2110352,
+    2110353,
+    2110354,
+    2110355,
+    2110356,
+    2110357,
+    2110358,
+    2110359,
+    2110360
+   ],
+   "track": "event"
+  },
+  "635231": {
+   "hero": 1023,
+   "condition": 635231,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29021,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1023
+   ],
+   "value2": [
+    2130601,
+    2130602,
+    2130603
+   ],
+   "track": "event"
+  },
+  "635232": {
+   "hero": 1023,
+   "condition": 635232,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1023
+   ],
+   "value2": [
+    34001,
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635233": {
+   "hero": 1023,
+   "condition": 635233,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29053,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1023
+   ],
+   "value2": [
+    1204000
+   ],
+   "track": "event"
+  },
+  "635234": {
+   "hero": 1023,
+   "condition": 635234,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1023
+   ],
+   "value2": [
+    2130201,
+    2130202,
+    2130203,
+    2130204,
+    2130205
+   ],
+   "track": "event"
+  },
+  "635235": {
+   "hero": 1023,
+   "condition": 635235,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29027,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1023
+   ],
+   "value2": [
+    2110352,
+    2110353,
+    2110354,
+    2110355,
+    2110356,
+    2110357,
+    2110358,
+    2110359,
+    2110360
+   ],
+   "track": "event"
+  },
+  "635236": {
+   "hero": 1023,
+   "condition": 635236,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1023
+   ],
+   "value2": [
+    2130203,
+    2130204,
+    2130205
+   ],
+   "track": "event"
+  },
+  "635237": {
+   "hero": 1023,
+   "condition": 635237,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1023
+   ],
+   "value2": [
+    2130204,
+    2130205
+   ],
+   "track": "event"
+  },
+  "635238": {
+   "hero": 1023,
+   "condition": 635238,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29021,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1023
+   ],
+   "value2": [
+    2130602,
+    2130603
+   ],
+   "track": "event"
+  },
+  "635240": {
+   "hero": 1024,
+   "condition": 635240,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29025,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1024
+   ],
+   "value2": [
+    2110851,
+    2110852,
+    2110853,
+    2110854,
+    2110855,
+    2110856,
+    2110857,
+    2110858,
+    2110859,
+    2110860
+   ],
+   "track": "event"
+  },
+  "635241": {
+   "hero": 1024,
+   "condition": 635241,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1024
+   ],
+   "value2": [
+    2130203,
+    2130204,
+    2130205
+   ],
+   "track": "event"
+  },
+  "635242": {
+   "hero": 1024,
+   "condition": 635242,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1024
+   ],
+   "value2": [
+    34001,
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635243": {
+   "hero": 1024,
+   "condition": 635243,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29054,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1024
+   ],
+   "value2": [
+    1204002
+   ],
+   "track": "event"
+  },
+  "635244": {
+   "hero": 1024,
+   "condition": 635244,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29032,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1024
+   ],
+   "value2": [
+    2110291,
+    2110292,
+    2110293,
+    2110294,
+    2110191,
+    2110192,
+    2110193,
+    2110194
+   ],
+   "track": "event"
+  },
+  "635245": {
+   "hero": 1024,
+   "condition": 635245,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1024
+   ],
+   "value2": [
+    2130201,
+    2130202,
+    2130203,
+    2130204,
+    2130205
+   ],
+   "track": "event"
+  },
+  "635246": {
+   "hero": 1024,
+   "condition": 635246,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29025,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1024
+   ],
+   "value2": [
+    2110856,
+    2110857,
+    2110858,
+    2110859,
+    2110860
+   ],
+   "track": "event"
+  },
+  "635247": {
+   "hero": 1024,
+   "condition": 635247,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29025,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1024
+   ],
+   "value2": [
+    2110858,
+    2110859,
+    2110860
+   ],
+   "track": "event"
+  },
+  "635248": {
+   "hero": 1024,
+   "condition": 635248,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1024
+   ],
+   "value2": [
+    2130204,
+    2130205
+   ],
+   "track": "event"
+  },
+  "635250": {
+   "hero": 1025,
+   "condition": 635250,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29001,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1025
+   ],
+   "value2": [
+    2110151,
+    2110152,
+    2110153,
+    2110154,
+    2110155,
+    2110156,
+    2110157,
+    2110158,
+    2110159,
+    2110160
+   ],
+   "track": "event"
+  },
+  "635251": {
+   "hero": 1025,
+   "condition": 635251,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29021,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1025
+   ],
+   "value2": [
+    2130601,
+    2130602,
+    2130603
+   ],
+   "track": "event"
+  },
+  "635252": {
+   "hero": 1025,
+   "condition": 635252,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1025
+   ],
+   "value2": [
+    34001,
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635253": {
+   "hero": 1025,
+   "condition": 635253,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29055,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1025
+   ],
+   "value2": [
+    1204001
+   ],
+   "track": "event"
+  },
+  "635254": {
+   "hero": 1025,
+   "condition": 635254,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29026,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1025
+   ],
+   "value2": [
+    2110251,
+    2110252,
+    2110253,
+    2110254,
+    2110255,
+    2110256,
+    2110257,
+    2110258,
+    2110259,
+    2110260
+   ],
+   "track": "event"
+  },
+  "635255": {
+   "hero": 1025,
+   "condition": 635255,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29001,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1025
+   ],
+   "value2": [
+    2110154,
+    2110155,
+    2110156,
+    2110157,
+    2110158,
+    2110159,
+    2110160
+   ],
+   "track": "event"
+  },
+  "635256": {
+   "hero": 1025,
+   "condition": 635256,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29021,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1025
+   ],
+   "value2": [
+    2130602,
+    2130603
+   ],
+   "track": "event"
+  },
+  "635257": {
+   "hero": 1025,
+   "condition": 635257,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1025
+   ],
+   "value2": [
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635258": {
+   "hero": 1025,
+   "condition": 635258,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29026,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1025
+   ],
+   "value2": [
+    2110255,
+    2110256,
+    2110257,
+    2110258,
+    2110259,
+    2110260
+   ],
+   "track": "event"
+  },
+  "635260": {
+   "hero": 1026,
+   "condition": 635260,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29027,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1026
+   ],
+   "value2": [
+    2110351,
+    2110352,
+    2110353,
+    2110354,
+    2110355,
+    2110356,
+    2110357,
+    2110358,
+    2110359,
+    2110360
+   ],
+   "track": "event"
+  },
+  "635261": {
+   "hero": 1026,
+   "condition": 635261,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1026
+   ],
+   "value2": [
+    2132102,
+    2132103,
+    2132104,
+    2132105
+   ],
+   "track": "event"
+  },
+  "635262": {
+   "hero": 1026,
+   "condition": 635262,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29011,
+   "completeType": 69,
+   "completeNum": 1,
+   "value1": [
+    1026
+   ],
+   "value2": [],
+   "track": "unwired"
+  },
+  "635263": {
+   "hero": 1026,
+   "condition": 635263,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29068,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1026
+   ],
+   "value2": [
+    1204002
+   ],
+   "track": "event"
+  },
+  "635264": {
+   "hero": 1026,
+   "condition": 635264,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1026
+   ],
+   "value2": [
+    2130201,
+    2130202,
+    2130203,
+    2130204,
+    2130205
+   ],
+   "track": "event"
+  },
+  "635265": {
+   "hero": 1026,
+   "condition": 635265,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1026
+   ],
+   "value2": [
+    2130203,
+    2130204,
+    2130205
+   ],
+   "track": "event"
+  },
+  "635266": {
+   "hero": 1026,
+   "condition": 635266,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29027,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1026
+   ],
+   "value2": [
+    2110352,
+    2110353,
+    2110354,
+    2110355,
+    2110356,
+    2110357,
+    2110358,
+    2110359,
+    2110360
+   ],
+   "track": "event"
+  },
+  "635267": {
+   "hero": 1026,
+   "condition": 635267,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1026
+   ],
+   "value2": [
+    2130204,
+    2130205
+   ],
+   "track": "event"
+  },
+  "635268": {
+   "hero": 1026,
+   "condition": 635268,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29027,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1026
+   ],
+   "value2": [
+    2110353,
+    2110354,
+    2110355,
+    2110356,
+    2110357,
+    2110358,
+    2110359,
+    2110360
+   ],
+   "track": "event"
+  },
+  "635270": {
+   "hero": 1027,
+   "condition": 635270,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29025,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1027
+   ],
+   "value2": [
+    2110851,
+    2110852,
+    2110853,
+    2110854,
+    2110855,
+    2110856,
+    2110857,
+    2110858,
+    2110859,
+    2110860
+   ],
+   "track": "event"
+  },
+  "635271": {
+   "hero": 1027,
+   "condition": 635271,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29021,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1027
+   ],
+   "value2": [
+    2130601,
+    2130602,
+    2130603
+   ],
+   "track": "event"
+  },
+  "635272": {
+   "hero": 1027,
+   "condition": 635272,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1027
+   ],
+   "value2": [
+    34001,
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635273": {
+   "hero": 1027,
+   "condition": 635273,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29057,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1027
+   ],
+   "value2": [
+    1204002
+   ],
+   "track": "event"
+  },
+  "635274": {
+   "hero": 1027,
+   "condition": 635274,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29032,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1027
+   ],
+   "value2": [
+    2110291,
+    2110292,
+    2110293,
+    2110294,
+    2110191,
+    2110192,
+    2110193,
+    2110194
+   ],
+   "track": "event"
+  },
+  "635275": {
+   "hero": 1027,
+   "condition": 635275,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29025,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1027
+   ],
+   "value2": [
+    2110856,
+    2110857,
+    2110858,
+    2110859,
+    2110860
+   ],
+   "track": "event"
+  },
+  "635276": {
+   "hero": 1027,
+   "condition": 635276,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1027
+   ],
+   "value2": [
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635277": {
+   "hero": 1027,
+   "condition": 635277,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29021,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1027
+   ],
+   "value2": [
+    2130602,
+    2130603
+   ],
+   "track": "event"
+  },
+  "635278": {
+   "hero": 1027,
+   "condition": 635278,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29025,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1027
+   ],
+   "value2": [
+    2110858,
+    2110859,
+    2110860
+   ],
+   "track": "event"
+  },
+  "635280": {
+   "hero": 1028,
+   "condition": 635280,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1028
+   ],
+   "value2": [
+    34001,
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635281": {
+   "hero": 1028,
+   "condition": 635281,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29058,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1028
+   ],
+   "value2": [
+    1204000
+   ],
+   "track": "event"
+  },
+  "635282": {
+   "hero": 1028,
+   "condition": 635282,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29005,
+   "completeType": 25,
+   "completeNum": 1,
+   "value1": [
+    1028
+   ],
+   "value2": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ],
+   "track": "unwired"
+  },
+  "635283": {
+   "hero": 1028,
+   "condition": 635283,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29032,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1028
+   ],
+   "value2": [
+    2110291,
+    2110292,
+    2110293,
+    2110294,
+    2110191,
+    2110192,
+    2110193,
+    2110194
+   ],
+   "track": "event"
+  },
+  "635284": {
+   "hero": 1028,
+   "condition": 635284,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29001,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1028
+   ],
+   "value2": [
+    2110154,
+    2110155,
+    2110156,
+    2110157,
+    2110158,
+    2110159,
+    2110160
+   ],
+   "track": "event"
+  },
+  "635285": {
+   "hero": 1028,
+   "condition": 635285,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1028
+   ],
+   "value2": [
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635286": {
+   "hero": 1028,
+   "condition": 635286,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29005,
+   "completeType": 25,
+   "completeNum": 1,
+   "value1": [
+    1028
+   ],
+   "value2": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ],
+   "track": "unwired"
+  },
+  "635287": {
+   "hero": 1028,
+   "condition": 635287,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29001,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1028
+   ],
+   "value2": [
+    2110156,
+    2110157,
+    2110158,
+    2110159,
+    2110160
+   ],
+   "track": "event"
+  },
+  "635288": {
+   "hero": 1028,
+   "condition": 635288,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29005,
+   "completeType": 25,
+   "completeNum": 1,
+   "value1": [
+    1028
+   ],
+   "value2": [
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ],
+   "track": "unwired"
+  },
+  "635290": {
+   "hero": 1029,
+   "condition": 635290,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29026,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1029
+   ],
+   "value2": [
+    2110251,
+    2110252,
+    2110253,
+    2110254,
+    2110255,
+    2110256,
+    2110257,
+    2110258,
+    2110259,
+    2110260
+   ],
+   "track": "event"
+  },
+  "635291": {
+   "hero": 1029,
+   "condition": 635291,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1029
+   ],
+   "value2": [
+    2130201,
+    2130202,
+    2130203,
+    2130204,
+    2130205
+   ],
+   "track": "event"
+  },
+  "635292": {
+   "hero": 1029,
+   "condition": 635292,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1029
+   ],
+   "value2": [
+    34001,
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635293": {
+   "hero": 1029,
+   "condition": 635293,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29067,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1029
+   ],
+   "value2": [
+    1204002
+   ],
+   "track": "event"
+  },
+  "635294": {
+   "hero": 1029,
+   "condition": 635294,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29021,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1029
+   ],
+   "value2": [
+    2130602,
+    2130603
+   ],
+   "track": "event"
+  },
+  "635295": {
+   "hero": 1029,
+   "condition": 635295,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1029
+   ],
+   "value2": [
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635296": {
+   "hero": 1029,
+   "condition": 635296,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1029
+   ],
+   "value2": [
+    2130203,
+    2130204,
+    2130205
+   ],
+   "track": "event"
+  },
+  "635297": {
+   "hero": 1029,
+   "condition": 635297,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29026,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1029
+   ],
+   "value2": [
+    2110255,
+    2110256,
+    2110257,
+    2110258,
+    2110259,
+    2110260
+   ],
+   "track": "event"
+  },
+  "635298": {
+   "hero": 1029,
+   "condition": 635298,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1029
+   ],
+   "value2": [
+    2130204,
+    2130205
+   ],
+   "track": "event"
+  },
+  "635300": {
+   "hero": 1030,
+   "condition": 635300,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29027,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1030
+   ],
+   "value2": [
+    2110351,
+    2110352,
+    2110353,
+    2110354,
+    2110355,
+    2110356,
+    2110357,
+    2110358,
+    2110359,
+    2110360
+   ],
+   "track": "event"
+  },
+  "635301": {
+   "hero": 1030,
+   "condition": 635301,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1030
+   ],
+   "value2": [
+    2132001,
+    2132002,
+    2132003,
+    2132004,
+    2132005
+   ],
+   "track": "event"
+  },
+  "635302": {
+   "hero": 1030,
+   "condition": 635302,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1030
+   ],
+   "value2": [
+    34001,
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635303": {
+   "hero": 1030,
+   "condition": 635303,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29065,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1030
+   ],
+   "value2": [
+    1204000
+   ],
+   "track": "event"
+  },
+  "635304": {
+   "hero": 1030,
+   "condition": 635304,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29032,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1030
+   ],
+   "value2": [
+    2110291,
+    2110292,
+    2110293,
+    2110294,
+    2110191,
+    2110192,
+    2110193,
+    2110194
+   ],
+   "track": "event"
+  },
+  "635305": {
+   "hero": 1030,
+   "condition": 635305,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1030
+   ],
+   "value2": [
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635306": {
+   "hero": 1030,
+   "condition": 635306,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1030
+   ],
+   "value2": [
+    2132003,
+    2132004,
+    2132005
+   ],
+   "track": "event"
+  },
+  "635307": {
+   "hero": 1030,
+   "condition": 635307,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29027,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1030
+   ],
+   "value2": [
+    2110353,
+    2110354,
+    2110355,
+    2110356,
+    2110357,
+    2110358,
+    2110359,
+    2110360
+   ],
+   "track": "event"
+  },
+  "635308": {
+   "hero": 1030,
+   "condition": 635308,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1030
+   ],
+   "value2": [
+    2132004,
+    2132005
+   ],
+   "track": "event"
+  },
+  "635310": {
+   "hero": 1031,
+   "condition": 635310,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29025,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1031
+   ],
+   "value2": [
+    2110851,
+    2110852,
+    2110853,
+    2110854,
+    2110855,
+    2110856,
+    2110857,
+    2110858,
+    2110859,
+    2110860
+   ],
+   "track": "event"
+  },
+  "635311": {
+   "hero": 1031,
+   "condition": 635311,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29059,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1031
+   ],
+   "value2": [
+    1204000
+   ],
+   "track": "event"
+  },
+  "635312": {
+   "hero": 1031,
+   "condition": 635312,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1031
+   ],
+   "value2": [
+    34001,
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635313": {
+   "hero": 1031,
+   "condition": 635313,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1031
+   ],
+   "value2": [
+    2132101,
+    2132102,
+    2132103,
+    2132104,
+    2132105
+   ],
+   "track": "event"
+  },
+  "635314": {
+   "hero": 1031,
+   "condition": 635314,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29025,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1031
+   ],
+   "value2": [
+    2110856,
+    2110857,
+    2110858,
+    2110859,
+    2110860
+   ],
+   "track": "event"
+  },
+  "635315": {
+   "hero": 1031,
+   "condition": 635315,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1031
+   ],
+   "value2": [
+    2132102,
+    2132103,
+    2132104,
+    2132105
+   ],
+   "track": "event"
+  },
+  "635316": {
+   "hero": 1031,
+   "condition": 635316,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1031
+   ],
+   "value2": [
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635317": {
+   "hero": 1031,
+   "condition": 635317,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1031
+   ],
+   "value2": [
+    2132103,
+    2132104,
+    2132105
+   ],
+   "track": "event"
+  },
+  "635318": {
+   "hero": 1031,
+   "condition": 635318,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29025,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1031
+   ],
+   "value2": [
+    2110858,
+    2110859,
+    2110860
+   ],
+   "track": "event"
+  },
+  "635320": {
+   "hero": 1032,
+   "condition": 635320,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29001,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1032
+   ],
+   "value2": [
+    2110151,
+    2110152,
+    2110153,
+    2110154,
+    2110155,
+    2110156,
+    2110157,
+    2110158,
+    2110159,
+    2110160
+   ],
+   "track": "event"
+  },
+  "635321": {
+   "hero": 1032,
+   "condition": 635321,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1032
+   ],
+   "value2": [
+    2130201,
+    2130202,
+    2130203,
+    2130204,
+    2130205
+   ],
+   "track": "event"
+  },
+  "635322": {
+   "hero": 1032,
+   "condition": 635322,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1032
+   ],
+   "value2": [
+    34001,
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635323": {
+   "hero": 1032,
+   "condition": 635323,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29060,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1032
+   ],
+   "value2": [
+    1204002
+   ],
+   "track": "event"
+  },
+  "635324": {
+   "hero": 1032,
+   "condition": 635324,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29060,
+   "completeType": 68,
+   "completeNum": 1,
+   "value1": [
+    1032
+   ],
+   "value2": [
+    1204012
+   ],
+   "track": "event"
+  },
+  "635325": {
+   "hero": 1032,
+   "condition": 635325,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29001,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1032
+   ],
+   "value2": [
+    2110154,
+    2110155,
+    2110156,
+    2110157,
+    2110158,
+    2110159,
+    2110160
+   ],
+   "track": "event"
+  },
+  "635326": {
+   "hero": 1032,
+   "condition": 635326,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1032
+   ],
+   "value2": [
+    2130203,
+    2130204,
+    2130205
+   ],
+   "track": "event"
+  },
+  "635327": {
+   "hero": 1032,
+   "condition": 635327,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29001,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1032
+   ],
+   "value2": [
+    2110156,
+    2110157,
+    2110158,
+    2110159,
+    2110160
+   ],
+   "track": "event"
+  },
+  "635328": {
+   "hero": 1032,
+   "condition": 635328,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1032
+   ],
+   "value2": [
+    2130204,
+    2130205
+   ],
+   "track": "event"
+  },
+  "635330": {
+   "hero": 1033,
+   "condition": 635330,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29001,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1033
+   ],
+   "value2": [
+    2110151,
+    2110152,
+    2110153,
+    2110154,
+    2110155,
+    2110156,
+    2110157,
+    2110158,
+    2110159,
+    2110160
+   ],
+   "track": "event"
+  },
+  "635331": {
+   "hero": 1033,
+   "condition": 635331,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1033
+   ],
+   "value2": [
+    2132101,
+    2132102,
+    2132103,
+    2132104,
+    2132105
+   ],
+   "track": "event"
+  },
+  "635332": {
+   "hero": 1033,
+   "condition": 635332,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1033
+   ],
+   "value2": [
+    34001,
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635333": {
+   "hero": 1033,
+   "condition": 635333,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29062,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1033
+   ],
+   "value2": [
+    1204002
+   ],
+   "track": "event"
+  },
+  "635334": {
+   "hero": 1033,
+   "condition": 635334,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29032,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1033
+   ],
+   "value2": [
+    2110291,
+    2110292,
+    2110293,
+    2110294,
+    2110191,
+    2110192,
+    2110193,
+    2110194
+   ],
+   "track": "event"
+  },
+  "635335": {
+   "hero": 1033,
+   "condition": 635335,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1033
+   ],
+   "value2": [
+    2132102,
+    2132103,
+    2132104,
+    2132105
+   ],
+   "track": "event"
+  },
+  "635336": {
+   "hero": 1033,
+   "condition": 635336,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29001,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1033
+   ],
+   "value2": [
+    2110154,
+    2110155,
+    2110156,
+    2110157,
+    2110158,
+    2110159,
+    2110160
+   ],
+   "track": "event"
+  },
+  "635337": {
+   "hero": 1033,
+   "condition": 635337,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1033
+   ],
+   "value2": [
+    2132103,
+    2132104,
+    2132105
+   ],
+   "track": "event"
+  },
+  "635338": {
+   "hero": 1033,
+   "condition": 635338,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29001,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1033
+   ],
+   "value2": [
+    2110156,
+    2110157,
+    2110158,
+    2110159,
+    2110160
+   ],
+   "track": "event"
+  },
+  "635340": {
+   "hero": 1034,
+   "condition": 635340,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29027,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1034
+   ],
+   "value2": [
+    2110351,
+    2110352,
+    2110353,
+    2110354,
+    2110355,
+    2110356,
+    2110357,
+    2110358,
+    2110359,
+    2110360
+   ],
+   "track": "event"
+  },
+  "635341": {
+   "hero": 1034,
+   "condition": 635341,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29021,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1034
+   ],
+   "value2": [
+    2130501,
+    2130502,
+    2130503
+   ],
+   "track": "event"
+  },
+  "635342": {
+   "hero": 1034,
+   "condition": 635342,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29011,
+   "completeType": 69,
+   "completeNum": 1,
+   "value1": [
+    1034
+   ],
+   "value2": [],
+   "track": "unwired"
+  },
+  "635343": {
+   "hero": 1034,
+   "condition": 635343,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29061,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1034
+   ],
+   "value2": [
+    1204001
+   ],
+   "track": "event"
+  },
+  "635344": {
+   "hero": 1034,
+   "condition": 635344,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29021,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1034
+   ],
+   "value2": [
+    2131201,
+    2131202,
+    2131203
+   ],
+   "track": "event"
+  },
+  "635345": {
+   "hero": 1034,
+   "condition": 635345,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29021,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1034
+   ],
+   "value2": [
+    2130502,
+    2130503
+   ],
+   "track": "event"
+  },
+  "635346": {
+   "hero": 1034,
+   "condition": 635346,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29021,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1034
+   ],
+   "value2": [
+    2131202,
+    2131203
+   ],
+   "track": "event"
+  },
+  "635347": {
+   "hero": 1034,
+   "condition": 635347,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29027,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1034
+   ],
+   "value2": [
+    2110352,
+    2110353,
+    2110354,
+    2110355,
+    2110356,
+    2110357,
+    2110358,
+    2110359,
+    2110360
+   ],
+   "track": "event"
+  },
+  "635348": {
+   "hero": 1034,
+   "condition": 635348,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29061,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1034
+   ],
+   "value2": [
+    1204000
+   ],
+   "track": "event"
+  },
+  "635350": {
+   "hero": 1035,
+   "condition": 635350,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29028,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1035
+   ],
+   "value2": [
+    2110451,
+    2110452,
+    2110453,
+    2110454,
+    2110455,
+    2110456,
+    2110457,
+    2110458,
+    2110459,
+    2110460
+   ],
+   "track": "event"
+  },
+  "635351": {
+   "hero": 1035,
+   "condition": 635351,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1035
+   ],
+   "value2": [
+    2132101,
+    2132102,
+    2132103,
+    2132104,
+    2132105
+   ],
+   "track": "event"
+  },
+  "635352": {
+   "hero": 1035,
+   "condition": 635352,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1035
+   ],
+   "value2": [
+    34001,
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635353": {
+   "hero": 1035,
+   "condition": 635353,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29063,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1035
+   ],
+   "value2": [
+    1204000
+   ],
+   "track": "event"
+  },
+  "635354": {
+   "hero": 1035,
+   "condition": 635354,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29032,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1035
+   ],
+   "value2": [
+    2110291,
+    2110292,
+    2110293,
+    2110294,
+    2110191,
+    2110192,
+    2110193,
+    2110194
+   ],
+   "track": "event"
+  },
+  "635355": {
+   "hero": 1035,
+   "condition": 635355,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1035
+   ],
+   "value2": [
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635356": {
+   "hero": 1035,
+   "condition": 635356,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1035
+   ],
+   "value2": [
+    2132102,
+    2132103,
+    2132104,
+    2132105
+   ],
+   "track": "event"
+  },
+  "635357": {
+   "hero": 1035,
+   "condition": 635357,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1035
+   ],
+   "value2": [
+    2132103,
+    2132104,
+    2132105
+   ],
+   "track": "event"
+  },
+  "635358": {
+   "hero": 1035,
+   "condition": 635358,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29028,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1035
+   ],
+   "value2": [
+    2110452,
+    2110453,
+    2110454,
+    2110455,
+    2110456,
+    2110457,
+    2110458,
+    2110459,
+    2110460
+   ],
+   "track": "event"
+  },
+  "635360": {
+   "hero": 1036,
+   "condition": 635360,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29001,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1036
+   ],
+   "value2": [
+    2110151,
+    2110152,
+    2110153,
+    2110154,
+    2110155,
+    2110156,
+    2110157,
+    2110158,
+    2110159,
+    2110160
+   ],
+   "track": "event"
+  },
+  "635361": {
+   "hero": 1036,
+   "condition": 635361,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1036
+   ],
+   "value2": [
+    2132101,
+    2132102,
+    2132103,
+    2132104,
+    2132105
+   ],
+   "track": "event"
+  },
+  "635362": {
+   "hero": 1036,
+   "condition": 635362,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1036
+   ],
+   "value2": [
+    34001,
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635363": {
+   "hero": 1036,
+   "condition": 635363,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29064,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1036
+   ],
+   "value2": [
+    1204002
+   ],
+   "track": "event"
+  },
+  "635364": {
+   "hero": 1036,
+   "condition": 635364,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29032,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1036
+   ],
+   "value2": [
+    2110291,
+    2110292,
+    2110293,
+    2110294,
+    2110191,
+    2110192,
+    2110193,
+    2110194
+   ],
+   "track": "event"
+  },
+  "635365": {
+   "hero": 1036,
+   "condition": 635365,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29027,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1036
+   ],
+   "value2": [
+    2110352,
+    2110353,
+    2110354,
+    2110355,
+    2110356,
+    2110357,
+    2110358,
+    2110359,
+    2110360
+   ],
+   "track": "event"
+  },
+  "635366": {
+   "hero": 1036,
+   "condition": 635366,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1036
+   ],
+   "value2": [
+    2130203,
+    2130204,
+    2130205
+   ],
+   "track": "event"
+  },
+  "635367": {
+   "hero": 1036,
+   "condition": 635367,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1036
+   ],
+   "value2": [
+    2130204,
+    2130205
+   ],
+   "track": "event"
+  },
+  "635368": {
+   "hero": 1036,
+   "condition": 635368,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29027,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1036
+   ],
+   "value2": [
+    2110353,
+    2110354,
+    2110355,
+    2110356,
+    2110357,
+    2110358,
+    2110359,
+    2110360
+   ],
+   "track": "event"
+  },
+  "635390": {
+   "hero": 1039,
+   "condition": 635390,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29026,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1039
+   ],
+   "value2": [
+    2110251,
+    2110252,
+    2110253,
+    2110254,
+    2110255,
+    2110256,
+    2110257,
+    2110258,
+    2110259,
+    2110260
+   ],
+   "track": "event"
+  },
+  "635391": {
+   "hero": 1039,
+   "condition": 635391,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1039
+   ],
+   "value2": [
+    2130203,
+    2130204,
+    2130205
+   ],
+   "track": "event"
+  },
+  "635392": {
+   "hero": 1039,
+   "condition": 635392,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1039
+   ],
+   "value2": [
+    34001,
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635393": {
+   "hero": 1039,
+   "condition": 635393,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29066,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1039
+   ],
+   "value2": [
+    1204000
+   ],
+   "track": "event"
+  },
+  "635394": {
+   "hero": 1039,
+   "condition": 635394,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29027,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1039
+   ],
+   "value2": [
+    2110352,
+    2110353,
+    2110354,
+    2110355,
+    2110356,
+    2110357,
+    2110358,
+    2110359,
+    2110360
+   ],
+   "track": "event"
+  },
+  "635395": {
+   "hero": 1039,
+   "condition": 635395,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1039
+   ],
+   "value2": [
+    2130201,
+    2130202,
+    2130203,
+    2130204,
+    2130205
+   ],
+   "track": "event"
+  },
+  "635396": {
+   "hero": 1039,
+   "condition": 635396,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1039
+   ],
+   "value2": [
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635397": {
+   "hero": 1039,
+   "condition": 635397,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1039
+   ],
+   "value2": [
+    2130204,
+    2130205
+   ],
+   "track": "event"
+  },
+  "635398": {
+   "hero": 1039,
+   "condition": 635398,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29027,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1039
+   ],
+   "value2": [
+    2110353,
+    2110354,
+    2110355,
+    2110356,
+    2110357,
+    2110358,
+    2110359,
+    2110360
+   ],
+   "track": "event"
+  },
+  "635400": {
+   "hero": 1040,
+   "condition": 635400,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29026,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1040
+   ],
+   "value2": [
+    2110251,
+    2110252,
+    2110253,
+    2110254,
+    2110255,
+    2110256,
+    2110257,
+    2110258,
+    2110259,
+    2110260
+   ],
+   "track": "event"
+  },
+  "635401": {
+   "hero": 1040,
+   "condition": 635401,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1040
+   ],
+   "value2": [
+    2130201,
+    2130202,
+    2130203,
+    2130204,
+    2130205
+   ],
+   "track": "event"
+  },
+  "635402": {
+   "hero": 1040,
+   "condition": 635402,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1040
+   ],
+   "value2": [
+    34001,
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635403": {
+   "hero": 1040,
+   "condition": 635403,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29069,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1040
+   ],
+   "value2": [
+    1204002
+   ],
+   "track": "event"
+  },
+  "635404": {
+   "hero": 1040,
+   "condition": 635404,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1040
+   ],
+   "value2": [
+    2132103,
+    2132104,
+    2132105
+   ],
+   "track": "event"
+  },
+  "635405": {
+   "hero": 1040,
+   "condition": 635405,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1040
+   ],
+   "value2": [
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635406": {
+   "hero": 1040,
+   "condition": 635406,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1040
+   ],
+   "value2": [
+    2130203,
+    2130204,
+    2130205
+   ],
+   "track": "event"
+  },
+  "635407": {
+   "hero": 1040,
+   "condition": 635407,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1040
+   ],
+   "value2": [
+    2132104,
+    2132105
+   ],
+   "track": "event"
+  },
+  "635408": {
+   "hero": 1040,
+   "condition": 635408,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29026,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1040
+   ],
+   "value2": [
+    2110255,
+    2110256,
+    2110257,
+    2110258,
+    2110259,
+    2110260
+   ],
+   "track": "event"
+  },
+  "635970": {
+   "hero": 1197,
+   "condition": 635970,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29026,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1197
+   ],
+   "value2": [
+    2110251,
+    2110252,
+    2110253,
+    2110254,
+    2110255,
+    2110256,
+    2110257,
+    2110258,
+    2110259,
+    2110260
+   ],
+   "track": "event"
+  },
+  "635971": {
+   "hero": 1197,
+   "condition": 635971,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29021,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1197
+   ],
+   "value2": [
+    2131201,
+    2131202,
+    2131203
+   ],
+   "track": "event"
+  },
+  "635972": {
+   "hero": 1197,
+   "condition": 635972,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1197
+   ],
+   "value2": [
+    34001,
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635973": {
+   "hero": 1197,
+   "condition": 635973,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29097,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1197
+   ],
+   "value2": [
+    1204000
+   ],
+   "track": "event"
+  },
+  "635974": {
+   "hero": 1197,
+   "condition": 635974,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29011,
+   "completeType": 69,
+   "completeNum": 1,
+   "value1": [
+    1197
+   ],
+   "value2": [],
+   "track": "unwired"
+  },
+  "635975": {
+   "hero": 1197,
+   "condition": 635975,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29010,
+   "completeType": 67,
+   "completeNum": 1,
+   "value1": [
+    1197
+   ],
+   "value2": [
+    34002,
+    34003,
+    34004,
+    34005,
+    34006,
+    34007,
+    34008,
+    34009,
+    34010,
+    34011,
+    34012,
+    34013,
+    34014,
+    34015
+   ],
+   "track": "unwired"
+  },
+  "635976": {
+   "hero": 1197,
+   "condition": 635976,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29026,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1197
+   ],
+   "value2": [
+    2110253,
+    2110254,
+    2110255,
+    2110256,
+    2110257,
+    2110258,
+    2110259,
+    2110260
+   ],
+   "track": "event"
+  },
+  "635977": {
+   "hero": 1197,
+   "condition": 635977,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29021,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1197
+   ],
+   "value2": [
+    2131202,
+    2131203
+   ],
+   "track": "event"
+  },
+  "635978": {
+   "hero": 1197,
+   "condition": 635978,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29026,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1197
+   ],
+   "value2": [
+    2110255,
+    2110256,
+    2110257,
+    2110258,
+    2110259,
+    2110260
+   ],
+   "track": "event"
+  },
+  "635980": {
+   "hero": 1198,
+   "condition": 635980,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29026,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1198
+   ],
+   "value2": [
+    2110251,
+    2110252,
+    2110253,
+    2110254,
+    2110255,
+    2110256,
+    2110257,
+    2110258,
+    2110259,
+    2110260
+   ],
+   "track": "event"
+  },
+  "635981": {
+   "hero": 1198,
+   "condition": 635981,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29021,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1198
+   ],
+   "value2": [
+    2131201,
+    2131202,
+    2131203
+   ],
+   "track": "event"
+  },
+  "635982": {
+   "hero": 1198,
+   "condition": 635982,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29011,
+   "completeType": 69,
+   "completeNum": 1,
+   "value1": [
+    1198
+   ],
+   "value2": [],
+   "track": "unwired"
+  },
+  "635983": {
+   "hero": 1198,
+   "condition": 635983,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29098,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1198
+   ],
+   "value2": [
+    1204000
+   ],
+   "track": "event"
+  },
+  "635984": {
+   "hero": 1198,
+   "condition": 635984,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1198
+   ],
+   "value2": [
+    2132101,
+    2132102,
+    2132103,
+    2132104,
+    2132105
+   ],
+   "track": "event"
+  },
+  "635985": {
+   "hero": 1198,
+   "condition": 635985,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1198
+   ],
+   "value2": [
+    2132102,
+    2132103,
+    2132104,
+    2132105
+   ],
+   "track": "event"
+  },
+  "635986": {
+   "hero": 1198,
+   "condition": 635986,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1198
+   ],
+   "value2": [
+    2132103,
+    2132104,
+    2132105
+   ],
+   "track": "event"
+  },
+  "635987": {
+   "hero": 1198,
+   "condition": 635987,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29021,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1198
+   ],
+   "value2": [
+    2131202,
+    2131203
+   ],
+   "track": "event"
+  },
+  "635988": {
+   "hero": 1198,
+   "condition": 635988,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29098,
+   "completeType": 68,
+   "completeNum": 1,
+   "value1": [
+    1198
+   ],
+   "value2": [
+    1204015
+   ],
+   "track": "event"
+  },
+  "635990": {
+   "hero": 1199,
+   "condition": 635990,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29020,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1199
+   ],
+   "value2": [
+    2130201,
+    2130202,
+    2130203,
+    2130204,
+    2130205
+   ],
+   "track": "event"
+  },
+  "635991": {
+   "hero": 1199,
+   "condition": 635991,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29021,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1199
+   ],
+   "value2": [
+    2130501,
+    2130502,
+    2130503,
+    2130601,
+    2130602,
+    2130603,
+    2130701,
+    2130702,
+    2130703,
+    2131201,
+    2131202,
+    2131203,
+    2131301,
+    2131302,
+    2131303,
+    2131304
+   ],
+   "track": "event"
+  },
+  "635992": {
+   "hero": 1199,
+   "condition": 635992,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29011,
+   "completeType": 69,
+   "completeNum": 1,
+   "value1": [
+    1199
+   ],
+   "value2": [],
+   "track": "unwired"
+  },
+  "635993": {
+   "hero": 1199,
+   "condition": 635993,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29099,
+   "completeType": 68,
+   "completeNum": 3,
+   "value1": [
+    1199
+   ],
+   "value2": [
+    1204000
+   ],
+   "track": "event"
+  },
+  "635994": {
+   "hero": 1199,
+   "condition": 635994,
+   "gift": 780002,
+   "favor": 50,
+   "jump": 29001,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1199
+   ],
+   "value2": [
+    2110151,
+    2110152,
+    2110153,
+    2110154,
+    2110155,
+    2110156,
+    2110157,
+    2110158,
+    2110159,
+    2110160
+   ],
+   "track": "event"
+  },
+  "635995": {
+   "hero": 1199,
+   "condition": 635995,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29099,
+   "completeType": 68,
+   "completeNum": 1,
+   "value1": [
+    1199
+   ],
+   "value2": [
+    1204003
+   ],
+   "track": "event"
+  },
+  "635996": {
+   "hero": 1199,
+   "condition": 635996,
+   "gift": 780003,
+   "favor": 60,
+   "jump": 29001,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1199
+   ],
+   "value2": [
+    2110154,
+    2110155,
+    2110156,
+    2110157,
+    2110158,
+    2110159,
+    2110160
+   ],
+   "track": "event"
+  },
+  "635997": {
+   "hero": 1199,
+   "condition": 635997,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29021,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1199
+   ],
+   "value2": [
+    2130502,
+    2130503,
+    2130602,
+    2130603,
+    2130702,
+    2130703,
+    2131202,
+    2131203,
+    2131302,
+    2131303,
+    2131304
+   ],
+   "track": "event"
+  },
+  "635998": {
+   "hero": 1199,
+   "condition": 635998,
+   "gift": 780004,
+   "favor": 75,
+   "jump": 29001,
+   "completeType": 11,
+   "completeNum": 1,
+   "value1": [
+    1199
+   ],
+   "value2": [
+    2110156,
+    2110157,
+    2110158,
+    2110159,
+    2110160
+   ],
+   "track": "event"
+  }
+ }
+}

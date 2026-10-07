@@ -69,6 +69,7 @@ async def run(database: Path, seconds: float) -> None:
     gift_packages = GiftPackageService(store, economy)
     collection = CollectionService(store, economy)
     favor = FavorService(store, economy, clock=clock.now)
+    economy.attach_favor(favor)
     appearance = AppearanceService(store, economy)
     appearance_shop = AppearanceShopService(store, economy, appearance)
     mail = MailService(store, economy, clock=clock.now)

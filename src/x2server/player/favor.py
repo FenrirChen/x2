@@ -176,6 +176,49 @@ class FavorService:
             state["level"] += 1
         return state
 
+    def grant_favor(self, player_id, hero_id, amount):
+        """Add 好感经验 to one hero and report the change.
+
+        心愿任务 的领取 pays two things: the task's gift group (an item group, paid by
+        the economy) and its own ``FavorabilityGift`` - a plain experience amount
+        (50/60/75 in the client's table) that goes onto the named god through the same
+        curve a touch or a 送礼 uses. This is the entry point for the second half, so a
+        task claim and a manual interaction cannot drift apart.
+
+        Runs inside the caller's transaction (``EconomyService.claim_favor_task`` opens
+        one); it must not start its own, or a nested COMMIT would break that savepoint.
+
+        Returns the L2C_FavorChangeInfo push for the caller to attach, so the 角色页 bar
+        moves without the page asking again. An unusable hero or a zero gain answers
+        with no push rather than a fabricated one.
+        """
+        if hero_id <= 0 or amount <= 0 or hero_id not in self.heroes:
+            LOGGER.info("favor grant skipped player=%s hero=%s amount=%s",
+                        player_id, hero_id, amount)
+            return ()
+        snapshot = self.store.get(player_id)["snapshot"]
+        target = next((h for h in snapshot.get("heroes", [])
+                       if h["id"] == hero_id and h.get("state") == 2), None)
+        if target is None:
+            LOGGER.info("favor grant skipped player=%s hero=%s amount=%s (not owned)",
+                        player_id, hero_id, amount)
+            return ()
+        before = favor_state(target, self.heroes[hero_id]["InitialLevel"])
+        state = before.copy()
+        state["exp"] += amount
+        self._advance(hero_id, state, target.get("favor_breaks", []))
+        target["favor"] = state
+        self.economy.save_snapshot(player_id, snapshot)
+        LOGGER.info("favor granted player=%s hero=%s gain=%s %s/%s -> %s/%s",
+                    player_id, hero_id, amount, before["level"], before["exp"],
+                    state["level"], state["exp"])
+        # type 0 = E_AddFavorType.FAVOR_TASK, the bar animation for a task payout
+        # (a manual tap is 6, a gift is 7). Same message the two other sources push.
+        change = FAVOR_CHANGE_INFO.encode({"beforeLevel": before["level"],
+            "beforeExp": before["exp"], "afterLevel": state["level"], "afterExp": state["exp"],
+            "heroID": hero_id, "type": 0})
+        return (OutboundMessage("L2C_FavorChangeInfo", {"data": [change]}),)
+
     def _break(self, player_id, hero_id, hero):
         failure = OutboundMessage("L2C_FavorBreak", {"code": 13, "heroId": hero_id})
         if not hero:
@@ -275,6 +318,13 @@ class FavorService:
             count = (previous.get("count", 0) if previous.get("day") == day else 0) + num
             target["favor_gifts"] = {"day": day, "count": count}
             self.economy.save_snapshot(player_id, snapshot)
+            # 好感日常任务 E_SendDesignativeHeroGift(68) 数的是「给指定英雄送了指定的
+            # 礼物」: hero 与 item 就是这条条件的两个维度, num 是一次送出的数量(条件的
+            # CompleteNum 多为 3, 一次送 3 个与分三次各送 1 个都算达标)。token 带上
+            # hero/item/day/累计次数, 重放的同一请求不会再计一次。
+            self.economy.credit_favor_task(
+                player_id, f"gift:{hero_id}:{item_id}:{day}:{count}",
+                self.economy.TASK_EVENT_SEND_DESIGNATIVE_HERO_GIFT, hero_id, item_id, num)
             self.economy.achievements.record(player_id, f'gift:{hero_id}:{day}:{count}', 18, num)
         values.update(code=10, newExp=state["exp"], newLevel=state["level"], giftsTimes=count)
         change = FAVOR_CHANGE_INFO.encode({"beforeLevel": before["level"], "beforeExp": before["exp"],

@@ -27,6 +27,16 @@ class UnresolvedEconomy(ValueError):
     """The entire operation must be withheld, never partially granted."""
 
 
+# 北京时区的「本地日」整数键: 恰好在北京时间的 00:00 翻页, 用于好感日常任务的按日落库
+# (favor_daily_tasks.day)。favor.py 里那份按天的计数表用的是同样一条日界线。
+DAY_SECONDS = 86400
+BEIJING_OFFSET = 8 * 3600
+
+
+def day_index(now: int) -> int:
+    return (int(now) + BEIJING_OFFSET) // DAY_SECONDS
+
+
 class EconomyService:
     CAUSALITY_CARDS = {1202010: 10, 1202011: 20, 1202012: 30,
                        1202013: 60, 1202014: 100}  # Item.Used -> Gift.Num
@@ -58,8 +68,21 @@ class EconomyService:
     TASK_EVENT_LOGIN_DAY = 58          # E_LoginDay: one per local day the player logs in
     TASK_EVENT_FAVORABILITY_LEVEL = 73  # E_FavorabilityLevel: 好感等级达标的英雄数
     TASK_EVENT_CUSTOMS_ENTRY = 87      # E_CustomsEntry
+    TASK_EVENT_FAVORABILITY_DAILY_TASK = 72  # E_FavorabilityDailyTask: 完成一次心愿任务
+    # 好感日常任务(心愿任务)自己的两个条件类型 (data/favor_task_catalog.json 的 track=event):
+    #   11 E_CarryHeroCustomsPass    通关结算时队伍里带着指定英雄
+    #   68 E_SendDesignativeHeroGift 给指定英雄送指定的礼物
+    TASK_EVENT_CARRY_HERO_CUSTOMS_PASS = 11
+    TASK_EVENT_SEND_DESIGNATIVE_HERO_GIFT = 68
     # GameTaskType.CHALLENGE: 60 tasks in 10 groups, no period, no rollover.
     CHALLENGE_KIND = 3
+    # GameTaskType.FAVORDAILY. 心愿任务由玩家在许愿页签自己选(客户端的选择页 ->
+    # C2L_AcceptFavorTask), 不像每日/周常那样按等级自动开行; 接取记录按本地日存, 00:00
+    # 自动翻页, 所以不需要定时任务。
+    FAVOR_DAILY_KIND = 6
+    # QueryExtraType.GENMIND. C2L_GameTask(type=6) 的 extraType 把同一个请求分成两问:
+    # 0 = 我已接的心愿任务, 1 = 「开始分析」按钮生成的候选。见 favor_task_values。
+    QUERY_EXTRA_GENMIND = 1
     # GameTaskType.CHAPTER (7): the chapter DP query and its DP 宝箱 claims.
     CHAPTER_DP_KIND = 7
     POWER_BUY_ITEM = 1237900
@@ -86,6 +109,19 @@ class EconomyService:
                      if challenge_path.is_file() else None)
         self.challenge_tasks = {int(k): v for k, v in (challenge or {}).get("tasks", {}).items()}
         self.challenge_boxes = {int(k): v for k, v in (challenge or {}).get("boxes", {}).items()}
+        # 好感日常任务 (心愿任务). 345 条 (39 英雄各 8~9 条), 由玩家的 C2L_AcceptFavorTask
+        # 决定今天做哪几条, 所以它和挑战任务一样有自己的存储与下发方法, 不走 self.tasks
+        # 那套「按等级自动开行」的每日/周常机制。favor_task_catalog.json 从客户端自己的
+        # FavorabilityTask / TaskCondition 两张表生成, 只保留服务端能亲眼见证的条件。
+        favor_path = files("x2server").joinpath("data/favor_task_catalog.json")
+        favor = (json.loads(favor_path.read_text(encoding="utf-8"))
+                 if favor_path.is_file() else None)
+        self.favor_tasks = {int(k): v for k, v in (favor or {}).get("tasks", {}).items()}
+        self.favor_task_daily_limit = int((favor or {}).get("dailyLimit", 0))
+        # FavorService (player/favor.py). 任务的 FavorabilityGift 要加到英雄身上, 而好感
+        # 曲线与落库都在那边; tools/local_game_server.py 在两边都建好之后挂上来, 与
+        # achievements 同一种接线。None 时只发道具奖、不发好感。
+        self.favor = None
         # Chapter DP gates and thresholds, from the client's own ChapterInfo table.
         dp_path = files("x2server").joinpath("data/chapter_dp.json")
         self.chapter_dp_catalog = (json.loads(dp_path.read_text(encoding="utf-8"))["chapters"]
@@ -170,6 +206,15 @@ class EconomyService:
                 player_id INTEGER NOT NULL, kind INTEGER NOT NULL, start INTEGER NOT NULL,
                 task_id INTEGER NOT NULL, progress INTEGER NOT NULL, claimed INTEGER NOT NULL,
                 PRIMARY KEY(player_id,kind,start,task_id))""")
+            # 好感日常任务: 今天接了哪几条、做到哪、领没领。键含本地日(day_index), 所以
+            # 00:00 自动翻页、同日重启结果不变, 与 favor_touch_log 同一套写法。任务 id 是
+            # 635xxx, 与 economy_tasks 里的每日/周常/挑战 id 不重叠, 但也不能混进那张表:
+            # ensure_periods / _event 只按 self.tasks 和 challenge_tasks 扫表, 混进去会被
+            # 误扫误删。
+            store.db.execute("""CREATE TABLE IF NOT EXISTS favor_daily_tasks (
+                player_id INTEGER NOT NULL, day INTEGER NOT NULL, task_id INTEGER NOT NULL,
+                progress INTEGER NOT NULL DEFAULT 0, claimed INTEGER NOT NULL DEFAULT 0,
+                PRIMARY KEY(player_id,day,task_id))""")
             store.db.execute("""CREATE TABLE IF NOT EXISTS battle_costs (
                 uuid TEXT PRIMARY KEY, player_id INTEGER NOT NULL, amount INTEGER NOT NULL,
                 refunded INTEGER NOT NULL DEFAULT 0)""")
@@ -913,8 +958,235 @@ class EconomyService:
         except UnresolvedEconomy:
             return result
 
+    # -- 心愿任务 (好感日常, GameTaskType 6) --------------------------------
+    #
+    # 终端 -> 神格心愿任务 Tab 的调用链:
+    #
+    #   打开 Tab      C2L_GameTask(type=6, extraType=0)   -> 已接的任务
+    #   「开始分析」   C2L_GameTask(type=6, extraType=1)   -> 候选(生成)
+    #   选中后确认     C2L_AcceptFavorTask(459, taskIds)  -> code=10 后客户端自己重查上一行
+    #   领取           C2L_FinishGameTask(type=6)         -> 和每日/周常同一个协议
+    #
+    # extraType 不是可选参数, 它把同一个请求分成「我的任务」和「给候选」两问。
+    #
+    # 三件事让它自成一节:
+    #
+    # * 任务是玩家自己选的, 不像每日/周常按等级自动开行。345 条任务 id 是 635xxx, 落库
+    #   用独立的 favor_daily_tasks(键含本地日), 00:00 自动翻页。
+    # * 只有两种条件有服务端来源: 带指定英雄通关(11) 与 给指定英雄送指定礼物(68)。另外
+    #   三种(67 远征 / 69 特训 / 25)没有可记账的事件, 进度只能是 0 - 见 catalog 的
+    #   provenance。因此候选只从 track=="event" 里取, 不给玩家发一个永远做不完的任务。
+    # * 领奖是「道具组 + 好感经验」两半: 道具组走 self.gifts/_grant, 好感那半归
+    #   player/favor.py 的 grant_favor。
+
+    def attach_favor(self, service) -> None:
+        """Wire the 好感 service so a 心愿任务 claim can pay its FavorabilityGift.
+
+        Same division as ``achievements``: economy owns *when* a reward is paid,
+        player/favor.py owns the 好感 curve and the hero's own ``favor`` field. A
+        claim pays two halves - the task's Gift group (an item group, paid here)
+        and its own ``FavorabilityGift`` (50/60/75 好感经验, paid there) - so
+        without this the claim still succeeds, it just pays the item half only.
+        """
+        self.favor = service
+
+    def _favor_owned_heroes(self, player_id):
+        """Hero ids this save actually owns (state 2)."""
+        return {int(h.get("id", 0))
+                for h in self.store.get(player_id)["snapshot"].get("heroes", [])
+                if h.get("state") == 2 and int(h.get("id", 0)) > 0}
+
+    def favor_accepted_ids(self, player_id, day=None):
+        """Today's accepted 心愿任务 ids."""
+        day = day_index(int(self.clock())) if day is None else day
+        return {row[0] for row in self.store.db.execute(
+            "SELECT task_id FROM favor_daily_tasks WHERE player_id=? AND day=?", (player_id, day))}
+
+    def favor_candidates(self, player_id, day=None):
+        """Today's candidate 心愿任务 ids; deterministic per (day, player).
+
+        The official generation rule (候选数 / 概率 / 刷新时点) did not survive, so
+        this is a local compatibility rule. The pool is every task whose hero the
+        player owns and whose condition this server can witness, and the day's
+        pick is a hash-ordered slice of it - same day, same answer, restart or
+        not. Nothing is written, so the "generation" needs no table.
+        """
+        day = day_index(int(self.clock())) if day is None else day
+        owned = self._favor_owned_heroes(player_id)
+        taken = self.favor_accepted_ids(player_id, day)
+        if 0 < self.favor_task_daily_limit <= len(taken):
+            # 今天的名额已经接满。此时必须回空, 否则客户端会拿到一批「确认时一定被拒」
+            # 的候选(accept_favor_tasks 按同一个上限设闸), 表现为点确认弹错误。
+            return []
+        pool = [task_id for task_id, entry in self.favor_tasks.items()
+                if entry["track"] == "event" and entry["hero"] in owned and task_id not in taken]
+        pool.sort(key=lambda task_id: hashlib.sha256(
+            f"favortask:{day}:{player_id}:{task_id}".encode()).hexdigest())
+        if self.favor_task_daily_limit <= 0:
+            return pool
+        return pool[:self.favor_task_daily_limit - len(taken)]
+
+    def favor_task_values(self, player_id, extra_type, chapter_id=0):
+        """The L2C_GameTask payload for type 6, both questions.
+
+        ``extra_type == GENMIND`` is 「开始分析」: the candidate rows come back with
+        ``taskStatus == 0``. That value is what the client's own page-state machine
+        demands: FavorWishTab_CalPageState treats
+
+            taskList empty                            -> 0 (开始页)
+            每行 taskStatus == 0                       -> 1 (选择页)
+            任一行 taskStatus != 0                     -> 2 (任务页)
+
+        Only state 1 draws the choose page - the one with the confirm button that
+        sends C2L_AcceptFavorTask (459). Sending the candidates as UNLOCK (1) put
+        the client straight into the task page instead, so 459 was never sent and
+        the page looked like it reset itself. When nothing can be generated the
+        answer is E_NOT_GEN_MIND_TASK (173): the client handles that code for
+        type 6 on the same path as code 10, so it lands on the start page instead
+        of an error box.
+        """
+        day = day_index(int(self.clock()))
+        values = {"type": self.FAVOR_DAILY_KIND, "chapterId": chapter_id}
+        if extra_type == self.QUERY_EXTRA_GENMIND:
+            candidates = self.favor_candidates(player_id, day)
+            logging.getLogger("x2.economy").info(
+                "favor candidates player=%s day=%s ids=%s", player_id, day, candidates)
+            if not candidates:
+                return {"code": 173, **values, "taskList": []}
+            return {"code": 10, **values, "taskList": [
+                TASK.encode({"taskId": task_id, "taskStatus": 0, "taskProgress": 0,
+                             "taskRefreshTime": 0, "finishTimes": 0, "stage": 0})
+                for task_id in candidates]}
+        tasks = []
+        for task_id in sorted(self.favor_accepted_ids(player_id, day)):
+            entry = self.favor_tasks.get(task_id)
+            row = self.store.db.execute(
+                "SELECT progress,claimed FROM favor_daily_tasks"
+                " WHERE player_id=? AND day=? AND task_id=?",
+                (player_id, day, task_id)).fetchone()
+            if entry is None or row is None:
+                continue
+            progress, claimed = tuple(row)
+            target = entry["completeNum"]
+            # 4 FINISH(已领取) / 3 REWARD(可领取) / 2 START(进行中) - 与每日/周常、
+            # 挑战行同一个枚举。
+            tasks.append(TASK.encode({"taskId": task_id,
+                "taskStatus": 4 if claimed else 3 if progress >= target else 2,
+                "taskProgress": min(progress, target), "taskRefreshTime": 0,
+                "finishTimes": int(bool(claimed)), "stage": 0}))
+        return {"code": 10, **values, "taskList": tasks}
+
+    def accept_favor_tasks(self, player_id, task_ids):
+        """Persist the player's 心愿任务 choice; returns the L2C_AcceptFavorTask code.
+
+        The client only sends back ids it was shown, but the gate is kept here:
+        today's cap (the catalog's dailyLimit) is what stops a player from accepting
+        the whole 345-row table, and an id naming a hero the save does not hold is
+        dropped rather than stored as a task nothing can ever progress. Re-sending
+        an already-accepted id is idempotent, so a replayed confirm succeeds.
+        """
+        day = day_index(int(self.clock()))
+        owned = self._favor_owned_heroes(player_id)
+        accepted = self.favor_accepted_ids(player_id, day)
+        limit = self.favor_task_daily_limit
+        kept, fresh = [], []
+        for task_id in dict.fromkeys(int(t) for t in task_ids):
+            if task_id in accepted:
+                kept.append(task_id)
+                continue
+            entry = self.favor_tasks.get(task_id)
+            if entry is None or entry["hero"] not in owned:
+                continue
+            if limit > 0 and len(accepted) + len(fresh) >= limit:
+                break
+            fresh.append(task_id)
+        if not kept and not fresh:
+            logging.getLogger("x2.economy").info(
+                "favor accept refused player=%s day=%s ids=%s", player_id, day, task_ids)
+            return 13
+        with self.transaction():
+            for task_id in fresh:
+                self.store.db.execute(
+                    "INSERT OR IGNORE INTO favor_daily_tasks(player_id,day,task_id) VALUES (?,?,?)",
+                    (player_id, day, task_id))
+        logging.getLogger("x2.economy").info(
+            "favor accepted player=%s day=%s kept=%s new=%s", player_id, day, kept, fresh)
+        return 10
+
+    def credit_favor_task(self, player_id, key, condition_type, hero_id, other=0, amount=1):
+        """Credit one witnessed occurrence to today's accepted 心愿任务.
+
+        Caller must already be inside a transaction (both sources - 通关结算 and 送礼
+        - are). Mirrors ``_challenge_event``: these tasks have no ``task_periods`` row,
+        so the dedup token lives in economy_events keyed by the local day, and the
+        token is written only when some accepted task actually reads that condition.
+        """
+        day = day_index(int(self.clock()))
+        matched = [(task_id, entry) for task_id, entry in self.favor_tasks.items()
+                   if entry["track"] == "event" and entry["completeType"] == condition_type
+                   and not self._excluded(entry, "value1", hero_id)
+                   and not self._excluded(entry, "value2", other)]
+        if not matched:
+            return
+        inserted = self.store.db.execute("INSERT OR IGNORE INTO economy_events VALUES (?,?)",
+            (player_id, f"favortask:{day}:{key}:{condition_type}"))
+        if not inserted.rowcount:
+            return
+        for task_id, entry in matched:
+            # 只推今天接了、且还没领的那一行: 没接的任务不涨进度, 已经领过的不再涨。
+            self.store.db.execute(
+                "UPDATE favor_daily_tasks SET progress=MIN(?,progress+?)"
+                " WHERE player_id=? AND day=? AND task_id=? AND claimed=0",
+                (entry["completeNum"], amount, player_id, day, task_id))
+
+    def claim_favor_task(self, player_id, task_id):
+        """Pay one 心愿任务; returns ``(result dict, extra pushes)``.
+
+        The result joins the generic L2C_FinishGameTask data list, and the pushes
+        are the two things the page needs to repaint: the 角色页 bar
+        (L2C_FavorChangeInfo, from FavorService) and the 心愿任务 list itself. The
+        list matters because the client's FavorWishModule has no other refresh - a
+        claimed row would otherwise stay 可领取 on screen.
+        """
+        day = day_index(int(self.clock()))
+        result = {"code": 13, "taskId": task_id, "type": self.FAVOR_DAILY_KIND, "rewardData": b""}
+        entry = self.favor_tasks.get(task_id)
+        if entry is None:
+            return result, ()
+        row = self.store.db.execute(
+            "SELECT progress,claimed FROM favor_daily_tasks"
+            " WHERE player_id=? AND day=? AND task_id=?",
+            (player_id, day, task_id)).fetchone()
+        if not row or row[1] or row[0] < entry["completeNum"]:
+            return result, ()
+        extra = ()
+        try:
+            rewards = self.gifts([entry["gift"]])
+            with self.transaction():
+                rewards = self._grant(player_id, f"favortask:{day}:{task_id}", rewards)
+                self.store.db.execute(
+                    "UPDATE favor_daily_tasks SET claimed=1"
+                    " WHERE player_id=? AND day=? AND task_id=?",
+                    (player_id, day, task_id))
+                if self.favor is not None:
+                    extra = self.favor.grant_favor(player_id, entry["hero"], entry["favor"])
+                # 心愿任务本身是每日/周常的一个条件: 通过终端完成 N 次心愿任务, 630024
+                # (日, 1 次) 与 630109 (周, 12 次) 都是 E_FavorabilityDailyTask=72, 两个
+                # 值列都是 [0] 即不筛维度。
+                self._event(player_id, f"favortask:{day}:{task_id}",
+                            self.TASK_EVENT_FAVORABILITY_DAILY_TASK, 0, 1)
+                result.update(code=10, rewardData=self.reward_bytes(rewards))
+        except UnresolvedEconomy:
+            return result, ()
+        logging.getLogger("x2.economy").info(
+            "favor task claimed task=%s player=%s hero=%s rewards=%s favor=%s",
+            task_id, player_id, entry["hero"], dict(sorted(rewards.items())), entry["favor"])
+        pushes = tuple(extra) + (
+            OutboundMessage("L2C_GameTask", self.favor_task_values(player_id, 0)),)
+        return result, pushes
+
     def settle(self, player_id, run_uuid, section, success, section_type=0,
-               outside_items=(), maze_items=()):
+               outside_items=(), maze_items=(), carried_heroes=()):
         """Part of BattleService's receipt transaction, including first-clear key."""
         profile = self.section_rewards.get(section)
         config = self.reward_sections.get(section)
@@ -1018,6 +1290,12 @@ class EconomyService:
                 [{"star": spec["quality"], "item_id": spec["item_id"]} for spec in equipment_specs for _ in range(spec["quantity"])])
             self.dp.refresh(player_id, config["ChapterID"])
             self._event(player_id, f"clear:{run_uuid}", 3, section, 1)
+            # 心愿任务 E_CarryHeroCustomsPass(11): 队伍里带着某位神格通关指定关卡。队伍来自
+            # 本次 run 的 L2C_FightData(fightHeros), BattleService 解出来后随 checkout 传进来;
+            # 条件是 (英雄, 关卡清单) 两个维度, 所以 section 走 value2 那一列。
+            for hero_id in dict.fromkeys(carried_heroes):
+                self.credit_favor_task(player_id, f"clear:{run_uuid}:{hero_id}",
+                                       self.TASK_EVENT_CARRY_HERO_CUSTOMS_PASS, hero_id, section)
             spent = self.store.db.execute("SELECT amount FROM battle_costs WHERE uuid=? AND player_id=?",
                 (run_uuid, player_id)).fetchone()
             if spent and spent[0]:
@@ -1255,7 +1533,7 @@ class EconomyService:
                 **{name: self.handle for name in ("C2L_ItemAll", "C2L_ItemOpt", "C2L_ShopGoods", "C2L_RefreshShop", "C2L_BuyGoods",
             "C2L_QueryGoodsInfo", "C2L_GameTask", "C2L_DailyAndWeekTask", "C2L_FinishGameTask",
             "C2L_FinishGameTaskAsync", "C2L_PickTreasureBox", "C2L_QueryMission",
-            "C2L_UnlockStory")}}
+            "C2L_AcceptFavorTask", "C2L_UnlockStory")}}
 
     async def fetch_mobility_power(self, context, packet):
         player_id = context.session.player_id
@@ -1322,6 +1600,13 @@ class EconomyService:
                     "chapter DP served chapter=%s dp=%s/%s player=%s", chapter,
                     values["chapterTaskPoint"], values["chapterTaskTotalPoint"], player_id)
                 return OutboundMessage("L2C_GameTask", values)
+            if kind == self.FAVOR_DAILY_KIND:
+                values = self.favor_task_values(player_id, request.get("extraType", 0),
+                                                request.get("chapterId", 0))
+                logging.getLogger("x2.economy").info(
+                    "favor tasks served player=%s extra=%s code=%s rows=%s", player_id,
+                    request.get("extraType", 0), values["code"], len(values.get("taskList", ())))
+                return OutboundMessage("L2C_GameTask", values)
             return OutboundMessage("L2C_GameTask", self.task_values(player_id, kind) if kind in (1, 2)
                 else self.challenge_values(player_id) if kind == 3
                 else {"code": 10, "type": kind, "chapterId": request.get("chapterId", 0)})
@@ -1329,12 +1614,34 @@ class EconomyService:
             requests = [FINISH_REQUEST.decode(b) for b in request.get("data", [])] if name == "C2L_FinishGameTask" else [request]
             if len(requests) > 40:
                 raise ProtocolError("too many task claims")
-            results = [FINISH_RESULT.encode(
-                self.endless.claim(player_id, r.get("taskId", 0), context.session.session_id + ":" + str(packet.header.request_id)) if r.get("type", 0) == 12 else
-                self.claim_challenge(player_id, r.get("taskId", 0)) if r.get("type", 0) == 3 else
-                self.claim(player_id, r.get("taskId", 0), r.get("type", 0))
-                if not r.get("activityId") else {"code": 13, "taskId": r.get("taskId", 0), "type": r.get("type", 0)}) for r in requests]
-            return OutboundMessage(response_name, {"data": results if name == "C2L_FinishGameTask" else results[0]}, pushes=self.pushes(player_id))
+            results, extra_pushes = [], []
+            for r in requests:
+                task_id, kind = r.get("taskId", 0), r.get("type", 0)
+                if kind == 12:  # GameTaskType.ENDLESS: per-run objective
+                    results.append(self.endless.claim(
+                        player_id, task_id,
+                        context.session.session_id + ":" + str(packet.header.request_id)))
+                elif kind == self.CHALLENGE_KIND:
+                    results.append(self.claim_challenge(player_id, task_id))
+                elif kind == self.FAVOR_DAILY_KIND:
+                    result, pushes = self.claim_favor_task(player_id, task_id)
+                    results.append(result)
+                    extra_pushes.extend(pushes)
+                elif r.get("activityId"):
+                    results.append({"code": 13, "taskId": task_id, "type": kind})
+                else:
+                    results.append(self.claim(player_id, task_id, kind))
+            encoded = [FINISH_RESULT.encode(r) for r in results]
+            return OutboundMessage(
+                response_name,
+                {"data": encoded if name == "C2L_FinishGameTask" else encoded[0]},
+                pushes=tuple(extra_pushes) + tuple(self.pushes(player_id)))
+        if name == "C2L_AcceptFavorTask":
+            # 心愿任务的第二步(见 favor_task_values)。回包只有 code: 客户端拿到 10 之后
+            # 自己重查 C2L_GameTask(type=6, extraType=0), 所以这里再推一份列表是多余的;
+            # 失败码由客户端弹提示。
+            code = self.accept_favor_tasks(player_id, list(request.get("taskIds", ())))
+            return OutboundMessage(response_name, {"code": code})
         if name == "C2L_ShopGoods":
             shop = request.get("shopId", 0)
             # Client 2.4 dereferences a null goods list on success. With no fully
