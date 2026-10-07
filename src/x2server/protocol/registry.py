@@ -108,6 +108,8 @@ CORE_MESSAGE_REGISTRY = MessageRegistry(
         MessageEntry("C2L_EquipReclaim", 114, Direction.CLIENT_TO_SERVER),
         MessageEntry("L2C_EquipReclaim", 116, Direction.SERVER_TO_CLIENT),
         MessageEntry("L2C_EquipRemove", 537, Direction.SERVER_TO_CLIENT),
+        MessageEntry("C2L_LockEquip", 883, Direction.CLIENT_TO_SERVER),
+        MessageEntry("L2C_LockEquip", 884, Direction.SERVER_TO_CLIENT),
         MessageEntry("C2L_CardPool", 305, Direction.CLIENT_TO_SERVER),
         MessageEntry("L2C_CardPool", 307, Direction.SERVER_TO_CLIENT),
         MessageEntry("C2L_LuckDraw", 303, Direction.CLIENT_TO_SERVER),

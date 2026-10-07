@@ -146,6 +146,26 @@ class EquipmentInstanceFactory:
         return param
 
 
+def ensure_equipment_instances(db):
+    """Create or patch the 兽主 instance ledger: one canonical DDL for every creator.
+
+    Two callers build this table - ``EquipmentService.__init__`` and this module's drop
+    materializer - so a column one of them forgot would break wherever the table
+    happened to be created first. ``locked`` is the 兽主 lock state behind
+    C2L_LockEquip (883/884); the ``ALTER`` patches an older save whose table predates it.
+    """
+    db.execute("""CREATE TABLE IF NOT EXISTS equipment_instances (
+        id INTEGER PRIMARY KEY AUTOINCREMENT, player_id INTEGER NOT NULL,
+        type_id INTEGER NOT NULL, level INTEGER NOT NULL DEFAULT 0,
+        exp INTEGER NOT NULL DEFAULT 0, star INTEGER NOT NULL,
+        param TEXT NOT NULL, marker TEXT NOT NULL,
+        locked INTEGER NOT NULL DEFAULT 0,
+        UNIQUE(player_id,type_id,marker))""")
+    columns = {row[1] for row in db.execute("PRAGMA table_info(equipment_instances)")}
+    if "locked" not in columns:
+        db.execute("ALTER TABLE equipment_instances ADD COLUMN locked INTEGER NOT NULL DEFAULT 0")
+
+
 def materialize_instances(db, player_id: int, type_id: int, star: int, quantity: int,
                           run_uuid: str, factory: EquipmentInstanceFactory,
                           first_ordinal: int) -> list[dict]:
@@ -158,19 +178,14 @@ def materialize_instances(db, player_id: int, type_id: int, star: int, quantity:
     factory.validate(type_id, star, quantity)
     # Same DDL as EquipmentService.__init__ so EconomyService-only callers
     # (e.g. tests, standalone settle) share one canonical ledger.
-    db.execute("""CREATE TABLE IF NOT EXISTS equipment_instances (
-        id INTEGER PRIMARY KEY AUTOINCREMENT, player_id INTEGER NOT NULL,
-        type_id INTEGER NOT NULL, level INTEGER NOT NULL DEFAULT 0,
-        exp INTEGER NOT NULL DEFAULT 0, star INTEGER NOT NULL,
-        param TEXT NOT NULL, marker TEXT NOT NULL,
-        UNIQUE(player_id,type_id,marker))""")
+    ensure_equipment_instances(db)
     instances = []
     ordinal = first_ordinal
     for _ in range(quantity):
         marker = f"drop:{run_uuid}:{ordinal}"
         ordinal += 1
         row = db.execute(
-            "SELECT id, star, param FROM equipment_instances WHERE player_id=? AND type_id=? AND marker=?",
+            "SELECT id, star, param, locked FROM equipment_instances WHERE player_id=? AND type_id=? AND marker=?",
             (player_id, type_id, marker)).fetchone()
         if row is None:
             param = factory.roll_param(type_id, star)
@@ -178,10 +193,10 @@ def materialize_instances(db, player_id: int, type_id: int, star: int, quantity:
                 "INSERT INTO equipment_instances (player_id, type_id, level, exp, star, param, marker) "
                 "VALUES (?, ?, 0, 0, ?, ?, ?)",
                 (player_id, type_id, star, json.dumps(param, sort_keys=True), marker))
-            instance_id = cursor.lastrowid
+            instance_id, locked = cursor.lastrowid, 0
         else:
-            instance_id, star, param = row[0], row[1], json.loads(row[2])
+            instance_id, star, param, locked = row[0], row[1], json.loads(row[2]), row[3]
         instances.append({"id": instance_id, "typeId": type_id, "level": 0, "exp": 0,
                           "star": star, "status": 0, "param": param, "marker": marker,
-                          "lockState": 0, "timeSec": 0, "seasonId": 0})
+                          "lockState": locked, "timeSec": 0, "seasonId": 0})
     return instances

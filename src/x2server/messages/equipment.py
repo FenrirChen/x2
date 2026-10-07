@@ -21,4 +21,10 @@ EQUIPMENT_SCHEMAS = {s.name: s for s in (
     S("C2L_EquipReclaim", (F(1, "equipID", K.INT32, repeated=True),)),
     S("L2C_EquipReclaim", (F(1, "code", K.ENUM), F(2, "rewardData", K.MESSAGE))),
     S("L2C_EquipRemove", (F(1, "ids", K.INT32, repeated=True),)),
+    # 兽主锁定 (883/884). The client's own wire class is C2L_LockEquip{equipID} ->
+    # L2C_LockEquip{code, HeroEquip} (BagModule.SendLockEquipRequest /
+    # OnReceiveLockedEquipMsg). The request carries only the id, so the server toggles
+    # HeroEquip.lockState (field 8) and echoes the updated instance back.
+    S("C2L_LockEquip", (F(1, "equipID", K.INT32),)),
+    S("L2C_LockEquip", (F(1, "code", K.ENUM), F(2, "heroEquip", K.MESSAGE))),
 )}

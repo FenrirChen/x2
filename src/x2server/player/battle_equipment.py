@@ -31,7 +31,7 @@ def battle_equipment(store, player_id, hero):
     slots, ids, counts, encoded = set(), set(), Counter(), []
     for entry in sorted(worn, key=lambda e: e['position']):
         equip_id, slot = entry['equip_id'], entry['position']
-        row = store.db.execute('SELECT id,type_id,level,exp,star,param FROM equipment_instances '
+        row = store.db.execute('SELECT id,type_id,level,exp,star,param,locked FROM equipment_instances '
                                'WHERE player_id=? AND id=?', (player_id, equip_id)).fetchone()
         base = bases.get(str(row['type_id'])) if row else None
         if (not base or slot not in range(6) or slot in slots or equip_id in ids
@@ -42,7 +42,7 @@ def battle_equipment(store, player_id, hero):
         counts[base['suit']] += 1
         encoded.append(HERO_EQUIP.encode({'id': row['id'], 'typeId': row['type_id'],
             'level': row['level'], 'exp': row['exp'], 'star': row['star'], 'status': 1,
-            'param': EQUIP_PARAM.encode(json.loads(row['param'])), 'lockState': 0,
+            'param': EQUIP_PARAM.encode(json.loads(row['param'])), 'lockState': row['locked'],
             'timeSec': 0, 'seasonId': 0}))
     effects = []
     for suit_id, count in sorted(counts.items()):

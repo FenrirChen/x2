@@ -6,7 +6,8 @@ import secrets
 from pathlib import Path
 
 from x2server.messages.equipment import EQUIP_PARAM, HERO_EQUIP, EQUIPMENT_SCHEMAS
-from x2server.player.equipment_factory import load_equipment_tables, roll_value_sec
+from x2server.player.equipment_factory import (
+    load_equipment_tables, roll_value_sec, ensure_equipment_instances)
 from x2server.network.dispatcher import OutboundMessage
 from x2server.protocol.errors import ProtocolError
 from x2server.protocol.registry import CORE_MESSAGE_REGISTRY
@@ -30,12 +31,9 @@ class EquipmentService:
         self.exp_costs = {r["level"]: r for r in json.loads(progression.read_text(encoding="utf-8"))["level_rows"]}
         self.reclaim_stages = {r["Stage"]: r for r in json.loads(progression.read_text(encoding="utf-8"))["stage_rows"]}
         with store.db:
-            store.db.execute("""CREATE TABLE IF NOT EXISTS equipment_instances (
-                id INTEGER PRIMARY KEY AUTOINCREMENT, player_id INTEGER NOT NULL,
-                type_id INTEGER NOT NULL, level INTEGER NOT NULL DEFAULT 0,
-                exp INTEGER NOT NULL DEFAULT 0, star INTEGER NOT NULL,
-                param TEXT NOT NULL, marker TEXT NOT NULL,
-                UNIQUE(player_id,type_id,marker))""")
+            # One canonical DDL for the 兽主 ledger, shared with the drop
+            # materializer - see equipment_factory.ensure_equipment_instances.
+            ensure_equipment_instances(store.db)
             store.db.execute("""CREATE TABLE IF NOT EXISTS equipment_enhancements (
                 player_id INTEGER NOT NULL, equip_id INTEGER NOT NULL,
                 level INTEGER NOT NULL, attribute_slot INTEGER NOT NULL, bonus INTEGER NOT NULL,
@@ -49,11 +47,11 @@ class EquipmentService:
         instances = []
         snapshot = self.store.get(player_id)["snapshot"]
         worn = {e["equip_id"] for hero in snapshot.get("heroes", []) for e in hero.get("equips", [])}
-        for row in self.store.db.execute("SELECT id,type_id,level,exp,star,param FROM equipment_instances "
+        for row in self.store.db.execute("SELECT id,type_id,level,exp,star,param,locked FROM equipment_instances "
                                          "WHERE player_id=? ORDER BY id", (player_id,)):
             instances.append(HERO_EQUIP.encode({"id": row[0], "typeId": row[1],
                 "level": row[2], "exp": row[3], "star": row[4], "status": int(row[0] in worn),
-                "param": EQUIP_PARAM.encode(json.loads(row[5])), "lockState": 0,
+                "param": EQUIP_PARAM.encode(json.loads(row[5])), "lockState": row[6],
                 "timeSec": 0, "seasonId": 0}))
         return {"equip": instances}
 
@@ -62,11 +60,39 @@ class EquipmentService:
             raise ProtocolError("equipment query before login")
         return OutboundMessage("L2C_EquipAll", self.values(context.session.player_id))
 
+    async def lock(self, context, packet):
+        """Toggle 兽主锁定 (C2L_LockEquip 883 -> L2C_LockEquip 884).
+
+        The client's request carries only ``equipID``, so the state is toggled rather
+        than set, and the updated HeroEquip is echoed back: the client's handler
+        (BagModule.OnReceiveLockedEquipMsg) refreshes the bag entry from this one
+        message and sends no follow-up query.
+        """
+        player_id = context.session.player_id
+        if player_id is None:
+            raise ProtocolError("equipment lock before login")
+        equip_id = EQUIPMENT_SCHEMAS["C2L_LockEquip"].decode(packet.body).get("equipID")
+        if not equip_id:
+            return OutboundMessage("L2C_LockEquip", {"code": 13})
+        transaction = self.economy.transaction() if self.economy is not None else self.store.db
+        with transaction:
+            row = self.store.db.execute(
+                "SELECT locked FROM equipment_instances WHERE player_id=? AND id=?",
+                (player_id, equip_id)).fetchone()
+            if row is None:
+                return OutboundMessage("L2C_LockEquip", {"code": 13})
+            self.store.db.execute("UPDATE equipment_instances SET locked=? WHERE player_id=? AND id=?",
+                                  (0 if row[0] else 1, player_id, equip_id))
+        changed = next(e for e in self.values(player_id)["equip"]
+                       if HERO_EQUIP.decode(e)["id"] == equip_id)
+        return OutboundMessage("L2C_LockEquip", {"code": 10, "heroEquip": changed})
+
     def handlers(self):
         return {"C2L_EquipAll": self.query_all,
                 "C2L_DoEquip": self.handle, "C2L_DoUnEquip": self.handle,
                 "C2L_EquipStrengthen": self.strengthen,
-                "C2L_EquipReclaim": self.reclaim}
+                "C2L_EquipReclaim": self.reclaim,
+                "C2L_LockEquip": self.lock}
 
     def reclaim_rewards(self, rows):
         """Mirror the client's BagDecomposePage currency preview calculation."""
@@ -102,10 +128,14 @@ class EquipmentService:
             with self.economy.transaction():
                 placeholders = ",".join("?" for _ in ids)
                 rows = self.store.db.execute(
-                    f"SELECT id,level,star FROM equipment_instances WHERE player_id=? AND id IN ({placeholders})",
+                    f"SELECT id,level,star,locked FROM equipment_instances WHERE player_id=? AND id IN ({placeholders})",
                     (player_id, *ids)).fetchall()
                 if len(rows) != len(ids) or any(row["star"] not in self.reclaim_stages
                                               or row["level"] not in self.exp_costs for row in rows):
+                    return reject
+                # 已锁定的兽主不可分解: the client's lock button exists exactly to stop a
+                # piece being consumed by accident, so the server refuses it too.
+                if any(row["locked"] for row in rows):
                     return reject
                 rewards = self.reclaim_rewards(rows)
                 self.store.db.execute(f"DELETE FROM equipment_enhancements WHERE player_id=? AND equip_id IN ({placeholders})",
