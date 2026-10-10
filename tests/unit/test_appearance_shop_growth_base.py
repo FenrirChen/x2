@@ -39,7 +39,7 @@ def test_all_appearance_goods_are_listed_and_purchasable(env):
 
 
 def test_white_night_planet_has_buildings_and_query_reply(env):
-    _, _, ctx = env
+    store, economy, ctx = env
     data = GROWTH_BASE.decode(GROWTH_BASE.encode(growth_base_values()))
     assert len(data["buildingList"]) == 8
     assert len(data["civilization"]) == 8
@@ -56,9 +56,9 @@ def test_white_night_planet_has_buildings_and_query_reply(env):
     assert ruin.values["unlockExploreRuin"] == [UNLOCK_EXPLORE_RUIN.encode({})]
     repeat = asyncio.run(lobby.query(ctx, packet({}, 1212, "C2L_UnlockExploreRuin")))
     assert repeat.values == ruin.values
-    from x2server.player.college import CollegeService
-    flows = CollegeService()
-    alchemy = asyncio.run(flows.dispatch(ctx, packet({}, 1213, "C2L_AlchemyMainData")))
-    assert alchemy.message_name == "L2C_AlchemyMainData" and alchemy.values["code"] == 10
-    assert len(alchemy.values["recipeIdExp"]) == 6 and len(alchemy.values["customeres"]) == 5
-    assert len(alchemy.values["elements"]) == 6 and len(alchemy.values["productionBars"]) == 1
+    from x2server.player.alchemy import AlchemyService, AlchemyStateRepository
+    alchemy = AlchemyService(AlchemyStateRepository(store), economy)
+    result = asyncio.run(alchemy.handle(ctx, packet({}, 1213, "C2L_AlchemyMainData")))
+    assert result.message_name == "L2C_AlchemyMainData" and result.values["code"] == 10
+    assert len(result.values["recipeIdExp"]) == 60 and len(result.values["customeres"]) == 5
+    assert len(result.values["elements"]) == 6 and len(result.values["productionBars"]) == 8

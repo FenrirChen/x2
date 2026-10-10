@@ -96,24 +96,31 @@ def test_entry_queries_ruins_and_alchemy_initial_state(tmp_path):
         {'queueCount': 0, 'exp': 0, 'ruinId': 34001})]
     assert repeat.values == first.values
 
-    # 591 moved to CollegeService; its initial state ships the six starter
-    # recipes, five customers, three production slots and the six elements.
+    # 590 炼金已从 CollegeService 迁到 AlchemyService; 初始状态全量下发 60 条配方
+    # (未解锁取 -1), 5 个顾客槽、8 个产槽与 6 种元素。
+    from tests.unit.test_college_upgrade import CollegeFacade
+    from x2server.player.alchemy import AlchemyService, AlchemyStateRepository
     from x2server.player.college import CollegeService
-    flows = CollegeService(repo)
-    alchemy = asyncio.run(flows.dispatch(ctx, packet({}, 3, "C2L_AlchemyMainData")))
-    assert alchemy.message_name == "L2C_AlchemyMainData"
-    assert alchemy.values["code"] == 10
-    assert len(alchemy.values["recipeIdExp"]) == 6
-    assert len(alchemy.values["customeres"]) == 5
-    assert len(alchemy.values["productionBars"]) == 3
-    assert len(alchemy.values["elements"]) == 6
-    assert alchemy.values["buffType"] == 0 and alchemy.values["buffCount"] == 0
+    from x2server.player.economy import EconomyService
+    economy = EconomyService(store, FixedClock().now)
+    college = CollegeService(repo, economy=economy)
+    alchemy = AlchemyService(AlchemyStateRepository(store, FixedClock()), economy,
+                             college=repo, clock=FixedClock())
+    flows = CollegeFacade(college, alchemy)
+    alchemy_result = asyncio.run(flows.dispatch(ctx, packet({}, 3, "C2L_AlchemyMainData")))
+    assert alchemy_result.message_name == "L2C_AlchemyMainData"
+    assert alchemy_result.values["code"] == 10
+    assert len(alchemy_result.values["recipeIdExp"]) == 60
+    assert len(alchemy_result.values["customeres"]) == 5
+    assert len(alchemy_result.values["productionBars"]) == 8
+    assert len(alchemy_result.values["elements"]) == 6
+    assert alchemy_result.values["buffType"] == 0 and alchemy_result.values["buffCount"] == 0
     repeat_alchemy = asyncio.run(flows.dispatch(ctx, packet({}, 4, "C2L_AlchemyMainData")))
-    assert repeat_alchemy.values == alchemy.values
+    assert repeat_alchemy.values == alchemy_result.values
 
     # Wire round-trips keep every repeated list constructed and empty.
     from x2server.messages.college import COLLEGE_SCHEMAS
-    wire = COLLEGE_SCHEMAS["L2C_AlchemyMainData"].encode(alchemy.values)
+    wire = COLLEGE_SCHEMAS["L2C_AlchemyMainData"].encode(alchemy_result.values)
     decoded = COLLEGE_SCHEMAS["L2C_AlchemyMainData"].decode(wire)
     assert decoded["code"] == 10
     # Round-trip preserves the non-null initial alchemy lists.
@@ -147,14 +154,23 @@ def test_login_snapshot_marks_growth_base_open(tmp_path):
 
 def test_college_flow_chain_answers(tmp_path):
     """Full network chain: queries answer real state, mutations answer E_ERROR_OPT."""
+    from tests.unit.test_college_upgrade import CollegeFacade
     from x2server.messages.college import COLLEGE_SCHEMAS
+    from x2server.player.alchemy import AlchemyService, AlchemyStateRepository
     from x2server.player.college import CollegeService
+    from x2server.player.economy import EconomyService
     path = tmp_path / "college-chain.db"
     store = PlayerStore(path)
     store.login("college-chain", 1, 0)
     repo = CollegeStateRepository(store, FixedClock())
     ctx = DispatchContext("chain", "local", SessionState("chain", "session", player_id=1))
-    flows = CollegeService(repo)
+    economy = EconomyService(store, FixedClock().now)
+    # 不注入 economy 时 CollegeService 的变异流程仍按未实现回 13 (客户端弹错误气泡),
+    # 与炼金无关的查询照常回答。
+    college = CollegeService(repo)
+    alchemy = AlchemyService(AlchemyStateRepository(store, FixedClock()), economy,
+                             college=repo, clock=FixedClock())
+    flows = CollegeFacade(college, alchemy)
 
     slot = asyncio.run(flows.dispatch(ctx, packet({"posIndex": 2}, 1, "C2L_SingleCustomerInfo")))
     assert slot.values["code"] == 10 and slot.values["posIndex"] == 2
@@ -164,7 +180,8 @@ def test_college_flow_chain_answers(tmp_path):
                    if n == "CustomerInfo") if False else None
     from x2server.messages.lobby import CUSTOMER_INFO
     info = CUSTOMER_INFO.decode(customer)
-    assert info["questId"] >= 35303 and info["type"] == 2  # AlchemyType.TRANSACTION
+    # 新实现按 (账号, 槽位, 游戏日) 确定性挑委托, questId 落在该顾客的 quests 里。
+    assert info["questId"] > 0 and info["type"] == 2  # AlchemyType.TRANSACTION
     assert len(info["itemId"]) == 1 and info["adviseItemId"] > 0
     # Independent native-wire assertions: CustomerInfo.Serialize 0x38f05a8
     # uses fields 3=type, 4=advisor, 5=param, 6=result, 7=quantity.

@@ -9,8 +9,8 @@ from contextlib import contextmanager
 import uuid
 
 from x2server.messages.college import COLLEGE_IDS, COLLEGE_SCHEMAS
-from x2server.messages.lobby import (BUILDING_BASE_INFO, BUILD_QUEUE, CUSTOMER_INFO, ELEMENT,
-                                     EXPLORE_DATA, MISSION_PAIR, PRAY_QUEUE, PRODUCTION_BAR,
+from x2server.messages.lobby import (BUILDING_BASE_INFO, BUILD_QUEUE,
+                                     EXPLORE_DATA, PRAY_QUEUE,
                                      TRAINING_DATA, WONDER_QUEUE, zero_queue_row)
 from x2server.network.dispatcher import DispatchContext, OutboundMessage
 from x2server.protocol.errors import ProtocolError
@@ -21,6 +21,39 @@ from .server_clock import ServerClock
 LOGGER = logging.getLogger("x2.college")
 
 E_ERROR_OPT = 13  # GameLogicErrCode.E_ERROR_OPT: refused, unsupported mutation.
+
+# 星能: 每小时恢复 2 点, 上限 96。与离线端星能口径一致 (alchemy.py 的元素/星能
+# 结算同源); 存档里 ``star_energy`` 的 -1 表示"未初始化", 首次结算直接给满。
+STAR_ENERGY_PER_HOUR = 2
+STAR_ENERGY_CAP = 96
+
+
+def settle_star_energy(state: dict, now: int) -> None:
+    """Lazily recover 星能; 逐字对齐离线端 college.cpp 的 college_settle 星能部分。
+
+    ``-1`` 是"未初始化", 首次结算直接给满。恢复只推进已结算的整数刻, 余数留到下次;
+    满值/未初始化时把结算时刻设为 now。``star_energy_at`` 存上一次结算的 unix;
+    ``star_gain_time`` 是给 584 用的"下次恢复时刻" (满值时等于 now)。
+    """
+    energy = int(state.get("star_energy", -1))
+    at = int(state.get("star_energy_at", 0))
+    if energy < 0:
+        energy, at = STAR_ENERGY_CAP, now
+    elif energy >= STAR_ENERGY_CAP:
+        at = now
+    else:
+        if at <= 0 or at > now:
+            at = now
+        elapsed = now - at
+        if elapsed > 0:
+            ticks = elapsed * STAR_ENERGY_PER_HOUR // 3600
+            if ticks > 0:
+                energy = min(STAR_ENERGY_CAP, energy + ticks)
+                at = (now if energy >= STAR_ENERGY_CAP
+                      else at + ticks * 3600 // STAR_ENERGY_PER_HOUR)
+    state["star_energy"] = energy
+    state["star_energy_at"] = at
+    state["star_gain_time"] = at if energy >= STAR_ENERGY_CAP else at + 3600 // STAR_ENERGY_PER_HOUR
 
 
 def initial_state() -> dict:
@@ -33,7 +66,7 @@ def initial_state() -> dict:
             info["buildingStar"] = row["star"]
         (buildings if row["type"] == "building" else wonders).append(info)
     return {"version": 1, "buildings": buildings, "wonders": wonders,
-            "star_energy": 0, "warehouse_gold": 0, "extra_power": 0,
+            "star_energy": -1, "warehouse_gold": 0, "extra_power": 0,
             "gold_gain_time": 0, "star_gain_time": 0, "washing_count_day": 0,
             "explore": [], "training": [], "pray": [], "ruins": [],
             "alchemy": {"recipe_exp": [], "customers": [], "production_bars": [],
@@ -85,7 +118,6 @@ class CollegeStateRepository:
                     changed = True
         if changed:
             self.save(player_id, state)
-        state.setdefault('alchemy', {}).setdefault('element_epoch', row[1])
         if int(state.get('star_gain_time', 0)) <= 0:
             state['star_gain_time'] = row[1]
         return state
@@ -114,6 +146,15 @@ class CollegeStateRepository:
                 (json.dumps(state, sort_keys=True), self.clock.now(), player_id))
             if cursor.rowcount != 1:
                 raise ValueError("college state missing or version mismatch")
+
+    # ``peek``/``stage`` are the bare read/write pair AlchemyService uses so it can
+    # read-modify-write 星能 inside the economy's transaction without committing its
+    # savepoint.  Both still nest through this repository's own SAVEPOINT wrapper.
+    def peek(self, player_id: int) -> dict:
+        return self.load(player_id)
+
+    def stage(self, player_id: int, state: dict) -> None:
+        self.save(player_id, state)
 
     def growth_base(self, player_id: int) -> dict:
         with self.transaction():
@@ -183,16 +224,13 @@ class CollegeStateRepository:
     def settle(self, state):
         """Apply each persisted target once; offline progress uses the same clock."""
         completed = []
-        from .college_alchemy import settle_elements, settle_energy
-        # Recover with the OLD level up to each upgrade's completion instant,
-        # then use the new speed/capacity. Offline upgrades cannot retroactively
-        # grant hours at their new rate.
+        # 星能随时间恢复; 装备洗炼/元素恢复改由 AlchemyStateRepository (player/alchemy.py)
+        # 自己的表按需结算, 学院快照不再参与炼金元素。
         queues = (("build_queue", "buildings"), ("wonder_queue", "wonders"))
         for key, field in sorted(queues, key=lambda pair: (state.get(pair[0]) or {}).get('upgradeEndTime', 2**63)):
             queue = state.get(key)
             if queue and queue['upgradeEndTime'] <= self.clock.now():
-                settle_elements(state, queue['upgradeEndTime'], self.catalog)
-                settle_energy(state, queue['upgradeEndTime'], self.catalog)
+                settle_star_energy(state, queue['upgradeEndTime'])
                 row = next(r for r in state[field] if r['buildingId'] == queue['buildingId'])
                 row['buildingLevel'] = queue['target_level']
                 completed.append(queue['buildingId'])
@@ -200,8 +238,7 @@ class CollegeStateRepository:
                 if queue['buildingId'] not in pending:
                     pending.append(queue['buildingId'])
                 state[key] = None
-        settle_elements(state, self.clock.now(), self.catalog)
-        settle_energy(state, self.clock.now(), self.catalog)
+        settle_star_energy(state, self.clock.now())
         for row in state.get('pray', []):
             row['prayStatus'] = 2 if row['prayEndTime'] <= self.clock.now() else 1
         for kind, prefix in (('training', 'training'), ('explore', 'explore')):
@@ -222,47 +259,23 @@ class CollegeStateRepository:
                 self.save(player_id, state)
             return [dict(row) for row in state['ruins']]
 
-    def alchemy_main(self, player_id: int) -> dict:
-        """590/591 snapshot; every list stays a constructed (possibly empty) list."""
-        state = self.load(player_id)
-        alchemy = state.get("alchemy", {})
-        pairs = []
-        for pair in alchemy.get("recipe_exp", []):
-            if isinstance(pair, dict):
-                pairs.append({"Key": int(pair.get("Key", 0)), "Value": int(pair.get("Value", 0))})
-            else:
-                key, value = pair
-                pairs.append({"Key": int(key), "Value": int(value)})
-        return {"recipe_exp": pairs,
-                "customers": list(alchemy.get("customers", [])),
-                "production_bars": list(alchemy.get("production_bars", [])),
-                "elements": list(alchemy.get("elements", [])),
-                "buff_type": int(alchemy.get("buff_type", 0)),
-                "buff_count": int(alchemy.get("buff_count", 0))}
-
 
 class CollegeService:
     """Network chain for the remaining College flows.
 
-    Building progression and alchemy production use transactional services.
+    Building progression and the other transactional services are wired here; the
+    alchemy 炼金 flows are owned by AlchemyService (player/alchemy.py).
     Other mutations answer E_ERROR_OPT (13) until their rules are implemented.
     """
 
     # 882 type==3 sends the client down its own refresh chain (0x1B06160).
     ASSIST_UNAVAILABLE = 3
-    ALCHEMY_TRANSACTION = 2  # AlchemyType.TRANSACTION, the standard sell order.
 
     def __init__(self, college: CollegeStateRepository | None = None, clock=None, economy=None):
         self.college = college
         self.clock = clock or (college.clock if college else ServerClock())
-        self._catalog: dict | None = None
         from .college_upgrade import BuildingUpgradeService
         self.upgrades = BuildingUpgradeService(college, economy) if college and economy else None
-        from .college_alchemy import AlchemyService
-        self.alchemy = AlchemyService(college, economy, self._alchemy_main) if college and economy else None
-        if self.alchemy:
-            self.alchemy.customer = self._customer_for
-            self.alchemy.customer_count = self._customer_count
         from .college_jobs import CollegeJobsService
         self.jobs = CollegeJobsService(college, economy) if college and economy else None
         from .college_pray import CollegePrayService
@@ -279,16 +292,10 @@ class CollegeService:
         request = COLLEGE_SCHEMAS[name].decode(packet.body)
         if self.upgrades and flow in ("BuildingUpgrade", "BuildStarUP", "BuildSpeedUP", "BuildCrystalFinish"):
             return self.upgrades.handle(context, packet, flow, request)
-        if self.alchemy and flow in self.alchemy.FLOWS:
-            return self.alchemy.handle(context, packet, flow, request)
         if self.jobs and flow in self.jobs.FLOWS:
             return self.jobs.handle(context, packet, flow, request)
         if self.prayers and flow in self.prayers.FLOWS:
             return self.prayers.handle(context, packet, flow, request)
-        if flow == "SingleCustomerInfo":
-            return self._single_customer(context.session.player_id, request)
-        if flow == "AlchemyMainData":
-            return self._alchemy_main(context.session.player_id)
         if flow == "QueryFirstReCharge":
             # Read-only queries: this local account has no recharge activities.
             return OutboundMessage("L2C_QueryFirstReCharge", {"code": 10, "state": 0})
@@ -314,113 +321,3 @@ class CollegeService:
         LOGGER.info("college mutation refused player=%s flow=%s request=%s",
                     context.session.player_id, flow, request)
         return OutboundMessage("L2C_" + flow, {"code": E_ERROR_OPT})
-
-    def _single_customer(self, player_id: int, request: dict) -> OutboundMessage:
-        pos_index = int(request.get("posIndex", 0))
-        count = self._customer_count(player_id)
-        if not 0 <= pos_index < count:
-            return OutboundMessage("L2C_SingleCustomerInfo", {"code": E_ERROR_OPT})
-        # 593 with code=10 requires a non-null customere (0x189DE24 null-deref),
-        # so empty slots are answered with a deterministic customer derived from
-        # the official tables, including the persisted refusal rotation.
-        customer = self._customer_for(player_id, pos_index)
-        return OutboundMessage("L2C_SingleCustomerInfo", {
-            "code": 10, "posIndex": pos_index,
-            "customere": CUSTOMER_INFO.encode(customer),
-            "transactionNum": 1, "transactionLastRecoverTime": 0})
-
-    def _alchemy_main(self, player_id: int) -> OutboundMessage:
-        # 591: the handler null-checks every list (first NRE at recipeIdExp,
-        # 0x189CE1C) and its reset code expects the six elements / five display
-        # positions, so the compatible initial state ships exactly those rows.
-        catalog = self._load_catalog()
-        state = self.college.load(player_id) if self.college else initial_state()
-        if self.college:
-            # Settle completion before looking up the active star effects.
-            self.college.growth_base(player_id)
-            state = self.college.load(player_id)
-            # StarEffectValue2 references an older recipe ID domain (292xx).
-            # The live 360xx recipe table uses RecipeLevel, as confirmed by
-            # GetFurnaceRecipeLevel. Never send nonexistent IDs to TableMgr.
-            tier = self.college.catalog.effect(state, 707, 10, star=True)[0]
-            recipes = sorted(int(recipe['recipeId']) for rows in catalog['recipes'].values()
-                             for level, recipe in rows.items() if int(level) <= tier)
-        else:
-            recipes = sorted(int(rows["1"]["recipeId"]) for rows in catalog["recipes"].values())
-        exp = dict((int(pair["Key"]), int(pair["Value"]))
-                   for pair in state.get('alchemy', {}).get('recipe_exp', []))
-        elements = sorted(int(element) for element in catalog["recipes"].keys())
-        values = {
-            "code": 10,
-            "recipeIdExp": [MISSION_PAIR.encode({"Key": recipe, "Value": exp.get(recipe, 0)})
-                            for recipe in recipes],
-            "customeres": [CUSTOMER_INFO.encode(row)
-                           for row in self._customer_rows(player_id)],
-            "productionBars": [PRODUCTION_BAR.encode({})],
-            "elements": [ELEMENT.encode(row) for row in state['alchemy'].get('elements', [])]
-                        or [ELEMENT.encode({'elementId': element, 'num': 0,
-                            'lastRecoverTime': self.clock.now(), 'buyTimesDay': 0}) for element in elements],
-            "buffType": 0, "buffCount": 0}
-        if self.alchemy:
-            with self.college.transaction():
-                values.update(self.alchemy.snapshot_fields(state))
-                self.college.save(player_id, state)
-        elif self.college:
-            count = self.college.catalog.effect(state, 701, 7, star=True)[0]
-            values['productionBars'] = [PRODUCTION_BAR.encode({'buffId': [0]}) for _ in range(count)]
-        return OutboundMessage("L2C_AlchemyMainData", values)
-
-    def _customer_count(self, player_id):
-        return 5  # MAX_CUSTOMER_NUM and GlobalParamString.AlchemyCustomerNum
-
-    def _customer_rows(self, player_id: int) -> list:
-        """The customer row sitting on each slot, de-duplicated by customerId.
-
-        The base stride keeps the five slots on distinct customers only while the
-        refusal rotations stay aligned; once two rotations diverge, two slots can
-        resolve to the same row, i.e. the same god shows up on two slots.  Walk
-        the slots in order and advance any row already taken to the next free
-        customer, wrapping the official table (38 rows for 5 slots, so a free
-        row always exists).
-        """
-        catalog = self._load_catalog()
-        customers = catalog["customers"]
-        state = self.college.load(player_id) if self.college else initial_state()
-        rotations = state.get('alchemy', {}).get('customer_rotations', {})
-        taken: set = set()
-        rows = []
-        for pos in range(self._customer_count(player_id)):
-            rotation = int(rotations.get(str(pos), 0))
-            index = (player_id * 31 + pos * 17 + 5 + rotation) % len(customers)
-            for _ in range(len(customers)):
-                if customers[index]["customerId"] not in taken:
-                    break
-                index = (index + 1) % len(customers)
-            taken.add(customers[index]["customerId"])
-            rows.append(customers[index])
-        return rows
-
-    def _customer_for(self, player_id: int, pos_index: int) -> dict:
-        catalog = self._load_catalog()
-        state = self.college.load(player_id) if self.college else initial_state()
-        rotation = int(state.get('alchemy', {}).get('customer_rotations', {}).get(str(pos_index), 0))
-        # Pick this slot out of the de-duplicated arrangement so a refreshed slot
-        # can never collide with a customer another slot already offers.
-        row = self._customer_rows(player_id)[pos_index]
-        element = str(row["like"])
-        first = catalog["recipes"][element]["1"]
-        second = catalog["recipes"][element]["2"]
-        customer = {"questId": row["sellQuestId"], "itemId": [first["productId"]],
-                "itemNum": [first["productNum"]], "type": self.ALCHEMY_TRANSACTION,
-                "adviseItemId": second["productId"], "param": 0, "result": 0}
-        saved = state.get('alchemy', {}).get('customer_orders', {}).get(str(pos_index), {})
-        if saved.get('rotation') == rotation and saved.get('questId') == customer['questId']:
-            for key in ('itemId', 'itemNum', 'adviseItemId'):
-                customer[key] = saved[key]
-        return customer
-
-    def _load_catalog(self) -> dict:
-        if self._catalog is None:
-            self._catalog = json.loads(files("x2server").joinpath(
-                "data/college_alchemy_catalog.json").read_text(encoding="utf-8"))
-        return self._catalog

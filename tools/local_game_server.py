@@ -36,6 +36,7 @@ from x2server.player.appearance import AppearanceService
 from x2server.player.mail import MailService
 from x2server.player.terminal import TerminalService
 from x2server.player.college import CollegeService, CollegeStateRepository
+from x2server.player.alchemy import AlchemyService, AlchemyStateRepository
 from x2server.player.system_mail import daily_welfare_watch, deliver_hero_choice, deliver_ultimate_causality, deliver_revival_supply
 from x2server.player.tutorial import TutorialService
 from x2server.player.star_chart import StarChartService
@@ -70,6 +71,11 @@ async def run(database: Path, seconds: float) -> None:
         "revival supply mail backfill minted=%s failed=%s", supply_minted, supply_failed)
     economy = EconomyService(store, clock=clock.now)
     college_flows = CollegeService(college, economy=economy)
+    # 炼金 (12 对消息 590..605/729..732/824..827 + 617 推送): 独立三张表 + 自己的服务,
+    # 星能仍读改写学院快照, 所以要把 college 传进去。
+    alchemy = AlchemyService(AlchemyStateRepository(store, clock), economy, college, clock)
+    # 探索结算的元素奖励要记进炼金元素池, college_jobs 通过 college.alchemy 拿到它。
+    college.alchemy = alchemy.repo
     star_chart = StarChartService(store, economy)
     equipment = EquipmentService(store, economy)
     # 兽主套装预设：应用预设要校验部件槽位并推 L2C_EquipUpdate，所以放在 equipment 之后
@@ -80,6 +86,8 @@ async def run(database: Path, seconds: float) -> None:
     gift_packages = GiftPackageService(store, economy)
     collection = CollectionService(store, economy)
     favor = FavorService(store, economy, clock=clock.now)
+    # 炼金的「打折委托」要按官方曲线给对应神格加默契, 通过 economy.favor 反查。
+    economy.attach_favor(favor)
     appearance = AppearanceService(store, economy)
     appearance_shop = AppearanceShopService(store, economy, appearance)
     mail = MailService(store, economy, clock=clock.now)
@@ -88,7 +96,7 @@ async def run(database: Path, seconds: float) -> None:
                          mail=mail, gift_packages=gift_packages, college=college)
     http = BootstrapHTTPServer(endpoints.bind_host, endpoints.http_port, identity)
     tcp = X2TCPServer(Settings(tcp_host=endpoints.bind_host, tcp_port=endpoints.game_port, read_timeout=120),
-        Dispatcher({**star_chart.handlers(), **LobbyService(clock, college).handlers(), **college_flows.handlers(), **TutorialService(store).handlers(), **BirthdayService(store).handlers(), **economy.handlers(), **shop.handlers(), **gift_packages.handlers(), **collection.handlers(), **favor.handlers(), **appearance.handlers(), **appearance_shop.handlers(), **mail.handlers(), **terminal.handlers(), **equipment.handlers(), **equip_plans.handlers(), **wish.handlers(), **ProgressionService(store, economy, appearance).handlers(), **BattleService(store, economy).handlers(), **BattleShopService(store, economy).handlers(), "C2L_HeroAll": HeroService(store).query_all,
+        Dispatcher({**star_chart.handlers(), **LobbyService(clock, college).handlers(), **college_flows.handlers(), **alchemy.handlers(), **TutorialService(store).handlers(), **BirthdayService(store).handlers(), **economy.handlers(), **shop.handlers(), **gift_packages.handlers(), **collection.handlers(), **favor.handlers(), **appearance.handlers(), **appearance_shop.handlers(), **mail.handlers(), **terminal.handlers(), **equipment.handlers(), **equip_plans.handlers(), **wish.handlers(), **ProgressionService(store, economy, appearance).handlers(), **BattleService(store, economy).handlers(), **BattleShopService(store, economy).handlers(), "C2L_HeroAll": HeroService(store).query_all,
                     "C2L_Login": login.login, "C2L_ReConnect": login.reconnect,
                     "C2L_ServerTableConfig": login.server_config}))
     chat = X2TCPServer(Settings(tcp_host=endpoints.bind_host, tcp_port=endpoints.chat_port, read_timeout=120),

@@ -3,10 +3,12 @@ import asyncio
 import pytest
 
 from tests.unit.test_battle import packet
+from x2server.messages.alchemy import ALCHEMY_SCHEMAS
 from x2server.messages.core import CORE_SCHEMAS
 from x2server.messages.lobby import BUILDING_BASE_INFO, BUILD_QUEUE, TRAINING_DATA
-from x2server.network.dispatcher import DispatchContext
+from x2server.network.dispatcher import DispatchContext, Dispatcher
 from x2server.network.session import SessionState
+from x2server.player.alchemy import AlchemyService, AlchemyStateRepository
 from x2server.player.college import CollegeService, CollegeStateRepository
 from x2server.player.economy import EconomyService
 from x2server.player.lobby import LobbyService
@@ -20,6 +22,32 @@ class Clock:
         return self.value
 
 
+# Building flows expect the shared buildingId/type preamble; alchemy flows carry
+# their own fields and must not have it injected (ProtoSchema.encode raises on
+# unknown fields).
+BUILDING_FLOWS = ('BuildingUpgrade', 'BuildStarUP', 'BuildSpeedUP', 'BuildCrystalFinish')
+
+
+class CollegeFacade:
+    """Route 学院炼金 590..605 到新的 AlchemyService, 其余学院流程仍走 CollegeService。
+
+    AlchemyService 与 CollegeService 在 590..605 上重名, 注册到 Dispatcher 时炼金后注册
+    以覆盖旧实现; 其余下标/解包用法全部委托回 CollegeService。
+    """
+
+    def __init__(self, college, alchemy):
+        self.college = college
+        self.alchemy_service = alchemy
+        self._dispatcher = Dispatcher({**college.handlers(), **alchemy.handlers()})
+
+    def __getattr__(self, name):
+        return getattr(self.college, name)
+
+    async def dispatch(self, context, packet):
+        outcome = await self._dispatcher.dispatch(context, packet)
+        return outcome.response
+
+
 @pytest.fixture
 def game(tmp_path):
     store = PlayerStore(tmp_path / 'buildings.db')
@@ -29,7 +57,12 @@ def game(tmp_path):
     clock = Clock()
     economy = EconomyService(store, clock.now)
     repo = CollegeStateRepository(store, clock)
-    service = CollegeService(repo, economy=economy)
+    college = CollegeService(repo, economy=economy)
+    alchemy_repo = AlchemyStateRepository(store, clock)
+    alchemy = AlchemyService(alchemy_repo, economy, college=repo, clock=clock)
+    # 探索元素奖励经 college_jobs 写回新的元素池 (alchemy_state 表)。
+    repo.alchemy = alchemy_repo
+    service = CollegeFacade(college, alchemy)
     with store.db:
         for item in (1237801, 1237802, 1237832):
             store.db.execute('INSERT INTO inventory VALUES (?,?,?)', (1, item, 100))
@@ -39,13 +72,24 @@ def game(tmp_path):
 
 
 def send(game, flow, bid=701, kind=1, seq=1, **fields):
-    service, context = game[3:]
-    result = asyncio.run(service.dispatch(context, packet(
-        {'buildingId': bid, 'type': kind, **fields}, seq, 'C2L_' + flow)))
+    values = {'buildingId': bid, 'type': kind, **fields} if flow in BUILDING_FLOWS else dict(fields)
+    result = asyncio.run(game[3].dispatch(game[4], packet(values, seq, 'C2L_' + flow)))
     # Every emitted message is encodable with the actual registered wire schema.
+    schemas = {**CORE_SCHEMAS, **ALCHEMY_SCHEMAS}
     for message in (*result.before_response, result, *result.pushes):
-        CORE_SCHEMAS[message.message_name].encode(message.values)
+        schemas[message.message_name].encode(message.values)
     return result
+
+
+def seed_elements(game, number=10):
+    """把元素池统一设为 number; 一并把恢复锚点重置到当前时刻, 便于确定性断言。"""
+    alchemy_repo = game[3].alchemy_service.repo
+    state = alchemy_repo.peek(1)
+    now = game[1].now()
+    for key in state['element_num']:
+        state['element_num'][key] = number
+        state['element_recover_at'][key] = now
+    alchemy_repo.stage(1, state)
 
 
 def quantity(store, item):
@@ -104,11 +148,12 @@ def test_star_level_gate_and_real_unlock_effects(game):
     repo.save(1, state)
     assert send(game, 'BuildingUpgrade').values['code'] == 57
     assert send(game, 'BuildStarUP', seq=2).values['star'] == 2
-    alchemy = service._alchemy_main(1).values
+    alchemy = send(game, 'AlchemyMainData', seq=10).values
     assert len(alchemy['customeres']) == 5
-    assert len(alchemy['productionBars']) == 4  # hall star 2
+    assert len(alchemy['productionBars']) == 8  # 固定 8 个产槽
     assert send(game, 'BuildStarUP', bid=707, seq=3).values['code'] == 10
-    assert len(service._alchemy_main(1).values['recipeIdExp']) == 12
+    # 官方快照口径: 全量下发 60 条配方, 未解锁取 -1。
+    assert len(send(game, 'AlchemyMainData', seq=11).values['recipeIdExp']) == 60
     assert send(game, 'BuildStarUP', bid=704, seq=4).values['code'] == 10
     slots = [TRAINING_DATA.decode(v) for v in repo.growth_base(1)['trainingList']]
     assert [r['trainingId'] for r in slots] == [0, 1]
@@ -172,4 +217,4 @@ def test_repository_never_commits_an_outer_transaction(game):
             repo.save(1, state)
             raise RuntimeError('outer transaction aborted')
     assert quantity(store, 1237801) == 100
-    assert repo.load(1)['star_energy'] == 0
+    assert repo.load(1)['star_energy'] == -1  # 未初始化, 首次结算才补满

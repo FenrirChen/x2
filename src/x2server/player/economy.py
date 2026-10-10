@@ -78,6 +78,9 @@ class EconomyService:
     def __init__(self, store, clock=time.time):
         self.store = store
         self.clock = clock
+        # FavorService (player/favor.py). 炼金委托打折要给顾客对应的神格加默契,
+        # 走它的官方曲线; 没有它时那条分支静默跳过 (数值仍照常发放)。见 attach_favor。
+        self.favor = None
         self.catalog = json.loads(files("x2server").joinpath("data/economy_catalog.json").read_text(encoding="utf-8"))
         # 挑战任务 (ChallengeTask): 60 rows in 10 groups of 6, keyed to the client's
         # own ChallengeTask/TaskCondition tables. Boxes 1..10 are the group ids.
@@ -387,6 +390,29 @@ class EconomyService:
             for i, n in sorted(rewards.items())],
             "rewardEquip": reward_equips})
 
+    def reward_list_visible(self, item_id) -> bool:
+        """Whether a reward list the client renders may name this item.
+
+        The list is resolved client-side against ``table/Item``, and one item class
+        breaks it: ``ItemType 10`` (装备).  Such an item is still *granted* (it goes
+        to the inventory and rides ``L2C_ItemUpdate``); only the list omits it.
+        """
+        row = self.items.get(item_id)
+        return (row or {}).get("ItemType", {}).get("value") != 10
+
+    def reward_bytes_visible(self, rewards, reward_equips=()):
+        """``reward_bytes`` for a list the client renders, minus the ItemType 10 items."""
+        visible = {item: n for item, n in rewards.items() if self.reward_list_visible(item)}
+        if len(visible) != len(rewards):
+            logging.getLogger("x2.economy").info(
+                "reward list withheld ItemType 10 items %s (granted=%s)",
+                sorted(set(rewards) - set(visible)), dict(sorted(rewards.items())))
+        return self.reward_bytes(visible, reward_equips)
+
+    def attach_favor(self, service) -> None:
+        """Wire the 好感 service so 炼金委托打折 can pay the customer's god 默契."""
+        self.favor = service
+
     def _grant(self, player_id, source, rewards, *, stackable_types=()):
         """Called inside the owner's transaction; never commits independently."""
         existing = self.store.db.execute("SELECT rewards FROM economy_grants WHERE player_id=? AND source=?",
@@ -421,6 +447,9 @@ class EconomyService:
                 if quantity > 2**31 - 1:
                     raise UnresolvedEconomy("currency overflow")
             elif (kind not in self.STACKABLE_REWARD_TYPES and kind not in stackable_types
+                    # ItemType 16 (元素币 1237991..1237996 等) 与主库一致地落到背包:
+                    # 炼金取消产槽会退还元素币材料, 主库的 _grant 正是把它当普通背包道具。
+                    and kind != 16
                     and item != 1260015 and not (kind == 11 and source.startswith("chapterdp:"))):
                 raise UnresolvedEconomy("unrecovered reward destination")
             else:
@@ -443,6 +472,35 @@ class EconomyService:
         self.store.db.execute("INSERT INTO economy_grants VALUES (?,?,?,?)",
             (player_id, source, json.dumps(rewards, sort_keys=True), int(time.time())))
         return rewards
+
+    def _spend(self, player_id, snapshot, item_id: int, amount: int) -> None:
+        """Deduct one already-validated cost line (currency, 体力 or inventory).
+
+        炼金 (player/alchemy.py 的 ``_pay``) 会先整单校验再逐条调用本方法扣费;
+        currency lines mutate ``snapshot`` in place (调用方最后 ``save_snapshot`` 一次),
+        inventory lines decrement the stored row directly. 不足时抛 ``UnresolvedEconomy``,
+        由调用方的 ``economy.transaction()`` 回滚整笔。
+        """
+        if amount <= 0:
+            raise UnresolvedEconomy("invalid price")
+        if item_id in self.CURRENCIES:
+            field = self.CURRENCIES[item_id]
+            if snapshot.get(field, 0) < amount:
+                raise UnresolvedEconomy("insufficient currency")
+            snapshot[field] -= amount
+            return
+        if item_id == 1237900:
+            if snapshot.get("mobility", {}).get("power", 0) < amount:
+                raise UnresolvedEconomy("insufficient stamina")
+            snapshot["mobility"]["power"] -= amount
+            return
+        row = self.store.db.execute(
+            "SELECT quantity FROM inventory WHERE player_id=? AND item_id=?",
+            (player_id, item_id)).fetchone()
+        if row is None or row[0] < amount:
+            raise UnresolvedEconomy("insufficient items")
+        self.store.db.execute("UPDATE inventory SET quantity=quantity-? WHERE player_id=? AND item_id=?",
+                              (amount, player_id, item_id))
 
     def inventory_values(self, player_id):
         from .appearance import avatar_frames

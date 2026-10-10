@@ -176,6 +176,38 @@ class FavorService:
             state["level"] += 1
         return state
 
+    def grant_favor(self, player_id, hero_id, amount, commit=True, change_type=7):
+        """Add 好感经验 to one hero and return the L2C_FavorChangeInfo notice.
+
+        Entry point for flows that pay 默契 outside the 送礼/触摸 handlers - 炼金委托
+        打折 uses it with ``change_type=13``.  Writes through the snapshot model (the
+        same one ``_add``/``_break`` use), so it lives in ``hero["favor"]``.  ``commit``
+        is accepted for signature compatibility with the caller's open transaction;
+        the write already rides ``economy.save_snapshot`` without committing.
+        Returns ``()`` for an unowned hero or a zero gain rather than a fabricated push.
+        """
+        if hero_id <= 0 or amount <= 0 or hero_id not in self.heroes:
+            LOGGER.info("favor grant skipped player=%s hero=%s amount=%s",
+                        player_id, hero_id, amount)
+            return ()
+        snapshot = self.store.get(player_id)["snapshot"]
+        target = next((h for h in snapshot.get("heroes", [])
+                       if h["id"] == hero_id and h["state"] == 2), None)
+        if target is None:
+            return ()
+        before = favor_state(target, self.heroes[hero_id]["InitialLevel"]).copy()
+        after = {"level": before["level"], "exp": before["exp"] + amount}
+        self._advance(hero_id, after, target.get("favor_breaks", []))
+        target["favor"] = after
+        self.economy.save_snapshot(player_id, snapshot)
+        LOGGER.info("favor granted player=%s hero=%s gain=%s type=%s %s/%s -> %s/%s",
+                    player_id, hero_id, amount, change_type, before["level"], before["exp"],
+                    after["level"], after["exp"])
+        return (OutboundMessage("L2C_FavorChangeInfo", {"data": [FAVOR_CHANGE_INFO.encode({
+            "beforeLevel": before["level"], "beforeExp": before["exp"],
+            "afterLevel": after["level"], "afterExp": after["exp"],
+            "heroID": hero_id, "type": change_type})]}),)
+
     def _break(self, player_id, hero_id, hero):
         failure = OutboundMessage("L2C_FavorBreak", {"code": 13, "heroId": hero_id})
         if not hero:

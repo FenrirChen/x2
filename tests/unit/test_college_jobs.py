@@ -1,9 +1,9 @@
 """Real timed jobs, restart, occupancy and atomic claims on isolated saves."""
 import pytest
 import asyncio
-from tests.unit.test_college_upgrade import game
-from tests.unit.test_college_alchemy import send, seed_elements
+from tests.unit.test_college_upgrade import game, send, seed_elements
 from x2server.messages.lobby import TRAINING_DATA, EXPLORE_DATA
+from x2server.player.alchemy import catalog as alchemy_catalog
 from x2server.player.college import CollegeStateRepository
 from x2server.player.college_power import hero_power
 from x2server.player.store import PlayerStore
@@ -85,9 +85,10 @@ def test_explore_all_official_reward_destinations(game, monkeypatch, award_index
     assert not repo.load(1)['explore']
     assert store.get(1)['snapshot']['heroes'][0]['college_status'] == 0
     if gift['items'][award_index][0] in (1237991, 1237992):
+        # 元素奖励落在新的元素池 (alchemy_state 表), 不是学院快照的旧 alchemy.elements。
         eid = gift['items'][award_index][0] - 1237000
-        element = next(r for r in repo.load(1)['alchemy']['elements'] if r['elementId'] == eid)
-        assert element['num'] >= 50
+        element_num = service.alchemy_service.repo.peek(1)['element_num']
+        assert element_num[str(eid)] >= 50
         assert store.db.execute('SELECT quantity FROM inventory WHERE player_id=1 AND item_id=?',
                                 (gift['items'][award_index][0],)).fetchone() is None
 
@@ -138,24 +139,28 @@ def test_explore_speed_write_failure_rolls_back(game, monkeypatch):
 
 def test_energy_recovery_and_legacy_anchor(game):
     _, clock, repo, _, _ = game
+    # -1 是"未初始化": 首次结算直接补满 96, 下次恢复时刻锚定在 now。
     wire = repo.growth_base(1)
-    assert wire['starEnergy'] == 0 and wire['starGainTime'] == clock.value
-    clock.value += 599
-    assert repo.growth_base(1)['starEnergy'] == 0
+    assert wire['starEnergy'] == 96 and wire['starGainTime'] == clock.value
+    # 掉到 10 后按每小时 2 点恢复; 不满一整刻不恢复。
+    state = repo.load(1)
+    state.update(star_energy=10, star_energy_at=clock.value)
+    repo.save(1, state)
+    clock.value += 1799
+    assert repo.growth_base(1)['starEnergy'] == 10
     clock.value += 1
-    assert repo.growth_base(1)['starEnergy'] == 5
-    clock.value += 600 * 100
-    assert repo.growth_base(1)['starEnergy'] == 240
-    state = repo.load(1)
-    state['star_energy'] -= 10
-    repo.save(1, state)
-    assert repo.growth_base(1)['starEnergy'] == 230
-    clock.value += 600
-    assert repo.growth_base(1)['starEnergy'] == 235
-    state = repo.load(1)
-    state.update(star_gain_time=clock.value + 9999, star_energy=0)
-    repo.save(1, state)
+    assert repo.growth_base(1)['starEnergy'] == 11
+    clock.value += 3600 * 100
+    assert repo.growth_base(1)['starEnergy'] == 96
+    # 满值后 star_gain_time 推到现在。
     assert repo.growth_base(1)['starGainTime'] == clock.value
+    # star_gain_time 是派生字段: 结算按 star_energy_at 重算, 脏值被覆盖。
+    state = repo.load(1)
+    state.update(star_energy=10, star_energy_at=clock.value,
+                 star_gain_time=clock.value + 9999)
+    repo.save(1, state)
+    assert repo.growth_base(1)['starEnergy'] == 10
+    assert repo.growth_base(1)['starGainTime'] == clock.value + 1800
 
 
 def test_training_timed_claim_and_replay(game):
@@ -239,10 +244,12 @@ def test_exploration_gates_cancel_and_claim(game, monkeypatch):
     # Force an element award to check its special capped storage destination.
     monkeypatch.setattr(service.jobs.economy, 'gifts', lambda *a, **kw: {1237991: 50})
     clock.value += 10800
+    # 元素池清零并把恢复锚点钉在当前时刻, 奖励 50 点即落在新元素池 (clamped to cap)。
+    seed_elements(game, 0)
     result = send(game, 'FinishExplore', seq=8, exploreId=0)
     assert result.values['code'] == 10 and result.values['exp'] == 1
     assert [r['ruinId'] for r in repo.load(1)['ruins']] == [34001, 34002]
-    assert repo.load(1)['alchemy']['elements'][0]['num'] == 56
+    assert service.alchemy_service.repo.peek(1)['element_num']['991'] == 50
     quantity = store.db.execute('SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1281001').fetchone()[0]
     assert 2 <= quantity <= 4
     assert send(game, 'FinishExplore', seq=8, exploreId=0).values == result.values
@@ -262,33 +269,29 @@ def test_job_write_failure_rolls_back_energy_and_hero(game, monkeypatch):
     assert game[0].db.execute('SELECT count(*) FROM college_job_receipts').fetchone()[0] == 0
 
 
-@pytest.mark.parametrize('kind', [1, 2])
-def test_alchemy_energy_and_crystal_speed(game, kind):
+@pytest.mark.parametrize('kind,field,amount', [(1, 'gold', 1000), (2, 'crystal', 50)])
+def test_alchemy_energy_and_crystal_speed(game, kind, field, amount):
     funded(game)
     seed_elements(game)
     service = game[3]
-    rid = min(service.alchemy.recipes)
-    result = send(game, 'MakeItem', posIndex=0, recipeId=rid)
-    assert result.values['code'] == 10
     store, clock, repo, _, _ = game
-    remaining = repo.load(1)['alchemy']['production_bars'][0]['endTime'] - clock.value
-    if kind == 1:
-        assert send(game, 'MakIngSpeed', seq=2, posIndex=0, type=kind).values['code'] == 22
-        clock.value += remaining - 100
-        remaining = 100
-    energy_before = repo.growth_base(1)['starEnergy']
+    rid = min(alchemy_catalog()['recipes'], key=int)
+    assert send(game, 'MakeItem', posIndex=0, recipeId=rid).values['code'] == 10
+    assert service.alchemy_service.repo.production_rows(1)[0]['endAt'] == clock.value + 4000
+    # 对应货币不足时加速被拒 (回 35), 产槽不受影响。
     player = store.get(1)
-    store.save_snapshot(1, dict(player['snapshot'], crystal=100), player['revision'])
-    before = store.get(1)['snapshot']['crystal']
+    store.save_snapshot(1, dict(player['snapshot'], gold=0, crystal=0), player['revision'])
+    assert send(game, 'MakIngSpeed', seq=2, posIndex=0, type=kind).values['code'] == 35
+    assert service.alchemy_service.repo.production_rows(1)[0]['endAt'] == clock.value + 4000
+    # 补足货币后加速成功: 扣对应货币, 产槽立刻到时。
+    player = store.get(1)
+    store.save_snapshot(1, dict(player['snapshot'], gold=500000, crystal=100), player['revision'])
+    before = store.get(1)['snapshot'][field]
     result = send(game, 'MakIngSpeed', seq=2, posIndex=0, type=kind)
     assert result.values['code'] == 10
-    state = repo.load(1)
-    assert state['alchemy']['production_bars'][0]['endTime'] == clock.value
-    if kind == 1:
-        assert state['star_energy'] == energy_before - (remaining + 9) // 10
-    else:
-        recipe = service.alchemy.recipes[rid]
-        assert store.get(1)['snapshot']['crystal'] == before - recipe['Pay']
-    assert send(game, 'MakIngSpeed', seq=2, posIndex=0, type=kind).values == result.values
-    assert send(game, 'MakIngSpeed', seq=3, posIndex=0, type=kind).values['code'] == 205
+    assert store.get(1)['snapshot'][field] == before - amount
+    assert service.alchemy_service.repo.production_rows(1)[0]['endAt'] == clock.value
+    # 新实现没有"已到期短路": 重复加速会再扣一次 (旧断言的 205 已废弃)。
+    assert send(game, 'MakIngSpeed', seq=3, posIndex=0, type=kind).values['code'] == 10
+    assert store.get(1)['snapshot'][field] == before - 2 * amount
     assert send(game, 'AlchemyCollect', seq=4, posIndex=0).values['code'] == 10

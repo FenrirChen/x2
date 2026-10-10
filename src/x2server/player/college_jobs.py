@@ -220,12 +220,23 @@ class CollegeJobsService:
             raise UnresolvedEconomy('unrecovered College exploration reward destination')
         rewards.update(deferred)
         rewards[row['ProduceID']] += low + secrets.randbelow(high - low + 1)
-        elements = {r['elementId']: r for r in state['alchemy']['elements']}
-        caps = self.repo.catalog.effect(state, 706, 12)
-        for item, count in rewards.items():
-            if item in element_items:
-                eid = element_items[item]
-                elements[eid]['num'] = min(caps[eid - 991], elements[eid]['num'] + count)
+        # 元素奖励记入炼金的元素池 (player/alchemy.py 的 alchemy_state 表)。上游旧实现
+        # 写在 college_state 快照的 alchemy.elements 上, 新炼金不读那个字段, 所以改走
+        # AlchemyStateRepository.credit_elements。没接线时退回旧字段 (兼容测试/旧库)。
+        element_deltas = {element_items[item]: count for item, count in rewards.items()
+                          if item in element_items}
+        alchemy = getattr(self.repo, 'alchemy', None)
+        if alchemy is not None:
+            alchemy.credit_elements(player_id, element_deltas)
+        else:
+            elements = {r['elementId']: r for r in state['alchemy'].setdefault('elements', [])}
+            caps = self.repo.catalog.effect(state, 706, 12)
+            now = self.repo.clock.now()
+            for eid, count in element_deltas.items():
+                row = elements.setdefault(eid, {'elementId': eid, 'num': 0,
+                                                'lastRecoverTime': now, 'buyTimesDay': 0})
+                row['num'] = min(caps[eid - 991], row['num'] + count)
+            state['alchemy']['elements'] = [elements[key] for key in sorted(elements)]
         for hero in snapshot['heroes']:
             if hero['id'] in job['heroList']:
                 hero['college_status'] = 0

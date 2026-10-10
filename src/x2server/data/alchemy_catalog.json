@@ -1,0 +1,5457 @@
+{
+ "compat": {
+  "advice_star_energy": {
+   "amount": 2,
+   "denominator": 10000
+  },
+  "cancel_refund_ratio": 0.5,
+  "customer_slots": 5,
+  "element_buy_daily_limit": 10,
+  "element_buy_tiers": [
+   {
+    "gold": 2000,
+    "num": 5,
+    "typeId": 1
+   },
+   {
+    "gold": 10000,
+    "num": 30,
+    "typeId": 2
+   }
+  ],
+  "element_cap": 100,
+  "element_recover_sec": 1800,
+  "production_slots": 8,
+  "speed_tiers": [
+   {
+    "itemId": 1237901,
+    "num": 1000,
+    "type": 1
+   },
+   {
+    "itemId": 1237902,
+    "num": 50,
+    "type": 2
+   }
+  ]
+ },
+ "customers": {
+  "38001": {
+   "like": [
+    991,
+    992
+   ],
+   "nameId": 10031,
+   "param": 1003,
+   "quests": [
+    35003,
+    35303,
+    35503
+   ],
+   "type": 1
+  },
+  "38002": {
+   "like": [
+    991,
+    993
+   ],
+   "nameId": 10041,
+   "param": 1004,
+   "quests": [
+    35004,
+    35304,
+    35504
+   ],
+   "type": 1
+  },
+  "38003": {
+   "like": [
+    991,
+    994
+   ],
+   "nameId": 10051,
+   "param": 1005,
+   "quests": [
+    35005,
+    35305,
+    35505
+   ],
+   "type": 1
+  },
+  "38004": {
+   "like": [
+    991,
+    995
+   ],
+   "nameId": 10061,
+   "param": 1006,
+   "quests": [
+    35006,
+    35306,
+    35506
+   ],
+   "type": 1
+  },
+  "38005": {
+   "like": [
+    991,
+    996
+   ],
+   "nameId": 10071,
+   "param": 1007,
+   "quests": [
+    35007,
+    35307,
+    35507
+   ],
+   "type": 1
+  },
+  "38006": {
+   "like": [
+    992,
+    993
+   ],
+   "nameId": 10081,
+   "param": 1008,
+   "quests": [
+    35008,
+    35308,
+    35508
+   ],
+   "type": 1
+  },
+  "38007": {
+   "like": [
+    992,
+    994
+   ],
+   "nameId": 10091,
+   "param": 1009,
+   "quests": [
+    35009,
+    35309,
+    35509
+   ],
+   "type": 1
+  },
+  "38008": {
+   "like": [
+    992,
+    995
+   ],
+   "nameId": 10101,
+   "param": 1010,
+   "quests": [
+    35010,
+    35310,
+    35510
+   ],
+   "type": 1
+  },
+  "38009": {
+   "like": [
+    992,
+    996
+   ],
+   "nameId": 10111,
+   "param": 1011,
+   "quests": [
+    35011,
+    35311,
+    35511
+   ],
+   "type": 1
+  },
+  "38010": {
+   "like": [
+    993,
+    994
+   ],
+   "nameId": 10121,
+   "param": 1012,
+   "quests": [
+    35012,
+    35312,
+    35512
+   ],
+   "type": 1
+  },
+  "38011": {
+   "like": [
+    993,
+    995
+   ],
+   "nameId": 10131,
+   "param": 1013,
+   "quests": [
+    35013,
+    35313,
+    35513
+   ],
+   "type": 1
+  },
+  "38012": {
+   "like": [
+    993,
+    996
+   ],
+   "nameId": 10141,
+   "param": 1014,
+   "quests": [
+    35014,
+    35314,
+    35514
+   ],
+   "type": 1
+  },
+  "38013": {
+   "like": [
+    994,
+    995
+   ],
+   "nameId": 10151,
+   "param": 1015,
+   "quests": [
+    35015,
+    35315,
+    35515
+   ],
+   "type": 1
+  },
+  "38014": {
+   "like": [
+    994,
+    996
+   ],
+   "nameId": 10161,
+   "param": 1016,
+   "quests": [
+    35016,
+    35316,
+    35516
+   ],
+   "type": 1
+  },
+  "38015": {
+   "like": [
+    995,
+    996
+   ],
+   "nameId": 10171,
+   "param": 1017,
+   "quests": [
+    35017,
+    35317,
+    35517
+   ],
+   "type": 1
+  },
+  "38016": {
+   "like": [
+    991,
+    992
+   ],
+   "nameId": 10181,
+   "param": 1018,
+   "quests": [
+    35018,
+    35318,
+    35518
+   ],
+   "type": 1
+  },
+  "38017": {
+   "like": [
+    991,
+    993
+   ],
+   "nameId": 10191,
+   "param": 1019,
+   "quests": [
+    35019,
+    35319,
+    35519
+   ],
+   "type": 1
+  },
+  "38018": {
+   "like": [
+    991,
+    994
+   ],
+   "nameId": 10201,
+   "param": 1020,
+   "quests": [
+    35020,
+    35320,
+    35520
+   ],
+   "type": 1
+  },
+  "38019": {
+   "like": [
+    991,
+    995
+   ],
+   "nameId": 10211,
+   "param": 1021,
+   "quests": [
+    35021,
+    35321,
+    35521
+   ],
+   "type": 1
+  },
+  "38020": {
+   "like": [
+    991,
+    996
+   ],
+   "nameId": 10221,
+   "param": 1022,
+   "quests": [
+    35022,
+    35322,
+    35522
+   ],
+   "type": 1
+  },
+  "38021": {
+   "like": [
+    992,
+    994
+   ],
+   "nameId": 10231,
+   "param": 1023,
+   "quests": [
+    35023,
+    35323,
+    35523
+   ],
+   "type": 1
+  },
+  "38025": {
+   "like": [
+    993,
+    994
+   ],
+   "nameId": 10251,
+   "param": 1025,
+   "quests": [
+    35025,
+    35325,
+    35525
+   ],
+   "type": 1
+  },
+  "38026": {
+   "like": [
+    993,
+    994
+   ],
+   "nameId": 10261,
+   "param": 1026,
+   "quests": [
+    35026,
+    35326,
+    35526
+   ],
+   "type": 1
+  },
+  "38027": {
+   "like": [
+    992,
+    996
+   ],
+   "nameId": 10271,
+   "param": 1027,
+   "quests": [
+    35027,
+    35327,
+    35527
+   ],
+   "type": 1
+  },
+  "38028": {
+   "like": [
+    992,
+    995
+   ],
+   "nameId": 10281,
+   "param": 1028,
+   "quests": [
+    35028,
+    35328,
+    35528
+   ],
+   "type": 1
+  },
+  "38029": {
+   "like": [
+    993,
+    994
+   ],
+   "nameId": 10291,
+   "param": 1029,
+   "quests": [
+    35029,
+    35329,
+    35529
+   ],
+   "type": 1
+  },
+  "38030": {
+   "like": [
+    992,
+    995
+   ],
+   "nameId": 10301,
+   "param": 1030,
+   "quests": [
+    35030,
+    35330,
+    35530
+   ],
+   "type": 1
+  },
+  "38031": {
+   "like": [
+    993,
+    996
+   ],
+   "nameId": 10311,
+   "param": 1031,
+   "quests": [
+    35031,
+    35331,
+    35531
+   ],
+   "type": 1
+  },
+  "38032": {
+   "like": [
+    992,
+    996
+   ],
+   "nameId": 10321,
+   "param": 1032,
+   "quests": [
+    35032,
+    35332,
+    35532
+   ],
+   "type": 1
+  },
+  "38033": {
+   "like": [
+    993,
+    994
+   ],
+   "nameId": 10331,
+   "param": 1033,
+   "quests": [
+    35033,
+    35333,
+    35533
+   ],
+   "type": 1
+  },
+  "38034": {
+   "like": [
+    994,
+    996
+   ],
+   "nameId": 10341,
+   "param": 1034,
+   "quests": [
+    35034,
+    35334,
+    35534
+   ],
+   "type": 1
+  },
+  "38035": {
+   "like": [
+    994,
+    996
+   ],
+   "nameId": 10351,
+   "param": 1035,
+   "quests": [
+    35035,
+    35335,
+    35535
+   ],
+   "type": 1
+  },
+  "38036": {
+   "like": [
+    991,
+    993
+   ],
+   "nameId": 10361,
+   "param": 1036,
+   "quests": [
+    35036,
+    35336,
+    35536
+   ],
+   "type": 1
+  },
+  "38039": {
+   "like": [
+    992,
+    996
+   ],
+   "nameId": 10391,
+   "param": 1039,
+   "quests": [
+    35039,
+    35339,
+    35539
+   ],
+   "type": 1
+  },
+  "38040": {
+   "like": [
+    992,
+    993
+   ],
+   "nameId": 10401,
+   "param": 1040,
+   "quests": [
+    35040,
+    35340,
+    35540
+   ],
+   "type": 1
+  },
+  "38197": {
+   "like": [
+    992,
+    995
+   ],
+   "nameId": 11971,
+   "param": 1197,
+   "quests": [
+    35197,
+    35497,
+    35697
+   ],
+   "type": 1
+  },
+  "38198": {
+   "like": [
+    992,
+    996
+   ],
+   "nameId": 11981,
+   "param": 1198,
+   "quests": [
+    35198,
+    35498,
+    35698
+   ],
+   "type": 1
+  },
+  "38199": {
+   "like": [
+    993,
+    994
+   ],
+   "nameId": 11991,
+   "param": 1199,
+   "quests": [
+    35199,
+    35499,
+    35699
+   ],
+   "type": 1
+  },
+  "38201": {
+   "like": [
+    993,
+    995
+   ],
+   "nameId": 382011,
+   "param": 6459,
+   "quests": [
+    35201
+   ],
+   "type": 2
+  },
+  "38202": {
+   "like": [
+    994,
+    995
+   ],
+   "nameId": 382021,
+   "param": 6434,
+   "quests": [
+    35202,
+    35203,
+    35206
+   ],
+   "type": 2
+  },
+  "38203": {
+   "like": [
+    993,
+    995
+   ],
+   "nameId": 382031,
+   "param": 6473,
+   "quests": [
+    35204
+   ],
+   "type": 2
+  },
+  "38204": {
+   "like": [
+    994,
+    995
+   ],
+   "nameId": 382041,
+   "param": 6474,
+   "quests": [
+    35205
+   ],
+   "type": 2
+  }
+ },
+ "elements": [
+  {
+   "cap": 100,
+   "id": 991,
+   "recoverNum": 3,
+   "recoverSec": 1800
+  },
+  {
+   "cap": 100,
+   "id": 992,
+   "recoverNum": 3,
+   "recoverSec": 1800
+  },
+  {
+   "cap": 100,
+   "id": 993,
+   "recoverNum": 3,
+   "recoverSec": 1800
+  },
+  {
+   "cap": 100,
+   "id": 994,
+   "recoverNum": 3,
+   "recoverSec": 1800
+  },
+  {
+   "cap": 100,
+   "id": 995,
+   "recoverNum": 3,
+   "recoverSec": 1800
+  },
+  {
+   "cap": 100,
+   "id": 996,
+   "recoverNum": 3,
+   "recoverSec": 1800
+  }
+ ],
+ "order": {
+  "991": [
+   36011,
+   36012,
+   36013,
+   36014,
+   36015,
+   36016,
+   36017,
+   36018,
+   36019,
+   36020
+  ],
+  "992": [
+   36021,
+   36022,
+   36023,
+   36024,
+   36025,
+   36026,
+   36027,
+   36028,
+   36029,
+   36030
+  ],
+  "993": [
+   36031,
+   36032,
+   36033,
+   36034,
+   36035,
+   36036,
+   36037,
+   36038,
+   36039,
+   36040
+  ],
+  "994": [
+   36041,
+   36042,
+   36043,
+   36044,
+   36045,
+   36046,
+   36047,
+   36048,
+   36049,
+   36050
+  ],
+  "995": [
+   36051,
+   36052,
+   36053,
+   36054,
+   36055,
+   36056,
+   36057,
+   36058,
+   36059,
+   36060
+  ],
+  "996": [
+   36061,
+   36062,
+   36063,
+   36064,
+   36065,
+   36066,
+   36067,
+   36068,
+   36069,
+   36070
+  ]
+ },
+ "provenance": {
+  "field_columns": {
+   "CollegeCustomer": [
+    "CustomerID",
+    "Type",
+    "Param",
+    "Name",
+    "QDrawing",
+    "Like",
+    "ChatChance",
+    "ChatParam",
+    "PriceDesc",
+    "PriceAction",
+    "PriceExpression",
+    "DiscountDesc",
+    "DiscountAction",
+    "DiscountExpression",
+    "SuggestDesc",
+    "SuggestAction",
+    "SuggestExpression",
+    "ChatDesc",
+    "ChatAction",
+    "ChatExpression",
+    "ChatNegativeDesc",
+    "ChatNegativeAction",
+    "ChatNegativeExpression",
+    "RefuseDesc",
+    "RefuseAction",
+    "RefuseExpression",
+    "SuccessDesc",
+    "SuccessAction",
+    "SuccessExpression",
+    "NotEnoughDesc",
+    "ExpressionEffectID",
+    "NegativeEffectID"
+   ],
+   "CollegeQuest": [
+    "QuestID",
+    "QuestType",
+    "Icon",
+    "QuestNameID",
+    "QuestDescID",
+    "Hero",
+    "Param",
+    "AwardType",
+    "AwardGroup",
+    "QuestCompleteID"
+   ],
+   "CollegeRecipe": [
+    "RecipeID",
+    "RecipeType",
+    "RecipeLevel",
+    "ProductID",
+    "ProductNum",
+    "Gold",
+    "Pay",
+    "ItemGroup",
+    "ItemNum",
+    "WaitTimes",
+    "Exp",
+    "RecipeEffect1",
+    "RecipeEffectParam1",
+    "RecipeEffect2",
+    "RecipeEffectParam2",
+    "RecipeEffect3",
+    "RecipeEffectParam3",
+    "RecipeEffect4",
+    "RecipeEffectParam4",
+    "RecipeEffect5",
+    "RecipeEffectParam5"
+   ]
+  },
+  "revival_constants": {
+   "note": "买元素挡位/每日限购、加速挡位、取消退还比例在客户端表里没有闭环证据 (SERVER_ONLY_UNKNOWN), 仍是 Revival 兼容常量, 见 compat 节, 不声称是官方数值",
+   "see": "compat"
+  },
+  "source": "x2offline/data/table_json/CollegeRecipe.json + CollegeCustomer.json + CollegeQuest.json (客户端自己的表)",
+  "table_derived": {
+   "GlobalParamString": {
+    "AlchemyAdviceParam": "10000|2 → compat.advice_star_energy (换委托/委派 600 的星能成本 = ceil(Gold/10000*2))",
+    "AlchemyCustomerNum": "5 → compat.customer_slots / slots.customer (顾客槽位数)",
+    "AlchemyNum": "8 → compat.production_slots / slots.production (炼金产槽数)",
+    "Element01..06": "1800 → elements[*].recoverSec (元素恢复间隔秒)",
+    "Element01..06Param": "100|100|3 → elements[*].cap=100 (上限) 与 elements[*].recoverNum=3 (每次恢复量); 首值 100 为初始值, 与上限相同"
+   },
+   "note": "GlobalParamString 里的炼金常量已按表落地; 同一张表里的 AlchemyPriceNum/AlchemyPriceParam、AlchemyDiscountNum/AlchemyDiscountParam、AlchemyAdviceParam、AlchemyChatParam 与 CollegeCustomer 的 Price*/Discount*/Suggest*/Chat* 列一一对应, 是**顾客交互**参数, 不是买元素/加速价格, 因此未用于 compat 的挡位。例外: AlchemyAdviceParam 已按表落地为 compat.advice_star_energy, 供 600 换委托/委派收星能用。"
+  },
+  "table_values": "recipes[*].{type,level,productId,productNum,gold,pay,itemGroup,itemNum,waitSec,exp} 与 customers/quests 全部取自表内列; Pay = 该元素消耗量, Gold = 金币, WaitTimes = 制作秒数; recipes[*].effects 取自 CollegeRecipe 的 RecipeEffect1..5/RecipeEffectParam1..5"
+ },
+ "quests": {
+  "35003": {
+   "awardGroup": [
+    782003
+   ],
+   "awardType": 1,
+   "hero": 1003,
+   "param": 38001,
+   "type": 1
+  },
+  "35004": {
+   "awardGroup": [
+    782004
+   ],
+   "awardType": 1,
+   "hero": 1004,
+   "param": 38002,
+   "type": 1
+  },
+  "35005": {
+   "awardGroup": [
+    782005
+   ],
+   "awardType": 1,
+   "hero": 1005,
+   "param": 38003,
+   "type": 1
+  },
+  "35006": {
+   "awardGroup": [
+    782006
+   ],
+   "awardType": 1,
+   "hero": 1006,
+   "param": 38004,
+   "type": 1
+  },
+  "35007": {
+   "awardGroup": [
+    782007
+   ],
+   "awardType": 1,
+   "hero": 1007,
+   "param": 38005,
+   "type": 1
+  },
+  "35008": {
+   "awardGroup": [
+    782008
+   ],
+   "awardType": 1,
+   "hero": 1008,
+   "param": 38006,
+   "type": 1
+  },
+  "35009": {
+   "awardGroup": [
+    782009
+   ],
+   "awardType": 1,
+   "hero": 1009,
+   "param": 38007,
+   "type": 1
+  },
+  "35010": {
+   "awardGroup": [
+    782010
+   ],
+   "awardType": 1,
+   "hero": 1010,
+   "param": 38008,
+   "type": 1
+  },
+  "35011": {
+   "awardGroup": [
+    782011
+   ],
+   "awardType": 1,
+   "hero": 1011,
+   "param": 38009,
+   "type": 1
+  },
+  "35012": {
+   "awardGroup": [
+    782012
+   ],
+   "awardType": 1,
+   "hero": 1012,
+   "param": 38010,
+   "type": 1
+  },
+  "35013": {
+   "awardGroup": [
+    782013
+   ],
+   "awardType": 1,
+   "hero": 1013,
+   "param": 38011,
+   "type": 1
+  },
+  "35014": {
+   "awardGroup": [
+    782014
+   ],
+   "awardType": 1,
+   "hero": 1014,
+   "param": 38012,
+   "type": 1
+  },
+  "35015": {
+   "awardGroup": [
+    782015
+   ],
+   "awardType": 1,
+   "hero": 1015,
+   "param": 38013,
+   "type": 1
+  },
+  "35016": {
+   "awardGroup": [
+    782016
+   ],
+   "awardType": 1,
+   "hero": 1016,
+   "param": 38014,
+   "type": 1
+  },
+  "35017": {
+   "awardGroup": [
+    782017
+   ],
+   "awardType": 1,
+   "hero": 1017,
+   "param": 38015,
+   "type": 1
+  },
+  "35018": {
+   "awardGroup": [
+    782018
+   ],
+   "awardType": 1,
+   "hero": 1018,
+   "param": 38016,
+   "type": 1
+  },
+  "35019": {
+   "awardGroup": [
+    782019
+   ],
+   "awardType": 1,
+   "hero": 1019,
+   "param": 38017,
+   "type": 1
+  },
+  "35020": {
+   "awardGroup": [
+    782020
+   ],
+   "awardType": 1,
+   "hero": 1020,
+   "param": 38018,
+   "type": 1
+  },
+  "35021": {
+   "awardGroup": [
+    782021
+   ],
+   "awardType": 1,
+   "hero": 1021,
+   "param": 38019,
+   "type": 1
+  },
+  "35022": {
+   "awardGroup": [
+    782022
+   ],
+   "awardType": 1,
+   "hero": 1022,
+   "param": 38020,
+   "type": 1
+  },
+  "35023": {
+   "awardGroup": [
+    782023
+   ],
+   "awardType": 1,
+   "hero": 1023,
+   "param": 38021,
+   "type": 1
+  },
+  "35025": {
+   "awardGroup": [
+    782025
+   ],
+   "awardType": 1,
+   "hero": 1025,
+   "param": 38025,
+   "type": 1
+  },
+  "35026": {
+   "awardGroup": [
+    782026
+   ],
+   "awardType": 1,
+   "hero": 1026,
+   "param": 38026,
+   "type": 1
+  },
+  "35027": {
+   "awardGroup": [
+    782027
+   ],
+   "awardType": 1,
+   "hero": 1027,
+   "param": 38027,
+   "type": 1
+  },
+  "35028": {
+   "awardGroup": [
+    782028
+   ],
+   "awardType": 1,
+   "hero": 1028,
+   "param": 38028,
+   "type": 1
+  },
+  "35029": {
+   "awardGroup": [
+    782029
+   ],
+   "awardType": 1,
+   "hero": 1029,
+   "param": 38029,
+   "type": 1
+  },
+  "35030": {
+   "awardGroup": [
+    782030
+   ],
+   "awardType": 1,
+   "hero": 1030,
+   "param": 38030,
+   "type": 1
+  },
+  "35031": {
+   "awardGroup": [
+    782031
+   ],
+   "awardType": 1,
+   "hero": 1031,
+   "param": 38031,
+   "type": 1
+  },
+  "35032": {
+   "awardGroup": [
+    782032
+   ],
+   "awardType": 1,
+   "hero": 1032,
+   "param": 38032,
+   "type": 1
+  },
+  "35033": {
+   "awardGroup": [
+    782033
+   ],
+   "awardType": 1,
+   "hero": 1033,
+   "param": 38033,
+   "type": 1
+  },
+  "35034": {
+   "awardGroup": [
+    782034
+   ],
+   "awardType": 1,
+   "hero": 1034,
+   "param": 38034,
+   "type": 1
+  },
+  "35035": {
+   "awardGroup": [
+    782035
+   ],
+   "awardType": 1,
+   "hero": 1035,
+   "param": 38035,
+   "type": 1
+  },
+  "35036": {
+   "awardGroup": [
+    782036
+   ],
+   "awardType": 1,
+   "hero": 1036,
+   "param": 38036,
+   "type": 1
+  },
+  "35039": {
+   "awardGroup": [
+    782039
+   ],
+   "awardType": 1,
+   "hero": 1039,
+   "param": 38039,
+   "type": 1
+  },
+  "35040": {
+   "awardGroup": [
+    782040
+   ],
+   "awardType": 1,
+   "hero": 1040,
+   "param": 38040,
+   "type": 1
+  },
+  "35197": {
+   "awardGroup": [
+    782197
+   ],
+   "awardType": 1,
+   "hero": 1197,
+   "param": 38197,
+   "type": 1
+  },
+  "35198": {
+   "awardGroup": [
+    782198
+   ],
+   "awardType": 1,
+   "hero": 1198,
+   "param": 38198,
+   "type": 1
+  },
+  "35199": {
+   "awardGroup": [
+    782199
+   ],
+   "awardType": 1,
+   "hero": 1199,
+   "param": 38199,
+   "type": 1
+  },
+  "35201": {
+   "awardGroup": [
+    10000
+   ],
+   "awardType": 2,
+   "hero": 0,
+   "param": 38201,
+   "type": 4
+  },
+  "35202": {
+   "awardGroup": [
+    300,
+    5
+   ],
+   "awardType": 3,
+   "hero": 0,
+   "param": 38202,
+   "type": 5
+  },
+  "35203": {
+   "awardGroup": [
+    300,
+    5
+   ],
+   "awardType": 3,
+   "hero": 0,
+   "param": 38202,
+   "type": 6
+  },
+  "35204": {
+   "awardGroup": [
+    795085,
+    795086,
+    795087
+   ],
+   "awardType": 1,
+   "hero": 0,
+   "param": 38203,
+   "type": 7
+  },
+  "35205": {
+   "awardGroup": [
+    795088,
+    795089,
+    795090,
+    795091,
+    795092,
+    795093,
+    795094,
+    795095,
+    795096,
+    795097,
+    795098,
+    795099,
+    795100,
+    795101,
+    795102,
+    795103
+   ],
+   "awardType": 1,
+   "hero": 0,
+   "param": 38204,
+   "type": 7
+  },
+  "35206": {
+   "awardGroup": [
+    795104,
+    795105,
+    795106,
+    795107,
+    795108,
+    795109,
+    795110,
+    795111,
+    795112,
+    795113,
+    795114,
+    795115,
+    795116,
+    795117,
+    795118,
+    795119,
+    795120,
+    795121,
+    795122,
+    795123,
+    795124,
+    795125,
+    795126,
+    795127,
+    795128,
+    795129,
+    795130,
+    795131,
+    795132,
+    795133,
+    795134,
+    795135
+   ],
+   "awardType": 1,
+   "hero": 0,
+   "param": 38202,
+   "type": 7
+  },
+  "35303": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1003,
+   "param": 38001,
+   "type": 2
+  },
+  "35304": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1004,
+   "param": 38002,
+   "type": 2
+  },
+  "35305": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1005,
+   "param": 38003,
+   "type": 2
+  },
+  "35306": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1006,
+   "param": 38004,
+   "type": 2
+  },
+  "35307": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1007,
+   "param": 38005,
+   "type": 2
+  },
+  "35308": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1008,
+   "param": 38006,
+   "type": 2
+  },
+  "35309": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1009,
+   "param": 38007,
+   "type": 2
+  },
+  "35310": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1010,
+   "param": 38008,
+   "type": 2
+  },
+  "35311": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1011,
+   "param": 38009,
+   "type": 2
+  },
+  "35312": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1012,
+   "param": 38010,
+   "type": 2
+  },
+  "35313": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1013,
+   "param": 38011,
+   "type": 2
+  },
+  "35314": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1014,
+   "param": 38012,
+   "type": 2
+  },
+  "35315": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1015,
+   "param": 38013,
+   "type": 2
+  },
+  "35316": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1016,
+   "param": 38014,
+   "type": 2
+  },
+  "35317": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1017,
+   "param": 38015,
+   "type": 2
+  },
+  "35318": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1018,
+   "param": 38016,
+   "type": 2
+  },
+  "35319": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1019,
+   "param": 38017,
+   "type": 2
+  },
+  "35320": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1020,
+   "param": 38018,
+   "type": 2
+  },
+  "35321": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1021,
+   "param": 38019,
+   "type": 2
+  },
+  "35322": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1022,
+   "param": 38020,
+   "type": 2
+  },
+  "35323": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1023,
+   "param": 38021,
+   "type": 2
+  },
+  "35325": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1025,
+   "param": 38025,
+   "type": 2
+  },
+  "35326": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1026,
+   "param": 38026,
+   "type": 2
+  },
+  "35327": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1027,
+   "param": 38027,
+   "type": 2
+  },
+  "35328": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1028,
+   "param": 38028,
+   "type": 2
+  },
+  "35329": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1029,
+   "param": 38029,
+   "type": 2
+  },
+  "35330": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1030,
+   "param": 38030,
+   "type": 2
+  },
+  "35331": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1031,
+   "param": 38031,
+   "type": 2
+  },
+  "35332": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1032,
+   "param": 38032,
+   "type": 2
+  },
+  "35333": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1033,
+   "param": 38033,
+   "type": 2
+  },
+  "35334": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1034,
+   "param": 38034,
+   "type": 2
+  },
+  "35335": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1035,
+   "param": 38035,
+   "type": 2
+  },
+  "35336": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1036,
+   "param": 38036,
+   "type": 2
+  },
+  "35339": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1039,
+   "param": 38039,
+   "type": 2
+  },
+  "35340": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1040,
+   "param": 38040,
+   "type": 2
+  },
+  "35497": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1197,
+   "param": 38197,
+   "type": 2
+  },
+  "35498": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1198,
+   "param": 38198,
+   "type": 2
+  },
+  "35499": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1199,
+   "param": 38199,
+   "type": 2
+  },
+  "35503": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1003,
+   "param": 38001,
+   "type": 3
+  },
+  "35504": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1004,
+   "param": 38002,
+   "type": 3
+  },
+  "35505": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1005,
+   "param": 38003,
+   "type": 3
+  },
+  "35506": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1006,
+   "param": 38004,
+   "type": 3
+  },
+  "35507": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1007,
+   "param": 38005,
+   "type": 3
+  },
+  "35508": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1008,
+   "param": 38006,
+   "type": 3
+  },
+  "35509": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1009,
+   "param": 38007,
+   "type": 3
+  },
+  "35510": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1010,
+   "param": 38008,
+   "type": 3
+  },
+  "35511": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1011,
+   "param": 38009,
+   "type": 3
+  },
+  "35512": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1012,
+   "param": 38010,
+   "type": 3
+  },
+  "35513": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1013,
+   "param": 38011,
+   "type": 3
+  },
+  "35514": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1014,
+   "param": 38012,
+   "type": 3
+  },
+  "35515": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1015,
+   "param": 38013,
+   "type": 3
+  },
+  "35516": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1016,
+   "param": 38014,
+   "type": 3
+  },
+  "35517": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1017,
+   "param": 38015,
+   "type": 3
+  },
+  "35518": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1018,
+   "param": 38016,
+   "type": 3
+  },
+  "35519": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1019,
+   "param": 38017,
+   "type": 3
+  },
+  "35520": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1020,
+   "param": 38018,
+   "type": 3
+  },
+  "35521": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1021,
+   "param": 38019,
+   "type": 3
+  },
+  "35522": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1022,
+   "param": 38020,
+   "type": 3
+  },
+  "35523": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1023,
+   "param": 38021,
+   "type": 3
+  },
+  "35525": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1025,
+   "param": 38025,
+   "type": 3
+  },
+  "35526": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1026,
+   "param": 38026,
+   "type": 3
+  },
+  "35527": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1027,
+   "param": 38027,
+   "type": 3
+  },
+  "35528": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1028,
+   "param": 38028,
+   "type": 3
+  },
+  "35529": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1029,
+   "param": 38029,
+   "type": 3
+  },
+  "35530": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1030,
+   "param": 38030,
+   "type": 3
+  },
+  "35531": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1031,
+   "param": 38031,
+   "type": 3
+  },
+  "35532": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1032,
+   "param": 38032,
+   "type": 3
+  },
+  "35533": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1033,
+   "param": 38033,
+   "type": 3
+  },
+  "35534": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1034,
+   "param": 38034,
+   "type": 3
+  },
+  "35535": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1035,
+   "param": 38035,
+   "type": 3
+  },
+  "35536": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1036,
+   "param": 38036,
+   "type": 3
+  },
+  "35539": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1039,
+   "param": 38039,
+   "type": 3
+  },
+  "35540": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1040,
+   "param": 38040,
+   "type": 3
+  },
+  "35697": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1197,
+   "param": 38197,
+   "type": 3
+  },
+  "35698": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1198,
+   "param": 38198,
+   "type": 3
+  },
+  "35699": {
+   "awardGroup": [
+    500
+   ],
+   "awardType": 2,
+   "hero": 1199,
+   "param": 38199,
+   "type": 3
+  }
+ },
+ "recipes": {
+  "36011": {
+   "effects": [
+    [
+     3,
+     [
+      36012
+     ]
+    ],
+    [
+     1,
+     [
+      1237991,
+      1
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     4,
+     [
+      1000
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    9,
+    12,
+    18
+   ],
+   "gold": 2400,
+   "itemGroup": [
+    1237991
+   ],
+   "itemNum": [
+    4
+   ],
+   "level": 1,
+   "pay": 5,
+   "productId": 1280011,
+   "productNum": 1,
+   "type": 991,
+   "waitSec": 4000
+  },
+  "36012": {
+   "effects": [
+    [
+     1,
+     [
+      1237991,
+      2
+     ]
+    ],
+    [
+     3,
+     [
+      36013
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     4,
+     [
+      1425
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 3420,
+   "itemGroup": [
+    1237991
+   ],
+   "itemNum": [
+    9
+   ],
+   "level": 2,
+   "pay": 7,
+   "productId": 1280012,
+   "productNum": 1,
+   "type": 991,
+   "waitSec": 5700
+  },
+  "36013": {
+   "effects": [
+    [
+     1,
+     [
+      1237991,
+      4
+     ]
+    ],
+    [
+     3,
+     [
+      36014
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     4,
+     [
+      2100
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 5040,
+   "itemGroup": [
+    1237991,
+    1281001
+   ],
+   "itemNum": [
+    16,
+    2
+   ],
+   "level": 3,
+   "pay": 10,
+   "productId": 1280013,
+   "productNum": 1,
+   "type": 991,
+   "waitSec": 8400
+  },
+  "36014": {
+   "effects": [
+    [
+     1,
+     [
+      1237991,
+      6
+     ]
+    ],
+    [
+     3,
+     [
+      36015
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     4,
+     [
+      2775
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 6660,
+   "itemGroup": [
+    1237991,
+    1281002
+   ],
+   "itemNum": [
+    25,
+    2
+   ],
+   "level": 4,
+   "pay": 13,
+   "productId": 1280014,
+   "productNum": 1,
+   "type": 991,
+   "waitSec": 11100
+  },
+  "36015": {
+   "effects": [
+    [
+     1,
+     [
+      1237991,
+      9
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     3,
+     [
+      36016
+     ]
+    ],
+    [
+     4,
+     [
+      3450
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 8280,
+   "itemGroup": [
+    1237991,
+    1237995,
+    1281004
+   ],
+   "itemNum": [
+    36,
+    5,
+    2
+   ],
+   "level": 5,
+   "pay": 17,
+   "productId": 1280015,
+   "productNum": 1,
+   "type": 991,
+   "waitSec": 13800
+  },
+  "36016": {
+   "effects": [
+    [
+     1,
+     [
+      1237991,
+      12
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     3,
+     [
+      36017
+     ]
+    ],
+    [
+     4,
+     [
+      4125
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 9900,
+   "itemGroup": [
+    1237991,
+    1237995,
+    1281005
+   ],
+   "itemNum": [
+    49,
+    6,
+    2
+   ],
+   "level": 6,
+   "pay": 20,
+   "productId": 1280016,
+   "productNum": 1,
+   "type": 991,
+   "waitSec": 16500
+  },
+  "36017": {
+   "effects": [
+    [
+     1,
+     [
+      1237991,
+      16
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     3,
+     [
+      36018
+     ]
+    ],
+    [
+     4,
+     [
+      4800
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 11520,
+   "itemGroup": [
+    1237991,
+    1237995,
+    1281007
+   ],
+   "itemNum": [
+    64,
+    7,
+    2
+   ],
+   "level": 7,
+   "pay": 21,
+   "productId": 1280017,
+   "productNum": 1,
+   "type": 991,
+   "waitSec": 19200
+  },
+  "36018": {
+   "effects": [
+    [
+     1,
+     [
+      1237991,
+      20
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     4,
+     [
+      5475
+     ]
+    ],
+    [
+     3,
+     [
+      36019
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 13140,
+   "itemGroup": [
+    1237991,
+    1237995,
+    1281008
+   ],
+   "itemNum": [
+    81,
+    8,
+    2
+   ],
+   "level": 8,
+   "pay": 22,
+   "productId": 1280018,
+   "productNum": 1,
+   "type": 991,
+   "waitSec": 21900
+  },
+  "36019": {
+   "effects": [
+    [
+     1,
+     [
+      1237991,
+      25
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     4,
+     [
+      6150
+     ]
+    ],
+    [
+     3,
+     [
+      36020
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 14760,
+   "itemGroup": [
+    1237991,
+    1237995,
+    1281010
+   ],
+   "itemNum": [
+    100,
+    9,
+    2
+   ],
+   "level": 9,
+   "pay": 22,
+   "productId": 1280019,
+   "productNum": 1,
+   "type": 991,
+   "waitSec": 24600
+  },
+  "36020": {
+   "effects": [
+    [
+     1,
+     [
+      1237991,
+      30
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     1,
+     [
+      1237995,
+      5
+     ]
+    ],
+    [
+     4,
+     [
+      7200
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 17280,
+   "itemGroup": [
+    1237991,
+    1237995,
+    1281011
+   ],
+   "itemNum": [
+    121,
+    10,
+    2
+   ],
+   "level": 10,
+   "pay": 26,
+   "productId": 1280020,
+   "productNum": 1,
+   "type": 991,
+   "waitSec": 28800
+  },
+  "36021": {
+   "effects": [
+    [
+     3,
+     [
+      36022
+     ]
+    ],
+    [
+     1,
+     [
+      1237992,
+      1
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     4,
+     [
+      1000
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    9,
+    12,
+    18
+   ],
+   "gold": 2400,
+   "itemGroup": [
+    1237992
+   ],
+   "itemNum": [
+    4
+   ],
+   "level": 1,
+   "pay": 5,
+   "productId": 1280021,
+   "productNum": 1,
+   "type": 992,
+   "waitSec": 4000
+  },
+  "36022": {
+   "effects": [
+    [
+     1,
+     [
+      1237992,
+      2
+     ]
+    ],
+    [
+     3,
+     [
+      36023
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     4,
+     [
+      1700
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 4080,
+   "itemGroup": [
+    1237992,
+    1281001
+   ],
+   "itemNum": [
+    9,
+    2
+   ],
+   "level": 2,
+   "pay": 8,
+   "productId": 1280022,
+   "productNum": 1,
+   "type": 992,
+   "waitSec": 6800
+  },
+  "36023": {
+   "effects": [
+    [
+     1,
+     [
+      1237992,
+      4
+     ]
+    ],
+    [
+     3,
+     [
+      36024
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     4,
+     [
+      2500
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 6000,
+   "itemGroup": [
+    1237992,
+    1281003
+   ],
+   "itemNum": [
+    16,
+    2
+   ],
+   "level": 3,
+   "pay": 12,
+   "productId": 1280023,
+   "productNum": 1,
+   "type": 992,
+   "waitSec": 10000
+  },
+  "36024": {
+   "effects": [
+    [
+     1,
+     [
+      1237992,
+      6
+     ]
+    ],
+    [
+     3,
+     [
+      36025
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     4,
+     [
+      3300
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 7920,
+   "itemGroup": [
+    1237992,
+    1281004
+   ],
+   "itemNum": [
+    25,
+    2
+   ],
+   "level": 4,
+   "pay": 16,
+   "productId": 1280024,
+   "productNum": 1,
+   "type": 992,
+   "waitSec": 13200
+  },
+  "36025": {
+   "effects": [
+    [
+     1,
+     [
+      1237992,
+      9
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     3,
+     [
+      36026
+     ]
+    ],
+    [
+     4,
+     [
+      4100
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 9840,
+   "itemGroup": [
+    1237992,
+    1237996,
+    1281006
+   ],
+   "itemNum": [
+    36,
+    5,
+    2
+   ],
+   "level": 5,
+   "pay": 20,
+   "productId": 1280025,
+   "productNum": 1,
+   "type": 992,
+   "waitSec": 16400
+  },
+  "36026": {
+   "effects": [
+    [
+     1,
+     [
+      1237992,
+      12
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     3,
+     [
+      36027
+     ]
+    ],
+    [
+     4,
+     [
+      4900
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 11760,
+   "itemGroup": [
+    1237992,
+    1237996,
+    1281007
+   ],
+   "itemNum": [
+    49,
+    6,
+    2
+   ],
+   "level": 6,
+   "pay": 24,
+   "productId": 1280026,
+   "productNum": 1,
+   "type": 992,
+   "waitSec": 19600
+  },
+  "36027": {
+   "effects": [
+    [
+     1,
+     [
+      1237992,
+      16
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     3,
+     [
+      36028
+     ]
+    ],
+    [
+     4,
+     [
+      5700
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 13680,
+   "itemGroup": [
+    1237992,
+    1237996,
+    1281009
+   ],
+   "itemNum": [
+    64,
+    7,
+    2
+   ],
+   "level": 7,
+   "pay": 25,
+   "productId": 1280027,
+   "productNum": 1,
+   "type": 992,
+   "waitSec": 22800
+  },
+  "36028": {
+   "effects": [
+    [
+     1,
+     [
+      1237992,
+      20
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     4,
+     [
+      6500
+     ]
+    ],
+    [
+     3,
+     [
+      36029
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 15600,
+   "itemGroup": [
+    1237992,
+    1237996,
+    1281010
+   ],
+   "itemNum": [
+    81,
+    8,
+    2
+   ],
+   "level": 8,
+   "pay": 26,
+   "productId": 1280028,
+   "productNum": 1,
+   "type": 992,
+   "waitSec": 26000
+  },
+  "36029": {
+   "effects": [
+    [
+     1,
+     [
+      1237992,
+      25
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     4,
+     [
+      7300
+     ]
+    ],
+    [
+     3,
+     [
+      36030
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 17520,
+   "itemGroup": [
+    1237992,
+    1237996,
+    1281012
+   ],
+   "itemNum": [
+    100,
+    9,
+    2
+   ],
+   "level": 9,
+   "pay": 26,
+   "productId": 1280029,
+   "productNum": 1,
+   "type": 992,
+   "waitSec": 29200
+  },
+  "36030": {
+   "effects": [
+    [
+     1,
+     [
+      1237992,
+      30
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     1,
+     [
+      1237996,
+      5
+     ]
+    ],
+    [
+     4,
+     [
+      8100
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 19440,
+   "itemGroup": [
+    1237992,
+    1237996,
+    1281013
+   ],
+   "itemNum": [
+    121,
+    10,
+    2
+   ],
+   "level": 10,
+   "pay": 29,
+   "productId": 1280030,
+   "productNum": 1,
+   "type": 992,
+   "waitSec": 32400
+  },
+  "36031": {
+   "effects": [
+    [
+     3,
+     [
+      36032
+     ]
+    ],
+    [
+     1,
+     [
+      1237993,
+      1
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     4,
+     [
+      1050
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    9,
+    12,
+    18
+   ],
+   "gold": 2520,
+   "itemGroup": [
+    1237993
+   ],
+   "itemNum": [
+    4
+   ],
+   "level": 1,
+   "pay": 5,
+   "productId": 1280031,
+   "productNum": 1,
+   "type": 993,
+   "waitSec": 4200
+  },
+  "36032": {
+   "effects": [
+    [
+     1,
+     [
+      1237993,
+      2
+     ]
+    ],
+    [
+     3,
+     [
+      36033
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     4,
+     [
+      1925
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 4620,
+   "itemGroup": [
+    1237993
+   ],
+   "itemNum": [
+    9
+   ],
+   "level": 2,
+   "pay": 9,
+   "productId": 1280032,
+   "productNum": 1,
+   "type": 993,
+   "waitSec": 7700
+  },
+  "36033": {
+   "effects": [
+    [
+     1,
+     [
+      1237993,
+      4
+     ]
+    ],
+    [
+     3,
+     [
+      36034
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     4,
+     [
+      2800
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 6720,
+   "itemGroup": [
+    1237993,
+    1281002
+   ],
+   "itemNum": [
+    16,
+    2
+   ],
+   "level": 3,
+   "pay": 13,
+   "productId": 1280033,
+   "productNum": 1,
+   "type": 993,
+   "waitSec": 11200
+  },
+  "36034": {
+   "effects": [
+    [
+     1,
+     [
+      1237993,
+      6
+     ]
+    ],
+    [
+     3,
+     [
+      36035
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     4,
+     [
+      3675
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 8820,
+   "itemGroup": [
+    1237993,
+    1281003
+   ],
+   "itemNum": [
+    25,
+    2
+   ],
+   "level": 4,
+   "pay": 18,
+   "productId": 1280034,
+   "productNum": 1,
+   "type": 993,
+   "waitSec": 14700
+  },
+  "36035": {
+   "effects": [
+    [
+     1,
+     [
+      1237993,
+      9
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     3,
+     [
+      36036
+     ]
+    ],
+    [
+     4,
+     [
+      4550
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 10920,
+   "itemGroup": [
+    1237993,
+    1237995,
+    1281005
+   ],
+   "itemNum": [
+    36,
+    5,
+    2
+   ],
+   "level": 5,
+   "pay": 22,
+   "productId": 1280035,
+   "productNum": 1,
+   "type": 993,
+   "waitSec": 18200
+  },
+  "36036": {
+   "effects": [
+    [
+     1,
+     [
+      1237993,
+      12
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     3,
+     [
+      36037
+     ]
+    ],
+    [
+     4,
+     [
+      5425
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 13020,
+   "itemGroup": [
+    1237993,
+    1237995,
+    1281006
+   ],
+   "itemNum": [
+    49,
+    6,
+    2
+   ],
+   "level": 6,
+   "pay": 26,
+   "productId": 1280036,
+   "productNum": 1,
+   "type": 993,
+   "waitSec": 21700
+  },
+  "36037": {
+   "effects": [
+    [
+     1,
+     [
+      1237993,
+      16
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     3,
+     [
+      36038
+     ]
+    ],
+    [
+     4,
+     [
+      6300
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 15120,
+   "itemGroup": [
+    1237993,
+    1237995,
+    1281008
+   ],
+   "itemNum": [
+    64,
+    7,
+    2
+   ],
+   "level": 7,
+   "pay": 28,
+   "productId": 1280037,
+   "productNum": 1,
+   "type": 993,
+   "waitSec": 25200
+  },
+  "36038": {
+   "effects": [
+    [
+     1,
+     [
+      1237993,
+      20
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     4,
+     [
+      7175
+     ]
+    ],
+    [
+     3,
+     [
+      36039
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 17220,
+   "itemGroup": [
+    1237993,
+    1237995,
+    1281009
+   ],
+   "itemNum": [
+    81,
+    8,
+    2
+   ],
+   "level": 8,
+   "pay": 29,
+   "productId": 1280038,
+   "productNum": 1,
+   "type": 993,
+   "waitSec": 28700
+  },
+  "36039": {
+   "effects": [
+    [
+     1,
+     [
+      1237993,
+      25
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     4,
+     [
+      8050
+     ]
+    ],
+    [
+     3,
+     [
+      36040
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 19320,
+   "itemGroup": [
+    1237993,
+    1237995,
+    1281011
+   ],
+   "itemNum": [
+    100,
+    9,
+    2
+   ],
+   "level": 9,
+   "pay": 29,
+   "productId": 1280039,
+   "productNum": 1,
+   "type": 993,
+   "waitSec": 32200
+  },
+  "36040": {
+   "effects": [
+    [
+     1,
+     [
+      1237993,
+      30
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     1,
+     [
+      1237995,
+      5
+     ]
+    ],
+    [
+     4,
+     [
+      9000
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 21600,
+   "itemGroup": [
+    1237993,
+    1237995,
+    1281012
+   ],
+   "itemNum": [
+    121,
+    10,
+    2
+   ],
+   "level": 10,
+   "pay": 32,
+   "productId": 1280040,
+   "productNum": 1,
+   "type": 993,
+   "waitSec": 36000
+  },
+  "36041": {
+   "effects": [
+    [
+     3,
+     [
+      36042
+     ]
+    ],
+    [
+     1,
+     [
+      1237994,
+      1
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     4,
+     [
+      1200
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    9,
+    12,
+    18
+   ],
+   "gold": 2880,
+   "itemGroup": [
+    1237994
+   ],
+   "itemNum": [
+    4
+   ],
+   "level": 1,
+   "pay": 6,
+   "productId": 1280041,
+   "productNum": 1,
+   "type": 994,
+   "waitSec": 4800
+  },
+  "36042": {
+   "effects": [
+    [
+     1,
+     [
+      1237994,
+      2
+     ]
+    ],
+    [
+     3,
+     [
+      36043
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     4,
+     [
+      2100
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 5040,
+   "itemGroup": [
+    1237994,
+    1281002
+   ],
+   "itemNum": [
+    9,
+    2
+   ],
+   "level": 2,
+   "pay": 10,
+   "productId": 1280042,
+   "productNum": 1,
+   "type": 994,
+   "waitSec": 8400
+  },
+  "36043": {
+   "effects": [
+    [
+     1,
+     [
+      1237994,
+      4
+     ]
+    ],
+    [
+     3,
+     [
+      36044
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     4,
+     [
+      3000
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 7200,
+   "itemGroup": [
+    1237994,
+    1281001
+   ],
+   "itemNum": [
+    16,
+    2
+   ],
+   "level": 3,
+   "pay": 14,
+   "productId": 1280043,
+   "productNum": 1,
+   "type": 994,
+   "waitSec": 12000
+  },
+  "36044": {
+   "effects": [
+    [
+     1,
+     [
+      1237994,
+      6
+     ]
+    ],
+    [
+     3,
+     [
+      36045
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     4,
+     [
+      3900
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 9360,
+   "itemGroup": [
+    1237994,
+    1281005
+   ],
+   "itemNum": [
+    25,
+    2
+   ],
+   "level": 4,
+   "pay": 19,
+   "productId": 1280044,
+   "productNum": 1,
+   "type": 994,
+   "waitSec": 15600
+  },
+  "36045": {
+   "effects": [
+    [
+     1,
+     [
+      1237994,
+      9
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     3,
+     [
+      36046
+     ]
+    ],
+    [
+     4,
+     [
+      4800
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 11520,
+   "itemGroup": [
+    1237994,
+    1237996,
+    1281004
+   ],
+   "itemNum": [
+    36,
+    5,
+    2
+   ],
+   "level": 5,
+   "pay": 23,
+   "productId": 1280045,
+   "productNum": 1,
+   "type": 994,
+   "waitSec": 19200
+  },
+  "36046": {
+   "effects": [
+    [
+     1,
+     [
+      1237994,
+      12
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     3,
+     [
+      36047
+     ]
+    ],
+    [
+     4,
+     [
+      5700
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 13680,
+   "itemGroup": [
+    1237994,
+    1237996,
+    1281008
+   ],
+   "itemNum": [
+    49,
+    6,
+    2
+   ],
+   "level": 6,
+   "pay": 27,
+   "productId": 1280046,
+   "productNum": 1,
+   "type": 994,
+   "waitSec": 22800
+  },
+  "36047": {
+   "effects": [
+    [
+     1,
+     [
+      1237994,
+      16
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     3,
+     [
+      36048
+     ]
+    ],
+    [
+     4,
+     [
+      6600
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 15840,
+   "itemGroup": [
+    1237994,
+    1237996,
+    1281007
+   ],
+   "itemNum": [
+    64,
+    7,
+    2
+   ],
+   "level": 7,
+   "pay": 29,
+   "productId": 1280047,
+   "productNum": 1,
+   "type": 994,
+   "waitSec": 26400
+  },
+  "36048": {
+   "effects": [
+    [
+     1,
+     [
+      1237994,
+      20
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     4,
+     [
+      7500
+     ]
+    ],
+    [
+     3,
+     [
+      36049
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 18000,
+   "itemGroup": [
+    1237994,
+    1237996,
+    1281011
+   ],
+   "itemNum": [
+    81,
+    8,
+    2
+   ],
+   "level": 8,
+   "pay": 30,
+   "productId": 1280048,
+   "productNum": 1,
+   "type": 994,
+   "waitSec": 30000
+  },
+  "36049": {
+   "effects": [
+    [
+     1,
+     [
+      1237994,
+      25
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     4,
+     [
+      8400
+     ]
+    ],
+    [
+     3,
+     [
+      36050
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 20160,
+   "itemGroup": [
+    1237994,
+    1237996,
+    1281010
+   ],
+   "itemNum": [
+    100,
+    9,
+    2
+   ],
+   "level": 9,
+   "pay": 30,
+   "productId": 1280049,
+   "productNum": 1,
+   "type": 994,
+   "waitSec": 33600
+  },
+  "36050": {
+   "effects": [
+    [
+     1,
+     [
+      1237994,
+      30
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     1,
+     [
+      1237996,
+      5
+     ]
+    ],
+    [
+     4,
+     [
+      9900
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 23760,
+   "itemGroup": [
+    1237994,
+    1237996,
+    1281014
+   ],
+   "itemNum": [
+    121,
+    10,
+    2
+   ],
+   "level": 10,
+   "pay": 36,
+   "productId": 1280050,
+   "productNum": 1,
+   "type": 994,
+   "waitSec": 39600
+  },
+  "36051": {
+   "effects": [
+    [
+     3,
+     [
+      36052
+     ]
+    ],
+    [
+     1,
+     [
+      1237995,
+      2
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     4,
+     [
+      1350
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    9,
+    12,
+    18
+   ],
+   "gold": 3240,
+   "itemGroup": [
+    1237995
+   ],
+   "itemNum": [
+    9
+   ],
+   "level": 1,
+   "pay": 6,
+   "productId": 1280051,
+   "productNum": 1,
+   "type": 995,
+   "waitSec": 5400
+  },
+  "36052": {
+   "effects": [
+    [
+     1,
+     [
+      1237995,
+      4
+     ]
+    ],
+    [
+     3,
+     [
+      36053
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     4,
+     [
+      2400
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 5760,
+   "itemGroup": [
+    1237995
+   ],
+   "itemNum": [
+    16
+   ],
+   "level": 2,
+   "pay": 12,
+   "productId": 1280052,
+   "productNum": 1,
+   "type": 995,
+   "waitSec": 9600
+  },
+  "36053": {
+   "effects": [
+    [
+     1,
+     [
+      1237995,
+      6
+     ]
+    ],
+    [
+     3,
+     [
+      36054
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     4,
+     [
+      3450
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 8280,
+   "itemGroup": [
+    1237995,
+    1281003,
+    1281001
+   ],
+   "itemNum": [
+    25,
+    2,
+    2
+   ],
+   "level": 3,
+   "pay": 17,
+   "productId": 1280053,
+   "productNum": 1,
+   "type": 995,
+   "waitSec": 13800
+  },
+  "36054": {
+   "effects": [
+    [
+     1,
+     [
+      1237995,
+      9
+     ]
+    ],
+    [
+     3,
+     [
+      36055
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     4,
+     [
+      4500
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 10800,
+   "itemGroup": [
+    1237995,
+    1281002
+   ],
+   "itemNum": [
+    36,
+    2
+   ],
+   "level": 4,
+   "pay": 22,
+   "productId": 1280054,
+   "productNum": 1,
+   "type": 995,
+   "waitSec": 18000
+  },
+  "36055": {
+   "effects": [
+    [
+     1,
+     [
+      1237995,
+      12
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     3,
+     [
+      36056
+     ]
+    ],
+    [
+     4,
+     [
+      5550
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 13320,
+   "itemGroup": [
+    1237995,
+    1237992,
+    1281006,
+    1281004
+   ],
+   "itemNum": [
+    49,
+    7,
+    2,
+    2
+   ],
+   "level": 5,
+   "pay": 27,
+   "productId": 1280055,
+   "productNum": 1,
+   "type": 995,
+   "waitSec": 22200
+  },
+  "36056": {
+   "effects": [
+    [
+     1,
+     [
+      1237995,
+      16
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     3,
+     [
+      36057
+     ]
+    ],
+    [
+     4,
+     [
+      6600
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 15840,
+   "itemGroup": [
+    1237995,
+    1237992,
+    1281005
+   ],
+   "itemNum": [
+    64,
+    8,
+    2
+   ],
+   "level": 6,
+   "pay": 32,
+   "productId": 1280056,
+   "productNum": 1,
+   "type": 995,
+   "waitSec": 26400
+  },
+  "36057": {
+   "effects": [
+    [
+     1,
+     [
+      1237995,
+      20
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     3,
+     [
+      36058
+     ]
+    ],
+    [
+     4,
+     [
+      7650
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 18360,
+   "itemGroup": [
+    1237995,
+    1237992,
+    1281009,
+    1281007
+   ],
+   "itemNum": [
+    81,
+    9,
+    2,
+    2
+   ],
+   "level": 7,
+   "pay": 34,
+   "productId": 1280057,
+   "productNum": 1,
+   "type": 995,
+   "waitSec": 30600
+  },
+  "36058": {
+   "effects": [
+    [
+     1,
+     [
+      1237995,
+      25
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     4,
+     [
+      8700
+     ]
+    ],
+    [
+     3,
+     [
+      36059
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 20880,
+   "itemGroup": [
+    1237995,
+    1237994,
+    1281008
+   ],
+   "itemNum": [
+    100,
+    10,
+    2
+   ],
+   "level": 8,
+   "pay": 35,
+   "productId": 1280058,
+   "productNum": 1,
+   "type": 995,
+   "waitSec": 34800
+  },
+  "36059": {
+   "effects": [
+    [
+     1,
+     [
+      1237995,
+      30
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     4,
+     [
+      9750
+     ]
+    ],
+    [
+     3,
+     [
+      36060
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 23400,
+   "itemGroup": [
+    1237995,
+    1237994,
+    1281012,
+    1281010
+   ],
+   "itemNum": [
+    121,
+    11,
+    2,
+    2
+   ],
+   "level": 9,
+   "pay": 35,
+   "productId": 1280059,
+   "productNum": 1,
+   "type": 995,
+   "waitSec": 39000
+  },
+  "36060": {
+   "effects": [
+    [
+     1,
+     [
+      1237995,
+      36
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     1,
+     [
+      1237994,
+      5
+     ]
+    ],
+    [
+     4,
+     [
+      10800
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 25920,
+   "itemGroup": [
+    1237995,
+    1237994,
+    1281011
+   ],
+   "itemNum": [
+    144,
+    12,
+    2
+   ],
+   "level": 10,
+   "pay": 39,
+   "productId": 1280060,
+   "productNum": 1,
+   "type": 995,
+   "waitSec": 43200
+  },
+  "36061": {
+   "effects": [
+    [
+     3,
+     [
+      36062
+     ]
+    ],
+    [
+     1,
+     [
+      1237996,
+      2
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     4,
+     [
+      1350
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    9,
+    12,
+    18
+   ],
+   "gold": 3240,
+   "itemGroup": [
+    1237996
+   ],
+   "itemNum": [
+    9
+   ],
+   "level": 1,
+   "pay": 6,
+   "productId": 1280061,
+   "productNum": 1,
+   "type": 996,
+   "waitSec": 5400
+  },
+  "36062": {
+   "effects": [
+    [
+     1,
+     [
+      1237996,
+      4
+     ]
+    ],
+    [
+     3,
+     [
+      36063
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     4,
+     [
+      2400
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 5760,
+   "itemGroup": [
+    1237996,
+    1281003
+   ],
+   "itemNum": [
+    16,
+    2
+   ],
+   "level": 2,
+   "pay": 12,
+   "productId": 1280062,
+   "productNum": 1,
+   "type": 996,
+   "waitSec": 9600
+  },
+  "36063": {
+   "effects": [
+    [
+     1,
+     [
+      1237996,
+      6
+     ]
+    ],
+    [
+     3,
+     [
+      36064
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     4,
+     [
+      3450
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 8280,
+   "itemGroup": [
+    1237996,
+    1281001
+   ],
+   "itemNum": [
+    25,
+    2
+   ],
+   "level": 3,
+   "pay": 17,
+   "productId": 1280063,
+   "productNum": 1,
+   "type": 996,
+   "waitSec": 13800
+  },
+  "36064": {
+   "effects": [
+    [
+     1,
+     [
+      1237996,
+      9
+     ]
+    ],
+    [
+     3,
+     [
+      36065
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     4,
+     [
+      4500
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 10800,
+   "itemGroup": [
+    1237996,
+    1281006,
+    1281002
+   ],
+   "itemNum": [
+    36,
+    2,
+    2
+   ],
+   "level": 4,
+   "pay": 22,
+   "productId": 1280064,
+   "productNum": 1,
+   "type": 996,
+   "waitSec": 18000
+  },
+  "36065": {
+   "effects": [
+    [
+     1,
+     [
+      1237996,
+      12
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     3,
+     [
+      36066
+     ]
+    ],
+    [
+     4,
+     [
+      5550
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 13320,
+   "itemGroup": [
+    1237996,
+    1237991,
+    1281004
+   ],
+   "itemNum": [
+    49,
+    7,
+    2
+   ],
+   "level": 5,
+   "pay": 27,
+   "productId": 1280065,
+   "productNum": 1,
+   "type": 996,
+   "waitSec": 22200
+  },
+  "36066": {
+   "effects": [
+    [
+     1,
+     [
+      1237996,
+      16
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     3,
+     [
+      36067
+     ]
+    ],
+    [
+     4,
+     [
+      6600
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 15840,
+   "itemGroup": [
+    1237996,
+    1237991,
+    1281009,
+    1281005
+   ],
+   "itemNum": [
+    64,
+    8,
+    2,
+    2
+   ],
+   "level": 6,
+   "pay": 32,
+   "productId": 1280066,
+   "productNum": 1,
+   "type": 996,
+   "waitSec": 26400
+  },
+  "36067": {
+   "effects": [
+    [
+     1,
+     [
+      1237996,
+      20
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     3,
+     [
+      36068
+     ]
+    ],
+    [
+     4,
+     [
+      7650
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 18360,
+   "itemGroup": [
+    1237996,
+    1237991,
+    1281007
+   ],
+   "itemNum": [
+    81,
+    9,
+    2
+   ],
+   "level": 7,
+   "pay": 34,
+   "productId": 1280067,
+   "productNum": 1,
+   "type": 996,
+   "waitSec": 30600
+  },
+  "36068": {
+   "effects": [
+    [
+     1,
+     [
+      1237996,
+      25
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     4,
+     [
+      8700
+     ]
+    ],
+    [
+     3,
+     [
+      36069
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 20880,
+   "itemGroup": [
+    1237996,
+    1237993,
+    1281012,
+    1281008
+   ],
+   "itemNum": [
+    100,
+    10,
+    2,
+    2
+   ],
+   "level": 8,
+   "pay": 35,
+   "productId": 1280068,
+   "productNum": 1,
+   "type": 996,
+   "waitSec": 34800
+  },
+  "36069": {
+   "effects": [
+    [
+     1,
+     [
+      1237996,
+      30
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     4,
+     [
+      9750
+     ]
+    ],
+    [
+     3,
+     [
+      36070
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 23400,
+   "itemGroup": [
+    1237996,
+    1237993,
+    1281010
+   ],
+   "itemNum": [
+    121,
+    11,
+    2
+   ],
+   "level": 9,
+   "pay": 35,
+   "productId": 1280069,
+   "productNum": 1,
+   "type": 996,
+   "waitSec": 39000
+  },
+  "36070": {
+   "effects": [
+    [
+     1,
+     [
+      1237996,
+      36
+     ]
+    ],
+    [
+     2,
+     [
+      250
+     ]
+    ],
+    [
+     1,
+     [
+      1237993,
+      5
+     ]
+    ],
+    [
+     4,
+     [
+      10800
+     ]
+    ],
+    [
+     5,
+     [
+      200
+     ]
+    ]
+   ],
+   "exp": [
+    3,
+    6,
+    12,
+    18,
+    24
+   ],
+   "gold": 25920,
+   "itemGroup": [
+    1237996,
+    1237993,
+    1281015,
+    1281011
+   ],
+   "itemNum": [
+    144,
+    12,
+    2,
+    2
+   ],
+   "level": 10,
+   "pay": 39,
+   "productId": 1280070,
+   "productNum": 1,
+   "type": 996,
+   "waitSec": 43200
+  }
+ },
+ "slots": {
+  "customer": 5,
+  "production": 8
+ }
+}
