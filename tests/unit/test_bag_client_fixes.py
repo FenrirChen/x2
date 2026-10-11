@@ -97,6 +97,48 @@ def test_compose_costs_replay_reopen_and_insufficient_material(env):
     assert store.db.execute("SELECT quantity FROM inventory WHERE item_id=1250012").fetchone()[0] == 2
 
 
+def test_type3_compose_charges_stamina_and_rolls_extra_drop(env, monkeypatch):
+    store, economy, ctx = env
+    service = BagItemService(store, economy)
+    # Force the OtherProduct permille roll to always hit (secrets.randbelow(1000) -> 0).
+    monkeypatch.setattr("x2server.player.bag_items.secrets.randbelow", lambda n: 0)
+    stock(store, 1202080, 6)
+    before = store.get(1)["snapshot"]["mobility"]["power"]
+    reply = asyncio.run(service.compose(ctx, packet({"RecipeID": 29201, "composeCount": 1},
+        name="C2L_JewelCompose", request_id=301)))
+    assert reply.values["result"] == 10
+    # 3 spent on the recipe cost and 1 returned by the always-hit extra drop.
+    assert store.db.execute("SELECT quantity FROM inventory WHERE item_id=1202080").fetchone()[0] == 4
+    assert store.db.execute("SELECT quantity FROM inventory WHERE item_id=1202081").fetchone()[0] == 1
+    # RecipeType 3 also charges PowerNeed (体力) straight from the snapshot.
+    assert store.get(1)["snapshot"]["mobility"]["power"] == before - 10
+
+
+def test_type4_compose_materializes_equipment_box(env, monkeypatch):
+    store, economy, ctx = env
+    service = BagItemService(store, economy)
+    monkeypatch.setattr("x2server.player.bag_items.secrets.randbelow", lambda n: 0)
+    stock(store, 1237920, 40)
+    p = store.get(1)
+    store.save_snapshot(1, dict(p["snapshot"], gold=100000), p["revision"])
+    before = store.get(1)["snapshot"]["mobility"]["power"]
+    reply = asyncio.run(service.compose(ctx, packet({"RecipeID": 29301, "composeCount": 1},
+        name="C2L_JewelCompose", request_id=401)))
+    assert reply.values["result"] == 10
+    assert store.db.execute("SELECT quantity FROM inventory WHERE item_id=1237920").fetchone()[0] == 20
+    snapshot = store.get(1)["snapshot"]
+    assert snapshot["gold"] == 50000
+    assert snapshot["mobility"]["power"] == before - 50
+    # The 775xxx box expands into a real 兽主 equipment instance, delivered both in
+    # rewardData and as an L2C_EquipUpdate push so the bag refreshes.
+    assert REWARD.decode(reply.values["rewardData"]).get("rewardEquip")
+    updates = [m for m in reply.before_response if m.message_name == "L2C_EquipUpdate"]
+    assert len(updates) == 1 and len(updates[0].values["equip"]) == 1
+    # The client caps RecipeType 4 at ten per request; anything larger is refused.
+    assert asyncio.run(service.compose(ctx, packet({"RecipeID": 29301, "composeCount": 11},
+        name="C2L_JewelCompose", request_id=402))).values["result"] == 13
+
+
 def test_every_canonical_gem_recipe_and_invalid_counts(env):
     store, economy, ctx = env
     service = BagItemService(store, economy)
