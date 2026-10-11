@@ -1,6 +1,7 @@
 """Recover the enabled activity groups without inventing rewards."""
 import json
 import sys
+import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -14,6 +15,33 @@ THEMES = (
     (10, '珠雀绮馔', 13430111), (99, '日月盈仄', 50009023),
 )
 STATE_SLOTS = {37: 0, 33: 1, 15: 2, 13: 4, 7: 5, 10: 6, 99: 7}
+
+
+def restore_yuexi_shops(tables):
+    """Retained Table_410 has the four shops missing from canonical ShopConfig."""
+    from analysis.progression.probe import (
+        ROOT as RESOURCE_ROOT, UnityPy, schemas, enums, classes, decode_record,
+    )
+    from phase3_protobuf import parse_table_container
+    source = 'assets/bin/Data/8c8abe333ea043a418a9e14cc63c7c71'
+    with zipfile.ZipFile(RESOURCE_ROOT / 'X2_Eclipse_v2_4.apk') as apk:
+        asset = next(o.read() for o in UnityPy.load(apk.read(source)).objects
+                     if o.type.name == 'TextAsset')
+        blob = asset.m_Script
+        if isinstance(blob, str):
+            blob = blob.encode('utf-8', 'surrogateescape')
+    fields = schemas['ShopConfig']['fields']
+    recovered = {}
+    for raw in parse_table_container(bytes(blob))['items']:
+        row = decode_record(raw, fields, enums, classes)[0]
+        if row['ShopID'] in range(887, 891):
+            row['ShopParam2'] = [(row['ShopID'] - 886) * 6]
+            recovered[row['ShopID']] = row
+    if len(recovered) != 4:
+        raise ValueError('Missing retained YueXi shop configuration')
+    existing = {row['ShopID'] for row in tables['ShopConfig']}
+    tables['ShopConfig'].extend(recovered[key] for key in sorted(recovered)
+                                if key not in existing)
 
 
 def retire_disabled_theme(data):
@@ -53,6 +81,7 @@ def main():
     tables, meta, missing = read_tables(names)
     if missing:
         raise ValueError(f'Missing required tables: {missing}')
+    restore_yuexi_shops(tables)
     from tools.analysis.export_world_boss import mail_templates
     tables['MailInfo'], meta['MailInfo'] = mail_templates(set(range(1325044, 1325054)))
     sections = {r['SectionID']: r for r in tables['SectionTable']}

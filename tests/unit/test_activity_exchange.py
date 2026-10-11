@@ -24,6 +24,21 @@ def open_shop(service, economy, shop, period):
                 service.rotation.put(1, period, 'clear', sid, 1)
 
 
+def test_yuexi_client_shop_rows_match_purchase_unlock_rules(activity):
+    _, _, service, _ = activity
+    exchange = ActivityExchange(service)
+    import json
+    from pathlib import Path
+    catalog = json.loads((Path(__file__).resolve().parents[2] /
+        'src/x2server/data/activity_rotation_catalog.json').read_text(encoding='utf-8'))
+    rows = {r['ShopID']: r for r in catalog['tables']['ShopConfig']}
+    for shop_id, count in zip(range(887, 891), (6, 12, 18, 24)):
+        assert rows[shop_id]['ShopParam1'] == 70011
+        assert rows[shop_id]['ShopParam2'] == [count]
+        assert rows[shop_id]['ShopIcon']
+        assert exchange.shops[shop_id]['unlock'] == {'kind': 'memory_count', 'count': count}
+
+
 @pytest.mark.parametrize('group', [7, 33, 13, 99])
 def test_all_stages_visible_before_unlock_but_purchase_gates_remain(activity, group):
     _, economy, service, now = activity
