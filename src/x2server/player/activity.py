@@ -61,16 +61,25 @@ class ActivityService:
         self.obtained(player, period, rewards, source)
         return rewards
 
+    def yuexi_preview_end(self, period):
+        row = self.rotation.of_type(1, period) if period.theme['group'] == 99 else None
+        # The client checks the next Beijing day refresh after a claim. A
+        # developer review may start mid-day; do not replay that same plot at
+        # midnight when only one recovered story exists.
+        return min(period.end, ((period.start + 8 * 3600) // 86400
+                   + len(row['ActivityParam1'])) * 86400 - 8 * 3600) if row else period.end
+
     def query_activity(self, player):
         period = self.rotation.at()
         if period is None:
             return {'code': 10}
         rows = []
         for row in period.theme['activities']:
+            end = self.yuexi_preview_end(period) if period.theme['group'] == 99 and enum(row['ActivityType']) == 1 else period.end
             values = {'actId': row['ActivityID'], 'state': 1,
                       'activityParentType': enum(row['ActivityParentType']),
                       'actType': enum(row['ActivityType']), 'startTime': period.start,
-                      'endTime': period.end, 'openLever': row['OpenLever'],
+                      'endTime': end, 'openLever': row['OpenLever'],
                       'activityShow': row.get('ActivityShow', 0),
                       'activityGroup': row['ActivityGroup'], 'activityName': row.get('ActivityName', 0),
                       'activityDescription': row.get('ActivityDescription', ''),
@@ -78,6 +87,7 @@ class ActivityService:
                       'openType': enum(row.get('OpenType')), 'openParam': row.get('OpenParam', []) or [0],
                       'activityDataItems': [encode('ActivityDataItem', {'index': 0,
                           'itemParams': [encode('ItemData', {'id': 0, 'num': 0})]})]}
+            values['state'] = int(self.economy.clock() < end)
             for index in range(1, 5):
                 values[f'param{index}'] = row.get(f'ActivityParam{index}', []) or [0]
             values['activityReward'] = row.get('ActivityReward', []) or [0]
@@ -363,10 +373,12 @@ class ActivityService:
             raise UnresolvedEconomy('incorrect activity family')
         row = next(a for a in period.theme['activities'] if enum(a['ActivityType']) in (1, 15, 24))
         state = self.rotation.get(player, period, 'pre-notice', row['ActivityID'], 0)
+        if activity_type == 1:
+            state = self.rotation.get(player, period, 'dialogue', 0, state)
         result = {'code': 10, 'activityType': activity_type, 'lastPreNoticSec': state}
         if claim:
             with self.economy.transaction():
-                if state:
+                if state or activity_type == 1 and self.economy.clock() >= self.yuexi_preview_end(period):
                     raise UnresolvedEconomy('preview already claimed')
                 groups = row.get('ActivityReward') if activity_type in (1, 2) else row.get('ActivityParam2')
                 if not groups:
@@ -374,5 +386,7 @@ class ActivityService:
                 rewards = self.grant(player, period, 'pre-notice', row['ActivityID'], groups)
                 state = int(self.economy.clock())
                 self.rotation.put(player, period, 'pre-notice', row['ActivityID'], state)
+                if activity_type == 1:
+                    self.rotation.put(player, period, 'dialogue', 0, state)
                 result.update(lastPreNoticSec=state, rewardData=self.economy.reward_bytes(rewards))
         return result

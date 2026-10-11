@@ -64,6 +64,54 @@ def test_retired_activity_battle_entry_and_query_are_rejected(runtime):
     assert reply.values['code'] == 13
 
 
+def test_yuexi_skipped_intro_claim_persists_and_cannot_pay_twice(runtime):
+    store, e, ctx, rt, now = runtime
+    now[0] = ActivityRotation.ANCHOR + 6 * ActivityRotation.SECONDS + 3600
+    request = packet({}, 975, 'C2L_ActivityDialogue')
+    assert rt.operate(1, 'ActivityDialogReciveInfo', {}, 'query')['lastReciveTimeSec'] == 0
+    claimed = asyncio.run(rt.handle(ctx, request))
+    assert claimed.values['code'] == 10
+    assert rewards(claimed.values['rewardData']) == e.gifts([776004], allow_daily_random=True)
+    snapshot = store.get(1)
+    assert asyncio.run(rt.handle(ctx, request)).values == claimed.values
+    assert store.get(1) == snapshot
+    denied = asyncio.run(rt.handle(ctx, packet({}, 976, 'C2L_ActivityDialogue')))
+    assert denied.values['code'] == 13
+    with pytest.raises(UnresolvedEconomy):
+        rt.a.pre_notice(1, 1, claim=True)
+    restored = ActivityRuntime(ActivityService(e), MailService(store, e, e.clock))
+    assert restored.operate(1, 'ActivityDialogReciveInfo', {}, 'relogin')['lastReciveTimeSec'] == now[0]
+    now[0] += 86400
+    rows = [ACTIVITY_SCHEMAS['ActivityData'].decode(r) for r in rt.a.query_activity(1)['activityData']]
+    assert next(r for r in rows if r['actId'] == 70009).get('state', 0) == 0
+    assert next(r for r in rows if r['actId'] == 70010)['state'] == 1
+    assert asyncio.run(rt.handle(ctx, packet({}, 977, 'C2L_ActivityDialogue'))).values['code'] == 13
+    now[0] += 34 * 86400
+    assert rt.operate(1, 'ActivityDialogReciveInfo', {}, 'next-period')['lastReciveTimeSec'] == 0
+
+
+def test_yuexi_midday_review_closes_only_preview_at_beijing_midnight(runtime):
+    _, _, _, rt, now = runtime
+    rt.r.anchor += 23 * 3600
+    now[0] = rt.r.anchor + 6 * ActivityRotation.SECONDS + 60
+    period = rt.r.at()
+    assert rt.a.yuexi_preview_end(period) == period.start + 3600
+    now[0] = period.start + 3600
+    data = [ACTIVITY_SCHEMAS['ActivityData'].decode(r) for r in rt.a.query_activity(1)['activityData']]
+    assert {r['actId'] for r in data if r.get('state') == 1} == {70010, 70011}
+    with pytest.raises(UnresolvedEconomy):
+        rt.operate(1, 'ActivityDialogue', {}, 'closed')
+
+
+def test_yuexi_generic_preview_claim_is_shared_with_plot_completion(runtime):
+    _, _, _, rt, now = runtime
+    now[0] = ActivityRotation.ANCHOR + 6 * ActivityRotation.SECONDS + 3600
+    assert rt.a.pre_notice(1, 1, claim=True)['code'] == 10
+    assert rt.operate(1, 'ActivityDialogReciveInfo', {}, 'query')['lastReciveTimeSec'] == now[0]
+    with pytest.raises(UnresolvedEconomy):
+        rt.operate(1, 'ActivityDialogue', {}, 'alternate-route')
+
+
 def test_winter_progress_and_story_protocols_use_current_period(runtime):
     _, e, ctx, rt, now = runtime
     now[0] = ActivityRotation.ANCHOR + 4 * ActivityRotation.SECONDS + 3600

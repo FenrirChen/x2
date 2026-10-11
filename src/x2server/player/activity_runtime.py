@@ -262,14 +262,28 @@ class ActivityRuntime:
         if op == 'ActivityShop':
             return self.exchange.activity_listing(player, req.get('activityType', 0))
         if op in ('ActivityDialogReciveInfo', 'ActivityDialogue'):
-            # Dialogue is a daily reward only when a real activity config defines it.
-            row = self.r.of_type(27, period)
+            # YueXiModule.ShowStory selects Param1 by elapsed event day and
+            # OnPLotEnd sends 628 (including when the plot is skipped).
+            row = self.r.of_type(1, period) if period.theme['group'] == 99 else None
             if row is None:
-                raise UnresolvedEconomy('no food dialogue')
-            last = self.r.get(player, period, 'dialogue', 0, 0)
+                if op == 'ActivityDialogReciveInfo' and self.r.of_type(27, period):
+                    return {'code': 10, 'lastReciveTimeSec': 0}
+                raise UnresolvedEconomy('no recovered dialogue reward configuration')
+            last = self.r.get(player, period, 'dialogue', 0,
+                              self.r.get(player, period, 'pre-notice', row['ActivityID'], 0))
             result = {'code': 10, 'lastReciveTimeSec': last}
             if op == 'ActivityDialogue':
-                raise UnresolvedEconomy('no recovered dialogue reward configuration')
+                now = int(self.e.clock())
+                day = (now - period.start) // 86400
+                groups = row.get('ActivityParam2', [])
+                if (now >= self.a.yuexi_preview_end(period)
+                        or not 0 <= day < len(row['ActivityParam1']) or day >= len(groups)
+                        or last and (last - period.start) // 86400 == day):
+                    raise UnresolvedEconomy('dialogue is closed or already claimed')
+                reward = self.a.grant(player, period, 'dialogue', day, [groups[day]])
+                self.r.put(player, period, 'dialogue', 0, now)
+                self.r.put(player, period, 'pre-notice', row['ActivityID'], now)
+                result.update(lastReciveTimeSec=now, rewardData=self.e.reward_bytes(reward))
             return result
         if op == 'ActivityReissueState':
             return {'code': 10, 'activityType': req.get('activityType', 0), 'reciveCount': 0}
@@ -371,9 +385,10 @@ class ActivityRuntime:
         previous = None
         while True:
             period = self.r.at()
+            current = (period.index, self.a.yuexi_preview_end(period) > int(self.e.clock())) if period else None
             for player in server.authenticated_player_ids():
                 self.deliver_daily_mail(player)
-                if previous != (period.index if period else None):
+                if previous != current:
                     await server.push_to_player(player, OutboundMessage('L2C_QueryActivity', self.a.query_activity(player)))
-            previous = period.index if period else None
+            previous = current if server.authenticated_player_ids() else None
             await asyncio.sleep(5)

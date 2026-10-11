@@ -95,7 +95,12 @@ def test_all_themes_wire_has_current_dates_and_only_current_group(activity):
         rows = [ACTIVITY_SCHEMAS['ActivityData'].decode(raw)
                 for raw in service.query_activity(1)['activityData']]
         assert {r['activityGroup'] for r in rows} == {period.theme['group']}
-        assert all(r['startTime'] == period.start and r['endTime'] == period.end for r in rows)
+        assert all(r['startTime'] == period.start for r in rows)
+        for row in rows:
+            # YueXi's recovered preview has one story/day, while the main
+            # event and shop remain open for the full five-day review.
+            expected_end = period.start + 86400 if row['actId'] == 70009 else period.end
+            assert row['endTime'] == expected_end
         assert all(r['param1'] and r['param2'] and r['param3'] and r['param4'] for r in rows)
 
 
