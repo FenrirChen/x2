@@ -242,10 +242,29 @@ class ProgressionService:
                         events.append(self.economy.TASK_EVENT_HERO_LEVEL_UP)
                     elif req.get("opt") == 2:
                         row = next(r for r in catalog()["hero_star"] if r["star"] == hero["star"])
-                        options = {prototype["fragment_item_id"]: row["fragment_count_field"],
-                                   **{r["material_item_id"]:r["material_num"] for r in row["universal_fragment_option"]}}
+                        # PlayerStage stores the chips needed to *reach* a stage,
+                        # and the client reads them off row(star + 1):
+                        # HeroStarUP_Refresh 0x1923A9C-0x1923B28 loads
+                        # PlayerStageManager.GetItem(star + 1) and takes ChipNum
+                        # (row+0x14) for the self chip and UniversalChip
+                        # (row+0x18) for the universal chip's id/count - the same
+                        # row HeroModule_GetUpStarRed 0x19048B8 compares against.
+                        # Reading row(star) instead charged the previous tier: the
+                        # cost matched while neighbouring rows agree (1..10), but
+                        # row 11 asks 60 where row 12 asks 9, so a five-star hero
+                        # was billed 60 for a 9-chip step. The client enables the
+                        # button on 9, the server answered 13 for anything under
+                        # 60, and the client drops that silently - the reported
+                        # "five stars can no longer be starred up", with chips and
+                        # universal chips alike.
+                        target = next((r for r in catalog()["hero_star"]
+                                       if r["star"] == row.get("next_star")), None)
+                        if target is None:
+                            raise UnresolvedEconomy("invalid star request")
+                        options = {prototype["fragment_item_id"]: target["fragment_count_field"],
+                                   **{r["material_item_id"]:r["material_num"] for r in target["universal_fragment_option"]}}
                         item = req.get("upstarConsumeItemId",0)
-                        if not row["next_star"] or item not in options:
+                        if item not in options:
                             raise UnresolvedEconomy("invalid star request")
                         costs[item] = options[item]
                         if hero["star"] < 11 <= row["next_star"]:

@@ -179,10 +179,41 @@ def test_fragment_synthesis_and_artifact_second_upgrade_use_static_costs(env):
     assert store.db.execute("SELECT quantity FROM inventory WHERE item_id=1238100").fetchone()[0] == 0
     assert asyncio.run(service.handle(ctx, packet({"opt": 0, "heroId": 1008}, 15, "C2L_Artifact"))).values["code"] == 10
     with store.db:
-        economy._grant(1, "test-more-fragments", {1201008: 25})
+        economy._grant(1, "test-more-fragments", {1201008: 40})
     assert asyncio.run(service.handle(ctx, packet({"id": 1008, "opt": 2,
         "upstarConsumeItemId": 1201008}, 16, "C2L_HeroOpt"))).values["code"] == 10
     assert next(h for h in store.get(1)["snapshot"]["heroes"] if h["id"] == 1008)["star"] == 6
+    assert store.db.execute("SELECT quantity FROM inventory WHERE item_id=1201008").fetchone()[0] == 0
+
+
+def test_five_star_upgrade_charges_the_next_player_stage_row(env):
+    """五星之后的同步提升要按 PlayerStage 的下一行收费.
+
+    客户端 HeroStarUP_Refresh 0x1923A9C 取的是 GetItem(star + 1): ChipNum
+    (row+0x14) 是自身碎片需求, UniversalChip(row+0x18) 是万能碎片的需求. 表里第
+    11 行写 60, 第 12 行只写 9, 所以 11 -> 12 阶应只扣 9 枚. 旧代码读第 star 行
+    (扣 60), 玩家不足 60 时服务端回 13, 客户端对 13 静默 - 这正是「五星之后没办法
+    用碎片同步提升」以及万能碎片同样用不了的原因。
+    """
+    store, economy, ctx = env
+    service = ProgressionService(store, economy)
+    with store.db:
+        economy._grant(1, "star11", {1201003: 9, 1201000: 9})
+        state = store.get(1)["snapshot"]
+        state["heroes"][0]["star"] = 11
+        economy.save_snapshot(1, state)
+    assert asyncio.run(service.handle(ctx, packet({"id": 1003, "opt": 2,
+        "upstarConsumeItemId": 1201003}, 40, "C2L_HeroOpt"))).values["code"] == 10
+    assert store.get(1)["snapshot"]["heroes"][0]["star"] == 12
+    assert store.db.execute("SELECT quantity FROM inventory WHERE item_id=1201003").fetchone()[0] == 0
+    # 万能碎片走同一行, 同样只扣 9 而不是 60.
+    assert store.db.execute("SELECT quantity FROM inventory WHERE item_id=1201000").fetchone()[0] == 9
+    with store.db:
+        economy._grant(1, "star12-universal", {1201000: 9})
+    assert asyncio.run(service.handle(ctx, packet({"id": 1003, "opt": 2,
+        "upstarConsumeItemId": 1201000}, 41, "C2L_HeroOpt"))).values["code"] == 10
+    assert store.get(1)["snapshot"]["heroes"][0]["star"] == 13
+    assert store.db.execute("SELECT quantity FROM inventory WHERE item_id=1201000").fetchone()[0] == 9
 
 
 def test_artifact_progress_reaches_100_before_fusing(env):
