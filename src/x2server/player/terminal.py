@@ -1,5 +1,6 @@
 """Account-scoped terminal conversations and moments from the shipped tables."""
 
+from functools import lru_cache
 from importlib.resources import files
 import json
 import time
@@ -9,6 +10,13 @@ from x2server.messages.terminal import (BLOG_BOX, BLOG_GROUP, CHAT_GROUP, LETTER
 from x2server.network.dispatcher import OutboundMessage
 from x2server.protocol.errors import ProtocolError
 from x2server.protocol.registry import CORE_MESSAGE_REGISTRY
+from .favor import catalog, favor_state
+
+
+@lru_cache(maxsize=1)
+def initial_favor_levels():
+    """HeroID -> official starting favor level, mirroring login.snapshot_push."""
+    return {row["HeroID"]: row["InitialLevel"] for row in catalog()["favorabilityhero"]}
 
 
 class TerminalService:
@@ -31,7 +39,7 @@ class TerminalService:
     def _available(row, hero):
         trigger = row.get("TriggerType", {}).get("enum")
         if trigger == "E_FavorabilityLevel":
-            return hero.get("favor", {}).get("level", 1) >= row.get("TypeNumber", 1)
+            return favor_state(hero, initial_favor_levels().get(hero["id"], 1))["level"] >= row.get("TypeNumber", 1)
         # Other triggers depend on calendar, section, or choice events which
         # the current player snapshot does not yet prove occurred.
         return False
