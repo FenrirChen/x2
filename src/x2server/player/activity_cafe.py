@@ -121,13 +121,14 @@ class ActivityCafe:
                 state['employees'][str(position)] = hero
             elif operation == 'CafeStoreCooking':
                 recipe = self.recipes.get(request.get('recipeID'))
-                types = food['ActivityParam1']
+                # ShowRank is the display sort order, not a shop assignment.
+                # Both native recipe views offer all recipes in their activity
+                # and SendCafeStoreCooking uses the currently selected shop.
                 if (recipe is None or not set(recipe['ItemGroup']).issubset(food['ActivityParam2'])
-                        or types[0 if recipe['ShowRank'] <= 5 else 1 if recipe['ShowRank'] <= 10 else 2] != store_type
                         or not self.owns_recipe(player, recipe['UnlockItem'])
                         or len(state['queues']) >= config['QueueNum']
                         or not state['employees'].get('1')):
-                    raise UnresolvedEconomy('recipe locked, wrong store or queue full')
+                    raise UnresolvedEconomy('recipe locked, queue full or chef absent')
                 for item, num in zip(recipe['ItemGroup'], recipe['ItemNum'], strict=True):
                     self.a.spend(player, period, item, num, f'cook:{token}:{item}')
                 duration = max(1, recipe['WaitTimes'] * max(100, 1000 - self.buff(store_type, state, 5)) // 1000)

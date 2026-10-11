@@ -222,6 +222,58 @@ def test_cafe_paid_cooking_sale_level_staff_restart(runtime):
     assert reopened.cafe.values(1, 7)['exp'] > 0
 
 
+@pytest.mark.parametrize('theme_index', [0, 5])
+def test_all_cafe_recipes_exact_ingredients_in_every_store(runtime, theme_index):
+    store, e, ctx, rt, now = runtime
+    base_time = ActivityRotation.ANCHOR + theme_index * ActivityRotation.SECONDS + 3600
+    now[0] = base_time
+    food = rt.r.of_type(27, rt.r.at())
+    recipes = [r for r in rt.cafe.recipes.values()
+               if set(r['ItemGroup']).issubset(food['ActivityParam2'])]
+    assert len(recipes) == (11 if theme_index == 0 else 13)
+    seed(rt, {r['UnlockItem']: 1 for r in recipes})
+    for store_type in food['ActivityParam1']:
+        with e.transaction():
+            rt.operate(1, 'CafeStoreUnLock', {'storeType': store_type}, f'unlock-{store_type}')
+            rt.operate(1, 'CafeStorePositionSet', {'storeType': store_type,
+                'heroId': 1003, 'position': 1}, f'staff-{store_type}')
+        for recipe in recipes:
+            now[0] = base_time
+            with e.transaction():
+                for item, count in zip(recipe['ItemGroup'], recipe['ItemNum'], strict=True):
+                    store.db.execute('''INSERT INTO inventory VALUES (?,?,?)
+                        ON CONFLICT(player_id,item_id) DO UPDATE SET quantity=excluded.quantity''',
+                        (1, item, count))
+            request = packet({'storeType': store_type, 'recipeID': recipe['RecipeID']},
+                             2000 + store_type * 100 + recipe['RecipeID'], 'C2L_CafeStoreCooking')
+            response = asyncio.run(rt.handle(ctx, request))
+            assert response.values['code'] == 10, (store_type, recipe['RecipeID'])
+            queue = ACTIVITY_SCHEMAS['CafeStoreQueue'].decode(response.values['queue'])
+            assert queue['recipeId'] == recipe['RecipeID']
+            assert all(store.db.execute('SELECT quantity FROM inventory WHERE player_id=1 AND item_id=?',
+                       (i,)).fetchone()[0] == 0 for i in recipe['ItemGroup'])
+            assert asyncio.run(rt.handle(ctx, request)).values == response.values
+            assert len(rt.cafe.values(1, store_type)['cafeStoreQueueInfo']) == 1
+            now[0] += recipe['WaitTimes'] + 1
+            with e.transaction():
+                sold = rt.operate(1, 'CafeStoreReceiveRevenue', {'storeType': store_type},
+                                  f'sale-{store_type}-{recipe["RecipeID"]}')
+            assert rewards(sold['rewardData'])[1237984] == recipe['SellPrice']
+            assert rt.cafe.values(1, store_type)['cafeStoreQueueInfo'] == []
+
+
+def test_cafe_incomplete_ingredients_roll_back_entire_order(runtime):
+    store, e, _, rt, _ = runtime
+    seed(rt, {1290301: 1, 1290317: 3, 1290318: 1})
+    with e.transaction():
+        rt.operate(1, 'CafeStoreUnLock', {'storeType': 7}, 'unlock')
+        rt.operate(1, 'CafeStorePositionSet', {'storeType': 7, 'heroId': 1003, 'position': 1}, 'chef')
+    with pytest.raises(UnresolvedEconomy), e.transaction():
+        rt.operate(1, 'CafeStoreCooking', {'storeType': 7, 'recipeID': 25}, 'insufficient')
+    assert store.db.execute('SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1290317').fetchone()[0] == 3
+    assert rt.cafe.values(1, 7)['cafeStoreQueueInfo'] == []
+
+
 def test_cafe_empty_queue_staff_busy_capacity_sale_and_level_loop(runtime):
     store, e, ctx, rt, now = runtime
     seed(rt, {1290301: 1, 1290317: 30, 1290318: 20, 1237984: 1000})
