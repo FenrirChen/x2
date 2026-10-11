@@ -12,6 +12,14 @@ import math
 # IsEnergyRecover uses it as SECONDS, although its UI timer polls in milliseconds.
 ENERGY_PERIOD = 600
 
+# GlobalParamString.AlchemySpeedConsume = 120 (data/table_json). The client
+# computes the star-energy price of a speed-up as
+# CollegeRecipeSpeedUp.Tick -> ceil(remainingSeconds / AlchemySpeedConsume)
+# and compares it against CollegeModule.GetEnergyCurEnergy before sending
+# C2L_MakIngSpeed(type=1); a mismatch makes the button report "not enough
+# items" and suppress the request entirely.
+ALCHEMY_SPEED_CONSUME = 120
+
 
 def settle_energy(state, now, catalog):
     anchor = int(state.get('star_gain_time', 0))
@@ -177,8 +185,9 @@ class AlchemyService:
         if remaining <= 0:
             return dict(values, code=205)
         if kind == 1:
-            # CollegeRecipeSpeedUp ctor StarEnergyRate=10; Tick ceil(rest/rate).
-            cost = (remaining + 9) // 10
+            # CollegeRecipeSpeedUp.Tick: ceil(remainingSeconds / AlchemySpeedConsume),
+            # matching the price the client previews before sending this request.
+            cost = (remaining + ALCHEMY_SPEED_CONSUME - 1) // ALCHEMY_SPEED_CONSUME
             if state['star_energy'] < cost:
                 return dict(values, code=22)
             state['star_energy'] -= cost

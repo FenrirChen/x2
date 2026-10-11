@@ -1,6 +1,7 @@
 """Canonical bag gifts and recipe operations, committed with replay receipts."""
 from collections import Counter
 import hashlib
+import json
 import logging
 import secrets
 
@@ -8,6 +9,7 @@ from x2server.messages.economy import ECONOMY_SCHEMAS, REWARD, REWARD_ITEM
 from x2server.network.dispatcher import OutboundMessage
 from x2server.protocol.errors import ProtocolError
 from .economy import UnresolvedEconomy
+from .equipment_factory import EquipmentValidationError
 
 
 def resolve_bag_gifts(economy, item_id, groups, selected):
@@ -211,43 +213,139 @@ class BagItemService:
         recipe_id, count = req.get("RecipeID", 0), req.get("composeCount", 0)
         failure = OutboundMessage("L2C_JewelCompose", {"result": 13, "recipeID": recipe_id})
         recipe = self.economy.bag_catalog["recipes"].get(str(recipe_id))
-        if recipe is None or type(count) is not int or not 1 <= count <= 999 or recipe["type"] not in (1, 2, 3):
+        if recipe is None or type(count) is not int or not 1 <= count <= 999 or recipe["type"] not in (1, 2, 3, 4):
+            return failure
+        # RecipeType 4 (装备合成) draws a greedy equipment box, so the client caps
+        # its quantity widget at 10 for those rows (CollegeFurnaceComposeTab_Refresh
+        # 0x1BC9064 csel w22, w0, w9 with w9 = 10 when RecipeType == 4).
+        if recipe["type"] == 4 and count > 10:
             return failure
         key = hashlib.sha256(f"{player}:{context.session.session_id}:{packet.header.request_id}:compose".encode() + packet.body).hexdigest()
+        reward_equips: tuple = ()
         try:
             with self.economy.transaction():
                 cached = self.store.db.execute("SELECT response FROM bag_operation_receipts WHERE player_id=? AND request_key=?", (player, key)).fetchone()
                 if cached:
                     values = ECONOMY_SCHEMAS["L2C_JewelCompose"].decode(cached[0])
+                    reward_equips = tuple(REWARD.decode(values.get("rewardData", b"")).get("rewardEquip", []))
                 else:
                     if recipe["unlockType"]:
                         cleared = self.store.db.execute("SELECT 1 FROM economy_clears WHERE player_id=? AND section_id=?", (player, recipe["unlockParam"])).fetchone()
                         if recipe["unlockType"] != 1 or not cleared:
                             raise UnresolvedEconomy("recipe not unlocked")
-                    if recipe["productNum"] <= 0 or recipe["otherProduct"] or recipe["power"]:
+                    if recipe["productNum"] <= 0 or recipe["gold"] < 0 or recipe["power"] < 0:
                         raise UnresolvedEconomy("unsupported recipe output/cost")
                     costs = Counter()
                     for item, num in recipe["costs"]:
                         if num <= 0:
                             raise UnresolvedEconomy("invalid recipe cost")
                         costs[item] += num * count
-                    if recipe["gold"] < 0:
-                        raise UnresolvedEconomy("invalid recipe gold")
                     costs[1237901] += recipe["gold"] * count
+                    # PowerNeed is the 体力 cost (Recipe offset 0x1C). It lives in the
+                    # snapshot, not the inventory, so settle the regen clock first and
+                    # debit it exactly like charge_battle does. refresh_stamina() commits
+                    # its own snapshot, so it has to run before the read below.
+                    power = recipe["power"] * count
+                    if power:
+                        self.economy.refresh_stamina(player)
                     snapshot = self.store.get(player)["snapshot"]
+                    if power and snapshot.get("mobility", {}).get("power", 0) < power:
+                        raise UnresolvedEconomy("insufficient stamina")
                     # spend() has no service state beyond economy/store.
                     spender = object.__new__(ProgressionService)
                     spender.store, spender.economy = self.store, self.economy
                     spender.spend(player, snapshot, costs)
+                    if power:
+                        snapshot["mobility"]["power"] -= power
+                    granted = Counter()
+                    if recipe["type"] == 4:
+                        granted, reward_equips = self._compose_equip_box(player, recipe, count, key)
+                    else:
+                        granted[recipe["product"]] += recipe["productNum"] * count
+                        if recipe["type"] == 3:
+                            granted.update(self._compose_extra_drop(player, recipe, count))
                     self.economy.save_snapshot(player, snapshot)
-                    granted = self.economy._grant(player, f"compose:{key}",
-                        {recipe["product"]: recipe["productNum"] * count}, stackable_types=(11,))
+                    granted = self.economy._grant(player, f"compose:{key}", granted, stackable_types=(11,))
                     values = {"result": 10, "recipeID": recipe_id,
-                        "rewardData": self.economy.reward_bytes(granted)}
+                        "rewardData": self.economy.reward_bytes(granted, reward_equips)}
                     self.store.db.execute("INSERT INTO bag_operation_receipts VALUES (?,?,?)",
                         (player, key, ECONOMY_SCHEMAS["L2C_JewelCompose"].encode(values)))
-        except UnresolvedEconomy as exc:
+        except (UnresolvedEconomy, EquipmentValidationError) as exc:
             logging.getLogger("x2.economy").info("compose rejected player=%s recipe=%s count=%s reason=%s", player, recipe_id, count, exc)
             return failure
-        logging.getLogger("x2.economy").info("compose accepted player=%s recipe=%s count=%s", player, recipe_id, count)
-        return OutboundMessage("L2C_JewelCompose", values, before_response=self.economy.pushes(player))
+        logging.getLogger("x2.economy").info("compose accepted player=%s recipe=%s count=%s equips=%s",
+            player, recipe_id, count, len(reward_equips))
+        pushes = self.economy.pushes(player)
+        if reward_equips:
+            pushes = pushes + (OutboundMessage("L2C_EquipUpdate", {"code": 10, "equip": list(reward_equips)}),)
+        return OutboundMessage("L2C_JewelCompose", values, before_response=pushes)
+
+    def _compose_extra_drop(self, player, recipe, count):
+        """RecipeType 3 OtherProduct / OtherProductID (Recipe offsets 0x44 / 0x48).
+
+        CollegeFurnaceComposeTab_Refresh 0x1BC9088 reads OtherProduct and prints
+        (OtherProduct + GetFurnaceRecipeExtraPercent)/10 as a percent, so the field is
+        the extra-drop chance in permille and OtherProductID names the Gift group it
+        draws from. GetFurnaceRecipeExtraPercent (0x1B00C28) is CollegeLevel[707]'s
+        EffectValue2 for EffectType2 == 14, i.e. the furnace upgrade bonus.
+        """
+        if not recipe["otherProductId"]:
+            return Counter()
+        chance = min(1000, recipe["otherProduct"] + self._furnace_extra_permille(player))
+        if chance <= 0:
+            return Counter()
+        hits = sum(1 for _ in range(count) if secrets.randbelow(1000) < chance)
+        if not hits:
+            return Counter()
+        deferred: Counter = Counter()
+        extra = self.economy.gifts([recipe["otherProductId"]] * hits,
+                                   deferred=deferred, allow_daily_random=True)
+        if deferred:
+            # Roll back the entire compose instead of consuming materials and
+            # silently discarding an unsupported extra reward destination.
+            raise UnresolvedEconomy("unresolved compose extra reward")
+        return Counter(extra)
+
+    def _furnace_extra_permille(self, player):
+        """CollegeModule_GetFurnaceRecipeExtraPercent(707) for the saved furnace level."""
+        from .college_upgrade import _catalog
+        if not self.store.db.execute("SELECT 1 FROM sqlite_master WHERE name='college_state'").fetchone():
+            return 0
+        row = self.store.db.execute("SELECT state_json FROM college_state WHERE player_id=?", (player,)).fetchone()
+        if not row:
+            return 0
+        state = json.loads(row[0])
+        buildings = (state.get("buildings") or []) + (state.get("wonders") or [])
+        level = next((b.get("buildingLevel", 1) for b in buildings if b.get("buildingId") == 707), 1)
+        catalog = _catalog()
+        building = next((b for b in catalog["buildings"] if b["ID"] == 707), None)
+        ids = (building or {}).get("LevelID") or []
+        if not 1 <= level <= len(ids):
+            return 0
+        level_row = next((r for r in catalog["levels"] if r["BuildID"] == ids[level - 1]), None)
+        if not level_row or level_row.get("EffectType2") != 14:
+            return 0
+        return (level_row.get("EffectValue2") or [0])[0]
+
+    def _compose_equip_box(self, player, recipe, count, key):
+        """RecipeType 4's ProductID is a Gift group of 兽主 type ids (775001..775019).
+
+        Gift.GiftShow only names a display item, so the produced star is not in the
+        recovered tables. The row's RecipeLevel is the only star-shaped value left
+        (1..6, matching EquibStage/MinorCountTiers), so it is used as a
+        REVIVAL_COMPATIBILITY choice for the instance star.
+        """
+        from x2server.messages.equipment import HERO_EQUIP, EQUIP_PARAM
+        from .equipment_factory import materialize_instances
+        deferred: Counter = Counter()
+        granted = Counter(self.economy.gifts([recipe["product"]] * count,
+                                             deferred=deferred, allow_daily_random=True))
+        star = min(6, max(1, recipe["level"] or 1))
+        equips, ordinal = [], 0
+        for item, amount in sorted(deferred.items()):
+            instances = materialize_instances(self.store.db, player, item, star, amount,
+                f"compose:{key}", self.economy.equipment_factory, ordinal)
+            ordinal += amount
+            equips.extend(HERO_EQUIP.encode({**{k: v for k, v in instance.items() if k not in ("param", "marker")},
+                "param": EQUIP_PARAM.encode(instance["param"])}) for instance in instances)
+        return granted, tuple(equips)
