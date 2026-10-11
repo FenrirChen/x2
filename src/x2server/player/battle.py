@@ -428,7 +428,10 @@ class BattleService:
             if not run or {h.get('heroId') for h in selected} != set(json.loads(run['team_json'])):
                 return reject
             values = BATTLE_SCHEMAS['L2C_FightData'].decode(run['response'])
-            values['fightDataProfile'] = saved['profile']
+            # Restore the run's element-compose tally so the resumed battle shows
+            # the same formula counts / exp the client had before the reconnect.
+            values['fightDataProfile'] = self.economy.element_compose.refresh_profile(
+                player['id'], saved['run_id'], saved['profile'])
             with self.store.db:
                 self.store.db.execute('UPDATE battle_entries SET created_at=? WHERE uuid=?', (int(time.time()),saved['run_id']))
                 self.store.db.execute('UPDATE economy_runs SET session_id=? WHERE uuid=?', (context.session.session_id,saved['run_id']))

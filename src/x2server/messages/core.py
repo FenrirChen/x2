@@ -18,6 +18,7 @@ from x2server.messages.appearance import APPEARANCE_SCHEMAS
 from x2server.messages.mail import MAIL_SCHEMAS
 from x2server.messages.terminal import TERMINAL_SCHEMAS
 from x2server.messages.battle_shop import BATTLE_SHOP_SCHEMAS
+from x2server.messages.element_compose import ELEMENT_COMPOSE_SCHEMAS
 from x2server.messages.star_chart import STAR_CHART_SCHEMAS
 from x2server.messages.medals import MEDAL_SCHEMAS
 from x2server.messages.world_boss import WORLD_BOSS_SCHEMAS
@@ -126,6 +127,7 @@ CORE_SCHEMAS.update(APPEARANCE_SCHEMAS)
 CORE_SCHEMAS.update(MAIL_SCHEMAS)
 CORE_SCHEMAS.update(TERMINAL_SCHEMAS)
 CORE_SCHEMAS.update(BATTLE_SHOP_SCHEMAS)
+CORE_SCHEMAS.update(ELEMENT_COMPOSE_SCHEMAS)
 CORE_SCHEMAS.update(STAR_CHART_SCHEMAS)
 # 兽主套装预设 (EquipPlan, 423-430 四对). PlayerDataProto 的第 9 号成员由本表之外的
 # EquipPlanProto 形状下发，见 messages/equip_plan.py。没有这些 schema 和下面的

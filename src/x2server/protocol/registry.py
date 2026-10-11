@@ -149,6 +149,8 @@ CORE_MESSAGE_REGISTRY = MessageRegistry(
         MessageEntry("L2C_BuyInsideBattleShopItems", 158, Direction.SERVER_TO_CLIENT),
         MessageEntry("C2L_RecordInsideBattleItems", 156, Direction.CLIENT_TO_SERVER),
         MessageEntry("L2C_RecordInsideBattleItems", 159, Direction.SERVER_TO_CLIENT),
+        MessageEntry("C2L_ElementCompose", 495, Direction.CLIENT_TO_SERVER),
+        MessageEntry("L2C_ElementCompose", 496, Direction.SERVER_TO_CLIENT),
         MessageEntry("L2C_CheckoutMainMission", 152, Direction.SERVER_TO_CLIENT),
         MessageEntry("L2C_PrepareMainMission", 153, Direction.SERVER_TO_CLIENT),
         MessageEntry("C2L_FightDropData", 264, Direction.CLIENT_TO_SERVER),
