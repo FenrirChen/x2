@@ -100,6 +100,15 @@ class ProgressionService:
                      if HERO_SKIN.decode(value)["heroId"] == hero_id), None)
         return (OutboundMessage("L2C_HeroSkinUpdate", {"skin": skin}),) if skin else ()
 
+    def godlike_costs(self, player_id, rule):
+        # GlobalParamString.GodCommonItem=1206000. RefreshGodShedNeedChip
+        # compares the sum of the hero stone and common stone with the cost.
+        item, amount = rule["ItemID"], rule["Cost"]
+        row = self.store.db.execute("SELECT quantity FROM inventory WHERE player_id=? AND item_id=?",
+                                    (player_id, item)).fetchone()
+        specific = min(amount, max(0, row[0] if row else 0))
+        return Counter({item: specific, 1206000: amount - specific})
+
     async def handle(self, context, packet):
         player_id = context.session.player_id
         if player_id is None:
@@ -107,8 +116,9 @@ class ProgressionService:
         self.economy.ensure_periods(player_id)
         name = CORE_MESSAGE_REGISTRY.name_for(packet.message_id)
         req = PROGRESSION_SCHEMAS[name].decode(packet.body)
-        logging.getLogger("x2.progression").info("growth request %s player=%s hero=%s opt=%s skill=%s",
-            name, player_id, req.get("id", req.get("heroId")), req.get("opt"), req.get("skillId"))
+        hero_id = req.get("id", req.get("heroId", req.get("heroID")))
+        logging.getLogger("x2.progression").info("growth request %s player=%s hero=%s opt=%s skill=%s slot=%s",
+            name, player_id, hero_id, req.get("opt"), req.get("skillId"), req.get("slotIndex"))
         response = name.replace("C2L_", "L2C_")
         schema = PROGRESSION_SCHEMAS[response]
         response_fields = {field.name for field in schema.fields}
@@ -117,6 +127,8 @@ class ProgressionService:
         cached = self.store.db.execute("SELECT response FROM progression_receipts WHERE player_id=? AND request_key=?", (player_id,key)).fetchone()
         if cached:
             pushes = self.pushes(player_id)
+            if name in ("C2L_HeroGodLike", "C2L_GodSlotLock"):
+                return OutboundMessage(response, schema.decode(cached[0]), before_response=pushes)
             skin_update = (self.stage_skin_update(player_id, req.get("id"))
                            if name == "C2L_HeroOpt" and req.get("opt") == 2 else ())
             return (OutboundMessage(response, schema.decode(cached[0]), before_response=pushes[:1], pushes=pushes[1:])
@@ -151,17 +163,19 @@ class ProgressionService:
                     skill_id = rule["SkillID"]
                     if hero.get("god_shed") or any(s["id"] == skill_id for s in hero_skills(hero)):
                         raise UnresolvedEconomy("godlike already unlocked")
-                    costs[rule["ItemID"]] = rule["Cost"]
+                    costs.update(self.godlike_costs(player_id, rule))
                     hero["skills"] = [*hero_skills(hero), {"id": skill_id, "level": 1}]
                     hero["god_shed"] = {"skill_id": skill_id}
                 elif name == "C2L_GodSlotLock":
                     rule = godhole_rules().get(hero["id"])
                     artifact = hero.get("god_equip")
-                    if (not hero.get("god_shed") or not artifact or not rule
+                    if (not rule or hero["star"] != 46 or not artifact
+                            or not any(s["id"] == rule["SkillID"] for s in hero_skills(hero))
                             or req.get("slotIndex") != rule["HoleNum"]):
                         raise UnresolvedEconomy("godlike slot cannot be opened")
                     slots = artifact.setdefault("god_slot_lock", [])
                     if req["slotIndex"] not in slots:
+                        costs.update(self.godlike_costs(player_id, rule))
                         slots.append(req["slotIndex"])
                         slots.sort()
                 elif name == "C2L_Artifact":
@@ -296,10 +310,15 @@ class ProgressionService:
                 self.store.db.execute("INSERT INTO progression_receipts VALUES (?,?,?)", (player_id,key,schema.encode(values)))
         except UnresolvedEconomy as exc:
             logging.getLogger("x2.progression").info("growth rejected %s player=%s hero=%s reason=%s",
-                name, player_id, req.get("id", req.get("heroId")), exc)
+                name, player_id, hero_id, exc)
             values["code"] = 13
             return OutboundMessage(response,values)
         pushes = self.pushes(player_id)
+        if name in ("C2L_HeroGodLike", "C2L_GodSlotLock"):
+            # Both native callbacks synchronously refresh the godlike page from
+            # HeroModule data. Deliver skills, slots and materials first so the
+            # callback advances to the next step or hides the completed button.
+            return OutboundMessage(response, values, before_response=pushes)
         skin_update = self.stage_skin_update(player_id, stage_skin_hero)
         return (OutboundMessage(response, values, before_response=pushes[:1], pushes=pushes[1:])
                 if name == "C2L_Artifact" else OutboundMessage(response, values,

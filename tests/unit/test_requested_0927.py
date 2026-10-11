@@ -58,22 +58,24 @@ def test_six_star_godlike_answers_and_unlocks_client_skill(env):
         state["heroes"].append({"id": 1028, "state": 2, "level": 60, "star": 46,
                                "god_equip": {"id": 1528, "level": 100, "star": 6}})
         economy.save_snapshot(1, state)
-        economy._grant(1, "test-godlike", {1206028: 20})
+        economy._grant(1, "test-godlike", {1206028: 40})
     request = {"heroId": 1028}
     first = asyncio.run(service.handle(ctx, packet(request, 940, "C2L_HeroGodLike")))
     assert first.message_name == "L2C_HeroGodLike" and first.values["code"] == 10
-    assert first.pushes[0].message_name == "L2C_HeroUpdate"
+    assert not first.pushes and first.before_response[0].message_name == "L2C_HeroUpdate"
     hero = next(h for h in store.get(1)["snapshot"]["heroes"] if h["id"] == 1028)
     assert any(s["id"] == 10286 and s["level"] == 1 for s in hero["skills"])
     assert asyncio.run(service.handle(ctx, packet(request, 941, "C2L_HeroGodLike"))).values["code"] == 13
-    assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1206028").fetchone()[0] == 0
+    assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1206028").fetchone()[0] == 20
     slot = {"heroID": 1028, "slotIndex": 5}
     second = asyncio.run(service.handle(ctx, packet(slot, 942, "C2L_GodSlotLock")))
     assert second.values["code"] == 10 and second.message_name == "L2C_GodSlotLock"
-    wire = HERO_DATA.decode(second.pushes[0].values["heros"][-1])
+    assert not second.pushes
+    wire = HERO_DATA.decode(second.before_response[0].values["heros"][-1])
     equip = HERO_GOD_EQUIP.decode(wire["godEquip"])
     assert GOD_SLOT_LOCK_INFO.decode(equip["godSlotLockInfo"][0]) == {"slot": 5, "state": 1}
     assert asyncio.run(service.handle(ctx, packet(slot, 943, "C2L_GodSlotLock"))).values["code"] == 10
+    assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1206028").fetchone()[0] == 0
 
 
 def test_activity_boxes_show_status_claim_once_and_roll_over(env):
