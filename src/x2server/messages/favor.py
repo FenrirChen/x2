@@ -5,6 +5,17 @@ FAVOR_IDS = (("AddFavor", 274, 277), ("UpgradeFetters", 498, 499),
     ("UnlockHeroArchives", 500, 501), ("QueryHeroArchives", 502, 503),
     ("FavorBreak", 651, 652), ("QueryHeroJournal", 657, 658))
 
+# AddFavorType names, 0-based (AddFavorType__Enum): the ``type`` a change notice
+# carries. 通讯/战斗结算各有一档自己的类型, 发错档客户端会当成别的来源, 默契条
+# 不刷新 —— 私聊回信=ReplyLetter(3), 时光点赞评论=ReplyBlog(4),
+# 编入队伍通关=CheckoutMission(5), 角色页触摸=Anim(6), 送礼=Gifts(7)。
+ADD_FAVOR_TYPE_FAVOR_TASK = 0
+ADD_FAVOR_TYPE_REPLY_LETTER = 3
+ADD_FAVOR_TYPE_REPLY_BLOG = 4
+ADD_FAVOR_TYPE_CHECKOUT_MISSION = 5
+ADD_FAVOR_TYPE_ANIM = 6
+ADD_FAVOR_TYPE_GIFTS = 7
+
 HERO_FETTER = S("HeroFetter", (F(1, "posId", K.INT32), F(2, "level", K.INT32)))
 HERO_ARCHIVE = S("HeroArchive", (F(1, "fileId", K.INT32), F(2, "status", K.INT32)))
 FAVOR = S("Favor", (F(1, "level", K.INT32), F(2, "exp", K.INT32)))

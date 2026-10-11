@@ -6,7 +6,8 @@ import logging
 import time
 from collections import Counter
 
-from x2server.messages.favor import FAVOR_SCHEMAS, FAVOR_CHANGE_INFO
+from x2server.messages.favor import (FAVOR_SCHEMAS, FAVOR_CHANGE_INFO,
+                                     ADD_FAVOR_TYPE_FAVOR_TASK)
 from x2server.network.dispatcher import OutboundMessage
 from x2server.protocol.errors import ProtocolError
 from x2server.protocol.registry import CORE_MESSAGE_REGISTRY
@@ -176,7 +177,8 @@ class FavorService:
             state["level"] += 1
         return state
 
-    def grant_favor(self, player_id, hero_id, amount):
+    def grant_favor(self, player_id, hero_id, amount,
+                    change_type=ADD_FAVOR_TYPE_FAVOR_TASK):
         """Add 好感经验 to one hero and report the change.
 
         心愿任务 的领取 pays two things: the task's gift group (an item group, paid by
@@ -187,6 +189,11 @@ class FavorService:
 
         Runs inside the caller's transaction (``EconomyService.claim_favor_task`` opens
         one); it must not start its own, or a nested COMMIT would break that savepoint.
+
+        ``change_type`` is the FavorChangeInfo ``type`` (AddFavorType) the notice carries;
+        a caller granting through a non-task flow names its own kind so the client can
+        tell the sources apart (通讯回信=ReplyLetter(3), 时光点赞评论=ReplyBlog(4),
+        编入队伍通关=CheckoutMission(5)).
 
         Returns the L2C_FavorChangeInfo push for the caller to attach, so the 角色页 bar
         moves without the page asking again. An unusable hero or a zero gain answers
@@ -212,11 +219,11 @@ class FavorService:
         LOGGER.info("favor granted player=%s hero=%s gain=%s %s/%s -> %s/%s",
                     player_id, hero_id, amount, before["level"], before["exp"],
                     state["level"], state["exp"])
-        # type 0 = E_AddFavorType.FAVOR_TASK, the bar animation for a task payout
-        # (a manual tap is 6, a gift is 7). Same message the two other sources push.
+        # type defaults to FAVOR_TASK(0), the bar animation for a task payout (a manual
+        # tap is 6, a gift is 7, 通讯/通关各有自己的档, 见 change_type 参数).
         change = FAVOR_CHANGE_INFO.encode({"beforeLevel": before["level"],
             "beforeExp": before["exp"], "afterLevel": state["level"], "afterExp": state["exp"],
-            "heroID": hero_id, "type": 0})
+            "heroID": hero_id, "type": change_type})
         return (OutboundMessage("L2C_FavorChangeInfo", {"data": [change]}),)
 
     def _break(self, player_id, hero_id, hero):

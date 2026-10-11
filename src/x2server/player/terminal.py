@@ -5,12 +5,27 @@ from importlib.resources import files
 import json
 import time
 
+from x2server.messages.favor import (ADD_FAVOR_TYPE_REPLY_BLOG,
+                                     ADD_FAVOR_TYPE_REPLY_LETTER)
 from x2server.messages.terminal import (BLOG_BOX, BLOG_GROUP, CHAT_GROUP, LETTER_BOX,
                                         LETTER_DATA, LETTER_GROUP, PAIR, TERMINAL_SCHEMAS)
 from x2server.network.dispatcher import OutboundMessage
 from x2server.protocol.errors import ProtocolError
 from x2server.protocol.registry import CORE_MESSAGE_REGISTRY
 from .server_clock import BEIJING
+
+# 通讯提升默契的两条途径: 「私聊回信 (含生日对话) 读完」与「时光点赞 / 评论」都加好感。
+# 数值取本工程既有的兼容口径, 只保证「点赞 < 评论」。
+REPLY_FAVOR = 10       # 普通回信选项: 少量提升默契
+BLOG_LIKE_FAVOR = 10   # 时光点赞
+BLOG_REPLY_FAVOR = 20  # 时光评论
+# 发放的 FavorChangeInfo.type 用客户端自己的枚举档: 私聊回信=ReplyLetter(3), 时光点赞/
+# 评论=ReplyBlog(4)。发错档客户端会当成「角色页触摸」, 默契条不刷新 (见 messages/favor.py)。
+#
+# 私聊为避免连弹横幅, 一段对话里每次该加的默契先累加 (pending_favor), 客户端发出收尾的
+# C2L_UpdatePrivateLetter(isEnd=true) 时合并成一次发放 (见 _settle_letter_favor); 但推送
+# 本身必须照发 (见 _grant_favor) —— 曾把它整个丢掉, 结果「点赞 / 回信 / 生日对话读完」
+# 都看不到默契变化, 玩家反馈「没加默契」。
 
 
 class TerminalService:
@@ -26,6 +41,15 @@ class TerminalService:
         self.letters = {row["PrivateMailID"]: row for row in data["privatemail"]}
         self.roots = [row for row in data["privatemail"] if row.get("IsMasterSequence")]
         self.blogs = {row["BlogID"]: row for row in data["favorabilityblog"]}
+        # OptionEffect: OptionEffectID -> [[EffectType, EffectParm1, EffectParm2], ...]。
+        # 私聊 / 时光语句的 OptionEffectID 指到这张表; EffectType==1 是「给 EffectParm1
+        # 这位神格 +EffectParm2 点默契」(心形正向选项)。缺失时退化为空表 (只是不发那部分
+        # 好感), 不能让通讯整页打不开。
+        try:
+            self.option_effects = json.loads(files("x2server").joinpath(
+                "data/option_effect.json").read_text(encoding="utf-8"))
+        except Exception:  # noqa: BLE001 - 通讯页必须能开
+            self.option_effects = {}
 
     def handlers(self):
         return {"C2L_" + name: self.handle for name in
@@ -100,12 +124,72 @@ class TerminalService:
         return [int(option) for option in row.get("ReplyContent", []) if option]
 
     def _grant_effects(self, snapshot, row):
-        """Remember what this line hands out, for the E_OptionEffect gate."""
+        """记住这封信给出的选项效果，供 E_OptionEffect 门槛判定, 并累计表内好感。
+
+        效果 id 只记一次 (幂等): 复看已解锁的会话、重复走到同一句都不会再发一次好感。
+        EffectType==1 是「给 EffectParm1 这位神格 +EffectParm2 点默契」—— 规范里
+        「心形正向选项大幅提升默契」就是它。加法只入队列, 实际发放推迟到整段读完
+        (_settle_letter_favor)。
+        """
         effects = self._state(snapshot)["effects"]
         for effect in row.get("OptionEffectID") or []:
-            if str(effect) not in effects:
-                effects[str(effect)] = True
-                self._dirty = True
+            key = str(effect)
+            if not effect or key in effects:
+                continue
+            effects[key] = True
+            self._dirty = True
+            for kind, param1, param2 in self.option_effects.get(key, ()):
+                if int(kind) == 1:
+                    self._queue_letter_favor(snapshot, row.get("GroupID"),
+                                             int(param1), int(param2))
+
+    def _grant_favor(self, hero_id, amount, change_type):
+        """给某位神格加默契, 返回要推给客户端的 L2C_FavorChangeInfo 元组。
+
+        走的是玩家页同一个 `FavorService.grant_favor` (同一条好感曲线), 所以通讯加
+        的默契和触摸/送礼完全同口径。economy 没接 favor (单测单独装配服务) 或数值
+        非正时静默跳过并返回空元组。
+
+        **推送必须带出去**: 客户端只有收到 FavorChangeInfo 才会刷新某位神格的默契
+        (角色页的进度条 / 「默契 +N」提示)。上一版把这条推送丢掉了, 客户端便完全
+        不知道默契变过, 表现就是「点赞 / 回信 / 生日对话结束后没加默契」。
+        """
+        favor = getattr(self.economy, "favor", None) if self.economy is not None else None
+        if favor is None or hero_id <= 0 or amount <= 0:
+            return ()
+        with self.economy.transaction():
+            return favor.grant_favor(self._player_id, hero_id, amount,
+                                     change_type=change_type)
+
+    def _queue_letter_favor(self, snapshot, group_id, hero_id, amount):
+        """把这封信该加的默契记到会话组上, 等整段读完再一次性结算。
+
+        私聊的每个选项各自是一次 C2L_ReplyLetter, 客户端最后再发一次
+        C2L_UpdatePrivateLetter(isEnd=true) 表示整段读完。逐次发放会连弹好几次横幅,
+        所以先累加进 progress["pending_favor"] (按神格分开记, 心形效果的目标神格可能
+        不是会话主神格)。整段读完时由 _settle_letter_favor 合并成一次发放。
+        """
+        if amount <= 0 or group_id in (None, 0):
+            return
+        progress = self._state(snapshot)["letters"].get(str(group_id))
+        if progress is None:
+            return
+        pending = progress.setdefault("pending_favor", {})
+        key = str(int(hero_id))
+        pending[key] = int(pending.get(key, 0)) + int(amount)
+        self._dirty = True
+
+    def _settle_letter_favor(self, snapshot, progress):
+        """整段对话读完: 把这次会话累计的默契合并成一次发放, 返回那一条推送。
+
+        合并发放是为了不「连点几个选项、横幅连弹好几次」; 但推送本身不能省 —— 客户端
+        要靠它刷新默契条并弹一次「默契 +N」, 否则玩家读完整段对话却看不到任何默契变化。
+        """
+        pending = progress.pop("pending_favor", None) or {}
+        pushes = ()
+        for hero, amount in pending.items():
+            pushes += self._grant_favor(int(hero), int(amount), ADD_FAVOR_TYPE_REPLY_LETTER)
+        return pushes
 
     def _extend_auto_chain(self, snapshot, progress):
         """The client advances through lines without reply choices locally.
@@ -223,6 +307,9 @@ class TerminalService:
         self._dirty = False
         snapshot = self.store.get(player_id)["snapshot"]
         state = self._state(snapshot)
+        # 本次请求要带出去的 L2C_FavorChangeInfo (私聊读完结算 / 时光点赞评论)。攒起来
+        # 挂在回包上, 客户端才能刷新默契条并提示「默契 +N」。
+        pushes: tuple = ()
         if name == "C2L_QueryPrivateLetter":
             kind = req.get("type", 0)
             values = {"code": 10,
@@ -263,6 +350,12 @@ class TerminalService:
                 reply_id = req.get("replyID", 0)
                 success = reply_id in options
                 if success:
+                    # 回信选项加默契: 表内效果由 _grant_effects 按 OptionEffect 记(心形正向),
+                    # 普通选项再补一个保守小值。只在「这次选的不是原先那一项」时记, 免得
+                    # 反复点同一个选项刷默契。两者都只入队列, 等整段读完 (isEnd) 由
+                    # _settle_letter_favor 合并成一次发放。
+                    if progress["replies"].get(str(letter_id)) != reply_id:
+                        self._queue_letter_favor(snapshot, row["GroupID"], hero_id, REPLY_FAVOR)
                     progress["replies"][str(letter_id)] = reply_id
                     self._grant_effects(snapshot, row)
                     index = options.index(reply_id)
@@ -276,11 +369,13 @@ class TerminalService:
             elif success:
                 # The client reports isEnd only after reading a whole thread. A
                 # line with no reply option has no other hook, so its
-                # OptionEffectID is recorded here.
+                # OptionEffectID is recorded here. 也正是这一刻结算整段对话攒下的默契
+                # (合并成一次发放, 并推送一条变更通知)。
                 progress["ended"] = bool(req.get("isEnd"))
                 progress["last"] = int(self.clock())
                 if progress["ended"]:
                     self._grant_effects(snapshot, row)
+                    pushes += self._settle_letter_favor(snapshot, progress)
             if success:
                 self._dirty = True
             values = {"code": 10 if success else 13,
@@ -290,7 +385,7 @@ class TerminalService:
                 values.update(heroID=hero_id, groupID=req.get("groupID", 0),
                               letterID=letter_id, replyID=req.get("replyID", 0))
             self._flush(player_id, snapshot)
-            return OutboundMessage(reply, values)
+            return OutboundMessage(reply, values, pushes=pushes)
         hero_id, blog_id = req.get("heroID", 0), req.get("groupID", 0)
         row = self.blogs.get(blog_id)
         hero = self._owned(snapshot).get(hero_id)
@@ -298,12 +393,24 @@ class TerminalService:
         if success:
             progress = state["blogs"].setdefault(str(blog_id), {"start": int(self.clock()), "replies": {}})
             if name == "C2L_LikeNpcBlog":
-                progress["like"] = int(self.clock()) if not progress.get("like") else 0
+                # 时光点赞加默契: 只在「由未赞变已赞」的那一次发 (取消赞不发, 再赞因为
+                # like 置 0 后会重新计 —— 与客户端点赞按钮的开关语义一致)。单次动作
+                # 即时发放并推送, 客户端才会当场提示「默契 +N」。
+                if not progress.get("like"):
+                    progress["like"] = int(self.clock())
+                    pushes += self._grant_favor(hero_id, BLOG_LIKE_FAVOR,
+                                                ADD_FAVOR_TYPE_REPLY_BLOG)
+                else:
+                    progress["like"] = 0
             else:
                 reply_id = req.get("replyID", 0)
                 success = reply_id in row.get("ReplyContent", []) and reply_id != 0
                 if success:
                     chat_id = str(req.get("chatGroupID", 0))
+                    # 时光评论加默契: 每条动态的每个评论区首次留言才发一次。
+                    if chat_id not in progress["replies"]:
+                        pushes += self._grant_favor(hero_id, BLOG_REPLY_FAVOR,
+                                                    ADD_FAVOR_TYPE_REPLY_BLOG)
                     progress["replies"][chat_id] = reply_id
                     progress.setdefault("reply_times", {})[chat_id] = int(self.clock())
             if success:
@@ -312,4 +419,4 @@ class TerminalService:
             "blogBox": self._blog_box(hero_id, snapshot) if success else None,
             "blcakHeros": self._blocked(snapshot)}
         self._flush(player_id, snapshot)
-        return OutboundMessage(reply, values)
+        return OutboundMessage(reply, values, pushes=pushes)

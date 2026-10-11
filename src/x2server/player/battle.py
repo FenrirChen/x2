@@ -14,6 +14,14 @@ from x2server.protocol.errors import ProtocolError
 from x2server.protocol.protobuf import decode_varint, _skip_unknown
 from .economy import UnresolvedEconomy
 from .battle_entry import BattleEntryCatalog, EntryDenied
+from .favor import favor_state
+from x2server.messages.favor import ADD_FAVOR_TYPE_CHECKOUT_MISSION
+
+
+# 编入队伍通关一次给每位出战神格加的默契经验。数值取自客户端 BattleFavorability 表
+# (每行第三列都是 10), 该表没有更细的按关卡区分口径, 所以统一 10。只有通关 (success)
+# 才加。
+BATTLE_FAVOR = 10
 
 
 class BattleService:
@@ -233,6 +241,7 @@ class BattleService:
                                    before_response=before, pushes=pushes)
         snapshot = self.store.get(player_id)["snapshot"]
         heroes = snapshot.get("heroes", [])
+        favor_pushes: tuple = ()
         # The client echoes the selected hero state in checkout.  Preserve a
         # validated god-equip payload so the next Current Echoes configuration
         # can see traces carried out of the run.  Older builds omit this field.
@@ -287,6 +296,30 @@ class BattleService:
                         self.economy.world_boss.finish_battle(player_id,row['uuid'],request.get('success',False),confirmed=True)
                     updated = self.store.get(player_id)["snapshot"]
                     values.update(roleExp=updated.get("exp", 0), roleLevel=updated["level"], UpLevelNum=updated["level"]-snapshot["level"])
+                    # 编入队伍通关加默契 (AddFavorType.CheckoutMission=5)。出战神格来自本次
+                    # 入场的 fightHeros (carried_heroes), 只有通关才加, 每位 +BATTLE_FAVOR;
+                    # heroFavorExp/heroAddFavorExp/heroFavorLevel 与 heroIDList 平行, 结算页
+                    # 据此画「默契 +N」。未出战神格按当前值填 (填 0 会被读成「默契归零」)。
+                    favor_service = getattr(self.economy, "favor", None)
+                    gains = (set(int(h) for h in carried_heroes)
+                             if request.get("success") else set())
+                    favor_exp, favor_add, favor_level = [], [], []
+                    for hero in heroes:
+                        hero_id = int(hero.get("id", 0))
+                        if favor_service is not None and hero_id > 0:
+                            if hero_id in gains:
+                                favor_pushes += favor_service.grant_favor(
+                                    player_id, hero_id, BATTLE_FAVOR,
+                                    change_type=ADD_FAVOR_TYPE_CHECKOUT_MISSION)
+                            fav = favor_state(hero)
+                            level, exp = int(fav.get("level", 1)), int(fav.get("exp", 0))
+                        else:
+                            level, exp = 0, 0
+                        favor_level.append(level)
+                        favor_exp.append(exp)
+                        favor_add.append(BATTLE_FAVOR if hero_id in gains else 0)
+                    values.update(heroFavorExp=favor_exp, heroAddFavorExp=favor_add,
+                                  heroFavorLevel=favor_level)
                 self.store.db.execute("INSERT INTO battle_receipts VALUES (?,?,?,?)",
                     (row["uuid"], digest, int(time.time()), schema.encode(values)))
                 self.store.db.execute("INSERT INTO battle_checkout_wire VALUES (?,?,?)",
@@ -295,7 +328,7 @@ class BattleService:
             logging.getLogger("x2.battle").info(
                 "checkout rejected section=%s reason=settle: %s", section, exc)
             return reject
-        pushes = self.economy.pushes(player_id) if self.economy else ()
+        pushes = favor_pushes + (self.economy.pushes(player_id) if self.economy else ())
         if reward_equips:
             # Official "subsequent change" channel: some client builds only apply
             # equipment ledger updates via EquipUpdate, not via 152.rewardEquip.
