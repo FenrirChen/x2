@@ -13,7 +13,6 @@ import math
 ENERGY_PERIOD = 600
 
 
-
 def settle_energy(state, now, catalog):
     anchor = int(state.get('star_gain_time', 0))
     if anchor <= 0 or anchor > now:

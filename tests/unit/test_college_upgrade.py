@@ -110,9 +110,11 @@ def test_star_level_gate_and_real_unlock_effects(game):
     assert send(game, 'BuildStarUP', bid=707, seq=3).values['code'] == 10
     from x2server.messages.lobby import MISSION_PAIR
     recipes = [MISSION_PAIR.decode(raw) for raw in service._alchemy_main(1).values['recipeIdExp']]
-    assert len(recipes) == len(service.alchemy.recipes)
-    assert sum(row['Value'] >= 0 for row in recipes) == 6
-    assert next(row['Value'] for row in recipes if row['Key'] == 36012) == -1
+    # A furnace star upgrade does not bypass recipe experience prerequisites.
+    # Locked (-1) rows must stay out of the wire or the client exposes them as
+    # craftable products with negative manufacture counts.
+    assert {row['Key'] for row in recipes} == {36011, 36021, 36031, 36041, 36051, 36061}
+    assert all(row['Value'] == 0 for row in recipes)
     assert send(game, 'BuildStarUP', bid=704, seq=4).values['code'] == 10
     slots = [TRAINING_DATA.decode(v) for v in repo.growth_base(1)['trainingList']]
     assert [r['trainingId'] for r in slots] == [0, 1]

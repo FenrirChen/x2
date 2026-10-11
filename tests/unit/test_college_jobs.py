@@ -297,7 +297,7 @@ def test_alchemy_energy_and_crystal_speed(game, kind):
     state = repo.load(1)
     assert state['alchemy']['production_bars'][0]['endTime'] == clock.value
     if kind == 1:
-        rate = rules()["params"]["AlchemySpeedConsume"]
+        rate = int(rules()["params"]["AlchemySpeedConsume"])
         cost = (remaining + rate - 1) // rate
         assert state['star_energy'] == energy_before - cost
     else:
