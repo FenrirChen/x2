@@ -57,6 +57,12 @@ class EconomyService:
     TASK_EVENT_EQUIP_EQUIP = 49        # E_EquipEquip
     TASK_EVENT_LOGIN_DAY = 58          # E_LoginDay: one per local day the player logs in
     TASK_EVENT_FAVORABILITY_LEVEL = 73  # E_FavorabilityLevel: 好感等级达标的英雄数
+    # 炼金实验室 的两条日常/周常条件 (economy_catalog.json task_conditions):
+    #   630027/630113「完成 N 次交易」 E_AlchemyDealTask=75
+    #   630028/630114「完成 N 次任务」 E_AlchemyQuestTask=76
+    # 由 player/college_alchemy.py 的 598 AlchemyFinish 成交路径记录。
+    TASK_EVENT_ALCHEMY_DEAL = 75       # E_AlchemyDealTask: 完成交易次数
+    TASK_EVENT_ALCHEMY_QUEST = 76      # E_AlchemyQuestTask: 完成任务次数
     TASK_EVENT_CUSTOMS_ENTRY = 87      # E_CustomsEntry
     # GameTaskType.CHALLENGE: 60 tasks in 10 groups, no period, no rollover.
     CHALLENGE_KIND = 3

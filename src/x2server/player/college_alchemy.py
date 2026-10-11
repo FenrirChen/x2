@@ -288,6 +288,15 @@ class AlchemyService:
         state['star_energy'] -= energy
         reward = {1237901: gold}
         self.economy._grant(player_id, 'college-trade:' + uuid.uuid4().hex, reward)
+        # 每日/周常 炼金任务: 本服务端顾客一律是 CustomerInfo.type==2 的普通交易委托, 一次
+        # 成交同时满足「交易」与「完成 1 次委托」两种读法 (与 economy 里「一次购买既算
+        # E_BuyGood 又算 E_BuyGold」同一设计), 对应 630027/630028(日) 与 630113/630114(周)。
+        # key 含 slot/questId, 重放同一请求不会重复计数。
+        source = 'alchemy-finish:%s:%s:%s' % (player_id, pos, customer['questId'])
+        self.economy.record_event(
+            player_id, source + ':deal', self.economy.TASK_EVENT_ALCHEMY_DEAL, 0, 1)
+        self.economy.record_event(
+            player_id, source + ':quest', self.economy.TASK_EVENT_ALCHEMY_QUEST, 0, 1)
         change = self.discount_favor(player_id, customer, favor_gain)
         result = dict(values, code=10, alchemyType=2,
                       rewardData=self.economy.reward_bytes(reward).hex())
