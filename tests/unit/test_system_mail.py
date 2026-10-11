@@ -57,6 +57,7 @@ def test_choice_mail_concurrent_ensure_and_atomic_registration_failure(tmp_path)
     # Emulate an older account predating this reward policy.
     with accounts.db:
         accounts.db.execute("DELETE FROM player_mail WHERE source_key LIKE 'hero_choice_%'")
+        accounts.db.execute("DELETE FROM system_mail_issues WHERE kind='hero_choice'")
     other = AccountStore(store)
     with ThreadPoolExecutor(max_workers=2) as pool:
         results = list(pool.map(lambda a: a.ensure_hero_choice_mail(player_id, 200), (accounts, other)))

@@ -1,6 +1,7 @@
 """Production lifecycle, offline recovery and atomic inventory on isolated saves."""
 import asyncio
 import pytest
+from x2server.player.college_upgrade import _catalog
 
 from tests.unit.test_battle import packet
 from tests.unit.test_college_upgrade import game, quantity, send as upgrade
@@ -26,6 +27,48 @@ def seed_elements(game, number=10):
     for row in state['alchemy']['elements']:
         row['num'] = number
     repo.save(1, state)
+
+
+@pytest.mark.parametrize('recipe', _catalog()['recipes'], ids=lambda r: str(r['RecipeID']))
+def test_every_recipe_accepts_exact_materials_and_debits_once(game, recipe):
+    store, _, repo, service, _ = game
+    seed_elements(game, 0)
+    state = repo.load(1)
+    state['alchemy']['recipe_exp'] = [{'Key': recipe['RecipeID'], 'Value': 0}]
+    elements = {row['elementId']: row for row in state['alchemy']['elements']}
+    with store.db:
+        for item, count in zip(recipe['ItemGroup'], recipe['ItemNum'], strict=True):
+            if item in service.alchemy.element_items:
+                elements[service.alchemy.element_items[item]]['num'] = count
+            else:
+                store.db.execute('INSERT OR REPLACE INTO inventory VALUES (?,?,?)', (1, item, count))
+        result = service.alchemy._make(1, state, {'posIndex': 0, 'recipeId': recipe['RecipeID']})
+        assert result['code'] == 10
+        for item in recipe['ItemGroup']:
+            if item in service.alchemy.element_items:
+                assert elements[service.alchemy.element_items[item]]['num'] == 0
+            else:
+                assert quantity(store, item) == 0
+        assert service.alchemy._make(1, state, {'posIndex': 0, 'recipeId': recipe['RecipeID']})['code'] == 206
+        assert service.alchemy._make(1, state, {'posIndex': 1, 'recipeId': recipe['RecipeID']})['code'] == 22
+
+
+@pytest.mark.parametrize('energy,expected', [(300, 10), (67, 10), (66, 22)])
+def test_energy_acceleration_matches_native_67_point_price(game, energy, expected):
+    _, clock, repo, _, _ = game
+    seed_elements(game)
+    assert send(game, 'MakeItem', posIndex=0, recipeId=36011).values['code'] == 10
+    state = repo.load(1)
+    state['star_energy'] = energy
+    repo.catalog.state_row(state, 702)['buildingLevel'] = 3
+    state['alchemy']['production_bars'][0]['endTime'] = clock.value + 8040
+    repo.save(1, state)
+    result = send(game, 'MakIngSpeed', seq=2, posIndex=0, type=1)
+    assert result.values['code'] == expected
+    assert repo.load(1)['star_energy'] == energy - (67 if expected == 10 else 0)
+    assert send(game, 'MakIngSpeed', seq=2, posIndex=0, type=1).values == result.values
+    if expected == 10:
+        assert send(game, 'AlchemyCollect', seq=3, posIndex=0).values['code'] == 10
 
 
 def test_element_energy_purchase_limit_day_and_replay(game):
@@ -281,12 +324,12 @@ def test_batch_validation_and_no_duplicate_rewards(game):
     assert quantity(store, 1280011) == 3
 
 
-def test_collect_unlocks_next_recipe_with_star_requirement(game):
+def test_collect_unlocks_next_recipe_independent_of_furnace_star(game):
     _, clock, repo, service, _ = game
     seed_elements(game, 20)
     state = repo.load(1)
     state['alchemy']['recipe_exp'] = [{'Key': 36011, 'Value': 2}]
-    repo.catalog.state_row(state, 707)['buildingStar'] = 2
+    repo.catalog.state_row(state, 707)['buildingStar'] = 1
     repo.save(1, state)
     assert send(game, 'MakeItem', posIndex=0, recipeId=36012).values['code'] == 13
     assert send(game, 'MakeItem', seq=2, posIndex=0, recipeId=36011).values['code'] == 10
@@ -294,6 +337,24 @@ def test_collect_unlocks_next_recipe_with_star_requirement(game):
     assert send(game, 'AlchemyCollect', seq=3, posIndex=0).values['exp'] == 3
     assert service.alchemy.recipe_exp(repo.load(1))[36012] == 0
     assert send(game, 'MakeItem', seq=4, posIndex=0, recipeId=36012).values['code'] == 10
+
+
+def test_existing_recipe_experience_recovers_unlocks_and_all_locked_wire_rows(game):
+    store, _, repo, service, _ = game
+    seed_elements(game, 120)
+    with store.db:
+        store.db.execute('INSERT INTO inventory VALUES (?,?,?)', (1, 1281001, 5))
+    state = repo.load(1)
+    state['alchemy']['recipe_exp'] = [{'Key': 36021, 'Value': 5}, {'Key': 36022, 'Value': -1}]
+    repo.catalog.state_row(state, 707)['buildingStar'] = 1
+    repo.save(1, state)
+    fields = service.alchemy.snapshot_fields(repo.load(1))
+    from x2server.messages.lobby import MISSION_PAIR
+    exp = {r['Key']: r['Value'] for r in map(MISSION_PAIR.decode, fields['recipeIdExp'])}
+    assert exp[36021] == 5 and exp[36022] == 0
+    assert 36030 not in exp
+    assert all(value >= 0 for value in exp.values())
+    assert send(game, 'MakeItem', recipeId=36022, posIndex=0).values['code'] == 10
 
 
 def test_recipe_effects_match_thresholds_and_building_tier(game):

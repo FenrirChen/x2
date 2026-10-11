@@ -1,0 +1,1801 @@
+{
+  "database": "D:\\demo\\x2\\x2_revive_workspace\\runtime\\phase14\\player.sqlite3",
+  "user_version": 2,
+  "excluded_tables": {
+    "system_mail_issues": "服务器一次性邮件发放历史，禁止随存档迁移或回滚以防重复领取。",
+    "world_boss_days": "全服 BOSS 日历，不随单个玩家存档覆盖。",
+    "accounts": "账号认证身份（username/password_hash/status/created_at/last_login_at）。存档代表游戏状态，不代表登录身份；导入必须保留目标账号的凭据。",
+    "repair_history": "服务器运维修复记录（repair_key/applied_at/backup_path），不属于任何玩家游戏状态。"
+  },
+  "excluded_player_columns": {
+    "id": "player 主键 = 认证身份绑定键，导入保持目标 player 行不变",
+    "account": "与 accounts.username 绑定的登录身份，导入不得覆盖",
+    "created_at": "账号建档时间，属于身份活动数据",
+    "login_count": "登录次数计数，属于账号活动数据",
+    "revision": "乐观并发控制技术字段，导入后由服务器重置"
+  },
+  "tables": [
+    {
+      "table": "accounts",
+      "columns": [
+        "account_id",
+        "username",
+        "password_hash",
+        "created_at",
+        "last_login_at",
+        "status",
+        "player_id"
+      ],
+      "primary_key": [
+        "account_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": false,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": "account_id"
+    },
+    {
+      "table": "achievement_events",
+      "columns": [
+        "player_id",
+        "event_key",
+        "event_type",
+        "amount"
+      ],
+      "primary_key": [
+        "player_id",
+        "event_key"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "achievement_receipts",
+      "columns": [
+        "player_id",
+        "request_key",
+        "response"
+      ],
+      "primary_key": [
+        "player_id",
+        "request_key"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [
+        "response"
+      ],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "achievements",
+      "columns": [
+        "player_id",
+        "achv_id",
+        "progress",
+        "claimed"
+      ],
+      "primary_key": [
+        "player_id",
+        "achv_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "activity_events",
+      "columns": [
+        "player_id",
+        "period",
+        "event_key"
+      ],
+      "primary_key": [
+        "player_id",
+        "period",
+        "event_key"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "activity_receipts",
+      "columns": [
+        "player_id",
+        "request_key",
+        "period",
+        "message",
+        "response"
+      ],
+      "primary_key": [
+        "player_id",
+        "request_key"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [
+        "response"
+      ],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "activity_runs",
+      "columns": [
+        "uuid",
+        "player_id",
+        "period",
+        "section_id",
+        "created_at",
+        "settled"
+      ],
+      "primary_key": [
+        "uuid"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "activity_state",
+      "columns": [
+        "player_id",
+        "period",
+        "namespace",
+        "state_key",
+        "value"
+      ],
+      "primary_key": [
+        "player_id",
+        "period",
+        "namespace",
+        "state_key"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "appearance_shop_purchases",
+      "columns": [
+        "player_id",
+        "item_id",
+        "goods_id",
+        "purchased_at"
+      ],
+      "primary_key": [
+        "player_id",
+        "item_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "appearance_shop_receipts",
+      "columns": [
+        "request_key",
+        "player_id",
+        "response"
+      ],
+      "primary_key": [
+        "request_key"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [
+        "response"
+      ],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "appearance_voice_unlock",
+      "columns": [
+        "player_id",
+        "dubbing_id"
+      ],
+      "primary_key": [
+        "player_id",
+        "dubbing_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "appearance_wear",
+      "columns": [
+        "player_id",
+        "hero_id",
+        "type",
+        "skin_id"
+      ],
+      "primary_key": [
+        "player_id",
+        "hero_id",
+        "type"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "bag_jewel_seen",
+      "columns": [
+        "player_id",
+        "hero_id"
+      ],
+      "primary_key": [
+        "player_id",
+        "hero_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "bag_operation_receipts",
+      "columns": [
+        "player_id",
+        "request_key",
+        "response"
+      ],
+      "primary_key": [
+        "player_id",
+        "request_key"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [
+        "response"
+      ],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "battle_checkout_wire",
+      "columns": [
+        "uuid",
+        "checkout",
+        "unknown_field_numbers"
+      ],
+      "primary_key": [
+        "uuid"
+      ],
+      "owner_column": null,
+      "owner_join": [
+        "battle_entries",
+        "uuid",
+        "uuid"
+      ],
+      "included": true,
+      "blob_columns": [
+        "checkout"
+      ],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "battle_costs",
+      "columns": [
+        "uuid",
+        "player_id",
+        "amount",
+        "refunded"
+      ],
+      "primary_key": [
+        "uuid"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "battle_drop_budget_versions",
+      "columns": [
+        "uuid",
+        "policy_version"
+      ],
+      "primary_key": [
+        "uuid"
+      ],
+      "owner_column": null,
+      "owner_join": [
+        "battle_entries",
+        "uuid",
+        "uuid"
+      ],
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "battle_entries",
+      "columns": [
+        "player_id",
+        "request_key",
+        "uuid",
+        "created_at",
+        "response",
+        "section_type",
+        "entry_source",
+        "map_id",
+        "team_json",
+        "ai_cost"
+      ],
+      "primary_key": [
+        "player_id",
+        "request_key"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [
+        "response"
+      ],
+      "json_columns": [
+        "team_json"
+      ],
+      "autoincrement": null
+    },
+    {
+      "table": "battle_receipts",
+      "columns": [
+        "uuid",
+        "request_hash",
+        "created_at",
+        "response"
+      ],
+      "primary_key": [
+        "uuid"
+      ],
+      "owner_column": null,
+      "owner_join": [
+        "battle_entries",
+        "uuid",
+        "uuid"
+      ],
+      "included": true,
+      "blob_columns": [
+        "response"
+      ],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "battle_shop_pickups",
+      "columns": [
+        "player_id",
+        "item_id",
+        "num",
+        "section_id",
+        "created_at"
+      ],
+      "primary_key": [],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "battle_shop_purchases",
+      "columns": [
+        "player_id",
+        "shop_id",
+        "level",
+        "item_id",
+        "num",
+        "price",
+        "money_type",
+        "section_id",
+        "created_at"
+      ],
+      "primary_key": [],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "battle_shop_visits",
+      "columns": [
+        "player_id",
+        "shop_id",
+        "level",
+        "section_id",
+        "created_at",
+        "run_id"
+      ],
+      "primary_key": [
+        "player_id",
+        "shop_id",
+        "level"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "battle_unresolved_rewards",
+      "columns": [
+        "uuid",
+        "player_id",
+        "section_id",
+        "reward_group",
+        "reason"
+      ],
+      "primary_key": [
+        "uuid",
+        "reward_group"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "challenge_task_state",
+      "columns": [
+        "player_id",
+        "task_id",
+        "progress",
+        "claimed"
+      ],
+      "primary_key": [
+        "player_id",
+        "task_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "chapter_dp_floors",
+      "columns": [
+        "player_id",
+        "chapter_id",
+        "minimum_dp",
+        "reason"
+      ],
+      "primary_key": [
+        "player_id",
+        "chapter_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "chapter_dp_migrations",
+      "columns": [
+        "player_id",
+        "legacy_floors"
+      ],
+      "primary_key": [
+        "player_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [
+        "legacy_floors"
+      ],
+      "autoincrement": null
+    },
+    {
+      "table": "chapter_objectives",
+      "columns": [
+        "player_id",
+        "chapter_id",
+        "task_id",
+        "progress"
+      ],
+      "primary_key": [
+        "player_id",
+        "chapter_id",
+        "task_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "chapter_signals",
+      "columns": [
+        "player_id",
+        "chapter_id",
+        "source",
+        "kind",
+        "subject",
+        "scope",
+        "amount"
+      ],
+      "primary_key": [
+        "player_id",
+        "chapter_id",
+        "source",
+        "kind",
+        "subject",
+        "scope"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "collection_awards",
+      "columns": [
+        "player_id",
+        "award_id"
+      ],
+      "primary_key": [
+        "player_id",
+        "award_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "college_alchemy_receipts",
+      "columns": [
+        "player_id",
+        "receipt_key",
+        "digest",
+        "response"
+      ],
+      "primary_key": [
+        "player_id",
+        "receipt_key"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "college_job_receipts",
+      "columns": [
+        "player_id",
+        "receipt_key",
+        "digest",
+        "response"
+      ],
+      "primary_key": [
+        "player_id",
+        "receipt_key"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "college_pray_receipts",
+      "columns": [
+        "player_id",
+        "receipt_key",
+        "digest",
+        "response"
+      ],
+      "primary_key": [
+        "player_id",
+        "receipt_key"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "college_state",
+      "columns": [
+        "player_id",
+        "version",
+        "state_json",
+        "created_at",
+        "updated_at"
+      ],
+      "primary_key": [
+        "player_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [
+        "state_json"
+      ],
+      "autoincrement": null
+    },
+    {
+      "table": "college_upgrade_receipts",
+      "columns": [
+        "player_id",
+        "receipt_key",
+        "digest",
+        "response"
+      ],
+      "primary_key": [
+        "player_id",
+        "receipt_key"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "economy_checkouts",
+      "columns": [
+        "player_id",
+        "digest",
+        "uuid"
+      ],
+      "primary_key": [
+        "player_id",
+        "digest"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "economy_clears",
+      "columns": [
+        "player_id",
+        "section_id",
+        "first_uuid"
+      ],
+      "primary_key": [
+        "player_id",
+        "section_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "economy_events",
+      "columns": [
+        "player_id",
+        "event_key"
+      ],
+      "primary_key": [
+        "player_id",
+        "event_key"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "economy_grants",
+      "columns": [
+        "player_id",
+        "source",
+        "rewards",
+        "created_at"
+      ],
+      "primary_key": [
+        "player_id",
+        "source"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [
+        "rewards"
+      ],
+      "autoincrement": null
+    },
+    {
+      "table": "economy_runs",
+      "columns": [
+        "uuid",
+        "player_id",
+        "session_id",
+        "section_id",
+        "settled",
+        "section_type",
+        "entry_source"
+      ],
+      "primary_key": [
+        "uuid"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "economy_tasks",
+      "columns": [
+        "player_id",
+        "task_id",
+        "progress",
+        "claimed"
+      ],
+      "primary_key": [
+        "player_id",
+        "task_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "endless_observations",
+      "columns": [
+        "player_id",
+        "run_id",
+        "kind",
+        "value",
+        "amount"
+      ],
+      "primary_key": [
+        "player_id",
+        "run_id",
+        "kind",
+        "value"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "endless_profiles",
+      "columns": [
+        "player_id",
+        "run_id",
+        "section_id",
+        "profile",
+        "updated_at"
+      ],
+      "primary_key": [
+        "player_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [
+        "profile"
+      ],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "endless_task_receipts",
+      "columns": [
+        "player_id",
+        "request_key",
+        "task_id",
+        "response"
+      ],
+      "primary_key": [
+        "player_id",
+        "request_key",
+        "task_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [
+        "response"
+      ],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "endless_tasks",
+      "columns": [
+        "player_id",
+        "task_id",
+        "progress",
+        "claimed"
+      ],
+      "primary_key": [
+        "player_id",
+        "task_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "equip_plan_receipts",
+      "columns": [
+        "request_key",
+        "player_id",
+        "response_name",
+        "response"
+      ],
+      "primary_key": [
+        "request_key"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [
+        "response"
+      ],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "equipment_enhancements",
+      "columns": [
+        "player_id",
+        "equip_id",
+        "level",
+        "attribute_slot",
+        "bonus"
+      ],
+      "primary_key": [
+        "player_id",
+        "equip_id",
+        "level"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "equipment_instances",
+      "columns": [
+        "id",
+        "player_id",
+        "type_id",
+        "level",
+        "exp",
+        "star",
+        "param",
+        "marker",
+        "locked",
+        "UNIQUE(player_id,type_id,marker)"
+      ],
+      "primary_key": [
+        "id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": "id"
+    },
+    {
+      "table": "equipment_lock_receipts",
+      "columns": [
+        "request_key",
+        "player_id",
+        "response"
+      ],
+      "primary_key": [
+        "request_key"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [
+        "response"
+      ],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "equipment_main_growth",
+      "columns": [
+        "equip_id",
+        "player_id",
+        "star",
+        "main_type",
+        "growth_value"
+      ],
+      "primary_key": [
+        "equip_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "favor_touch_log",
+      "columns": [
+        "player_id",
+        "hero_id",
+        "day",
+        "count"
+      ],
+      "primary_key": [
+        "player_id",
+        "hero_id",
+        "day"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "fight_drop_claims",
+      "columns": [
+        "report_id",
+        "field",
+        "position",
+        "decoded"
+      ],
+      "primary_key": [
+        "report_id",
+        "field",
+        "position"
+      ],
+      "owner_column": null,
+      "owner_join": [
+        "fight_drop_observations",
+        "id",
+        "report_id"
+      ],
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [
+        "decoded"
+      ],
+      "autoincrement": null
+    },
+    {
+      "table": "fight_drop_items",
+      "columns": [
+        "report_id",
+        "position",
+        "item_id",
+        "value",
+        "variant",
+        "in_relic_list"
+      ],
+      "primary_key": [
+        "report_id",
+        "position"
+      ],
+      "owner_column": null,
+      "owner_join": [
+        "fight_drop_observations",
+        "id",
+        "report_id"
+      ],
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "fight_drop_observations",
+      "columns": [
+        "id",
+        "player_id",
+        "uuid",
+        "session_id",
+        "request_id",
+        "digest",
+        "recorded_at",
+        "body",
+        "decoded",
+        "context",
+        "UNIQUE(player_id,uuid,digest)"
+      ],
+      "primary_key": [
+        "id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [
+        "body"
+      ],
+      "json_columns": [
+        "decoded",
+        "context"
+      ],
+      "autoincrement": "id"
+    },
+    {
+      "table": "gift_package_claims",
+      "columns": [
+        "player_id",
+        "package_id",
+        "period",
+        "claimed_at"
+      ],
+      "primary_key": [
+        "player_id",
+        "package_id",
+        "period"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "gift_package_daily_claims",
+      "columns": [
+        "player_id",
+        "package_id",
+        "day"
+      ],
+      "primary_key": [
+        "player_id",
+        "package_id",
+        "day"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "gift_package_receipts",
+      "columns": [
+        "request_key",
+        "player_id",
+        "response"
+      ],
+      "primary_key": [
+        "request_key"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [
+        "response"
+      ],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "inventory",
+      "columns": [
+        "player_id",
+        "item_id",
+        "quantity"
+      ],
+      "primary_key": [
+        "player_id",
+        "item_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "item_opt_receipts",
+      "columns": [
+        "request_key",
+        "player_id",
+        "response"
+      ],
+      "primary_key": [
+        "request_key"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [
+        "response"
+      ],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "pending_reward_deliveries",
+      "columns": [
+        "player_id",
+        "source",
+        "item_id",
+        "quantity"
+      ],
+      "primary_key": [
+        "player_id",
+        "source",
+        "item_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "pending_reward_instances",
+      "columns": [
+        "run_id",
+        "ordinal",
+        "player_id",
+        "item_id",
+        "quantity",
+        "quality",
+        "e_num",
+        "reason"
+      ],
+      "primary_key": [
+        "run_id",
+        "ordinal"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "pending_rewards",
+      "columns": [
+        "player_id",
+        "source",
+        "item_id",
+        "quantity",
+        "reason"
+      ],
+      "primary_key": [
+        "player_id",
+        "source",
+        "item_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "player_mail",
+      "columns": [
+        "id",
+        "player_id",
+        "sender",
+        "title",
+        "body",
+        "state",
+        "created_at",
+        "attachments",
+        "deleted",
+        "source_key"
+      ],
+      "primary_key": [
+        "id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [
+        "attachments"
+      ],
+      "autoincrement": "id"
+    },
+    {
+      "table": "players",
+      "columns": [
+        "id",
+        "account",
+        "created_at",
+        "login_count",
+        "snapshot",
+        "revision"
+      ],
+      "primary_key": [
+        "id"
+      ],
+      "owner_column": null,
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [
+        "snapshot"
+      ],
+      "autoincrement": null
+    },
+    {
+      "table": "progression_receipts",
+      "columns": [
+        "player_id",
+        "request_key",
+        "response"
+      ],
+      "primary_key": [
+        "player_id",
+        "request_key"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [
+        "response"
+      ],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "repair_history",
+      "columns": [
+        "repair_key",
+        "applied_at",
+        "backup_path"
+      ],
+      "primary_key": [
+        "repair_key"
+      ],
+      "owner_column": null,
+      "owner_join": null,
+      "included": false,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "reward_settlement_audit",
+      "columns": [
+        "run_id",
+        "player_id",
+        "section_id",
+        "sources",
+        "blocked",
+        "created_at"
+      ],
+      "primary_key": [
+        "run_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [
+        "sources",
+        "blocked"
+      ],
+      "autoincrement": null
+    },
+    {
+      "table": "shop_compat_counts",
+      "columns": [
+        "player_id",
+        "shop_id",
+        "goods_id",
+        "period",
+        "quantity"
+      ],
+      "primary_key": [
+        "player_id",
+        "shop_id",
+        "goods_id",
+        "period"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "shop_purchase_counts",
+      "columns": [
+        "player_id",
+        "goods_id",
+        "quantity"
+      ],
+      "primary_key": [
+        "player_id",
+        "goods_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "shop_receipts",
+      "columns": [
+        "request_key",
+        "player_id",
+        "response"
+      ],
+      "primary_key": [
+        "request_key"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [
+        "response"
+      ],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "shop_refreshes",
+      "columns": [
+        "player_id",
+        "shop_id",
+        "period",
+        "count"
+      ],
+      "primary_key": [
+        "player_id",
+        "shop_id",
+        "period"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "star_chart_receipts",
+      "columns": [
+        "player_id",
+        "request_key",
+        "message",
+        "response"
+      ],
+      "primary_key": [
+        "player_id",
+        "request_key"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [
+        "response"
+      ],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "story_reviews",
+      "columns": [
+        "player_id",
+        "chapter_id"
+      ],
+      "primary_key": [
+        "player_id",
+        "chapter_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "sweep_receipts",
+      "columns": [
+        "request_key",
+        "player_id",
+        "section_id",
+        "response"
+      ],
+      "primary_key": [
+        "request_key"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [
+        "response"
+      ],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "task_boxes",
+      "columns": [
+        "player_id",
+        "kind",
+        "period_start",
+        "box_id"
+      ],
+      "primary_key": [
+        "player_id",
+        "kind",
+        "period_start",
+        "box_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "task_history",
+      "columns": [
+        "player_id",
+        "kind",
+        "start",
+        "task_id",
+        "progress",
+        "claimed"
+      ],
+      "primary_key": [
+        "player_id",
+        "kind",
+        "start",
+        "task_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "task_periods",
+      "columns": [
+        "player_id",
+        "kind",
+        "start",
+        "end"
+      ],
+      "primary_key": [
+        "player_id",
+        "kind"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "wish_last_result",
+      "columns": [
+        "player_id",
+        "pool_id",
+        "response"
+      ],
+      "primary_key": [
+        "player_id",
+        "pool_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [
+        "response"
+      ],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "wish_pity",
+      "columns": [
+        "player_id",
+        "category",
+        "since_hero",
+        "since_top",
+        "since_featured"
+      ],
+      "primary_key": [
+        "player_id",
+        "category"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "wish_receipts",
+      "columns": [
+        "player_id",
+        "request_key",
+        "response"
+      ],
+      "primary_key": [
+        "player_id",
+        "request_key"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [
+        "response"
+      ],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "wish_state",
+      "columns": [
+        "player_id",
+        "pool_id",
+        "total",
+        "singles",
+        "tens",
+        "since_hero",
+        "since_top",
+        "first_three_star",
+        "since_featured"
+      ],
+      "primary_key": [
+        "player_id",
+        "pool_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "world_boss_accounts",
+      "columns": [
+        "player_id",
+        "day",
+        "state"
+      ],
+      "primary_key": [
+        "player_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "world_boss_days",
+      "columns": [
+        "day",
+        "boss_id",
+        "type_id"
+      ],
+      "primary_key": [
+        "day"
+      ],
+      "owner_column": null,
+      "owner_join": null,
+      "included": false,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "world_boss_members",
+      "columns": [
+        "boss_id",
+        "player_id",
+        "team",
+        "damage",
+        "active",
+        "run_id",
+        "retry_at",
+        "charged",
+        "combat_confirmed"
+      ],
+      "primary_key": [
+        "boss_id",
+        "player_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "world_boss_player_days",
+      "columns": [
+        "player_id",
+        "day",
+        "boss_id",
+        "type_id"
+      ],
+      "primary_key": [
+        "player_id",
+        "day"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "world_boss_receipts",
+      "columns": [
+        "player_id",
+        "request_key",
+        "response_name",
+        "response"
+      ],
+      "primary_key": [
+        "player_id",
+        "request_key"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [
+        "response"
+      ],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "world_boss_runs",
+      "columns": [
+        "boss_id",
+        "type_id",
+        "group_id",
+        "created",
+        "state",
+        "finish",
+        "max_hp",
+        "hp",
+        "finder",
+        "finder_name",
+        "monster_level"
+      ],
+      "primary_key": [
+        "boss_id"
+      ],
+      "owner_column": null,
+      "owner_join": [
+        "world_boss_player_days",
+        "boss_id",
+        "boss_id"
+      ],
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "world_boss_tickets",
+      "columns": [
+        "ticket",
+        "boss_id",
+        "player_id",
+        "UNIQUE(boss_id,player_id)"
+      ],
+      "primary_key": [
+        "ticket"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    }
+  ]
+}

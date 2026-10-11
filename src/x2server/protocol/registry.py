@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from x2server.messages.college import COLLEGE_IDS
+from x2server.messages.activity import ACTIVITY_IDS, ACTIVITY_PUSH_IDS
 from x2server.messages.lobby import LOBBY_IDS
 from x2server.messages.chat import CHAT_IDS
 from x2server.messages.economy import ECONOMY_IDS
@@ -75,6 +76,9 @@ class MessageRegistry:
 # Deliberately absent: L2C_CheckoutMainMissionSign does not exist in the client.
 CORE_MESSAGE_REGISTRY = MessageRegistry(
     (
+        *(MessageEntry('C2L_' + name, request, Direction.CLIENT_TO_SERVER) for name, request, _ in ACTIVITY_IDS),
+        *(MessageEntry('L2C_' + name, response, Direction.SERVER_TO_CLIENT) for name, _, response in ACTIVITY_IDS),
+        *(MessageEntry(name, mid, Direction.SERVER_TO_CLIENT) for name, mid in ACTIVITY_PUSH_IDS),
         *(MessageEntry(name, pid, Direction.CLIENT_TO_SERVER if name.startswith(("C2L_", "C2W_"))
                         else Direction.SERVER_TO_CLIENT) for name, pid in WORLD_BOSS_IDS),
         *(MessageEntry(name, pid, Direction.CLIENT_TO_SERVER if name.startswith("C2L_")

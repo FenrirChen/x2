@@ -28,7 +28,7 @@ sources['GlobalParamString'] = {'source': 'assets/bin/Data/' + entry['source_has
 params = {r['Key']: r['Value'] for r in global_rows
           if r['Key'] in ('AlchemyNum', 'AlchemyCustomerNum', 'AlchemyExploreParam',
                          'AlchemyPriceNum', 'AlchemyPriceParam', 'AlchemyDiscountNum',
-                         'AlchemyDiscountParam', 'AlchemyAdviceParam')
+                         'AlchemyDiscountParam', 'AlchemyAdviceParam', 'AlchemySpeedConsume')
           or r['Key'] in [f'Element{i:02}' + suffix for i in range(1, 7)
                           for suffix in ('', 'Pay', 'Param')]}
 result = {'sources': sources, 'items': items, 'params': params,

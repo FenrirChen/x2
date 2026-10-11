@@ -8,6 +8,12 @@ Evidence: official 2.4 decoded tables (rows, not just schemas); dump.cs/script.j
 
 # 白夜行星
 
+## 2026-10-10 炼金解锁门槛纠正
+
+炼金 CollegeRecipe（360xx）的解锁只依据前置配方制作经验与 RecipeEffect=3。此前误用707熔炉的 StarEffectType10（GetFurnaceRecipeLevel，用于292xx熔炉配方）限制炼金 RecipeLevel，导致初始熔炉一星时制作经验达标仍无法解锁二级配方。原生 CollegeAlchemyModule.RefreshRecipeMaxUnlock(0x189caa4)依据非负配方经验计算已解锁级别，没有熔炉星级条件。
+
+现查询下发全部炼金配方，未解锁经验=-1；已达标存档按解锁链补齐经验0，保留已积累经验。制造仍校验配方已解锁、真实材料和空闲队列。一件产物一点经验的既定规则不变。
+
 ## 2026-10-10 祈神提示残留与顾客操作闭环
 
 - 祈神领取/取消后，584给八座奇迹各自的空闲PrayQueue，而非仅buildingId=0哨兵。原生Civilization.Refresh(0x1db5e64–0x1db5f38)只替换匹配buildingId的缓存；缺行会保留status=2的旧对象，造成红点及领取提示残留。持久化任务仍只保存实际进行/待领取项目；其他建筑的任务不清除。

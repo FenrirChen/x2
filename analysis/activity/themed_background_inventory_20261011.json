@@ -1,0 +1,943 @@
+[
+  {
+    "file": "4a7573f214c7eb24eb21d0a0249a5689",
+    "id": 1,
+    "type": "Texture2D",
+    "name": "ZhangJieChangJing_SakuraBG",
+    "rect": null,
+    "size": [
+      256,
+      256
+    ]
+  },
+  {
+    "file": "59ab5ce8662aa03499e31895e79f92e5",
+    "id": 1,
+    "type": "Texture2D",
+    "name": "YingZhiDao_ZhuJieMian_font_yingzhidao",
+    "rect": null,
+    "size": [
+      260,
+      100
+    ]
+  },
+  {
+    "file": "59ab5ce8662aa03499e31895e79f92e5",
+    "id": 2,
+    "type": "Sprite",
+    "name": "YingZhiDao_ZhuJieMian_font_yingzhidao",
+    "rect": {
+      "x": 0.0,
+      "y": 0.0,
+      "width": 260.0,
+      "height": 100.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "0f718ef491dd4684c89f95587e5b564a",
+    "id": 1,
+    "type": "Texture2D",
+    "name": "YingZhiDao_ZhuJieMian_yingzhidaodi",
+    "rect": null,
+    "size": [
+      480,
+      148
+    ]
+  },
+  {
+    "file": "0f718ef491dd4684c89f95587e5b564a",
+    "id": 2,
+    "type": "Sprite",
+    "name": "YingZhiDao_ZhuJieMian_yingzhidaodi",
+    "rect": {
+      "x": 0.0,
+      "y": 0.0,
+      "width": 480.0,
+      "height": 148.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "6174c075dbeaa87478db03147773ab1a",
+    "id": 72,
+    "type": "Sprite",
+    "name": "ZhouNianQing_GuanQia_DiTuIcon",
+    "rect": {
+      "x": 148.0,
+      "y": 347.0,
+      "width": 35.0,
+      "height": 36.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "6174c075dbeaa87478db03147773ab1a",
+    "id": 77,
+    "type": "Sprite",
+    "name": "ZhouNianQing_NanDu_BG1",
+    "rect": {
+      "x": 359.0,
+      "y": 871.0,
+      "width": 252.0,
+      "height": 67.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "984e74d5b0ca3a84a834cc33c23e6260",
+    "id": 1,
+    "type": "Texture2D",
+    "name": "YingZhiDao_TanChuangBG",
+    "rect": null,
+    "size": [
+      1232,
+      664
+    ]
+  },
+  {
+    "file": "984e74d5b0ca3a84a834cc33c23e6260",
+    "id": 2,
+    "type": "Sprite",
+    "name": "YingZhiDao_TanChuangBG",
+    "rect": {
+      "x": 0.0,
+      "y": 0.0,
+      "width": 1232.0,
+      "height": 664.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "af9d9bf30ea9c034587df8854f55983e",
+    "id": 1,
+    "type": "Texture2D",
+    "name": "Ying_Mian_BG2",
+    "rect": null,
+    "size": [
+      1688,
+      1004
+    ]
+  },
+  {
+    "file": "af9d9bf30ea9c034587df8854f55983e",
+    "id": 2,
+    "type": "Sprite",
+    "name": "Ying_Mian_BG2",
+    "rect": {
+      "x": 0.0,
+      "y": 0.0,
+      "width": 1688.0,
+      "height": 1004.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "93ca01c11354fbc43a91c3fa93ffb2ab",
+    "id": 1,
+    "type": "Texture2D",
+    "name": "ChunJie_BGn",
+    "rect": null,
+    "size": [
+      928,
+      496
+    ]
+  },
+  {
+    "file": "93ca01c11354fbc43a91c3fa93ffb2ab",
+    "id": 2,
+    "type": "Sprite",
+    "name": "ChunJie_BGn",
+    "rect": {
+      "x": 0.0,
+      "y": 0.0,
+      "width": 928.0,
+      "height": 496.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "d6c3ac05fca689444807250e038666ea",
+    "id": 23,
+    "type": "Sprite",
+    "name": "YingZhiDao_ZhuJieMian_fangxiang",
+    "rect": {
+      "x": 431.0,
+      "y": 956.0,
+      "width": 80.0,
+      "height": 67.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "d6c3ac05fca689444807250e038666ea",
+    "id": 24,
+    "type": "Sprite",
+    "name": "YingZhiDao_ZhuJieMian_font_sakura",
+    "rect": {
+      "x": 363.0,
+      "y": 887.0,
+      "width": 64.0,
+      "height": 26.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "d6c3ac05fca689444807250e038666ea",
+    "id": 25,
+    "type": "Sprite",
+    "name": "YingZhiDao_ZhuJieMian_icon_baoshi",
+    "rect": {
+      "x": 431.0,
+      "y": 882.0,
+      "width": 72.0,
+      "height": 72.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "d6c3ac05fca689444807250e038666ea",
+    "id": 26,
+    "type": "Sprite",
+    "name": "YingZhiDao_ZhuJieMian_icon_duanjian",
+    "rect": {
+      "x": 144.0,
+      "y": 499.0,
+      "width": 70.0,
+      "height": 70.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "d6c3ac05fca689444807250e038666ea",
+    "id": 27,
+    "type": "Sprite",
+    "name": "YingZhiDao_ZhuJieMian_icon_rizhi",
+    "rect": {
+      "x": 145.0,
+      "y": 571.0,
+      "width": 70.0,
+      "height": 71.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "d6c3ac05fca689444807250e038666ea",
+    "id": 28,
+    "type": "Sprite",
+    "name": "YingZhiDao_ZhuJieMian_icon_taiyang",
+    "rect": {
+      "x": 428.0,
+      "y": 716.0,
+      "width": 72.0,
+      "height": 71.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "d6c3ac05fca689444807250e038666ea",
+    "id": 29,
+    "type": "Sprite",
+    "name": "YingZhiDao_ZhuJieMian_touying",
+    "rect": {
+      "x": 1.0,
+      "y": 635.0,
+      "width": 142.0,
+      "height": 58.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "d6c3ac05fca689444807250e038666ea",
+    "id": 40,
+    "type": "Sprite",
+    "name": "YingZhiDao_ZhuJieMian_font_Hua",
+    "rect": {
+      "x": 1.0,
+      "y": 77.0,
+      "width": 48.0,
+      "height": 48.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "20f6743579ecb364186ba89fbee2db59",
+    "id": 1,
+    "type": "Texture2D",
+    "name": "chunjiebg3",
+    "rect": null,
+    "size": [
+      1336,
+      752
+    ]
+  },
+  {
+    "file": "20f6743579ecb364186ba89fbee2db59",
+    "id": 2,
+    "type": "Sprite",
+    "name": "chunjiebg3",
+    "rect": {
+      "x": 0.0,
+      "y": 0.0,
+      "width": 1336.0,
+      "height": 752.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "72e89d711cbf23b46816ff00450c2be7",
+    "id": 1,
+    "type": "Texture2D",
+    "name": "chunjiebg2",
+    "rect": null,
+    "size": [
+      1336,
+      752
+    ]
+  },
+  {
+    "file": "72e89d711cbf23b46816ff00450c2be7",
+    "id": 2,
+    "type": "Sprite",
+    "name": "chunjiebg2",
+    "rect": {
+      "x": 0.0,
+      "y": 0.0,
+      "width": 1336.0,
+      "height": 752.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "955e637c6adbb5d4abd01881e6c9aaa7",
+    "id": 1,
+    "type": "Texture2D",
+    "name": "ChuJiu_JuQingBG",
+    "rect": null,
+    "size": [
+      1024,
+      512
+    ]
+  },
+  {
+    "file": "955e637c6adbb5d4abd01881e6c9aaa7",
+    "id": 2,
+    "type": "Sprite",
+    "name": "ChuJiu_JuQingBG",
+    "rect": {
+      "x": 0.0,
+      "y": 0.0,
+      "width": 1024.0,
+      "height": 512.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "c8047d677a77c7641a5e68eaec2135cf",
+    "id": 1,
+    "type": "Texture2D",
+    "name": "YingZhiDao_ZhuJieMian_font_weisheng",
+    "rect": null,
+    "size": [
+      156,
+      52
+    ]
+  },
+  {
+    "file": "c8047d677a77c7641a5e68eaec2135cf",
+    "id": 2,
+    "type": "Sprite",
+    "name": "YingZhiDao_ZhuJieMian_font_weisheng",
+    "rect": {
+      "x": 0.0,
+      "y": 0.0,
+      "width": 156.0,
+      "height": 52.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "a69ba7109d434d24cb55129bfaccdb6b",
+    "id": 1,
+    "type": "Texture2D",
+    "name": "YingZhiDao_RenWu_Lbg2",
+    "rect": null,
+    "size": [
+      404,
+      404
+    ]
+  },
+  {
+    "file": "a69ba7109d434d24cb55129bfaccdb6b",
+    "id": 2,
+    "type": "Sprite",
+    "name": "YingZhiDao_RenWu_Lbg2",
+    "rect": {
+      "x": 0.0,
+      "y": 0.0,
+      "width": 404.0,
+      "height": 404.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "908fbcb10cb98114db7b3bc9b1037195",
+    "id": 1,
+    "type": "Texture2D",
+    "name": "YingZhiDao_FuBen_BG",
+    "rect": null,
+    "size": [
+      2048,
+      892
+    ]
+  },
+  {
+    "file": "908fbcb10cb98114db7b3bc9b1037195",
+    "id": 2,
+    "type": "Sprite",
+    "name": "YingZhiDao_FuBen_BG",
+    "rect": {
+      "x": 0.0,
+      "y": 0.0,
+      "width": 2048.0,
+      "height": 892.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "783f66167479b25459e1578039292d99",
+    "id": 1,
+    "type": "Texture2D",
+    "name": "YueXiChuJiu_RiYueBG",
+    "rect": null,
+    "size": [
+      1336,
+      752
+    ]
+  },
+  {
+    "file": "783f66167479b25459e1578039292d99",
+    "id": 2,
+    "type": "Sprite",
+    "name": "YueXiChuJiu_RiYueBG",
+    "rect": {
+      "x": 0.0,
+      "y": 0.0,
+      "width": 1336.0,
+      "height": 752.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "54628012479bd5c42b47d7ae7985bdb5",
+    "id": 1,
+    "type": "Texture2D",
+    "name": "YingZhiDao_ShangDian_bg",
+    "rect": null,
+    "size": [
+      1628,
+      752
+    ]
+  },
+  {
+    "file": "54628012479bd5c42b47d7ae7985bdb5",
+    "id": 2,
+    "type": "Sprite",
+    "name": "YingZhiDao_ShangDian_bg",
+    "rect": {
+      "x": 0.0,
+      "y": 0.0,
+      "width": 1628.0,
+      "height": 752.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "207a9dde33140fa45bd7313e76bcc163",
+    "id": 1,
+    "type": "Texture2D",
+    "name": "chunjiebg",
+    "rect": null,
+    "size": [
+      1336,
+      752
+    ]
+  },
+  {
+    "file": "207a9dde33140fa45bd7313e76bcc163",
+    "id": 2,
+    "type": "Sprite",
+    "name": "chunjiebg",
+    "rect": {
+      "x": 0.0,
+      "y": 0.0,
+      "width": 1336.0,
+      "height": 752.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "d91ac6139fb01964b9ebe2c5fdd68089",
+    "id": 1,
+    "type": "Texture2D",
+    "name": "Ying_RenWu_BG",
+    "rect": null,
+    "size": [
+      1628,
+      752
+    ]
+  },
+  {
+    "file": "d91ac6139fb01964b9ebe2c5fdd68089",
+    "id": 2,
+    "type": "Sprite",
+    "name": "Ying_RenWu_BG",
+    "rect": {
+      "x": 0.0,
+      "y": 0.0,
+      "width": 1628.0,
+      "height": 752.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "004fa84b0ca1b564989de5425019dd62",
+    "id": 1,
+    "type": "Texture2D",
+    "name": "gonggong_scene2",
+    "rect": null,
+    "size": [
+      1336,
+      752
+    ]
+  },
+  {
+    "file": "004fa84b0ca1b564989de5425019dd62",
+    "id": 2,
+    "type": "Sprite",
+    "name": "gonggong_scene2",
+    "rect": {
+      "x": 0.0,
+      "y": 0.0,
+      "width": 1336.0,
+      "height": 752.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "576a775f870b7254988c197687142fd0",
+    "id": 1,
+    "type": "Texture2D",
+    "name": "gonggong_scene",
+    "rect": null,
+    "size": [
+      1336,
+      752
+    ]
+  },
+  {
+    "file": "576a775f870b7254988c197687142fd0",
+    "id": 2,
+    "type": "Sprite",
+    "name": "gonggong_scene",
+    "rect": {
+      "x": 0.0,
+      "y": 0.0,
+      "width": 1336.0,
+      "height": 752.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "bcd7cfe9336fb9e4cbd416d59a5bfc8a",
+    "id": 3,
+    "type": "Sprite",
+    "name": "Ying_Mian_BiaoTi",
+    "rect": {
+      "x": 242.0,
+      "y": 611.0,
+      "width": 160.0,
+      "height": 84.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "bcd7cfe9336fb9e4cbd416d59a5bfc8a",
+    "id": 4,
+    "type": "Sprite",
+    "name": "Ying_Mian_BiaoTi2",
+    "rect": {
+      "x": 1.0,
+      "y": 2.0,
+      "width": 120.0,
+      "height": 120.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "bcd7cfe9336fb9e4cbd416d59a5bfc8a",
+    "id": 5,
+    "type": "Sprite",
+    "name": "Ying_Mian_BiaoTi3",
+    "rect": {
+      "x": 1.0,
+      "y": 551.0,
+      "width": 239.0,
+      "height": 144.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "bcd7cfe9336fb9e4cbd416d59a5bfc8a",
+    "id": 6,
+    "type": "Sprite",
+    "name": "Ying_Mian_BiaoTi4",
+    "rect": {
+      "x": 1.0,
+      "y": 697.0,
+      "width": 368.0,
+      "height": 28.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "bcd7cfe9336fb9e4cbd416d59a5bfc8a",
+    "id": 7,
+    "type": "Sprite",
+    "name": "Ying_Mian_btn",
+    "rect": {
+      "x": 123.0,
+      "y": 82.0,
+      "width": 131.0,
+      "height": 40.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "bcd7cfe9336fb9e4cbd416d59a5bfc8a",
+    "id": 8,
+    "type": "Sprite",
+    "name": "Ying_Mian_BTN1",
+    "rect": {
+      "x": 256.0,
+      "y": 426.0,
+      "width": 120.0,
+      "height": 16.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "bcd7cfe9336fb9e4cbd416d59a5bfc8a",
+    "id": 9,
+    "type": "Sprite",
+    "name": "Ying_Mian_ICON1",
+    "rect": {
+      "x": 431.0,
+      "y": 874.0,
+      "width": 68.0,
+      "height": 71.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "bcd7cfe9336fb9e4cbd416d59a5bfc8a",
+    "id": 10,
+    "type": "Sprite",
+    "name": "Ying_Mian_ICON2",
+    "rect": {
+      "x": 431.0,
+      "y": 947.0,
+      "width": 72.0,
+      "height": 76.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "bcd7cfe9336fb9e4cbd416d59a5bfc8a",
+    "id": 11,
+    "type": "Sprite",
+    "name": "Ying_Mian_ICONDi",
+    "rect": {
+      "x": 407.0,
+      "y": 731.0,
+      "width": 64.0,
+      "height": 71.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "bcd7cfe9336fb9e4cbd416d59a5bfc8a",
+    "id": 12,
+    "type": "Sprite",
+    "name": "Ying_Mian_XuYuan",
+    "rect": {
+      "x": 235.0,
+      "y": 444.0,
+      "width": 192.0,
+      "height": 68.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "bcd7cfe9336fb9e4cbd416d59a5bfc8a",
+    "id": 17,
+    "type": "Sprite",
+    "name": "Ying_Mian_Icon",
+    "rect": {
+      "x": 407.0,
+      "y": 895.0,
+      "width": 16.0,
+      "height": 16.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "2cdd0b34551ec8f449ff81cc65d05b47",
+    "id": 1,
+    "type": "Texture2D",
+    "name": "YueXiChuJiu_JuQing_BG",
+    "rect": null,
+    "size": [
+      1024,
+      512
+    ]
+  },
+  {
+    "file": "2cdd0b34551ec8f449ff81cc65d05b47",
+    "id": 2,
+    "type": "Sprite",
+    "name": "YueXiChuJiu_JuQing_BG",
+    "rect": {
+      "x": 0.0,
+      "y": 0.0,
+      "width": 1024.0,
+      "height": 512.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "b43d07d39994fb24ba05e18215627199",
+    "id": 1,
+    "type": "Texture2D",
+    "name": "ChuJiu_HuoDongBG",
+    "rect": null,
+    "size": [
+      1336,
+      752
+    ]
+  },
+  {
+    "file": "b43d07d39994fb24ba05e18215627199",
+    "id": 2,
+    "type": "Sprite",
+    "name": "ChuJiu_HuoDongBG",
+    "rect": {
+      "x": 0.0,
+      "y": 0.0,
+      "width": 1336.0,
+      "height": 752.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "106b6fd109db97f46b349f49a58f0053",
+    "id": 1,
+    "type": "Texture2D",
+    "name": "YingZhiDao_RenWu_Lbg",
+    "rect": null,
+    "size": [
+      592,
+      752
+    ]
+  },
+  {
+    "file": "106b6fd109db97f46b349f49a58f0053",
+    "id": 2,
+    "type": "Sprite",
+    "name": "YingZhiDao_RenWu_Lbg",
+    "rect": {
+      "x": 0.0,
+      "y": 0.0,
+      "width": 592.0,
+      "height": 752.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "b63cf6f58ed3411419de3d913d8001e7",
+    "id": 1,
+    "type": "Texture2D",
+    "name": "OsirisBG",
+    "rect": null,
+    "size": [
+      1336,
+      752
+    ]
+  },
+  {
+    "file": "b63cf6f58ed3411419de3d913d8001e7",
+    "id": 2,
+    "type": "Sprite",
+    "name": "OsirisBG",
+    "rect": {
+      "x": 0.0,
+      "y": 0.0,
+      "width": 1336.0,
+      "height": 752.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  },
+  {
+    "file": "0f65cd231b8f4af46a29d280847cbdaa",
+    "id": 1,
+    "type": "Texture2D",
+    "name": "Ying_Mian_BG",
+    "rect": null,
+    "size": [
+      1688,
+      1004
+    ]
+  },
+  {
+    "file": "0f65cd231b8f4af46a29d280847cbdaa",
+    "id": 2,
+    "type": "Sprite",
+    "name": "Ying_Mian_BG",
+    "rect": {
+      "x": 0.0,
+      "y": 0.0,
+      "width": 1688.0,
+      "height": 1004.0
+    },
+    "size": [
+      null,
+      null
+    ]
+  }
+]

@@ -1,0 +1,5711 @@
+{
+  "meta": {
+    "Language": {
+      "source": "assets/bin/Data/844762d28a77f85408b631eb3f0186bc",
+      "record_count": 28996,
+      "fields": [
+        "Key",
+        "Chinese",
+        "ChineseFT",
+        "LanguageKor",
+        "LanguageJpn"
+      ]
+    },
+    "ActivityReal": {
+      "source": "assets/bin/Data/3657c86433542824e8a7db9a23e2b1d8",
+      "record_count": 141,
+      "fields": [
+        "ActivityID",
+        "ActivityParentType",
+        "ActivityType",
+        "ActivityGroup",
+        "ActivityName",
+        "ActivityShow",
+        "OpenLever",
+        "OpenType",
+        "OpenParam",
+        "OpenTime",
+        "EndTime",
+        "ActivityParam1",
+        "ActivityParam2",
+        "ActivityParam3",
+        "ActivityParam4",
+        "ActivityReward",
+        "ActivityDescription",
+        "BGMID",
+        "OtherID",
+        "ActivityTaps",
+        "AreaID"
+      ]
+    },
+    "ActivityDungeon": {
+      "source": "assets/bin/Data/c4e8c6889d311b944bbc0a657f371693",
+      "record_count": 105,
+      "fields": [
+        "ID",
+        "GameplayType",
+        "UnlockType",
+        "GameplayParam01",
+        "GameplayParam02",
+        "GameplayParam03",
+        "DungeonName",
+        "DungeonDesc",
+        "SectionID",
+        "ChallengeLevel",
+        "PreChapter",
+        "ShowPic",
+        "ChapterPic",
+        "ChapterPicName",
+        "ActivityParam1",
+        "ActivityParam2",
+        "ActivityParam3",
+        "ActivityParam4",
+        "Limit",
+        "IllustrationID",
+        "NoChanllge"
+      ]
+    },
+    "SectionTable": {
+      "source": "assets/bin/Data/cca5f3cc8525b59459bdebf586c887fb",
+      "record_count": 3203,
+      "fields": [
+        "SectionID",
+        "NextSectionID",
+        "SectionNumberID",
+        "NumerChina",
+        "GameplayNotice",
+        "Maps",
+        "ChapterID",
+        "Type",
+        "CollisionDetectionRadius",
+        "IfBossBattle",
+        "Name",
+        "NameChina",
+        "NameMore",
+        "NameMoreChina",
+        "ChallengeName",
+        "ChallengeDesc",
+        "ChallengeReward1",
+        "StageIcon",
+        "LevelDisplay",
+        "RecommendedAbility",
+        "RecommendedLevel",
+        "DifficultyLevel",
+        "Profession",
+        "EnemyDisplay",
+        "DroopLimit",
+        "DroopLimit2",
+        "DroopLimit3",
+        "DroopDisplay",
+        "DroopDisplayProbability",
+        "OpenType",
+        "OpenParam",
+        "HeroLimit",
+        "TimeLimit",
+        "StartParam",
+        "WinCondition",
+        "WinParam",
+        "ExitCountDown",
+        "FailCondition",
+        "FailParam",
+        "FailTips",
+        "AgainSwitch",
+        "FailShowSwitch",
+        "Open",
+        "ManualValue",
+        "FirVReward",
+        "ExpertChestReward",
+        "ChestReward",
+        "VReward",
+        "MopReward",
+        "DropValueID",
+        "SectionRelicList",
+        "PlayerPassive",
+        "MonsterPassive",
+        "GoblinRate",
+        "GoblinIdList",
+        "GoblinChance",
+        "AssistType",
+        "AssistParam",
+        "BehaviorManager",
+        "IsAutoFightMode",
+        "AutoFightCondition",
+        "ContinueFightID",
+        "ContinueFightConsume",
+        "AutoFightMode",
+        "ChangeSceneColor",
+        "ChangeSceneFog",
+        "IsSeriesSection",
+        "IsShowWinTips",
+        "IsSaveGame",
+        "Favorability",
+        "PlotReviewBackground",
+        "PlotReviewStoryID",
+        "PlotReviewDesc",
+        "GamePlayType",
+        "GamePlayValue",
+        "GamePlayValue2",
+        "SwitchValue",
+        "BattlepassEquib",
+        "BattlepassEquibInto",
+        "StartLevelByItem"
+      ]
+    },
+    "Item": {
+      "source": "assets/bin/Data/e49ddfae661db9147b8823552f01df41",
+      "record_count": 3026,
+      "fields": [
+        "ItemID",
+        "NameID",
+        "DescID",
+        "HistoryID",
+        "ItemUseScence",
+        "ItemType",
+        "ItemQuality",
+        "PileCount",
+        "ItemValue",
+        "AddADCGroup",
+        "IMQualityLevel",
+        "DropLimit",
+        "DropLimitParam",
+        "NeedLevel",
+        "ItemShow",
+        "Used",
+        "Purchased",
+        "Gain",
+        "Composed",
+        "Recover",
+        "FunctionEff",
+        "EffData",
+        "Return",
+        "Icon",
+        "EffectIcon",
+        "Model",
+        "Effect",
+        "IfShowName",
+        "DropSound",
+        "PickSound",
+        "QuickBuyID"
+      ]
+    },
+    "MapInfo": {
+      "source": "assets/bin/Data/192c1f2b873c253499869d5dd6c8fb05",
+      "record_count": 3099,
+      "fields": [
+        "MapTypeID",
+        "GradeSuppression",
+        "MonsterLevel",
+        "StageID",
+        "MonsterLevelUp",
+        "MapSize",
+        "Audio",
+        "MapHelpTips",
+        "SceneMap",
+        "PreLoadMonster",
+        "PreLoadMonsterNumber",
+        "PreLoadCommonNPC",
+        "PreLoadCommonNPCNumber",
+        "PreLoadPlay",
+        "PreLoadDestroy",
+        "PreLoadTrap",
+        "PreLoadEffect",
+        "IfCloseMonster"
+      ]
+    }
+  },
+  "missing": [
+    "Story"
+  ],
+  "titles": {
+    "阏逢敛遗": {
+      "texts": [
+        {
+          "key": 6450131,
+          "text": "阏逢敛遗中累计获得小麦 20"
+        },
+        {
+          "key": 6450171,
+          "text": "阏逢敛遗中累计获得蔬菜 20"
+        },
+        {
+          "key": 6450211,
+          "text": "阏逢敛遗中累计获得菌菇 20"
+        },
+        {
+          "key": 6450251,
+          "text": "阏逢敛遗中累计获得鲜肉 20"
+        },
+        {
+          "key": 6450291,
+          "text": "阏逢敛遗中累计获得果仁 20"
+        },
+        {
+          "key": 6450331,
+          "text": "阏逢敛遗中累计获得稻米 20"
+        },
+        {
+          "key": 6450371,
+          "text": "阏逢敛遗中累计获得酱料 20"
+        },
+        {
+          "key": 6450411,
+          "text": "阏逢敛遗中累计获得鱼肉 20"
+        },
+        {
+          "key": 6450451,
+          "text": "阏逢敛遗累计获得辅料 20"
+        },
+        {
+          "key": 6450491,
+          "text": "阏逢敛遗中累计获得海鲜 20"
+        },
+        {
+          "key": 12379842,
+          "text": "可用于在“天街当铺”商店中抽取福袋，通过“阏逢敛遗”活动获得。"
+        },
+        {
+          "key": 12600683,
+          "text": "“阏逢敛遗”活动获得"
+        },
+        {
+          "key": 12703122,
+          "text": "“阏逢敛遗”活动解锁"
+        },
+        {
+          "key": 12703125,
+          "text": "“阏逢敛遗”活动解锁"
+        },
+        {
+          "key": 13430701,
+          "text": "阏逢敛遗"
+        },
+        {
+          "key": 27002111,
+          "text": "阏逢敛遗补给礼"
+        },
+        {
+          "key": 216111111,
+          "text": "参与活动 阏逢敛遗 解锁"
+        }
+      ],
+      "sections": [],
+      "items": [
+        {
+          "id": 1237984,
+          "texts": [
+            [
+              "DescID",
+              "可用于在“天街当铺”商店中抽取福袋，通过“阏逢敛遗”活动获得。"
+            ]
+          ]
+        },
+        {
+          "id": 1260068,
+          "texts": [
+            [
+              "HistoryID",
+              "“阏逢敛遗”活动获得"
+            ]
+          ]
+        },
+        {
+          "id": 1270312,
+          "texts": [
+            [
+              "DescID",
+              "“阏逢敛遗”活动解锁"
+            ]
+          ]
+        }
+      ],
+      "unlock_section_references": [
+        {
+          "language_key": 216111111,
+          "text": "参与活动 阏逢敛遗 解锁",
+          "derived_section_id": 2161111,
+          "section": {
+            "SectionID": 2161111,
+            "SectionNumberID": 2000001,
+            "NumerChina": "第一幕",
+            "Maps": [
+              2261111
+            ],
+            "ChapterID": 2060751,
+            "Type": {
+              "value": 14,
+              "enum": "E_ActivityStory"
+            },
+            "Name": 21611111,
+            "NameChina": "微风之启",
+            "NameMore": 21611112,
+            "NameMoreChina": "四神学院受到了一种未知能量的侵入，在熟悉面容之下的是…",
+            "StageIcon": "",
+            "LevelDisplay": 2,
+            "RecommendedAbility": 2920,
+            "RecommendedLevel": 20,
+            "DifficultyLevel": {
+              "value": 1,
+              "enum": "E_Difficulty1"
+            },
+            "Profession": 301,
+            "EnemyDisplay": [
+              3100,
+              3105,
+              3106,
+              3120
+            ],
+            "DroopLimit2": [
+              6,
+              7,
+              8
+            ],
+            "OpenType": {
+              "value": 1,
+              "enum": "E_Level"
+            },
+            "OpenParam": 17,
+            "WinCondition": {
+              "value": 2,
+              "enum": "E_BlockComplete"
+            },
+            "WinParam": [
+              1948991,
+              3000
+            ],
+            "FailTips": [
+              {
+                "Items": [
+                  13101701,
+                  13101702,
+                  13101703,
+                  13101704
+                ]
+              },
+              {
+                "Items": [
+                  13101801,
+                  13101802,
+                  13101803,
+                  13101804,
+                  13101805
+                ]
+              },
+              {
+                "Items": [
+                  13101901,
+                  13101902,
+                  13101903,
+                  13101904
+                ]
+              }
+            ],
+            "Open": 150,
+            "ManualValue": 12,
+            "FirVReward": [
+              776706
+            ],
+            "VReward": [
+              776808
+            ],
+            "DropValueID": 10660211,
+            "AssistType": {
+              "value": 2,
+              "enum": "E_Friend"
+            },
+            "IsShowWinTips": {
+              "value": 1,
+              "enum": "E_Yes"
+            },
+            "Favorability": 2
+          }
+        }
+      ]
+    },
+    "伪生樱之岛": {
+      "texts": [
+        {
+          "key": 15253,
+          "text": "日月光辉，万物生长。\n\n来源：\n最初是天照创造以守护高天原的神物，在人世间流传千万年。当此世天照召唤出月读来拯救樱之岛时，为了助长月读的力量，天照重新创造了琼勾玉，与历史上创造的那块形体不同。"
+        },
+        {
+          "key": 380268,
+          "text": "不错~感谢你的协助，那么吾就先离开啦，樱之岛随时欢迎你来做客。"
+        },
+        {
+          "key": 690547,
+          "text": "你总是令吾想起以前呢……那个战斗力超强，脾气却很倔强的小子。不如与吾一起回到樱之岛吧？"
+        },
+        {
+          "key": 690548,
+          "text": "白驹过隙，你已于此坚守百日了。还真是了不起呀！嗯，樱之岛正需要你这样的人才。"
+        },
+        {
+          "key": 1634170,
+          "text": "天照告知伊邪纳岐樱之岛出现危机，伊邪纳岐认为自己多少也有责任便主动要求帮忙。"
+        },
+        {
+          "key": 1948001,
+          "text": "奥西里斯发现樱之岛正在发生重叠或扭曲，需要有人前去勘察，而月读却忽然失踪。"
+        },
+        {
+          "key": 1948049,
+          "text": "经过确认，月读很可能已经回到樱之岛，但现在的樱之岛上几乎检测不到任何的通讯信息或是生命活动痕迹，犹如沉没之船。"
+        },
+        {
+          "key": 1948079,
+          "text": "解神者与阿努比斯、少姜来到樱之岛调查异常情况的原因，三人朝着樱学院的方位小心前进着。"
+        },
+        {
+          "key": 1948229,
+          "text": "源氏将众人带到幸存者藏身的洞窟，在原住民口中了解樱之岛上灾难的始末，以及樱学院的消失，并认识了两位新朋友：须佐和伊邪那美。"
+        },
+        {
+          "key": 1950001,
+          "text": "须佐追上了斩念源氏的步伐想要结伴同行，但源氏表现犹豫，对现世产生了疑问。须佐希望源氏能与自己一起拯救樱之岛，他似乎怀有秘密。"
+        },
+        {
+          "key": 1950209,
+          "text": "答应要求后，天照将樱之岛的现况告知众人。她为拯救岛屿的命运建立了日向世界，但封闭的日向世界仍有缺陷，为了解决这个问题，解神者需要帮助其寻找八件神物。"
+        },
+        {
+          "key": 1950383,
+          "text": "花瓣落下的尽头没有看见木花的姐姐，却意料之外地见到了须佐。须佐告知大家樱之岛濒亡地现状，斥责里侧世界的虚假，在少姜的疑问下，他坦白自己的真名实为“素盏鸣尊”。"
+        },
+        {
+          "key": 1950692,
+          "text": "月读阻拦了与伊邪那美对战的众人，说出与她有关的过去。随后素盏鸣尊也如约定一样出现了，身旁跟随着斩念源氏。在月读与素盏鸣尊的对话中，决定樱之岛的未来仿佛就在此刻，源氏为了不让月读犹豫而鼓励她，众人将一同为守护而战。"
+        },
+        {
+          "key": 1950840,
+          "text": "被推入封存世界的素盏鸣尊消失了，铃彦之阵如愿带回了樱之岛的生机。源氏向月读告别，木花去追寻姐姐，解神者带着迷茫的斩念源氏回到樱学院，与大家一同欣赏落樱。"
+        },
+        {
+          "key": 5710092,
+          "text": "到达樱之岛"
+        },
+        {
+          "key": 6352601,
+          "text": "在守护樱之岛时，天照受到过来自四神学院的帮助，自然也要为四神学院出力相助才符合礼节。"
+        },
+        {
+          "key": 6352661,
+          "text": "在守护樱之岛时，天照受到过来自四神学院的帮助，自然也要为四神学院出力相助才符合礼节。"
+        },
+        {
+          "key": 6352681,
+          "text": "在守护樱之岛时，天照受到过来自四神学院的帮助，自然也要为四神学院出力相助才符合礼节。"
+        },
+        {
+          "key": 11040012,
+          "text": "探索樱之岛的石灯得到的线索。"
+        },
+        {
+          "key": 11040022,
+          "text": "探索樱之岛的石灯得到的线索。"
+        },
+        {
+          "key": 11040032,
+          "text": "探索樱之岛的石灯得到的线索。"
+        },
+        {
+          "key": 11040042,
+          "text": "探索樱之岛的石灯得到的线索。"
+        },
+        {
+          "key": 11040052,
+          "text": "探索樱之岛的石灯得到的线索。"
+        },
+        {
+          "key": 11040062,
+          "text": "探索樱之岛的石灯得到的线索。"
+        },
+        {
+          "key": 11040072,
+          "text": "探索樱之岛的石灯得到的线索。"
+        },
+        {
+          "key": 11040082,
+          "text": "探索樱之岛时找到的信笺，里面鼓鼓的。打开可以获得注连绳"
+        },
+        {
+          "key": 11040083,
+          "text": "探索樱之岛时找到的信笺。活动期间每日可获取上限为10个，次日刷新。"
+        },
+        {
+          "key": 11040112,
+          "text": "探索樱之岛的神龛得到的线索。"
+        },
+        {
+          "key": 11040122,
+          "text": "探索樱之岛的神龛得到的线索。"
+        },
+        {
+          "key": 11040132,
+          "text": "探索樱之岛的神龛得到的线索。"
+        },
+        {
+          "key": 11040142,
+          "text": "探索樱之岛的神龛得到的线索。"
+        },
+        {
+          "key": 11040152,
+          "text": "探索樱之岛的神龛得到的线索。"
+        },
+        {
+          "key": 11040162,
+          "text": "探索樱之岛的神龛得到的线索。"
+        },
+        {
+          "key": 11040172,
+          "text": "探索樱之岛的神龛得到的线索。"
+        },
+        {
+          "key": 11040212,
+          "text": "探索樱之岛的鸟居得到的线索。"
+        },
+        {
+          "key": 11040222,
+          "text": "探索樱之岛的鸟居得到的线索。"
+        },
+        {
+          "key": 11040232,
+          "text": "探索樱之岛的鸟居得到的线索。"
+        },
+        {
+          "key": 11040242,
+          "text": "探索樱之岛的鸟居得到的线索。"
+        },
+        {
+          "key": 11040252,
+          "text": "探索樱之岛的鸟居得到的线索。"
+        },
+        {
+          "key": 11040253,
+          "text": "樱之岛骤变发生后，樱学院便从原址消失了，这座深山中的鸟居则忽然具有了神性。"
+        },
+        {
+          "key": 11040272,
+          "text": "探索樱之岛时找到的信笺，里面鼓鼓的。打开可以获得泷樱花"
+        },
+        {
+          "key": 11040273,
+          "text": "探索樱之岛时找到的信笺。活动期间每日可获取上限为10个，次日刷新。"
+        },
+        {
+          "key": 11040312,
+          "text": "探索樱之岛的石碑得到的线索。"
+        },
+        {
+          "key": 11040322,
+          "text": "探索樱之岛的石碑得到的线索。"
+        },
+        {
+          "key": 11040332,
+          "text": "探索樱之岛的石碑得到的线索。"
+        },
+        {
+          "key": 11040342,
+          "text": "探索樱之岛的石碑得到的线索。"
+        },
+        {
+          "key": 11040352,
+          "text": "探索樱之岛的石碑得到的线索。"
+        },
+        {
+          "key": 11040362,
+          "text": "探索樱之岛的石碑得到的线索。"
+        },
+        {
+          "key": 12030421,
+          "text": "樱之岛宝箱"
+        },
+        {
+          "key": 12030423,
+          "text": "【樱之岛·伪生】额外掉落，可通过修复建筑获得"
+        },
+        {
+          "key": 12379762,
+          "text": "可在【樱百屋】兑换各种商品，通过【樱之岛·逆死】相关活动获得。"
+        },
+        {
+          "key": 12379763,
+          "text": "樱之岛上最古老樱树泷樱的花朵，淡粉的花瓣携带着令神感怀的遥远气息，总在晴和之日飘满樱学院。"
+        },
+        {
+          "key": 12379782,
+          "text": "可在【千鸟居】兑换各种商品，通过【樱之岛·伪生】相关活动获得。"
+        },
+        {
+          "key": 12820391,
+          "text": "樱之岛决战群像"
+        },
+        {
+          "key": 12902322,
+          "text": "可用于修复【樱之岛】建筑中的【神龛】及【鸟居】"
+        },
+        {
+          "key": 12902332,
+          "text": "可用于修复【樱之岛】建筑中的【石灯】及【石碑】"
+        },
+        {
+          "key": 13101536,
+          "text": "樱之岛的居民会感谢你的。"
+        },
+        {
+          "key": 13101545,
+          "text": "离开樱之岛"
+        },
+        {
+          "key": 13102681,
+          "text": "【樱之岛•逆死】活动将在{0}年{1}月{2}日开启，敬请期待！"
+        },
+        {
+          "key": 13430591,
+          "text": "樱之岛"
+        },
+        {
+          "key": 13430771,
+          "text": "樱之岛"
+        },
+        {
+          "key": 21610012,
+          "text": "樱之岛出现了不寻常的变动，而恰在此时，月读不见了……"
+        },
+        {
+          "key": 21610402,
+          "text": "蔚蓝的海面上隐藏着许多险况，漩涡、海风……避开它们，登上樱之岛吧！"
+        },
+        {
+          "key": 21613042,
+          "text": "从天照口中得知了樱之岛的现况，她的计划又是什么？"
+        },
+        {
+          "key": 21613072,
+          "text": "展露真名的素盏鸣尊似乎有许多难言的苦衷，关于樱之岛的真正故事是……？"
+        },
+        {
+          "key": 21613112,
+          "text": "“已死的一切”都已被埋葬，樱之岛重新扬起了清新的风，有人欢聚有人离别，世界总是如此演进。"
+        },
+        {
+          "key": 21613232,
+          "text": "“已死的一切”都已被埋葬，樱之岛重新扬起了清新的风，有人欢聚有人离别，世界总是如此演进。"
+        },
+        {
+          "key": 21613242,
+          "text": "展露真名的素盏鸣尊似乎有许多难言的苦衷，关于樱之岛的真正故事是……？"
+        },
+        {
+          "key": 21613312,
+          "text": "天照遇到了一些麻烦，帮助她探索樱之岛，完成她留下的任务可以获得额外的奖励。\n（完成全部探索可获得开启【琼岛危机】的钥匙。）"
+        },
+        {
+          "key": 27001921,
+          "text": "樱之岛冶色礼"
+        },
+        {
+          "key": 27001931,
+          "text": "樱之岛因果补给"
+        },
+        {
+          "key": 27001941,
+          "text": "樱之岛外观包"
+        },
+        {
+          "key": 27001951,
+          "text": "樱之岛特惠包"
+        },
+        {
+          "key": 27001961,
+          "text": "樱之岛晶石包"
+        },
+        {
+          "key": 27001971,
+          "text": "樱之岛畅享包"
+        },
+        {
+          "key": 27001981,
+          "text": "樱之岛豪华包"
+        },
+        {
+          "key": 27001991,
+          "text": "樱之岛日月包"
+        },
+        {
+          "key": 27002001,
+          "text": "樱之岛魂器包"
+        },
+        {
+          "key": 27002221,
+          "text": "樱之岛耀晴礼"
+        },
+        {
+          "key": 27002231,
+          "text": "樱之岛补给礼"
+        },
+        {
+          "key": 27002241,
+          "text": "樱之岛特惠包"
+        },
+        {
+          "key": 27002251,
+          "text": "樱之岛晶石包"
+        },
+        {
+          "key": 27002261,
+          "text": "樱之岛畅享包"
+        },
+        {
+          "key": 27002271,
+          "text": "樱之岛豪华包"
+        },
+        {
+          "key": 27002281,
+          "text": "樱之岛日月包"
+        },
+        {
+          "key": 27002291,
+          "text": "樱之岛洗炼包"
+        },
+        {
+          "key": 50000833,
+          "text": "通关【樱之岛】关卡50次"
+        },
+        {
+          "key": 50000843,
+          "text": "通关【樱之岛】关卡100次"
+        },
+        {
+          "key": 50000853,
+          "text": "通关【樱之岛】关卡150次"
+        },
+        {
+          "key": 50000863,
+          "text": "通关【樱之岛】关卡200次"
+        },
+        {
+          "key": 50000973,
+          "text": "在【樱之岛】关卡中获得10000个注连绳"
+        },
+        {
+          "key": 50000983,
+          "text": "在【樱之岛】关卡中获得20000个注连绳"
+        },
+        {
+          "key": 50000993,
+          "text": "在【樱之岛】关卡中获得22000个注连绳"
+        },
+        {
+          "key": 50005132,
+          "text": "通关【樱之岛】关卡50次"
+        },
+        {
+          "key": 50005142,
+          "text": "通关【樱之岛】关卡100次"
+        },
+        {
+          "key": 50005152,
+          "text": "通关【樱之岛】关卡150次"
+        },
+        {
+          "key": 50005162,
+          "text": "通关【樱之岛】关卡200次"
+        },
+        {
+          "key": 50005272,
+          "text": "在【樱之岛】关卡中获得10000个泷樱花"
+        },
+        {
+          "key": 50005282,
+          "text": "在【樱之岛】关卡中获得15000个泷樱花"
+        },
+        {
+          "key": 50005292,
+          "text": "在【樱之岛】关卡中获得20000个泷樱花"
+        },
+        {
+          "key": 50009035,
+          "text": "樱之岛"
+        },
+        {
+          "key": 50020016,
+          "text": "通关【惊心偶遇】10%概率额外获得樱之岛宝箱"
+        },
+        {
+          "key": 50020026,
+          "text": "通关【陌路迎击】15%概率额外获得樱之岛宝箱"
+        },
+        {
+          "key": 50020036,
+          "text": "通关【谬误终局】20%概率额外获得樱之岛宝箱"
+        },
+        {
+          "key": 50020046,
+          "text": "通关【恨意灼烧】25%概率额外获得樱之岛宝箱"
+        },
+        {
+          "key": 216100711,
+          "text": "参与活动 樱之岛·伪生 解锁"
+        },
+        {
+          "key": 216131011,
+          "text": "参与活动 樱之岛·逆死 解锁"
+        },
+        {
+          "key": 216131111,
+          "text": "参与活动 樱之岛·逆死 解锁"
+        }
+      ],
+      "sections": [
+        {
+          "row": {
+            "SectionID": 2161001,
+            "NumerChina": "",
+            "Maps": [
+              2261001
+            ],
+            "ChapterID": 2060710,
+            "Type": {
+              "value": 14,
+              "enum": "E_ActivityStory"
+            },
+            "Name": 21610011,
+            "NameChina": "呼救盲声",
+            "NameMore": 21610012,
+            "NameMoreChina": "樱之岛出现了不寻常的变动，而恰在此时，月读不见了……",
+            "StageIcon": "",
+            "LevelDisplay": 1,
+            "RecommendedAbility": -1,
+            "RecommendedLevel": 25,
+            "DifficultyLevel": {
+              "value": 1,
+              "enum": "E_Difficulty1"
+            },
+            "Profession": 302,
+            "DroopLimit2": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18,
+              19,
+              22,
+              23,
+              24,
+              25,
+              26
+            ],
+            "OpenType": {
+              "value": 1,
+              "enum": "E_Level"
+            },
+            "OpenParam": 17,
+            "WinCondition": {
+              "value": 2,
+              "enum": "E_BlockComplete"
+            },
+            "WinParam": [
+              1948049,
+              3000
+            ],
+            "FailTips": [
+              {
+                "Items": [
+                  13101701,
+                  13101702,
+                  13101703,
+                  13101704
+                ]
+              },
+              {
+                "Items": [
+                  13101801,
+                  13101802,
+                  13101803,
+                  13101804,
+                  13101805
+                ]
+              },
+              {
+                "Items": [
+                  13101901,
+                  13101902,
+                  13101903,
+                  13101904
+                ]
+              }
+            ],
+            "Open": 150,
+            "ManualValue": 30,
+            "FirVReward": [
+              776605
+            ],
+            "VReward": [
+              776556
+            ],
+            "DropValueID": 10660212,
+            "AssistType": {
+              "value": 2,
+              "enum": "E_Friend"
+            },
+            "IsShowWinTips": {
+              "value": 1,
+              "enum": "E_Yes"
+            },
+            "Favorability": 5
+          },
+          "matched_text": [
+            [
+              "NameMore",
+              "樱之岛出现了不寻常的变动，而恰在此时，月读不见了……"
+            ]
+          ]
+        },
+        {
+          "row": {
+            "SectionID": 2161040,
+            "NumerChina": "",
+            "Maps": [
+              2261040
+            ],
+            "ChapterID": 2060740,
+            "Type": {
+              "value": 14,
+              "enum": "E_ActivityStory"
+            },
+            "Name": 21610401,
+            "NameChina": "迷中海境",
+            "NameMore": 21610402,
+            "NameMoreChina": "蔚蓝的海面上隐藏着许多险况，漩涡、海风……避开它们，登上樱之岛吧！",
+            "StageIcon": "",
+            "LevelDisplay": 1,
+            "RecommendedAbility": -1,
+            "RecommendedLevel": 25,
+            "DifficultyLevel": {
+              "value": 1,
+              "enum": "E_Difficulty1"
+            },
+            "Profession": 302,
+            "DroopLimit": [
+              1104008
+            ],
+            "DroopLimit2": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18,
+              19,
+              22,
+              23,
+              24,
+              25,
+              26
+            ],
+            "DroopDisplay": [
+              1104008,
+              1237978
+            ],
+            "OpenType": {
+              "value": 1,
+              "enum": "E_Level"
+            },
+            "OpenParam": 17,
+            "TimeLimit": 150,
+            "WinCondition": {
+              "value": 9,
+              "enum": "E_BehaviorSuccess"
+            },
+            "WinParam": [
+              3000
+            ],
+            "FailCondition": {
+              "value": 5,
+              "enum": "E_BehaviorFail"
+            },
+            "FailParam": [
+              3000
+            ],
+            "FailTips": [
+              {
+                "Items": [
+                  13101701,
+                  13101702,
+                  13101703,
+                  13101704
+                ]
+              },
+              {
+                "Items": [
+                  13101801,
+                  13101802,
+                  13101803,
+                  13101804,
+                  13101805
+                ]
+              },
+              {
+                "Items": [
+                  13101901,
+                  13101902,
+                  13101903,
+                  13101904
+                ]
+              }
+            ],
+            "AgainSwitch": 1,
+            "FailShowSwitch": 1,
+            "Open": 150,
+            "VReward": [
+              776612
+            ],
+            "DropValueID": 10660402,
+            "AssistType": {
+              "value": 1,
+              "enum": "E_Trial"
+            },
+            "AssistParam": [
+              1215,
+              -1,
+              -1
+            ],
+            "IsShowWinTips": {
+              "value": 1,
+              "enum": "E_Yes"
+            }
+          },
+          "matched_text": [
+            [
+              "NameMore",
+              "蔚蓝的海面上隐藏着许多险况，漩涡、海风……避开它们，登上樱之岛吧！"
+            ]
+          ]
+        },
+        {
+          "row": {
+            "SectionID": 2161304,
+            "NumerChina": "",
+            "Maps": [
+              2261304
+            ],
+            "ChapterID": 2061013,
+            "Type": {
+              "value": 14,
+              "enum": "E_ActivityStory"
+            },
+            "Name": 21613041,
+            "NameChina": "铃铛",
+            "NameMore": 21613042,
+            "NameMoreChina": "从天照口中得知了樱之岛的现况，她的计划又是什么？",
+            "StageIcon": "",
+            "LevelDisplay": 2,
+            "RecommendedAbility": -1,
+            "RecommendedLevel": 25,
+            "Profession": 302,
+            "EnemyDisplay": [
+              3070,
+              3071,
+              4077
+            ],
+            "DroopLimit2": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18,
+              19,
+              22,
+              23,
+              24,
+              25,
+              26
+            ],
+            "OpenType": {
+              "value": 1,
+              "enum": "E_Level"
+            },
+            "OpenParam": 17,
+            "WinCondition": {
+              "value": 1,
+              "enum": "E_UnitDead"
+            },
+            "WinParam": [
+              5046,
+              3000
+            ],
+            "FailTips": [
+              {
+                "Items": [
+                  13101701,
+                  13101702,
+                  13101703,
+                  13101704
+                ]
+              },
+              {
+                "Items": [
+                  13101801,
+                  13101802,
+                  13101803,
+                  13101804,
+                  13101805
+                ]
+              },
+              {
+                "Items": [
+                  13101901,
+                  13101902,
+                  13101903,
+                  13101904
+                ]
+              }
+            ],
+            "Open": 150,
+            "ManualValue": 30,
+            "FirVReward": [
+              776824
+            ],
+            "VReward": [
+              776556
+            ],
+            "DropValueID": 10660212,
+            "AssistType": {
+              "value": 2,
+              "enum": "E_Friend"
+            },
+            "IsShowWinTips": {
+              "value": 1,
+              "enum": "E_Yes"
+            },
+            "Favorability": 5
+          },
+          "matched_text": [
+            [
+              "NameMore",
+              "从天照口中得知了樱之岛的现况，她的计划又是什么？"
+            ]
+          ]
+        },
+        {
+          "row": {
+            "SectionID": 2161307,
+            "NumerChina": "",
+            "Maps": [
+              2261307
+            ],
+            "ChapterID": 2061016,
+            "Type": {
+              "value": 14,
+              "enum": "E_ActivityStory"
+            },
+            "Name": 21613071,
+            "NameChina": "谎言",
+            "NameMore": 21613072,
+            "NameMoreChina": "展露真名的素盏鸣尊似乎有许多难言的苦衷，关于樱之岛的真正故事是……？",
+            "StageIcon": "",
+            "LevelDisplay": 4,
+            "RecommendedAbility": -1,
+            "RecommendedLevel": 25,
+            "Profession": 302,
+            "EnemyDisplay": [
+              3070,
+              3071,
+              4077
+            ],
+            "DroopLimit2": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18,
+              19,
+              22,
+              23,
+              24,
+              25,
+              26
+            ],
+            "OpenType": {
+              "value": 1,
+              "enum": "E_Level"
+            },
+            "OpenParam": 17,
+            "WinCondition": {
+              "value": 2,
+              "enum": "E_BlockComplete"
+            },
+            "WinParam": [
+              1950548,
+              3000
+            ],
+            "FailTips": [
+              {
+                "Items": [
+                  13101701,
+                  13101702,
+                  13101703,
+                  13101704
+                ]
+              },
+              {
+                "Items": [
+                  13101801,
+                  13101802,
+                  13101803,
+                  13101804,
+                  13101805
+                ]
+              },
+              {
+                "Items": [
+                  13101901,
+                  13101902,
+                  13101903,
+                  13101904
+                ]
+              }
+            ],
+            "Open": 150,
+            "ManualValue": 30,
+            "FirVReward": [
+              776824
+            ],
+            "VReward": [
+              776556
+            ],
+            "DropValueID": 10660212,
+            "AssistType": {
+              "value": 2,
+              "enum": "E_Friend"
+            },
+            "BehaviorManager": "Sakura/B_2161307",
+            "IsShowWinTips": {
+              "value": 1,
+              "enum": "E_Yes"
+            },
+            "Favorability": 5
+          },
+          "matched_text": [
+            [
+              "NameMore",
+              "展露真名的素盏鸣尊似乎有许多难言的苦衷，关于樱之岛的真正故事是……？"
+            ]
+          ]
+        },
+        {
+          "row": {
+            "SectionID": 2161311,
+            "NumerChina": "",
+            "Maps": [
+              2261311
+            ],
+            "ChapterID": 2061020,
+            "Type": {
+              "value": 14,
+              "enum": "E_ActivityStory"
+            },
+            "Name": 21613111,
+            "NameChina": "日出之光·下",
+            "NameMore": 21613112,
+            "NameMoreChina": "“已死的一切”都已被埋葬，樱之岛重新扬起了清新的风，有人欢聚有人离别，世界总是如此演进。",
+            "StageIcon": "",
+            "LevelDisplay": 2,
+            "RecommendedAbility": -1,
+            "RecommendedLevel": 25,
+            "Profession": 303,
+            "EnemyDisplay": [
+              5952
+            ],
+            "DroopLimit2": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18,
+              19,
+              22,
+              23,
+              24,
+              25,
+              26
+            ],
+            "OpenType": {
+              "value": 1,
+              "enum": "E_Level"
+            },
+            "OpenParam": 17,
+            "WinCondition": {
+              "value": 2,
+              "enum": "E_BlockComplete"
+            },
+            "WinParam": [
+              1950840,
+              3000
+            ],
+            "FailTips": [
+              {
+                "Items": [
+                  13101701,
+                  13101702,
+                  13101703,
+                  13101704
+                ]
+              },
+              {
+                "Items": [
+                  13101801,
+                  13101802,
+                  13101803,
+                  13101804,
+                  13101805
+                ]
+              },
+              {
+                "Items": [
+                  13101901,
+                  13101902,
+                  13101903,
+                  13101904
+                ]
+              }
+            ],
+            "Open": 150,
+            "ManualValue": 30,
+            "FirVReward": [
+              776830
+            ],
+            "VReward": [
+              776556
+            ],
+            "DropValueID": 10660212,
+            "AssistType": {
+              "value": 2,
+              "enum": "E_Friend"
+            },
+            "IsShowWinTips": {
+              "value": 1,
+              "enum": "E_Yes"
+            },
+            "Favorability": 5
+          },
+          "matched_text": [
+            [
+              "NameMore",
+              "“已死的一切”都已被埋葬，樱之岛重新扬起了清新的风，有人欢聚有人离别，世界总是如此演进。"
+            ]
+          ]
+        },
+        {
+          "row": {
+            "SectionID": 2161323,
+            "NumerChina": "",
+            "Maps": [
+              2261323
+            ],
+            "ChapterID": 2061023,
+            "Type": {
+              "value": 14,
+              "enum": "E_ActivityStory"
+            },
+            "Name": 21613231,
+            "NameChina": "八岐骨语",
+            "NameMore": 21613232,
+            "NameMoreChina": "“已死的一切”都已被埋葬，樱之岛重新扬起了清新的风，有人欢聚有人离别，世界总是如此演进。",
+            "StageIcon": "",
+            "LevelDisplay": 1,
+            "RecommendedAbility": -1,
+            "RecommendedLevel": 40,
+            "DifficultyLevel": {
+              "value": 3,
+              "enum": "E_Difficulty3"
+            },
+            "Profession": 302,
+            "EnemyDisplay": [
+              5047
+            ],
+            "DroopLimit2": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18,
+              19,
+              22,
+              23,
+              24,
+              25,
+              26
+            ],
+            "DroopDisplay": [
+              1237976
+            ],
+            "OpenType": {
+              "value": 1,
+              "enum": "E_Level"
+            },
+            "OpenParam": 17,
+            "TimeLimit": 300,
+            "WinCondition": {
+              "value": 1,
+              "enum": "E_UnitDead"
+            },
+            "WinParam": [
+              5047,
+              3000
+            ],
+            "FailTips": [
+              {
+                "Items": [
+                  13101701,
+                  13101702,
+                  13101703,
+                  13101704
+                ]
+              },
+              {
+                "Items": [
+                  13101801,
+                  13101802,
+                  13101803,
+                  13101804,
+                  13101805
+                ]
+              },
+              {
+                "Items": [
+                  13101901,
+                  13101902,
+                  13101903,
+                  13101904
+                ]
+              }
+            ],
+            "FailShowSwitch": 1,
+            "Open": 150,
+            "ManualValue": 24,
+            "FirVReward": [
+              776825
+            ],
+            "VReward": [
+              776555
+            ],
+            "DropValueID": 10660212,
+            "AssistType": {
+              "value": 2,
+              "enum": "E_Friend"
+            },
+            "IsAutoFightMode": {
+              "value": 1,
+              "enum": "E_Yes"
+            },
+            "AutoFightCondition": {
+              "value": 1,
+              "enum": "E_Default"
+            },
+            "ContinueFightID": 9,
+            "ContinueFightConsume": 12,
+            "AutoFightMode": {
+              "value": 4,
+              "enum": "E_BossBattle"
+            },
+            "IsShowWinTips": {
+              "value": 1,
+              "enum": "E_Yes"
+            },
+            "Favorability": 4
+          },
+          "matched_text": [
+            [
+              "NameMore",
+              "“已死的一切”都已被埋葬，樱之岛重新扬起了清新的风，有人欢聚有人离别，世界总是如此演进。"
+            ]
+          ]
+        },
+        {
+          "row": {
+            "SectionID": 2161324,
+            "NumerChina": "",
+            "Maps": [
+              2261324
+            ],
+            "ChapterID": 2061024,
+            "Type": {
+              "value": 14,
+              "enum": "E_ActivityStory"
+            },
+            "Name": 21613241,
+            "NameChina": "千引狂鸣",
+            "NameMore": 21613242,
+            "NameMoreChina": "展露真名的素盏鸣尊似乎有许多难言的苦衷，关于樱之岛的真正故事是……？",
+            "StageIcon": "",
+            "LevelDisplay": 1,
+            "RecommendedAbility": -1,
+            "RecommendedLevel": 40,
+            "DifficultyLevel": {
+              "value": 4,
+              "enum": "E_Difficulty4"
+            },
+            "Profession": 303,
+            "EnemyDisplay": [
+              5952
+            ],
+            "DroopLimit2": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18,
+              19,
+              22,
+              23,
+              24,
+              25,
+              26
+            ],
+            "DroopDisplay": [
+              1237976
+            ],
+            "OpenType": {
+              "value": 1,
+              "enum": "E_Level"
+            },
+            "OpenParam": 17,
+            "TimeLimit": 300,
+            "WinCondition": {
+              "value": 1,
+              "enum": "E_UnitDead"
+            },
+            "WinParam": [
+              5952,
+              3000
+            ],
+            "FailTips": [
+              {
+                "Items": [
+                  13101701,
+                  13101702,
+                  13101703,
+                  13101704
+                ]
+              },
+              {
+                "Items": [
+                  13101801,
+                  13101802,
+                  13101803,
+                  13101804,
+                  13101805
+                ]
+              },
+              {
+                "Items": [
+                  13101901,
+                  13101902,
+                  13101903,
+                  13101904
+                ]
+              }
+            ],
+            "FailShowSwitch": 1,
+            "Open": 150,
+            "ManualValue": 30,
+            "FirVReward": [
+              776825
+            ],
+            "VReward": [
+              776556
+            ],
+            "DropValueID": 10660212,
+            "AssistType": {
+              "value": 2,
+              "enum": "E_Friend"
+            },
+            "IsAutoFightMode": {
+              "value": 1,
+              "enum": "E_Yes"
+            },
+            "AutoFightCondition": {
+              "value": 1,
+              "enum": "E_Default"
+            },
+            "ContinueFightID": 9,
+            "ContinueFightConsume": 15,
+            "AutoFightMode": {
+              "value": 4,
+              "enum": "E_BossBattle"
+            },
+            "IsShowWinTips": {
+              "value": 1,
+              "enum": "E_Yes"
+            },
+            "Favorability": 5
+          },
+          "matched_text": [
+            [
+              "NameMore",
+              "展露真名的素盏鸣尊似乎有许多难言的苦衷，关于樱之岛的真正故事是……？"
+            ]
+          ]
+        },
+        {
+          "row": {
+            "SectionID": 2161327,
+            "NumerChina": "",
+            "Maps": [
+              2261323
+            ],
+            "ChapterID": 2061023,
+            "Type": {
+              "value": 15,
+              "enum": "E_ActivityBattle"
+            },
+            "Name": 21613231,
+            "NameChina": "八岐骨语",
+            "NameMore": 21613232,
+            "NameMoreChina": "“已死的一切”都已被埋葬，樱之岛重新扬起了清新的风，有人欢聚有人离别，世界总是如此演进。",
+            "StageIcon": "",
+            "LevelDisplay": 1,
+            "RecommendedAbility": -1,
+            "RecommendedLevel": 40,
+            "DifficultyLevel": {
+              "value": 3,
+              "enum": "E_Difficulty3"
+            },
+            "Profession": 302,
+            "EnemyDisplay": [
+              5047
+            ],
+            "DroopLimit2": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18,
+              19,
+              22,
+              23,
+              24,
+              25,
+              26
+            ],
+            "DroopDisplay": [
+              1237976
+            ],
+            "OpenType": {
+              "value": 1,
+              "enum": "E_Level"
+            },
+            "OpenParam": 17,
+            "TimeLimit": 300,
+            "WinCondition": {
+              "value": 1,
+              "enum": "E_UnitDead"
+            },
+            "WinParam": [
+              5047,
+              3000
+            ],
+            "FailTips": [
+              {
+                "Items": [
+                  13101701,
+                  13101702,
+                  13101703,
+                  13101704
+                ]
+              },
+              {
+                "Items": [
+                  13101801,
+                  13101802,
+                  13101803,
+                  13101804,
+                  13101805
+                ]
+              },
+              {
+                "Items": [
+                  13101901,
+                  13101902,
+                  13101903,
+                  13101904
+                ]
+              }
+            ],
+            "AgainSwitch": 1,
+            "FailShowSwitch": 1,
+            "Open": 150,
+            "ManualValue": 24,
+            "VReward": [
+              776828,
+              776555
+            ],
+            "DropValueID": 10660212,
+            "AssistType": {
+              "value": 2,
+              "enum": "E_Friend"
+            },
+            "IsAutoFightMode": {
+              "value": 1,
+              "enum": "E_Yes"
+            },
+            "AutoFightCondition": {
+              "value": 1,
+              "enum": "E_Default"
+            },
+            "ContinueFightID": 9,
+            "ContinueFightConsume": 12,
+            "AutoFightMode": {
+              "value": 4,
+              "enum": "E_BossBattle"
+            },
+            "IsShowWinTips": {
+              "value": 1,
+              "enum": "E_Yes"
+            },
+            "Favorability": 4
+          },
+          "matched_text": [
+            [
+              "NameMore",
+              "“已死的一切”都已被埋葬，樱之岛重新扬起了清新的风，有人欢聚有人离别，世界总是如此演进。"
+            ]
+          ]
+        },
+        {
+          "row": {
+            "SectionID": 2161328,
+            "NumerChina": "",
+            "Maps": [
+              2261324
+            ],
+            "ChapterID": 2061024,
+            "Type": {
+              "value": 15,
+              "enum": "E_ActivityBattle"
+            },
+            "Name": 21613241,
+            "NameChina": "千引狂鸣",
+            "NameMore": 21613242,
+            "NameMoreChina": "展露真名的素盏鸣尊似乎有许多难言的苦衷，关于樱之岛的真正故事是……？",
+            "StageIcon": "",
+            "LevelDisplay": 1,
+            "RecommendedAbility": -1,
+            "RecommendedLevel": 40,
+            "DifficultyLevel": {
+              "value": 4,
+              "enum": "E_Difficulty4"
+            },
+            "Profession": 303,
+            "EnemyDisplay": [
+              5952
+            ],
+            "DroopLimit2": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18,
+              19,
+              22,
+              23,
+              24,
+              25,
+              26
+            ],
+            "DroopDisplay": [
+              1237976
+            ],
+            "OpenType": {
+              "value": 1,
+              "enum": "E_Level"
+            },
+            "OpenParam": 17,
+            "TimeLimit": 300,
+            "WinCondition": {
+              "value": 1,
+              "enum": "E_UnitDead"
+            },
+            "WinParam": [
+              5952,
+              3000
+            ],
+            "FailTips": [
+              {
+                "Items": [
+                  13101701,
+                  13101702,
+                  13101703,
+                  13101704
+                ]
+              },
+              {
+                "Items": [
+                  13101801,
+                  13101802,
+                  13101803,
+                  13101804,
+                  13101805
+                ]
+              },
+              {
+                "Items": [
+                  13101901,
+                  13101902,
+                  13101903,
+                  13101904
+                ]
+              }
+            ],
+            "AgainSwitch": 1,
+            "FailShowSwitch": 1,
+            "Open": 150,
+            "ManualValue": 30,
+            "VReward": [
+              776829,
+              776556
+            ],
+            "DropValueID": 10660212,
+            "AssistType": {
+              "value": 2,
+              "enum": "E_Friend"
+            },
+            "IsAutoFightMode": {
+              "value": 1,
+              "enum": "E_Yes"
+            },
+            "AutoFightCondition": {
+              "value": 1,
+              "enum": "E_Default"
+            },
+            "ContinueFightID": 9,
+            "ContinueFightConsume": 15,
+            "AutoFightMode": {
+              "value": 4,
+              "enum": "E_BossBattle"
+            },
+            "IsShowWinTips": {
+              "value": 1,
+              "enum": "E_Yes"
+            },
+            "Favorability": 5
+          },
+          "matched_text": [
+            [
+              "NameMore",
+              "展露真名的素盏鸣尊似乎有许多难言的苦衷，关于樱之岛的真正故事是……？"
+            ]
+          ]
+        },
+        {
+          "row": {
+            "SectionID": 2161331,
+            "Maps": [
+              2261331
+            ],
+            "ChapterID": 2061025,
+            "Type": {
+              "value": 14,
+              "enum": "E_ActivityStory"
+            },
+            "Name": 21613311,
+            "NameChina": "碎骸秘地",
+            "NameMore": 21613312,
+            "NameMoreChina": "天照遇到了一些麻烦，帮助她探索樱之岛，完成她留下的任务可以获得额外的奖励。\r\n（完成全部探索可获得开启【琼岛危机】的钥匙。）",
+            "StageIcon": "",
+            "LevelDisplay": 12,
+            "RecommendedAbility": -1,
+            "RecommendedLevel": 40,
+            "DifficultyLevel": {
+              "value": 1,
+              "enum": "E_Difficulty1"
+            },
+            "Profession": 301,
+            "EnemyDisplay": [
+              3068,
+              3069,
+              4077,
+              4081,
+              5653,
+              5045,
+              5950
+            ],
+            "DroopLimit": [
+              1104027,
+              1290234
+            ],
+            "DroopLimit2": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18,
+              19,
+              22,
+              23,
+              24,
+              25,
+              26
+            ],
+            "DroopDisplay": [
+              1237976
+            ],
+            "OpenType": {
+              "value": 1,
+              "enum": "E_Level"
+            },
+            "OpenParam": 17,
+            "TimeLimit": 1800,
+            "WinCondition": {
+              "value": 1,
+              "enum": "E_UnitDead"
+            },
+            "WinParam": [
+              5951,
+              3000
+            ],
+            "FailTips": [
+              {
+                "Items": [
+                  13101701,
+                  13101702,
+                  13101703,
+                  13101704,
+                  13101709,
+                  13101710,
+                  13101711
+                ]
+              },
+              {
+                "Items": [
+                  13101288,
+                  13101289,
+                  13101290
+                ]
+              },
+              {
+                "Items": [
+                  13101291,
+                  13101292,
+                  13101293
+                ]
+              }
+            ],
+            "AgainSwitch": 1,
+            "FailShowSwitch": 1,
+            "Open": 150,
+            "ManualValue": 30,
+            "VReward": [
+              776833,
+              776556
+            ],
+            "DropValueID": 10660402,
+            "GoblinRate": 50,
+            "GoblinIdList": [
+              4029,
+              4011,
+              4014,
+              4015,
+              4016
+            ],
+            "GoblinChance": [
+              60,
+              10,
+              10,
+              10,
+              10
+            ],
+            "AssistType": {
+              "value": 2,
+              "enum": "E_Friend"
+            },
+            "BehaviorManager": "Sakura/B_2161331",
+            "IsShowWinTips": {
+              "value": 1,
+              "enum": "E_Yes"
+            },
+            "Favorability": 5,
+            "GamePlayType": {
+              "value": 7,
+              "enum": "E_OptionalRelic"
+            }
+          },
+          "matched_text": [
+            [
+              "NameMore",
+              "天照遇到了一些麻烦，帮助她探索樱之岛，完成她留下的任务可以获得额外的奖励。\n（完成全部探索可获得开启【琼岛危机】的钥匙。）"
+            ]
+          ]
+        }
+      ],
+      "items": [
+        {
+          "id": 1104001,
+          "texts": [
+            [
+              "DescID",
+              "探索樱之岛的石灯得到的线索。"
+            ]
+          ]
+        },
+        {
+          "id": 1104002,
+          "texts": [
+            [
+              "DescID",
+              "探索樱之岛的石灯得到的线索。"
+            ]
+          ]
+        },
+        {
+          "id": 1104003,
+          "texts": [
+            [
+              "DescID",
+              "探索樱之岛的石灯得到的线索。"
+            ]
+          ]
+        },
+        {
+          "id": 1104004,
+          "texts": [
+            [
+              "DescID",
+              "探索樱之岛的石灯得到的线索。"
+            ]
+          ]
+        },
+        {
+          "id": 1104005,
+          "texts": [
+            [
+              "DescID",
+              "探索樱之岛的石灯得到的线索。"
+            ]
+          ]
+        },
+        {
+          "id": 1104006,
+          "texts": [
+            [
+              "DescID",
+              "探索樱之岛的石灯得到的线索。"
+            ]
+          ]
+        },
+        {
+          "id": 1104007,
+          "texts": [
+            [
+              "DescID",
+              "探索樱之岛的石灯得到的线索。"
+            ]
+          ]
+        },
+        {
+          "id": 1104008,
+          "texts": [
+            [
+              "DescID",
+              "探索樱之岛时找到的信笺，里面鼓鼓的。打开可以获得注连绳"
+            ],
+            [
+              "HistoryID",
+              "探索樱之岛时找到的信笺。活动期间每日可获取上限为10个，次日刷新。"
+            ]
+          ]
+        },
+        {
+          "id": 1104011,
+          "texts": [
+            [
+              "DescID",
+              "探索樱之岛的神龛得到的线索。"
+            ]
+          ]
+        },
+        {
+          "id": 1104012,
+          "texts": [
+            [
+              "DescID",
+              "探索樱之岛的神龛得到的线索。"
+            ]
+          ]
+        },
+        {
+          "id": 1104013,
+          "texts": [
+            [
+              "DescID",
+              "探索樱之岛的神龛得到的线索。"
+            ]
+          ]
+        },
+        {
+          "id": 1104014,
+          "texts": [
+            [
+              "DescID",
+              "探索樱之岛的神龛得到的线索。"
+            ]
+          ]
+        },
+        {
+          "id": 1104015,
+          "texts": [
+            [
+              "DescID",
+              "探索樱之岛的神龛得到的线索。"
+            ]
+          ]
+        },
+        {
+          "id": 1104016,
+          "texts": [
+            [
+              "DescID",
+              "探索樱之岛的神龛得到的线索。"
+            ]
+          ]
+        },
+        {
+          "id": 1104017,
+          "texts": [
+            [
+              "DescID",
+              "探索樱之岛的神龛得到的线索。"
+            ]
+          ]
+        },
+        {
+          "id": 1104021,
+          "texts": [
+            [
+              "DescID",
+              "探索樱之岛的鸟居得到的线索。"
+            ]
+          ]
+        },
+        {
+          "id": 1104022,
+          "texts": [
+            [
+              "DescID",
+              "探索樱之岛的鸟居得到的线索。"
+            ]
+          ]
+        },
+        {
+          "id": 1104023,
+          "texts": [
+            [
+              "DescID",
+              "探索樱之岛的鸟居得到的线索。"
+            ]
+          ]
+        },
+        {
+          "id": 1104024,
+          "texts": [
+            [
+              "DescID",
+              "探索樱之岛的鸟居得到的线索。"
+            ]
+          ]
+        },
+        {
+          "id": 1104025,
+          "texts": [
+            [
+              "DescID",
+              "探索樱之岛的鸟居得到的线索。"
+            ],
+            [
+              "HistoryID",
+              "樱之岛骤变发生后，樱学院便从原址消失了，这座深山中的鸟居则忽然具有了神性。"
+            ]
+          ]
+        },
+        {
+          "id": 1104027,
+          "texts": [
+            [
+              "DescID",
+              "探索樱之岛时找到的信笺，里面鼓鼓的。打开可以获得泷樱花"
+            ],
+            [
+              "HistoryID",
+              "探索樱之岛时找到的信笺。活动期间每日可获取上限为10个，次日刷新。"
+            ]
+          ]
+        },
+        {
+          "id": 1104031,
+          "texts": [
+            [
+              "DescID",
+              "探索樱之岛的石碑得到的线索。"
+            ]
+          ]
+        },
+        {
+          "id": 1104032,
+          "texts": [
+            [
+              "DescID",
+              "探索樱之岛的石碑得到的线索。"
+            ]
+          ]
+        },
+        {
+          "id": 1104033,
+          "texts": [
+            [
+              "DescID",
+              "探索樱之岛的石碑得到的线索。"
+            ]
+          ]
+        },
+        {
+          "id": 1104034,
+          "texts": [
+            [
+              "DescID",
+              "探索樱之岛的石碑得到的线索。"
+            ]
+          ]
+        },
+        {
+          "id": 1104035,
+          "texts": [
+            [
+              "DescID",
+              "探索樱之岛的石碑得到的线索。"
+            ]
+          ]
+        },
+        {
+          "id": 1104036,
+          "texts": [
+            [
+              "DescID",
+              "探索樱之岛的石碑得到的线索。"
+            ]
+          ]
+        },
+        {
+          "id": 1203042,
+          "texts": [
+            [
+              "NameID",
+              "樱之岛宝箱"
+            ],
+            [
+              "HistoryID",
+              "【樱之岛·伪生】额外掉落，可通过修复建筑获得"
+            ]
+          ]
+        },
+        {
+          "id": 1237976,
+          "texts": [
+            [
+              "DescID",
+              "可在【樱百屋】兑换各种商品，通过【樱之岛·逆死】相关活动获得。"
+            ],
+            [
+              "HistoryID",
+              "樱之岛上最古老樱树泷樱的花朵，淡粉的花瓣携带着令神感怀的遥远气息，总在晴和之日飘满樱学院。"
+            ]
+          ]
+        },
+        {
+          "id": 1237978,
+          "texts": [
+            [
+              "DescID",
+              "可在【千鸟居】兑换各种商品，通过【樱之岛·伪生】相关活动获得。"
+            ]
+          ]
+        },
+        {
+          "id": 1282039,
+          "texts": [
+            [
+              "NameID",
+              "樱之岛决战群像"
+            ]
+          ]
+        },
+        {
+          "id": 1290232,
+          "texts": [
+            [
+              "DescID",
+              "可用于修复【樱之岛】建筑中的【神龛】及【鸟居】"
+            ]
+          ]
+        },
+        {
+          "id": 1290233,
+          "texts": [
+            [
+              "DescID",
+              "可用于修复【樱之岛】建筑中的【石灯】及【石碑】"
+            ]
+          ]
+        }
+      ],
+      "unlock_section_references": [
+        {
+          "language_key": 216100711,
+          "text": "参与活动 樱之岛·伪生 解锁",
+          "derived_section_id": 2161007,
+          "section": {
+            "SectionID": 2161007,
+            "NumerChina": "",
+            "Maps": [
+              2261007
+            ],
+            "ChapterID": 2060710,
+            "Type": {
+              "value": 14,
+              "enum": "E_ActivityStory"
+            },
+            "Name": 21610071,
+            "NameChina": "默听残火",
+            "NameMore": 21610072,
+            "NameMoreChina": "“也许在这个岛上，就意味着无法逃离灾难跟悲伤吧。”",
+            "StageIcon": "",
+            "LevelDisplay": 3,
+            "RecommendedAbility": -1,
+            "RecommendedLevel": 25,
+            "DifficultyLevel": {
+              "value": 1,
+              "enum": "E_Difficulty1"
+            },
+            "Profession": 302,
+            "EnemyDisplay": [
+              3068,
+              3069,
+              4077,
+              5950
+            ],
+            "DroopLimit2": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18,
+              19,
+              22,
+              23,
+              24,
+              25,
+              26
+            ],
+            "OpenType": {
+              "value": 1,
+              "enum": "E_Level"
+            },
+            "OpenParam": 17,
+            "WinCondition": {
+              "value": 2,
+              "enum": "E_BlockComplete"
+            },
+            "WinParam": [
+              1948719,
+              3000
+            ],
+            "FailTips": [
+              {
+                "Items": [
+                  13101701,
+                  13101702,
+                  13101703,
+                  13101704
+                ]
+              },
+              {
+                "Items": [
+                  13101801,
+                  13101802,
+                  13101803,
+                  13101804,
+                  13101805
+                ]
+              },
+              {
+                "Items": [
+                  13101901,
+                  13101902,
+                  13101903,
+                  13101904
+                ]
+              }
+            ],
+            "Open": 150,
+            "ManualValue": 30,
+            "FirVReward": [
+              776605
+            ],
+            "VReward": [
+              776556,
+              776631
+            ],
+            "DropValueID": 10660212,
+            "AssistType": {
+              "value": 2,
+              "enum": "E_Friend"
+            },
+            "IsShowWinTips": {
+              "value": 1,
+              "enum": "E_Yes"
+            },
+            "Favorability": 5
+          }
+        },
+        {
+          "language_key": 216131011,
+          "text": "参与活动 樱之岛·逆死 解锁",
+          "derived_section_id": 2161310,
+          "section": {
+            "SectionID": 2161310,
+            "NumerChina": "",
+            "Maps": [
+              2261310
+            ],
+            "ChapterID": 2061019,
+            "Type": {
+              "value": 14,
+              "enum": "E_ActivityStory"
+            },
+            "Name": 21613101,
+            "NameChina": "日出之光·上",
+            "NameMore": 21613102,
+            "NameMoreChina": "伊邪那美再度出现，一切已发生的都变成此刻的因由，面对立场的相悖，大家会如何抉择？",
+            "StageIcon": "",
+            "LevelDisplay": 1,
+            "RecommendedAbility": -1,
+            "RecommendedLevel": 25,
+            "Profession": 302,
+            "EnemyDisplay": [
+              5951
+            ],
+            "DroopLimit2": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18,
+              19,
+              22,
+              23,
+              24,
+              25,
+              26
+            ],
+            "OpenType": {
+              "value": 1,
+              "enum": "E_Level"
+            },
+            "OpenParam": 17,
+            "WinCondition": {
+              "value": 2,
+              "enum": "E_BlockComplete"
+            },
+            "WinParam": [
+              1950692,
+              3000
+            ],
+            "FailTips": [
+              {
+                "Items": [
+                  13101701,
+                  13101702,
+                  13101703,
+                  13101704
+                ]
+              },
+              {
+                "Items": [
+                  13101801,
+                  13101802,
+                  13101803,
+                  13101804,
+                  13101805
+                ]
+              },
+              {
+                "Items": [
+                  13101901,
+                  13101902,
+                  13101903,
+                  13101904
+                ]
+              }
+            ],
+            "Open": 150,
+            "ManualValue": 30,
+            "FirVReward": [
+              776830,
+              776835
+            ],
+            "VReward": [
+              776556
+            ],
+            "DropValueID": 10660212,
+            "AssistType": {
+              "value": 2,
+              "enum": "E_Friend"
+            },
+            "IsShowWinTips": {
+              "value": 1,
+              "enum": "E_Yes"
+            },
+            "Favorability": 5
+          }
+        },
+        {
+          "language_key": 216131111,
+          "text": "参与活动 樱之岛·逆死 解锁",
+          "derived_section_id": 2161311,
+          "section": {
+            "SectionID": 2161311,
+            "NumerChina": "",
+            "Maps": [
+              2261311
+            ],
+            "ChapterID": 2061020,
+            "Type": {
+              "value": 14,
+              "enum": "E_ActivityStory"
+            },
+            "Name": 21613111,
+            "NameChina": "日出之光·下",
+            "NameMore": 21613112,
+            "NameMoreChina": "“已死的一切”都已被埋葬，樱之岛重新扬起了清新的风，有人欢聚有人离别，世界总是如此演进。",
+            "StageIcon": "",
+            "LevelDisplay": 2,
+            "RecommendedAbility": -1,
+            "RecommendedLevel": 25,
+            "Profession": 303,
+            "EnemyDisplay": [
+              5952
+            ],
+            "DroopLimit2": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18,
+              19,
+              22,
+              23,
+              24,
+              25,
+              26
+            ],
+            "OpenType": {
+              "value": 1,
+              "enum": "E_Level"
+            },
+            "OpenParam": 17,
+            "WinCondition": {
+              "value": 2,
+              "enum": "E_BlockComplete"
+            },
+            "WinParam": [
+              1950840,
+              3000
+            ],
+            "FailTips": [
+              {
+                "Items": [
+                  13101701,
+                  13101702,
+                  13101703,
+                  13101704
+                ]
+              },
+              {
+                "Items": [
+                  13101801,
+                  13101802,
+                  13101803,
+                  13101804,
+                  13101805
+                ]
+              },
+              {
+                "Items": [
+                  13101901,
+                  13101902,
+                  13101903,
+                  13101904
+                ]
+              }
+            ],
+            "Open": 150,
+            "ManualValue": 30,
+            "FirVReward": [
+              776830
+            ],
+            "VReward": [
+              776556
+            ],
+            "DropValueID": 10660212,
+            "AssistType": {
+              "value": 2,
+              "enum": "E_Friend"
+            },
+            "IsShowWinTips": {
+              "value": 1,
+              "enum": "E_Yes"
+            },
+            "Favorability": 5
+          }
+        }
+      ]
+    },
+    "斟鄩之邑": {
+      "texts": [
+        {
+          "key": 690335,
+          "text": "我乃水神共工，听见你的呼唤，于斟鄩之邑苏醒。现世是怎样的？安宁如旧，还是重陷危乱中？……不论如何，你我一起守护吧。"
+        },
+        {
+          "key": 2822715,
+          "text": "斟鄩之邑"
+        },
+        {
+          "key": 2823233,
+          "text": "斟鄩之邑"
+        },
+        {
+          "key": 10041123,
+          "text": "一个普普通通的木制机关，在斟鄩之邑中被一位男性居民收留。"
+        },
+        {
+          "key": 10041133,
+          "text": "一盏照耀夜途的长明灯，由斟鄩之邑中一位女性居民创造。"
+        },
+        {
+          "key": 10041163,
+          "text": "一个普普通通的木制机关，在斟鄩之邑中被一位男性居民收留。"
+        },
+        {
+          "key": 10041173,
+          "text": "一盏照耀夜途的长明灯，由斟鄩之邑中一位女性居民创造。"
+        },
+        {
+          "key": 10041203,
+          "text": "一个普普通通的木制机关，在斟鄩之邑中被一位男性居民收留。"
+        },
+        {
+          "key": 10041213,
+          "text": "一盏照耀夜途的长明灯，由斟鄩之邑中一位女性居民创造。"
+        },
+        {
+          "key": 10041243,
+          "text": "一个普普通通的木制机关，在斟鄩之邑中被一位男性居民收留。"
+        },
+        {
+          "key": 10041253,
+          "text": "一盏照耀夜途的长明灯，由斟鄩之邑中一位女性居民创造。"
+        },
+        {
+          "key": 10041283,
+          "text": "一个普普通通的木制机关，在斟鄩之邑中被一位男性居民收留。"
+        },
+        {
+          "key": 10041293,
+          "text": "一盏照耀夜途的长明灯，由斟鄩之邑中一位女性居民创造。"
+        },
+        {
+          "key": 10041333,
+          "text": "斟鄩之邑的居民已经消散在茫茫无边的历史中，风的痕迹却铭刻在了木制机关的身上。"
+        },
+        {
+          "key": 10041353,
+          "text": "斟鄩之邑的居民已经消散在茫茫无边的历史中，长明灯的光芒中依然灼炼着旧日的碎片。"
+        },
+        {
+          "key": 12110322,
+          "text": "我乃水神共工，听见你的呼唤，于斟鄩之邑苏醒。现世是怎样的？安宁如旧，还是重陷危乱中？……不论如何，你我一起守护吧。"
+        },
+        {
+          "key": 12379812,
+          "text": "可在【古代宝箱】中抽取各种商品，通过【斟鄩之邑】相关活动获得。"
+        },
+        {
+          "key": 13430301,
+          "text": "斟鄩之邑"
+        },
+        {
+          "key": 13430311,
+          "text": "斟鄩之邑"
+        },
+        {
+          "key": 27001311,
+          "text": "斟鄩之邑希声礼包"
+        },
+        {
+          "key": 27001321,
+          "text": "斟鄩之邑兽骸礼包"
+        },
+        {
+          "key": 27001331,
+          "text": "斟鄩之邑特惠包"
+        },
+        {
+          "key": 27001341,
+          "text": "斟鄩之邑晶石包"
+        },
+        {
+          "key": 27001351,
+          "text": "斟鄩之邑组合包"
+        },
+        {
+          "key": 27001361,
+          "text": "斟鄩之邑豪华包"
+        },
+        {
+          "key": 27001371,
+          "text": "斟鄩之邑日月包"
+        },
+        {
+          "key": 27001381,
+          "text": "斟鄩之邑外观包"
+        },
+        {
+          "key": 27001831,
+          "text": "斟鄩之邑希声礼包"
+        },
+        {
+          "key": 27001841,
+          "text": "斟鄩之邑因果补给"
+        },
+        {
+          "key": 27001851,
+          "text": "斟鄩之邑特惠包"
+        },
+        {
+          "key": 27001861,
+          "text": "斟鄩之邑源质包"
+        },
+        {
+          "key": 27001871,
+          "text": "斟鄩之邑晶石包"
+        },
+        {
+          "key": 27001881,
+          "text": "斟鄩之邑畅享包"
+        },
+        {
+          "key": 27001891,
+          "text": "斟鄩之邑豪华包"
+        },
+        {
+          "key": 27001901,
+          "text": "斟鄩之邑日月包"
+        },
+        {
+          "key": 27100891,
+          "text": "斟鄩之邑补给包"
+        },
+        {
+          "key": 27100901,
+          "text": "斟鄩之邑超值包"
+        },
+        {
+          "key": 27100911,
+          "text": "斟鄩之邑特惠包"
+        },
+        {
+          "key": 27100921,
+          "text": "斟鄩之邑兽骸礼包"
+        },
+        {
+          "key": 27100931,
+          "text": "斟鄩之邑组合包"
+        },
+        {
+          "key": 27100941,
+          "text": "斟鄩之邑加速包"
+        },
+        {
+          "key": 27100951,
+          "text": "斟鄩之邑仄豪华包"
+        },
+        {
+          "key": 27100961,
+          "text": "斟鄩之邑宝石包"
+        },
+        {
+          "key": 27100971,
+          "text": "斟鄩之邑微醺包"
+        },
+        {
+          "key": 27100981,
+          "text": "斟鄩之邑神迹包"
+        },
+        {
+          "key": 27101251,
+          "text": "斟鄩之邑超值神降包"
+        },
+        {
+          "key": 27101261,
+          "text": "斟鄩之邑豪华神降包"
+        },
+        {
+          "key": 27101271,
+          "text": "斟鄩之邑水神专属神降包"
+        },
+        {
+          "key": 50000822,
+          "text": "通关【斟鄩之邑】中的关卡50次"
+        },
+        {
+          "key": 50000832,
+          "text": "通关【斟鄩之邑】中的关卡100次"
+        },
+        {
+          "key": 50000842,
+          "text": "通关【斟鄩之邑】中的关卡150次"
+        },
+        {
+          "key": 50000972,
+          "text": "在【斟鄩之邑】关卡中获得1000个青铜古贝"
+        },
+        {
+          "key": 50000982,
+          "text": "在【斟鄩之邑】关卡中获得3000个青铜古贝"
+        },
+        {
+          "key": 50000992,
+          "text": "在【斟鄩之邑】关卡中获得5000个青铜古贝"
+        },
+        {
+          "key": 50009027,
+          "text": "斟鄩之邑"
+        }
+      ],
+      "sections": [],
+      "items": [
+        {
+          "id": 1004112,
+          "texts": [
+            [
+              "HistoryID",
+              "一个普普通通的木制机关，在斟鄩之邑中被一位男性居民收留。"
+            ]
+          ]
+        },
+        {
+          "id": 1004113,
+          "texts": [
+            [
+              "HistoryID",
+              "一盏照耀夜途的长明灯，由斟鄩之邑中一位女性居民创造。"
+            ]
+          ]
+        },
+        {
+          "id": 1004114,
+          "texts": [
+            [
+              "HistoryID",
+              "一个普普通通的木制机关，在斟鄩之邑中被一位男性居民收留。"
+            ]
+          ]
+        },
+        {
+          "id": 1004115,
+          "texts": [
+            [
+              "HistoryID",
+              "一盏照耀夜途的长明灯，由斟鄩之邑中一位女性居民创造。"
+            ]
+          ]
+        },
+        {
+          "id": 1004116,
+          "texts": [
+            [
+              "HistoryID",
+              "一个普普通通的木制机关，在斟鄩之邑中被一位男性居民收留。"
+            ]
+          ]
+        },
+        {
+          "id": 1004117,
+          "texts": [
+            [
+              "HistoryID",
+              "一盏照耀夜途的长明灯，由斟鄩之邑中一位女性居民创造。"
+            ]
+          ]
+        },
+        {
+          "id": 1004118,
+          "texts": [
+            [
+              "HistoryID",
+              "一个普普通通的木制机关，在斟鄩之邑中被一位男性居民收留。"
+            ]
+          ]
+        },
+        {
+          "id": 1004119,
+          "texts": [
+            [
+              "HistoryID",
+              "一盏照耀夜途的长明灯，由斟鄩之邑中一位女性居民创造。"
+            ]
+          ]
+        },
+        {
+          "id": 1004120,
+          "texts": [
+            [
+              "HistoryID",
+              "一个普普通通的木制机关，在斟鄩之邑中被一位男性居民收留。"
+            ]
+          ]
+        },
+        {
+          "id": 1004121,
+          "texts": [
+            [
+              "HistoryID",
+              "一盏照耀夜途的长明灯，由斟鄩之邑中一位女性居民创造。"
+            ]
+          ]
+        },
+        {
+          "id": 1004122,
+          "texts": [
+            [
+              "HistoryID",
+              "一个普普通通的木制机关，在斟鄩之邑中被一位男性居民收留。"
+            ]
+          ]
+        },
+        {
+          "id": 1004123,
+          "texts": [
+            [
+              "HistoryID",
+              "一盏照耀夜途的长明灯，由斟鄩之邑中一位女性居民创造。"
+            ]
+          ]
+        },
+        {
+          "id": 1004124,
+          "texts": [
+            [
+              "HistoryID",
+              "一个普普通通的木制机关，在斟鄩之邑中被一位男性居民收留。"
+            ]
+          ]
+        },
+        {
+          "id": 1004125,
+          "texts": [
+            [
+              "HistoryID",
+              "一盏照耀夜途的长明灯，由斟鄩之邑中一位女性居民创造。"
+            ]
+          ]
+        },
+        {
+          "id": 1004126,
+          "texts": [
+            [
+              "HistoryID",
+              "一个普普通通的木制机关，在斟鄩之邑中被一位男性居民收留。"
+            ]
+          ]
+        },
+        {
+          "id": 1004127,
+          "texts": [
+            [
+              "HistoryID",
+              "一盏照耀夜途的长明灯，由斟鄩之邑中一位女性居民创造。"
+            ]
+          ]
+        },
+        {
+          "id": 1004128,
+          "texts": [
+            [
+              "HistoryID",
+              "一个普普通通的木制机关，在斟鄩之邑中被一位男性居民收留。"
+            ]
+          ]
+        },
+        {
+          "id": 1004129,
+          "texts": [
+            [
+              "HistoryID",
+              "一盏照耀夜途的长明灯，由斟鄩之邑中一位女性居民创造。"
+            ]
+          ]
+        },
+        {
+          "id": 1004130,
+          "texts": [
+            [
+              "HistoryID",
+              "一个普普通通的木制机关，在斟鄩之邑中被一位男性居民收留。"
+            ]
+          ]
+        },
+        {
+          "id": 1004131,
+          "texts": [
+            [
+              "HistoryID",
+              "一盏照耀夜途的长明灯，由斟鄩之邑中一位女性居民创造。"
+            ]
+          ]
+        },
+        {
+          "id": 1004133,
+          "texts": [
+            [
+              "HistoryID",
+              "斟鄩之邑的居民已经消散在茫茫无边的历史中，风的痕迹却铭刻在了木制机关的身上。"
+            ]
+          ]
+        },
+        {
+          "id": 1004135,
+          "texts": [
+            [
+              "HistoryID",
+              "斟鄩之邑的居民已经消散在茫茫无边的历史中，长明灯的光芒中依然灼炼着旧日的碎片。"
+            ]
+          ]
+        },
+        {
+          "id": 1211032,
+          "texts": [
+            [
+              "DescID",
+              "我乃水神共工，听见你的呼唤，于斟鄩之邑苏醒。现世是怎样的？安宁如旧，还是重陷危乱中？……不论如何，你我一起守护吧。"
+            ]
+          ]
+        },
+        {
+          "id": 1237981,
+          "texts": [
+            [
+              "DescID",
+              "可在【古代宝箱】中抽取各种商品，通过【斟鄩之邑】相关活动获得。"
+            ]
+          ]
+        },
+        {
+          "id": 1291932,
+          "texts": [
+            [
+              "DescID",
+              "我乃水神共工，听见你的呼唤，于斟鄩之邑苏醒。现世是怎样的？安宁如旧，还是重陷危乱中？……不论如何，你我一起守护吧。"
+            ]
+          ]
+        }
+      ],
+      "unlock_section_references": []
+    },
+    "秘宝之海": {
+      "texts": [
+        {
+          "key": 51121,
+          "text": "秘宝之海的小丑"
+        },
+        {
+          "key": 55411,
+          "text": "秘宝之海的小丑"
+        },
+        {
+          "key": 12379792,
+          "text": "可在【典藏商店】兑换各种商品，通过【秘宝之海】相关活动获得。"
+        },
+        {
+          "key": 12901952,
+          "text": "用于在【秘宝之海】活动中解锁鲜脆春卷"
+        },
+        {
+          "key": 12901953,
+          "text": "秘宝之海中散落的上古食谱，不知是谁遗落在了这里。"
+        },
+        {
+          "key": 12901962,
+          "text": "用于在【秘宝之海】活动中解锁长寿面"
+        },
+        {
+          "key": 12901963,
+          "text": "秘宝之海中散落的上古食谱，不知是谁遗落在了这里。"
+        },
+        {
+          "key": 12901972,
+          "text": "用于在【秘宝之海】活动中解锁五福春饺"
+        },
+        {
+          "key": 12901973,
+          "text": "秘宝之海中散落的上古食谱，不知是谁遗落在了这里。"
+        },
+        {
+          "key": 12901982,
+          "text": "用于在【秘宝之海】活动中解锁芝麻元宵"
+        },
+        {
+          "key": 12901983,
+          "text": "秘宝之海中散落的上古食谱，不知是谁遗落在了这里。"
+        },
+        {
+          "key": 12901992,
+          "text": "用于在【秘宝之海】活动中解锁团圆八宝"
+        },
+        {
+          "key": 12901993,
+          "text": "秘宝之海中散落的上古食谱，不知是谁遗落在了这里。"
+        },
+        {
+          "key": 12902002,
+          "text": "用于在【秘宝之海】活动中解锁红烧肉"
+        },
+        {
+          "key": 12902003,
+          "text": "秘宝之海中散落的上古食谱，不知是谁遗落在了这里。"
+        },
+        {
+          "key": 12902012,
+          "text": "用于在【秘宝之海】活动中解锁年年有鱼"
+        },
+        {
+          "key": 12902013,
+          "text": "秘宝之海中散落的上古食谱，不知是谁遗落在了这里。"
+        },
+        {
+          "key": 12902022,
+          "text": "用于在【秘宝之海】活动中解锁年糕蟹煲"
+        },
+        {
+          "key": 12902023,
+          "text": "秘宝之海中散落的上古食谱，不知是谁遗落在了这里。"
+        },
+        {
+          "key": 12902032,
+          "text": "用于【秘宝之海】活动中烹饪营业获得嘉年华奖券"
+        },
+        {
+          "key": 12902042,
+          "text": "用于【秘宝之海】活动中烹饪营业获得嘉年华奖券"
+        },
+        {
+          "key": 12902052,
+          "text": "用于【秘宝之海】活动中烹饪营业获得嘉年华奖券"
+        },
+        {
+          "key": 12902062,
+          "text": "用于【秘宝之海】活动中烹饪营业获得嘉年华奖券"
+        },
+        {
+          "key": 12902072,
+          "text": "用于【秘宝之海】活动中烹饪营业获得嘉年华奖券"
+        },
+        {
+          "key": 12902082,
+          "text": "用于【秘宝之海】活动中烹饪营业获得嘉年华奖券"
+        },
+        {
+          "key": 12902092,
+          "text": "用于【秘宝之海】活动中烹饪营业获得嘉年华奖券"
+        },
+        {
+          "key": 12902102,
+          "text": "用于【秘宝之海】活动中烹饪营业获得嘉年华奖券"
+        },
+        {
+          "key": 12902112,
+          "text": "用于【秘宝之海】活动中烹饪消耗的食材"
+        },
+        {
+          "key": 12902122,
+          "text": "用于【秘宝之海】活动中烹饪消耗的食材"
+        },
+        {
+          "key": 12902132,
+          "text": "用于【秘宝之海】活动中烹饪消耗的食材"
+        },
+        {
+          "key": 12902142,
+          "text": "用于【秘宝之海】活动中烹饪消耗的食材"
+        },
+        {
+          "key": 12902152,
+          "text": "用于【秘宝之海】活动中烹饪消耗的食材"
+        },
+        {
+          "key": 12902162,
+          "text": "用于【秘宝之海】活动中烹饪消耗的食材"
+        },
+        {
+          "key": 12902172,
+          "text": "用于【秘宝之海】活动中烹饪消耗的食材"
+        },
+        {
+          "key": 12902182,
+          "text": "用于【秘宝之海】活动中烹饪消耗的食材"
+        },
+        {
+          "key": 12902192,
+          "text": "用于【秘宝之海】活动中烹饪消耗的食材"
+        },
+        {
+          "key": 12902202,
+          "text": "用于【秘宝之海】活动中烹饪消耗的食材"
+        },
+        {
+          "key": 12902212,
+          "text": "用于在【秘宝之海】活动中解锁烤串"
+        },
+        {
+          "key": 12902213,
+          "text": "秘宝之海中散落的上古食谱，不知是谁遗落在了这里。"
+        },
+        {
+          "key": 12902222,
+          "text": "用于在【秘宝之海】活动中解锁章鱼丸子"
+        },
+        {
+          "key": 12902223,
+          "text": "秘宝之海中散落的上古食谱，不知是谁遗落在了这里。"
+        },
+        {
+          "key": 12902232,
+          "text": "用于在【秘宝之海】活动中解锁清蒸龙虾"
+        },
+        {
+          "key": 12902233,
+          "text": "秘宝之海中散落的上古食谱，不知是谁遗落在了这里。"
+        },
+        {
+          "key": 12902242,
+          "text": "用于【秘宝之海】活动中烹饪营业获得嘉年华奖券"
+        },
+        {
+          "key": 12902252,
+          "text": "用于【秘宝之海】活动中烹饪营业获得嘉年华奖券"
+        },
+        {
+          "key": 12902262,
+          "text": "用于【秘宝之海】活动中烹饪营业获得嘉年华奖券"
+        },
+        {
+          "key": 13102619,
+          "text": "【秘宝之海】活动将在{0}年{1}月{2}日开启，敬请期待！"
+        },
+        {
+          "key": 13430461,
+          "text": "秘宝之海"
+        },
+        {
+          "key": 27001691,
+          "text": "秘宝之海自选包"
+        },
+        {
+          "key": 27001711,
+          "text": "秘宝之海因果补给"
+        },
+        {
+          "key": 27001721,
+          "text": "秘宝之海外观包"
+        },
+        {
+          "key": 27001731,
+          "text": "秘宝之海特惠包"
+        },
+        {
+          "key": 27001741,
+          "text": "秘宝之海晶石包"
+        },
+        {
+          "key": 27001751,
+          "text": "秘宝之海畅享包"
+        },
+        {
+          "key": 27001761,
+          "text": "秘宝之海豪华包"
+        },
+        {
+          "key": 27001771,
+          "text": "秘宝之海日月包"
+        },
+        {
+          "key": 27001811,
+          "text": "秘宝之海许愿包"
+        },
+        {
+          "key": 27001821,
+          "text": "秘宝之海组合包"
+        },
+        {
+          "key": 27205121,
+          "text": "秘宝之海每日特惠"
+        },
+        {
+          "key": 27205131,
+          "text": "秘宝之海倾情礼包"
+        },
+        {
+          "key": 27205141,
+          "text": "秘宝之海许愿特惠一"
+        },
+        {
+          "key": 27205151,
+          "text": "秘宝之海许愿特惠二"
+        },
+        {
+          "key": 27205161,
+          "text": "秘宝之海期遇礼包"
+        },
+        {
+          "key": 27205171,
+          "text": "秘宝之海许愿特惠三"
+        },
+        {
+          "key": 27205181,
+          "text": "秘宝之海绮石礼包"
+        },
+        {
+          "key": 27205191,
+          "text": "秘宝之海因果补给"
+        },
+        {
+          "key": 27205201,
+          "text": "秘宝之海专属剑柄养成礼包"
+        },
+        {
+          "key": 50001502,
+          "text": "击败【秘宝之海的小丑】10次"
+        },
+        {
+          "key": 50009033,
+          "text": "秘宝之海"
+        }
+      ],
+      "sections": [],
+      "items": [
+        {
+          "id": 1237979,
+          "texts": [
+            [
+              "DescID",
+              "可在【典藏商店】兑换各种商品，通过【秘宝之海】相关活动获得。"
+            ]
+          ]
+        },
+        {
+          "id": 1290195,
+          "texts": [
+            [
+              "DescID",
+              "用于在【秘宝之海】活动中解锁鲜脆春卷"
+            ],
+            [
+              "HistoryID",
+              "秘宝之海中散落的上古食谱，不知是谁遗落在了这里。"
+            ]
+          ]
+        },
+        {
+          "id": 1290196,
+          "texts": [
+            [
+              "DescID",
+              "用于在【秘宝之海】活动中解锁长寿面"
+            ],
+            [
+              "HistoryID",
+              "秘宝之海中散落的上古食谱，不知是谁遗落在了这里。"
+            ]
+          ]
+        },
+        {
+          "id": 1290197,
+          "texts": [
+            [
+              "DescID",
+              "用于在【秘宝之海】活动中解锁五福春饺"
+            ],
+            [
+              "HistoryID",
+              "秘宝之海中散落的上古食谱，不知是谁遗落在了这里。"
+            ]
+          ]
+        },
+        {
+          "id": 1290198,
+          "texts": [
+            [
+              "DescID",
+              "用于在【秘宝之海】活动中解锁芝麻元宵"
+            ],
+            [
+              "HistoryID",
+              "秘宝之海中散落的上古食谱，不知是谁遗落在了这里。"
+            ]
+          ]
+        },
+        {
+          "id": 1290199,
+          "texts": [
+            [
+              "DescID",
+              "用于在【秘宝之海】活动中解锁团圆八宝"
+            ],
+            [
+              "HistoryID",
+              "秘宝之海中散落的上古食谱，不知是谁遗落在了这里。"
+            ]
+          ]
+        },
+        {
+          "id": 1290200,
+          "texts": [
+            [
+              "DescID",
+              "用于在【秘宝之海】活动中解锁红烧肉"
+            ],
+            [
+              "HistoryID",
+              "秘宝之海中散落的上古食谱，不知是谁遗落在了这里。"
+            ]
+          ]
+        },
+        {
+          "id": 1290201,
+          "texts": [
+            [
+              "DescID",
+              "用于在【秘宝之海】活动中解锁年年有鱼"
+            ],
+            [
+              "HistoryID",
+              "秘宝之海中散落的上古食谱，不知是谁遗落在了这里。"
+            ]
+          ]
+        },
+        {
+          "id": 1290202,
+          "texts": [
+            [
+              "DescID",
+              "用于在【秘宝之海】活动中解锁年糕蟹煲"
+            ],
+            [
+              "HistoryID",
+              "秘宝之海中散落的上古食谱，不知是谁遗落在了这里。"
+            ]
+          ]
+        },
+        {
+          "id": 1290203,
+          "texts": [
+            [
+              "DescID",
+              "用于【秘宝之海】活动中烹饪营业获得嘉年华奖券"
+            ]
+          ]
+        },
+        {
+          "id": 1290204,
+          "texts": [
+            [
+              "DescID",
+              "用于【秘宝之海】活动中烹饪营业获得嘉年华奖券"
+            ]
+          ]
+        },
+        {
+          "id": 1290205,
+          "texts": [
+            [
+              "DescID",
+              "用于【秘宝之海】活动中烹饪营业获得嘉年华奖券"
+            ]
+          ]
+        },
+        {
+          "id": 1290206,
+          "texts": [
+            [
+              "DescID",
+              "用于【秘宝之海】活动中烹饪营业获得嘉年华奖券"
+            ]
+          ]
+        },
+        {
+          "id": 1290207,
+          "texts": [
+            [
+              "DescID",
+              "用于【秘宝之海】活动中烹饪营业获得嘉年华奖券"
+            ]
+          ]
+        },
+        {
+          "id": 1290208,
+          "texts": [
+            [
+              "DescID",
+              "用于【秘宝之海】活动中烹饪营业获得嘉年华奖券"
+            ]
+          ]
+        },
+        {
+          "id": 1290209,
+          "texts": [
+            [
+              "DescID",
+              "用于【秘宝之海】活动中烹饪营业获得嘉年华奖券"
+            ]
+          ]
+        },
+        {
+          "id": 1290210,
+          "texts": [
+            [
+              "DescID",
+              "用于【秘宝之海】活动中烹饪营业获得嘉年华奖券"
+            ]
+          ]
+        },
+        {
+          "id": 1290211,
+          "texts": [
+            [
+              "DescID",
+              "用于【秘宝之海】活动中烹饪消耗的食材"
+            ]
+          ]
+        },
+        {
+          "id": 1290212,
+          "texts": [
+            [
+              "DescID",
+              "用于【秘宝之海】活动中烹饪消耗的食材"
+            ]
+          ]
+        },
+        {
+          "id": 1290213,
+          "texts": [
+            [
+              "DescID",
+              "用于【秘宝之海】活动中烹饪消耗的食材"
+            ]
+          ]
+        },
+        {
+          "id": 1290214,
+          "texts": [
+            [
+              "DescID",
+              "用于【秘宝之海】活动中烹饪消耗的食材"
+            ]
+          ]
+        },
+        {
+          "id": 1290215,
+          "texts": [
+            [
+              "DescID",
+              "用于【秘宝之海】活动中烹饪消耗的食材"
+            ]
+          ]
+        },
+        {
+          "id": 1290216,
+          "texts": [
+            [
+              "DescID",
+              "用于【秘宝之海】活动中烹饪消耗的食材"
+            ]
+          ]
+        },
+        {
+          "id": 1290217,
+          "texts": [
+            [
+              "DescID",
+              "用于【秘宝之海】活动中烹饪消耗的食材"
+            ]
+          ]
+        },
+        {
+          "id": 1290218,
+          "texts": [
+            [
+              "DescID",
+              "用于【秘宝之海】活动中烹饪消耗的食材"
+            ]
+          ]
+        },
+        {
+          "id": 1290219,
+          "texts": [
+            [
+              "DescID",
+              "用于【秘宝之海】活动中烹饪消耗的食材"
+            ]
+          ]
+        },
+        {
+          "id": 1290220,
+          "texts": [
+            [
+              "DescID",
+              "用于【秘宝之海】活动中烹饪消耗的食材"
+            ]
+          ]
+        },
+        {
+          "id": 1290221,
+          "texts": [
+            [
+              "DescID",
+              "用于在【秘宝之海】活动中解锁烤串"
+            ],
+            [
+              "HistoryID",
+              "秘宝之海中散落的上古食谱，不知是谁遗落在了这里。"
+            ]
+          ]
+        },
+        {
+          "id": 1290222,
+          "texts": [
+            [
+              "DescID",
+              "用于在【秘宝之海】活动中解锁章鱼丸子"
+            ],
+            [
+              "HistoryID",
+              "秘宝之海中散落的上古食谱，不知是谁遗落在了这里。"
+            ]
+          ]
+        },
+        {
+          "id": 1290223,
+          "texts": [
+            [
+              "DescID",
+              "用于在【秘宝之海】活动中解锁清蒸龙虾"
+            ],
+            [
+              "HistoryID",
+              "秘宝之海中散落的上古食谱，不知是谁遗落在了这里。"
+            ]
+          ]
+        },
+        {
+          "id": 1290224,
+          "texts": [
+            [
+              "DescID",
+              "用于【秘宝之海】活动中烹饪营业获得嘉年华奖券"
+            ]
+          ]
+        },
+        {
+          "id": 1290225,
+          "texts": [
+            [
+              "DescID",
+              "用于【秘宝之海】活动中烹饪营业获得嘉年华奖券"
+            ]
+          ]
+        },
+        {
+          "id": 1290226,
+          "texts": [
+            [
+              "DescID",
+              "用于【秘宝之海】活动中烹饪营业获得嘉年华奖券"
+            ]
+          ]
+        }
+      ],
+      "unlock_section_references": []
+    },
+    "全景裂隙": {
+      "texts": [
+        {
+          "key": 9822,
+          "text": "可在【轮回数据库】兑换各种商品，通过【全景裂隙】相关活动获得。"
+        },
+        {
+          "key": 12379822,
+          "text": "可在【轮回数据库】兑换各种商品，通过【全景裂隙】相关活动获得。"
+        },
+        {
+          "key": 12600353,
+          "text": "“全景裂隙”活动轮回奖励获得"
+        },
+        {
+          "key": 13102472,
+          "text": "【全景裂隙】活动将在{0}年{1}月{2}日开启，敬请期待！"
+        },
+        {
+          "key": 13430231,
+          "text": "全景裂隙"
+        },
+        {
+          "key": 20235011,
+          "text": "全景裂隙"
+        },
+        {
+          "key": 27001231,
+          "text": "全景裂隙数据包"
+        },
+        {
+          "key": 27001241,
+          "text": "全景裂隙补给包"
+        },
+        {
+          "key": 27001251,
+          "text": "全景裂隙特惠包"
+        },
+        {
+          "key": 27001261,
+          "text": "全景裂隙晶石包"
+        },
+        {
+          "key": 27001271,
+          "text": "全景裂隙组合包"
+        },
+        {
+          "key": 27001281,
+          "text": "全景裂隙豪华包"
+        },
+        {
+          "key": 27001601,
+          "text": "全景裂隙复刻礼包"
+        },
+        {
+          "key": 27001611,
+          "text": "全景裂隙因果补给"
+        },
+        {
+          "key": 27001621,
+          "text": "全景裂隙许愿包"
+        },
+        {
+          "key": 27001631,
+          "text": "全景裂隙源质包"
+        },
+        {
+          "key": 27001641,
+          "text": "全景裂隙畅享包"
+        },
+        {
+          "key": 27001651,
+          "text": "全景裂隙豪华包"
+        },
+        {
+          "key": 27001661,
+          "text": "全景裂隙日月包"
+        },
+        {
+          "key": 27101081,
+          "text": "全景裂隙补给包"
+        },
+        {
+          "key": 27101091,
+          "text": "全景裂隙超值包"
+        },
+        {
+          "key": 27101101,
+          "text": "全景裂隙特惠包"
+        },
+        {
+          "key": 27101111,
+          "text": "全景裂隙兽骸礼包"
+        },
+        {
+          "key": 27101121,
+          "text": "全景裂隙组合包"
+        },
+        {
+          "key": 27101131,
+          "text": "全景裂隙加速包"
+        },
+        {
+          "key": 27101141,
+          "text": "全景裂隙仄豪华包"
+        },
+        {
+          "key": 27101151,
+          "text": "全景裂隙宝石包"
+        },
+        {
+          "key": 27101161,
+          "text": "全景裂隙日冕包"
+        },
+        {
+          "key": 27101171,
+          "text": "全景裂隙神迹包"
+        },
+        {
+          "key": 27101281,
+          "text": "全景裂隙超值神降包"
+        },
+        {
+          "key": 27101291,
+          "text": "全景裂隙豪华神降包"
+        },
+        {
+          "key": 27101301,
+          "text": "全景裂隙冥神专属神降包"
+        },
+        {
+          "key": 27102101,
+          "text": "全景裂隙纪念神降包"
+        },
+        {
+          "key": 27102111,
+          "text": "全景裂隙豪华神降包"
+        },
+        {
+          "key": 27204401,
+          "text": "全景裂隙每日特惠"
+        },
+        {
+          "key": 27204411,
+          "text": "全景裂隙倾情礼包"
+        },
+        {
+          "key": 27204421,
+          "text": "全景裂隙许愿特惠一"
+        },
+        {
+          "key": 27204431,
+          "text": "全景裂隙许愿特惠二"
+        },
+        {
+          "key": 27204441,
+          "text": "全景裂隙期遇礼包"
+        },
+        {
+          "key": 27204451,
+          "text": "全景裂隙许愿特惠三"
+        },
+        {
+          "key": 27204461,
+          "text": "全景裂隙绮石礼包"
+        },
+        {
+          "key": 27204471,
+          "text": "全景裂隙因果补给"
+        },
+        {
+          "key": 50000672,
+          "text": "在【全景裂隙】关卡中获得10000个数据核心"
+        },
+        {
+          "key": 50000682,
+          "text": "在【全景裂隙】关卡中获得20000个数据核心"
+        },
+        {
+          "key": 50000692,
+          "text": "在【全景裂隙】关卡中获得30000个数据核心"
+        },
+        {
+          "key": 50009026,
+          "text": "全景裂隙"
+        },
+        {
+          "key": 216055111,
+          "text": "参与活动 全景裂隙 解锁"
+        }
+      ],
+      "sections": [],
+      "items": [
+        {
+          "id": 1237982,
+          "texts": [
+            [
+              "DescID",
+              "可在【轮回数据库】兑换各种商品，通过【全景裂隙】相关活动获得。"
+            ]
+          ]
+        },
+        {
+          "id": 1260035,
+          "texts": [
+            [
+              "HistoryID",
+              "“全景裂隙”活动轮回奖励获得"
+            ]
+          ]
+        }
+      ],
+      "unlock_section_references": [
+        {
+          "language_key": 216055111,
+          "text": "参与活动 全景裂隙 解锁",
+          "derived_section_id": 2160551,
+          "section": {
+            "SectionID": 2160551,
+            "NumerChina": "",
+            "Maps": [
+              2260551
+            ],
+            "ChapterID": 2060550,
+            "Type": {
+              "value": 14,
+              "enum": "E_ActivityStory"
+            },
+            "Name": 21605511,
+            "NameChina": "暗潮重塑",
+            "NameMore": 21605512,
+            "NameMoreChina": "以黑暗之神为名的的少年，在至黑的夜里呼唤着认同。",
+            "StageIcon": "",
+            "LevelDisplay": 1,
+            "RecommendedAbility": 23800,
+            "RecommendedLevel": 50,
+            "DifficultyLevel": {
+              "value": 5,
+              "enum": "E_Difficulty5"
+            },
+            "Profession": 302,
+            "EnemyDisplay": [
+              3158,
+              3160,
+              3157,
+              3159,
+              4058,
+              5946
+            ],
+            "DroopLimit2": [
+              0,
+              6,
+              7,
+              8
+            ],
+            "OpenType": {
+              "value": 1,
+              "enum": "E_Level"
+            },
+            "OpenParam": 17,
+            "WinCondition": {
+              "value": 2,
+              "enum": "E_BlockComplete"
+            },
+            "WinParam": [
+              1945243,
+              500
+            ],
+            "FailTips": [
+              {
+                "Items": [
+                  13101701,
+                  13101702,
+                  13101703,
+                  13101704
+                ]
+              },
+              {
+                "Items": [
+                  13101801,
+                  13101802,
+                  13101803,
+                  13101804,
+                  13101805
+                ]
+              },
+              {
+                "Items": [
+                  13101901,
+                  13101902,
+                  13101903,
+                  13101904
+                ]
+              }
+            ],
+            "Open": 150,
+            "ManualValue": 30,
+            "FirVReward": [
+              776305
+            ],
+            "VReward": [
+              730075
+            ],
+            "DropValueID": 10660211,
+            "AssistType": {
+              "value": 2,
+              "enum": "E_Friend"
+            },
+            "IsShowWinTips": {
+              "value": 1,
+              "enum": "E_Yes"
+            },
+            "Favorability": 5
+          }
+        }
+      ]
+    },
+    "冬至万物": {
+      "texts": [
+        {
+          "key": 9852,
+          "text": "可在零件重构室兑换各种商品，通过冬至万物相关活动获得。"
+        },
+        {
+          "key": 9862,
+          "text": "可用于乱流入侵进度解锁，通过冬至万物相关活动获得。"
+        },
+        {
+          "key": 9872,
+          "text": "可用于孤守寻迹进度解锁，通过冬至万物相关活动获得。"
+        },
+        {
+          "key": 9882,
+          "text": "可用于重临此世进度解锁，通过冬至万物相关活动获得。"
+        },
+        {
+          "key": 12379852,
+          "text": "可在零件重构室兑换各种商品，通过冬至万物相关活动获得。"
+        },
+        {
+          "key": 12379862,
+          "text": "可用于乱流入侵进度解锁，通过冬至万物相关活动获得。"
+        },
+        {
+          "key": 12379872,
+          "text": "可用于孤守寻迹进度解锁，通过冬至万物相关活动获得。"
+        },
+        {
+          "key": 12379882,
+          "text": "可用于重临此世进度解锁，通过冬至万物相关活动获得。"
+        },
+        {
+          "key": 12600243,
+          "text": "“冬至万物”活动礼包获得"
+        },
+        {
+          "key": 12600253,
+          "text": "完成“冬至万物”活动驰援任务获得"
+        },
+        {
+          "key": 13102254,
+          "text": "【冬至万物】活动将在{0}年{1}月{2}日开启，敬请期待！"
+        },
+        {
+          "key": 13430091,
+          "text": "冬至万物"
+        },
+        {
+          "key": 27000791,
+          "text": "冬至万物知契礼包"
+        },
+        {
+          "key": 27000801,
+          "text": "冬至万物冬狩礼包"
+        },
+        {
+          "key": 27000811,
+          "text": "冬至万物特惠包"
+        },
+        {
+          "key": 27000821,
+          "text": "冬至万物组合包"
+        },
+        {
+          "key": 27000831,
+          "text": "冬至万物豪华包"
+        },
+        {
+          "key": 27001391,
+          "text": "冬至万物知契复刻包"
+        },
+        {
+          "key": 27001401,
+          "text": "冬至万物超值礼包"
+        },
+        {
+          "key": 27001411,
+          "text": "冬至万物特惠礼包"
+        },
+        {
+          "key": 27001421,
+          "text": "冬至万物晶石包"
+        },
+        {
+          "key": 27001431,
+          "text": "冬至万物畅享包"
+        },
+        {
+          "key": 27001441,
+          "text": "冬至万物豪华包"
+        },
+        {
+          "key": 27001451,
+          "text": "冬至万物日月包"
+        },
+        {
+          "key": 50009017,
+          "text": "冬至万物"
+        },
+        {
+          "key": 216023111,
+          "text": "参与活动 冬至万物 解锁"
+        },
+        {
+          "key": 216023121,
+          "text": "参与活动 冬至万物 解锁"
+        }
+      ],
+      "sections": [],
+      "items": [
+        {
+          "id": 1237985,
+          "texts": [
+            [
+              "DescID",
+              "可在零件重构室兑换各种商品，通过冬至万物相关活动获得。"
+            ]
+          ]
+        },
+        {
+          "id": 1237986,
+          "texts": [
+            [
+              "DescID",
+              "可用于乱流入侵进度解锁，通过冬至万物相关活动获得。"
+            ]
+          ]
+        },
+        {
+          "id": 1237987,
+          "texts": [
+            [
+              "DescID",
+              "可用于孤守寻迹进度解锁，通过冬至万物相关活动获得。"
+            ]
+          ]
+        },
+        {
+          "id": 1237988,
+          "texts": [
+            [
+              "DescID",
+              "可用于重临此世进度解锁，通过冬至万物相关活动获得。"
+            ]
+          ]
+        },
+        {
+          "id": 1260024,
+          "texts": [
+            [
+              "HistoryID",
+              "“冬至万物”活动礼包获得"
+            ]
+          ]
+        },
+        {
+          "id": 1260025,
+          "texts": [
+            [
+              "HistoryID",
+              "完成“冬至万物”活动驰援任务获得"
+            ]
+          ]
+        }
+      ],
+      "unlock_section_references": [
+        {
+          "language_key": 216023111,
+          "text": "参与活动 冬至万物 解锁",
+          "derived_section_id": 2160231,
+          "section": {
+            "SectionID": 2160231,
+            "NumerChina": "",
+            "Maps": [
+              2260231
+            ],
+            "ChapterID": 2060230,
+            "Type": {
+              "value": 10,
+              "enum": "E_ShuangHanStory"
+            },
+            "Name": 21602311,
+            "NameChina": "长廊",
+            "NameMore": 21602312,
+            "NameMoreChina": "前往万物初始之庭的路途上，回归故里的那个身影是——",
+            "StageIcon": "",
+            "LevelDisplay": 1,
+            "RecommendedAbility": 22600,
+            "RecommendedLevel": 35,
+            "DifficultyLevel": {
+              "value": 6,
+              "enum": "E_Difficulty6"
+            },
+            "Profession": 302,
+            "EnemyDisplay": [
+              3049,
+              3050,
+              3051,
+              5629
+            ],
+            "DroopLimit2": [
+              6,
+              7,
+              8
+            ],
+            "OpenType": {
+              "value": 1,
+              "enum": "E_Level"
+            },
+            "OpenParam": 17,
+            "TimeLimit": 300,
+            "WinCondition": {
+              "value": 1,
+              "enum": "E_UnitDead"
+            },
+            "WinParam": [
+              5629,
+              3000
+            ],
+            "FailTips": [
+              {
+                "Items": [
+                  13101701,
+                  13101702,
+                  13101703,
+                  13101704
+                ]
+              },
+              {
+                "Items": [
+                  13101801,
+                  13101802,
+                  13101803,
+                  13101804,
+                  13101805
+                ]
+              },
+              {
+                "Items": [
+                  13101901,
+                  13101902,
+                  13101903,
+                  13101904
+                ]
+              }
+            ],
+            "Open": 150,
+            "ManualValue": 30,
+            "FirVReward": [
+              776141,
+              784019
+            ],
+            "VReward": [
+              776157
+            ],
+            "DropValueID": 10660231,
+            "AssistType": {
+              "value": 1,
+              "enum": "E_Trial"
+            },
+            "AssistParam": [
+              1331,
+              -1,
+              -1
+            ],
+            "BehaviorManager": "B_2160200",
+            "IsShowWinTips": {
+              "value": 1,
+              "enum": "E_Yes"
+            },
+            "Favorability": 5
+          }
+        },
+        {
+          "language_key": 216023121,
+          "text": "参与活动 冬至万物 解锁",
+          "derived_section_id": 2160231,
+          "section": {
+            "SectionID": 2160231,
+            "NumerChina": "",
+            "Maps": [
+              2260231
+            ],
+            "ChapterID": 2060230,
+            "Type": {
+              "value": 10,
+              "enum": "E_ShuangHanStory"
+            },
+            "Name": 21602311,
+            "NameChina": "长廊",
+            "NameMore": 21602312,
+            "NameMoreChina": "前往万物初始之庭的路途上，回归故里的那个身影是——",
+            "StageIcon": "",
+            "LevelDisplay": 1,
+            "RecommendedAbility": 22600,
+            "RecommendedLevel": 35,
+            "DifficultyLevel": {
+              "value": 6,
+              "enum": "E_Difficulty6"
+            },
+            "Profession": 302,
+            "EnemyDisplay": [
+              3049,
+              3050,
+              3051,
+              5629
+            ],
+            "DroopLimit2": [
+              6,
+              7,
+              8
+            ],
+            "OpenType": {
+              "value": 1,
+              "enum": "E_Level"
+            },
+            "OpenParam": 17,
+            "TimeLimit": 300,
+            "WinCondition": {
+              "value": 1,
+              "enum": "E_UnitDead"
+            },
+            "WinParam": [
+              5629,
+              3000
+            ],
+            "FailTips": [
+              {
+                "Items": [
+                  13101701,
+                  13101702,
+                  13101703,
+                  13101704
+                ]
+              },
+              {
+                "Items": [
+                  13101801,
+                  13101802,
+                  13101803,
+                  13101804,
+                  13101805
+                ]
+              },
+              {
+                "Items": [
+                  13101901,
+                  13101902,
+                  13101903,
+                  13101904
+                ]
+              }
+            ],
+            "Open": 150,
+            "ManualValue": 30,
+            "FirVReward": [
+              776141,
+              784019
+            ],
+            "VReward": [
+              776157
+            ],
+            "DropValueID": 10660231,
+            "AssistType": {
+              "value": 1,
+              "enum": "E_Trial"
+            },
+            "AssistParam": [
+              1331,
+              -1,
+              -1
+            ],
+            "BehaviorManager": "B_2160200",
+            "IsShowWinTips": {
+              "value": 1,
+              "enum": "E_Yes"
+            },
+            "Favorability": 5
+          }
+        }
+      ]
+    },
+    "日月盈仄": {
+      "texts": [
+        {
+          "key": 9892,
+          "text": "可在影域交易所兑换各种商品，通过日月盈仄相关活动获得。"
+        },
+        {
+          "key": 210035,
+          "text": "点击这里进入【日月盈仄】活动界面"
+        },
+        {
+          "key": 686018,
+          "text": "日月盈仄，人心也起伏不定。不过，你一直在这里吧……"
+        },
+        {
+          "key": 800073,
+          "text": "    许愿福利限时开启！\n    活动期间，在【日月盈仄】复刻许愿池中许愿达到\n一定次数，可获得纯晶石、自选2星神格等丰厚奖励。\n    <color=#FFFFFF97>*达成条件后福利宝箱自动开启</color>"
+        },
+        {
+          "key": 6300251,
+          "text": "日月盈仄I"
+        },
+        {
+          "key": 6300261,
+          "text": "日月盈仄II"
+        },
+        {
+          "key": 7001042,
+          "text": "通关日月盈仄复刻活动关卡-2160101"
+        },
+        {
+          "key": 7001052,
+          "text": "通关日月盈仄复刻活动关卡-2160102"
+        },
+        {
+          "key": 7001062,
+          "text": "通关日月盈仄复刻活动关卡-2160103"
+        },
+        {
+          "key": 7001112,
+          "text": "通关日月盈仄复刻活动关卡-2160104"
+        },
+        {
+          "key": 7001122,
+          "text": "通关日月盈仄复刻活动关卡-2160105"
+        },
+        {
+          "key": 12379892,
+          "text": "可在影域交易所兑换各种商品，通过日月盈仄相关活动获得。"
+        },
+        {
+          "key": 12600073,
+          "text": "通过活动“日月盈仄”影域交易所兑换获得"
+        },
+        {
+          "key": 12600223,
+          "text": "“日月盈仄”活动礼包获得"
+        },
+        {
+          "key": 12901012,
+          "text": "用于解锁【日月盈仄】剧情章节\n——一只黑狐狸路过"
+        },
+        {
+          "key": 12901022,
+          "text": "用于解锁【日月盈仄】剧情章节\n——一只黑狐狸路过"
+        },
+        {
+          "key": 12901032,
+          "text": "用于解锁【日月盈仄】剧情章节\n——一只黑狐狸路过"
+        },
+        {
+          "key": 12901042,
+          "text": "用于解锁【日月盈仄】剧情章节\n——一只黑狐狸路过"
+        },
+        {
+          "key": 12901052,
+          "text": "用于解锁【日月盈仄】剧情章节\n——一只黑狐狸路过"
+        },
+        {
+          "key": 12901062,
+          "text": "用于解锁【日月盈仄】剧情章节\n——一只黑狐狸路过"
+        },
+        {
+          "key": 12901072,
+          "text": "用于解锁【日月盈仄】剧情章节\n——日御之庭使者降临"
+        },
+        {
+          "key": 12901082,
+          "text": "用于解锁【日月盈仄】剧情章节\n——日御之庭使者降临"
+        },
+        {
+          "key": 12901092,
+          "text": "用于解锁【日月盈仄】剧情章节\n——日御之庭使者降临"
+        },
+        {
+          "key": 12901102,
+          "text": "用于解锁【日月盈仄】剧情章节\n——日御之庭使者降临"
+        },
+        {
+          "key": 12901112,
+          "text": "用于解锁【日月盈仄】剧情章节\n——日御之庭使者降临"
+        },
+        {
+          "key": 12901122,
+          "text": "用于解锁【日月盈仄】剧情章节\n——日御之庭使者降临"
+        },
+        {
+          "key": 12901132,
+          "text": "用于解锁【日月盈仄】剧情章节\n——世上的另一个我"
+        },
+        {
+          "key": 12901142,
+          "text": "用于解锁【日月盈仄】剧情章节\n——世上的另一个我"
+        },
+        {
+          "key": 12901152,
+          "text": "用于解锁【日月盈仄】剧情章节\n——世上的另一个我"
+        },
+        {
+          "key": 12901162,
+          "text": "用于解锁【日月盈仄】剧情章节\n——世上的另一个我"
+        },
+        {
+          "key": 12901172,
+          "text": "用于解锁【日月盈仄】剧情章节\n——世上的另一个我"
+        },
+        {
+          "key": 12901182,
+          "text": "用于解锁【日月盈仄】剧情章节\n——世上的另一个我"
+        },
+        {
+          "key": 12901192,
+          "text": "用于解锁【日月盈仄】剧情章节\n——狐之饵"
+        },
+        {
+          "key": 12901202,
+          "text": "用于解锁【日月盈仄】剧情章节\n——狐之饵"
+        },
+        {
+          "key": 12901212,
+          "text": "用于解锁【日月盈仄】剧情章节\n——狐之饵"
+        },
+        {
+          "key": 12901222,
+          "text": "用于解锁【日月盈仄】剧情章节\n——狐之饵"
+        },
+        {
+          "key": 12901232,
+          "text": "用于解锁【日月盈仄】剧情章节\n——狐之饵"
+        },
+        {
+          "key": 12901242,
+          "text": "用于解锁【日月盈仄】剧情章节\n——狐之饵"
+        },
+        {
+          "key": 12901892,
+          "text": "用于解锁日月盈仄复刻中的影域交易所"
+        },
+        {
+          "key": 13102464,
+          "text": "【日月盈仄】复刻活动将在{0}年{1}月{2}日开启，敬请期待！"
+        },
+        {
+          "key": 13430081,
+          "text": "日月盈仄"
+        },
+        {
+          "key": 13430211,
+          "text": "日月盈仄复刻"
+        },
+        {
+          "key": 27000661,
+          "text": "日月盈仄信印礼包"
+        },
+        {
+          "key": 27000671,
+          "text": "日月盈仄补给包"
+        },
+        {
+          "key": 27000681,
+          "text": "日月盈仄特惠包"
+        },
+        {
+          "key": 27000691,
+          "text": "日月盈仄组合包"
+        },
+        {
+          "key": 27000701,
+          "text": "日月盈仄期遇礼包"
+        },
+        {
+          "key": 27000711,
+          "text": "日月盈仄豪华包"
+        },
+        {
+          "key": 27000721,
+          "text": "日月盈仄补给礼"
+        },
+        {
+          "key": 27001041,
+          "text": "日月盈仄复刻礼包"
+        },
+        {
+          "key": 27001051,
+          "text": "日月盈仄补给包"
+        },
+        {
+          "key": 27001061,
+          "text": "日月盈仄特惠包"
+        },
+        {
+          "key": 27001071,
+          "text": "日月盈仄组合包"
+        },
+        {
+          "key": 27001081,
+          "text": "日月盈仄期遇礼包"
+        },
+        {
+          "key": 27001091,
+          "text": "日月盈仄豪华包"
+        },
+        {
+          "key": 27001101,
+          "text": "日月盈仄补给礼"
+        },
+        {
+          "key": 27001111,
+          "text": "日月盈仄绮石礼包"
+        },
+        {
+          "key": 27100221,
+          "text": "日月盈仄补给包"
+        },
+        {
+          "key": 27100231,
+          "text": "日月盈仄超值包"
+        },
+        {
+          "key": 27100241,
+          "text": "日月盈仄特惠包"
+        },
+        {
+          "key": 27100251,
+          "text": "日月盈仄组合包"
+        },
+        {
+          "key": 27100261,
+          "text": "日月盈仄遇礼包"
+        },
+        {
+          "key": 27100271,
+          "text": "日月盈仄豪华包"
+        },
+        {
+          "key": 27100281,
+          "text": "日月盈仄云月包"
+        },
+        {
+          "key": 27100561,
+          "text": "日月盈仄神迹包"
+        },
+        {
+          "key": 27101741,
+          "text": "日月盈仄春声包"
+        },
+        {
+          "key": 27101751,
+          "text": "日月盈仄超值神降包"
+        },
+        {
+          "key": 27101761,
+          "text": "日月盈仄豪华神降包"
+        },
+        {
+          "key": 27101771,
+          "text": "日月盈仄精卫专属神降包"
+        },
+        {
+          "key": 27204001,
+          "text": "日月盈仄复刻礼包"
+        },
+        {
+          "key": 27204011,
+          "text": "日月盈仄补给包"
+        },
+        {
+          "key": 27204021,
+          "text": "日月盈仄特惠包"
+        },
+        {
+          "key": 27204031,
+          "text": "日月盈仄组合包"
+        },
+        {
+          "key": 27204041,
+          "text": "日月盈仄期遇礼包"
+        },
+        {
+          "key": 27204051,
+          "text": "日月盈仄豪华包"
+        },
+        {
+          "key": 27204061,
+          "text": "日月盈仄补给礼"
+        },
+        {
+          "key": 27204071,
+          "text": "日月盈仄绮石礼包"
+        },
+        {
+          "key": 27204901,
+          "text": "日月盈仄复刻每日特惠"
+        },
+        {
+          "key": 27204911,
+          "text": "日月盈仄复刻倾情礼包"
+        },
+        {
+          "key": 27204921,
+          "text": "日月盈仄复刻许愿特惠一"
+        },
+        {
+          "key": 27204931,
+          "text": "日月盈仄复刻许愿特惠二"
+        },
+        {
+          "key": 27204941,
+          "text": "日月盈仄复刻期遇礼包"
+        },
+        {
+          "key": 27204951,
+          "text": "日月盈仄复刻许愿特惠三"
+        },
+        {
+          "key": 27204961,
+          "text": "日月盈仄复刻绮石礼包"
+        },
+        {
+          "key": 27204971,
+          "text": "日月盈仄复刻因果补给"
+        },
+        {
+          "key": 29000007,
+          "text": "【日月盈仄复刻-日月盈仄】"
+        },
+        {
+          "key": 29135001,
+          "text": "【日月盈仄】"
+        },
+        {
+          "key": 29135002,
+          "text": "【日月盈仄】一只黑狐狸路过"
+        },
+        {
+          "key": 29135003,
+          "text": "【日月盈仄】日御之庭使者降临"
+        },
+        {
+          "key": 29135004,
+          "text": "【日月盈仄】世上的另一个我"
+        },
+        {
+          "key": 29135005,
+          "text": "【日月盈仄】狐之饵"
+        },
+        {
+          "key": 50009023,
+          "text": "日月盈仄"
+        },
+        {
+          "key": 212150121,
+          "text": "参与活动 日月盈仄 解锁"
+        }
+      ],
+      "sections": [],
+      "items": [
+        {
+          "id": 1237983,
+          "texts": [
+            [
+              "DescID",
+              "可在影域交易所兑换各种商品，通过日月盈仄相关活动获得。"
+            ]
+          ]
+        },
+        {
+          "id": 1237989,
+          "texts": [
+            [
+              "DescID",
+              "可在影域交易所兑换各种商品，通过日月盈仄相关活动获得。"
+            ]
+          ]
+        },
+        {
+          "id": 1260007,
+          "texts": [
+            [
+              "HistoryID",
+              "通过活动“日月盈仄”影域交易所兑换获得"
+            ]
+          ]
+        },
+        {
+          "id": 1260022,
+          "texts": [
+            [
+              "HistoryID",
+              "“日月盈仄”活动礼包获得"
+            ]
+          ]
+        },
+        {
+          "id": 1290101,
+          "texts": [
+            [
+              "DescID",
+              "用于解锁【日月盈仄】剧情章节\n——一只黑狐狸路过"
+            ]
+          ]
+        },
+        {
+          "id": 1290102,
+          "texts": [
+            [
+              "DescID",
+              "用于解锁【日月盈仄】剧情章节\n——一只黑狐狸路过"
+            ]
+          ]
+        },
+        {
+          "id": 1290103,
+          "texts": [
+            [
+              "DescID",
+              "用于解锁【日月盈仄】剧情章节\n——一只黑狐狸路过"
+            ]
+          ]
+        },
+        {
+          "id": 1290104,
+          "texts": [
+            [
+              "DescID",
+              "用于解锁【日月盈仄】剧情章节\n——一只黑狐狸路过"
+            ]
+          ]
+        },
+        {
+          "id": 1290105,
+          "texts": [
+            [
+              "DescID",
+              "用于解锁【日月盈仄】剧情章节\n——一只黑狐狸路过"
+            ]
+          ]
+        },
+        {
+          "id": 1290106,
+          "texts": [
+            [
+              "DescID",
+              "用于解锁【日月盈仄】剧情章节\n——一只黑狐狸路过"
+            ]
+          ]
+        },
+        {
+          "id": 1290107,
+          "texts": [
+            [
+              "DescID",
+              "用于解锁【日月盈仄】剧情章节\n——日御之庭使者降临"
+            ]
+          ]
+        },
+        {
+          "id": 1290108,
+          "texts": [
+            [
+              "DescID",
+              "用于解锁【日月盈仄】剧情章节\n——日御之庭使者降临"
+            ]
+          ]
+        },
+        {
+          "id": 1290109,
+          "texts": [
+            [
+              "DescID",
+              "用于解锁【日月盈仄】剧情章节\n——日御之庭使者降临"
+            ]
+          ]
+        },
+        {
+          "id": 1290110,
+          "texts": [
+            [
+              "DescID",
+              "用于解锁【日月盈仄】剧情章节\n——日御之庭使者降临"
+            ]
+          ]
+        },
+        {
+          "id": 1290111,
+          "texts": [
+            [
+              "DescID",
+              "用于解锁【日月盈仄】剧情章节\n——日御之庭使者降临"
+            ]
+          ]
+        },
+        {
+          "id": 1290112,
+          "texts": [
+            [
+              "DescID",
+              "用于解锁【日月盈仄】剧情章节\n——日御之庭使者降临"
+            ]
+          ]
+        },
+        {
+          "id": 1290113,
+          "texts": [
+            [
+              "DescID",
+              "用于解锁【日月盈仄】剧情章节\n——世上的另一个我"
+            ]
+          ]
+        },
+        {
+          "id": 1290114,
+          "texts": [
+            [
+              "DescID",
+              "用于解锁【日月盈仄】剧情章节\n——世上的另一个我"
+            ]
+          ]
+        },
+        {
+          "id": 1290115,
+          "texts": [
+            [
+              "DescID",
+              "用于解锁【日月盈仄】剧情章节\n——世上的另一个我"
+            ]
+          ]
+        },
+        {
+          "id": 1290116,
+          "texts": [
+            [
+              "DescID",
+              "用于解锁【日月盈仄】剧情章节\n——世上的另一个我"
+            ]
+          ]
+        },
+        {
+          "id": 1290117,
+          "texts": [
+            [
+              "DescID",
+              "用于解锁【日月盈仄】剧情章节\n——世上的另一个我"
+            ]
+          ]
+        },
+        {
+          "id": 1290118,
+          "texts": [
+            [
+              "DescID",
+              "用于解锁【日月盈仄】剧情章节\n——世上的另一个我"
+            ]
+          ]
+        },
+        {
+          "id": 1290119,
+          "texts": [
+            [
+              "DescID",
+              "用于解锁【日月盈仄】剧情章节\n——狐之饵"
+            ]
+          ]
+        },
+        {
+          "id": 1290120,
+          "texts": [
+            [
+              "DescID",
+              "用于解锁【日月盈仄】剧情章节\n——狐之饵"
+            ]
+          ]
+        },
+        {
+          "id": 1290121,
+          "texts": [
+            [
+              "DescID",
+              "用于解锁【日月盈仄】剧情章节\n——狐之饵"
+            ]
+          ]
+        },
+        {
+          "id": 1290122,
+          "texts": [
+            [
+              "DescID",
+              "用于解锁【日月盈仄】剧情章节\n——狐之饵"
+            ]
+          ]
+        },
+        {
+          "id": 1290123,
+          "texts": [
+            [
+              "DescID",
+              "用于解锁【日月盈仄】剧情章节\n——狐之饵"
+            ]
+          ]
+        },
+        {
+          "id": 1290124,
+          "texts": [
+            [
+              "DescID",
+              "用于解锁【日月盈仄】剧情章节\n——狐之饵"
+            ]
+          ]
+        },
+        {
+          "id": 1290189,
+          "texts": [
+            [
+              "DescID",
+              "用于解锁日月盈仄复刻中的影域交易所"
+            ]
+          ]
+        },
+        {
+          "id": 1290190,
+          "texts": [
+            [
+              "DescID",
+              "用于解锁日月盈仄复刻中的影域交易所"
+            ]
+          ]
+        },
+        {
+          "id": 1290191,
+          "texts": [
+            [
+              "DescID",
+              "用于解锁日月盈仄复刻中的影域交易所"
+            ]
+          ]
+        },
+        {
+          "id": 1290192,
+          "texts": [
+            [
+              "DescID",
+              "用于解锁日月盈仄复刻中的影域交易所"
+            ]
+          ]
+        },
+        {
+          "id": 1290236,
+          "texts": [
+            [
+              "DescID",
+              "用于解锁日月盈仄复刻中的影域交易所"
+            ]
+          ]
+        },
+        {
+          "id": 1290237,
+          "texts": [
+            [
+              "DescID",
+              "用于解锁日月盈仄复刻中的影域交易所"
+            ]
+          ]
+        },
+        {
+          "id": 1290238,
+          "texts": [
+            [
+              "DescID",
+              "用于解锁日月盈仄复刻中的影域交易所"
+            ]
+          ]
+        },
+        {
+          "id": 1290239,
+          "texts": [
+            [
+              "DescID",
+              "用于解锁日月盈仄复刻中的影域交易所"
+            ]
+          ]
+        }
+      ],
+      "unlock_section_references": [
+        {
+          "language_key": 212150121,
+          "text": "参与活动 日月盈仄 解锁",
+          "derived_section_id": 2121501,
+          "section": {
+            "SectionID": 2121501,
+            "NextSectionID": 2121502,
+            "SectionNumberID": 2000001,
+            "NumerChina": "第一幕",
+            "Maps": [
+              2221501
+            ],
+            "ChapterID": 2021501,
+            "Type": {
+              "value": 4,
+              "enum": "E_PointOfView"
+            },
+            "Name": 21215011,
+            "NameChina": "雷鸣之时",
+            "NameMore": 21215012,
+            "NameMoreChina": "青色的使者来访四神，深邃的黑暗在阴影中蠢动。\r\n——而在下，有个计划……",
+            "LevelDisplay": 1,
+            "RecommendedAbility": 2000,
+            "RecommendedLevel": 35,
+            "Profession": 301,
+            "EnemyDisplay": [
+              3010,
+              3011
+            ],
+            "DroopLimit2": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18,
+              19
+            ],
+            "HeroLimit": 1015,
+            "WinCondition": {
+              "value": 2,
+              "enum": "E_BlockComplete"
+            },
+            "WinParam": [
+              1615016,
+              500
+            ],
+            "FailTips": [
+              {
+                "Items": [
+                  13101701,
+                  13101702,
+                  13101703,
+                  13101704
+                ]
+              },
+              {
+                "Items": [
+                  13101801,
+                  13101802,
+                  13101803,
+                  13101804,
+                  13101805
+                ]
+              },
+              {
+                "Items": [
+                  13101901,
+                  13101902,
+                  13101903,
+                  13101904
+                ]
+              }
+            ],
+            "Open": 150,
+            "ManualValue": 6,
+            "FirVReward": [
+              730001,
+              734501
+            ],
+            "VReward": [
+              730000
+            ],
+            "IsShowWinTips": {
+              "value": 1,
+              "enum": "E_Yes"
+            },
+            "Favorability": 30,
+            "PlotReviewBackground": "ChapterBG/ZhangJieChangJing_3BG",
+            "PlotReviewStoryID": [
+              1615001,
+              1615016
+            ]
+          }
+        }
+      ]
+    },
+    "珠雀绮馔": {
+      "texts": [
+        {
+          "key": 12600303,
+          "text": "“珠雀绮馔”活动中收集食谱残页获得"
+        },
+        {
+          "key": 13102434,
+          "text": "【珠雀绮馔】活动将在{0}年{1}月{2}日开启，敬请期待！"
+        },
+        {
+          "key": 13430111,
+          "text": "珠雀绮馔"
+        },
+        {
+          "key": 27000931,
+          "text": "珠雀绮馔天和礼包"
+        },
+        {
+          "key": 29000006,
+          "text": "【珠雀绮馔-龙游雀牌】"
+        },
+        {
+          "key": 50009018,
+          "text": "珠雀绮馔"
+        },
+        {
+          "key": 216041111,
+          "text": "参与活动 珠雀绮馔 解锁"
+        },
+        {
+          "key": 216042111,
+          "text": "参与活动 珠雀绮馔 解锁"
+        }
+      ],
+      "sections": [],
+      "items": [
+        {
+          "id": 1260030,
+          "texts": [
+            [
+              "HistoryID",
+              "“珠雀绮馔”活动中收集食谱残页获得"
+            ]
+          ]
+        }
+      ],
+      "unlock_section_references": [
+        {
+          "language_key": 216041111,
+          "text": "参与活动 珠雀绮馔 解锁",
+          "derived_section_id": 2160411,
+          "section": {
+            "SectionID": 2160411,
+            "SectionNumberID": 2000001,
+            "NumerChina": "第一幕",
+            "Maps": [
+              2260411
+            ],
+            "ChapterID": 2060410,
+            "Type": {
+              "value": 14,
+              "enum": "E_ActivityStory"
+            },
+            "Name": 21604111,
+            "NameChina": "牌过三巡",
+            "NameMore": 21604112,
+            "NameMoreChina": "除夕之夜，四神学院的来访者是……",
+            "StageIcon": "",
+            "LevelDisplay": 1,
+            "RecommendedAbility": 3400,
+            "RecommendedLevel": 17,
+            "DifficultyLevel": {
+              "value": 1,
+              "enum": "E_Difficulty1"
+            },
+            "Profession": 302,
+            "EnemyDisplay": [
+              3052,
+              3053,
+              3054,
+              4003
+            ],
+            "DroopLimit2": [
+              6,
+              7,
+              8
+            ],
+            "OpenType": {
+              "value": 1,
+              "enum": "E_Level"
+            },
+            "OpenParam": 17,
+            "WinCondition": {
+              "value": 5,
+              "enum": "E_MonsterTideSuccess"
+            },
+            "WinParam": [
+              70016,
+              3000
+            ],
+            "FailCondition": {
+              "value": 1,
+              "enum": "E_MonsterTideFail"
+            },
+            "FailParam": [
+              70016,
+              3000
+            ],
+            "FailTips": [
+              {
+                "Items": [
+                  13101701,
+                  13101702,
+                  13101703,
+                  13101704
+                ]
+              },
+              {
+                "Items": [
+                  13101801,
+                  13101802,
+                  13101803,
+                  13101804,
+                  13101805
+                ]
+              },
+              {
+                "Items": [
+                  13101901,
+                  13101902,
+                  13101903,
+                  13101904
+                ]
+              }
+            ],
+            "Open": 150,
+            "ManualValue": 18,
+            "FirVReward": [
+              776167,
+              784020
+            ],
+            "VReward": [
+              776155
+            ],
+            "DropValueID": 10660211,
+            "AssistType": {
+              "value": 2,
+              "enum": "E_Friend"
+            },
+            "IsShowWinTips": {
+              "value": 1,
+              "enum": "E_Yes"
+            },
+            "Favorability": 3
+          }
+        },
+        {
+          "language_key": 216042111,
+          "text": "参与活动 珠雀绮馔 解锁",
+          "derived_section_id": 2160421,
+          "section": {
+            "SectionID": 2160421,
+            "SectionNumberID": 2000002,
+            "NumerChina": "第二幕",
+            "Maps": [
+              2260421
+            ],
+            "ChapterID": 2060420,
+            "Type": {
+              "value": 14,
+              "enum": "E_ActivityStory"
+            },
+            "Name": 21604211,
+            "NameChina": "谁在出千",
+            "NameMore": 21604212,
+            "NameMoreChina": "牌过三巡，出千的人究竟是谁？",
+            "StageIcon": "",
+            "LevelDisplay": 1,
+            "RecommendedAbility": 3400,
+            "RecommendedLevel": 17,
+            "DifficultyLevel": {
+              "value": 2,
+              "enum": "E_Difficulty2"
+            },
+            "Profession": 302,
+            "EnemyDisplay": [
+              3010,
+              3011,
+              4005,
+              4006,
+              5937
+            ],
+            "DroopLimit2": [
+              6,
+              7,
+              8
+            ],
+            "OpenType": {
+              "value": 1,
+              "enum": "E_Level"
+            },
+            "OpenParam": 17,
+            "WinCondition": {
+              "value": 1,
+              "enum": "E_UnitDead"
+            },
+            "WinParam": [
+              5937,
+              3000
+            ],
+            "FailTips": [
+              {
+                "Items": [
+                  13101701,
+                  13101702,
+                  13101703,
+                  13101704
+                ]
+              },
+              {
+                "Items": [
+                  13101801,
+                  13101802,
+                  13101803,
+                  13101804,
+                  13101805
+                ]
+              },
+              {
+                "Items": [
+                  13101901,
+                  13101902,
+                  13101903,
+                  13101904
+                ]
+              }
+            ],
+            "Open": 150,
+            "ManualValue": 18,
+            "FirVReward": [
+              776168,
+              784021
+            ],
+            "VReward": [
+              776155
+            ],
+            "DropValueID": 10660211,
+            "AssistType": {
+              "value": 2,
+              "enum": "E_Friend"
+            },
+            "IsShowWinTips": {
+              "value": 1,
+              "enum": "E_Yes"
+            },
+            "Favorability": 3
+          }
+        }
+      ]
+    }
+  },
+  "verification_note": "Section and Story are not the correct recovered table names; SectionTable inspected. Story package contents not fully validated.",
+  "map_verification": "MapInfo decoded; resources not exhaustively load-tested."
+}

@@ -112,6 +112,9 @@ CORE_SCHEMAS = {
 }
 from x2server.messages.college import COLLEGE_SCHEMAS
 CORE_SCHEMAS.update(LOBBY_SCHEMAS)
+from x2server.messages.activity import ACTIVITY_SCHEMAS
+CORE_SCHEMAS.update({name: schema for name, schema in ACTIVITY_SCHEMAS.items()
+                     if name.startswith(('C2L_', 'L2C_'))})
 CORE_SCHEMAS.update(COLLEGE_SCHEMAS)
 CORE_SCHEMAS.update(ACHIEVEMENT_SCHEMAS)
 CORE_SCHEMAS.update(MEDAL_SCHEMAS)
@@ -150,6 +153,10 @@ BASE_INFO = ProtoSchema("BaseInfoProto", (
     ProtoField(11, "SeniorJewelChip", FieldKind.INT32),
     ProtoField(22, "ChallengeCoin", FieldKind.INT32),
     ProtoField(23, "PowerOfLight", FieldKind.INT32),
+    # RookieSignModule.CheckTimeEnble reads this before ActivityModule chooses
+    # its landing tab. Zero means locked, not expired; old accounts must carry
+    # their real start so the client can fall back to DivinationPage.
+    ProtoField(26, "SignInStartTime", FieldKind.INT64),
     ProtoField(28, "WishCrystal", FieldKind.INT32),
     ProtoField(29, "StarSkillPoint", FieldKind.INT32),
     ProtoField(30, "FriendCoin", FieldKind.INT32),
@@ -160,6 +167,16 @@ BASE_INFO = ProtoSchema("BaseInfoProto", (
     ProtoField(43, "AICoin", FieldKind.INT32),
     ProtoField(44, "AIPointAutoAdd", FieldKind.INT32),
     ProtoField(47, "SkinCoupon", FieldKind.INT32),
+    ProtoField(46, "ActivityCoin", FieldKind.INT32),
+    ProtoField(49, "ShuangHanCoin1", FieldKind.INT32),
+    ProtoField(50, "ShuangHanCoin2", FieldKind.INT32),
+    ProtoField(51, "ShuangHanCoin3", FieldKind.INT32),
+    ProtoField(52, "ShuangHanCoin4", FieldKind.INT32),
+    ProtoField(58, "NewYearCoin", FieldKind.INT32),
+    ProtoField(62, "AoxilisiCoin", FieldKind.INT32),
+    ProtoField(63, "MainActivityCoin", FieldKind.INT32),
+    ProtoField(65, "BattlepassShopCoin", FieldKind.INT32),
+    ProtoField(73, "MemoryPoint", FieldKind.INT32),
     ProtoField(56, "GuildScore", FieldKind.INT32),
     ProtoField(59, "RMBCrystal", FieldKind.INT32),
     ProtoField(60, "JewelCoin", FieldKind.INT32),

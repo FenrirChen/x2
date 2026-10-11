@@ -12,6 +12,9 @@ from .service import BootstrapService, HTTPResponse, RecoveredBootstrapService
 
 LOGGER = logging.getLogger("x2.bootstrap.http")
 MAX_REQUEST_BODY = 64 * 1024
+# /save-manager/import uploads whole .x2save containers; the cap matches the
+# save-manager validation limit instead of the bootstrap JSON body limit.
+MAX_SAVE_MANAGER_BODY = 96 * 1024 * 1024 + 64 * 1024
 
 
 def _handler_for(
@@ -37,6 +40,9 @@ def _handler_for(
             Leaving inbound bytes unread can make Windows close the socket with a reset,
             causing the client to lose an otherwise valid response.
             """
+            route = self.path.split("?", 1)[0]
+            max_body = (MAX_SAVE_MANAGER_BODY if route.startswith("/save-manager/")
+                        else MAX_REQUEST_BODY)
             raw_length = self.headers.get("Content-Length", "0")
             try:
                 length = int(raw_length)
@@ -48,7 +54,7 @@ def _handler_for(
                 return HTTPResponse(
                     400, "application/json; charset=utf-8", b'{"error":"bad_content_length"}\n'
                 )
-            if length > MAX_REQUEST_BODY:
+            if length > max_body:
                 return HTTPResponse(
                     413, "application/json; charset=utf-8", b'{"error":"request_too_large"}\n'
                 )

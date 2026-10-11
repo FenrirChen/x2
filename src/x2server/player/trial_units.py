@@ -16,13 +16,24 @@ def trial_hero(unit_id, wire_id):
         return None
     prototype = next((r for r in progression()['hero_unlock'] if r['hero_id'] == row['UnitID']), {})
     levels = row.get('SkillLevel', [])
-    return {'id': wire_id, 'battle_base_id': row['UnitID'], 'trial_unit': unit_id,
+    # TrialHeroID is a distinct UnitBase/PlayerAttrib combat identity. UnitID
+    # identifies the normal hero for presentation/artifact lookup only.
+    skill_ids = catalog()['unit_skills'][str(unit_id)]
+    skin = row.get('AppearanceID', 0)
+    # A battle skin replaces ActionFileID through Appearance.UnitBaseID.
+    # Normal default skins would replace trial-specific attacks with the
+    # normal hero's actions (Thetis projectile range 1600 -> 800).
+    if skin and catalog()['appearance_units'].get(str(skin)) != unit_id:
+        skin = 0
+    return {'id': unit_id, 'battle_base_id': unit_id, 'trial_unit': unit_id,
         'state': 2, 'level': row['HeroLevel'], 'star': row['HeroStars'], 'exp': 0,
-        'skills': [{'id': skill, 'level': levels[i] if i < len(levels) else 1}
-                   for i, skill in enumerate(prototype.get('initial_skills', []))],
+        'skills': [{'id': skill, 'level': levels[i]}
+                   for i, skill in enumerate(skill_ids[:len(levels)]) if skill > 0],
         'god_equip': ({'id': prototype['artifact_id'], 'star': row.get('ArtifactStar', 0),
-                      'level': row.get('ArtifactLevel', 0)} if prototype.get('artifact_id') else None),
-        'trial_skin': row.get('AppearanceID', 0)}
+                      'level': row.get('ArtifactLevel', 0),
+                      'jewels': {str(slot): item for slot, item in enumerate(row.get('WeaponGems', [])) if item > 0}}
+                     if prototype.get('artifact_id') else None),
+        'trial_skin': skin}
 
 
 def equipment(hero):

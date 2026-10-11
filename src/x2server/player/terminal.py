@@ -4,6 +4,7 @@ from functools import lru_cache
 from importlib.resources import files
 import json
 import time
+from datetime import datetime, timezone, timedelta
 
 from x2server.messages.terminal import (BLOG_BOX, BLOG_GROUP, CHAT_GROUP, LETTER_BOX,
                                         LETTER_DATA, LETTER_GROUP, PAIR, TERMINAL_SCHEMAS)
@@ -35,13 +36,27 @@ class TerminalService:
     def _owned(self, snapshot):
         return {hero["id"]: hero for hero in snapshot.get("heroes", []) if hero.get("state") == 2}
 
-    @staticmethod
-    def _available(row, hero):
+    def _available(self, row, hero, player_id=None, snapshot=None):
         trigger = row.get("TriggerType", {}).get("enum")
         if trigger == "E_FavorabilityLevel":
-            return favor_state(hero, initial_favor_levels().get(hero["id"], 1))["level"] >= row.get("TypeNumber", 1)
-        # Other triggers depend on calendar, section, or choice events which
-        # the current player snapshot does not yet prove occurred.
+            hero_id = hero.get('id', row.get('HeroID'))
+            return favor_state(hero, initial_favor_levels().get(hero_id, 1))["level"] >= row.get("TypeNumber", 1)
+        if trigger == 'E_SectionPass' and player_id is not None:
+            return bool(self.store.db.execute('SELECT 1 FROM economy_clears WHERE player_id=? AND section_id=?',
+                (player_id, row.get('TypeNumber'))).fetchone())
+        if trigger == 'E_SpecialDay':
+            today = int(datetime.fromtimestamp(self.clock(), timezone(timedelta(hours=8))).strftime('%Y%m%d'))
+            return 19000101 <= row.get('TypeNumber', 0) <= today
+        if trigger == 'E_OptionEffect' and snapshot:
+            for progress in snapshot.get('terminal', {}).get('letters', {}).values():
+                for letter, reply in progress.get('replies', {}).items():
+                    source = self.letters.get(int(letter), {})
+                    options = source.get('ReplyContent', [])
+                    if reply in options:
+                        effects = source.get('OptionEffectID', [])
+                        index = options.index(reply)
+                        if index < len(effects) and effects[index] == row.get('TypeNumber'):
+                            return True
         return False
 
     @staticmethod
@@ -55,9 +70,19 @@ class TerminalService:
         seen = set(chain)
         while chain:
             current = self.letters.get(chain[-1])
-            if not current or current.get("ReplyContent"):
+            if not current:
                 break
-            following = [value for value in current.get("NextPrivateMailID", [])
+            options = current.get("ReplyContent", [])
+            selected = progress.get("replies", {}).get(str(chain[-1]))
+            if any(options):
+                if selected not in options:
+                    break
+                index = options.index(selected)
+                following = current.get("NextPrivateMailID", [])[index:index + 1]
+            else:
+                # The official table uses [0] as a no-choice sentinel.
+                following = current.get("NextPrivateMailID", [])
+            following = [value for value in following
                          if value in self.letters and self.letters[value]["GroupID"] == current["GroupID"]]
             if len(following) != 1 or following[0] in seen:
                 break
@@ -66,7 +91,7 @@ class TerminalService:
             changed = True
         return changed
 
-    def _letter_box(self, hero_id, snapshot):
+    def _letter_box(self, hero_id, snapshot, player_id=None):
         hero = self._owned(snapshot).get(hero_id)
         if not hero:
             return None
@@ -74,13 +99,14 @@ class TerminalService:
         groups = []
         last_time = 0
         for root in self.roots:
-            if root["HeroID"] != hero_id or not self._available(root, hero):
+            if root["HeroID"] != hero_id or not (state.get(str(root['GroupID'])) or self._available(root, hero, player_id, snapshot)):
                 continue
             group_id = root["GroupID"]
             progress = state.get(str(group_id), {})
-            chain = progress.get("chain", [root["PrivateMailID"]])
-            if progress:
-                self._extend_auto_chain(progress)
+            if not progress:
+                progress = {"chain": [root["PrivateMailID"]], "replies": {}, "start": int(self.clock())}
+            self._extend_auto_chain(progress)
+            chain = progress["chain"]
             valid = [letter_id for letter_id in chain if letter_id in self.letters and
                      self.letters[letter_id]["GroupID"] == group_id]
             if not valid:
@@ -96,18 +122,18 @@ class TerminalService:
             return None
         return LETTER_BOX.encode({"heroID": hero_id, "groups": groups, "lastReplyTime": last_time})
 
-    def _letter_boxes(self, snapshot):
+    def _letter_boxes(self, snapshot, player_id=None):
         return [box for hero_id in sorted(self._owned(snapshot))
-                if (box := self._letter_box(hero_id, snapshot)) is not None]
+                if (box := self._letter_box(hero_id, snapshot, player_id)) is not None]
 
-    def _blog_box(self, hero_id, snapshot):
+    def _blog_box(self, hero_id, snapshot, player_id=None):
         hero = self._owned(snapshot).get(hero_id)
         if not hero:
             return None
         state = self._state(snapshot)["blogs"]
         groups = []
         for blog_id, row in sorted(self.blogs.items()):
-            if row["HeroID"] != hero_id or not self._available(row, hero):
+            if row["HeroID"] != hero_id or not self._available(row, hero, player_id, snapshot):
                 continue
             progress = state.get(str(blog_id), {})
             chats = []
@@ -122,9 +148,9 @@ class TerminalService:
             return None
         return BLOG_BOX.encode({"heroID": hero_id, "blogGroup": groups})
 
-    def _blog_boxes(self, snapshot):
+    def _blog_boxes(self, snapshot, player_id=None):
         return [box for hero_id in sorted(self._owned(snapshot))
-                if (box := self._blog_box(hero_id, snapshot)) is not None]
+                if (box := self._blog_box(hero_id, snapshot, player_id)) is not None]
 
     def _blocked(self, snapshot):
         return [PAIR.encode({"Key": int(hero), "Value": int(value)})
@@ -145,12 +171,16 @@ class TerminalService:
         state = self._state(snapshot)
         if name == "C2L_QueryPrivateLetter":
             kind = req.get("type", 0)
+            before = json.dumps(state, sort_keys=True)
+            boxes = self._letter_boxes(snapshot, player_id) if kind in (0, 1) else []
+            if json.dumps(state, sort_keys=True) != before:
+                self._save(player_id, snapshot)
             return OutboundMessage(reply, {"code": 10,
-                "letterBoxs": self._letter_boxes(snapshot) if kind in (0, 1) else [],
+                "letterBoxs": boxes,
                 "systemLetters": [], "blcakHeros": self._blocked(snapshot)})
         if name == "C2L_QueryNpcBlog":
             return OutboundMessage(reply, {"code": 10,
-                "blogBox": self._blog_boxes(snapshot), "blcakHeros": self._blocked(snapshot)})
+                "blogBox": self._blog_boxes(snapshot, player_id), "blcakHeros": self._blocked(snapshot)})
         if name == "C2L_AddBlackNpc":
             hero_id = req.get("heroID", 0)
             if hero_id not in self._owned(snapshot):
@@ -164,8 +194,9 @@ class TerminalService:
             row = self.letters.get(letter_id)
             root = next((r for r in self.roots if r["GroupID"] == (row or {}).get("GroupID")), None)
             hero = self._owned(snapshot).get(hero_id)
-            success = bool(row and root and hero and row["HeroID"] == hero_id and
-                           self._available(root, hero) and
+            success = bool(row and root and hero and root["HeroID"] == hero_id and
+                           row.get("HeroID", root["HeroID"]) == hero_id and
+                           (state['letters'].get(str(root['GroupID'])) or self._available(root, hero, player_id, snapshot)) and
                            (name != "C2L_ReplyLetter" or req.get("groupID") == row["GroupID"]))
             if success:
                 progress = state["letters"].setdefault(str(row["GroupID"]),
@@ -173,9 +204,10 @@ class TerminalService:
                 self._extend_auto_chain(progress)
                 success = letter_id in progress["chain"]
             if success and name == "C2L_ReplyLetter":
-                options = [int(option) for option in row.get("ReplyContent", []) if option]
+                options = row.get("ReplyContent", [])
                 reply_id = req.get("replyID", 0)
-                success = reply_id in options
+                previous = progress["replies"].get(str(letter_id))
+                success = bool(reply_id and reply_id in options and (previous is None or previous == reply_id))
                 if success:
                     progress["replies"][str(letter_id)] = reply_id
                     index = options.index(reply_id)
@@ -192,7 +224,7 @@ class TerminalService:
             if success:
                 self._save(player_id, snapshot)
             values = {"code": 10 if success else 13,
-                      "letterBox": self._letter_box(hero_id, snapshot) if success else None,
+                      "letterBox": self._letter_box(hero_id, snapshot, player_id) if success else None,
                       "blcakHeros": self._blocked(snapshot)}
             if name == "C2L_ReplyLetter":
                 values.update(heroID=hero_id, groupID=req.get("groupID", 0),
@@ -201,7 +233,7 @@ class TerminalService:
         hero_id, blog_id = req.get("heroID", 0), req.get("groupID", 0)
         row = self.blogs.get(blog_id)
         hero = self._owned(snapshot).get(hero_id)
-        success = bool(row and hero and row["HeroID"] == hero_id and self._available(row, hero))
+        success = bool(row and hero and row["HeroID"] == hero_id and self._available(row, hero, player_id, snapshot))
         if success:
             progress = state["blogs"].setdefault(str(blog_id), {"start": int(self.clock()), "replies": {}})
             if name == "C2L_LikeNpcBlog":
@@ -216,5 +248,5 @@ class TerminalService:
             if success:
                 self._save(player_id, snapshot)
         return OutboundMessage(reply, {"code": 10 if success else 13,
-            "blogBox": self._blog_box(hero_id, snapshot) if success else None,
+            "blogBox": self._blog_box(hero_id, snapshot, player_id) if success else None,
             "blcakHeros": self._blocked(snapshot)})

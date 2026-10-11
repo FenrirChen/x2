@@ -41,6 +41,16 @@ SHOP_CURRENCY_FIELDS = {
     1237923: "SkinCoupon", 1237924: "GuildScore",
     1237925: "JewelCoin", 1237926: "RMBCrystal",
     1237927: "FragmentMoney", 1237928: "FragmentMoney",
+    # Item.EffData -> GameAPI.GetCurrencyNum -> BaseInfoProto. Multiple
+    # item IDs can name the same official currency (e.g. AoxilisiCoin).
+    1237976: "AoxilisiCoin", 1237977: "MemoryPoint",
+    1237978: "AoxilisiCoin", 1237979: "MainActivityCoin",
+    1237981: "MainActivityCoin", 1237982: "AoxilisiCoin",
+    1237984: "NewYearCoin", 1237985: "ShuangHanCoin1",
+    1237986: "ShuangHanCoin2", 1237987: "ShuangHanCoin3",
+    1237988: "ShuangHanCoin4", 1237989: "ActivityCoin",
+    1237980: "BattlepassShopCoin", 1237998: "BattlepassShopCoin",
+    1285001: "BattlepassShopCoin",
 }
 
 
@@ -65,6 +75,8 @@ class LoginService:
             raise ProtocolError("local login authentication failed")
         now = self.clock.now()
         player = self.store.login(self.identity.account_for_player(values["id"]), values["id"], now)
+        if self.economy:
+            self.economy.extra_activity.repair_course_equipment(player['id'])
         if self.mail:
             self.identity.ensure_welcome_mail(player["id"], now)
             self.identity.ensure_daily_login_mail(player["id"], now)
@@ -152,6 +164,7 @@ class LoginService:
             "DailyActivity": snapshot.get("daily_activity", 0),
             "WeekActivity": snapshot.get("week_activity", 0),
             "Birthday": snapshot.get("birthday", 0),
+            "SignInStartTime": int(player.get("created_at") or 0),
             "MainChapter": snapshot.get("main_chapter", 0),
             "MainSection": snapshot.get("main_section", 0),
             "AIPointAutoAdd": int(snapshot.get("star_chart", {}).get("auto_add", False)),
@@ -251,6 +264,10 @@ class LoginService:
                             else EconomyService.POWER_RECOVER_SECONDS)
         pairs = [STRING_PAIR.encode({"key": "PowerBuyNum", "val": "120"}),
                  STRING_PAIR.encode({"key": "PowerRecover", "val": str(recovery_seconds)}),
+                 # Native battle admission defaults to 25*32=800, while the
+                 # bag counter displays 1280. Supply the matching capacity.
+                 STRING_PAIR.encode({"key": "EquipPageLimit", "val": "40"}),
+                 STRING_PAIR.encode({"key": "EquipCellLimit", "val": "32"}),
                  STRING_PAIR.encode({"key": "Energy", "val": "600"})]
         LOGGER.info("server configuration response prepared with %s-second power recovery",
                     recovery_seconds)

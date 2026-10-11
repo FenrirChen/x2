@@ -127,6 +127,11 @@ class X2Connection:
         self.writer.write(packet)
         async with asyncio.timeout(self.settings.write_timeout):
             await self.writer.drain()
+        if response.dispatch_gap:
+            # Native MarsNet.TickMsg abandons the rest of its received batch
+            # when a UI subscriber throws. Keep initialization refreshes in a
+            # separate client tick so unrelated replies cannot be lost.
+            await asyncio.sleep(response.dispatch_gap)
         for push in response.pushes:
             await self.send_response(push, 0)
 

@@ -151,6 +151,26 @@ class ChapterDP:
             self.observe(player, chapter, run, "quality", quality, count, 4)
         self.refresh(player, chapter)
 
+    def report_money_events(self, player, chapter, run, events):
+        """Final client StatsManager totals carried by 316, scoped to this run."""
+        from x2server.messages.battle import CHAPTER_TASK_EVENT
+        subjects = {subject for task in self.chapters.get(str(chapter), {}).get('tasks', [])
+                    if task.get('completeType') == 'E_GetMoneyPer'
+                    for subject in task['completeValues1']}
+        changed = False
+        for raw in events[:512]:
+            event = CHAPTER_TASK_EVENT.decode(raw)
+            # Native GetDPDatas converts E_GetMoney(38) to E_GetMoneyPer(39),
+            # then emits param1=currency, param2=0, num=GetMoneyInGame(...,true).
+            if (event.get('completeType') != 39 or event.get('param1') not in subjects
+                    or event.get('param2', 0) != 0 or not 0 < event.get('num', 0) <= 10**7):
+                continue
+            self.observe(player, chapter, run, 'money', event['param1'], event['num'])
+            changed = True
+        if changed:
+            self.refresh(player, chapter)
+        return changed
+
     def equipment(self, player, chapter, run, instances):
         counts = Counter(i["star"] for i in instances)
         for star, count in counts.items():

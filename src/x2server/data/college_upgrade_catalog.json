@@ -14,7 +14,8 @@
     },
     "CollegeRecipe": {
       "file": "CollegeRecipe_ecb5fd16_5fd7bddd.bytes",
-      "sha256": "f607bd7a2f5a04db7fb1c5e7343cc966acb3fd22f8788b2a428205b0b532d9e4"
+      "sha256": "f607bd7a2f5a04db7fb1c5e7343cc966acb3fd22f8788b2a428205b0b532d9e4",
+      "materialVectorSource": "assets/bin/Data/f879df98cb242e646b5d3b81d45ab4d0"
     },
     "CollegeExplore": {
       "file": "CollegeExplore_abe4748c_da18e67d.bytes",
@@ -14428,7 +14429,7 @@
       ],
       "ItemNum": [
         16,
-        5
+        2
       ],
       "WaitTimes": 8400,
       "Exp": [
@@ -14474,7 +14475,7 @@
       ],
       "ItemNum": [
         25,
-        4
+        2
       ],
       "WaitTimes": 11100,
       "Exp": [
@@ -14522,7 +14523,7 @@
       "ItemNum": [
         36,
         5,
-        3
+        2
       ],
       "WaitTimes": 13800,
       "Exp": [
@@ -14853,7 +14854,7 @@
       ],
       "ItemNum": [
         9,
-        5
+        2
       ],
       "WaitTimes": 6800,
       "Exp": [
@@ -14899,7 +14900,7 @@
       ],
       "ItemNum": [
         16,
-        4
+        2
       ],
       "WaitTimes": 10000,
       "Exp": [
@@ -14945,7 +14946,7 @@
       ],
       "ItemNum": [
         25,
-        3
+        2
       ],
       "WaitTimes": 13200,
       "Exp": [
@@ -15233,7 +15234,7 @@
       "ItemNum": [
         121,
         10,
-        4
+        2
       ],
       "WaitTimes": 32400,
       "Exp": [
@@ -15368,7 +15369,7 @@
       ],
       "ItemNum": [
         16,
-        4
+        2
       ],
       "WaitTimes": 11200,
       "Exp": [
@@ -15414,7 +15415,7 @@
       ],
       "ItemNum": [
         25,
-        4
+        2
       ],
       "WaitTimes": 14700,
       "Exp": [
@@ -15793,7 +15794,7 @@
       ],
       "ItemNum": [
         9,
-        4
+        2
       ],
       "WaitTimes": 8400,
       "Exp": [
@@ -15839,7 +15840,7 @@
       ],
       "ItemNum": [
         16,
-        5
+        2
       ],
       "WaitTimes": 12000,
       "Exp": [
@@ -15933,7 +15934,7 @@
       "ItemNum": [
         36,
         5,
-        3
+        2
       ],
       "WaitTimes": 19200,
       "Exp": [
@@ -16173,7 +16174,7 @@
       "ItemNum": [
         121,
         10,
-        4
+        2
       ],
       "WaitTimes": 39600,
       "Exp": [
@@ -16309,8 +16310,8 @@
       ],
       "ItemNum": [
         25,
-        4,
-        5
+        2,
+        2
       ],
       "WaitTimes": 13800,
       "Exp": [
@@ -16356,7 +16357,7 @@
       ],
       "ItemNum": [
         36,
-        4
+        2
       ],
       "WaitTimes": 18000,
       "Exp": [
@@ -16406,7 +16407,7 @@
         49,
         7,
         2,
-        3
+        2
       ],
       "WaitTimes": 22200,
       "Exp": [
@@ -16741,7 +16742,7 @@
       ],
       "ItemNum": [
         16,
-        4
+        2
       ],
       "WaitTimes": 9600,
       "Exp": [
@@ -16787,7 +16788,7 @@
       ],
       "ItemNum": [
         25,
-        5
+        2
       ],
       "WaitTimes": 13800,
       "Exp": [
@@ -16835,7 +16836,7 @@
       "ItemNum": [
         36,
         2,
-        4
+        2
       ],
       "WaitTimes": 18000,
       "Exp": [
@@ -16883,7 +16884,7 @@
       "ItemNum": [
         49,
         7,
-        3
+        2
       ],
       "WaitTimes": 22200,
       "Exp": [
@@ -17128,7 +17129,7 @@
       "ItemNum": [
         144,
         12,
-        4,
+        2,
         2
       ],
       "WaitTimes": 43200,

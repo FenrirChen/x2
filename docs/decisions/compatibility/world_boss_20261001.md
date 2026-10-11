@@ -1,5 +1,13 @@
 # 主界面时序之门：WorldBoss 恢复
 
+## 2026-10-02 部署日志中的直接战斗连接认证失败
+
+部署日志22:11:26显示415正常返回10，但新连接421被`Boss network authentication rejected`拒绝，token/session均为空。客户端`CheckBossHasMassed(0x136dd7c)`查找的是PlayerData.WorldBossSearch.WorldBoss里的发现记录，非服务端成员报名；`OnClickWorldBossCheckMassed(0x136e4c0)`命中后直接进入`StartJoinWorldBoss(0x1374468)`→独立socket→`JoinBossEnter(0x1e7d754)`→421，不经过417。个人雷达已下发Boss，服务端此前却要求随机票据同时关联world_boss_members，导致新玩家或旧成员记录缺失时认证失败。
+
+修复：票据认证验证随机ID、playerid、Boss可用状态及过期时间，取消成员记录作为先决条件；421 act=1与417使用相同事务报名逻辑，首次创建成员后检查真实拥有队伍、每日次数，并进入FIGHT。已有成员仍执行重入、死亡冷却和队伍绑定规则。预测内部ID、其他玩家票据、无效队伍、次数不足和过期实例均拒绝；未实际进入战斗仍不扣次数，伤害必须绑定未结算UUID。没有按IP放行，没有伪造token。
+
+世界BOSS和战斗相关31项测试通过。回归覆盖415→服务重建→空token/session的421（无417）→125/126入场及重传→伤害及防重→887结算→结算后拒绝伤害；同时覆盖上述拒绝条件。部署主机仍需同步修复文件并重启才能应用，工作区修复不代表远端已更新。
+
 ## 故障与客户端证据
 
 入口是 WorldBossModule，不是 Type 7 周常无尽。实机 407/C2L_WorldBossSearch 原先 unknown、无回包。入口 679 原先 code=208，使客户端显示每天 17–23 点开放。
@@ -36,7 +44,7 @@ tools/analysis/export_world_boss.py 从标准 APK 导出 WorldBossInfo、WorldBo
 
 world_boss_accounts/runs/members/receipts 存储日次数、槽位、问答、最终领奖、共享 Boss、队伍、伤害、绑定 UUID 和请求回执。通过代码创建表，不修改测试玩家的已有存档内容。
 
-独立 C2W 连接验证 game token 或已认证大厅 session。实机确认原生客户端两者均未填写，因此通过已认证大厅查询返回玩家专属、32 字节随机生成的 opaque Boss ID，持久化映射真实 Boss；独立连接必须持有这个 ID、匹配玩家、已大厅报名且 Boss 未过期，才可认证。共享血量仍按内部 Boss ID 聚合，不凭 playerid 或 IP 授权，不记录票据到业务日志。队伍必须是拥有的角色。伤害必须绑定自己的未结算 battle UUID；结算后停止累计。
+独立 C2W 连接验证 game token 或已认证大厅 session。实机确认原生客户端两者均未填写，因此通过已认证大厅查询返回玩家专属、32 字节随机生成的 opaque Boss ID，持久化映射真实 Boss；独立连接必须持有这个 ID、匹配玩家且 Boss 未过期，才可认证。421允许凭该票据首次报名，兼容客户端跳过417的分支。共享血量仍按内部 Boss ID 聚合，不凭 playerid 或 IP 授权，不记录票据到业务日志。队伍必须是拥有的角色。伤害必须绑定自己的未结算 battle UUID；结算后停止累计。
 
 次数在有效 264 战斗请求、绑定 UUID 的实际伤害、或有效 887 结算时确认，同一成员重入不再扣。combat_confirmed 代码迁移根据已保存的 264、887、伤害证据保留真实战斗次数，恢复旧版仅报名/收到 126 但客户端未进战的次数。放弃未进战入场也不扣次。未结算战斗重入复用 UUID，相同队伍的 701 重发允许通过；失败结算后按原始 DeadPenaltyTime=60 秒冷却重试，保留伤害贡献；成功结算后不能重试。查询不推送整份账号数据，避免客户端重复查询。
 

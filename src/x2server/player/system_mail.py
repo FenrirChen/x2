@@ -14,10 +14,33 @@ HERO_CHOICE_BOX = 1290005
 ULTIMATE_CAUSALITY_CARD = 1202014
 SENDER = "解神者 Revival"
 
+ONCE_MAIL_PREFIXES = {
+    'welcome': ('welcome_mail:', 'account_welcome:'),
+    'hero_choice': ('hero_choice_1290005:',),
+    'ultimate_causality': ('ultimate_causality_50:',),
+    'revival_supply': ('revival_supply_200_7200_140:',),
+}
+
+
+def remember_once_mail_history(db, player_id):
+    """Server-owned issuance history survives save replacement and owner changes."""
+    db.execute('''CREATE TABLE IF NOT EXISTS system_mail_issues (
+        player_id INTEGER NOT NULL, kind TEXT NOT NULL,
+        PRIMARY KEY(player_id,kind))''')
+    for row in db.execute('SELECT source_key FROM player_mail WHERE player_id=? AND source_key IS NOT NULL', (player_id,)):
+        for kind, prefixes in ONCE_MAIL_PREFIXES.items():
+            if row[0].startswith(prefixes):
+                db.execute('INSERT OR IGNORE INTO system_mail_issues VALUES (?,?)', (player_id, kind))
+
 
 def insert_system_mail(db, player_id, account_id, kind, now):
     """Call inside the account transaction; UNIQUE source_key owns idempotence."""
     ensure_mail_schema(db)
+    remember_once_mail_history(db, player_id)
+    if kind in ONCE_MAIL_PREFIXES and db.execute(
+            'SELECT 1 FROM system_mail_issues WHERE player_id=? AND kind=?',
+            (player_id, kind)).fetchone():
+        return False
     title = ""
     if kind == "welcome":
         source_key = f"welcome_mail:{account_id}"
@@ -47,10 +70,13 @@ def insert_system_mail(db, player_id, account_id, kind, now):
         if db.execute("SELECT 1 FROM player_mail WHERE player_id=? AND source_key IN (?,?) LIMIT 1",
                       (player_id, source_key, f"account_welcome:{account_id}")).fetchone():
             return False
-    return db.execute("""INSERT OR IGNORE INTO player_mail
+    created = db.execute("""INSERT OR IGNORE INTO player_mail
         (player_id,sender,title,body,created_at,attachments,source_key)
         VALUES (?,?,?,?,?,?,?)""", (player_id, SENDER, title, body, now,
                                 json.dumps(rewards, sort_keys=True), source_key)).rowcount == 1
+    if created and kind in ONCE_MAIL_PREFIXES:
+        db.execute('INSERT OR IGNORE INTO system_mail_issues VALUES (?,?)', (player_id, kind))
+    return created
 
 
 def eligible_accounts(db):

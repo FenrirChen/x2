@@ -158,6 +158,72 @@ def test_boss_list_admission_socket_auth_damage_and_checkout(env):
     assert call(w,socket,'C2W_WorldBossAct',wire,19).values['code']==13
 
 
+def test_native_radar_direct_socket_join_without_417_survives_restart(env):
+    store,economy,ctx=env
+    listing=call(economy.world_boss,ctx,'C2L_QueryWorldBossInfo')
+    boss=INFO.decode(listing.values['bossInfos'][0])
+    assert store.db.execute('SELECT count(*) FROM world_boss_members').fetchone()[0]==0
+    # Native CheckBossHasMassed finds the discovered ID in the radar and
+    # branches directly to StartJoinWorldBoss, without lobby admission 417.
+    economy=EconomyService(store)
+    w=economy.world_boss
+    socket=DispatchContext('remote-native','remote-peer',SessionState('remote-native',''))
+    wire={'bossid':boss['bossId'],'act':1,'playerid':1,'value':[1003,0,0]}
+    joined=call(w,socket,'C2W_WorldBossAct',wire,7)
+    assert joined.values['code']==10 and socket.session.player_id==1
+    assert INFO.decode(joined.values['bossInfo'])['state']==2
+    assert call(w,socket,'C2W_WorldBossAct',wire,7).values==joined.values
+    assert store.db.execute('SELECT count(*) FROM world_boss_members').fetchone()[0]==1
+    assert account_state(store,1,w.now())['world_challenges']==0
+    row=economy.entry_catalog.sections[w.bosses[boss['typeId']]['StageID']]
+    values=dict(request(),missionId=row['SectionID'],chapter=row['ChapterID'],sceneId=row['Maps'][0])
+    battle=BattleService(store,economy)
+    entry=asyncio.run(battle.enter(ctx,packet(values,8)))
+    assert entry.values['result']==10
+    assert asyncio.run(battle.enter(ctx,packet(values,8))).values==entry.values
+    hp=w.get_boss(boss['bossId'])['hp']
+    damage=dict(wire,act=3,value=[500])
+    assert call(w,socket,'C2W_WorldBossAct',damage,9).values['code']==10
+    assert call(w,socket,'C2W_WorldBossAct',damage,9).values['code']==10
+    assert w.get_boss(boss['bossId'])['hp']==hp-500
+    assert account_state(store,1,w.now())['world_challenges']==1
+    done=packet({'checkout':CHECKOUT.encode({'sectionId':row['SectionID'],'chapterId':row['ChapterID'],
+        'success':True,'fightTime':120})},name='C2L_CheckoutMainMissionSign',request_id=10)
+    assert asyncio.run(battle.checkout(ctx,done)).values['result']==10
+    assert call(w,socket,'C2W_WorldBossAct',dict(damage,value=[600]),11).values['code']==13
+
+
+@pytest.mark.parametrize('invalid', ['internal_id','foreign_player','invalid_team','exhausted','expired'])
+def test_native_direct_join_keeps_authentication_and_admission_guards(env,invalid):
+    store,economy,ctx=env
+    w=economy.world_boss
+    boss=INFO.decode(call(w,ctx,'C2L_QueryWorldBossInfo').values['bossInfos'][0])
+    wire={'bossid':boss['bossId'],'act':1,'playerid':1,'value':[1003,0,0]}
+    if invalid=='internal_id':
+        wire['bossid']=w.internal_id(boss['bossId'])
+    elif invalid=='foreign_player':
+        wire['playerid']=2
+    elif invalid=='invalid_team':
+        wire['value']=[99999999]
+    elif invalid=='exhausted':
+        with economy.transaction():
+            # Counters are derived from confirmed members, not stored totals.
+            for index in range(w.explore[0]['ChallengeLimitNumber']):
+                old=f'confirmed:{index}'
+                w.create_boss(old,w.bosses[boss['typeId']])
+                store.db.execute("INSERT INTO world_boss_members(boss_id,player_id,team,charged,combat_confirmed) VALUES (?,1,'[1003]',1,1)",(old,))
+    else:
+        with economy.transaction():
+            store.db.execute('UPDATE world_boss_runs SET finish=?',(w.now()-1,))
+    socket=DispatchContext('remote-native','remote-peer',SessionState('remote-native',''))
+    before=account_state(store,1,w.now())
+    members=store.db.execute('SELECT count(*) FROM world_boss_members').fetchone()[0]
+    assert call(w,socket,'C2W_WorldBossAct',wire,7).values['code']==13
+    assert account_state(store,1,w.now())==before
+    assert store.db.execute('SELECT count(*) FROM world_boss_members').fetchone()[0]==members
+    assert store.db.execute('SELECT state FROM world_boss_runs').fetchone()[0]==1
+
+
 def test_native_boss_info_reserved_tag_and_shared_health_push(env):
     assert next(f.number for f in INFO.fields if f.name=='topPlayers')==13
     assert next(f.number for f in INFO.fields if f.name=='selfPlayer')==15

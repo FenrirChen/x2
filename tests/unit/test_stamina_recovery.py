@@ -56,3 +56,6 @@ def test_client_recovery_config_matches_server(env):
         ctx, packet({}, name="C2L_ServerTableConfig")))
     pairs = {r["key"]: r["val"] for r in map(STRING_PAIR.decode, response.values["keyVal"])}
     assert pairs["PowerRecover"] == str(EconomyService.POWER_RECOVER_SECONDS) == "225"
+    capacity = int(pairs['EquipPageLimit']) * int(pairs['EquipCellLimit'])
+    assert capacity == 1280
+    assert 805 < capacity

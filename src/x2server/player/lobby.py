@@ -64,15 +64,6 @@ class LobbyService:
             return OutboundMessage("L2C_UnlockExploreRuin", {
                 "code": 10,
                 "unlockExploreRuin": rows or [UNLOCK_EXPLORE_RUIN.encode({})]})
-        if name == "C2L_QueryWorldBossOpenTime":
-            # Main-screen 时序之门 is WorldBoss, not EndlessWeekly.
-            # WorldBossModule.OnHandleQueryOpenState treats code=10 as Open;
-            # the 17:00-23:00 text is the client's fallback for any other code.
-            # USER_DECISION 2026-10-01: keep this entry open all day.
-            logging.getLogger("x2.lobby").info(
-                "temporal gate WorldBoss open query player=%s policy=always-open",
-                context.session.player_id)
-            return OutboundMessage("L2C_QueryWorldBossOpenTime", {"code": 10})
         if name == "C2L_QueryActivity":
             if not self.sweep_enabled:
                 return OutboundMessage('L2C_QueryActivity', {'code': 10})
@@ -89,6 +80,9 @@ class LobbyService:
                 context.session.player_id, values["actId"], values["actType"])
             return OutboundMessage("L2C_QueryActivity", {"code": 10,
                 "activityData": [ACTIVITY_DATA.encode(values)]})
+        if name == "C2L_QueryWorldBossOpenTime":
+            # USER_DECISION 2026-10-01: temporal gate stays open all day.
+            return OutboundMessage("L2C_QueryWorldBossOpenTime", {"code": 10})
         # These describe a dedicated local account with no online activities.
         states = {
             "C2L_QueryTelInfo": {"code": 10, "telNumber": "", "lastBindTime": 0},

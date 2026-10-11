@@ -28,9 +28,9 @@ from x2server.protocol.registry import CORE_MESSAGE_REGISTRY
 
 # SimpleActivityOptType (protocol/commandx2_messages.md 5294 行):
 #   UNLOCK_FUN=0 / REWARD_MAIN=1 / REWARD_EXTRA=2
-OPT_UNLOCK_FUN = 0
-OPT_REWARD_MAIN = 1
-OPT_REWARD_EXTRA = 2
+OPT_UNLOCK_FUN = 1
+OPT_REWARD_MAIN = 2
+OPT_REWARD_EXTRA = 3
 
 CODE_OK = 10
 CODE_ERROR_OPT = 13
@@ -182,8 +182,8 @@ class ExtraActivityService:
         组的展开走 ``EconomyService.gifts``, 但 ItemType 10 (分部级装备/兽主) 会被
         ``deferred`` 接住而不是抛 ``UnresolvedEconomy``: 一个裸 1240xxx id 直接进奖励
         列表会让客户端断线, 它只能作为 ``equipment_instances`` 实例落地, 再经
-        ``rewardData.rewardEquip`` 下发。星数按 ``player/pending_delivery.py`` 对
-        「固定礼包装备」的同一条口径取 1。
+        ``rewardData.rewardEquip`` 下发。课程兽主星级取原表 GiftShow 对应物品的
+        ItemQuality（4/5/6星），不能用普通物品数量或固定的1星替代。
 
         没有装备工厂、或不是分部级装备的 id 写进 ``pending_rewards`` 记账, 不阻断其余
         奖励 —— 免费列 710050/710051 就是两条这样的装备组, 修好之前它们会让整个等级
@@ -192,20 +192,52 @@ class ExtraActivityService:
         发货与去重交给上游的 ``EconomyService._grant`` (它按 ``(player_id, source)``
         幂等, 并在同一事务里落快照), 不再逐件 ``_credit`` + 手写快照。
         """
-        pending = Counter()
-        rewards = self.economy.gifts(groups, deferred=pending)
+        rewards = Counter()
         factory = getattr(self.economy, "equipment_factory", None)
         specs = []
-        for item, count in sorted(pending.items()):
-            if factory is not None and factory.is_drop_equipment(item):
-                specs.append({"item_id": item, "quantity": count, "star": 1})
-            else:
-                self.store.db.execute(
-                    "INSERT OR IGNORE INTO pending_rewards VALUES (?,?,?,?,?)",
-                    (player_id, source, item, count, "unrecovered activity reward"))
+        for group in groups:
+            pending = Counter()
+            rewards.update(self.economy.gifts([group], deferred=pending))
+            for item, count in sorted(pending.items()):
+                if factory is not None and factory.is_drop_equipment(item):
+                    stars = self.course['equipmentGiftStars'].get(str(group), {})
+                    specs.append({"item_id": item, "quantity": count,
+                                  "star": stars.get(str(item), 1)})
+                else:
+                    self.store.db.execute(
+                        "INSERT OR IGNORE INTO pending_rewards VALUES (?,?,?,?,?)",
+                        (player_id, source, item, count, "unrecovered activity reward"))
         reward_equips = self.economy.materialize_equipment(player_id, marker, specs) if specs else []
         self.economy._grant(player_id, source, rewards)
         return rewards, reward_equips
+
+    def equipment_pushes(self, player_id, equips):
+        # ShowGetAwardItem renders a reward window; it does not synchronize
+        # BagModule.AllEquipDataDic. Send the actual instances separately.
+        return self.economy.pushes(player_id) + ((OutboundMessage(
+            'L2C_EquipUpdate', {'code': CODE_OK, 'equip': equips}),) if equips else ())
+
+    def repair_course_equipment(self, player_id):
+        """Repair identifiable, unenhanced old one-star course grants in place."""
+        changed = []
+        with self.economy.transaction():
+            for index, level in enumerate(self.gates):
+                if level not in self._claimed_levels(player_id, 0):
+                    continue
+                for group in self.course['freeGiftGroups'][index]:
+                    for item, star in self.course['equipmentGiftStars'].get(str(group), {}).items():
+                        rows = self.store.db.execute('''SELECT id FROM equipment_instances
+                            WHERE player_id=? AND type_id=? AND star=1 AND level=0
+                            AND marker LIKE ?''',
+                            (player_id, int(item), f'drop:star-privilege:{player_id}:{level}:%')).fetchall()
+                        for row in rows:
+                            param = self.economy.equipment_factory.roll_param(int(item), star)
+                            self.store.db.execute('UPDATE equipment_instances SET star=?,param=? WHERE id=? AND player_id=?',
+                                (star, json.dumps(param, sort_keys=True), row[0], player_id))
+                            changed.append(row[0])
+        if changed:
+            logging.getLogger('x2.extra_activity').info('course equipment quality repaired player=%s ids=%s', player_id, changed)
+        return changed
 
     # -- 星之特权 (特别课程 100002) ----------------------------------------
 
@@ -290,7 +322,7 @@ class ExtraActivityService:
         return OutboundMessage("L2C_ReciveStarPrivilegeReward", {
             "code": CODE_OK, "privilegeRewardList": self._star_privilege_list(player_id),
             "rewardData": self.economy.reward_bytes(rewards, reward_equips)},
-            pushes=self.economy.pushes(player_id))
+            pushes=self.equipment_pushes(player_id, reward_equips))
 
     def query_star_privilege_info(self) -> OutboundMessage:
         """L2C_QueryStarPrivilegeInfo (724): 本期特权的购买信息。
@@ -307,7 +339,7 @@ class ExtraActivityService:
     def _activity_claimed(self, player_id, track) -> set:
         return {int(r[0]) for r in self.store.db.execute(
             "SELECT level FROM simple_activity_claims WHERE player_id=? AND track=?",
-            (player_id, track))}
+            (player_id, track - 1))}
 
     def _activity_unlocked(self, player_id) -> set:
         return {int(r[0]) for r in self.store.db.execute(
@@ -384,14 +416,16 @@ class ExtraActivityService:
         if index in claimed:
             return OutboundMessage("L2C_SimpleActivityOpt", {"code": CODE_ERROR_OPT})
         gift_id = (gifts if opt == OPT_REWARD_MAIN else extras)[index]
+        # Preserve pre-fix database tracks and grant keys (main=1, extra=2).
+        track = opt - 1
         try:
             with self.economy.transaction():
                 rewards, reward_equips = self._grant_groups(
-                    player_id, [gift_id], f"simple-activity:{player_id}:{opt}:{index}",
-                    f"simple-activity:{player_id}:{opt}:{index}")
+                    player_id, [gift_id], f"simple-activity:{player_id}:{track}:{index}",
+                    f"simple-activity:{player_id}:{track}:{index}")
                 self.store.db.execute(
                     "INSERT OR IGNORE INTO simple_activity_claims VALUES (?,?,?)",
-                    (player_id, opt, index))
+                    (player_id, track, index))
         except UnresolvedEconomy as exc:
             logging.getLogger("x2.extra_activity").warning(
                 "simple activity claim refused player=%s reason=%s", player_id, exc)
@@ -402,7 +436,7 @@ class ExtraActivityService:
         return OutboundMessage("L2C_SimpleActivityOpt", {
             "code": CODE_OK, **self._activity_lists(player_id),
             "rewardData": self.economy.reward_bytes(rewards, reward_equips)},
-            pushes=self.economy.pushes(player_id))
+            pushes=self.equipment_pushes(player_id, reward_equips))
 
     # -- 献祭福利 (限时签到 100003) ----------------------------------------
 
@@ -458,7 +492,7 @@ class ExtraActivityService:
         return OutboundMessage("L2C_ReciveNoviceSign", {
             "code": CODE_OK, "SignCount": slot + 1,
             "rewardData": self.economy.reward_bytes(rewards, reward_equips)},
-            pushes=self.economy.pushes(player_id))
+            pushes=self.equipment_pushes(player_id, reward_equips))
 
     # -- 自选三星 (GameActivity 100005, 890/891) ---------------------------
 
@@ -517,4 +551,4 @@ class ExtraActivityService:
         return OutboundMessage("L2C_ExchangeItemActivity", {
             "code": CODE_OK,
             "rewardData": self.economy.reward_bytes(rewards, reward_equips)},
-            pushes=self.economy.pushes(player_id))
+            pushes=self.equipment_pushes(player_id, reward_equips))

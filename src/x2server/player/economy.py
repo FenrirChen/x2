@@ -916,6 +916,12 @@ class EconomyService:
             self._event(player_id, key, condition_type, value, amount, value2)
 
     def _event(self, player_id, key, condition_type, value, amount, value2=0):
+        activity = getattr(self, 'activity', None)
+        if activity:
+            period = None
+            if key.startswith(('entry:', 'clear:', 'kills:', 'power:')):
+                period = activity.rotation.run_period(player_id, key.split(':')[1])
+            activity.event(player_id, key, condition_type, value, amount, value2, period=period)
         self.ensure_periods(player_id)
         active_kinds = set()
         for row in self.store.db.execute("SELECT kind,start FROM task_periods WHERE player_id=?", (player_id,)).fetchall():
@@ -1002,6 +1008,13 @@ class EconomyService:
             pending = Counter()
             first = not self.store.db.execute(
                 "SELECT 1 FROM economy_clears WHERE player_id=? AND section_id=?", (player_id, section)).fetchone()
+            # USER_DECISION: reset the eight named activities each period.
+            # Only a run explicitly bound by ActivityRotation can override this
+            # gate. Normal stages keep the original lifetime first-clear rule.
+            activity = getattr(self, 'activity', None)
+            activity_period = activity.rotation.run_period(player_id, run_uuid) if activity else None
+            if activity_period:
+                first = not activity.rotation.get(player_id, activity_period, 'clear', section, 0)
             for source, groups in (("NORMAL_CLEAR_FIXED", profile["normal_reward"]),
                                    ("FIRST_CLEAR_FIXED", profile["first_reward"] if first else [])):
                 for group in groups:
@@ -1036,7 +1049,14 @@ class EconomyService:
             for grant in grants:
                 key = "COMPAT_REWARD" if grant.source == "COMPAT_GOLD_DUNGEON" else grant.source
                 sources[key].append(grant.__dict__)
+            if activity_period:
+                extra = activity.runtime.extra_rewards(player_id, run_uuid, section, sum_grants(grants))
+                grants.extend(RewardGrant('EXTRA_DROP', section, run_uuid, item, count,
+                    reason='current activity ExtraDroop/AccountBuff') for item, count in extra.items())
+                sources['EXTRA_DROP'].extend({'item_id': i, 'quantity': n} for i, n in extra.items())
             rewards = self._grant(player_id, f"battle:{run_uuid}", sum_grants(grants))
+            if activity_period:
+                activity.obtained(player_id, activity_period, rewards, f'battle:{run_uuid}')
             if pending:
                 for item, count in pending.items():
                     self.store.db.execute("INSERT OR IGNORE INTO pending_rewards VALUES (?,?,?,?,?)",
@@ -1077,6 +1097,8 @@ class EconomyService:
             (run_uuid, player_id, section, json.dumps(sources, ensure_ascii=False, sort_keys=True),
              json.dumps(blocked, ensure_ascii=False, sort_keys=True), int(time.time())))
         self.store.db.execute("UPDATE economy_runs SET settled=1 WHERE uuid=?", (run_uuid,))
+        if getattr(self, 'activity', None) and section in self.activity.rotation.section_groups:
+            self.activity.complete(player_id, run_uuid, section, success)
         logging.getLogger("x2.rewards").info("RewardSettlement run=%s section=%s sources=%s blocked=%s final_grants=%s",
             run_uuid, section, {k: len(v) for k, v in sources.items()}, blocked, rewards)
         return self.reward_bytes(rewards, reward_equips), reward_equips
@@ -1407,11 +1429,19 @@ class EconomyService:
         if name == "C2L_ItemAll":
             return OutboundMessage(response_name, self.inventory_values(player_id))
         if name == "C2L_QueryMission":
-            return OutboundMessage(response_name, self.mission_values(player_id))
+            # ChapterModule fires a global RefreshPage even while the hidden
+            # ChapterInfoView is being initialized. Client 2.4 can throw there;
+            # let this refresh finish before delivering the following queries.
+            return OutboundMessage(response_name, self.mission_values(player_id), dispatch_gap=0.05)
         if name == "C2L_UnlockStory":
             return self.unlock_story(player_id, request)
         if name in ("C2L_GameTask", "C2L_DailyAndWeekTask"):
             kind = request.get("type", 0)
+            # Only the separately verified activity task types are routed here;
+            # ordinary daily, weekly, challenge and chapter tasks stay below.
+            if kind in (9, 20) and getattr(self, 'activity', None):
+                return OutboundMessage('L2C_GameTask', self.activity.task_values(
+                    player_id, kind, request.get('extraType', 0)))
             if kind == 12:
                 return OutboundMessage("L2C_GameTask", self.endless.task_values(player_id, request.get("chapterId", 2060101)))
             if kind == 7:  # GameTaskType.CHAPTER: the DP the client's chapter gate reads
@@ -1433,6 +1463,7 @@ class EconomyService:
             if len(requests) > 40:
                 raise ProtocolError("too many task claims")
             results = [FINISH_RESULT.encode(
+                self.activity.claim_task(player_id, r.get('taskId', 0), r.get('type', 0), r.get('activityId', 0)) if r.get('type', 0) in (9, 20) and getattr(self, 'activity', None) else
                 self.endless.claim(player_id, r.get("taskId", 0), context.session.session_id + ":" + str(packet.header.request_id)) if r.get("type", 0) == 12 else
                 self.claim_challenge(player_id, r.get("taskId", 0)) if r.get("type", 0) == 3 else
                 self.claim(player_id, r.get("taskId", 0), r.get("type", 0))
@@ -1444,6 +1475,12 @@ class EconomyService:
             # confirmed goods, reject the query before that success-only path.
             return OutboundMessage(response_name, {"code": 13, "shopId": shop})
         if name == "C2L_PickTreasureBox":
+            if request.get('type', 0) in (9, 20) and getattr(self, 'activity', None):
+                try:
+                    rewards = self.activity.claim_task_box(player_id, request.get('activityId', 0), request.get('boxId', -1))
+                    return OutboundMessage(response_name, {'code': 10, **request, 'rewardData': self.reward_bytes(rewards)}, before_response=self.pushes(player_id))
+                except UnresolvedEconomy:
+                    return OutboundMessage(response_name, {'code': 13, **request})
             logging.getLogger("x2.economy").info(
                 "pick treasure box player=%s type=%s box=%s param=%s activity=%s",
                 player_id, request.get("type", 0), request.get("boxId", -1),

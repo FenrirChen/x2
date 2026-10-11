@@ -20,7 +20,9 @@ def catalog():
 
 @lru_cache(maxsize=1)
 def battle_hero_base():
-    return json.loads(files("x2server").joinpath("data/battle_hero_base.json").read_text(encoding="utf-8"))
+    from .trial_units import catalog as trials
+    return {**json.loads(files("x2server").joinpath("data/battle_hero_base.json").read_text(encoding="utf-8")),
+            **trials()['unit_attributes']}
 
 
 @lru_cache(maxsize=1)
@@ -241,16 +243,24 @@ class ProgressionService:
                         event = 7
                         events.append(self.economy.TASK_EVENT_HERO_LEVEL_UP)
                     elif req.get("opt") == 2:
-                        row = next(r for r in catalog()["hero_star"] if r["star"] == hero["star"])
-                        options = {prototype["fragment_item_id"]: row["fragment_count_field"],
-                                   **{r["material_item_id"]:r["material_num"] for r in row["universal_fragment_option"]}}
+                        row = next((r for r in catalog()["hero_star"] if r["star"] == hero["star"]), None)
+                        # The terminal PlayerStage row omits next_star. Reject it
+                        # through the protocol rather than disconnecting the player.
+                        target = next((r for r in catalog()["hero_star"]
+                                       if row and r["star"] == row.get("next_star")), None)
+                        if target is None:
+                            raise UnresolvedEconomy("hero at terminal or unknown stage")
+                        # HeroStarUP.Refresh reads PlayerStage(star + 1): costs
+                        # describe reaching the target stage, not leaving this one.
+                        options = {prototype["fragment_item_id"]: target["fragment_count_field"],
+                                   **{r["material_item_id"]:r["material_num"] for r in target["universal_fragment_option"]}}
                         item = req.get("upstarConsumeItemId",0)
-                        if not row["next_star"] or item not in options:
+                        if item not in options:
                             raise UnresolvedEconomy("invalid star request")
                         costs[item] = options[item]
-                        if hero["star"] < 11 <= row["next_star"]:
+                        if hero["star"] < 11 <= target["star"]:
                             stage_skin_hero = hero["id"]
-                        hero["star"] = row["next_star"]
+                        hero["star"] = target["star"]
                     else:
                         raise UnresolvedEconomy("unrecovered hero operation")
                 else:

@@ -273,7 +273,12 @@ def test_alchemy_energy_and_crystal_speed(game, kind):
     store, clock, repo, _, _ = game
     remaining = repo.load(1)['alchemy']['production_bars'][0]['endTime'] - clock.value
     if kind == 1:
+        state = repo.load(1)
+        state['star_energy'] = 0
+        repo.save(1, state)
         assert send(game, 'MakIngSpeed', seq=2, posIndex=0, type=kind).values['code'] == 22
+        state['star_energy'] = 200
+        repo.save(1, state)
         clock.value += remaining - 100
         remaining = 100
     energy_before = repo.growth_base(1)['starEnergy']
@@ -285,7 +290,7 @@ def test_alchemy_energy_and_crystal_speed(game, kind):
     state = repo.load(1)
     assert state['alchemy']['production_bars'][0]['endTime'] == clock.value
     if kind == 1:
-        assert state['star_energy'] == energy_before - (remaining + 9) // 10
+        assert state['star_energy'] == energy_before - (remaining + 119) // 120
     else:
         recipe = service.alchemy.recipes[rid]
         assert store.get(1)['snapshot']['crystal'] == before - recipe['Pay']

@@ -1,0 +1,189 @@
+[
+  {
+    "file": "0f65cd231b8f4af46a29d280847cbdaa",
+    "id": 2,
+    "name": "Ying_Mian_BG",
+    "size": [
+      1688.0,
+      1004.0
+    ],
+    "pages": [
+      "ui/ui_sakuraend_main"
+    ]
+  },
+  {
+    "file": "2cdd0b34551ec8f449ff81cc65d05b47",
+    "id": 2,
+    "name": "YueXiChuJiu_JuQing_BG",
+    "size": [
+      1024.0,
+      512.0
+    ],
+    "pages": [
+      "ui/ui_yuexichujiu_reprint_juqing",
+      "ui/ui_yuexichujiujuqing"
+    ]
+  },
+  {
+    "file": "54628012479bd5c42b47d7ae7985bdb5",
+    "id": 2,
+    "name": "YingZhiDao_ShangDian_bg",
+    "size": [
+      1628.0,
+      752.0
+    ],
+    "pages": [
+      "ui/ui_sakura_shop",
+      "ui/ui_sakura_task"
+    ]
+  },
+  {
+    "file": "60ad38afee38ba14990307884df04175",
+    "id": 2,
+    "name": "HuoDong_Mask",
+    "size": [
+      1468.0,
+      752.0
+    ],
+    "pages": [
+      "ui/ui_yuexichujiu_reprint_activity"
+    ]
+  },
+  {
+    "file": "783f66167479b25459e1578039292d99",
+    "id": 2,
+    "name": "YueXiChuJiu_RiYueBG",
+    "size": [
+      1336.0,
+      752.0
+    ],
+    "pages": [
+      "ui/ui_yuexichujiu_main",
+      "ui/ui_yuexichujiu_reprint_main"
+    ]
+  },
+  {
+    "file": "908fbcb10cb98114db7b3bc9b1037195",
+    "id": 2,
+    "name": "YingZhiDao_FuBen_BG",
+    "size": [
+      2048.0,
+      892.0
+    ],
+    "pages": [
+      "ui/ui_sakura_section",
+      "ui/ui_sakuraend_section"
+    ]
+  },
+  {
+    "file": "955e637c6adbb5d4abd01881e6c9aaa7",
+    "id": 2,
+    "name": "ChuJiu_JuQingBG",
+    "size": [
+      1024.0,
+      512.0
+    ],
+    "pages": [
+      "ui/ui_yuexichujiu_reprint_shop",
+      "ui/ui_yuexichujiushop"
+    ]
+  },
+  {
+    "file": "984e74d5b0ca3a84a834cc33c23e6260",
+    "id": 2,
+    "name": "YingZhiDao_TanChuangBG",
+    "size": [
+      1232.0,
+      664.0
+    ],
+    "pages": [
+      "ui/ui_sakura_building"
+    ]
+  },
+  {
+    "file": "9d3565950dcab46419424c1a5f0649fc",
+    "id": 2,
+    "name": "AnniversaryMap_1",
+    "size": [
+      1012.0,
+      500.0
+    ],
+    "pages": [
+      "ui/ui_anniversary_tower_map"
+    ]
+  },
+  {
+    "file": "9fd395d750b20fc43b07c5e9596f38c3",
+    "id": 2,
+    "name": "TanChuangBG02",
+    "size": [
+      1024.0,
+      512.0
+    ],
+    "pages": [
+      "ui/ui_newyearchieftask"
+    ]
+  },
+  {
+    "file": "af9d9bf30ea9c034587df8854f55983e",
+    "id": 2,
+    "name": "Ying_Mian_BG2",
+    "size": [
+      1688.0,
+      1004.0
+    ],
+    "pages": [
+      "ui/ui_sakuraend_main"
+    ]
+  },
+  {
+    "file": "b43d07d39994fb24ba05e18215627199",
+    "id": 2,
+    "name": "ChuJiu_HuoDongBG",
+    "size": [
+      1336.0,
+      752.0
+    ],
+    "pages": [
+      "ui/ui_yuexichujiu_activity",
+      "ui/ui_yuexichujiu_reprint_activity"
+    ]
+  },
+  {
+    "file": "d91ac6139fb01964b9ebe2c5fdd68089",
+    "id": 2,
+    "name": "Ying_RenWu_BG",
+    "size": [
+      1628.0,
+      752.0
+    ],
+    "pages": [
+      "ui/ui_sakuraend_shop",
+      "ui/ui_sakuraend_task"
+    ]
+  },
+  {
+    "file": "f33faab7422d49c4fa7c95391b193520",
+    "id": 2,
+    "name": "TanChuangBG",
+    "size": [
+      1024.0,
+      512.0
+    ],
+    "pages": [
+      "ui/ui_anniversary_tower_effect",
+      "ui/ui_anniversary_tower_map",
+      "ui/ui_anniversary_tower_rank",
+      "ui/ui_anniversary_tower_section_difficultyselect",
+      "ui/ui_newyear2_foodfight_choosehero",
+      "ui/ui_newyear2_foodfight_lvup",
+      "ui/ui_newyear2_foodmission_dp",
+      "ui/ui_newyear2_section_difficultyselect",
+      "ui/ui_newyear_foodfight_choosehero",
+      "ui/ui_newyear_foodfight_lvup",
+      "ui/ui_newyear_foodmission_dp",
+      "ui/ui_newyear_section_difficultyselect",
+      "ui/ui_osiris_tower_rank"
+    ]
+  }
+]

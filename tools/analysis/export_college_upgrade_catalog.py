@@ -45,6 +45,8 @@ catalog = {'sources': sources, 'buildings': tables['CollegeBuilding'],
            'recipes': tables['CollegeRecipe'], 'explores': tables['CollegeExplore']}
 target = Path('src/x2server/data/college_upgrade_catalog.json')
 target.write_text(json.dumps(catalog, ensure_ascii=False, indent=2) + '\n', encoding='utf8')
+from align_alchemy_recipe_costs import main as align_recipe_costs
+align_recipe_costs()
 print('Exported', {key: len(value) for key, value in catalog.items() if isinstance(value, list)})
 print('Building 701:', catalog['buildings'][0])
 print('Level 2:', catalog['levels'][1])

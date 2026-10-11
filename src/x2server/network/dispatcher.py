@@ -36,6 +36,7 @@ class OutboundMessage:
     data_version: int = 0
     pushes: tuple[OutboundMessage, ...] = ()
     before_response: tuple[OutboundMessage, ...] = ()
+    dispatch_gap: float = 0.0
 
 
 Handler: TypeAlias = Callable[

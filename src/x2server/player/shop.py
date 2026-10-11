@@ -215,6 +215,9 @@ class ShopService:
             raise ProtocolError("shop requested before login")
         name = CORE_MESSAGE_REGISTRY.name_for(packet.message_id)
         request = ECONOMY_SCHEMAS[name].decode(packet.body)
+        activity = getattr(self.economy, 'activity', None)
+        if activity and activity.runtime.exchange.owns(name, request):
+            return await activity.runtime.exchange.handle(context, packet, name, request)
         response_name = name.replace("C2L_", "L2C_", 1)
         if name == "C2L_QueryReCommendShop":
             from .recommendations import recommend

@@ -67,6 +67,58 @@ def test_per_run_prism_counts_buff_granted_prism(env):
     assert economy.chapter_dp(1, 2010100) == 2
 
 
+def test_final_money_events_all_chapters_keep_runs_separate_and_survive_restart(env):
+    from x2server.messages.battle import CHAPTER_TASK_EVENT
+    from x2server.player.economy import EconomyService
+    store, economy, _ = env
+    def event(amount):
+        return CHAPTER_TASK_EVENT.encode(dict(completeType=39, param1=903, param2=0, num=amount))
+    with economy.transaction():
+        for change in ({'completeType': 38}, {'param1': 902}, {'param2': 1}, {'num': -1}, {'num': 10**7 + 1}):
+            assert not economy.dp.report_money_events(1, 2010100, 'invalid', [CHAPTER_TASK_EVENT.encode(
+                dict({'completeType': 39, 'param1': 903, 'param2': 0, 'num': 4500}, **change))])
+    assert economy.chapter_dp(1, 2010100) == 0
+    for chapter in map(int, economy.dp.chapters):
+        task = next(t for t in economy.dp.chapters[str(chapter)]['tasks']
+                    if t.get('completeType') == 'E_GetMoneyPer')
+        with economy.transaction():
+            economy.dp.report_money_events(1, chapter, 'a', [event(2500)])
+            economy.dp.report_money_events(1, chapter, 'b', [event(2000)])
+        assert economy.chapter_dp(1, chapter) == 0  # Separate games do not sum to 4500.
+        with economy.transaction():
+            for amount in (4500, 1000, 4500):
+                economy.dp.report_money_events(1, chapter, 'a', [event(amount)])
+        assert economy.chapter_dp(1, chapter) == sum(task['dpPoints'])
+    restored = EconomyService(store)
+    assert restored.chapter_dp(1, 2010100) == 2
+
+
+def test_first_chapter_final_prism_event_without_kill_list_requires_successful_run(env):
+    from tests.unit.test_battle import request
+    from x2server.messages.battle import CHAPTER_TASK_EVENT
+    store, economy, context = env
+    battle = BattleService(store, economy)
+    entered = asyncio.run(battle.enter(context, packet(request())))
+    assert entered.values['result'] == 10
+    uuid = entered.values['uuid']
+    report = packet({'sectionId': 2110801, 'chapterTaskEvent': [CHAPTER_TASK_EVENT.encode(
+        {'completeType': 39, 'param1': 903, 'param2': 0, 'num': 4500})]}, 2, 'C2L_FightKillInfo')
+    assert not asyncio.run(battle.kill_info(context, report)).pushes
+    assert economy.chapter_dp(1, 2010100) == 0
+    with store.db:
+        store.db.execute('INSERT INTO battle_receipts VALUES (?,?,?,?)', (uuid, 'test', 0,
+            BATTLE_SCHEMAS['L2C_CheckoutMainMission'].encode({'result': 10, 'success': False})))
+    assert not asyncio.run(battle.kill_info(context, report)).pushes
+    assert economy.chapter_dp(1, 2010100) == 0
+    with store.db:
+        store.db.execute('UPDATE battle_receipts SET response=? WHERE uuid=?', (
+            BATTLE_SCHEMAS['L2C_CheckoutMainMission'].encode({'result': 10, 'success': True}), uuid))
+    assert asyncio.run(battle.kill_info(context, report)).pushes
+    assert economy.chapter_dp(1, 2010100) == 2
+    asyncio.run(battle.kill_info(context, report))
+    assert economy.chapter_dp(1, 2010100) == 2
+
+
 def test_claim_atomic_and_duplicate_does_not_pay(env):
     store, economy, _ = env
     with economy.transaction():

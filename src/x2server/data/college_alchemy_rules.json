@@ -263,6 +263,7 @@
     "AlchemyNum": "8",
     "AlchemyPriceNum": "2000",
     "AlchemyPriceParam": "5000|15",
+    "AlchemySpeedConsume": "120",
     "Element01": "1800",
     "Element01Param": "100|100|3",
     "Element01Pay": "5",

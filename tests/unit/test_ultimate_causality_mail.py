@@ -76,6 +76,8 @@ def test_causality_concurrent_lazy_backfill_and_registration_rollback(tmp_path, 
     player_id = accounts.get_by_name('new')['player_id']
     with accounts.db:
         accounts.db.execute("DELETE FROM player_mail WHERE source_key LIKE ?", (prefix + '%',))
+        accounts.db.execute('DELETE FROM system_mail_issues WHERE kind=?',
+                            ('ultimate_causality' if prefix == 'ultimate_causality_' else 'revival_supply',))
     other = AccountStore(store)
     with ThreadPoolExecutor(max_workers=2) as pool:
         results = list(pool.map(lambda a: getattr(a, ensure)(player_id, 200), (accounts, other)))

@@ -524,19 +524,15 @@ class WorldBossService:
         if action==1:
             if boss['state'] not in (1,2):
                 raise ValueError('boss no longer available')
-            if not network:
+            # CheckBossHasMassed checks the personal radar, not membership.
+            # A discovered Boss can therefore go straight from 415 to 421.
+            if not member:
                 counter='world_challenges' if static.get('BossType',{}).get('value',0)==0 else 'normal_challenges'
                 limit=self.explore[0 if counter=='world_challenges' else 1]['ChallengeLimitNumber']
-                if not member:
-                    if state[counter]>=limit:
-                        raise ValueError('daily challenge exhausted')
-                    team=[h['id'] for h in self.store.get(player)['snapshot']['heroes'] if h.get('state')==2][:3]
-                    self.store.db.execute('INSERT INTO world_boss_members(boss_id,player_id,team,active) VALUES (?,?,?,1)',(boss['boss_id'],player,json.dumps(team)))
-                else:
-                    self.rejoin(member)
-                    self.store.db.execute('UPDATE world_boss_members SET active=1 WHERE boss_id=? AND player_id=?',(boss['boss_id'],player))
-            elif not member:
-                raise ValueError('network join without lobby admission')
+                if state[counter]>=limit:
+                    raise ValueError('daily challenge exhausted')
+                team=[h['id'] for h in self.store.get(player)['snapshot']['heroes'] if h.get('state')==2][:3]
+                self.store.db.execute('INSERT INTO world_boss_members(boss_id,player_id,team,active) VALUES (?,?,?,1)',(boss['boss_id'],player,json.dumps(team)))
             else:
                 self.rejoin(member)
                 self.store.db.execute('UPDATE world_boss_members SET active=1 WHERE boss_id=? AND player_id=?',(boss['boss_id'],player))
@@ -649,7 +645,6 @@ class WorldBossService:
                 # opaque boss ID delivered through the authenticated lobby is
                 # a player-specific capability, never a predictable public ID.
                 ticket=self.store.db.execute('''SELECT b.state,b.finish FROM world_boss_tickets t
-                    JOIN world_boss_members m ON m.boss_id=t.boss_id AND m.player_id=t.player_id
                     JOIN world_boss_runs b ON b.boss_id=t.boss_id
                     WHERE t.ticket=? AND t.player_id=?''',(req.get('bossid',''),claimed)).fetchone()
                 ticket_ok=bool(ticket and ticket['state'] in (1,2) and ticket['finish']>self.now())

@@ -1,0 +1,186 @@
+{
+  "ui/ui_anniversary_main": [
+    "2cf79920faf6e8345960e45ea92e4cbc",
+    46
+  ],
+  "ui/ui_anniversary_poolshop": [
+    "5078898fab9aa8c4e9857c04ee7a52a2",
+    165
+  ],
+  "ui/ui_anniversary_section": [
+    "b0f215eed3e403a4faa76e1433745e05",
+    78
+  ],
+  "ui/ui_anniversary_task": [
+    "8f9391a0c2910504ebf82dfd4400af6a",
+    208
+  ],
+  "ui/ui_anniversary_tower_section": [
+    "528809a912d604e44ab5a3a4558ec8c4",
+    67
+  ],
+  "ui/ui_gonggong_main": [
+    "5aaf674fbdc177c43b480ff99e03736e",
+    39
+  ],
+  "ui/ui_gonggong_section": [
+    "f61d79b175b081e418b4dac2f22fd691",
+    3
+  ],
+  "ui/ui_gonggong_shop": [
+    "d383aad9ef242e248ab294db10288090",
+    75
+  ],
+  "ui/ui_gonggong_task": [
+    "7966d47b43ef4574fbb367b1a8c4a71f",
+    146
+  ],
+  "ui/ui_newyear2_foodfight_main": [
+    "932b41216c77456488b991c4731e1ae4",
+    287
+  ],
+  "ui/ui_newyear2_foodfight_store": [
+    "87f7b4abd3499644c9b1af0b9e24768d",
+    13
+  ],
+  "ui/ui_newyear2_lantern_drawlots": [
+    "70eb0817f3a6df04f878558bc033de72",
+    19
+  ],
+  "ui/ui_newyear2_lantern_main": [
+    "5dcb533d05ab4ea4a959ba81346338e1",
+    5
+  ],
+  "ui/ui_newyear2_lantern_question": [
+    "f89b02b707d034749bceb0491449f2e6",
+    6
+  ],
+  "ui/ui_newyear2_lantern_yearlabel": [
+    "7c4311a246b23414c98ac7386b785615",
+    21
+  ],
+  "ui/ui_newyear2_main": [
+    "0fd70f6b429a5a74ea80861669487c80",
+    105
+  ],
+  "ui/ui_newyear2_section": [
+    "8cb5a774973043543812ca7b58de6beb",
+    140
+  ],
+  "ui/ui_newyear2_shop": [
+    "e7ff62dff4f9ad048999a34e42d0519c",
+    58
+  ],
+  "ui/ui_newyear2_task": [
+    "b60e10648f5224041bfe7267e5ccd5b6",
+    47
+  ],
+  "ui/ui_newyear_foodfight_main": [
+    "f87dfa4374fda25429e9737688a20a46",
+    281
+  ],
+  "ui/ui_newyear_foodfight_store": [
+    "fda0bd72bc1ebea47b7a62ef9f136e87",
+    13
+  ],
+  "ui/ui_newyear_lantern_drawlots": [
+    "265f091d51046c24bacfc96cd0eefb12",
+    14
+  ],
+  "ui/ui_newyear_lantern_main": [
+    "5ba6c0cdc13e24b4fb850397fe09ac61",
+    5
+  ],
+  "ui/ui_newyear_lantern_yearlabel": [
+    "b85c6e436e9fef8429a505e9e57a6cfc",
+    21
+  ],
+  "ui/ui_newyear_main": [
+    "b8de9fa15f3d3174bb4f99bb17c786e5",
+    67
+  ],
+  "ui/ui_newyear_pov": [
+    "459d4b06cd50c5c4588c30484f3e0999",
+    41
+  ],
+  "ui/ui_newyear_section": [
+    "1137af204ca2d2e49bf56421169a227c",
+    37
+  ],
+  "ui/ui_newyear_shop": [
+    "b301944329f74ca4d9a3428e3aa3fe8b",
+    51
+  ],
+  "ui/ui_newyearchieftask": [
+    "37b9367d2bc98f64782d1bb10d3353d2",
+    100
+  ],
+  "ui/ui_osiris_main": [
+    "7d7a5408ab0764643921e3530c6127bb",
+    62
+  ],
+  "ui/ui_osiris_section": [
+    "aba6dc317858aef4bbb54771424d88a8",
+    241
+  ],
+  "ui/ui_osiris_shop": [
+    "704c74ceb866a4a4a8212a6d13f2cc5e",
+    90
+  ],
+  "ui/ui_osiris_task": [
+    "d5306c1d90bc5024c8c49bd3f4b9428f",
+    36
+  ],
+  "ui/ui_osiris_towerdata": [
+    "7ebb466e033033346818eb3694cc57f7",
+    18
+  ],
+  "ui/ui_sakura_main": [
+    "5c6e2b3d805f03d4c95c64eccfb97a7d",
+    34
+  ],
+  "ui/ui_zhenxun_main": [
+    "f2d3f2262fc78f047879ae3c2fe3f80e",
+    54
+  ],
+  "ui/ui_zhenxun_section": [
+    "c12334e156ae52249ba13c0ea2ff2f4b",
+    39
+  ],
+  "ui/ui_zhenxun_shop": [
+    "e1a50cd1ad967f74495d4f4cfc2c129f",
+    40
+  ],
+  "ui/ui_zhenxun_task": [
+    "b7cf5119afc967d4db06fa094f84e355",
+    79
+  ],
+  "uialtas/cg/ann1": [
+    "91ca85a3140113744847387a2fd4f80e",
+    2
+  ],
+  "uialtas/cg/chunjiebg2": [
+    "72e89d711cbf23b46816ff00450c2be7",
+    2
+  ],
+  "uialtas/cg/chunjiebg3": [
+    "20f6743579ecb364186ba89fbee2db59",
+    2
+  ],
+  "uialtas/cg/gonggong_scene": [
+    "576a775f870b7254988c197687142fd0",
+    2
+  ],
+  "uialtas/cg/osirisbg": [
+    "b63cf6f58ed3411419de3d913d8001e7",
+    2
+  ],
+  "uialtas/cg/yinghu": [
+    "ba49c0f7674804d489a9e92678adabf3",
+    2
+  ],
+  "uialtas/cg/zhenxun1": [
+    "94add22e19cdaad45b2b40305d50c018",
+    2
+  ]
+}

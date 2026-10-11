@@ -67,7 +67,7 @@ class DivinationService:
             "SELECT stamp,check_mask,last_time FROM player_divination WHERE player_id=?",
             (player_id,)).fetchone()
         stamp, mask, last = (0, 0, 0) if row is None else (int(row[0]), int(row[1]), int(row[2]))
-        if stamp // 100 != month:
+        if stamp // 100 != month or (last and datetime.fromtimestamp(last, BEIJING).year != today.year):
             mask = 0
         return stamp, mask, last
 
@@ -124,7 +124,7 @@ class DivinationService:
         try:
             with self.economy.transaction():
                 rewards = self.economy.gifts([group])
-                self.economy._grant(player_id, f"divination:{stamp}", rewards)
+                self.economy._grant(player_id, f"divination:{today.year}:{stamp}", rewards)
                 self.store.db.execute(
                     "INSERT INTO player_divination VALUES (?,?,?,?) "
                     "ON CONFLICT(player_id) DO UPDATE SET stamp=excluded.stamp, "

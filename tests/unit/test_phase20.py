@@ -179,10 +179,54 @@ def test_fragment_synthesis_and_artifact_second_upgrade_use_static_costs(env):
     assert store.db.execute("SELECT quantity FROM inventory WHERE item_id=1238100").fetchone()[0] == 0
     assert asyncio.run(service.handle(ctx, packet({"opt": 0, "heroId": 1008}, 15, "C2L_Artifact"))).values["code"] == 10
     with store.db:
-        economy._grant(1, "test-more-fragments", {1201008: 25})
+        economy._grant(1, "test-more-fragments", {1201008: 40})
     assert asyncio.run(service.handle(ctx, packet({"id": 1008, "opt": 2,
         "upstarConsumeItemId": 1201008}, 16, "C2L_HeroOpt"))).values["code"] == 10
     assert next(h for h in store.get(1)["snapshot"]["heroes"] if h["id"] == 1008)["star"] == 6
+    assert store.db.execute("SELECT quantity FROM inventory WHERE item_id=1201008").fetchone()[0] == 0
+
+
+@pytest.mark.parametrize("stage", [46, 0, 47])
+def test_terminal_or_unknown_hero_star_returns_failure_without_mutation(env, stage):
+    store, economy, ctx = env
+    service = ProgressionService(store, economy)
+    with economy.transaction():
+        snapshot = store.get(1)["snapshot"]
+        snapshot["heroes"][0]["star"] = stage
+        economy.save_snapshot(1, snapshot)
+        economy._grant(1, "terminal-fragments", {1201003: 100})
+    before = store.get(1)
+    for seq in (401, 402):
+        result = asyncio.run(service.handle(ctx, packet({"id": 1003, "opt": 2,
+            "upstarConsumeItemId": 1201003}, seq, "C2L_HeroOpt")))
+        assert result.values["code"] == 13
+    assert store.get(1) == before
+    assert store.db.execute("SELECT quantity FROM inventory WHERE item_id=1201003").fetchone()[0] == 100
+    assert store.db.execute("SELECT COUNT(*) FROM progression_receipts").fetchone()[0] == 0
+
+
+@pytest.mark.parametrize("stage,cost", [(3, 25), (5, 40), (10, 60), (11, 9), (45, 18)])
+@pytest.mark.parametrize("item", [1201003, 1201000])
+def test_hero_star_target_cost_exact_balance_and_replay(env, stage, cost, item):
+    store, economy, ctx = env
+    service = ProgressionService(store, economy)
+    with economy.transaction():
+        snapshot = store.get(1)["snapshot"]
+        snapshot["heroes"][0]["star"] = stage
+        economy.save_snapshot(1, snapshot)
+        economy._grant(1, "target-fragments", {item: cost - 1})
+    req = {"id": 1003, "opt": 2, "upstarConsumeItemId": item}
+    assert asyncio.run(service.handle(ctx, packet(req, 410, "C2L_HeroOpt"))).values["code"] == 13
+    assert store.get(1)["snapshot"]["heroes"][0]["star"] == stage
+    assert store.db.execute("SELECT quantity FROM inventory WHERE item_id=?", (item,)).fetchone()[0] == cost - 1
+    with economy.transaction():
+        economy._grant(1, "last-fragment", {item: 1})
+    operation = packet(req, 411, "C2L_HeroOpt")
+    result = asyncio.run(service.handle(ctx, operation))
+    assert result.values["code"] == 10
+    assert asyncio.run(service.handle(ctx, operation)).values == result.values
+    assert store.get(1)["snapshot"]["heroes"][0]["star"] == stage + 1
+    assert store.db.execute("SELECT quantity FROM inventory WHERE item_id=?", (item,)).fetchone()[0] == 0
 
 
 def test_artifact_progress_reaches_100_before_fusing(env):

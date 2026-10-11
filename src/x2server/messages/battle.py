@@ -29,6 +29,8 @@ OUTSIDE_ITEM = S("ItemDataP", (F(1, "id", K.INT32), F(2, "num", K.INT32),
     F(3, "quality", K.INT32), F(4, "eNum", K.INT32)))
 FIGHT_KILL_DATA = S("FightKillData", (F(1, "heroId", K.INT32),
     F(2, "unitId", K.INT32, repeated=True), F(3, "num", K.INT32, repeated=True)))
+CHAPTER_TASK_EVENT = S("ChapterTaskEvent", tuple(
+    F(n, name, K.INT32) for n, name in enumerate(('completeType', 'param1', 'param2', 'num'), 1)))
 DROP_REPORT_NPC = S("FightDropNpc", (F(1, "id", K.INT32), F(2, "count", K.INT32)))
 DROP_REPORT_ITEM = S("FightDropItemEntry", (F(1, "itemId", K.INT32), F(2, "value", K.INT32), F(3, "variant", K.INT32)))
 DROP_REPORT_SPAN = S("FightDropSpan", tuple(F(n, f"field{n}", K.INT32) for n in range(1, 23)))

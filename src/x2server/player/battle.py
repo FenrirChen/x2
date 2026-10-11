@@ -124,6 +124,16 @@ class BattleService:
         accepted = bool(row and int(time.time()) - row["created_at"] <= 3600
             and FIGHT_DATA.decode(BATTLE_SCHEMAS["L2C_FightData"].decode(row["response"])["data"])["missionId"] == section)
         credited = False
+        if (accepted and self.economy and request.get('chapterTaskEvent')
+                and self.catalog.sections.get(section, {}).get('Type') != 5):
+            receipt = self.store.db.execute('SELECT response FROM battle_receipts WHERE uuid=?',
+                                           (row['uuid'],)).fetchone()
+            settled = BATTLE_SCHEMAS['L2C_CheckoutMainMission'].decode(receipt[0]) if receipt else {}
+            if settled.get('result') == 10 and settled.get('success'):
+                with self.economy.transaction():
+                    credited = self.economy.dp.report_money_events(
+                        context.session.player_id, self.catalog.sections[section]['ChapterID'],
+                        row['uuid'], request['chapterTaskEvent'])
         if (accepted and self.economy and request.get("datas")
                 and self.catalog.sections.get(section, {}).get('Type') != 5):
             receipt = self.store.db.execute("SELECT response FROM battle_receipts WHERE uuid=?", (row["uuid"],)).fetchone()
@@ -220,7 +230,7 @@ class BattleService:
                 return reject
             before, pushes = self._checkout_star_sync(self.economy.pushes(player_id) if self.economy else ())
             return OutboundMessage("L2C_CheckoutMainMission", schema.decode(cached["response"]),
-                                   before_response=before, pushes=pushes)
+                                   before_response=before + self._activity_progress_sync(player_id, section), pushes=pushes)
         snapshot = self.store.get(player_id)["snapshot"]
         heroes = snapshot.get("heroes", [])
         # The client echoes the selected hero state in checkout.  Preserve a
@@ -295,7 +305,14 @@ class BattleService:
         # its ability immediately without requiring another login.
         star_before, pushes = self._checkout_star_sync(pushes)
         return OutboundMessage("L2C_CheckoutMainMission", values, pushes=pushes,
-                               before_response=star_before)
+                               before_response=star_before + self._activity_progress_sync(player_id, section))
+
+    def _activity_progress_sync(self, player, section):
+        activity = getattr(self.economy, 'activity', None) if self.economy else None
+        if (activity and section in activity.rotation.section_groups
+                and activity.rotation.section_groups[section] != -1):
+            return activity.runtime.progress_messages(player)
+        return ()
 
     @staticmethod
     def _checkout_star_sync(pushes):
@@ -417,6 +434,13 @@ class BattleService:
         reject = OutboundMessage("L2C_FightData", {"result": 13})
         player = self.store.get(context.session.player_id)
         snapshot = player["snapshot"]
+        # Calendar admission includes retired sections, which stay closed.
+        activity = getattr(self.economy, 'activity', None) if self.economy else None
+        if activity and section in activity.rotation.section_groups:
+            try:
+                activity.admission(player['id'], section)
+            except UnresolvedEconomy:
+                return reject
         selected = [PROFILE_HERO.decode(raw) for raw in request.get("heros", [])]
         if not 1 <= len(selected) <= 3 or len({h.get("heroId") for h in selected}) != len(selected):
             return reject
@@ -585,7 +609,11 @@ class BattleService:
                         self.economy.refund_battle(player["id"], old[0])
                         self.store.db.execute("UPDATE economy_runs SET settled=1 WHERE uuid=?", (old[0],))
                         self.economy.world_boss.finish_battle(player['id'],old[0],False)
-                    self.economy.charge_battle(player["id"], values["uuid"], section, entry_context.stamina_cost)
+                    cost = entry_context.stamina_cost
+                    if activity and section in activity.rotation.section_groups:
+                        activity.rotation.bind_run(player['id'], section, values['uuid'])
+                        cost = activity.runtime.prepare_buffs(player['id'], section, values['uuid'], cost)
+                    self.economy.charge_battle(player["id"], values["uuid"], section, cost)
                     ai_cost = 0
                     if request.get('useAIPoint'):
                         from .star_chart import consume_battle_ai

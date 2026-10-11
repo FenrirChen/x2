@@ -1,0 +1,3117 @@
+{
+  "ids": {
+    "L2C_ActivityBuildingUpgrade": 1043,
+    "C2L_ActivityBuildingUpgrade": 1042,
+    "L2C_ActivityBuilding": 1041,
+    "C2L_ActivityBuilding": 1040,
+    "L2C_ActivityTowerPassive": 926,
+    "C2L_ActivityTowerPassive": 925,
+    "L2C_ActivityTowerLevelUp": 924,
+    "C2L_ActivityTowerLevelUp": 923,
+    "L2C_QueryActivityTower": 922,
+    "C2L_QueryActivityTower": 921,
+    "L2C_ActivityPassRecord": 914,
+    "C2L_ActivityPassRecord": 913,
+    "L2C_ReceiveFoodMissionReward": 877,
+    "C2L_ReceiveFoodMissionReward": 876,
+    "L2C_QueryFoodMissionReward": 875,
+    "C2L_QueryFoodMissionReward": 874,
+    "L2C_ActivityMissionSelBranch": 1113,
+    "C2L_ActivityMissionSelBranch": 1112,
+    "L2C_ActivityMissionData": 859,
+    "C2L_ActivityMissionData": 858,
+    "L2C_LanternShowRecBox": 857,
+    "C2L_LanternShowRecBox": 856,
+    "L2C_LanternShowQueryData": 855,
+    "C2L_LanternShowQueryData": 854,
+    "L2C_LanternShowPaper": 853,
+    "C2L_LanternShowPaper": 852,
+    "L2C_LanternShowAnswerQuestion": 851,
+    "C2L_LanternShowAnswerQuestion": 850,
+    "L2C_LanternShowQuestion": 849,
+    "C2L_LanternShowQuestion": 848,
+    "L2C_CafeStoreUpdate": 847,
+    "C2L_CafeStoreUpdate": 846,
+    "L2C_CafeStoreReceiveRevenue": 845,
+    "C2L_CafeStoreReceiveRevenue": 844,
+    "L2C_CafeStoreLevelUp": 843,
+    "C2L_CafeStoreLevelUp": 842,
+    "L2C_CafeStoreCooking": 841,
+    "C2L_CafeStoreCooking": 840,
+    "L2C_CafeStorePositionSet": 839,
+    "C2L_CafeStorePositionSet": 838,
+    "L2C_CafeStoreUnLock": 837,
+    "C2L_CafeStoreUnLock": 836,
+    "L2C_CafeStoreInfo": 835,
+    "C2L_CafeStoreInfo": 834,
+    "L2C_ActivityRewardPoolDraw": 833,
+    "C2L_ActivityRewardPoolDraw": 832,
+    "L2C_ActivityRewardPoolInfo": 831,
+    "C2L_ActivityRewardPoolInfo": 830,
+    "L2C_ActivityReissueState": 821,
+    "C2L_ActivityReissueState": 820,
+    "L2C_ActivityReissue": 819,
+    "C2L_ActivityReissue": 818,
+    "L2C_ActivityPreNotic": 741,
+    "C2L_ActivityPreNotic": 740,
+    "L2C_ActivityPreNoticInfo": 739,
+    "C2L_ActivityPreNoticInfo": 738,
+    "L2C_ActivityShop": 685,
+    "L2C_Goods": 223,
+    "C2L_ActivityShop": 684,
+    "L2C_ActivityDialogReciveInfo": 687,
+    "C2L_ActivityDialogReciveInfo": 686,
+    "L2C_ActivityDialogue": 629,
+    "C2L_ActivityDialogue": 628,
+    "L2C_PlayShuangHanPV": 737,
+    "C2L_PlayShuangHanPV": 736,
+    "L2C_QueryShuangHanActivity": 735,
+    "C2L_QueryShuangHanActivity": 734,
+    "L2C_ActivityMissionRecordSave": 621,
+    "C2L_ActivityMissionRecordSave": 620,
+    "L2C_QueryActivityMissionRecord": 619,
+    "C2L_QueryActivityMissionRecord": 618,
+    "L2C_UpdateActivityConfig": 696,
+    "L2C_UpdateActivity": 692,
+    "L2C_QueryActivity": 616,
+    "C2L_QueryActivity": 615,
+    "L2C_ExtraDropData": 861,
+    "C2L_ExtraDropData": 860,
+    "L2C_SceneGlobalParam": 1039,
+    "C2L_SceneGlobalParam": 1038
+  },
+  "schemas": {
+    "L2C_ActivityBuildingUpgrade": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "id",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "lv",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 61942968,
+      "native_tags": [
+        8,
+        16,
+        24
+      ],
+      "verified": true
+    },
+    "C2L_ActivityBuildingUpgrade": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "id",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        }
+      ],
+      "native_serialize": 64673584,
+      "native_tags": [
+        8
+      ],
+      "verified": true
+    },
+    "L2C_ActivityBuilding": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "buildings",
+          "type": "ActivityBuilding",
+          "repeated": true,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 58402904,
+      "native_tags": [
+        8,
+        18
+      ],
+      "verified": true
+    },
+    "ActivityBuilding": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "id",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "lv",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        }
+      ],
+      "native_serialize": 31226896,
+      "native_tags": [
+        8,
+        16
+      ],
+      "verified": true
+    },
+    "C2L_ActivityBuilding": {
+      "fields": [],
+      "native_serialize": 64670604,
+      "native_tags": [],
+      "verified": true
+    },
+    "L2C_ActivityTowerPassive": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "passives",
+          "type": "ActivityTowerPassive",
+          "repeated": true,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 62040432,
+      "native_tags": [
+        8,
+        18
+      ],
+      "verified": true
+    },
+    "ActivityTowerPassive": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "sectionId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "heroPassiveIds",
+          "type": "int",
+          "repeated": true,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 3,
+          "name": "monsterPassiveIds",
+          "type": "int",
+          "repeated": true,
+          "native_offset": "0x20"
+        }
+      ],
+      "native_serialize": 58407156,
+      "native_tags": [
+        8,
+        16,
+        24
+      ],
+      "verified": true
+    },
+    "C2L_ActivityTowerPassive": {
+      "fields": [],
+      "native_serialize": 64743052,
+      "native_tags": [],
+      "verified": true
+    },
+    "L2C_ActivityTowerLevelUp": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "towerInfo",
+          "type": "ActivityTowerInfo",
+          "repeated": false,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 3,
+          "name": "towerPoint",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x20"
+        }
+      ],
+      "native_serialize": 62036376,
+      "native_tags": [
+        8,
+        18,
+        24
+      ],
+      "verified": true
+    },
+    "ActivityTowerInfo": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "id",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        }
+      ],
+      "native_serialize": 31278360,
+      "native_tags": [
+        8
+      ],
+      "verified": true
+    },
+    "C2L_ActivityTowerLevelUp": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "type",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "opt",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        }
+      ],
+      "native_serialize": 64739508,
+      "native_tags": [
+        8,
+        16
+      ],
+      "verified": true
+    },
+    "L2C_QueryActivityTower": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "towerInfo",
+          "type": "ActivityTowerInfo",
+          "repeated": true,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 3,
+          "name": "towerPoint",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x20"
+        }
+      ],
+      "native_serialize": 51480880,
+      "native_tags": [
+        8,
+        18,
+        24
+      ],
+      "verified": true
+    },
+    "C2L_QueryActivityTower": {
+      "fields": [],
+      "native_serialize": 63920580,
+      "native_tags": [],
+      "verified": true
+    },
+    "L2C_ActivityPassRecord": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "missionPassCount",
+          "type": "KeyValuePair_Int32_Int32",
+          "repeated": true,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 62000776,
+      "native_tags": [
+        8,
+        18
+      ],
+      "verified": true
+    },
+    "KeyValuePair_Int32_Int32": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "Key",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "Value",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        }
+      ],
+      "native_serialize": 58286268,
+      "native_tags": [
+        8,
+        16
+      ],
+      "verified": true
+    },
+    "C2L_ActivityPassRecord": {
+      "fields": [],
+      "native_serialize": 64712548,
+      "native_tags": [],
+      "verified": true
+    },
+    "L2C_ReceiveFoodMissionReward": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "activityId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "rewardData",
+          "type": "RewardData",
+          "repeated": false,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 4,
+          "name": "receivedList",
+          "type": "int",
+          "repeated": true,
+          "native_offset": "0x20"
+        },
+        {
+          "number": 5,
+          "name": "scoreCount",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x28"
+        }
+      ],
+      "native_serialize": 57867488,
+      "native_tags": [
+        8,
+        16,
+        26,
+        32,
+        40
+      ],
+      "verified": true
+    },
+    "RewardData": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "rewardItem",
+          "type": "RewardItem",
+          "repeated": true,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "rewardEquip",
+          "type": "HeroEquip",
+          "repeated": true,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 3,
+          "name": "transformHero",
+          "type": "TransformHero",
+          "repeated": true,
+          "native_offset": "0x20"
+        }
+      ],
+      "native_serialize": 60152808,
+      "native_tags": [
+        10,
+        18,
+        26
+      ],
+      "verified": true
+    },
+    "TransformHero": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "heroId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "transform",
+          "type": "bool",
+          "repeated": false,
+          "native_offset": "0x14"
+        }
+      ],
+      "native_serialize": 25354780,
+      "native_tags": [
+        8,
+        16
+      ],
+      "verified": true
+    },
+    "HeroEquip": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "id",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "typeId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "level",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 4,
+          "name": "exp",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x1C"
+        },
+        {
+          "number": 5,
+          "name": "star",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x20"
+        },
+        {
+          "number": 6,
+          "name": "status",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x24"
+        },
+        {
+          "number": 7,
+          "name": "param",
+          "type": "EquipParam",
+          "repeated": false,
+          "native_offset": "0x28"
+        },
+        {
+          "number": 8,
+          "name": "lockState",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x30"
+        },
+        {
+          "number": 9,
+          "name": "timeSec",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x34"
+        },
+        {
+          "number": 10,
+          "name": "seasonId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x38"
+        }
+      ],
+      "native_serialize": 58268708,
+      "native_tags": [
+        8,
+        16,
+        24,
+        32,
+        40,
+        48,
+        58,
+        64,
+        72,
+        80
+      ],
+      "verified": true
+    },
+    "EquipParam": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "at1",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "av1",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "at2",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 4,
+          "name": "av2",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x1C"
+        },
+        {
+          "number": 5,
+          "name": "at3",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x20"
+        },
+        {
+          "number": 6,
+          "name": "av3",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x24"
+        },
+        {
+          "number": 7,
+          "name": "at4",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x28"
+        },
+        {
+          "number": 8,
+          "name": "av4",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x2C"
+        },
+        {
+          "number": 9,
+          "name": "at5",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x30"
+        },
+        {
+          "number": 10,
+          "name": "av5",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x34"
+        },
+        {
+          "number": 11,
+          "name": "at6",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x38"
+        },
+        {
+          "number": 12,
+          "name": "av6",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x3C"
+        },
+        {
+          "number": 13,
+          "name": "lock1",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x40"
+        },
+        {
+          "number": 14,
+          "name": "lock2",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x44"
+        },
+        {
+          "number": 15,
+          "name": "lock3",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x48"
+        },
+        {
+          "number": 16,
+          "name": "lock4",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x4C"
+        },
+        {
+          "number": 17,
+          "name": "lock5",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x50"
+        },
+        {
+          "number": 18,
+          "name": "lock6",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x54"
+        }
+      ],
+      "native_serialize": 55607548,
+      "native_tags": [
+        8,
+        16,
+        24,
+        32,
+        40,
+        48,
+        56,
+        64,
+        72,
+        80,
+        88,
+        96,
+        104,
+        112,
+        120,
+        128,
+        136,
+        144
+      ],
+      "verified": true
+    },
+    "RewardItem": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "itemId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "itemNum",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "transform",
+          "type": "bool",
+          "repeated": false,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 60157848,
+      "native_tags": [
+        8,
+        16,
+        24
+      ],
+      "verified": true
+    },
+    "C2L_ReceiveFoodMissionReward": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "activityId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "scoreCount",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        }
+      ],
+      "native_serialize": 63724424,
+      "native_tags": [
+        8,
+        16
+      ],
+      "verified": true
+    },
+    "L2C_QueryFoodMissionReward": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "activityId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "receivedList",
+          "type": "int",
+          "repeated": true,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 51534468,
+      "native_tags": [
+        8,
+        16,
+        24
+      ],
+      "verified": true
+    },
+    "C2L_QueryFoodMissionReward": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "activityId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        }
+      ],
+      "native_serialize": 63965308,
+      "native_tags": [
+        8
+      ],
+      "verified": true
+    },
+    "L2C_ActivityMissionSelBranch": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "activityId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "branch",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 61967684,
+      "native_tags": [
+        8,
+        16,
+        24
+      ],
+      "verified": true
+    },
+    "C2L_ActivityMissionSelBranch": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "activityId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "branch",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        }
+      ],
+      "native_serialize": 64692936,
+      "native_tags": [
+        8,
+        16
+      ],
+      "verified": true
+    },
+    "L2C_ActivityMissionData": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "missionData",
+          "type": "ActivityMissionData",
+          "repeated": true,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 3,
+          "name": "activityId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x20"
+        },
+        {
+          "number": 4,
+          "name": "branch",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x24"
+        }
+      ],
+      "native_serialize": 61959008,
+      "native_tags": [
+        8,
+        18,
+        24,
+        32
+      ],
+      "verified": true
+    },
+    "ActivityMissionData": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "chapterId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "lastPastMissionId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "pastChallengeId",
+          "type": "int",
+          "repeated": true,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 4,
+          "name": "playPv",
+          "type": "bool",
+          "repeated": false,
+          "native_offset": "0x20"
+        },
+        {
+          "number": 5,
+          "name": "passTime",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x24"
+        }
+      ],
+      "native_serialize": 31253520,
+      "native_tags": [
+        8,
+        16,
+        24,
+        32,
+        40
+      ],
+      "verified": true
+    },
+    "C2L_ActivityMissionData": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "activityId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        }
+      ],
+      "native_serialize": 64686104,
+      "native_tags": [
+        8
+      ],
+      "verified": true
+    },
+    "L2C_LanternShowRecBox": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "activityId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "boxIndex",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 4,
+          "name": "receivedBoxs",
+          "type": "int",
+          "repeated": true,
+          "native_offset": "0x20"
+        },
+        {
+          "number": 5,
+          "name": "rewardData",
+          "type": "RewardData",
+          "repeated": false,
+          "native_offset": "0x28"
+        }
+      ],
+      "native_serialize": 53628712,
+      "native_tags": [
+        8,
+        16,
+        24,
+        32,
+        42
+      ],
+      "verified": true
+    },
+    "C2L_LanternShowRecBox": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "activityId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "boxIndex",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        }
+      ],
+      "native_serialize": 60412064,
+      "native_tags": [
+        8,
+        16
+      ],
+      "verified": true
+    },
+    "L2C_LanternShowQueryData": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "activityId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "receivedBoxs",
+          "type": "int",
+          "repeated": true,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 4,
+          "name": "newYearCardCount",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x20"
+        },
+        {
+          "number": 5,
+          "name": "newYearPaperCount",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x24"
+        }
+      ],
+      "native_serialize": 53619916,
+      "native_tags": [
+        8,
+        16,
+        24,
+        32,
+        40
+      ],
+      "verified": true
+    },
+    "C2L_LanternShowQueryData": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "activityId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        }
+      ],
+      "native_serialize": 60405496,
+      "native_tags": [
+        8
+      ],
+      "verified": true
+    },
+    "L2C_LanternShowPaper": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "activityId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "buffData",
+          "type": "AccountBuffData",
+          "repeated": false,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 61664132,
+      "native_tags": [
+        8,
+        16,
+        26
+      ],
+      "verified": true
+    },
+    "AccountBuffData": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "buffId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "buffType",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "buffEnd",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 4,
+          "name": "buffStop",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x1C"
+        }
+      ],
+      "native_serialize": 31198288,
+      "native_tags": [
+        8,
+        16,
+        24,
+        32
+      ],
+      "verified": true
+    },
+    "C2L_LanternShowPaper": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "activityId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        }
+      ],
+      "native_serialize": 60402212,
+      "native_tags": [
+        8
+      ],
+      "verified": true
+    },
+    "L2C_LanternShowAnswerQuestion": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "activityId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "questionId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 4,
+          "name": "answerIndex",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x1C"
+        },
+        {
+          "number": 5,
+          "name": "right",
+          "type": "bool",
+          "repeated": false,
+          "native_offset": "0x20"
+        },
+        {
+          "number": 6,
+          "name": "rewardData",
+          "type": "RewardData",
+          "repeated": false,
+          "native_offset": "0x28"
+        }
+      ],
+      "native_serialize": 61659352,
+      "native_tags": [
+        8,
+        16,
+        24,
+        32,
+        40,
+        50
+      ],
+      "verified": true
+    },
+    "C2L_LanternShowAnswerQuestion": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "activityId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "questionId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "answerIndex",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 60398392,
+      "native_tags": [
+        8,
+        16,
+        24
+      ],
+      "verified": true
+    },
+    "L2C_LanternShowQuestion": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "activityId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "questionId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 53624844,
+      "native_tags": [
+        8,
+        16,
+        24
+      ],
+      "verified": true
+    },
+    "C2L_LanternShowQuestion": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "activityId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        }
+      ],
+      "native_serialize": 60408780,
+      "native_tags": [
+        8
+      ],
+      "verified": true
+    },
+    "L2C_CafeStoreUpdate": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "storeType",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "storeInfo",
+          "type": "CafeStoreInfo",
+          "repeated": false,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 61918900,
+      "native_tags": [
+        8,
+        16,
+        26
+      ],
+      "verified": true
+    },
+    "CafeStoreInfo": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "type",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "lockState",
+          "type": "CafeStoreState",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "employeeInfo",
+          "type": "CafeStoreEmployee",
+          "repeated": true,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 4,
+          "name": "cafeStoreQueueInfo",
+          "type": "CafeStoreQueue",
+          "repeated": true,
+          "native_offset": "0x20"
+        },
+        {
+          "number": 5,
+          "name": "revenue",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x28"
+        },
+        {
+          "number": 6,
+          "name": "level",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x2C"
+        },
+        {
+          "number": 7,
+          "name": "exp",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x30"
+        }
+      ],
+      "native_serialize": 59640860,
+      "native_tags": [
+        8,
+        16,
+        26,
+        34,
+        40,
+        48,
+        56
+      ],
+      "verified": true
+    },
+    "CafeStoreQueue": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "cd",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "preRevenue",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "recipeId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 4,
+          "name": "state",
+          "type": "CafeStoreQueueState",
+          "repeated": false,
+          "native_offset": "0x1C"
+        },
+        {
+          "number": 5,
+          "name": "inQueueTime",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x20"
+        }
+      ],
+      "native_serialize": 59646452,
+      "native_tags": [
+        8,
+        16,
+        24,
+        32,
+        40
+      ],
+      "verified": true
+    },
+    "CafeStoreEmployee": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "position",
+          "type": "CafeStoreEmployeePostion",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "heroId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        }
+      ],
+      "native_serialize": 59637264,
+      "native_tags": [
+        8,
+        16
+      ],
+      "verified": true
+    },
+    "C2L_CafeStoreUpdate": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "storeType",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        }
+      ],
+      "native_serialize": 61110748,
+      "native_tags": [
+        8
+      ],
+      "verified": true
+    },
+    "L2C_CafeStoreReceiveRevenue": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "storeType",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "storeInfo",
+          "type": "CafeStoreInfo",
+          "repeated": false,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 4,
+          "name": "rewardData",
+          "type": "RewardData",
+          "repeated": false,
+          "native_offset": "0x20"
+        }
+      ],
+      "native_serialize": 61910512,
+      "native_tags": [
+        8,
+        16,
+        26,
+        34
+      ],
+      "verified": true
+    },
+    "C2L_CafeStoreReceiveRevenue": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "storeType",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        }
+      ],
+      "native_serialize": 61104180,
+      "native_tags": [
+        8
+      ],
+      "verified": true
+    },
+    "L2C_CafeStoreLevelUp": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "storeType",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "level",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 4,
+          "name": "exp",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x1C"
+        }
+      ],
+      "native_serialize": 61902144,
+      "native_tags": [
+        8,
+        16,
+        24,
+        32
+      ],
+      "verified": true
+    },
+    "C2L_CafeStoreLevelUp": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "storeType",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        }
+      ],
+      "native_serialize": 63625576,
+      "native_tags": [
+        8,
+        16
+      ],
+      "verified": true
+    },
+    "L2C_CafeStoreCooking": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "storeType",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "queue",
+          "type": "CafeStoreQueue",
+          "repeated": false,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 61893868,
+      "native_tags": [
+        8,
+        16,
+        26
+      ],
+      "verified": true
+    },
+    "C2L_CafeStoreCooking": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "storeType",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "recipeID",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        }
+      ],
+      "native_serialize": 63619052,
+      "native_tags": [
+        8,
+        16
+      ],
+      "verified": true
+    },
+    "L2C_CafeStorePositionSet": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "storeInfo",
+          "type": "CafeStoreInfo",
+          "repeated": true,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 61906260,
+      "native_tags": [
+        8,
+        18
+      ],
+      "verified": true
+    },
+    "C2L_CafeStorePositionSet": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "storeType",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "heroId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "position",
+          "type": "CafeStoreEmployeePostion",
+          "repeated": false,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 61100312,
+      "native_tags": [
+        8,
+        16,
+        24
+      ],
+      "verified": true
+    },
+    "L2C_CafeStoreUnLock": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "storeType",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "lockState",
+          "type": "CafeStoreState",
+          "repeated": false,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 61914940,
+      "native_tags": [
+        8,
+        16,
+        24
+      ],
+      "verified": true
+    },
+    "C2L_CafeStoreUnLock": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "storeType",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        }
+      ],
+      "native_serialize": 61107464,
+      "native_tags": [
+        8
+      ],
+      "verified": true
+    },
+    "L2C_CafeStoreInfo": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "storeInfo",
+          "type": "CafeStoreInfo",
+          "repeated": true,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 61897892,
+      "native_tags": [
+        8,
+        18
+      ],
+      "verified": true
+    },
+    "C2L_CafeStoreInfo": {
+      "fields": [],
+      "native_serialize": 63622596,
+      "native_tags": [],
+      "verified": true
+    },
+    "L2C_ActivityRewardPoolDraw": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "activityId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "rewardPoolId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 4,
+          "name": "rewardPoolInfos",
+          "type": "RewardPoolInfo",
+          "repeated": true,
+          "native_offset": "0x20"
+        },
+        {
+          "number": 5,
+          "name": "rewardData",
+          "type": "RewardData",
+          "repeated": false,
+          "native_offset": "0x28"
+        }
+      ],
+      "native_serialize": 62021820,
+      "native_tags": [
+        8,
+        16,
+        24,
+        34,
+        42
+      ],
+      "verified": true
+    },
+    "RewardPoolInfo": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "rewardPoolId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "goodsIdCountPair",
+          "type": "KeyValuePair_Int32_Int32",
+          "repeated": true,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 60162264,
+      "native_tags": [
+        8,
+        18
+      ],
+      "verified": true
+    },
+    "C2L_ActivityRewardPoolDraw": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "activityId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "rewardPoolId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "drawCount",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 64728856,
+      "native_tags": [
+        8,
+        16,
+        24
+      ],
+      "verified": true
+    },
+    "L2C_ActivityRewardPoolInfo": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "activityId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "rewardPoolInfos",
+          "type": "RewardPoolInfo",
+          "repeated": true,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 62027124,
+      "native_tags": [
+        8,
+        16,
+        26
+      ],
+      "verified": true
+    },
+    "C2L_ActivityRewardPoolInfo": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "activityId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        }
+      ],
+      "native_serialize": 64732856,
+      "native_tags": [
+        8
+      ],
+      "verified": true
+    },
+    "L2C_ActivityReissueState": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "reciveCount",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "activityType",
+          "type": "ActivityType",
+          "repeated": false,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 62017848,
+      "native_tags": [
+        8,
+        16,
+        24
+      ],
+      "verified": true
+    },
+    "C2L_ActivityReissueState": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "activityType",
+          "type": "ActivityType",
+          "repeated": false,
+          "native_offset": "0x10"
+        }
+      ],
+      "native_serialize": 64725524,
+      "native_tags": [
+        8
+      ],
+      "verified": true
+    },
+    "L2C_ActivityReissue": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "rewardData",
+          "type": "RewardData",
+          "repeated": false,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 3,
+          "name": "activityType",
+          "type": "ActivityType",
+          "repeated": false,
+          "native_offset": "0x20"
+        },
+        {
+          "number": 4,
+          "name": "reciveCount",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x24"
+        }
+      ],
+      "native_serialize": 62013424,
+      "native_tags": [
+        8,
+        18,
+        24,
+        32
+      ],
+      "verified": true
+    },
+    "C2L_ActivityReissue": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "activityType",
+          "type": "ActivityType",
+          "repeated": false,
+          "native_offset": "0x10"
+        }
+      ],
+      "native_serialize": 64722192,
+      "native_tags": [
+        8
+      ],
+      "verified": true
+    },
+    "L2C_ActivityPreNotic": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "rewardData",
+          "type": "RewardData",
+          "repeated": false,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 3,
+          "name": "lastPreNoticSec",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x20"
+        },
+        {
+          "number": 4,
+          "name": "activityType",
+          "type": "ActivityType",
+          "repeated": false,
+          "native_offset": "0x24"
+        }
+      ],
+      "native_serialize": 62005028,
+      "native_tags": [
+        8,
+        18,
+        24,
+        32
+      ],
+      "verified": true
+    },
+    "C2L_ActivityPreNotic": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "activityType",
+          "type": "ActivityType",
+          "repeated": false,
+          "native_offset": "0x10"
+        }
+      ],
+      "native_serialize": 64715528,
+      "native_tags": [
+        8
+      ],
+      "verified": true
+    },
+    "L2C_ActivityPreNoticInfo": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "activityType",
+          "type": "ActivityType",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "lastPreNoticSec",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 62009452,
+      "native_tags": [
+        8,
+        16,
+        24
+      ],
+      "verified": true
+    },
+    "C2L_ActivityPreNoticInfo": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "activityType",
+          "type": "ActivityType",
+          "repeated": false,
+          "native_offset": "0x10"
+        }
+      ],
+      "native_serialize": 64718860,
+      "native_tags": [
+        8
+      ],
+      "verified": true
+    },
+    "L2C_ActivityShop": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "goodsList",
+          "type": "ActivityShopGoods",
+          "repeated": true,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 3,
+          "name": "activityType",
+          "type": "ActivityType",
+          "repeated": false,
+          "native_offset": "0x20"
+        }
+      ],
+      "native_serialize": 62031728,
+      "native_tags": [
+        8,
+        18,
+        24
+      ],
+      "verified": true
+    },
+    "ActivityShopGoods": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "shopId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "NextRefreshTime",
+          "type": "long",
+          "repeated": false,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 3,
+          "name": "RefreshTimes",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x20"
+        },
+        {
+          "number": 4,
+          "name": "RefreshPrice",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x24"
+        },
+        {
+          "number": 5,
+          "name": "goods",
+          "type": "L2C_Goods",
+          "repeated": true,
+          "native_offset": "0x28"
+        }
+      ],
+      "native_serialize": 31265512,
+      "native_tags": [
+        8,
+        16,
+        24,
+        32,
+        42
+      ],
+      "verified": true
+    },
+    "L2C_Goods": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "goodsId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "originalPrice",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "itemId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 4,
+          "name": "num",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x1C"
+        },
+        {
+          "number": 5,
+          "name": "price",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x20"
+        },
+        {
+          "number": 6,
+          "name": "currencyType",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x24"
+        },
+        {
+          "number": 7,
+          "name": "canBuyTimes",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x28"
+        },
+        {
+          "number": 8,
+          "name": "hasBuyTimes",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x2C"
+        },
+        {
+          "number": 9,
+          "name": "startTime",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x30"
+        },
+        {
+          "number": 10,
+          "name": "endTime",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x34"
+        },
+        {
+          "number": 11,
+          "name": "goodsTag",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x38"
+        },
+        {
+          "number": 12,
+          "name": "limited",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x3C"
+        }
+      ],
+      "native_serialize": 61565272,
+      "native_tags": [
+        8,
+        16,
+        24,
+        32,
+        40,
+        48,
+        56,
+        64,
+        72,
+        80,
+        88,
+        96
+      ],
+      "verified": true
+    },
+    "C2L_ActivityShop": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "activityType",
+          "type": "ActivityType",
+          "repeated": false,
+          "native_offset": "0x10"
+        }
+      ],
+      "native_serialize": 64736176,
+      "native_tags": [
+        8
+      ],
+      "verified": true
+    },
+    "L2C_ActivityDialogReciveInfo": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "lastReciveTimeSec",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        }
+      ],
+      "native_serialize": 61946836,
+      "native_tags": [
+        8,
+        16
+      ],
+      "verified": true
+    },
+    "C2L_ActivityDialogReciveInfo": {
+      "fields": [],
+      "native_serialize": 64676864,
+      "native_tags": [],
+      "verified": true
+    },
+    "L2C_ActivityDialogue": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "rewardData",
+          "type": "RewardData",
+          "repeated": false,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 3,
+          "name": "lastReciveTimeSec",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x20"
+        }
+      ],
+      "native_serialize": 61950432,
+      "native_tags": [
+        8,
+        18,
+        24
+      ],
+      "verified": true
+    },
+    "C2L_ActivityDialogue": {
+      "fields": [],
+      "native_serialize": 64679840,
+      "native_tags": [],
+      "verified": true
+    },
+    "L2C_PlayShuangHanPV": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "activityInfo",
+          "type": "ActivityShuangHan",
+          "repeated": false,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 54611248,
+      "native_tags": [
+        8,
+        18
+      ],
+      "verified": true
+    },
+    "ActivityShuangHan": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "chapterId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "storyPlayState",
+          "type": "bool",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "lastPassMissionId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 31270708,
+      "native_tags": [
+        8,
+        16,
+        24
+      ],
+      "verified": true
+    },
+    "C2L_PlayShuangHanPV": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "chapterId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        }
+      ],
+      "native_serialize": 63870632,
+      "native_tags": [
+        8
+      ],
+      "verified": true
+    },
+    "L2C_QueryShuangHanActivity": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "activityInfo",
+          "type": "ActivityShuangHan",
+          "repeated": true,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 53010972,
+      "native_tags": [
+        8,
+        18
+      ],
+      "verified": true
+    },
+    "C2L_QueryShuangHanActivity": {
+      "fields": [],
+      "native_serialize": 63647712,
+      "native_tags": [],
+      "verified": true
+    },
+    "L2C_ActivityMissionRecordSave": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "missionId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "recordVal",
+          "type": "long",
+          "repeated": false,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 61963816,
+      "native_tags": [
+        8,
+        16,
+        24
+      ],
+      "verified": true
+    },
+    "C2L_ActivityMissionRecordSave": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "missionId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "recordVal",
+          "type": "long",
+          "repeated": false,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 64689388,
+      "native_tags": [
+        8,
+        16
+      ],
+      "verified": true
+    },
+    "L2C_QueryActivityMissionRecord": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "missionRecordData",
+          "type": "ActivityMissionRecordData",
+          "repeated": true,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 3,
+          "name": "previousRecord",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x20"
+        },
+        {
+          "number": 4,
+          "name": "missionPassCount",
+          "type": "KeyValuePair_Int32_Int32",
+          "repeated": true,
+          "native_offset": "0x28"
+        }
+      ],
+      "native_serialize": 51462944,
+      "native_tags": [
+        8,
+        18,
+        24,
+        34
+      ],
+      "verified": true
+    },
+    "ActivityMissionRecordData": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "missionId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "recordValue",
+          "type": "long",
+          "repeated": false,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 31258416,
+      "native_tags": [
+        8,
+        16
+      ],
+      "verified": true
+    },
+    "C2L_QueryActivityMissionRecord": {
+      "fields": [],
+      "native_serialize": 63908676,
+      "native_tags": [],
+      "verified": true
+    },
+    "L2C_UpdateActivityConfig": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "activityData",
+          "type": "ActivityData",
+          "repeated": true,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 59721560,
+      "native_tags": [
+        8,
+        18
+      ],
+      "verified": true
+    },
+    "ActivityData": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "actId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "state",
+          "type": "ActivityRealState",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "activityParentType",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 4,
+          "name": "actType",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x1C"
+        },
+        {
+          "number": 5,
+          "name": "startTime",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x20"
+        },
+        {
+          "number": 6,
+          "name": "endTime",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x24"
+        },
+        {
+          "number": 7,
+          "name": "openLever",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x28"
+        },
+        {
+          "number": 8,
+          "name": "activityShow",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x2C"
+        },
+        {
+          "number": 9,
+          "name": "activityGroup",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x30"
+        },
+        {
+          "number": 10,
+          "name": "activityName",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x34"
+        },
+        {
+          "number": 11,
+          "name": "param1",
+          "type": "int",
+          "repeated": true,
+          "native_offset": "0x38"
+        },
+        {
+          "number": 12,
+          "name": "param2",
+          "type": "int",
+          "repeated": true,
+          "native_offset": "0x40"
+        },
+        {
+          "number": 13,
+          "name": "param3",
+          "type": "int",
+          "repeated": true,
+          "native_offset": "0x48"
+        },
+        {
+          "number": 14,
+          "name": "param4",
+          "type": "int",
+          "repeated": true,
+          "native_offset": "0x50"
+        },
+        {
+          "number": 15,
+          "name": "activityDescription",
+          "type": "string",
+          "repeated": false,
+          "native_offset": "0x58"
+        },
+        {
+          "number": 16,
+          "name": "activityReward",
+          "type": "int",
+          "repeated": true,
+          "native_offset": "0x60"
+        },
+        {
+          "number": 17,
+          "name": "activityDataItems",
+          "type": "ActivityDataItem",
+          "repeated": true,
+          "native_offset": "0x68"
+        },
+        {
+          "number": 18,
+          "name": "activityTaps",
+          "type": "string",
+          "repeated": false,
+          "native_offset": "0x70"
+        },
+        {
+          "number": 19,
+          "name": "openType",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x78"
+        },
+        {
+          "number": 20,
+          "name": "openParam",
+          "type": "int",
+          "repeated": true,
+          "native_offset": "0x80"
+        }
+      ],
+      "native_serialize": 31233992,
+      "native_tags": [
+        8,
+        16,
+        24,
+        32,
+        40,
+        48,
+        56,
+        64,
+        72,
+        80,
+        88,
+        96,
+        104,
+        112,
+        122,
+        128,
+        138,
+        146,
+        152,
+        160
+      ],
+      "verified": true
+    },
+    "ActivityDataItem": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "index",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "itemParams",
+          "type": "ItemData",
+          "repeated": true,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 31244564,
+      "native_tags": [
+        8,
+        18
+      ],
+      "verified": true
+    },
+    "ItemData": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "id",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "num",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "locked",
+          "type": "bool",
+          "repeated": false,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 4,
+          "name": "dayGet",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x1C"
+        }
+      ],
+      "native_serialize": 58324000,
+      "native_tags": [
+        8,
+        16,
+        24,
+        32
+      ],
+      "verified": true
+    },
+    "L2C_UpdateActivity": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "activityData",
+          "type": "ActivityData",
+          "repeated": true,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 57418500,
+      "native_tags": [
+        8,
+        18
+      ],
+      "verified": true
+    },
+    "L2C_QueryActivity": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "activityData",
+          "type": "ActivityData",
+          "repeated": true,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 54641948,
+      "native_tags": [
+        8,
+        18
+      ],
+      "verified": true
+    },
+    "C2L_QueryActivity": {
+      "fields": [],
+      "native_serialize": 63890512,
+      "native_tags": [],
+      "verified": true
+    },
+    "L2C_ExtraDropData": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "data",
+          "type": "KeyValuePair_Int32_Int32",
+          "repeated": true,
+          "native_offset": "0x10"
+        }
+      ],
+      "native_serialize": 55532168,
+      "native_tags": [
+        10
+      ],
+      "verified": true
+    },
+    "C2L_ExtraDropData": {
+      "fields": [],
+      "native_serialize": 57047780,
+      "native_tags": [],
+      "verified": true
+    },
+    "L2C_SceneGlobalParam": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "sceneSectionParam",
+          "type": "SceneSectionParam",
+          "repeated": true,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 55245972,
+      "native_tags": [
+        8,
+        18
+      ],
+      "verified": true
+    },
+    "SceneSectionParam": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "sectionType",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "sectionParam",
+          "type": "KeyValuePair_Int32_Int32",
+          "repeated": true,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 60174896,
+      "native_tags": [
+        8,
+        18
+      ],
+      "verified": true
+    },
+    "C2L_SceneGlobalParam": {
+      "fields": [],
+      "native_serialize": 60917656,
+      "native_tags": [],
+      "verified": true
+    }
+  }
+}

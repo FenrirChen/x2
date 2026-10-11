@@ -233,6 +233,8 @@ class CollegeJobsService:
         self.economy.save_snapshot(player_id, snapshot)
         self.economy._grant(player_id, 'college-explore:' + job['job_id'],
             {i: n for i, n in rewards.items() if i not in element_items and n > 0})
+        self.economy._event(player_id, 'college-explore:' + job['job_id'],
+            self.economy.TASK_EVENT_HERO_ADVENTURE, 0, 1)
         state['explore'].remove(job)
         ruin = next(r for r in state['ruins'] if r['ruinId'] == job['ruinId'])
         ruin['exp'] = min(row['Exp'][-1], ruin['exp'] + 1)

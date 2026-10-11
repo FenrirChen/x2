@@ -17,7 +17,12 @@ def test_trial_loadout_all_client_rows_and_no_account_mutation(env):
     store, economy, ctx = env
     for row in catalog()['units']:
         hero = trial_hero(row['TrialHeroID'], row['TrialHeroID'])
-        assert hero['battle_base_id'] == row['UnitID']
+        assert hero['battle_base_id'] == row['TrialHeroID']
+        assert hero['id'] == row['TrialHeroID']
+        assert not hero['trial_skin'] or catalog()['appearance_units'][str(hero['trial_skin'])] == row['TrialHeroID']
+        from x2server.player.progression import hero_attributes
+        assert hero_attributes(hero)['atk'] > 0
+        assert [s['id'] for s in hero['skills']] == catalog()['unit_skills'][str(row['TrialHeroID'])][:len(row['SkillLevel'])]
         assert hero['level'] == row['HeroLevel'] and hero['star'] == row['HeroStars']
         equips, effects = equipment(hero)
         assert len(equips) == min(len(row.get('EquipGroupID', [])), len(row.get('EquipAttrID', [])))
@@ -36,7 +41,7 @@ def test_trial_loadout_all_client_rows_and_no_account_mutation(env):
     assert (hero['id'], hero['level'], hero['star']) == (1219, 20, 10)
     assert HERO_ATTR.decode(hero['heroAttrCount'])['atk'] > 100
     assert hero['heroGodEquip'] and len(hero['heroEquip']) == 6 and hero['heroSkill']
-    assert hero['battleSkinId'] == 1221901
+    assert hero['battleSkinId'] == 0
     assert store.get(1)['snapshot']['heroes'] == before
 
 

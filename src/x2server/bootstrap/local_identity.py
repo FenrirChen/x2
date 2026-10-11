@@ -46,6 +46,7 @@ class LocalIdentityService(RecoveredBootstrapService):
         password: str | None = None, accounts=None, players=None,
         chat_entry: str = "10.0.2.2:29001",
         clock: Callable[[], float] = time.time,
+        save_manager_api=None,
     ) -> None:
         super().__init__(contract, RecoveredControlInfo(update="LEBIAN"))
         if accounts is None and (not account or not password):
@@ -56,6 +57,7 @@ class LocalIdentityService(RecoveredBootstrapService):
         self._players = players
         self._chat_entry = chat_entry
         self._clock = clock
+        self._save_manager_api = save_manager_api
         self._account_token = secrets.token_urlsafe(32)
         self._game_token = secrets.token_urlsafe(32)
         self._start = int(clock())
@@ -76,6 +78,12 @@ class LocalIdentityService(RecoveredBootstrapService):
         if path.startswith("/gifticon/"):
             from x2server.player.recommendations import banner_response
             return banner_response(method, path)
+        if path.startswith("/save-manager/"):
+            if self._save_manager_api is None:
+                return self._json({"error": "save_manager_disabled"}, 404)
+            status, content_type, payload = self._save_manager_api.respond(
+                method, path, body, authorization)
+            return HTTPResponse(status, content_type, payload)
         if path in ("/MailService.GetMailPage", "/MailService.GetMail"):
             return self._mail_http(method, path, body, authorization)
         if path == "/apply/chatNode" and method.upper() == "POST":
@@ -236,6 +244,15 @@ class LocalIdentityService(RecoveredBootstrapService):
         except sqlite3.Error:
             return self._json({"code": "error"}, 500)
         if row is None:
+            account = self._accounts.get_by_name(account_name)
+            LOGGER.info(
+                "password login rejected route=%s fields=%s account_size=%d account_exists=%s "
+                "account_active=%s password_size=%d account_outer_whitespace=%s "
+                "password_outer_whitespace=%s account_non_ascii=%s password_non_ascii=%s",
+                path, sorted(values), len(account_name), account is not None,
+                bool(account and account["status"] == "active"), len(password),
+                account_name != account_name.strip(), password != password.strip(),
+                not account_name.isascii(), not password.isascii())
             return self._json({"code": "invalid"})
         token = secrets.token_urlsafe(32)
         expire = self._clock() + TOKEN_LIFETIME

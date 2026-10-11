@@ -16,6 +16,7 @@ which is the only channel the client reads that state from.
 from __future__ import annotations
 
 import json
+import hashlib
 import logging
 from importlib.resources import files
 
@@ -45,14 +46,17 @@ class ElementComposeService:
             self.store.db.execute("""CREATE TABLE IF NOT EXISTS battle_element_compose (
                 player_id INTEGER NOT NULL, run_uuid TEXT NOT NULL, formula_id INTEGER NOT NULL,
                 count INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(player_id,run_uuid,formula_id))""")
+            self.store.db.execute("""CREATE TABLE IF NOT EXISTS battle_element_compose_receipts (
+                player_id INTEGER NOT NULL, request_key TEXT NOT NULL, response BLOB NOT NULL,
+                PRIMARY KEY(player_id,request_key))""")
 
     def handlers(self):
         return {"C2L_ElementCompose": self.compose}
 
-    def _active_run(self, player_id: int) -> str:
+    def _active_run(self, player_id: int, session_id: str) -> str:
         row = self.store.db.execute(
-            "SELECT uuid FROM economy_runs WHERE player_id=? AND settled=0 ORDER BY rowid DESC LIMIT 1",
-            (player_id,)).fetchone()
+            "SELECT uuid FROM economy_runs WHERE player_id=? AND session_id=? AND settled=0 ORDER BY rowid DESC LIMIT 1",
+            (player_id, session_id)).fetchone()
         return row["uuid"] if row else ""
 
     async def compose(self, context, packet):
@@ -63,25 +67,38 @@ class ElementComposeService:
         request = ELEMENT_COMPOSE_SCHEMAS["C2L_ElementCompose"].decode(packet.body)
         formula_id = request.get("elementID", 0)
         count = request.get("count", 0)
+        key = hashlib.sha256((context.session.session_id + ':' + str(packet.header.request_id)).encode()
+                             + packet.body).hexdigest()
+        schema = ELEMENT_COMPOSE_SCHEMAS['L2C_ElementCompose']
+        cached = self.store.db.execute(
+            'SELECT response FROM battle_element_compose_receipts WHERE player_id=? AND request_key=?',
+            (player_id, key)).fetchone()
+        if cached:
+            return OutboundMessage('L2C_ElementCompose', schema.decode(cached[0]))
         formula = self.formulas.get(formula_id)
         if formula is None or not 0 < count <= self.MAX_COUNT:
             LOGGER.info("element compose refused formula=%s count=%s player=%s",
                         formula_id, count, player_id)
             return OutboundMessage("L2C_ElementCompose", {"code": REFUSED, "count": 0})
-        run_uuid = self._active_run(player_id)
+        # Native MaxComposeNum caps a single operation by ComposeRoundLimit.
+        if formula.get('roundLimit') and count > formula['roundLimit']:
+            return OutboundMessage('L2C_ElementCompose', {'code': REFUSED, 'count': 0})
+        run_uuid = self._active_run(player_id, context.session.session_id)
         if not run_uuid:
             LOGGER.info("element compose without an active run formula=%s player=%s",
                         formula_id, player_id)
             return OutboundMessage("L2C_ElementCompose", {"code": REFUSED, "count": 0})
-        with self.store.db:
+        values = {'code': OK, 'count': count,
+                  'composeItem': [INT_PAIR.encode({'Key': formula['itemId'], 'Value': count})]}
+        with self.economy.transaction():
             self.store.db.execute("""INSERT INTO battle_element_compose VALUES (?,?,?,?)
                 ON CONFLICT(player_id,run_uuid,formula_id) DO UPDATE SET count=count+excluded.count""",
                 (player_id, run_uuid, formula_id, count))
+            self.store.db.execute('INSERT INTO battle_element_compose_receipts VALUES (?,?,?)',
+                                  (player_id, key, schema.encode(values)))
         LOGGER.info("element compose player=%s run=%s formula=%s x%s -> item=%s",
                     player_id, run_uuid, formula_id, count, formula["itemId"])
-        return OutboundMessage("L2C_ElementCompose", {
-            "code": OK, "count": count,
-            "composeItem": [INT_PAIR.encode({"Key": formula["itemId"], "Value": count})]})
+        return OutboundMessage('L2C_ElementCompose', values)
 
     def profile_fields(self, player_id: int, run_uuid: str) -> dict:
         """FightDataProfile fields for this run's element compositions."""

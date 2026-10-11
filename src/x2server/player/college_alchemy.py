@@ -98,15 +98,26 @@ class AlchemyService:
     def recipe_exp(self, state):
         alchemy = state['alchemy']
         exp = {int(pair['Key']): int(pair['Value']) for pair in alchemy.get('recipe_exp', [])}
-        tier = self.repo.catalog.effect(state, 707, 10, star=True)[0]
         for recipe in self.recipes.values():
             if recipe['RecipeLevel'] == 1:
                 exp.setdefault(recipe['RecipeID'], 0)
-        for rid, value in list(exp.items()):
-            if rid in self.recipes and value >= 0:
-                for unlocked in self.effects(self.recipes[rid], value, 3):
-                    if unlocked in self.recipes and self.recipes[unlocked]['RecipeLevel'] <= tier:
-                        exp.setdefault(unlocked, 0)
+        # Building 707's E_Building07Recipe governs furnace recipes (292xx),
+        # not CollegeRecipe (360xx). Native RefreshRecipeMaxUnlock 0x189caa4
+        # derives alchemy tiers exclusively from non-negative recipe experience.
+        # Walk to a fixed point so an existing save can recover an entire chain
+        # without another collection or losing its accumulated experience.
+        pending = [(rid, value) for rid, value in exp.items() if rid in self.recipes and value >= 0]
+        visited = set()
+        while pending:
+            rid, value = pending.pop()
+            if rid in visited:
+                continue
+            visited.add(rid)
+            for unlocked in self.effects(self.recipes[rid], value, 3):
+                if unlocked in self.recipes:
+                    if exp.get(unlocked, -1) < 0:
+                        exp[unlocked] = 0
+                    pending.append((unlocked, exp[unlocked]))
         alchemy['recipe_exp'] = [{'Key': rid, 'Value': value} for rid, value in sorted(exp.items())]
         return exp
 
@@ -119,10 +130,11 @@ class AlchemyService:
 
     def snapshot_fields(self, state):
         exp = self.recipe_exp(state)
-        tier = self.repo.catalog.effect(state, 707, 10, star=True)[0]
         bars = state['alchemy'].get('production_bars', [])
-        return {'recipeIdExp': [MISSION_PAIR.encode({'Key': rid, 'Value': exp.get(rid, -1)})
-                    for rid, recipe in sorted(self.recipes.items()) if recipe['RecipeLevel'] <= tier],
+        # Presence in the native dictionary means unlocked. Negative placeholders
+        # also collide with CheckRecipeUpgrade.Dictionary.Add on collection.
+        return {'recipeIdExp': [MISSION_PAIR.encode({'Key': rid, 'Value': value})
+                    for rid, value in sorted(exp.items()) if rid in self.recipes and value >= 0],
                 'productionBars': [self.production_wire(bars[pos] if pos < len(bars) and bars[pos] else {})
                                    for pos in range(self.slots(state))],
                 'elements': [ELEMENT.encode(row) for row in state['alchemy']['elements']]}
@@ -133,8 +145,6 @@ class AlchemyService:
         exp = self.recipe_exp(state)
         recipe = self.recipes.get(rid)
         if not 0 <= pos < self.slots(state) or not recipe or exp.get(rid, -1) < 0:
-            return values
-        if recipe['RecipeLevel'] > self.repo.catalog.effect(state, 707, 10, star=True)[0]:
             return values
         bars = state['alchemy'].setdefault('production_bars', [])
         if pos < len(bars) and bars[pos]:
@@ -177,8 +187,9 @@ class AlchemyService:
         if remaining <= 0:
             return dict(values, code=205)
         if kind == 1:
-            # CollegeRecipeSpeedUp ctor StarEnergyRate=10; Tick ceil(rest/rate).
-            cost = (remaining + 9) // 10
+            # OnInit overrides the ctor default with GlobalParamString.
+            rate = int(rules()['params']['AlchemySpeedConsume'])
+            cost = (remaining + rate - 1) // rate
             if state['star_energy'] < cost:
                 return dict(values, code=22)
             state['star_energy'] -= cost
@@ -287,12 +298,13 @@ class AlchemyService:
             return dict(values, code=code)
         state['star_energy'] -= energy
         reward = {1237901: gold}
-        self.economy._grant(player_id, 'college-trade:' + uuid.uuid4().hex, reward)
+        source = 'college-trade:' + uuid.uuid4().hex
+        self.economy._grant(player_id, source, reward)
         # 每日/周常 炼金任务: 本服务端顾客一律是 CustomerInfo.type==2 的普通交易委托, 一次
         # 成交同时满足「交易」与「完成 1 次委托」两种读法 (与 economy 里「一次购买既算
         # E_BuyGood 又算 E_BuyGold」同一设计), 对应 630027/630028(日) 与 630113/630114(周)。
-        # key 含 slot/questId, 重放同一请求不会重复计数。
-        source = 'alchemy-finish:%s:%s:%s' % (player_id, pos, customer['questId'])
+        # A recurring customer is a new trade. Transport retries are already
+        # protected by the College receipt; share this trade's unique grant key.
         self.economy.record_event(
             player_id, source + ':deal', self.economy.TASK_EVENT_ALCHEMY_DEAL, 0, 1)
         self.economy.record_event(
