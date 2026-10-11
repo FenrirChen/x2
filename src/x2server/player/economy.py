@@ -58,8 +58,6 @@ class EconomyService:
     TASK_EVENT_LOGIN_DAY = 58          # E_LoginDay: one per local day the player logs in
     TASK_EVENT_FAVORABILITY_LEVEL = 73  # E_FavorabilityLevel: 好感等级达标的英雄数
     TASK_EVENT_CUSTOMS_ENTRY = 87      # E_CustomsEntry
-    TASK_EVENT_ALCHEMY_DEAL = 75        # E_AlchemyDealTask
-    TASK_EVENT_ALCHEMY_QUEST = 76       # E_AlchemyQuestTask
     # GameTaskType.CHALLENGE: 60 tasks in 10 groups, no period, no rollover.
     CHALLENGE_KIND = 3
     # GameTaskType.CHAPTER (7): the chapter DP query and its DP 宝箱 claims.

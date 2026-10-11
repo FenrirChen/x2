@@ -879,19 +879,6 @@ class AlchemyService:
                     player_id, hero_id,
                     trade_price_param(favor_base, TRADE_DISCOUNT_PARAM, divisor=2),
                     commit=False, change_type=ADD_FAVOR_TYPE_ALCHEMY_DISCOUNT))
-        # 每日/周常 炼金任务 (economy_catalog.json 的 task_conditions):
-        #   630027/630113「在炼金实验室完成 N 次交易」 E_AlchemyDealTask=75
-        #   630028/630114「在炼金实验室完成 N 次任务」 E_AlchemyQuestTask=76
-        # 本服务端的顾客一律是 CustomerInfo.type==2 的「普通交易委托」: 客户端把它标成
-        # AlchemyType.TRANSACTION(交易), 名下委托又取自 CollegeQuest.QuestType==1 (E_Chip,
-        # 碎片任务)。一次成交同时满足「交易」与「完成任务」两种读法 (与 economy 里「一次购买
-        # 既算 E_BuyGood 又算 E_BuyGold」同一设计), 所以两个条件一起记, 让这 4 条任务都能涨。
-        # key 复用 source (含 slot/questId), 重放同一请求不会重复计数。
-        if self.economy is not None:
-            self.economy.record_event(
-                player_id, source + ":deal", self.economy.TASK_EVENT_ALCHEMY_DEAL, 0, 1)
-            self.economy.record_event(
-                player_id, source + ":quest", self.economy.TASK_EVENT_ALCHEMY_QUEST, 0, 1)
         row["result"] = 1
         self.repo.put_customer(player_id, slot, row)
         values["rewardData"] = self.economy.reward_bytes_visible(rewards)
