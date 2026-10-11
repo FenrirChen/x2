@@ -9,6 +9,7 @@ from x2server.messages.economy import ECONOMY_SCHEMAS, REWARD, REWARD_ITEM
 from x2server.network.dispatcher import OutboundMessage
 from x2server.protocol.errors import ProtocolError
 from .economy import UnresolvedEconomy
+from .equipment_factory import EquipmentValidationError
 
 
 def resolve_bag_gifts(economy, item_id, groups, selected):
@@ -226,6 +227,7 @@ class BagItemService:
                 cached = self.store.db.execute("SELECT response FROM bag_operation_receipts WHERE player_id=? AND request_key=?", (player, key)).fetchone()
                 if cached:
                     values = ECONOMY_SCHEMAS["L2C_JewelCompose"].decode(cached[0])
+                    reward_equips = tuple(REWARD.decode(values.get("rewardData", b"")).get("rewardEquip", []))
                 else:
                     if recipe["unlockType"]:
                         cleared = self.store.db.execute("SELECT 1 FROM economy_clears WHERE player_id=? AND section_id=?", (player, recipe["unlockParam"])).fetchone()
@@ -268,7 +270,7 @@ class BagItemService:
                         "rewardData": self.economy.reward_bytes(granted, reward_equips)}
                     self.store.db.execute("INSERT INTO bag_operation_receipts VALUES (?,?,?)",
                         (player, key, ECONOMY_SCHEMAS["L2C_JewelCompose"].encode(values)))
-        except UnresolvedEconomy as exc:
+        except (UnresolvedEconomy, EquipmentValidationError) as exc:
             logging.getLogger("x2.economy").info("compose rejected player=%s recipe=%s count=%s reason=%s", player, recipe_id, count, exc)
             return failure
         logging.getLogger("x2.economy").info("compose accepted player=%s recipe=%s count=%s equips=%s",
@@ -298,9 +300,10 @@ class BagItemService:
         deferred: Counter = Counter()
         extra = self.economy.gifts([recipe["otherProductId"]] * hits,
                                    deferred=deferred, allow_daily_random=True)
-        for item, amount in deferred.items():
-            logging.getLogger("x2.economy").warning(
-                "compose extra drop unresolved player=%s item=%s num=%s", player, item, amount)
+        if deferred:
+            # Roll back the entire compose instead of consuming materials and
+            # silently discarding an unsupported extra reward destination.
+            raise UnresolvedEconomy("unresolved compose extra reward")
         return Counter(extra)
 
     def _furnace_extra_permille(self, player):

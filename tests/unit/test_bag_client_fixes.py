@@ -134,9 +134,66 @@ def test_type4_compose_materializes_equipment_box(env, monkeypatch):
     assert REWARD.decode(reply.values["rewardData"]).get("rewardEquip")
     updates = [m for m in reply.before_response if m.message_name == "L2C_EquipUpdate"]
     assert len(updates) == 1 and len(updates[0].values["equip"]) == 1
+    operation = packet({"RecipeID": 29301, "composeCount": 1},
+        name="C2L_JewelCompose", request_id=401)
+    replay = asyncio.run(service.compose(ctx, operation))
+    assert replay.values == reply.values
+    assert next(m.values for m in replay.before_response if m.message_name == "L2C_EquipUpdate") == updates[0].values
+    assert store.db.execute("SELECT COUNT(*) FROM equipment_instances WHERE player_id=1").fetchone()[0] == 1
+    assert store.db.execute("SELECT quantity FROM inventory WHERE item_id=1237920").fetchone()[0] == 20
+    assert store.get(1)["snapshot"]["mobility"]["power"] == before - 50
     # The client caps RecipeType 4 at ten per request; anything larger is refused.
     assert asyncio.run(service.compose(ctx, packet({"RecipeID": 29301, "composeCount": 11},
         name="C2L_JewelCompose", request_id=402))).values["result"] == 13
+
+
+def test_type3_unresolved_extra_rolls_back_materials_and_stamina(env, monkeypatch):
+    store, economy, ctx = env
+    service = BagItemService(store, economy)
+    stock(store, 1202080, 3)
+    before = store.get(1)
+    monkeypatch.setattr("x2server.player.bag_items.secrets.randbelow", lambda n: 0)
+    def unresolved(groups, deferred, allow_daily_random):
+        deferred[1240001] += 1
+        return {}
+    monkeypatch.setattr(economy, "gifts", unresolved)
+    reply = asyncio.run(service.compose(ctx, packet({"RecipeID": 29201, "composeCount": 1},
+        name="C2L_JewelCompose", request_id=403)))
+    assert reply.values["result"] == 13
+    assert store.get(1) == before
+    assert store.db.execute("SELECT quantity FROM inventory WHERE item_id=1202080").fetchone()[0] == 3
+    assert store.db.execute("SELECT COUNT(*) FROM bag_operation_receipts").fetchone()[0] == 0
+
+
+def test_every_furnace_recipe_grants_outputs_and_replays_without_extra_charge(env, monkeypatch):
+    store, economy, ctx = env
+    service = BagItemService(store, economy)
+    now = int(economy.clock())
+    monkeypatch.setattr(economy, "clock", lambda: now)
+    monkeypatch.setattr("x2server.player.bag_items.secrets.randbelow", lambda n: 0)
+    for recipe_id, recipe in economy.bag_catalog["recipes"].items():
+        if recipe["type"] not in (3, 4):
+            continue
+        for item, amount in recipe["costs"]:
+            stock(store, item, amount)
+        p = store.get(1)
+        snapshot = dict(p["snapshot"], gold=1000000,
+            mobility={"power": 100000, "recover_anchor": int(economy.clock())})
+        store.save_snapshot(1, snapshot, p["revision"])
+        if recipe["unlockType"]:
+            with store.db:
+                store.db.execute("INSERT OR IGNORE INTO economy_clears VALUES (1,?,?)", (recipe["unlockParam"], "furnace-test"))
+        operation = packet({"RecipeID": int(recipe_id), "composeCount": 1},
+            name="C2L_JewelCompose", request_id=int(recipe_id))
+        result = asyncio.run(service.compose(ctx, operation))
+        assert result.values["result"] == 10, recipe_id
+        after = store.get(1)
+        assert after["snapshot"]["mobility"]["power"] == 100000 - recipe["power"]
+        assert after["snapshot"]["gold"] == 1000000 - recipe["gold"]
+        reward = REWARD.decode(result.values["rewardData"])
+        assert reward.get("rewardEquip") if recipe["type"] == 4 else reward.get("rewardItem")
+        assert asyncio.run(service.compose(ctx, operation)).values == result.values
+        assert store.get(1) == after
 
 
 def test_every_canonical_gem_recipe_and_invalid_counts(env):
