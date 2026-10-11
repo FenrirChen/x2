@@ -2,6 +2,7 @@
 
 任务：存档管理（导出/导入）第一阶段审计产物。
 状态：**COMPLETE — 完整回答"一个账号的完整游戏状态由哪些数据组成"**。
+2026-10-11 发布复审：实际数据库共 98 张业务表，存档包括 93 张玩家表及 players.snapshot。已补入后来新增的 10 张表；下方 63/60 表数为首次审计历史基线，当前完整字段清单以 save_boundary.json 为准。`validate_boundary.py` 已对当前活体库通过。
 机器可读清单：`tools/savemanager/save_boundary.json`（由 `tools/savemanager/generate_audit.py` 从活体库生成，审计与实现共用同一份清单，不允许漂移）。
 审计基线：活体库 `runtime/phase14/player.sqlite3`（`PRAGMA user_version=2`）＋ `src/x2server/player/` 全部模块源码。未假设 schema，全部结论来自 `sqlite_master` 实际 DDL 与代码交叉验证。
 

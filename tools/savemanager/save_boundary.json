@@ -114,6 +114,22 @@
       "autoincrement": null
     },
     {
+      "table": "activity_exchange_stats",
+      "columns": [
+        "player_id",
+        "exchange_count"
+      ],
+      "primary_key": [
+        "player_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
       "table": "activity_receipts",
       "columns": [
         "player_id",
@@ -347,6 +363,46 @@
       ],
       "included": true,
       "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "battle_element_compose",
+      "columns": [
+        "player_id",
+        "run_uuid",
+        "formula_id",
+        "count"
+      ],
+      "primary_key": [
+        "player_id",
+        "run_uuid",
+        "formula_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "battle_element_compose_receipts",
+      "columns": [
+        "player_id",
+        "request_key",
+        "response"
+      ],
+      "primary_key": [
+        "player_id",
+        "request_key"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [
+        "response"
+      ],
       "json_columns": [],
       "autoincrement": null
     },
@@ -691,6 +747,25 @@
       "primary_key": [
         "player_id",
         "receipt_key"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "course_claims",
+      "columns": [
+        "player_id",
+        "level",
+        "track"
+      ],
+      "primary_key": [
+        "player_id",
+        "level",
+        "track"
       ],
       "owner_column": "player_id",
       "owner_join": null,
@@ -1261,6 +1336,24 @@
       "autoincrement": null
     },
     {
+      "table": "player_divination",
+      "columns": [
+        "player_id",
+        "stamp",
+        "check_mask",
+        "last_time"
+      ],
+      "primary_key": [
+        "player_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
       "table": "player_mail",
       "columns": [
         "id",
@@ -1285,6 +1378,40 @@
         "attachments"
       ],
       "autoincrement": "id"
+    },
+    {
+      "table": "player_novice_sign",
+      "columns": [
+        "player_id",
+        "sign_count",
+        "last_sign_time"
+      ],
+      "primary_key": [
+        "player_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "player_total_login_claimed",
+      "columns": [
+        "player_id",
+        "slot"
+      ],
+      "primary_key": [
+        "player_id",
+        "slot"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
     },
     {
       "table": "players",
@@ -1325,6 +1452,22 @@
       "blob_columns": [
         "response"
       ],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "recharge_first",
+      "columns": [
+        "player_id",
+        "state"
+      ],
+      "primary_key": [
+        "player_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
       "json_columns": [],
       "autoincrement": null
     },
@@ -1448,6 +1591,42 @@
       "autoincrement": null
     },
     {
+      "table": "simple_activity_claims",
+      "columns": [
+        "player_id",
+        "track",
+        "level"
+      ],
+      "primary_key": [
+        "player_id",
+        "track",
+        "level"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "simple_activity_unlocks",
+      "columns": [
+        "player_id",
+        "level"
+      ],
+      "primary_key": [
+        "player_id",
+        "level"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
       "table": "star_chart_receipts",
       "columns": [
         "player_id",
@@ -1502,6 +1681,23 @@
       "blob_columns": [
         "response"
       ],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "system_mail_issues",
+      "columns": [
+        "player_id",
+        "kind"
+      ],
+      "primary_key": [
+        "player_id",
+        "kind"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": false,
+      "blob_columns": [],
       "json_columns": [],
       "autoincrement": null
     },

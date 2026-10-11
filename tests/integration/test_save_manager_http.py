@@ -14,7 +14,7 @@ from urllib.parse import urlencode
 
 import pytest
 
-from tests.unit.test_save_manager import build_full_schema
+from tests.unit.test_save_manager import build_full_schema, populate_rich_state, apply_snapshot, rich_snapshot
 from x2server.bootstrap.http_server import BootstrapHTTPServer
 from x2server.bootstrap.local_identity import LocalIdentityService
 from x2server.bootstrap.models import RecoveredBootstrapContract
@@ -180,18 +180,29 @@ def test_end_to_end_http_socket(service):
     """The bootstrap HTTP server forwards large save bodies to the API."""
     async def scenario() -> None:
         identity, accounts, manager, online, store = service
-        server = BootstrapHTTPServer("127.0.0.1", 0, identity)
+        pid = accounts.get_by_name('alpha')['player_id']
+        apply_snapshot(store, pid, rich_snapshot(40))
+        with store.db:
+            populate_rich_state(store.db, pid)
+        before = manager.canonical_state(pid)
+        # Same bind used on Linux deployments; client connects by host address.
+        server = BootstrapHTTPServer("0.0.0.0", 0, identity)
         await server.start()
         try:
-            base = f"http://{server.bound_host}:{server.bound_port}"
+            base = f"http://127.0.0.1:{server.bound_port}"
             auth_response = await asyncio.to_thread(
                 post, f"{base}/save-manager/auth",
                 urlencode({"account": "alpha", "password": "pw-alpha"}).encode())
             auth = auth_response["token"]
             export = await asyncio.to_thread(post, f"{base}/save-manager/export", b"", auth=auth, raw=True)
             assert export[:2] == b"PK"
+            from x2server.player.save_manager import PLAYER_TABLES
+            plan = manager.parse_save(export)
+            assert set(plan.rows) == set(PLAYER_TABLES)
+            assert all(plan.rows[table] for table in PLAYER_TABLES)
             result = await asyncio.to_thread(post, f"{base}/save-manager/import", export, auth=auth)
             assert result["code"] == "ok"
+            assert manager.canonical_state(pid) == before
         finally:
             await server.stop()
     asyncio.run(scenario())

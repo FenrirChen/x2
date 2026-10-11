@@ -33,6 +33,47 @@ def runtime(env):
     return store, economy, context, runtime, now
 
 
+def test_yuexi_frontier_updates_on_checkout_and_resets_next_period(runtime):
+    _, _, _, rt, now = runtime
+    now[0] = ActivityRotation.ANCHOR + 6 * ActivityRotation.SECONDS + 3600
+    period = rt.a.period(1)
+    assert rt.records(1, period)['previousRecord'] == 0
+    for sid in period.theme['section_ids']:
+        rt.r.put(1, period, 'clear', sid, 1)
+        result = rt.operate(1, 'QueryActivityMissionRecord', {}, 'query')
+        assert result['previousRecord'] == sid
+        pushed = next(m for m in rt.progress_messages(1)
+                      if m.message_name == 'L2C_QueryActivityMissionRecord')
+        assert pushed.values['previousRecord'] == sid
+    now[0] += 7 * ActivityRotation.SECONDS
+    assert rt.records(1, rt.a.period(1))['previousRecord'] == 0
+
+
+@pytest.mark.parametrize('chapter_id,soul', [(2021511,1290189), (2022811,1290190),
+                                           (2021023,1290191), (2022711,1290192)])
+def test_yuexi_pov_soul_paid_only_after_all_successful_stages(runtime, chapter_id, soul):
+    store, economy, _, rt, now = runtime
+    from x2server.player.battle import BattleService
+    BattleService(store, economy)
+    economy.activity = rt.a
+    now[0] = ActivityRotation.ANCHOR + 6 * ActivityRotation.SECONDS + 3600
+    chapter = next(c for c in rt.a.tables['POVChapterInfo'] if c['ChapterID'] == chapter_id)
+    def finish(sid, key, success=True):
+        with economy.transaction():
+            store.db.execute("""INSERT INTO economy_runs
+                (uuid,player_id,session_id,section_id,settled,section_type,entry_source)
+                VALUES (?,1,'session',?,0,4,'MainMission')""", (key, sid))
+            result, _ = economy.settle(1, key, sid, success, section_type=4)
+        return rewards(result)
+    for index, sid in enumerate(chapter['StageID']):
+        if index == len(chapter['StageID']) - 1:
+            assert soul not in finish(sid, f'fail-{sid}', False)
+        result = finish(sid, f'pass-{sid}')
+        assert result.get(soul, 0) == int(index == len(chapter['StageID']) - 1)
+    assert soul not in finish(chapter['StageID'][-1], 'repeat')
+    assert store.db.execute('SELECT quantity FROM inventory WHERE player_id=1 AND item_id=?', (soul,)).fetchone()[0] == 1
+
+
 @pytest.mark.parametrize('theme', [3])
 def test_tower_entry_queries_use_real_catalog_and_stable_passives(runtime, theme):
     _, _, context, rt, now = runtime

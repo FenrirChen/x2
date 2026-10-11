@@ -1054,6 +1054,13 @@ class EconomyService:
                 grants.extend(RewardGrant('EXTRA_DROP', section, run_uuid, item, count,
                     reason='current activity ExtraDroop/AccountBuff') for item, count in extra.items())
                 sources['EXTRA_DROP'].extend({'item_id': i, 'quantity': n} for i, n in extra.items())
+            if activity:
+                chapter_rewards = activity.pov_chapter_rewards(player_id, section)
+                for item, count in chapter_rewards.items():
+                    grant = RewardGrant('FIRST_CLEAR_FIXED', section, run_uuid, item, count,
+                                        reason='POVChapterInfo.ClearReward')
+                    grants.append(grant)
+                    sources['FIRST_CLEAR_FIXED'].append(grant.__dict__)
             rewards = self._grant(player_id, f"battle:{run_uuid}", sum_grants(grants))
             if activity_period:
                 activity.obtained(player_id, activity_period, rewards, f'battle:{run_uuid}')

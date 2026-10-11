@@ -143,7 +143,12 @@ class ActivityRuntime:
             value = self.r.get(player, period, 'record', sid, 0)
             records.append(encode('ActivityMissionRecordData', {'missionId': sid, 'recordValue': value}))
             passes.append(encode('KeyValuePair_Int32_Int32', {'Key': sid, 'Value': self.r.get(player, period, 'clear', sid, 0)}))
-        return {'code': 10, 'missionRecordData': records, 'previousRecord': 0, 'missionPassCount': passes}
+        # YueXi reads previousRecord as a SectionTable ID, then uses its
+        # section order for MaxSectionProgress. Pass counts alone cannot advance it.
+        cleared = [sid for sid in period.theme['section_ids']
+                   if self.r.get(player, period, 'clear', sid, 0)]
+        return {'code': 10, 'missionRecordData': records,
+                'previousRecord': max(cleared, default=0), 'missionPassCount': passes}
 
     def operate(self, player, op, req, token):
         if op == 'QueryActivity':
@@ -353,6 +358,7 @@ class ActivityRuntime:
             return ()
         messages = [OutboundMessage('L2C_SceneGlobalParam',
                     self.operate(player, 'SceneGlobalParam', {}, 'progress')),
+                    OutboundMessage('L2C_QueryActivityMissionRecord', self.records(player, period)),
                     OutboundMessage('L2C_ActivityPassRecord',
                     {'code': 10, 'missionPassCount': self.records(player, period)['missionPassCount']})]
         for row in period.theme['activities']:

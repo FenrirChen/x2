@@ -91,6 +91,10 @@ def build_full_schema(store):
     clock = ServerClock()
     college = CollegeStateRepository(store, clock)
     economy = EconomyService(store, clock=clock.now)
+    from x2server.player.divination import DivinationService
+    from x2server.player.element_compose import ElementComposeService
+    DivinationService(store, economy)
+    ElementComposeService(economy)
     StarChartService(store, economy)
     equipment = EquipmentService(store, economy)
     from x2server.player.equip_plans import EquipPlanService
@@ -258,6 +262,37 @@ def test_export_container_structure(env):
         save_doc = json.loads(zf.read("save.json"))
         assert set(save_doc["tables"]) == set(PLAYER_TABLES)
         assert len(save_doc["tables"]["inventory"]["rows"]) >= 1
+
+
+def test_export_refuses_to_silently_omit_new_persisted_tables(env):
+    from x2server.player.save_manager import SaveBoundaryError
+    store, _, manager, alpha, _ = env
+    with store.db:
+        store.db.execute('CREATE TABLE future_feature (player_id INTEGER, value TEXT)')
+    with pytest.raises(SaveBoundaryError, match='future_feature'):
+        manager.export_save(alpha)
+
+
+def test_legacy_export_preserves_destination_welfare_claims(env):
+    from x2server.player.save_manager import RELEASE_ADDED_TABLES
+    _, _, manager, alpha, _ = env
+    archive = manager.export_save(alpha)
+    before = manager.canonical_state(alpha)
+    with zipfile.ZipFile(io.BytesIO(archive)) as z:
+        manifest = json.loads(z.read('manifest.json'))
+        document = json.loads(z.read('save.json'))
+        blobs = [z.read(name) for name in sorted(z.namelist()) if name.startswith('blobs/')]
+    manifest['server_save_schema'] = 'x2-revival/3'
+    for table in RELEASE_ADDED_TABLES:
+        del document['tables'][table]
+    legacy = manager._container_bytes(manifest, document, blobs)
+    manager.import_save(alpha, legacy)
+    after = manager.canonical_state(alpha)
+    for table in RELEASE_ADDED_TABLES - {'battle_element_compose', 'battle_element_compose_receipts'}:
+        assert after['tables'][table] == before['tables'][table]
+    manifest['server_save_schema'] = SERVER_SAVE_SCHEMA
+    with pytest.raises(ValueError, match='表集不符'):
+        manager.parse_save(manager._container_bytes(manifest, document, blobs))
 
 
 def hashlib_ok(expected: str, payload: bytes) -> bool:

@@ -77,11 +77,13 @@ def main():
              'ActivityBox', 'ActivityBoxGoods', 'ActivityBuilding', 'ShopConfig',
              'ShopGoodsGroup', 'Gift', 'AnswerConfig', 'Tower', 'TowerBase',
              'TowerController', 'TowerGrid', 'TowerRank', 'TowerEffect', 'Item',
-             'ExtraDroop', 'SectionTable', 'MapInfo', 'Language', 'AccountBuff']
+             'ExtraDroop', 'SectionTable', 'MapInfo', 'Language', 'AccountBuff', 'POVChapterInfo']
     tables, meta, missing = read_tables(names)
     if missing:
         raise ValueError(f'Missing required tables: {missing}')
     restore_yuexi_shops(tables)
+    tables['POVChapterInfo'] = [r for r in tables['POVChapterInfo']
+                               if r.get('UnlockActiviyID') == 70010]
     from tools.analysis.export_world_boss import mail_templates
     tables['MailInfo'], meta['MailInfo'] = mail_templates(set(range(1325044, 1325054)))
     sections = {r['SectionID']: r for r in tables['SectionTable']}

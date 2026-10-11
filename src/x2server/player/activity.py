@@ -249,6 +249,24 @@ class ActivityService:
             self.event(player, f'clear:{uuid}', 3, section, 1, period=period)
         self.store.db.execute('UPDATE activity_runs SET settled=1 WHERE uuid=?', (uuid,))
 
+    def pov_chapter_rewards(self, player, section):
+        """Called only by successful, validated battle settlement in its transaction."""
+        period = self.rotation.at()
+        if period is None:
+            return {}
+        for chapter in self.tables.get('POVChapterInfo', []):
+            if (section not in chapter['StageID']
+                    or self.rotation.activity(chapter['UnlockActiviyID'], period) is None):
+                continue
+            self.rotation.put(player, period, 'pov-clear', section, True)
+            if (all(self.rotation.get(player, period, 'pov-clear', sid, False)
+                    for sid in chapter['StageID'])
+                    and self.rotation.once(player, period, f"pov-chapter:{chapter['ChapterID']}")):
+                rewards = self.economy.gifts([chapter['ClearReward']], allow_daily_random=True)
+                self.obtained(player, period, rewards, f"pov-chapter:{chapter['ChapterID']}")
+                return rewards
+        return {}
+
     def mission_values(self, player, activity):
         period, row = self.require(player, activity)
         missions = []

@@ -20,7 +20,7 @@ import time
 from collections.abc import Callable
 from urllib.parse import parse_qs
 
-from ..player.save_manager import MAX_UPLOAD_BYTES, SaveManager
+from ..player.save_manager import MAX_UPLOAD_BYTES, SaveManager, SaveBoundaryError
 
 LOGGER = logging.getLogger("x2.bootstrap.save_manager")
 
@@ -60,6 +60,9 @@ class SaveManagerAPI:
         except OSError as exc:
             LOGGER.error("save-manager I/O failure route=%s error=%s", path, type(exc).__name__)
             return self._json(500, {"error": "internal_error"})
+        except SaveBoundaryError:
+            LOGGER.exception("save-manager export boundary incomplete")
+            return self._json(503, {"error": "save_schema_incomplete"})
         except RuntimeError:
             LOGGER.exception("save-manager online status unavailable")
             return self._json(503, {"error": "online_status_unavailable"})

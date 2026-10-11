@@ -23,7 +23,7 @@ blobs/NNNNNN.bin       BLOB 列原始字节（按导出顺序编号，000001 起
 {
   "format": "X2_REVIVAL_SAVE",
   "format_version": 1,
-  "server_save_schema": "x2-revival/2",
+  "server_save_schema": "x2-revival/4",
   "exported_at": 1727750000,
   "source_player": {"player_id": 3, "account": "fenrirchen", "login_count": 25},
   "checksums": {
@@ -49,7 +49,9 @@ blobs/NNNNNN.bin       BLOB 列原始字节（按导出顺序编号，000001 起
 }
 ```
 
-- 表集合必须与审计边界（`save_manager.PLAYER_TABLES`，60 张）**完全一致**：不多、不少。
+- 新存档表集合必须与审计边界（`save_manager.PLAYER_TABLES`，93 张）**完全一致**：不多、不少。
+- 兼容 `x2-revival/3` 的旧 83 表存档。旧文件缺失的八张福利/领奖表保留目标账号已有记录；缺失的两张战斗合成表清空。旧文件中从未保存的数据无法恢复，不能把旧存档视为新版完整备份。
+- 导出前校验实际持久化表是否全在边界内；发现新增表未定义归属时返回明确错误，避免静默漏存。
 - 序列化：`json.dumps(..., ensure_ascii=False, sort_keys=True, separators=(",", ":"))`，整数不丢精度（Python int / JSON number），UTF-8，禁 NaN/Inf。
 - 行按导出时的 rowid 顺序排列。
 - 值编码：

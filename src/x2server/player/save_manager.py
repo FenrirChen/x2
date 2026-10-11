@@ -30,8 +30,8 @@ from .store import validate_snapshot
 
 SAVE_FORMAT = "X2_REVIVAL_SAVE"
 SAVE_FORMAT_VERSION = 1
-SERVER_SAVE_SCHEMA = "x2-revival/3"
-ACCEPTED_SCHEMAS = {SERVER_SAVE_SCHEMA}
+SERVER_SAVE_SCHEMA = "x2-revival/4"
+ACCEPTED_SCHEMAS = {SERVER_SAVE_SCHEMA, "x2-revival/3"}
 
 MAX_UPLOAD_BYTES = 96 * 1024 * 1024
 MAX_ENTRY_COUNT = 65535  # accumulated battle BLOBs; bounded by byte limits below
@@ -79,7 +79,14 @@ TABLES_WITH_OWNER_COLUMN = [
     "sweep_receipts", "task_boxes", "task_history", "task_periods",
     "wish_last_result", "wish_pity", "wish_receipts", "wish_state",
 ]
+RELEASE_ADDED_TABLES = {
+    "activity_exchange_stats", "battle_element_compose", "battle_element_compose_receipts",
+    "course_claims", "player_divination", "player_novice_sign", "player_total_login_claimed",
+    "recharge_first", "simple_activity_claims", "simple_activity_unlocks",
+}
+TABLES_WITH_OWNER_COLUMN.extend(sorted(RELEASE_ADDED_TABLES))
 PLAYER_TABLES = sorted(TABLES_WITH_OWNER_COLUMN) + sorted(JOIN_OWNERS)
+LEGACY_PLAYER_TABLES = set(PLAYER_TABLES) - RELEASE_ADDED_TABLES
 # These are server-wide encounters/calendars, not a single player's save.
 GLOBAL_TABLES = {"accounts", "players", "repair_history", "world_boss_runs", "world_boss_days", "system_mail_issues"}
 
@@ -109,6 +116,7 @@ UUID_FAMILY_COLUMNS = {
     "battle_checkout_wire": "uuid", "economy_runs": "uuid",
     "economy_checkouts": "uuid",
     "pending_reward_instances": "run_id", "reward_settlement_audit": "run_id",
+    "battle_element_compose": "run_uuid",
 }
 GLOBAL_KEY_COLUMNS = {
     "world_boss_tickets": "ticket",
@@ -126,12 +134,17 @@ for _name in (*PLAYER_TABLES, *JOIN_OWNERS):
 COLUMN_NAME_RE = re.compile(r"[a-z_][a-z_0-9]*")
 
 
+class SaveBoundaryError(RuntimeError):
+    """A deployment added persisted tables without defining their save ownership."""
+
+
 @dataclass
 class ImportPlan:
     rows: dict[str, list[dict[str, Any]]]
     snapshot: dict[str, Any]
     source_player_id: int
     blobs: dict[str, bytes] = field(default_factory=dict)
+    preserve_tables: set[str] = field(default_factory=set)
 
 
 def _connect(store) -> sqlite3.Connection:
@@ -183,12 +196,20 @@ class SaveManager:
 
     # -- export -------------------------------------------------------------
 
+    def _check_boundary(self) -> None:
+        live = {r[0] for r in self.db.execute(
+            "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'")}
+        uncovered = live - set(PLAYER_TABLES) - GLOBAL_TABLES
+        if uncovered:
+            raise SaveBoundaryError(f"Uncovered persisted save tables: {sorted(uncovered)}")
+
     def export_save(self, player_id: int) -> bytes:
         """One consistent read transaction over the whole save boundary."""
         with self._lock:
             db = self.db
             db.execute("BEGIN DEFERRED")
             try:
+                self._check_boundary()
                 player = db.execute(
                     "SELECT id, account, login_count, snapshot FROM players WHERE id=?",
                     (player_id,)).fetchone()
@@ -311,10 +332,20 @@ class SaveManager:
         except ValueError as exc:
             raise ValueError(f"snapshot 非法: {exc}") from exc
         tables_doc = save_doc["tables"]
-        if not isinstance(tables_doc, dict) or set(tables_doc) != set(PLAYER_TABLES):
+        if not isinstance(tables_doc, dict):
+            raise ValueError('存档表集必须为对象')
+        legacy = (manifest['server_save_schema'] == 'x2-revival/3'
+                  and set(tables_doc) == LEGACY_PLAYER_TABLES)
+        if not legacy and set(tables_doc) != set(PLAYER_TABLES):
             missing = sorted(set(PLAYER_TABLES) - set(tables_doc))[:3]
             extra = sorted(set(tables_doc) - set(PLAYER_TABLES))[:3]
             raise ValueError(f"存档表集不符 missing={missing} extra={extra}")
+        # Legacy exports omitted these tables. Preserve destination welfare
+        # claims instead of reopening rewards; transient battle data resets.
+        preserve = (RELEASE_ADDED_TABLES - {'battle_element_compose', 'battle_element_compose_receipts'}
+                    if legacy else set())
+        if legacy:
+            tables_doc.update({table: {'rows': []} for table in RELEASE_ADDED_TABLES})
         source_pid = manifest["source_player"]["player_id"]
         rows_by_table: dict[str, list[dict[str, Any]]] = {}
         blob_refs: set[str] = set()
@@ -333,7 +364,7 @@ class SaveManager:
         if missing_blobs:
             raise ValueError(f"缺失 BLOB {sorted(missing_blobs)[:3]}")
         return ImportPlan(rows=rows_by_table, snapshot=save_doc["snapshot"],
-                          source_player_id=source_pid, blobs=blobs)
+                          source_player_id=source_pid, blobs=blobs, preserve_tables=preserve)
 
     def _validate_manifest(self, manifest: Any, blobs: dict[str, bytes],
                            save_bytes: bytes) -> None:
@@ -443,7 +474,7 @@ class SaveManager:
             try:
                 from .system_mail import remember_once_mail_history
                 remember_once_mail_history(db, player_id)
-                self._delete_target_state(db, player_id)
+                self._delete_target_state(db, player_id, plan.preserve_tables)
                 uuid_map = self._compute_uuid_map(db, plan, target["id"])
                 key_maps = {table: self._compute_key_map(db, table, plan, target["id"])
                             for table in GLOBAL_KEY_COLUMNS}
@@ -560,7 +591,8 @@ class SaveManager:
         path.write_bytes(current)
         return path
 
-    def _delete_target_state(self, db: sqlite3.Connection, player_id: int) -> None:
+    def _delete_target_state(self, db: sqlite3.Connection, player_id: int,
+                             preserve_tables: set[str] | None = None) -> None:
         # Delete join-owned rows before their direct-owner parents disappear.
         for table, (parent, parent_col, child_col) in JOIN_OWNERS.items():
             if self.exists(table) and self.exists(parent):
@@ -571,6 +603,8 @@ class SaveManager:
         observation_ids = [r[0] for r in db.execute(
             "SELECT id FROM fight_drop_observations WHERE player_id=?", (player_id,))]
         for table in PLAYER_TABLES:
+            if table in (preserve_tables or set()):
+                continue
             if not self.exists(table):
                 continue
             if table in JOIN_OWNERS:
