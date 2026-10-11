@@ -216,6 +216,25 @@ def test_five_star_upgrade_charges_the_next_player_stage_row(env):
     assert store.db.execute("SELECT quantity FROM inventory WHERE item_id=1201000").fetchone()[0] == 9
 
 
+@pytest.mark.parametrize("stage", [46, 0, 47])
+def test_terminal_or_unknown_hero_star_returns_failure_without_mutation(env, stage):
+    store, economy, ctx = env
+    service = ProgressionService(store, economy)
+    with economy.transaction():
+        snapshot = store.get(1)["snapshot"]
+        snapshot["heroes"][0]["star"] = stage
+        economy.save_snapshot(1, snapshot)
+        economy._grant(1, "terminal-fragments", {1201003: 100})
+    before = store.get(1)
+    for seq in (401, 402):
+        result = asyncio.run(service.handle(ctx, packet({"id": 1003, "opt": 2,
+            "upstarConsumeItemId": 1201003}, seq, "C2L_HeroOpt")))
+        assert result.values["code"] == 13
+    assert store.get(1) == before
+    assert store.db.execute("SELECT quantity FROM inventory WHERE item_id=1201003").fetchone()[0] == 100
+    assert store.db.execute("SELECT COUNT(*) FROM progression_receipts").fetchone()[0] == 0
+
+
 def test_artifact_progress_reaches_100_before_fusing(env):
     store, economy, ctx = env
     service = ProgressionService(store, economy)

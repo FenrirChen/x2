@@ -241,7 +241,7 @@ class ProgressionService:
                         event = 7
                         events.append(self.economy.TASK_EVENT_HERO_LEVEL_UP)
                     elif req.get("opt") == 2:
-                        row = next(r for r in catalog()["hero_star"] if r["star"] == hero["star"])
+                        row = next((r for r in catalog()["hero_star"] if r["star"] == hero["star"]), None)
                         # PlayerStage stores the chips needed to *reach* a stage,
                         # and the client reads them off row(star + 1):
                         # HeroStarUP_Refresh 0x1923A9C-0x1923B28 loads
@@ -258,7 +258,7 @@ class ProgressionService:
                         # "five stars can no longer be starred up", with chips and
                         # universal chips alike.
                         target = next((r for r in catalog()["hero_star"]
-                                       if r["star"] == row.get("next_star")), None)
+                                       if row and r["star"] == row.get("next_star")), None)
                         if target is None:
                             raise UnresolvedEconomy("invalid star request")
                         options = {prototype["fragment_item_id"]: target["fragment_count_field"],
