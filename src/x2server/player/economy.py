@@ -48,6 +48,7 @@ class EconomyService:
     TASK_EVENT_UPGRADE_EQUIPMENT = 12  # E_UpgradeEquipment
     TASK_EVENT_UPGRADE_SKILL = 13      # E_UpgradeSkill
     TASK_EVENT_UPGRADE_ARTIFACT = 14   # E_UpgradeArtifact
+    TASK_EVENT_HERO_ADVENTURE = 16     # E_HeroAdventure
     TASK_EVENT_HERO_INTERACTIVE = 19   # E_HeroInteractive
     TASK_EVENT_BUY_GOOD = 24           # E_BuyGood
     TASK_EVENT_ACCOUNT_LEVEL = 43      # E_AccountLevel: progress is the player's level

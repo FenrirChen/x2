@@ -241,12 +241,24 @@ class WorldBossService:
             slot['done']=True
         return {'code':10,'slotId':index,'rewardData':reward}
 
+    def _credit_adventure(self, player, key):
+        """每次派遣神格探险计一次每日/周常任务（CompleteType 16 E_HeroAdventure）。
+
+        对应每日任务 630007「通过时空之门进行 1 次遗迹探险」与周常 630107
+        「通过时空之门进行 10 次探险」。handle() 已把整段包在自己的事务里，所以这里
+        用内部的 ``_event`` 记账（不另开事务）；随后 handle 的 ``pushes()`` 会带上
+        ``L2C_TaskUpdate``，任务页才能即时刷新。
+        """
+        self.economy._event(player, f"worldboss-search:{key}",
+                            self.economy.TASK_EVENT_HERO_ADVENTURE, 0, 1)
+
     def search(self, player, state, key):
         if state['searches']>=self.activity['ExploreNumber']:
             raise ValueError('daily exploration exhausted')
         if not any(s['event']==self.explore[0]['ID'] for s in state['slots']):
             boss_id=self.ensure_boss_slot(player,state)
             state['searches']+=1
+            self._credit_adventure(player,key)
             boss=self.get_boss(boss_id)
             return {'code':10,'bossEvent':self.explore[0]['ID'],'eventVal':boss['type_id'],
                 'slotIdx':len(state['slots'])-1,'bossId':self.client_id(boss_id,player),'bossGroup':boss['group_id']}
@@ -265,6 +277,7 @@ class WorldBossService:
         index = len(state['slots'])
         state['slots'].append({'event':self.explore[kind]['ID'],'value':event['EventID']})
         state['searches']+=1
+        self._credit_adventure(player,key)
         return {'code':10,'bossEvent':self.explore[kind]['ID'],'eventVal':event['EventID'],'slotIdx':index}
 
     def boss_hp(self, static, monster_level, *, personal=False):
