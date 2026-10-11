@@ -71,6 +71,10 @@ class EconomyService:
     STORY_REVIEW_UNLOCK_ITEM = 1237916
     STORY_REVIEW_UNLOCK_NUM = 1
     STORY_REVIEW_AWARD = 760066
+    # 首充奖品: GameActivity 100001 的 RegistrationGift = [783023] (离线端 router.cpp:4330
+    # 同源)。FirstRechargePage_Init 正是读这一行的 RegistrationGift 展开成展示列表,
+    # 所以「领取」必须真发这一组 (原版奖励, 不做替换), 否则玩家看到列表却拿不到东西。
+    FIRST_RECHARGE_GIFT = 783023
     # REVIVAL_COMPATIBILITY ladder retained from the community fix package.
     POWER_BUY_PRICES = (20, 20, 40, 60, 80, 100, 120, 150, 180, 220,
                         260, 300, 350, 400, 460, 520, 600, 700, 800, 1000)
@@ -140,6 +144,9 @@ class EconomyService:
             store.db.execute("""CREATE TABLE IF NOT EXISTS inventory (
                 player_id INTEGER NOT NULL, item_id INTEGER NOT NULL, quantity INTEGER NOT NULL CHECK(quantity>=0),
                 PRIMARY KEY(player_id,item_id))""")
+            # 首充领取状态: 0=未充过 1=可领取 2=已领取 (客户端 L2C_QueryFirstReCharge.state)。
+            store.db.execute("""CREATE TABLE IF NOT EXISTS recharge_first (
+                player_id INTEGER NOT NULL PRIMARY KEY, state INTEGER NOT NULL DEFAULT 0)""")
             store.db.execute("""CREATE TABLE IF NOT EXISTS item_opt_receipts (
                 request_key TEXT PRIMARY KEY, player_id INTEGER NOT NULL, response BLOB NOT NULL)""")
             store.db.execute("""CREATE TABLE IF NOT EXISTS economy_tasks (
@@ -220,6 +227,13 @@ class EconomyService:
         self.endless = EndlessService(self)
         from .world_boss import WorldBossService
         self.world_boss = WorldBossService(self)
+        # 星之特权 (特别课程 100002) 与 积分活动 (100000), 另加献祭福利 (100003) 与
+        # 自选三星 (100005)。只依赖 store, 自建领取状态表并真发货 (见 player/extra_activity.py)。
+        from .extra_activity import ExtraActivityService
+        self.extra_activity = ExtraActivityService(self)
+        # 降临纪念 / 累计登录 (100004): 按创号时刻判天数门槛并真发货 (见 player/total_login.py)。
+        from .total_login import TotalLoginService
+        self.total_login = TotalLoginService(self)
         from .pending_delivery import recover
         for row in store.db.execute("SELECT id FROM players").fetchall():
             recover(self, row[0])
@@ -443,6 +457,30 @@ class EconomyService:
         self.store.db.execute("INSERT INTO economy_grants VALUES (?,?,?,?)",
             (player_id, source, json.dumps(rewards, sort_keys=True), int(time.time())))
         return rewards
+
+    def materialize_equipment(self, player_id, run_uuid, specs):
+        """Roll and persist the specs' equipment instances; returns wire-ready HeroEquip bytes.
+
+        与本地同名实现一致: 逐条 spec 用 materialize_instances 落库 (marker 幂等),
+        再把实例编码成客户端 rewardData.rewardEquip 认的 HeroEquip 字节。活动中心
+        (player/extra_activity.py) 发货时用它接住 ItemType 10 的奖励 —— 裸 1240xxx id
+        直接进奖励列表会让客户端断线, 只能作为实例落地再经 rewardEquip 下发。
+        """
+        equips, ordinal = [], 0
+        for spec in specs:
+            instances = materialize_instances(self.store.db, player_id, spec["item_id"],
+                                              spec["star"], spec["quantity"], run_uuid,
+                                              self.equipment_factory, ordinal)
+            ordinal += spec["quantity"]
+            for instance in instances:
+                wire = {k: v for k, v in instance.items() if k != "marker"}
+                equips.append(HERO_EQUIP.encode({**wire, "param": EQUIP_PARAM.encode(instance["param"])}))
+        if equips:
+            logging.getLogger("x2.economy").info(
+                "equipment instances materialized run=%s player=%s equips=%s",
+                run_uuid, player_id,
+                [(e["id"], e["typeId"], e["star"]) for e in (HERO_EQUIP.decode(b) for b in equips)])
+        return equips
 
     def inventory_values(self, player_id):
         from .appearance import avatar_frames
@@ -1247,15 +1285,65 @@ class EconomyService:
             OutboundMessage("L2C_TaskUpdate", {"type": 3, "taskList": self.challenge_values(player_id)["taskList"]}),
             self.achievements.update(player_id))
 
+    # ---- 首充 ------------------------------------------------------------
+    #
+    # USER_DECISION: 本地「一律点开就能领」。首充以前要先去充值页点一个档位才解锁
+    # (state 0 -> 1); 离线端 (x2offline/src/server/router.cpp:4314) 的口径也是「未领过
+    # 一律回 state=1」, 所以这里 state 0/1 都当可领取, 只有领过 (2) 才不可领。
+
+    def _first_recharge_state(self, player_id: int) -> int:
+        """0/1 都当「可领取」, 只有领过 (2) 才不可领。"""
+        row = self.store.db.execute(
+            "SELECT state FROM recharge_first WHERE player_id=?", (player_id,)).fetchone()
+        state = int(row[0]) if row else 0
+        return 1 if state == 0 else state
+
+    def query_first_recharge(self, player_id: int) -> OutboundMessage:
+        """L2C_QueryFirstReCharge: 0=未充过 1=可领取 2=已领取。"""
+        return OutboundMessage("L2C_QueryFirstReCharge",
+                               {"code": 10, "state": self._first_recharge_state(player_id)})
+
+    def receive_first_recharge(self, player_id: int) -> OutboundMessage:
+        """领取首充奖励: 真发首充礼包 FIRST_RECHARGE_GIFT (783023)。
+
+        口径照离线端 router.cpp:4329 recive-first-recharge: 状态必须为 1 (未领过),
+        在事务里 _grant 发货 (幂等去重 + 落快照), 再把状态推进到 2。旧实现只推状态、
+        不发货 —— 但首充列表是客户端从 GameActivity 100001 自己读出来的, 明细它早就
+        有了, 不发等于白点一次。
+        """
+        state = self._first_recharge_state(player_id)
+        if state != 1:
+            return OutboundMessage("L2C_ReciveFirstReCharge", {"code": 13})
+        try:
+            with self.transaction():
+                rewards = self.gifts([self.FIRST_RECHARGE_GIFT])
+                self._grant(player_id, "first-recharge", rewards)
+                self.store.db.execute("""INSERT INTO recharge_first VALUES (?,2)
+                    ON CONFLICT(player_id) DO UPDATE SET state=2""", (player_id,))
+        except UnresolvedEconomy as exc:
+            logging.getLogger("x2.economy").warning(
+                "first recharge claim refused player=%s reason=%s", player_id, exc)
+            return OutboundMessage("L2C_ReciveFirstReCharge", {"code": 13})
+        logging.getLogger("x2.economy").info(
+            "first recharge claimed player=%s delivered=%s", player_id, sorted(rewards.items()))
+        return OutboundMessage("L2C_ReciveFirstReCharge",
+                               {"code": 10, "rewardData": self.reward_bytes(dict(rewards))},
+                               pushes=self.pushes(player_id))
+
     def handlers(self):
         from .bag_items import BagItemService
         from .medals import MedalService
-        return {**self.world_boss.handlers(), **self.endless.handlers(), **MedalService(self).handlers(), **BagItemService(self.store, self).handlers(), **self.achievements.handlers(),
+        handlers = {**self.world_boss.handlers(), **self.endless.handlers(), **MedalService(self).handlers(), **BagItemService(self.store, self).handlers(), **self.achievements.handlers(),
                 "C2L_FetchMobilityPower": self.fetch_mobility_power,
                 **{name: self.handle for name in ("C2L_ItemAll", "C2L_ItemOpt", "C2L_ShopGoods", "C2L_RefreshShop", "C2L_BuyGoods",
             "C2L_QueryGoodsInfo", "C2L_GameTask", "C2L_DailyAndWeekTask", "C2L_FinishGameTask",
             "C2L_FinishGameTaskAsync", "C2L_PickTreasureBox", "C2L_QueryMission",
-            "C2L_UnlockStory")}}
+            "C2L_UnlockStory", "C2L_QueryFirstReCharge", "C2L_ReciveFirstReCharge")}}
+        # 活动中心: 星之特权/积分活动/献祭福利/自选三星 (ExtraActivityService) 与
+        # 降临纪念 (TotalLoginService) 各答自己的请求。
+        handlers.update(self.extra_activity.handlers())
+        handlers.update(self.total_login.handlers())
+        return handlers
 
     async def fetch_mobility_power(self, context, packet):
         player_id = context.session.player_id
@@ -1291,6 +1379,12 @@ class EconomyService:
         self.ensure_periods(player_id)
         name = CORE_MESSAGE_REGISTRY.name_for(packet.message_id)
         logging.getLogger("x2.economy").info("economy request %s player=%s", name, player_id)
+        # 首充这两个请求体都是空结构, 在 decode 前就地应答: C2L_QueryFirstReCharge 的
+        # schema 由 COLLEGE_IDS/messages.college 提供, 不在 LOBBY_SCHEMAS 里。
+        if name == "C2L_QueryFirstReCharge":
+            return self.query_first_recharge(player_id)
+        if name == "C2L_ReciveFirstReCharge":
+            return self.receive_first_recharge(player_id)
         request = (ECONOMY_SCHEMAS if name in ECONOMY_SCHEMAS else LOBBY_SCHEMAS)[name].decode(packet.body)
         response_name = name.replace("C2L_", "L2C_", 1)
         if name == "C2L_ItemOpt":

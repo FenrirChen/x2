@@ -162,6 +162,17 @@ BASE_INFO = ProtoSchema("BaseInfoProto", (
     ProtoField(59, "RMBCrystal", FieldKind.INT32),
     ProtoField(60, "JewelCoin", FieldKind.INT32),
     ProtoField(66, "FragmentMoney", FieldKind.INT32),
+    # 活动中心写在 BaseInfoProto 上的计数 (客户端自己的字段号):
+    #   53 NoviceSignInCount / 54 NoviceLastSignInTime / 55 NoviceSignInStartTime
+    #      —— 献祭福利 (限时签到 100003)。页签要求 55 非 0 才可点, 53 是已签到天数,
+    #      54 是上次签到时刻 (判「今天还能不能签」)。
+    #   61 ForeverExchangeCount —— 自选三星 (100005) 的已兑换次数。
+    # 值由 player/extra_activity.py 的 novice_sign_values / exchange_count 生成,
+    # 经 player/login.py 的 snapshot_push 下发。
+    ProtoField(53, "NoviceSignInCount", FieldKind.INT32),
+    ProtoField(54, "NoviceLastSignInTime", FieldKind.INT32),
+    ProtoField(55, "NoviceSignInStartTime", FieldKind.INT32),
+    ProtoField(61, "ForeverExchangeCount", FieldKind.INT32),
     ProtoField(32, "Birthday", FieldKind.INT32),
     ProtoField(14, "HeroExp", FieldKind.INT32),
     ProtoField(15, "QuestIDs", FieldKind.MESSAGE, repeated=True),
@@ -185,6 +196,14 @@ MODULE_STATUS = ProtoSchema("ModuleStatusProto", (
     ProtoField(4, "DrawStatus", FieldKind.INT32),
     ProtoField(5, "ShopStatus", FieldKind.INT32),
     ProtoField(6, "ClubStatus", FieldKind.INT32),
+))
+# DailyProto (PlayerDataProto 成员 3)。上游各模块各声明自己的一小段再拼接
+# (world_boss 13/14, star_chart 18, college_pray 12), 这里只声明降临纪念要下发的
+# TotalLoginDays (字段 8, int64)。客户端 CumulateLoginModule_RefreshRedPoint 从
+# Daily.TotalLoginDays 读累计登录天数判「天数够没够」, 缺了它页面天数恒 0 (即
+# 「时间出错」)。**不要**把已领档位塞进 Daily 的其它字段。
+LOGIN_DAILY = ProtoSchema("DailyProto", (
+    ProtoField(8, "TotalLoginDays", FieldKind.INT64),
 ))
 PLAYER_DATA = ProtoSchema("PlayerDataProto", (
     ProtoField(1, "BaseInfo", FieldKind.MESSAGE),
