@@ -40,6 +40,7 @@ from x2server.player.system_mail import daily_welfare_watch, deliver_hero_choice
 from x2server.player.tutorial import TutorialService
 from x2server.player.star_chart import StarChartService
 from x2server.player.equip_plans import EquipPlanService
+from x2server.player.divination import DivinationService
 
 
 async def run(database: Path, seconds: float) -> None:
@@ -69,6 +70,8 @@ async def run(database: Path, seconds: float) -> None:
     logging.getLogger("x2.system_mail").info(
         "revival supply mail backfill minted=%s failed=%s", supply_minted, supply_failed)
     economy = EconomyService(store, clock=clock.now)
+    # 星相屋/每日占卜 (362/363): 读写自己的签到状态并真发货, 见 player/divination.py。
+    divination = DivinationService(store, economy)
     college_flows = CollegeService(college, economy=economy)
     star_chart = StarChartService(store, economy)
     equipment = EquipmentService(store, economy)
@@ -88,7 +91,7 @@ async def run(database: Path, seconds: float) -> None:
                          mail=mail, gift_packages=gift_packages, college=college)
     http = BootstrapHTTPServer(endpoints.bind_host, endpoints.http_port, identity)
     tcp = X2TCPServer(Settings(tcp_host=endpoints.bind_host, tcp_port=endpoints.game_port, read_timeout=120),
-        Dispatcher({**star_chart.handlers(), **LobbyService(clock, college).handlers(), **college_flows.handlers(), **TutorialService(store).handlers(), **BirthdayService(store).handlers(), **economy.handlers(), **shop.handlers(), **gift_packages.handlers(), **collection.handlers(), **favor.handlers(), **appearance.handlers(), **appearance_shop.handlers(), **mail.handlers(), **terminal.handlers(), **equipment.handlers(), **equip_plans.handlers(), **wish.handlers(), **ProgressionService(store, economy, appearance).handlers(), **BattleService(store, economy).handlers(), **BattleShopService(store, economy).handlers(), "C2L_HeroAll": HeroService(store).query_all,
+        Dispatcher({**star_chart.handlers(), **LobbyService(clock, college).handlers(), **college_flows.handlers(), **TutorialService(store).handlers(), **BirthdayService(store).handlers(), **economy.handlers(), **divination.handlers(), **shop.handlers(), **gift_packages.handlers(), **collection.handlers(), **favor.handlers(), **appearance.handlers(), **appearance_shop.handlers(), **mail.handlers(), **terminal.handlers(), **equipment.handlers(), **equip_plans.handlers(), **wish.handlers(), **ProgressionService(store, economy, appearance).handlers(), **BattleService(store, economy).handlers(), **BattleShopService(store, economy).handlers(), "C2L_HeroAll": HeroService(store).query_all,
                     "C2L_Login": login.login, "C2L_ReConnect": login.reconnect,
                     "C2L_ServerTableConfig": login.server_config}))
     chat = X2TCPServer(Settings(tcp_host=endpoints.bind_host, tcp_port=endpoints.chat_port, read_timeout=120),

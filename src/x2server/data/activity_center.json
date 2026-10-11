@@ -1,0 +1,70 @@
+{
+  "_source": "客户端表 x2offline/masterdata/table 的 GameActivity(100004 降临纪念/累计登录, 100003 献祭福利/限时签到, 100002 特别课程/星之特权) 与 SimpleActivity(100000 积分活动) + SimpleActivityAction(4 条动作)。用户口径 2026-10-09: 本地「点开就能领」, 不要求真充值; 累计登录/限时签到严格按真实创号天数, 不做提前。",
+  "totalLoginActivity": {
+    "id": 100004,
+    "registrationDay": [36, 81],
+    "registrationGift": [760121, 760122],
+    "conditionLevel": [35, 45]
+  },
+  "noviceSignActivity": {
+    "id": 100003,
+    "registrationKeepTime": 10,
+    "registrationDay": [1, 2, 3, 4, 5],
+    "registrationGift": [760071, 760072, 760073, 760074, 760075],
+    "refreshTime": 5
+  },
+  "courseActivity": {
+    "id": 100002,
+    "gates": [10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60],
+    "freeGiftGroups": [
+      [795001, 710050],
+      [795002, 710051],
+      [795003],
+      [795004, 710038],
+      [795005, 710039],
+      [795006],
+      [795007, 710044],
+      [795008, 710045],
+      [795009],
+      [795010],
+      [795011]
+    ],
+    "paidGiftGroups": [
+      [795021],
+      [795022],
+      [795023],
+      [795024],
+      [795025],
+      [795026],
+      [795027],
+      [795028],
+      [795029],
+      [795030],
+      [795031]
+    ]
+  },
+  "simpleActivity": {
+    "id": 100000,
+    "activityDuration": 604800,
+    "getGiftTime": 864000,
+    "actions": [
+      {"id": 100000, "actionEnum": 1, "parmMax": 63},
+      {"id": 100001, "actionEnum": 2, "parmMax": 60},
+      {"id": 100002, "actionEnum": 3, "parmMax": 64},
+      {"id": 100003, "actionEnum": 4, "parmMax": 50}
+    ],
+    "scores": [40, 75, 110, 142, 168, 188],
+    "giftList": [905200, 905201, 905202, 905203, 905204, 905205],
+    "extraGiftList": [905206, 905207, 905208, 905209, 905210, 905211],
+    "rechargeId": 22100
+  },
+  "exchangeActivity": {
+    "id": 100005,
+    "currencyItem": 1237914,
+    "price": 20,
+    "giftGroup": 796043,
+    "level": 30,
+    "refreshTime": 5,
+    "_source": "客户端 GameActivity[100005]: RegistrationDay [914, 20] -> 货币 914 = CurrencyType 行 914 (CurrencyEnu 14 = E_VowOfCoin, ItemID 1237914 = 许愿币) x 20; RegistrationGift [796043] -> Gift 796043 = 1290001 自选3★神格 x1; ConditionLevel [30]; RefreshTime 5。文案 LanguageUI 6164/6165「自选三星」/ 7421「是否消耗20许愿币兑换一个自选3星神格」。"
+  }
+}

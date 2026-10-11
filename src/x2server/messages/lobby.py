@@ -15,6 +15,15 @@ MISSION_TYPE = ProtoSchema("MissionTypeData", (F(1, "type", K.INT32),
     F(2, "missionData", K.MESSAGE, repeated=True),
     F(3, "chapterHisMaxScore", K.MESSAGE, repeated=True),
     F(4, "chapterHisMaxScoreSec", K.MESSAGE, repeated=True)))
+# 星之特权 (特别课程) 一条档位的领取状态, 嵌在 L2C_QueryStarPrivilegeReward /
+# L2C_ReciveStarPrivilegeReward 的 privilegeRewardList 里。字段序 = 客户端自己的类型
+# (protocol/commandx2_messages.md 的 StarPrivilegeReward):
+# level / reciveFreeReward / recivePrivilegeReward, 全 int32。
+STAR_PRIVILEGE_REWARD = ProtoSchema("StarPrivilegeReward", (
+    F(1, "level", K.INT32),
+    F(2, "reciveFreeReward", K.INT32),
+    F(3, "recivePrivilegeReward", K.INT32),
+))
 BUILDING_BASE_INFO = ProtoSchema("BuildingBaseInfo", (F(1, "buildingId", K.INT32),
     F(2, "buildingLevel", K.INT32), F(3, "buildingStar", K.INT32)))
 GROWTH_BASE = ProtoSchema("L2C_QueryGrowthBase", (
@@ -112,6 +121,20 @@ LOBBY_IDS = (
     # above) and L2C_UnlockStory.story (field 3). Nothing ever filled that field,
     # so every 剧情回顾 chapter rendered locked with a 解锁 button.
     ("UnlockStory", 667, 668),
+    # 活动中心 (星相屋 / 首充 / 特别课程 / 积分活动 / 献祭福利 / 降临纪念 / 自选三星) 的
+    # 读写消息。这些之前只有消息号没有 schema/handler, 客户端点「领取」收不到回包 ->
+    # 一直等到超时再重连。它们都由 player/lobby.py 的 DELEGATED 转给真实现:
+    #   362/363 星相屋每日占卜      -> player/divination.py
+    #   721/722, 988/989, 1013/1014, 774/775, 890/891, 986/987
+    #                                -> player/extra_activity.py
+    #   816/817 降临纪念 (累计登录) -> player/total_login.py
+    #   635/636 首充领取              -> EconomyService (player/economy.py)
+    # (633/634 QueryFirstReCharge 已在 COLLEGE_IDS 里登记, 不在这里重复, 否则
+    #  registry 会因同名 id 冲突而拒绝加载。)
+    ("Divination", 362, 363), ("ReciveStarPrivilegeReward", 721, 722),
+    ("SimpleActivityOpt", 988, 989), ("SimpleActivityNotice", 1013, 1014),
+    ("TotalLoginReward", 816, 817), ("ReciveNoviceSign", 774, 775),
+    ("ExchangeItemActivity", 890, 891), ("ReciveFirstReCharge", 635, 636),
 )
 LOBBY_SCHEMAS = {
     "C2L_" + name: ProtoSchema("C2L_" + name,
@@ -131,6 +154,20 @@ for name, fields in {
     # ChapterInfo.ReviewUnlockRequest / POVChapterInfo.ReviewUnlockRequest hold
     # chapterType, so the request is exactly (chapterId, chapterType).
     "UnlockStory": (F(1, "chapterId", K.INT32), F(2, "chapterType", K.INT32)),
+    # 活动中心领取请求体。字段序 = 客户端自己的类型:
+    #   C2L_ReciveStarPrivilegeReward = reciveLevelList(list<int32>, 线上是裸 varint)
+    #   C2L_SimpleActivityOpt = id, opt(0 UNLOCK_FUN / 1 REWARD_MAIN / 2 REWARD_EXTRA), param
+    #   C2L_SimpleActivityNotice = id
+    #   C2L_TotalLoginReward = daysIndex (0-based 下标或 36/81 这个天数, 两种都认)
+    #   C2L_ReciveNoviceSign = SignCount
+    # C2L_Divination / C2L_ExchangeItemActivity / C2L_ReciveFirstReCharge 都是空结构,
+    # 走 LOBBY_IDS 默认的空 schema (C2L_QueryFirstReCharge 同理, 但它的编号在
+    # COLLEGE_IDS 里, schema 由 messages/college.py 提供)。
+    "ReciveStarPrivilegeReward": (F(1, "reciveLevelList", K.INT32, repeated=True),),
+    "SimpleActivityOpt": (F(1, "id", K.INT32), F(2, "opt", K.ENUM), F(3, "param", K.INT32)),
+    "SimpleActivityNotice": (F(1, "id", K.INT32),),
+    "TotalLoginReward": (F(1, "daysIndex", K.INT32),),
+    "ReciveNoviceSign": (F(1, "SignCount", K.INT32),),
 }.items():
     LOBBY_SCHEMAS["C2L_" + name] = ProtoSchema("C2L_" + name, fields)
 for name, fields in {
@@ -184,6 +221,38 @@ for name, fields in {
     # how the chapter just unlocked becomes replayable without a fresh query.
     "UnlockStory": (F(1, "code", K.ENUM), F(2, "rewardData", K.MESSAGE),
                     F(3, "story", K.INT32, repeated=True)),
+    # 活动中心回包。字段序都取自离线端 x2offline/src/server/router.cpp 与客户端
+    # il2cpp-types.h 的声明序:
+    #   363 Divination = code + rewardData
+    #   817 TotalLoginReward = code + daysIndex(回显) + rewardData
+    #   775 ReciveNoviceSign = code + SignCount(新的已签到天数) + rewardData
+    #   891 ExchangeItemActivity = code + rewardData (必须带 rewardData, 否则换不了)
+    #   722 ReciveStarPrivilegeReward = code + privilegeRewardList + rewardData
+    #   989 SimpleActivityOpt = code + mainRewards + extraRewards + unlockInfo + rewardData
+    #   1014 SimpleActivityNotice = code + id + totalProgress + subProgress +
+    #        mainRewards + extraRewards + unlockInfo
+    #   634 QueryFirstReCharge = code + state; 636 ReciveFirstReCharge = code + rewardData
+    "Divination": (F(1, "code", K.ENUM), F(2, "rewardData", K.MESSAGE)),
+    "TotalLoginReward": (F(1, "code", K.ENUM), F(2, "daysIndex", K.INT32),
+                         F(3, "rewardData", K.MESSAGE)),
+    "ReciveNoviceSign": (F(1, "code", K.ENUM), F(2, "SignCount", K.INT32),
+                         F(3, "rewardData", K.MESSAGE)),
+    "ExchangeItemActivity": (F(1, "code", K.ENUM), F(2, "rewardData", K.MESSAGE)),
+    "ReciveStarPrivilegeReward": (F(1, "code", K.ENUM),
+                                  F(2, "privilegeRewardList", K.MESSAGE, repeated=True),
+                                  F(3, "rewardData", K.MESSAGE)),
+    "SimpleActivityOpt": (F(1, "code", K.ENUM), F(2, "mainRewards", K.INT32, repeated=True),
+                          F(3, "extraRewards", K.INT32, repeated=True),
+                          F(4, "unlockInfo", K.INT32, repeated=True),
+                          F(5, "rewardData", K.MESSAGE)),
+    "SimpleActivityNotice": (F(1, "code", K.ENUM), F(2, "id", K.INT32),
+                             F(3, "totalProgress", K.INT32),
+                             F(4, "subProgress", K.MESSAGE, repeated=True),
+                             F(5, "mainRewards", K.INT32, repeated=True),
+                             F(6, "extraRewards", K.INT32, repeated=True),
+                             F(7, "unlockInfo", K.INT32, repeated=True)),
+    "QueryFirstReCharge": (F(1, "code", K.ENUM), F(2, "state", K.INT32)),
+    "ReciveFirstReCharge": (F(1, "code", K.ENUM), F(2, "rewardData", K.MESSAGE)),
 }.items():
     LOBBY_SCHEMAS["L2C_" + name] = ProtoSchema("L2C_" + name, fields)
 

@@ -9,7 +9,7 @@ from typing import Any
 
 from x2server.bootstrap.local_identity import LocalIdentityService
 from x2server.messages.core import (C2L_LOGIN, BASE_INFO, MOBILITY, MODULE_STATUS, RECONNECT,
-                                    STRING_PAIR, INT_PAIR)
+                                    STRING_PAIR, INT_PAIR, LOGIN_DAILY)
 from x2server.messages.favor import FAVOR, FAVOR_MAP_ENTRY
 from .favor import catalog, favor_state
 from x2server.network.dispatcher import DispatchContext, OutboundMessage
@@ -129,13 +129,20 @@ class LoginService:
         selected = snapshot.get("show")
         show = selected if selected in owned_ids else owned_ids[0] if owned_ids else 0
         from x2server.player.appearance import head_icon_info
+        stamp = int(time.time()) if now is None else int(now)
         currency_balances = {name: 0 for name in SHOP_CURRENCY_FIELDS.values()}
+        extra_base: dict[str, Any] = {}
         if store is not None:
             for item_id, quantity in store.db.execute(
                     "SELECT item_id,quantity FROM inventory WHERE player_id=?", (player["id"],)):
                 name = SHOP_CURRENCY_FIELDS.get(item_id)
                 if name:
                     currency_balances[name] += quantity
+            # 活动中心写在 BaseInfoProto 上的计数 (字段 53/54/55 献祭福利, 61 自选三星)。
+            # 页签靠 55 非 0 才可点, 53/54 画签到进度。
+            from .extra_activity import exchange_count, novice_sign_values
+            extra_base = novice_sign_values(store.db, player["id"], stamp, player.get("created_at"))
+            extra_base["ForeverExchangeCount"] = exchange_count(store.db, player["id"])
         base = BASE_INFO.encode({"Id": player["id"], "NickName": snapshot["nickname"],
             "Level": snapshot["level"], "Show": show,
             "Gold": snapshot.get("gold", 0), "Crystal": snapshot.get("crystal", 0),
@@ -151,6 +158,7 @@ class LoginService:
             "QuestIDs": [INT_PAIR.encode({"Key": int(k), "Value": int(v)})
                 for k, v in sorted(snapshot.get("guide_groups", {}).items(), key=lambda p: int(p[0]))],
             **currency_balances,
+            **extra_base,
             "IconInfo": head_icon_info(snapshot, {
                 int(hero["id"]): hero.get("favor", {})
                 for hero in snapshot.get("heroes", [])})})
@@ -173,8 +181,13 @@ class LoginService:
             college_row = store.db.execute('SELECT state_json FROM college_state WHERE player_id=?', (player['id'],)).fetchone()
             if college_row:
                 from .college_pray import daily_fields
-                values['Daily'] = values.get('Daily', b'') + daily_fields(json.loads(college_row[0]),
-                    int(time.time()) if now is None else int(now))
+                values['Daily'] = values.get('Daily', b'') + daily_fields(json.loads(college_row[0]), stamp)
+        # 降临纪念 (累计登录): Daily.TotalLoginDays (字段 8)。客户端
+        # CumulateLoginModule_RefreshRedPoint 从它判天数够没够, 缺了页面天数恒 0
+        # (「时间出错」)。天数按创号时刻算, 与 player/total_login.py 的领取门槛同源。
+        from .total_login import login_days
+        values["Daily"] = (values.get("Daily") or b"") + LOGIN_DAILY.encode(
+            {"TotalLoginDays": login_days(player.get("created_at"), stamp)})
         # REVIVAL_COMPAT 2026-10-02: CollegeModule.IsCollegeEnable (0x1AF9FF8)
         # enables the base entry only when PlayerData.ModuleStatus.GrowthBaseStatus
         # == 1; the official server value is unrecoverable, keep the module open.

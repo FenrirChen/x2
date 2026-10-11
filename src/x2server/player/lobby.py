@@ -14,6 +14,20 @@ from x2server.protocol.types import DecodedPacket
 
 
 class LobbyService:
+    # 活动中心里会改写玩家状态 (发奖/记签到) 的消息, 本文件的空态兜底答不了, 交给
+    # 各自的服务: 星相屋 -> DivinationService; 特别课程/积分活动/献祭福利/自选三星 ->
+    # ExtraActivityService; 降临纪念 -> TotalLoginService; 首充 -> EconomyService。
+    # (这些名字在 messages/lobby.py 的 LOBBY_IDS 里, 必须在派发表里让位, 否则空态
+    # 的 CObserve 回复会盖掉真实现。)
+    DELEGATED = frozenset((
+        "QueryDivination", "Divination",
+        "QueryStarPrivilegeReward", "ReciveStarPrivilegeReward", "QueryStarPrivilegeInfo",
+        "QuerySimpleActivity", "SimpleActivityOpt", "SimpleActivityNotice",
+        "ReciveNoviceSign", "ExchangeItemActivity",
+        "TotalLoginReward",
+        "QueryFirstReCharge", "ReciveFirstReCharge",
+    ))
+
     def __init__(self, clock=None, college=None, *, sweep_enabled=False):
         self.clock = clock or ServerClock()
         self.college = college
@@ -22,7 +36,8 @@ class LobbyService:
         self.sweep_enabled = sweep_enabled
 
     def handlers(self):
-        return {"C2L_" + name: self.query for name, _, _ in LOBBY_IDS}
+        return {"C2L_" + name: self.query for name, _, _ in LOBBY_IDS
+                if name not in self.DELEGATED}
 
     async def query(self, context: DispatchContext, packet: DecodedPacket) -> OutboundMessage:
         if context.session.player_id is None:
