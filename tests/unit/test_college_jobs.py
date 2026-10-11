@@ -5,6 +5,7 @@ from tests.unit.test_college_upgrade import game
 from tests.unit.test_college_alchemy import send, seed_elements
 from x2server.messages.lobby import TRAINING_DATA, EXPLORE_DATA
 from x2server.player.college import CollegeStateRepository
+from x2server.player.college_alchemy import rules
 from x2server.player.college_power import hero_power
 from x2server.player.store import PlayerStore
 from x2server.protocol.headers import RequestHeader
@@ -273,14 +274,20 @@ def test_alchemy_energy_and_crystal_speed(game, kind):
     store, clock, repo, _, _ = game
     remaining = repo.load(1)['alchemy']['production_bars'][0]['endTime'] - clock.value
     if kind == 1:
+        # Star energy prices the remaining seconds at one point per
+        # AlchemySpeedConsume (GlobalParamString, 120): an empty store must refuse
+        # the request instead of charging a rate the client never quoted.
         state = repo.load(1)
-        state['star_energy'] = 0
+        state['star_energy'], state['star_gain_time'] = 0, clock.value
         repo.save(1, state)
         assert send(game, 'MakIngSpeed', seq=2, posIndex=0, type=kind).values['code'] == 22
         state['star_energy'] = 200
         repo.save(1, state)
         clock.value += remaining - 100
         remaining = 100
+        state = repo.load(1)
+        state['star_energy'], state['star_gain_time'] = 200, clock.value
+        repo.save(1, state)
     energy_before = repo.growth_base(1)['starEnergy']
     player = store.get(1)
     store.save_snapshot(1, dict(player['snapshot'], crystal=100), player['revision'])
@@ -290,7 +297,9 @@ def test_alchemy_energy_and_crystal_speed(game, kind):
     state = repo.load(1)
     assert state['alchemy']['production_bars'][0]['endTime'] == clock.value
     if kind == 1:
-        assert state['star_energy'] == energy_before - (remaining + 119) // 120
+        rate = rules()["params"]["AlchemySpeedConsume"]
+        cost = (remaining + rate - 1) // rate
+        assert state['star_energy'] == energy_before - cost
     else:
         recipe = service.alchemy.recipes[rid]
         assert store.get(1)['snapshot']['crystal'] == before - recipe['Pay']
