@@ -566,8 +566,10 @@ def test_first_theme_all_sections_enter_settle_replay_with_real_rewards(runtime)
     obtained = {}
     for idx, sid in enumerate(rt.r.at().theme['section_ids']):
         row = battle.catalog.sections[sid]
+        hero = (next(h for h in row['AssistParam'] if h > 0)
+                if row.get('AssistType', {}).get('value') == 1 else 1003)
         entry = asyncio.run(battle.enter(ctx, packet({'missionId': sid, 'chapter': row['ChapterID'],
-            'sceneId': row['Maps'][0], 'heros': [PROFILE_HERO.encode({'heroId': 1003, 'leader': 1})]}, 100 + idx)))
+            'sceneId': row['Maps'][0], 'heros': [PROFILE_HERO.encode({'heroId': hero, 'leader': 1})]}, 100 + idx)))
         assert entry.values['result'] == 10, (sid, entry.values)
         checkout = packet({'checkout': CHECKOUT.encode({'chapterId': row['ChapterID'],
             'sectionId': sid, 'success': True, 'fightTime': 200})}, 200 + idx, name='C2L_CheckoutMainMissionSign')
@@ -604,8 +606,10 @@ def test_all_activity_sections_enter_and_settle_in_their_period(runtime, theme_i
             predecessor = row.get('OpenParam') if row.get('OpenType', {}).get('value') == 2 else 0
             if predecessor in pending:
                 continue
+            hero = (next(h for h in row['AssistParam'] if h > 0)
+                    if row.get('AssistType', {}).get('value') == 1 else 1003)
             entry = asyncio.run(battle.enter(ctx, packet({'missionId': sid, 'chapter': row['ChapterID'],
-                'sceneId': row['Maps'][0], 'heros': [PROFILE_HERO.encode({'heroId': 1003, 'leader': 1})]}, 10000 + count)))
+                'sceneId': row['Maps'][0], 'heros': [PROFILE_HERO.encode({'heroId': hero, 'leader': 1})]}, 10000 + count)))
             assert entry.values['result'] == 10, (period.theme['title'], sid, entry.values)
             assert FIGHT_PROFILE.decode(entry.values['fightDataProfile'])['sceneId'] == row['Maps'][0]
             checkout = packet({'checkout': CHECKOUT.encode({'chapterId': row['ChapterID'],
@@ -631,3 +635,47 @@ def test_all_activity_sections_enter_and_settle_in_their_period(runtime, theme_i
             count += 1
             progressed = True
         assert progressed, (period.theme['title'], sorted(pending))
+
+
+@pytest.mark.parametrize('theme_index,section', [(0, 2161190), (5, 2160400)])
+@pytest.mark.parametrize('wire_hero', [1303, 1003])
+def test_nian_feast_trial_entry_checkout_and_replay(runtime, theme_index, section, wire_hero):
+    from x2server.player.battle import BattleService
+    from x2server.messages.battle import CHECKOUT, PROFILE_HERO, FIGHT_DATA, FIGHT_HERO, BATTLE_SCHEMAS
+    store, economy, context, rt, now = runtime
+    now[0] = ActivityRotation.ANCHOR + theme_index * ActivityRotation.SECONDS + 3600
+    economy.activity = rt.a
+    battle = BattleService(store, economy)
+    player = store.get(1)
+    store.save_snapshot(1, {**player['snapshot'], 'heroes': []}, player['revision'])
+    before = store.get(1)['snapshot']
+    row = battle.catalog.sections[section]
+    values = {'missionId': section, 'chapter': row['ChapterID'], 'sceneId': row['Maps'][0],
+              'heros': [PROFILE_HERO.encode({'heroId': wire_hero, 'leader': 1})]}
+    request = packet(values, 501)
+    entry = asyncio.run(battle.enter(context, request))
+    assert entry.values['result'] == 10
+    fight = FIGHT_DATA.decode(entry.values['data'])
+    hero = FIGHT_HERO.decode(fight['fightHeros'][0])
+    assert (hero['id'], hero['level'], hero['star']) == (1303, 50, 15)
+    assert hero['battleSkinId'] == 1220301
+    replay = asyncio.run(battle.enter(context, request))
+    assert BATTLE_SCHEMAS['L2C_FightData'].encode(replay.values) == BATTLE_SCHEMAS['L2C_FightData'].encode(entry.values)
+    assert store.get(1)['snapshot']['heroes'] == before['heroes']
+    for seq, invalid in enumerate((
+            {**values, 'sceneId': row['Maps'][0] + 1},
+            {**values, 'chapter': row['ChapterID'] + 1},
+            {**values, 'heros': [PROFILE_HERO.encode({'heroId': 1004, 'leader': 1})]},
+            {**values, 'heros': [PROFILE_HERO.encode({'heroId': hid, 'leader': 1})
+                                 for hid in (1003, 1303)]}), 510):
+        assert asyncio.run(battle.enter(context, packet(invalid, seq))).values['result'] == 13
+    checkout = packet({'checkout': CHECKOUT.encode({'chapterId': row['ChapterID'],
+        'sectionId': section, 'success': True, 'fightTime': 200})}, 502, 'C2L_CheckoutMainMissionSign')
+    result = asyncio.run(battle.checkout(context, checkout))
+    assert result.values['result'] == 10
+    replay = asyncio.run(battle.checkout(context, checkout))
+    assert BATTLE_SCHEMAS['L2C_CheckoutMainMission'].encode(replay.values) == BATTLE_SCHEMAS['L2C_CheckoutMainMission'].encode(result.values)
+    assert rt.r.get(1, rt.r.at(), 'clear', section) == 1
+    assert store.get(1)['snapshot']['heroes'] == []
+    now[0] += ActivityRotation.SECONDS
+    assert asyncio.run(battle.enter(context, packet(values, 503))).values['result'] == 13

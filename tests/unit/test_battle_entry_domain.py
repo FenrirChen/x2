@@ -209,8 +209,12 @@ def test_each_static_section_type_enters_and_settles_without_invented_reward(env
         if section_type == 6:
             admit_fixture(economy, section)
         chapter = row["ChapterID"]
+        values = daily(section, chapter, row["Maps"][0])
+        if row.get('AssistType', {}).get('value') == 1:
+            hero = next(h for h in row['AssistParam'] if h > 0)
+            values['heros'] = [PROFILE_HERO.encode({'heroId': hero, 'leader': 1})]
         entry = asyncio.run(service.enter(ctx, packet(
-            daily(section, chapter, row["Maps"][0]), 400 + section_type)))
+            values, 400 + section_type)))
         assert entry.values["result"] == 10, (section_type, section)
         assert FIGHT_DATA.decode(entry.values["data"])["missionId"] == section
         drop = asyncio.run(service.drop_data(ctx, packet(

@@ -261,7 +261,7 @@ class AlchemyService:
         plus, discount = request.get('plusPrice', False), request.get('discountPrice', False)
         if action != 1 or (plus and discount):
             return values
-        customer = self.customer(player_id, pos)
+        customer = self.customer(player_id, pos, state)
         if customer['type'] != 2:
             return values
         exp = self.recipe_exp(state)
@@ -343,7 +343,7 @@ class AlchemyService:
         values = {'code': 13, 'type': action, 'posIndex': pos}
         if action != 1 or not 0 <= pos < self.customer_count(player_id):
             return values
-        customer = self.customer(player_id, pos)
+        customer = self.customer(player_id, pos, state)
         recommendation = customer['adviseItemId']
         recipe, _ = self.recipe_price(state, recommendation)
         if customer['type'] != 2 or not recipe or recommendation == customer['itemId'][0]:

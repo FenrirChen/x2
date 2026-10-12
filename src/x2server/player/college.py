@@ -354,7 +354,7 @@ class CollegeService:
             "code": 10,
             "recipeIdExp": [MISSION_PAIR.encode({"Key": recipe, "Value": exp.get(recipe, 0)})
                             for recipe in recipes],
-            "customeres": [CUSTOMER_INFO.encode(self._customer_for(player_id, pos))
+            "customeres": [CUSTOMER_INFO.encode(self._customer_for(player_id, pos, state))
                            for pos in range(self._customer_count(player_id))],
             "productionBars": [PRODUCTION_BAR.encode({})],
             "elements": [ELEMENT.encode(row) for row in state['alchemy'].get('elements', [])]
@@ -368,38 +368,66 @@ class CollegeService:
         elif self.college:
             count = self.college.catalog.effect(state, 701, 7, star=True)[0]
             values['productionBars'] = [PRODUCTION_BAR.encode({'buffId': [0]}) for _ in range(count)]
+            with self.college.transaction():
+                self.college.save(player_id, state)
         return OutboundMessage("L2C_AlchemyMainData", values)
 
     def _customer_count(self, player_id):
         return 5  # MAX_CUSTOMER_NUM and GlobalParamString.AlchemyCustomerNum
 
-    def _customer_for(self, player_id: int, pos_index: int) -> dict:
+    def _customer_for(self, player_id: int, pos_index: int, state=None) -> dict:
+        if state is None and self.college:
+            with self.college.transaction():
+                state = self.college.load(player_id)
+                result = self._customer_for(player_id, pos_index, state)
+                self.college.save(player_id, state)
+                return result
         catalog = self._load_catalog()
         customers = catalog["customers"]
-        state = self.college.load(player_id) if self.college else initial_state()
-        rotations = state.get('alchemy', {}).get('customer_rotations', {})
-        # The game day belongs in the seed. Without it the index only moved when
-        # the player refused an order, so each position kept showing the same
-        # face and demanding the same item forever.
+        state = state if state is not None else initial_state()
+        alchemy = state['alchemy']
+        rotations = alchemy.get('customer_rotations', {})
         from .task_calendar import task_period
         day, _ = task_period(1, self.clock.now())
         day_index = day // 86400
-        # One god stands at one position: walk the positions in order and skip
-        # whatever the lower ones already took, so the five slots never show the
-        # same character twice.
-        used = set()
-        index = 0
-        for pos in range(pos_index + 1):
+        old_day = alchemy.get('customer_day')
+        if old_day != day:
+            alchemy['customer_positions'] = {}
+            if old_day is not None:
+                alchemy['customer_orders'] = {}
+            alchemy['customer_day'] = day
+        positions = alchemy.setdefault('customer_positions', {})
+        by_quest = {r['sellQuestId']: r for r in customers}
+        used, valid = set(), {}
+        # Reserve unchanged positions before replacing any one customer. Later
+        # positions must keep the orders the client is currently displaying.
+        for pos in range(self._customer_count(player_id)):
+            key = str(pos)
+            rotation = int(rotations.get(key, 0))
+            saved = positions.get(key, {})
+            if not saved and old_day is None:
+                saved = alchemy.get('customer_orders', {}).get(key, {})
+            row = by_quest.get(saved.get('questId'))
+            if (row and saved.get('rotation') == rotation
+                    and row['heroId'] not in used):
+                valid[key] = {'questId': row['sellQuestId'], 'rotation': rotation}
+                used.add(row['heroId'])
+        for pos in range(self._customer_count(player_id)):
+            key = str(pos)
+            if key in valid:
+                continue
             base = (player_id * 31 + pos * 17 + 5
-                    + int(rotations.get(str(pos), 0)) + day_index) % len(customers)
-            index = base
+                    + int(rotations.get(key, 0)) + day_index) % len(customers)
             for offset in range(len(customers)):
                 candidate = (base + offset) % len(customers)
-                if int(customers[candidate]["heroId"]) not in used:
-                    index = candidate
+                row = customers[candidate]
+                if row['heroId'] not in used:
+                    valid[key] = {'questId': row['sellQuestId'],
+                                  'rotation': int(rotations.get(key, 0))}
+                    used.add(row['heroId'])
                     break
-            used.add(int(customers[index]["heroId"]))
-        row = customers[index]
+        alchemy['customer_positions'] = valid
+        row = by_quest[valid[str(pos_index)]['questId']]
         rotation = int(rotations.get(str(pos_index), 0))
         element = str(row["like"])
         first = catalog["recipes"][element]["1"]

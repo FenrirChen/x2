@@ -479,7 +479,8 @@ class BattleService:
             return OutboundMessage('L2C_FightData', values, pushes=self.economy.pushes(player['id']))
         from .progression import battle_hero_base, hero_attributes, hero_skills, catalog
         owned = {h["id"]: h for h in snapshot.get("heroes", [])}
-        section_config = self.economy.sections.get(section) if self.economy else None
+        # Activity trial teams are absent from the main-story-only economy catalog.
+        section_config = self.catalog.sections.get(section)
         trial_unit = None
         if section_config and section_config.get("AssistType", {}).get("value") == 1:
             trial_unit = next((unit for unit in section_config.get("AssistParam", []) if unit > 0), None)
@@ -495,6 +496,8 @@ class BattleService:
         if any(not h or h["state"] != 2 or str(h.get("battle_base_id", h["id"])) not in battle_hero_base()
                or not 1 <= h["level"] <= 120 or not 1 <= h["star"] <= 46 for h in heroes):
             return reject
+        if len({h['id'] for h in heroes}) != len(heroes):
+            return reject  # Normal/trial aliases must not duplicate one trial unit.
         key = hashlib.sha256((context.session.session_id + ':' + str(packet.header.request_id)).encode() + packet.body).hexdigest()
         cached = self.store.db.execute("SELECT response FROM battle_entries WHERE player_id=? AND request_key=?",
                                       (player["id"], key)).fetchone()

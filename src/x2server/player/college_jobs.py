@@ -88,9 +88,6 @@ class CollegeJobsService:
             'trainingStartTime': now, 'trainingEndTime': now + duration,
             'trainingTime': duration, 'heroId': hid, 'difficulty': 0, 'buildID': row['BuildID'],
             'paid_energy': cost, 'gain_exp': gain, 'job_id': job_id})
-        # 光之密室训练计入 E_HeroTrain (economy_catalog.json 630008 日 / 630108 周)。
-        self.economy._event(player_id, 'college-train:' + job_id,
-            self.economy.TASK_EVENT_HERO_TRAIN, 0, 1)
         return dict(result, code=10, heroId=hid, diffdifficulty=0, trainTime=duration,
                     trainEndTime=now + duration, starEnergy=state['star_energy'], buildId=row['BuildID'])
 
@@ -114,7 +111,7 @@ class CollegeJobsService:
             hero['level'] = row['next_level']
         hero['college_status'] = 0
         state['training'].remove(job)
-        # 与 _start_train 共用同一 job_id，economy_events 去重，避免重复计数。
+        # Count once on successful collection, never on start or cancellation.
         self.economy._event(player_id, 'college-train:' + job['job_id'],
             self.economy.TASK_EVENT_HERO_TRAIN, 0, 1)
         return dict(result, code=10, heroId=hero['id'], heroLevel=hero['level'],

@@ -95,9 +95,6 @@ class CollegePrayService:
             if hero:
                 hero['college_status'] = 1
             self.economy.save_snapshot(pid, snapshot)
-            # 奇迹祈神计入 E_BaseBless (economy_catalog.json 630006 日 / 630112 周)。
-            self.economy._event(pid, 'college-pray:' + job_id,
-                self.economy.TASK_EVENT_BASE_BLESS, 0, 1)
             return dict(result, code=10, heroStatus=1 if hid else 0, prayTime=duration, endTime=now + duration)
         if not job:
             return result
@@ -132,7 +129,7 @@ class CollegePrayService:
         self.economy._grant(pid, 'college-pray:' + flow + ':' + job['job_id'], rewards)
         state['pray'].remove(job)
         if flow == 'BuildRewardPrayGod':
-            # 与 BuildStartPrayGod 共用同一 job_id，economy_events 去重，避免重复计数。
+            # Count once on successful collection, never on start or cancellation.
             self.economy._event(pid, 'college-pray:' + job['job_id'],
                 self.economy.TASK_EVENT_BASE_BLESS, 0, 1)
             result['rewardData'] = self.economy.reward_bytes(rewards).hex()

@@ -15,6 +15,16 @@ from x2server.player.battle_shop import BattleShopService
 SHOP, FLOOR, SECTION = 400201, 4, 2110401  # dark pyramid, a section of chapter 2010500
 
 
+def test_weekly_shop_uses_its_four_recovered_slots_and_stable_stock(env):
+    store, economy, _ = env
+    service = BattleShopService(store, economy)
+    offers = service.stock(400203, 8, 'weekly-run')
+    assert [r['groupId'] for r in offers] == [30213, 30214, 30215, 30216]
+    assert service.stock(400203, 8, 'weekly-run') == offers
+    assert len(service.stock(400202, 5, 'normal-run')) == 6
+    assert len(service.stock(400101, 3, 'normal-run')) == 6
+
+
 def test_stock_rolls_per_player_and_run(env):
     store, economy, _ = env
     service = BattleShopService(store, economy)
