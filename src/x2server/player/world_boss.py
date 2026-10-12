@@ -27,6 +27,24 @@ def day(now):
     return (int(now)+8*3600)//86400
 
 
+_HEAD_ICONS = None
+
+
+def head_icon_of(hero_id):
+    """神格对应的头像 id (Picture 号, 如 贝黑莫斯 1003 -> 1270301)。
+
+    WorldBossPlayer.showTypeId 客户端会原样交给 UIAPI_SetIconImg 当头像号用
+    (结算榜 SettleRankItem_SetData、集结列表 MassPlayerNode_SetData 都读它),
+    发神格 id 时头像表里查不到条目, 榜单那一格于是空着。
+    """
+    global _HEAD_ICONS
+    if _HEAD_ICONS is None:
+        from .appearance import head_icon_catalog
+        _HEAD_ICONS = {int(key): value for key, value in head_icon_catalog()['by_hero'].items()}
+    entry = _HEAD_ICONS.get(int(hero_id or 0))
+    return int(entry['standard']) if entry and entry.get('standard') else 0
+
+
 def personal_monster_level(store, player):
     level = max(1, min(100, int(store.get(player)['snapshot']['level'])))
     return 10 if level < 30 else level // 10 * 10
@@ -375,8 +393,11 @@ class WorldBossService:
             if team and self.store.db.execute("SELECT 1 FROM sqlite_master WHERE name='appearance_wear'").fetchone():
                 worn=self.store.db.execute('SELECT skin_id FROM appearance_wear WHERE player_id=? AND hero_id=? AND type=1',(member['player_id'],team[0])).fetchone()
                 skin=worn[0] if worn else 0
+            # showTypeId 客户端会当头像号喂给 UIAPI_SetIconImg, 要发头像表 (1270xxx) 的
+            # 号, 发神格 id 查不到条目那一格就空着 (兜底仍回退到神格 id)。
             wire = PLAYER.encode({'name':snapshot['nickname'],'damage':member['damage'],'order':index,
-                'leaderTypeId':team[0] if team else 0,'id':member['player_id'],'showTypeId':team[0] if team else 0,'level':snapshot['level'],'leaderSkinId':skin})
+                'leaderTypeId':team[0] if team else 0,'id':member['player_id'],
+                'showTypeId':(head_icon_of(team[0]) or team[0]) if team else 0,'level':snapshot['level'],'leaderSkinId':skin})
             ranks.append(wire)
             if member['player_id']==player:
                 own=wire
@@ -552,7 +573,11 @@ class WorldBossService:
                     if state[counter]>=limit:
                         raise ValueError('daily challenge exhausted')
                 self.store.db.execute('UPDATE world_boss_members SET team=? WHERE boss_id=? AND player_id=?',(json.dumps(team),boss['boss_id'],player))
-            if network and boss['state']==1:
+            # 大厅入队也要把 Boss 标成「已集结」: battle_admission 与入战后的伤害
+            # 上报都以 state==2 为闸门, 旧版本只在这条新连接 (network) 上推进,
+            # 客户端只发大厅 act 时 state 停在 1, 于是编好队伍进战斗 admission 失败
+            # -> 客户端「操作失败」。
+            if boss['state']==1:
                 self.store.db.execute('UPDATE world_boss_runs SET state=2 WHERE boss_id=?',(boss['boss_id'],))
         elif action==2:
             if not member:
@@ -585,8 +610,19 @@ class WorldBossService:
         rows=self.store.db.execute('''SELECT m.*,b.type_id,b.state FROM world_boss_members m
             JOIN world_boss_runs b USING(boss_id)
             JOIN world_boss_player_days d ON d.boss_id=b.boss_id AND d.player_id=m.player_id
-            WHERE m.player_id=? AND m.active=1 AND b.state=2 AND d.day=?''',(player,day(self.now()))).fetchall()
+            WHERE m.player_id=? AND m.active=1 AND b.state IN (1,2) AND d.day=?''',(player,day(self.now()))).fetchall()
         match=next((r for r in rows if self.bosses[r['type_id']]['StageID']==section and set(json.loads(r['team']))==set(team)),None)
+        if not match and not allow_bound:
+            # 编队页选出来的人才是权威: 大厅登记时服务端只是随手取了前三个已上场
+            # 神格, 与玩家真正选的队伍不同就会卡住入场。同一 StageID 只有一个活跃
+            # 登记, 直接采纳客户端这次送来的队伍, 并把 state 1 推进到 2。
+            match=next((r for r in rows if self.bosses[r['type_id']]['StageID']==section),None)
+            if match is not None:
+                self.store.db.execute('UPDATE world_boss_members SET team=? WHERE boss_id=? AND player_id=?',
+                    (json.dumps(list(team)),match['boss_id'],player))
+                self.store.db.execute('UPDATE world_boss_runs SET state=2 WHERE boss_id=? AND state=1',(match['boss_id'],))
+                match=dict(match)
+                match['team']=json.dumps(list(team))
         if not match:
             raise ValueError('Boss battle has no matching admitted team')
         if match['run_id'] and not allow_bound:
