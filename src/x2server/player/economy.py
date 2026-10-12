@@ -49,12 +49,14 @@ class EconomyService:
     TASK_EVENT_UPGRADE_SKILL = 13      # E_UpgradeSkill
     TASK_EVENT_UPGRADE_ARTIFACT = 14   # E_UpgradeArtifact
     TASK_EVENT_HERO_ADVENTURE = 16     # E_HeroAdventure
+    TASK_EVENT_HERO_TRAIN = 17         # E_HeroTrain: 光之密室神格训练次数
     TASK_EVENT_HERO_INTERACTIVE = 19   # E_HeroInteractive
     TASK_EVENT_BUY_GOOD = 24           # E_BuyGood
     TASK_EVENT_ACCOUNT_LEVEL = 43      # E_AccountLevel: progress is the player's level
     TASK_EVENT_HERO_REACH_STAR_LEVEL = 44  # E_HeroReachStarAndLevel: 达标的英雄数
     TASK_EVENT_WISH = 45               # E_Wish
     TASK_EVENT_ITEM_STAR_ID = 47       # E_ItemStarAndID: 已拥有的清单内道具数
+    TASK_EVENT_BASE_BLESS = 48         # E_BaseBless: 奇迹祈神次数
     TASK_EVENT_EQUIP_EQUIP = 49        # E_EquipEquip
     TASK_EVENT_LOGIN_DAY = 58          # E_LoginDay: one per local day the player logs in
     TASK_EVENT_FAVORABILITY_LEVEL = 73  # E_FavorabilityLevel: 好感等级达标的英雄数
