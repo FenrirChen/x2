@@ -393,10 +393,15 @@ class ActivityService:
         state = self.rotation.get(player, period, 'pre-notice', row['ActivityID'], 0)
         if activity_type == 1:
             state = self.rotation.get(player, period, 'dialogue', 0, state)
-        # A local calendar can be moved while preserving this period's progress.
-        # The client compares this timestamp with the new activity start.
-        if state and state < period.start:
-            state = period.start
+        # Native ServerTime.GetRefreshTime (0x3e5227c) returns the next
+        # 05:00 UTC boundary (13:00 Beijing) after this timestamp. A completed
+        # single intro must remain complete across that boundary throughout
+        # its period; acknowledging an old timestamp otherwise replays it.
+        now = int(self.economy.clock())
+        refresh_start = ((now - 5 * 3600) // 86400) * 86400 + 5 * 3600
+        completed_floor = max(period.start, refresh_start)
+        if state and state < completed_floor:
+            state = completed_floor
             self.rotation.put(player, period, 'pre-notice', row['ActivityID'], state)
             if activity_type == 1:
                 self.rotation.put(player, period, 'dialogue', 0, state)

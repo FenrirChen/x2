@@ -278,13 +278,16 @@ class ActivityRuntime:
                 if op == 'ActivityDialogReciveInfo' and self.r.of_type(27, period):
                     return {'code': 10, 'lastReciveTimeSec': 0}
                 raise UnresolvedEconomy('no recovered dialogue reward configuration')
-            last = self.r.get(player, period, 'dialogue', 0,
-                              self.r.get(player, period, 'pre-notice', row['ActivityID'], 0))
+            last = self.a.pre_notice(player, 1)['lastPreNoticSec']
             result = {'code': 10, 'lastReciveTimeSec': last}
             if op == 'ActivityDialogue':
                 now = int(self.e.clock())
                 day = (now - period.start) // 86400
                 groups = row.get('ActivityParam2', [])
+                # This catalog has one intro per period. A repeat/skip
+                # acknowledgement must update the UI, never pay it again.
+                if last:
+                    return result
                 if (now >= self.a.yuexi_preview_end(period)
                         or not 0 <= day < len(row['ActivityParam1']) or day >= len(groups)
                         or last and (last - period.start) // 86400 == day):
@@ -332,6 +335,16 @@ class ActivityRuntime:
                     if cached['message'] != response:
                         raise UnresolvedEconomy('receipt mismatch')
                     values = response_schema.decode(cached['response'])
+                    # Queries describe live completion/calendar state, not the
+                    # old snapshot cached before a claim or review-calendar move.
+                    if name[4:] in {'QueryActivity', 'ActivityPreNoticInfo', 'ActivityDialogReciveInfo'}:
+                        values = self.operate(player, name[4:], req, token)
+                    elif name == 'C2L_ActivityPreNotic' and values.get('code') == 10:
+                        fresh = self.a.pre_notice(player, req.get('activityType', 0))
+                        values['lastPreNoticSec'] = fresh['lastPreNoticSec']
+                    elif name == 'C2L_ActivityDialogue' and values.get('code') == 10:
+                        fresh = self.operate(player, 'ActivityDialogReciveInfo', {}, token)
+                        values['lastReciveTimeSec'] = fresh['lastReciveTimeSec']
                 else:
                     values = self.operate(player, name[4:], req, token)
                     self.a.store.db.execute('INSERT INTO activity_receipts VALUES (?,?,?,?,?)',

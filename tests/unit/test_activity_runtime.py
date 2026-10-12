@@ -117,7 +117,7 @@ def test_yuexi_skipped_intro_claim_persists_and_cannot_pay_twice(runtime):
     assert asyncio.run(rt.handle(ctx, request)).values == claimed.values
     assert store.get(1) == snapshot
     denied = asyncio.run(rt.handle(ctx, packet({}, 976, 'C2L_ActivityDialogue')))
-    assert denied.values['code'] == 13
+    assert denied.values['code'] == 10 and not denied.values.get('rewardData')
     acknowledgement = rt.a.pre_notice(1, 1, claim=True)
     assert acknowledgement['code'] == 10 and not acknowledgement.get('rewardData')
     restored = ActivityRuntime(ActivityService(e), MailService(store, e, e.clock))
@@ -126,7 +126,8 @@ def test_yuexi_skipped_intro_claim_persists_and_cannot_pay_twice(runtime):
     rows = [ACTIVITY_SCHEMAS['ActivityData'].decode(r) for r in rt.a.query_activity(1)['activityData']]
     assert next(r for r in rows if r['actId'] == 70009).get('state', 0) == 0
     assert next(r for r in rows if r['actId'] == 70010)['state'] == 1
-    assert asyncio.run(rt.handle(ctx, packet({}, 977, 'C2L_ActivityDialogue'))).values['code'] == 13
+    acknowledged = asyncio.run(rt.handle(ctx, packet({}, 977, 'C2L_ActivityDialogue')))
+    assert acknowledged.values['code'] == 10 and not acknowledged.values.get('rewardData')
     now[0] += 34 * 86400
     assert rt.operate(1, 'ActivityDialogReciveInfo', {}, 'next-period')['lastReciveTimeSec'] == 0
 
@@ -149,8 +150,8 @@ def test_yuexi_generic_preview_claim_is_shared_with_plot_completion(runtime):
     now[0] = ActivityRotation.ANCHOR + 6 * ActivityRotation.SECONDS + 3600
     assert rt.a.pre_notice(1, 1, claim=True)['code'] == 10
     assert rt.operate(1, 'ActivityDialogReciveInfo', {}, 'query')['lastReciveTimeSec'] == now[0]
-    with pytest.raises(UnresolvedEconomy):
-        rt.operate(1, 'ActivityDialogue', {}, 'alternate-route')
+    acknowledged = rt.operate(1, 'ActivityDialogue', {}, 'alternate-route')
+    assert acknowledged['code'] == 10 and not acknowledged.get('rewardData')
 
 
 def test_winter_progress_and_story_protocols_use_current_period(runtime):
