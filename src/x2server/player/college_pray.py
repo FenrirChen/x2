@@ -85,15 +85,19 @@ class CollegePrayService:
             if code != 10:
                 return dict(result, code=code)
             duration = building['PrayWaitTimes']
+            job_id = uuid.uuid4().hex
             state['pray'].append({'buildingId': bid, 'prayStatus': 1, 'prayStartTime': now,
                 'prayEndTime': now + duration, 'prayItemID': sacrifice, 'prayItemNum': int(bool(sacrifice)),
                 'prayHeroID': hid, 'paid': dict(costs), 'reward_item': target['ChipPropID'],
                 # Language 13102257: one sacrificed chip doubles proceeds.
-                'reward_num': 10 if sacrifice else 5, 'job_id': uuid.uuid4().hex})
+                'reward_num': 10 if sacrifice else 5, 'job_id': job_id})
             state['pray_daily'] = {'day': day, 'count': count + 1}
             if hero:
                 hero['college_status'] = 1
             self.economy.save_snapshot(pid, snapshot)
+            # 奇迹祈神计入 E_BaseBless (economy_catalog.json 630006 日 / 630112 周)。
+            self.economy._event(pid, 'college-pray:' + job_id,
+                self.economy.TASK_EVENT_BASE_BLESS, 0, 1)
             return dict(result, code=10, heroStatus=1 if hid else 0, prayTime=duration, endTime=now + duration)
         if not job:
             return result
@@ -128,6 +132,9 @@ class CollegePrayService:
         self.economy._grant(pid, 'college-pray:' + flow + ':' + job['job_id'], rewards)
         state['pray'].remove(job)
         if flow == 'BuildRewardPrayGod':
+            # 与 BuildStartPrayGod 共用同一 job_id，economy_events 去重，避免重复计数。
+            self.economy._event(pid, 'college-pray:' + job['job_id'],
+                self.economy.TASK_EVENT_BASE_BLESS, 0, 1)
             result['rewardData'] = self.economy.reward_bytes(rewards).hex()
         return dict(result, code=10)
 
