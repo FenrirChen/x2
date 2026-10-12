@@ -118,8 +118,8 @@ def test_yuexi_skipped_intro_claim_persists_and_cannot_pay_twice(runtime):
     assert store.get(1) == snapshot
     denied = asyncio.run(rt.handle(ctx, packet({}, 976, 'C2L_ActivityDialogue')))
     assert denied.values['code'] == 13
-    with pytest.raises(UnresolvedEconomy):
-        rt.a.pre_notice(1, 1, claim=True)
+    acknowledgement = rt.a.pre_notice(1, 1, claim=True)
+    assert acknowledgement['code'] == 10 and not acknowledgement.get('rewardData')
     restored = ActivityRuntime(ActivityService(e), MailService(store, e, e.clock))
     assert restored.operate(1, 'ActivityDialogReciveInfo', {}, 'relogin')['lastReciveTimeSec'] == now[0]
     now[0] += 86400

@@ -393,10 +393,21 @@ class ActivityService:
         state = self.rotation.get(player, period, 'pre-notice', row['ActivityID'], 0)
         if activity_type == 1:
             state = self.rotation.get(player, period, 'dialogue', 0, state)
+        # A local calendar can be moved while preserving this period's progress.
+        # The client compares this timestamp with the new activity start.
+        if state and state < period.start:
+            state = period.start
+            self.rotation.put(player, period, 'pre-notice', row['ActivityID'], state)
+            if activity_type == 1:
+                self.rotation.put(player, period, 'dialogue', 0, state)
         result = {'code': 10, 'activityType': activity_type, 'lastPreNoticSec': state}
         if claim:
             with self.economy.transaction():
-                if state or activity_type == 1 and self.economy.clock() >= self.yuexi_preview_end(period):
+                # This is a completion acknowledgement as well as a reward
+                # claim. A repeated acknowledgement must unblock the client.
+                if state:
+                    return result
+                if activity_type == 1 and self.economy.clock() >= self.yuexi_preview_end(period):
                     raise UnresolvedEconomy('preview already claimed')
                 groups = row.get('ActivityReward') if activity_type in (1, 2) else row.get('ActivityParam2')
                 if not groups:

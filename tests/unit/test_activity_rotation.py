@@ -258,8 +258,23 @@ def test_preview_claim_once_and_again_next_cycle(activity):
     first = service.pre_notice(1, 3, claim=True)
     assert first['code'] == 10 and rewards(first['rewardData'])
     assert service.pre_notice(1, 3)['lastPreNoticSec'] == now[0]
-    with pytest.raises(UnresolvedEconomy, match='already'):
-        service.pre_notice(1, 3, claim=True)
+    again = service.pre_notice(1, 3, claim=True)
+    assert again['code'] == 10 and again['lastPreNoticSec'] == now[0]
+    assert not again.get('rewardData')
     now[0] += 35 * 86400
     assert service.pre_notice(1, 3)['lastPreNoticSec'] == 0
     assert service.pre_notice(1, 3, claim=True)['code'] == 10
+
+
+def test_preview_calendar_move_restores_completion_without_paying_again(activity):
+    store, _, service, now = activity
+    first = service.pre_notice(1, 3, claim=True)
+    grants = store.db.execute('SELECT count(*) FROM economy_grants').fetchone()[0]
+    service.rotation.anchor += 1800
+    now[0] += 1800
+    query = service.pre_notice(1, 3)
+    assert query['lastPreNoticSec'] >= service.period(1).start
+    reply = service.pre_notice(1, 3, claim=True)
+    assert reply['code'] == 10 and not reply.get('rewardData')
+    assert first['rewardData']
+    assert store.db.execute('SELECT count(*) FROM economy_grants').fetchone()[0] == grants
