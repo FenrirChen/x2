@@ -90,15 +90,25 @@ class EndlessService:
         self.observe(player, entry['uuid'], 59, section, req.get('layer', 0))
         for raw in req.get('currency', []):
             currency = PROFILE_CURRENCY.decode(raw)
-            self.observe(player, entry['uuid'], 38, currency.get('typeId', 0), currency.get('pickupNum', 0))
+            self.observe(player, entry['uuid'], 38, currency.get('typeId', 0),
+                max(currency.get('pickupNum', 0), currency.get('currentNum', 0) + currency.get('consumeNum', 0)))
         kills = KILLS.decode(req.get('killMonster', b''))
         detail = [INT_PAIR.decode(raw) for raw in kills.get('killDetail', [])]
         if len(detail) <= 512 and sum(r.get('Value', 0) for r in detail) <= 100000:
             for row in detail:
                 self.observe(player, entry['uuid'], 1, row.get('Key', 0), row.get('Value', 0))
 
-    def observe(self, player, run, kind, value, amount):
+    def observe(self, player, run, kind, value, amount, value2=0):
         if not 0 <= amount <= 100000:
+            return
+        matched = []
+        for task, row in self.tasks.items():
+            condition = row['condition']
+            if (condition['CompleteType']['value'] == kind
+                    and (condition.get('CompleteValue1', [0]) in ([0], []) or value in condition['CompleteValue1'])
+                    and (condition.get('CompleteValue2', [0]) in ([0], []) or value2 in condition['CompleteValue2'])):
+                matched.append((task, condition))
+        if not matched:
             return
         old = self.store.db.execute('SELECT amount FROM endless_observations WHERE player_id=? AND run_id=? AND kind=? AND value=?',
                                    (player, run, kind, value)).fetchone()
@@ -107,15 +117,29 @@ class EndlessService:
             return
         self.store.db.execute('''INSERT INTO endless_observations VALUES (?,?,?,?,?)
             ON CONFLICT(player_id,run_id,kind,value) DO UPDATE SET amount=MAX(amount,excluded.amount)''', (player, run, kind, value, amount))
-        for task, row in self.tasks.items():
-            condition = row['condition']
-            if condition['CompleteType']['value'] != kind or condition.get('CompleteValue1', [0]) not in ([0], []) and value not in condition['CompleteValue1']:
-                continue
+        for task, condition in matched:
             self.store.db.execute('''INSERT INTO endless_tasks(player_id,task_id,progress) VALUES (?,?,?)
                 ON CONFLICT(player_id,task_id) DO UPDATE SET progress=MIN(?,progress+excluded.progress)''',
                 (player, task, delta, condition['CompleteNum'][-1]))
 
+    def completed(self, player, run, section, team):
+        if self.economy.entry_catalog.sections.get(section, {}).get('Type') != 7:
+            return
+        self.observe(player, run, 63, section, 1, len(set(team)))
+
+    def composed(self, player, run):
+        section = self.store.db.execute('SELECT section_id FROM economy_runs WHERE uuid=? AND player_id=?',
+                                        (run, player)).fetchone()
+        if not section or self.economy.entry_catalog.sections.get(section[0], {}).get('Type') != 7:
+            return
+        fields = self.economy.element_compose.profile_fields(player, run)
+        from x2server.messages.core import INT_PAIR
+        count = sum(INT_PAIR.decode(raw).get('Value', 0) for raw in fields.get('formulaCompose', []))
+        self.observe(player, run, 61, 0, count)
+        self.observe(player, run, 65, 0, fields.get('elementExp', 0))
+
     def task_values(self, player, chapter):
+        self.repair(player)
         level = self.store.get(player)['snapshot']['level']
         tasks, light = [], 0
         for task, row in self.tasks.items():
@@ -132,12 +156,61 @@ class EndlessService:
         return {'code': 10, 'type': 12, 'chapterId': chapter, 'taskList': tasks,
                 'chapterTaskPoint': light, 'chapterTaskTotalPoint': 880}
 
+    def repair(self, player):
+        """Rebuild omitted events from server compose rows and saved checkouts."""
+        from x2server.messages.battle import CHECKOUT, PROFILE_HERO
+        with self.economy.transaction():
+            if self.store.db.execute("SELECT 1 FROM economy_events WHERE player_id=? AND event_key='endless-repair-v1'", (player,)).fetchone():
+                return
+            for row in self.store.db.execute('SELECT DISTINCT run_uuid FROM battle_element_compose WHERE player_id=?', (player,)).fetchall():
+                self.composed(player, row[0])
+            if not self.store.db.execute("SELECT 1 FROM sqlite_master WHERE name='battle_checkout_wire'").fetchone():
+                return
+            for run, section, team, raw, reply in self.store.db.execute('''
+                SELECT e.uuid,n.section_id,e.team_json,w.checkout,r.response FROM battle_entries e
+                JOIN economy_runs n ON n.uuid=e.uuid AND n.player_id=e.player_id
+                JOIN battle_checkout_wire w ON w.uuid=e.uuid JOIN battle_receipts r ON r.uuid=e.uuid
+                WHERE e.player_id=? AND e.section_type=7''', (player,)).fetchall():
+                result = BATTLE_SCHEMAS['L2C_CheckoutMainMission'].decode(reply)
+                if result.get('result') != 10:
+                    continue
+                request = CHECKOUT.decode(raw)
+                counts = {}
+                for raw_detail in KILLS.decode(request.get('killMonster', b'')).get('killDetail', [])[:512]:
+                    detail = INT_PAIR.decode(raw_detail)
+                    if 0 < detail.get('Value', 0) <= 10000:
+                        unit = detail.get('Key', 0)
+                        counts[unit] = counts.get(unit, 0) + detail['Value']
+                if sum(counts.values()) <= 100000:
+                    for unit, count in counts.items():
+                        self.observe(player, run, 1, unit, count)
+                if not result.get('success'):
+                    continue
+                survivors = {h.get('heroId') for h in map(PROFILE_HERO.decode, request.get('heros', []))
+                             if h.get('state', 0) == 0} & set(json.loads(team))
+                self.completed(player, run, section, survivors)
+            if self.store.db.execute("SELECT 1 FROM sqlite_master WHERE name='fight_drop_observations'").fetchone():
+                for run, section, raw in self.store.db.execute('''SELECT o.uuid,n.section_id,o.body FROM fight_drop_observations o
+                    JOIN economy_runs n ON n.uuid=o.uuid AND n.player_id=o.player_id
+                    WHERE o.player_id=? AND n.section_type=7''', (player,)).fetchall():
+                    report = BATTLE_SCHEMAS['C2L_FightDropData'].decode(raw)
+                    self.observe(player, run, 59, section, report.get('layer', 0))
+                    for raw_currency in report.get('currency', []):
+                        currency = PROFILE_CURRENCY.decode(raw_currency)
+                        self.observe(player, run, 38, currency.get('typeId', 0),
+                            max(currency.get('pickupNum', 0), currency.get('currentNum', 0) + currency.get('consumeNum', 0)))
+                    for raw_detail in KILLS.decode(report.get('killMonster', b'')).get('killDetail', [])[:512]:
+                        detail = INT_PAIR.decode(raw_detail)
+                        self.observe(player, run, 1, detail.get('Key', 0), detail.get('Value', 0))
+            self.store.db.execute("INSERT OR IGNORE INTO economy_events VALUES (?, 'endless-repair-v1')", (player,))
+
     def claim(self, player, task, request_key):
         from .economy import UnresolvedEconomy
         values = {'code': 13, 'type': 12, 'taskId': task}
         row = self.tasks.get(task)
         if not row or self.store.get(player)['snapshot']['level'] < row['AcceptLevel']:
             return values
+        self.repair(player)
         try:
             with self.economy.transaction():
                 from x2server.messages.economy import FINISH_RESULT

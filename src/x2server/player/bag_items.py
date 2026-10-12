@@ -82,15 +82,20 @@ def grant_bag_rewards(economy, player, source, rewards, used_item):
             if proto is None:
                 raise UnresolvedEconomy("bag hero lacks prototype")
             for _ in range(count):
-                duplicate = any(h["id"] == proto["hero_id"] for h in snapshot.get("heroes", []))
+                existing = next((h for h in snapshot.get('heroes', []) if h['id'] == proto['hero_id']), None)
+                duplicate = bool(existing and existing.get('state') == 2)
                 if duplicate:
                     ordinary[proto["fragment_item_id"]] += proto["fragment_count"]
                     ordinary[proto["duplicate_ticket_item_id"]] += proto["duplicate_ticket_count"]
                 else:
-                    snapshot.setdefault("heroes", []).append({"id": proto["hero_id"], "state": 2,
+                    unlocked = {"id": proto["hero_id"], "state": 2,
                         "level": proto["level"], "star": proto["star"], "exp": 0,
                         "skills": [{"id": i, "level": 1} for i in proto["initial_skills"]],
-                        "compat": "REVIVAL_COMPAT"})
+                        "compat": "REVIVAL_COMPAT"}
+                    if existing is None:
+                        snapshot.setdefault('heroes', []).append(unlocked)
+                    else:
+                        existing.update(unlocked)
                 heroes.append((item, duplicate))
         else:
             ordinary[item] += count
@@ -98,6 +103,9 @@ def grant_bag_rewards(economy, player, source, rewards, used_item):
         economy.save_snapshot(player, snapshot)
     # Explicit bag destinations preserve unrelated gift resolver rules.
     granted = economy._grant(player, source, ordinary, stackable_types=(11, 20))
+    if heroes:
+        logging.getLogger('x2.rewards').info('bag hero delivered player=%s source=%s box=%s heroes=%s converted=%s',
+            player, source, used_item, heroes, dict(ordinary))
     return REWARD.encode({
         "rewardItem": [REWARD_ITEM.encode({"itemId": item, "itemNum": n}) for item, n in granted.items()]
             + [REWARD_ITEM.encode({"itemId": item, "itemNum": 1, "transform": duplicate}) for item, duplicate in heroes],
@@ -105,6 +113,97 @@ def grant_bag_rewards(economy, player, source, rewards, used_item):
         "transformHero": [WishService.TRANSFORM_HERO.encode({"heroId": item - 1210000,
             "transform": duplicate}) for item, duplicate in heroes],
     })
+
+
+def recover_hero_boxes(economy, player):
+    """Repair only committed random-hero box outcomes; never draw again on login.
+
+    Grant ledgers prove duplicate fragments even after they have been spent.
+    A missing ledger is insufficient evidence to charge or compensate an account.
+    """
+    from .progression import catalog
+    prototypes = {r['hero_id']: r for r in catalog()['hero_unlock']}
+    fixed = 0
+    with economy.transaction():
+        rows = economy.store.db.execute('SELECT request_key,response FROM item_opt_receipts WHERE player_id=?',
+                                         (player,)).fetchall()
+        for key, raw in rows:
+            try:
+                receipt = ECONOMY_SCHEMAS['L2C_ItemOpt'].decode(raw)
+            except (ProtocolError, ValueError, TypeError):
+                logging.getLogger('x2.rewards').warning('invalid item receipt skipped player=%s key=%s', player, key)
+                continue
+            if receipt.get('code') != 10 or receipt.get('itemId') != 1203000:
+                continue
+            source = f'item-opt:{key}'
+            original = economy.store.db.execute('SELECT rewards FROM economy_grants WHERE player_id=? AND source=?',
+                                                 (player, source)).fetchone()
+            if original is None:
+                continue
+            try:
+                rewards = REWARD.decode(receipt.get('rewardData', b''))
+                entries = [REWARD_ITEM.decode(x) for x in rewards.get('rewardItem', [])]
+                ledger = {int(i): n for i, n in json.loads(original[0]).items()}
+                if not any(r.get('itemId', 0) - 1210000 in prototypes for r in entries):
+                    from .wish import WishService
+                    for raw_hero in rewards.get('transformHero', []):
+                        hero = WishService.TRANSFORM_HERO.decode(raw_hero)
+                        if hero.get('heroId') in prototypes:
+                            entries.append({'itemId': 1210000 + hero['heroId'], 'itemNum': 1,
+                                            'transform': hero.get('transform', False)})
+            except (ProtocolError, ValueError, TypeError, AttributeError):
+                logging.getLogger('x2.rewards').warning('invalid hero reward receipt skipped player=%s key=%s', player, key)
+                continue
+            if any(not 0 < r.get('itemNum', 0) <= 999 for r in entries):
+                continue
+            hero_entries = [r for r in entries if r.get('itemId', 0) - 1210000 in prototypes]
+            marker = f'hero-box-recovery:{key}'
+            if economy.store.db.execute('SELECT 1 FROM economy_grants WHERE player_id=? AND source=?',
+                                         (player, marker)).fetchone():
+                continue
+            snapshot = economy.store.get(player)['snapshot']
+            changed, missing = False, Counter()
+            for entry in hero_entries:
+                hero_id = entry['itemId'] - 1210000
+                proto = prototypes[hero_id]
+                if entry.get('transform', False):
+                    for field, amount_field in [('fragment_item_id', 'fragment_count'),
+                                               ('duplicate_ticket_item_id', 'duplicate_ticket_count')]:
+                        missing[proto[field]] += proto[amount_field] * entry.get('itemNum', 1)
+                elif not any(h['id'] == hero_id and h.get('state') == 2 for h in snapshot.get('heroes', [])):
+                    unlocked = {'id': hero_id, 'state': 2, 'level': proto['level'], 'star': proto['star'],
+                        'exp': 0, 'skills': [{'id': i, 'level': 1} for i in proto['initial_skills']],
+                        'compat': 'REVIVAL_COMPAT'}
+                    existing = next((h for h in snapshot.get('heroes', []) if h['id'] == hero_id), None)
+                    if existing is None:
+                        snapshot.setdefault('heroes', []).append(unlocked)
+                    else:
+                        existing.update(unlocked)
+                    changed = True
+            missing = {i: n - ledger.get(i, 0) for i, n in missing.items() if n > ledger.get(i, 0)}
+            if changed or missing:
+                if changed:
+                    economy.save_snapshot(player, snapshot)
+                economy._grant(player, marker, missing)
+                fixed += 1
+                logging.getLogger('x2.rewards').info('hero box recovered player=%s source=%s hero_restored=%s rewards=%s',
+                                                    player, source, changed, missing)
+            elif not hero_entries:
+                if not entries and not ledger and not rewards.get('rewardEquip'):
+                    # The committed success receipt proves at least one box was
+                    # consumed, but old receipts omitted the requested count.
+                    # Return that proven minimum rather than invent a hero.
+                    refund = economy._grant(player, marker, {1203000: 1})
+                    receipt['rewardData'] = economy.reward_bytes(refund)
+                    economy.store.db.execute('UPDATE item_opt_receipts SET response=? WHERE player_id=? AND request_key=?',
+                        (ECONOMY_SCHEMAS['L2C_ItemOpt'].encode(receipt), player, key))
+                    fixed += 1
+                    logging.getLogger('x2.rewards').warning('empty hero box refunded player=%s source=%s count=1; original bulk count unavailable',
+                                                           player, source)
+                else:
+                    logging.getLogger('x2.rewards').warning('hero box requires operator review player=%s source=%s: no saved hero outcome',
+                                                           player, source)
+    return fixed
 
 
 def bag_pushes(economy, player):

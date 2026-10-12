@@ -96,6 +96,7 @@ class ElementComposeService:
                 (player_id, run_uuid, formula_id, count))
             self.store.db.execute('INSERT INTO battle_element_compose_receipts VALUES (?,?,?)',
                                   (player_id, key, schema.encode(values)))
+            self.economy.endless.composed(player_id, run_uuid)
         LOGGER.info("element compose player=%s run=%s formula=%s x%s -> item=%s",
                     player_id, run_uuid, formula_id, count, formula["itemId"])
         return OutboundMessage('L2C_ElementCompose', values)

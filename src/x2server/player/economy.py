@@ -248,6 +248,8 @@ class EconomyService:
         from .pending_delivery import recover
         for row in store.db.execute("SELECT id FROM players").fetchall():
             recover(self, row[0])
+            from .bag_items import recover_hero_boxes
+            recover_hero_boxes(self, row[0])
 
     @contextmanager
     def transaction(self):
@@ -300,6 +302,8 @@ class EconomyService:
                 self.store.db.execute("UPDATE players SET snapshot=?,revision=revision+1 WHERE id=?", (json.dumps(snapshot, ensure_ascii=False, sort_keys=True), player_id))
 
     def login_event(self, player_id):
+        from .bag_items import recover_hero_boxes
+        recover_hero_boxes(self, player_id)
         self.achievements.login(player_id)
         self.refresh_stamina(player_id)
         self.ensure_periods(player_id)
@@ -974,7 +978,7 @@ class EconomyService:
             return result
 
     def settle(self, player_id, run_uuid, section, success, section_type=0,
-               outside_items=(), maze_items=(), extra_data=()):
+               outside_items=(), maze_items=(), extra_data=(), surviving_heroes=()):
         """Part of BattleService's receipt transaction, including first-clear key."""
         profile = self.section_rewards.get(section)
         config = self.reward_sections.get(section)
@@ -1109,6 +1113,15 @@ class EconomyService:
                         {"instance_id": instance["id"], "type_id": instance["typeId"],
                          "star": instance["star"], "marker": instance["marker"]})
             self.mark_section_cleared(player_id, section, run_uuid, section_type)
+            if section_type == 7 or activity_period:
+                team_row = self.store.db.execute('SELECT team_json FROM battle_entries WHERE uuid=? AND player_id=?',
+                                                 (run_uuid, player_id)).fetchone()
+                team = json.loads(team_row[0]) if team_row else []
+                survivors = set(surviving_heroes) & set(team)
+                self.endless.completed(player_id, run_uuid, section, survivors)
+                if activity_period:
+                    activity.event(player_id, f'three-hero:{run_uuid}', 63, section, 1,
+                                   len(survivors), period=activity_period)
             self.dp.equipment(player_id, config["ChapterID"], run_uuid,
                 [{"star": spec["quality"], "item_id": spec["item_id"]} for spec in equipment_specs for _ in range(spec["quantity"])])
             self.dp.refresh(player_id, config["ChapterID"])

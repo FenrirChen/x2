@@ -52,7 +52,10 @@ class ActivityService:
                 kind = next((enum(c['CompleteType']) for c in self.conditions.values()
                              if c['CompleteType'].get('enum') == 'E_GetMoney'), None)
                 if kind is not None:
-                    self.event(player, f'get:{key}:{item}', kind, item, count, period=period)
+                    item_row = next((r for r in self.tables['Item'] if r['ItemID'] == item), {})
+                    currency = item_row.get('EffData', []) if enum(item_row.get('ItemType')) == 16 else []
+                    if len(currency) == 1:
+                        self.event(player, f'get:{key}:{item}', kind, currency[0], count, period=period)
 
     def grant(self, player, period, category, key, groups):
         rewards = self.economy.gifts(groups, allow_daily_random=True)
@@ -129,8 +132,20 @@ class ActivityService:
                     state['progress'] = min(condition['CompleteNum'], state['progress'] + amount)
                     self.rotation.put(player, period, namespace, tid, state)
 
+    def battle_kills(self, player, run, units, period=None):
+        period = period or self.rotation.run_period(player, run) or self.rotation.at()
+        if period is None:
+            return
+        for unit, count in units.items():
+            key = f'kill-unit:{run}:{unit}'
+            old = self.rotation.get(player, period, 'event-progress', key, 0)
+            if count > old:
+                self.event(player, f'{key}:{count}', 1, unit, count - old, period=period)
+                self.rotation.put(player, period, 'event-progress', key, count)
+
     def task_values(self, player, kind, activity=0):
         period = self.period(player)
+        self.repair_tasks(player, period)
         tasks = []
         for tid, task in self.task_catalog(period, kind, activity).items():
             namespace = self.task_namespace(task)
@@ -152,8 +167,63 @@ class ActivityService:
         return {'code': 10, 'type': kind, 'activityId': activity,
                 'taskList': tasks, 'boxList': boxes}
 
+    def repair_tasks(self, player, period):
+        """Recover provable missed currency/kill/survival progress in this period."""
+        from x2server.messages.battle import BATTLE_SCHEMAS, CHECKOUT, PROFILE_HERO
+        from x2server.messages.core import INT_PAIR
+        from .endless import KILLS
+        with self.economy.transaction():
+            if not self.rotation.once(player, period, 'task-repair-v1'):
+                return
+            currencies = Counter()
+            for row in self.tables['Item']:
+                eff = row.get('EffData', [])
+                if enum(row.get('ItemType')) == 16 and len(eff) == 1:
+                    currencies[eff[0]] += self.rotation.get(player, period, 'obtained-item', row['ItemID'], 0)
+            for tid, task in self.task_catalog(period, 9).items():
+                condition = self.conditions[task['TaskConditionID']]
+                if enum(condition['CompleteType']) != 38:
+                    continue
+                value = sum(currencies[c] for c in condition.get('CompleteValue1', []))
+                state = self.rotation.get(player, period, 'tasks', tid, {'progress': 0, 'claimed': False})
+                state['progress'] = max(state['progress'], min(value, condition['CompleteNum']))
+                self.rotation.put(player, period, 'tasks', tid, state)
+            if self.store.db.execute("SELECT 1 FROM sqlite_master WHERE name='fight_drop_observations'").fetchone():
+                for run, raw in self.store.db.execute('''SELECT o.uuid,o.body FROM fight_drop_observations o
+                    JOIN activity_runs a ON a.uuid=o.uuid AND a.player_id=o.player_id
+                    WHERE a.player_id=? AND a.period=?''', (player, period.index)).fetchall():
+                    report = BATTLE_SCHEMAS['C2L_FightDropData'].decode(raw)
+                    units = Counter()
+                    for raw_detail in KILLS.decode(report.get('killMonster', b'')).get('killDetail', [])[:512]:
+                        detail = INT_PAIR.decode(raw_detail)
+                        if 0 < detail.get('Value', 0) <= 10000:
+                            units[detail.get('Key', 0)] += detail['Value']
+                    if sum(units.values()) <= 100000:
+                        self.battle_kills(player, run, units, period)
+            if self.store.db.execute("SELECT 1 FROM sqlite_master WHERE name='battle_checkout_wire'").fetchone():
+                for run, section, team, raw, reply in self.store.db.execute('''
+                    SELECT a.uuid,a.section_id,e.team_json,w.checkout,r.response FROM activity_runs a
+                    JOIN battle_entries e ON e.uuid=a.uuid JOIN battle_checkout_wire w ON w.uuid=a.uuid
+                    JOIN battle_receipts r ON r.uuid=a.uuid WHERE a.player_id=? AND a.period=?''',
+                    (player, period.index)).fetchall():
+                    result = BATTLE_SCHEMAS['L2C_CheckoutMainMission'].decode(reply)
+                    if result.get('result') == 10:
+                        request = CHECKOUT.decode(raw)
+                        units = Counter()
+                        for raw_detail in KILLS.decode(request.get('killMonster', b'')).get('killDetail', [])[:512]:
+                            detail = INT_PAIR.decode(raw_detail)
+                            if 0 < detail.get('Value', 0) <= 10000:
+                                units[detail.get('Key', 0)] += detail['Value']
+                        if sum(units.values()) <= 100000:
+                            self.battle_kills(player, run, units, period)
+                        if result.get('success'):
+                            alive = {h.get('heroId') for h in map(PROFILE_HERO.decode, request.get('heros', []))
+                                     if h.get('state', 0) == 0} & set(json.loads(team))
+                            self.event(player, f'three-hero:{run}', 63, section, 1, len(alive), period)
+
     def claim_task(self, player, task_id, kind, activity=0):
         period = self.period(player)
+        self.repair_tasks(player, period)
         result = {'code': 13, 'taskId': task_id, 'type': kind, 'activityId': activity}
         task = self.task_catalog(period, kind, activity).get(task_id)
         if task is None:

@@ -5,6 +5,7 @@ import logging
 import secrets
 import time
 import uuid
+from collections import Counter
 from importlib.resources import files
 
 from x2server.messages.battle import (BATTLE_SCHEMAS, CHECKOUT, DROP_DATA, OUTSIDE_ITEM, PROFILE_HERO,
@@ -156,16 +157,22 @@ class BattleService:
                 if 0 < total <= 100_000:
                     with self.economy.transaction():
                         chapter = self.catalog.sections[section]["ChapterID"]
+                        unit_totals = Counter()
                         for raw in request["datas"]:
                             report = FIGHT_KILL_DATA.decode(raw)
                             units, counts = report.get("unitId", []), report.get("num", [])
                             if len(units) == len(counts) and len(units) <= 512:
                                 for unit, count in zip(units, counts):
                                     if 0 < count <= 10_000:
-                                        if self.catalog.sections[section]['Type'] == 7:
-                                            self.economy.endless.observe(context.session.player_id, row['uuid'], 1, unit, count)
+                                        unit_totals[unit] += count
                                         self.economy.dp.observe(context.session.player_id, chapter,
                                             row["uuid"], "kill", unit, count, report.get("heroId", 0))
+                        if self.catalog.sections[section]['Type'] == 7:
+                            for unit, count in unit_totals.items():
+                                self.economy.endless.observe(context.session.player_id, row['uuid'], 1, unit, count)
+                        activity = getattr(self.economy, 'activity', None)
+                        if activity:
+                            activity.battle_kills(context.session.player_id, row['uuid'], unit_totals)
                         self.economy._event(context.session.player_id, f"kills:{row['uuid']}", 1, 0, total)
                         self.economy.dp.refresh(context.session.player_id, chapter)
                         for kind, count in by_type.items():
@@ -294,7 +301,23 @@ class BattleService:
                     values["rewardData"], reward_equips = self.economy.settle(
                         player_id, row["uuid"], section, request.get("success", False), section_type,
                         request.get("outsideItems", []), request.get("mazeItems", []),
-                        request.get('extraData', []))
+                        request.get('extraData', []),
+                        [h.get('heroId', 0) for h in map(PROFILE_HERO.decode, request.get('heros', []))
+                         if h.get('state', 0) == 0])
+                    from .endless import KILLS
+                    from x2server.messages.core import INT_PAIR
+                    units = Counter()
+                    for raw_detail in KILLS.decode(request.get('killMonster', b'')).get('killDetail', [])[:512]:
+                        detail = INT_PAIR.decode(raw_detail)
+                        if 0 < detail.get('Value', 0) <= 10000:
+                            units[detail.get('Key', 0)] += detail['Value']
+                    if sum(units.values()) <= 100000:
+                        if section_type == 7:
+                            for unit, count in units.items():
+                                self.economy.endless.observe(player_id, row['uuid'], 1, unit, count)
+                        activity = getattr(self.economy, 'activity', None)
+                        if activity:
+                            activity.battle_kills(player_id, row['uuid'], units)
                     if section_type == 6:
                         self.economy.world_boss.finish_battle(player_id,row['uuid'],request.get('success',False),confirmed=True)
                     updated = self.store.get(player_id)["snapshot"]
@@ -383,6 +406,17 @@ class BattleService:
                     if static['Type'] == 6:
                         boss_confirmed = self.economy.world_boss.confirm_battle(context.session.player_id, entry['uuid'])
                     self.economy.endless.save(context.session.player_id, entry, request)
+                    activity = getattr(self.economy, 'activity', None)
+                    if activity:
+                        from .endless import KILLS
+                        from x2server.messages.core import INT_PAIR
+                        units = Counter()
+                        for raw_detail in KILLS.decode(request.get('killMonster', b'')).get('killDetail', [])[:512]:
+                            detail = INT_PAIR.decode(raw_detail)
+                            if 0 < detail.get('Value', 0) <= 10000:
+                                units[detail.get('Key', 0)] += detail['Value']
+                        if sum(units.values()) <= 100000:
+                            activity.battle_kills(context.session.player_id, entry['uuid'], units)
                     self.economy.dp.report(context.session.player_id, static["ChapterID"], entry["uuid"], request)
             except Exception:
                 logging.getLogger("x2.battle").exception("264 DP observation failed")

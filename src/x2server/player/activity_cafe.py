@@ -38,12 +38,10 @@ class ActivityCafe:
             state['revenue'] += q['revenue']
             state['exp'] += q['exp']
             recipe = self.recipes[q['recipe']]
-            for event_name in ('E_CookFood', 'E_FoodShopSell'):
-                kind = next((enum(c['CompleteType']) for c in self.a.conditions.values()
-                             if c['CompleteType'].get('enum') == event_name), None)
-                if kind is not None:
-                    self.a.event(player, f"{event_name}:{q['token']}", kind,
-                        recipe['ProductID'], recipe['ProductNum'], store_type, period=period)
+            self.a.event(player, f"E_CookFood:{q['token']}", 99,
+                recipe['RecipeID'], recipe['ProductNum'], period=period)
+            self.a.event(player, f"E_FoodShopSell:{q['token']}", 101,
+                store_type, q['revenue'], period=period)
         state['queues'] = remaining
         self.save(player, period, store_type, state)
 
