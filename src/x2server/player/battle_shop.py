@@ -133,7 +133,9 @@ class BattleShopService:
             return None
         floor, groups = resolved
         offers = []
-        for index, slot in enumerate(self.slots):
+        # MazeShop declares only the groups this floor really has: 400203 lists four
+        # group ids, every other shop six. An offer past them would carry groupId 0.
+        for index, slot in enumerate(self.slots[:len(groups)]):
             pool = slot["items"]
             if not pool:
                 continue
