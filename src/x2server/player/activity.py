@@ -173,6 +173,17 @@ class ActivityService:
         from x2server.messages.core import INT_PAIR
         from .endless import KILLS
         with self.economy.transaction():
+            if self.rotation.once(player, period, 'bag-obtained-repair-v1'):
+                # The old bag path paid currencies but never notified activity
+                # progress. Receipt + committed grant prove a successful use.
+                for key, raw in self.store.db.execute('''SELECT r.request_key,g.rewards
+                    FROM item_opt_receipts r JOIN economy_grants g
+                    ON g.player_id=r.player_id AND g.source='item-opt:' || r.request_key
+                    WHERE r.player_id=? AND g.created_at>=? AND g.created_at<?''',
+                    (player, period.start, period.end)).fetchall():
+                    rewards = {int(i): n for i, n in json.loads(raw).items()
+                               if n > 0 and enum(self.economy.items.get(int(i), {}).get('ItemType')) == 16}
+                    self.obtained(player, period, rewards, f'bag-use:{key}')
             if not self.rotation.once(player, period, 'task-repair-v1'):
                 return
             currencies = Counter()

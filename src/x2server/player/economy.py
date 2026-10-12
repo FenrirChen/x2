@@ -1580,7 +1580,15 @@ class EconomyService:
                         request.get("selectedItemIndexList", [])))
                 # Canonical random Gifts can intentionally draw zero. Preserve
                 # that outcome rather than rolling back into a free reroll.
+                if 1237900 in rewards:
+                    # Regeneration belongs to the old balance. Applying it after
+                    # a box's power reward can clip the reward at the normal cap.
+                    self.refresh_stamina(player_id)
                 reward_data = grant_bag_rewards(self, player_id, f"item-opt:{key}", rewards, item_id)
+                activity = getattr(self, 'activity', None)
+                period = activity.rotation.at() if activity else None
+                if period:
+                    activity.obtained(player_id, period, rewards, f'bag-use:{key}')
                 values = {"code": 10, "opt": 0, "itemId": item_id,
                           "rewardData": reward_data}
                 self.store.db.execute("INSERT INTO item_opt_receipts VALUES (?,?,?)",
