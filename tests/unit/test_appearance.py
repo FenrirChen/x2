@@ -73,6 +73,21 @@ def test_avatar_inventory_and_voice_conditions(env):
         AppearanceService(store, economy)._voice_values(1)["heroDubbingDatas"][0])["dubbingIds"]
 
 
+def test_scene_background_wear_and_cancel(env):
+    store, economy, context = env
+    service = AppearanceService(store, economy)
+    # 场景展示页选中列表第 0 项 (默认场景) 时客户端发 type=3 卸下; 必须回 code==10,
+    # 否则客户端不会刷新 "SceneSkin"+玩家号, 主城背景就卡在已佩戴的那一张切不回去。
+    worn = invoke(service, context, "PutOnOrPutOffSeasonIcon", {"type": 2, "id": 1270407})
+    assert worn.values["code"] == 10
+    assert worn.values["putOnSceneIcon"] == 1270407
+    assert service._icon_values(1)["putOnSceneIcon"] == 1270407
+    off = invoke(service, context, "PutOnOrPutOffSeasonIcon", {"type": 3, "id": 1270407})
+    assert off.values["code"] == 10
+    assert off.values["putOnSceneIcon"] == 0
+    assert service._icon_values(1)["putOnSceneIcon"] == 0
+
+
 def test_five_star_stage_skin_unlocks_and_show_hero_can_change(env):
     store, economy, context = env
     service = AppearanceService(store, economy)

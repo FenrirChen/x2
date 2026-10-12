@@ -244,7 +244,14 @@ class AppearanceService:
             allowed = ({SEASON_ICON_DATA.decode(x)["id"] for x in owned["headIconList"]}
                        if kind == 1 else {SEASON_ICON_DATA.decode(x)["id"] for x in owned["sceneIconList"]}
                        if kind == 2 else set())
-            if icon not in allowed and not (icon == 0 and kind == 2):
+            # 场景展示页切回默认场景走 type=3: SceneSettingTab_OnMBtnSaveClick 在选中列表第 0 项时
+            # 把当前佩戴的场景 id 一起带上来, 语义是"卸下场景"而不是"再戴一次"。原实现把 type=3
+            # 归进 allowed = set(), 于是必然命中下面的 code 13; 客户端只在 code==10 时才调
+            # RefreshSceneSkin 去写 PlayerPrefs("SceneSkin"+玩家号), 结果就是背景能切过去、
+            # 切不回默认。type 只有 2/3 两档 (换头像走 C2L_Account opt=2, 不走这条消息)。
+            if kind == 3:
+                icon = 0
+            elif icon not in allowed and not (icon == 0 and kind == 2):
                 return OutboundMessage("L2C_PutOnOrPutOffSeasonIcon", {"code": 13})
             with self.economy.transaction():
                 snapshot = self.store.get(player_id)["snapshot"]
