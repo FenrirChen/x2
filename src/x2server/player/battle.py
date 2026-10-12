@@ -293,7 +293,8 @@ class BattleService:
                     self.store.db.execute("INSERT OR IGNORE INTO economy_checkouts VALUES (?,?,?)", (player_id, digest, row["uuid"]))
                     values["rewardData"], reward_equips = self.economy.settle(
                         player_id, row["uuid"], section, request.get("success", False), section_type,
-                        request.get("outsideItems", []), request.get("mazeItems", []))
+                        request.get("outsideItems", []), request.get("mazeItems", []),
+                        request.get('extraData', []))
                     if section_type == 6:
                         self.economy.world_boss.finish_battle(player_id,row['uuid'],request.get('success',False),confirmed=True)
                     updated = self.store.get(player_id)["snapshot"]

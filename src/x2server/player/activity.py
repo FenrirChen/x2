@@ -249,6 +249,57 @@ class ActivityService:
             self.event(player, f'clear:{uuid}', 3, section, 1, period=period)
         self.store.db.execute('UPDATE activity_runs SET settled=1 WHERE uuid=?', (uuid,))
 
+    def gameplay_day_counts(self, player, period=None):
+        period = period or self.rotation.at()
+        if period is None:
+            return {}
+        day = (int(self.economy.clock()) + 8 * 3600) // 86400
+        return {item: self.rotation.get(player, period, f'gameplay-day:{day}', item, 0)
+                for row in period.theme['activities'] if enum(row['ActivityType']) == 28
+                for item in row.get('ActivityParam4', [])}
+
+    def gameplay_rewards(self, player, period, section, extra_data):
+        """ActivityGamePlay1 converts reported maze currency even on defeat.
+
+        Its activity row owns the currency, exchange ratio, output and daily cap;
+        these rewards do not mark a failed ordinary battle as cleared.
+        """
+        from x2server.messages.lobby import MISSION_PAIR
+        config = self.sections.get(section, {})
+        row = next((r for r in period.theme['activities'] if enum(r['ActivityType']) == 28
+                    and config.get('ChapterID') in r.get('ActivityParam1', [])), None)
+        if row is None:
+            return {}
+        currencies, ratios, items = (row.get('ActivityParam2', []), row.get('ActivityParam3', []),
+                                    row.get('ActivityParam4', []))
+        if not len(currencies) == len(ratios) == len(items) or any(r <= 0 for r in ratios):
+            raise UnresolvedEconomy('invalid gameplay exchange configuration')
+        if len(extra_data) > 64:
+            raise UnresolvedEconomy('too many gameplay currency entries')
+        reported = {}
+        for raw in extra_data:
+            pair = MISSION_PAIR.decode(raw)
+            currency, amount = pair.get('Key', 0), pair.get('Value', 0)
+            if currency not in currencies:
+                continue
+            if currency in reported or not 0 <= amount <= 10**7:
+                raise UnresolvedEconomy('invalid/duplicate gameplay currency')
+            reported[currency] = amount
+        day = (int(self.economy.clock()) + 8 * 3600) // 86400
+        rewards = {}
+        limits = row.get('ActivityReward', [])
+        if limits and (len(limits) != len(items) or any(limit < 0 for limit in limits)):
+            raise UnresolvedEconomy('invalid gameplay daily limit')
+        for index, (currency, ratio, item) in enumerate(zip(currencies, ratios, items, strict=True)):
+            quantity = reported.get(currency, 0) // ratio
+            previous = self.rotation.get(player, period, f'gameplay-day:{day}', item, 0)
+            if limits:
+                quantity = min(quantity, max(0, limits[index] - previous))
+            if quantity:
+                rewards[item] = quantity
+                self.rotation.put(player, period, f'gameplay-day:{day}', item, previous + quantity)
+        return rewards
+
     def pov_chapter_rewards(self, player, section):
         """Called only by successful, validated battle settlement in its transaction."""
         period = self.rotation.at()

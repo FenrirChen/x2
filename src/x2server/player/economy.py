@@ -498,7 +498,12 @@ class EconomyService:
         items = dict(self.store.db.execute("SELECT item_id,quantity FROM inventory WHERE player_id=? AND quantity>0", (player_id,)))
         for frame in avatar_frames():
             items[frame] = max(1, items.get(frame, 0))
-        return {"items": [ITEM.encode({"id": r[0], "num": r[1], "locked": False, "dayGet": 0})
+        activity = getattr(self, 'activity', None)
+        day_counts = activity.gameplay_day_counts(player_id) if activity else {}
+        for item, count in day_counts.items():
+            if count:
+                items.setdefault(item, 0)  # Used gifts still carry their daily acquisition count.
+        return {"items": [ITEM.encode({"id": r[0], "num": r[1], "locked": False, "dayGet": day_counts.get(r[0], 0)})
             for r in sorted(items.items())]}
 
     # -- 挑战任务 (challenge, GameTaskType 3) ------------------------------
@@ -969,7 +974,7 @@ class EconomyService:
             return result
 
     def settle(self, player_id, run_uuid, section, success, section_type=0,
-               outside_items=(), maze_items=()):
+               outside_items=(), maze_items=(), extra_data=()):
         """Part of BattleService's receipt transaction, including first-clear key."""
         profile = self.section_rewards.get(section)
         config = self.reward_sections.get(section)
@@ -985,12 +990,28 @@ class EconomyService:
                 or run is None or run["player_id"] != player_id or run["section_id"] != section
                 or run["settled"]):
             raise UnresolvedEconomy("unclassified, mismatched or settled run")
+        activity = getattr(self, 'activity', None)
+        activity_period = activity.rotation.run_period(player_id, run_uuid) if activity else None
+        gameplay_rewards = (activity.gameplay_rewards(player_id, activity_period, section, extra_data)
+                            if activity_period and section_type == 16 else {})
+        if activity_period and section_type == 16:
+            # Exchange outputs come only from the currency report, not a second
+            # client-supplied outsideItems claim for the same packet.
+            outputs = {item for row in activity_period.theme['activities']
+                       if row['ActivityType'].get('value') == 28
+                       and config['ChapterID'] in row.get('ActivityParam1', [])
+                       for item in row.get('ActivityParam4', [])}
+            outside_items = [raw for raw in outside_items if OUTSIDE_ITEM.decode(raw).get('id') not in outputs]
         grants, pending_instances, blocked, equipment_specs = self.runtime_drops.resolve(
             run=run, profile=profile, outside_items=outside_items, success=success)
         reward_equips: list = []
         sources = {name: [] for name in ("FIRST_CLEAR_FIXED", "NORMAL_CLEAR_FIXED",
             "RUNTIME_BATTLE_DROP", "REPORT_CURRENCY", "SWEEP_REWARD", "EXTRA_DROP",
-            "COMPAT_REWARD", "EQUIP_INSTANCE", "RELIC_COLLECTION")}
+            "COMPAT_REWARD", "EQUIP_INSTANCE", "RELIC_COLLECTION", "ACTIVITY_GAMEPLAY")}
+        for item, quantity in gameplay_rewards.items():
+            grant = RewardGrant('ACTIVITY_GAMEPLAY', section, run_uuid, item, quantity,
+                                reason='ActivityReal maze currency exchange')
+            grants.append(grant)
         if success:
             # Relics carried out in the client's mazeItems (checkout field 12)
             # are collection unlocks, separate from outsideItems rewards.
@@ -1013,8 +1034,6 @@ class EconomyService:
             # USER_DECISION: reset the eight named activities each period.
             # Only a run explicitly bound by ActivityRotation can override this
             # gate. Normal stages keep the original lifetime first-clear rule.
-            activity = getattr(self, 'activity', None)
-            activity_period = activity.rotation.run_period(player_id, run_uuid) if activity else None
             if activity_period:
                 first = not activity.rotation.get(player_id, activity_period, 'clear', section, 0)
             for source, groups in (("NORMAL_CLEAR_FIXED", profile["normal_reward"]),
@@ -1099,7 +1118,12 @@ class EconomyService:
             if spent and spent[0]:
                 self._event(player_id, f"power:{run_uuid}", 10, 900, spent[0])
         else:
-            rewards = {}
+            rewards = (self._grant(player_id, f'battle:{run_uuid}', gameplay_rewards)
+                       if gameplay_rewards else {})
+            if activity_period and rewards:
+                activity.obtained(player_id, activity_period, rewards, f'battle:{run_uuid}')
+                sources['ACTIVITY_GAMEPLAY'].extend(grant.__dict__ for grant in grants
+                                                   if grant.source == 'ACTIVITY_GAMEPLAY')
             reward_equips = []
             self.refund_battle(player_id, run_uuid)
         self.store.db.execute("INSERT INTO reward_settlement_audit VALUES (?,?,?,?,?,?)",
@@ -1315,6 +1339,9 @@ class EconomyService:
         # Repeating removal is safe; refilling the stack naturally ends it.
         from .appearance import avatar_frames
         permanent = set(avatar_frames())
+        activity = getattr(self, 'activity', None)
+        if activity:
+            permanent.update(item for item, count in activity.gameplay_day_counts(player_id).items() if count)
         removed = [row[0] for row in self.store.db.execute(
             "SELECT item_id FROM inventory WHERE player_id=? AND quantity<=0 ORDER BY item_id", (player_id,))
             if row[0] not in permanent]
