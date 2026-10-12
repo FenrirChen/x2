@@ -5506,7 +5506,8 @@
       ],
       "description": "在白夜大厅中，累计派遣神格探险 {0} 次",
       "rule": {
-        "kind": "unsupported"
+        "kind": "event",
+        "event": 16
       }
     },
     "662320": {
@@ -5566,7 +5567,8 @@
       ],
       "description": "在炼金实验室中，累计完成 {0} 次交易",
       "rule": {
-        "kind": "unsupported"
+        "kind": "event",
+        "event": 75
       }
     },
     "662340": {
@@ -5596,7 +5598,8 @@
       ],
       "description": "在炼金实验室中，累计完成 {0} 次任务",
       "rule": {
-        "kind": "unsupported"
+        "kind": "event",
+        "event": 76
       }
     },
     "662400": {
@@ -5841,7 +5844,8 @@
       ],
       "description": "白夜补给中购买 {0} 件商品",
       "rule": {
-        "kind": "unsupported"
+        "kind": "event",
+        "event": 24
       }
     },
     "662710": {
@@ -5871,7 +5875,8 @@
       ],
       "description": "累计击败 {0} 只普通怪物",
       "rule": {
-        "kind": "unsupported"
+        "kind": "event",
+        "event": 622710
       }
     },
     "662720": {
@@ -5901,7 +5906,8 @@
       ],
       "description": "累计击败 {0} 只精英怪物",
       "rule": {
-        "kind": "unsupported"
+        "kind": "event",
+        "event": 622720
       }
     },
     "662730": {
@@ -5929,7 +5935,8 @@
       ],
       "description": "累计击败 {0} 只BOSS",
       "rule": {
-        "kind": "unsupported"
+        "kind": "event",
+        "event": 622730
       }
     },
     "662900": {

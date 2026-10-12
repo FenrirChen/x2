@@ -212,6 +212,36 @@ def test_legacy_login_evidence_is_adopted_once(env):
     assert economy.achievements.states(1)[662000][0] == 1
 
 
+def test_authoritative_events_are_mirrored_into_achievement_counters(env):
+    """kind=event 的成就读 achievement_events；此前只有 record() 写它，662710 等恒为 0。"""
+    store, economy, _ = env
+    economy.clock = lambda: 1790817334
+    mirror = [
+        ('kills:u1:type:2', economy.TASK_EVENT_KILL_MONSTER_TYPE, 2, 7),
+        ('kills:u1:type:3', economy.TASK_EVENT_KILL_MONSTER_TYPE, 3, 5),
+        ('kills:u1:type:4', economy.TASK_EVENT_KILL_MONSTER_TYPE, 4, 2),
+        ('college-explore:j1', economy.TASK_EVENT_HERO_ADVENTURE, 0, 1),
+        ('college-trade:t1', economy.TASK_EVENT_ALCHEMY_DEAL, 0, 1),
+        ('college-trade:t1:quest', economy.TASK_EVENT_ALCHEMY_QUEST, 0, 1),
+        ('shop-buy:r1', economy.TASK_EVENT_BUY_GOOD, 1234, 3),
+    ]
+    for key, condition, value, amount in mirror:
+        economy.record_event(1, key, condition, value, amount)
+    states = economy.achievements.states(1)
+    assert states[662710][0] == 7 and states[662720][0] == 5 and states[662730][0] == 2
+    assert states[662310][0] == 1 and states[662330][0] == 1 and states[662340][0] == 1
+    assert states[662700][0] == 3
+    # 没有事件源的成就仍然读不到任何东西，绝不能被镜像「猜」出来。
+    assert states[662320][0] == 0 and states[662600][0] == 0 and states[662300][0] == 0
+    # 同一个 key 重复上报在同一天不会重复累加。
+    economy.record_event(1, 'kills:u1:type:2', economy.TASK_EVENT_KILL_MONSTER_TYPE, 2, 7)
+    assert economy.achievements.states(1)[662710][0] == 7
+    # 隔天同一个 key 仍然要能记上。
+    economy.clock = lambda: 1790817334 + 86400
+    economy.record_event(1, 'kills:u1:type:2', economy.TASK_EVENT_KILL_MONSTER_TYPE, 2, 1)
+    assert economy.achievements.states(1)[662710][0] == 8
+
+
 def test_client_recount_is_only_a_refresh_hint(env):
     from x2server.protocol.protobuf import ProtoField, ProtoSchema, FieldKind
     condition = ProtoSchema('ReCountCondition', tuple(ProtoField(i, n, FieldKind.INT32)

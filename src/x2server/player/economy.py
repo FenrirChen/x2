@@ -67,6 +67,13 @@ class EconomyService:
     TASK_EVENT_ALCHEMY_DEAL = 75       # E_AlchemyDealTask: 完成交易次数
     TASK_EVENT_ALCHEMY_QUEST = 76      # E_AlchemyQuestTask: 完成任务次数
     TASK_EVENT_CUSTOMS_ENTRY = 87      # E_CustomsEntry
+    TASK_EVENT_KILL_MONSTER_TYPE = 2   # E_KillMonsterType: 击杀累计，value 是 UnitBase.UnitType
+    # 成就 662710/662720/662730「累计击败 普通/精英/BOSS 怪物」的计数器。击杀上报
+    # 只带 UnitType（battle.py 的 kills:{uuid}:type:{kind}），而 achievement_events 按
+    # event_type 汇总，所以镜像时把 UnitType 拆成三个互不相同的成就事件号。
+    # 类别取自 UnitBase：2=Monster(普通, 244/298 在 unit/Monster)、3=Monster(精英)、
+    # 4=BOSS(352/375 在 unit/BOSS)。
+    ACHV_EVENT_KILL = {2: 622710, 3: 622720, 4: 622730}
     # GameTaskType.CHALLENGE: 60 tasks in 10 groups, no period, no rollover.
     CHALLENGE_KIND = 3
     # GameTaskType.CHAPTER (7): the chapter DP query and its DP 宝箱 claims.
@@ -950,6 +957,16 @@ class EconomyService:
             self.store.db.execute("UPDATE economy_tasks SET progress=MIN(?,progress+?) WHERE player_id=? AND task_id=?",
                 (condition["CompleteNum"], amount, player_id, task_id))
         self._challenge_event(player_id, key, condition_type, value, amount, value2)
+        # 成就读 achievement_events，但此前只有 AchievementService.record 写它，
+        # 于是所有 kind=event 的成就永远停在 0（660270/662330/662710…）。这里把
+        # 事件镜像进去；只镜像「真的有成就声明要读」的事件号，避免刷大这张表。
+        # key 是本层去重键，带上本地日，防止隔天重复的 key 被永久去重。
+        achv_event = condition_type
+        if condition_type == self.TASK_EVENT_KILL_MONSTER_TYPE:
+            achv_event = self.ACHV_EVENT_KILL.get(value, 0)
+        if achv_event in self.achievements.event_types:
+            day = task_period(1, int(self.clock()))[0]
+            self.achievements.record(player_id, f"{key}:{condition_type}:{day}", achv_event, amount)
 
     def claim(self, player_id, task_id, kind):
         self.ensure_periods(player_id)

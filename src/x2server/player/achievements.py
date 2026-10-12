@@ -18,6 +18,9 @@ class AchievementService:
         self.catalog = json.loads(files('x2server').joinpath('data/achievements.json').read_text(encoding='utf-8'))
         self.rows = {int(i): r for i, r in self.catalog['achievements'].items()}
         self.timed_sections = sorted({i for r in self.rows.values() if r['rule']['kind'] == 'timed_clear' for i in r['rule']['ids']})
+        # 声明了 kind=event 的成就才需要事件镜像。EconomyService._event 用它做闸门，
+        # 只把这条链路上的事件写进 achievement_events。
+        self.event_types = {r['rule']['event'] for r in self.rows.values() if r['rule']['kind'] == 'event'}
         from .favor import catalog
         self.initial_favor = {r['HeroID']: r['InitialLevel'] for r in catalog()['favorabilityhero']}
         with self.store.db:
