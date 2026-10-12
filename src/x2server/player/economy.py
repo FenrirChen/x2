@@ -74,6 +74,9 @@ class EconomyService:
     # 类别取自 UnitBase：2=Monster(普通, 244/298 在 unit/Monster)、3=Monster(精英)、
     # 4=BOSS(352/375 在 unit/BOSS)。
     ACHV_EVENT_KILL = {2: 622710, 3: 622720, 4: 622730}
+    # Internal counters keep achievement sources narrower than shared task types.
+    ACHV_EVENT_COLLEGE_EXPLORE = 622310
+    ACHV_EVENT_SUPPLY_PURCHASE = 622700
     # GameTaskType.CHALLENGE: 60 tasks in 10 groups, no period, no rollover.
     CHALLENGE_KIND = 3
     # GameTaskType.CHAPTER (7): the chapter DP query and its DP 宝箱 claims.
@@ -957,16 +960,22 @@ class EconomyService:
             self.store.db.execute("UPDATE economy_tasks SET progress=MIN(?,progress+?) WHERE player_id=? AND task_id=?",
                 (condition["CompleteNum"], amount, player_id, task_id))
         self._challenge_event(player_id, key, condition_type, value, amount, value2)
-        # 成就读 achievement_events，但此前只有 AchievementService.record 写它，
-        # 于是所有 kind=event 的成就永远停在 0（660270/662330/662710…）。这里把
-        # 事件镜像进去；只镜像「真的有成就声明要读」的事件号，避免刷大这张表。
-        # key 是本层去重键，带上本地日，防止隔天重复的 key 被永久去重。
+        # Stable battle/job/order IDs are lifetime occurrences, even across midnight.
         achv_event = condition_type
         if condition_type == self.TASK_EVENT_KILL_MONSTER_TYPE:
             achv_event = self.ACHV_EVENT_KILL.get(value, 0)
+        elif condition_type == self.TASK_EVENT_HERO_ADVENTURE:
+            achv_event = self.ACHV_EVENT_COLLEGE_EXPLORE if key.startswith('college-explore:') else 0
+        elif condition_type == self.TASK_EVENT_BUY_GOOD:
+            # Every supply tab counts; purchases in unrelated activity systems do not.
+            achv_event = self.ACHV_EVENT_SUPPLY_PURCHASE if key.startswith(('shop-buy:', 'compat-shop:')) else 0
         if achv_event in self.achievements.event_types:
-            day = task_period(1, int(self.clock()))[0]
-            self.achievements.record(player_id, f"{key}:{condition_type}:{day}", achv_event, amount)
+            event_key = f"event:{condition_type}:{key}"
+            # Login deliberately reuses a key; touch, power, job and order keys
+            # already carry their day, sequence or globally unique occurrence ID.
+            if key == 'login':
+                event_key += ':' + str(task_period(1, int(self.clock()))[0])
+            self.achievements.record(player_id, event_key, achv_event, amount)
 
     def claim(self, player_id, task_id, kind):
         self.ensure_periods(player_id)

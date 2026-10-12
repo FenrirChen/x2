@@ -236,9 +236,11 @@ def test_authoritative_events_are_mirrored_into_achievement_counters(env):
     # 同一个 key 重复上报在同一天不会重复累加。
     economy.record_event(1, 'kills:u1:type:2', economy.TASK_EVENT_KILL_MONSTER_TYPE, 2, 7)
     assert economy.achievements.states(1)[662710][0] == 7
-    # 隔天同一个 key 仍然要能记上。
+    # 同一战斗跨日重报仍是同一发生记录；新战斗才增加计数。
     economy.clock = lambda: 1790817334 + 86400
     economy.record_event(1, 'kills:u1:type:2', economy.TASK_EVENT_KILL_MONSTER_TYPE, 2, 1)
+    assert economy.achievements.states(1)[662710][0] == 7
+    economy.record_event(1, 'kills:u2:type:2', economy.TASK_EVENT_KILL_MONSTER_TYPE, 2, 1)
     assert economy.achievements.states(1)[662710][0] == 8
 
 
@@ -253,3 +255,65 @@ def test_client_recount_is_only_a_refresh_hint(env):
     assert [p.message_name for p in answer.pushes] == ['L2C_AchvUpdate']
     assert env[1].achievements.states(1)[660001] == (0, 0)
     assert env[0].db.execute("SELECT COUNT(*) FROM economy_grants WHERE source LIKE 'achievement:%'").fetchone()[0] == 0
+
+
+def test_achievement_occurrences_deduplicate_across_midnight_and_reopen(env):
+    from datetime import datetime
+    store, economy, _ = env
+    boundary = int(datetime.fromisoformat('2026-10-13T00:00:00+08:00').timestamp())
+    events = [
+        ('kills:same-run:type:2', 2, 2, 7, 662710, 0),
+        ('college-explore:same-job', 16, 0, 1, 662310, 0),
+        ('college-train:same-job', 17, 0, 1, 662320, 0),
+        ('college-pray:same-job', 48, 0, 1, 662600, 0),
+        ('college-trade:same-order:deal', 75, 0, 1, 662330, 0),
+        ('college-trade:same-order:quest', 76, 0, 1, 662340, 0),
+        ('compat-shop:same-order', 24, 1234, 3, 662700, 801),
+    ]
+    economy.clock = lambda: boundary - 1
+    for key, kind, value, amount, aid, shop in events:
+        economy.record_event(1, key, kind, value, amount, shop)
+    economy.clock = lambda: boundary + 1
+    for key, kind, value, amount, aid, shop in events:
+        economy.record_event(1, key, kind, value, amount, shop)
+    states = economy.achievements.states(1)
+    assert all(states[aid][0] == amount for _, _, _, amount, aid, _ in events)
+    reopened = PlayerStore(store.path)
+    try:
+        again = EconomyService(reopened)
+        again.clock = lambda: boundary + 86400
+        for key, kind, value, amount, aid, shop in events:
+            again.record_event(1, key, kind, value, amount, shop)
+        assert all(again.achievements.states(1)[aid][0] == amount
+                   for _, _, _, amount, aid, _ in events)
+    finally:
+        reopened.close()
+
+
+def test_achievement_sources_keep_supply_tabs_and_exclude_worldboss_search(env):
+    _, economy, _ = env
+    economy.record_event(1, 'worldboss-search:request', 16, 0, 1)
+    economy.record_event(1, 'activity-shop:request', 24, 1234, 4, 860)
+    for shop in (801, 804, 809):
+        key = ('shop-buy:' if shop == 809 else 'compat-shop:') + str(shop)
+        economy.record_event(1, key, 24, 1234, 2, shop)
+    economy.record_event(1, 'college-explore:job', 16, 0, 1)
+    states = economy.achievements.states(1)
+    assert states[662310][0] == 1
+    assert states[662700][0] == 6
+
+
+def test_daily_touch_occurrence_keys_stay_distinct_and_rollback_is_atomic(env):
+    store, economy, _ = env
+    for day in (1790817334, 1790817334 + 86400):
+        economy.clock = lambda day=day: day
+        key = f'touch:1003:{day}:1'
+        economy.record_event(1, key, 19, 1003)
+        economy.record_event(1, key, 19, 1003)
+    count = store.db.execute('SELECT SUM(amount) FROM achievement_events WHERE player_id=1 AND event_type=19').fetchone()[0]
+    assert count == 2
+    with pytest.raises(RuntimeError):
+        with economy.transaction():
+            economy.record_event(1, 'college-train:rolled-back', 17, 0, 1)
+            raise RuntimeError('abort reward transaction')
+    assert economy.achievements.states(1)[662320][0] == 0

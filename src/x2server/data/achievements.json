@@ -5507,7 +5507,7 @@
       "description": "在白夜大厅中，累计派遣神格探险 {0} 次",
       "rule": {
         "kind": "event",
-        "event": 16
+        "event": 622310
       }
     },
     "662320": {
@@ -5537,7 +5537,8 @@
       ],
       "description": "在光之密室中，累计派遣神格训练 {0} 次",
       "rule": {
-        "kind": "unsupported"
+        "kind": "event",
+        "event": 17
       }
     },
     "662330": {
@@ -5816,7 +5817,8 @@
       ],
       "description": "在位面奇迹中，累计祈神 {0} 次",
       "rule": {
-        "kind": "unsupported"
+        "kind": "event",
+        "event": 48
       }
     },
     "662700": {
@@ -5845,7 +5847,7 @@
       "description": "白夜补给中购买 {0} 件商品",
       "rule": {
         "kind": "event",
-        "event": 24
+        "event": 622700
       }
     },
     "662710": {
