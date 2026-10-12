@@ -92,6 +92,31 @@ def test_chapter_seven_thetis_trial_uses_full_official_loadout(env, wire_id):
     assert hero_attributes({'id': 1007, 'level': 50, 'star': 15})['atk'] == 892
 
 
+@pytest.mark.parametrize('wire_id', [1303, 1003])
+def test_behemoth_trial_preserves_original_action_skin_and_loadout(env, wire_id):
+    store, economy, context = env
+    before = store.get(1)['snapshot']['heroes']
+    battle = BattleService(store, economy)
+    section = battle.catalog.sections[2110707]
+    values = request()
+    values.update(missionId=2110707, chapter=section['ChapterID'], sceneId=section['Maps'][0],
+                  heros=[PROFILE_HERO.encode({'heroId': wire_id, 'leader': 1})])
+    response = asyncio.run(battle.enter(context, packet(values)))
+    assert response.values['result'] == 10
+    hero = FIGHT_HERO.decode(FIGHT_DATA.decode(response.values['data'])['fightHeros'][0])
+    assert (hero['id'], hero['level'], hero['star'], hero['battleSkinId']) == (1303, 50, 15, 1220301)
+    assert HERO_ATTR.decode(hero['heroAttrCount']) == {'atk': 826, 'def': 711, 'hp': 6450, 'sp': 3000}
+    artifact = HERO_GOD_EQUIP.decode(hero['heroGodEquip'])
+    assert (artifact['id'], artifact['star'], artifact['level']) == (1503, 4, 15)
+    from x2server.messages.core import INT_PAIR
+    assert [INT_PAIR.decode(raw) for raw in artifact['jewel']] == [{'Key': 0, 'Value': 1251056}]
+    from x2server.messages.battle import HERO_SKILL
+    skills = [HERO_SKILL.decode(raw)['id'] for raw in hero['heroSkill']]
+    assert 10033 in skills and 10057 not in skills
+    assert len(hero['heroEquip']) == 6
+    assert store.get(1)['snapshot']['heroes'] == before
+
+
 def test_element_compose_transport_replay_limit_and_session_scope(env):
     store, economy, context = env
     with store.db:

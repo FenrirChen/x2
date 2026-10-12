@@ -19,7 +19,8 @@ def test_trial_loadout_all_client_rows_and_no_account_mutation(env):
         hero = trial_hero(row['TrialHeroID'], row['TrialHeroID'])
         assert hero['battle_base_id'] == row['TrialHeroID']
         assert hero['id'] == row['TrialHeroID']
-        assert not hero['trial_skin'] or catalog()['appearance_units'][str(hero['trial_skin'])] == row['TrialHeroID']
+        allowed = {row['TrialHeroID'], row['UnitID']} if row['TrialHeroID'] == 1303 else {row['TrialHeroID']}
+        assert not hero['trial_skin'] or catalog()['appearance_units'][str(hero['trial_skin'])] in allowed
         from x2server.player.progression import hero_attributes
         assert hero_attributes(hero)['atk'] > 0
         assert [s['id'] for s in hero['skills']] == catalog()['unit_skills'][str(row['TrialHeroID'])][:len(row['SkillLevel'])]

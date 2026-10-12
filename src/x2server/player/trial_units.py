@@ -20,10 +20,14 @@ def trial_hero(unit_id, wire_id):
     # identifies the normal hero for presentation/artifact lookup only.
     skill_ids = catalog()['unit_skills'][str(unit_id)]
     skin = row.get('AppearanceID', 0)
-    # A battle skin replaces ActionFileID through Appearance.UnitBaseID.
-    # Normal default skins would replace trial-specific attacks with the
-    # normal hero's actions (Thetis projectile range 1600 -> 800).
-    if skin and catalog()['appearance_units'].get(str(skin)) != unit_id:
+    # A skin replaces ActionFileID. Thetis must keep its independent trial
+    # attacks (normal skin halves their range). Behemoth's original trial skin
+    # is required: action_1303 contains invalid SkillID 10057 in ultimate
+    # transitions, while its prescribed regular action file checks 10033.
+    allowed_skin_units = {unit_id}
+    if unit_id == 1303:
+        allowed_skin_units.add(row['UnitID'])
+    if skin and catalog()['appearance_units'].get(str(skin)) not in allowed_skin_units:
         skin = 0
     return {'id': unit_id, 'battle_base_id': unit_id, 'trial_unit': unit_id,
         'state': 2, 'level': row['HeroLevel'], 'star': row['HeroStars'], 'exp': 0,
