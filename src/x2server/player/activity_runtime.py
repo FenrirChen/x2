@@ -151,6 +151,8 @@ class ActivityRuntime:
                 'previousRecord': max(cleared, default=0), 'missionPassCount': passes}
 
     def operate(self, player, op, req, token):
+        from .activity_protocol import check_request
+        check_request(self, player, op, req)
         if op == 'QueryActivity':
             return self.a.query_activity(player)
         if op == 'EntryidStatus':
@@ -317,9 +319,14 @@ class ActivityRuntime:
         response_schema = ACTIVITY_SCHEMAS.get(response) or LOBBY_SCHEMAS[response]
         token = hashlib.sha256(f'{context.session.session_id}:{packet.header.request_id}:{name}'.encode() + packet.body).hexdigest()
         try:
+            from .activity_protocol import check_request
+            check_request(self, player, name[4:], req)
             with self.e.transaction():
                 cached = self.a.store.db.execute('SELECT period,message,response FROM activity_receipts WHERE player_id=? AND request_key=?', (player, token)).fetchone()
                 if cached:
+                    current = self.r.at()
+                    if cached['period'] != (current.index if current else -1):
+                        raise UnresolvedEconomy('receipt belongs to another activity period')
                     if cached['period'] % self.r.state_cycle_size not in self.r.state_slots:
                         raise UnresolvedEconomy('activity is closed')
                     if cached['message'] != response:
@@ -329,10 +336,10 @@ class ActivityRuntime:
                     values = self.operate(player, name[4:], req, token)
                     self.a.store.db.execute('INSERT INTO activity_receipts VALUES (?,?,?,?,?)',
                         (player, token, self.r.at().index if self.r.at() else -1, response, response_schema.encode(values)))
-        except (UnresolvedEconomy, ValueError, KeyError, TypeError) as exc:
+        except (UnresolvedEconomy, ValueError, KeyError, TypeError, IndexError) as exc:
             # Encoding remains inside the transaction: an incompatible payload
             # must roll back and answer the request, never disconnect/retry it.
-            if isinstance(exc, (KeyError, TypeError)):
+            if isinstance(exc, (KeyError, TypeError, IndexError)):
                 logging.getLogger('x2.activity').exception('activity protocol rejected %s player=%s', name, player)
             logging.getLogger('x2.activity').info('activity denied %s player=%s reason=%s', name, player, exc)
             fields = {f.name for f in response_schema.fields}
@@ -372,7 +379,19 @@ class ActivityRuntime:
             elif any(cid in self.a.chapters for cid in row.get('ActivityParam1', [])):
                 messages.append(OutboundMessage('L2C_ActivityMissionData',
                                 self.a.mission_values(player, row['ActivityID'])))
-        return tuple(messages)
+        # Never let an invalid optional progress push interrupt the mandatory
+        # checkout reply after rewards have already been committed.
+        from .activity_protocol import check_progress
+        valid = []
+        for message in messages:
+            try:
+                check_progress(self, period, message)
+            except (ValueError, KeyError, TypeError, IndexError):
+                logging.getLogger('x2.activity').exception('activity progress rejected: %s group=%s',
+                    message.message_name, period.theme['group'])
+            else:
+                valid.append(message)
+        return tuple(valid)
 
     def deliver_daily_mail(self, player):
         period = self.r.at()

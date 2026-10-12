@@ -321,9 +321,14 @@ class BattleService:
 
     def _activity_progress_sync(self, player, section):
         activity = getattr(self.economy, 'activity', None) if self.economy else None
+        period = activity.rotation.at() if activity else None
         if (activity and section in activity.rotation.section_groups
-                and activity.rotation.section_groups[section] != -1):
-            return activity.runtime.progress_messages(player)
+                and period and activity.rotation.section_groups[section] == period.theme['group']):
+            try:
+                return activity.runtime.progress_messages(player)
+            except (ValueError, KeyError, TypeError, IndexError):
+                logging.getLogger('x2.activity').exception(
+                    'checkout progress unavailable player=%s section=%s', player, section)
         return ()
 
     @staticmethod

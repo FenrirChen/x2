@@ -46,3 +46,4 @@ dist/
 analysis/dp_client/raw/
 analysis/bag_client/raw/
 analysis/relic_client/raw/
+analysis/equipment/callgraph_bl.json
