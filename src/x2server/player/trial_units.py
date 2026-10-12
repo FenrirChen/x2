@@ -9,6 +9,22 @@ def catalog():
     return json.loads(files('x2server').joinpath('data/trial_units.json').read_text(encoding='utf-8'))
 
 
+def section_trial(row, selected_ids):
+    """Canonical trial sections, plus the requested chapter-seven story trial.
+
+    2.4 labels 2110607 as E_Friend. The user explicitly requests a Behemoth
+    trial there; only its solo normal/trial alias gets the canonical 1303
+    loadout. Other selected teams retain their account growth and equipment.
+    This compatibility exception must not rewrite the client's SectionTable.
+    """
+    if row.get('AssistType', {}).get('value') == 1:
+        return next((unit for unit in row.get('AssistParam', []) if unit > 0), None)
+    if (row.get('SectionID') == 2110607 and row.get('ChapterID') == 2010700
+            and len(selected_ids) == 1 and selected_ids[0] in (1003, 1303)):
+        return 1303
+    return None
+
+
 def trial_hero(unit_id, wire_id):
     from .progression import catalog as progression
     row = next((r for r in catalog()['units'] if r['TrialHeroID'] == unit_id), None)

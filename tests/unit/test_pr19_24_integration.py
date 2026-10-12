@@ -93,13 +93,14 @@ def test_chapter_seven_thetis_trial_uses_full_official_loadout(env, wire_id):
 
 
 @pytest.mark.parametrize('wire_id', [1303, 1003])
-def test_behemoth_trial_preserves_original_action_skin_and_loadout(env, wire_id):
+@pytest.mark.parametrize('section_id', [2110707, 2110607])
+def test_behemoth_trial_preserves_original_action_skin_and_loadout(env, wire_id, section_id):
     store, economy, context = env
     before = store.get(1)['snapshot']['heroes']
     battle = BattleService(store, economy)
-    section = battle.catalog.sections[2110707]
+    section = battle.catalog.sections[section_id]
     values = request()
-    values.update(missionId=2110707, chapter=section['ChapterID'], sceneId=section['Maps'][0],
+    values.update(missionId=section_id, chapter=section['ChapterID'], sceneId=section['Maps'][0],
                   heros=[PROFILE_HERO.encode({'heroId': wire_id, 'leader': 1})])
     response = asyncio.run(battle.enter(context, packet(values)))
     assert response.values['result'] == 10

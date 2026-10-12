@@ -481,9 +481,12 @@ class BattleService:
         owned = {h["id"]: h for h in snapshot.get("heroes", [])}
         # Activity trial teams are absent from the main-story-only economy catalog.
         section_config = self.catalog.sections.get(section)
-        trial_unit = None
-        if section_config and section_config.get("AssistType", {}).get("value") == 1:
-            trial_unit = next((unit for unit in section_config.get("AssistParam", []) if unit > 0), None)
+        from .trial_units import section_trial
+        trial_unit = section_trial(section_config or {}, [h.get('heroId') for h in selected])
+        if trial_unit is not None:
+            logging.getLogger('x2.battle').info(
+                'battle trial loadout section=%s trial=%s compatibility=%s',
+                section, trial_unit, section_config.get('AssistType', {}).get('value') != 1)
         heroes = []
         for selected_hero in selected:
             hero_id = selected_hero.get("heroId")
