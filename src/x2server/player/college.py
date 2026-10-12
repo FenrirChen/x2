@@ -377,16 +377,36 @@ class CollegeService:
         catalog = self._load_catalog()
         customers = catalog["customers"]
         state = self.college.load(player_id) if self.college else initial_state()
-        rotation = int(state.get('alchemy', {}).get('customer_rotations', {}).get(str(pos_index), 0))
-        # Revival compatibility: advance through the existing official customer
-        # table on refusal; no unrecovered refresh timer or fee is invented.
-        row = customers[(player_id * 31 + pos_index * 17 + 5 + rotation) % len(customers)]
+        rotations = state.get('alchemy', {}).get('customer_rotations', {})
+        # The game day belongs in the seed. Without it the index only moved when
+        # the player refused an order, so each position kept showing the same
+        # face and demanding the same item forever.
+        from .task_calendar import task_period
+        day, _ = task_period(1, self.clock.now())
+        day_index = day // 86400
+        # One god stands at one position: walk the positions in order and skip
+        # whatever the lower ones already took, so the five slots never show the
+        # same character twice.
+        used = set()
+        index = 0
+        for pos in range(pos_index + 1):
+            base = (player_id * 31 + pos * 17 + 5
+                    + int(rotations.get(str(pos), 0)) + day_index) % len(customers)
+            index = base
+            for offset in range(len(customers)):
+                candidate = (base + offset) % len(customers)
+                if int(customers[candidate]["heroId"]) not in used:
+                    index = candidate
+                    break
+            used.add(int(customers[index]["heroId"]))
+        row = customers[index]
+        rotation = int(rotations.get(str(pos_index), 0))
         element = str(row["like"])
         first = catalog["recipes"][element]["1"]
         second = catalog["recipes"][element]["2"]
         customer = {"questId": row["sellQuestId"], "itemId": [first["productId"]],
                 "itemNum": [first["productNum"]], "type": self.ALCHEMY_TRANSACTION,
-                "adviseItemId": second["productId"], "param": 0, "result": 0}
+                "adviseItemId": second["productId"], "param": int(row["heroId"]), "result": 0}
         saved = state.get('alchemy', {}).get('customer_orders', {}).get(str(pos_index), {})
         if saved.get('rotation') == rotation and saved.get('questId') == customer['questId']:
             for key in ('itemId', 'itemNum', 'adviseItemId'):
