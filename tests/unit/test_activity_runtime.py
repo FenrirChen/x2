@@ -517,7 +517,7 @@ def test_login_activity_queries_encode_all_responses_and_extra_drop_860(runtime)
                 ('LanternShowQueryData', {'activityId': 72046})]
     for seq, (name, values) in enumerate(requests, 800):
         result = asyncio.run(rt.handle(ctx, packet(values, seq, 'C2L_' + name)))
-        assert result.values.get('code', 10) == 10
+        assert result.values.get('code', 10) == (13 if name == 'QueryActivityMissionRecord' else 10)
         assert not result.before_response and not result.pushes
         for message in (*result.before_response, result, *result.pushes):
             CORE_SCHEMAS[message.message_name].encode(message.values)
@@ -613,6 +613,7 @@ def test_all_activity_sections_enter_and_settle_in_their_period(runtime, theme_i
             result = asyncio.run(battle.checkout(ctx, checkout))
             assert result.values['result'] == 10, (period.theme['title'], sid, result.values)
             updates = {p.message_name: p for p in result.before_response}
+            assert ('L2C_QueryActivityMissionRecord' in updates) == (period.theme['group'] == 99)
             assert 'L2C_SceneGlobalParam' in updates
             assert 'L2C_ActivityPassRecord' in updates
             pairs = [ACTIVITY_SCHEMAS['KeyValuePair_Int32_Int32'].decode(raw)

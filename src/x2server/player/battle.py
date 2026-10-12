@@ -181,8 +181,9 @@ class BattleService:
         """Close a bounded run; economy and receipt commit atomically when enabled.
 
         This is a single-account compatibility receipt, not replay verification.
-        The latest bounded entry is the only candidate and expires in one hour.
-        An identical retry returns the stored result; a conflicting one is denied.
+        The latest entry is the only candidate; new settlements expire in one hour.
+        An identical retry returns the stored result even after that timeout;
+        a conflicting one is denied.
         """
         player_id = context.session.player_id
         if player_id is None:
@@ -209,7 +210,7 @@ class BattleService:
             return reject_with('static/chapter/checkGm/fightTime gate')
         row = self.store.db.execute("SELECT uuid, created_at, response, ai_cost FROM battle_entries WHERE player_id=? ORDER BY rowid DESC LIMIT 1",
                                     (player_id,)).fetchone()
-        if not row or int(time.time()) - row["created_at"] > 3600:
+        if not row:
             return reject_with('no/expired battle entry')
         # Some 2.4 client paths submit fightTime=0. The entry timestamp is the
         # server-side start of this run, so use elapsed time for that case.
@@ -222,15 +223,26 @@ class BattleService:
             if not run or run["player_id"] != player_id or run["section_type"] != section_type:
                 return reject_with('economy run missing/mismatched')  # Old practice entries cannot acquire rewards retroactively.
         reward_equips: tuple = ()
-        digest = hashlib.sha256(packet.body if self.economy else raw).hexdigest()
+        # The outer battle-file upload/sendTag can change on reconnect. Only
+        # checkout is consumed by settlement and defines its idempotency key.
+        digest = hashlib.sha256(raw).hexdigest()
         cached = self.store.db.execute("SELECT request_hash, response FROM battle_receipts WHERE uuid=?", (row["uuid"],)).fetchone()
         schema = BATTLE_SCHEMAS["L2C_CheckoutMainMission"]
         if cached:
             if cached['request_hash'] != digest:
-                return reject
+                # Older receipts hashed the whole envelope. Exact persisted
+                # checkout bytes allow safe migration without settling again.
+                saved = self.store.db.execute('SELECT checkout FROM battle_checkout_wire WHERE uuid=?',
+                                               (row['uuid'],)).fetchone()
+                if saved is None or saved['checkout'] != raw:
+                    return reject_with('conflicting checkout replay')
             before, pushes = self._checkout_star_sync(self.economy.pushes(player_id) if self.economy else ())
             return OutboundMessage("L2C_CheckoutMainMission", schema.decode(cached["response"]),
                                    before_response=before + self._activity_progress_sync(player_id, section), pushes=pushes)
+        # A completed settlement remains replayable after the entry timeout.
+        # Only a new settlement is bounded by the one-hour combat window.
+        if int(time.time()) - row['created_at'] > 3600:
+            return reject_with('expired unsettled battle entry')
         snapshot = self.store.get(player_id)["snapshot"]
         heroes = snapshot.get("heroes", [])
         # The client echoes the selected hero state in checkout.  Preserve a

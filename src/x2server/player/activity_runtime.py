@@ -226,6 +226,8 @@ class ActivityRuntime:
             self.r.put(player, period, 'branch', aid, branch)
             return {'code': 10, 'activityId': aid, 'branch': branch}
         if op in ('QueryActivityMissionRecord', 'ActivityPassRecord'):
+            if op == 'QueryActivityMissionRecord' and period.theme['group'] != 99:
+                raise UnresolvedEconomy('YueXi mission records are not open in this theme')
             result = self.records(player, period)
             return {'code': 10, 'missionPassCount': result['missionPassCount']} if op == 'ActivityPassRecord' else result
         if op == 'ExtraDropData':
@@ -358,9 +360,12 @@ class ActivityRuntime:
             return ()
         messages = [OutboundMessage('L2C_SceneGlobalParam',
                     self.operate(player, 'SceneGlobalParam', {}, 'progress')),
-                    OutboundMessage('L2C_QueryActivityMissionRecord', self.records(player, period)),
                     OutboundMessage('L2C_ActivityPassRecord',
                     {'code': 10, 'missionPassCount': self.records(player, period)['missionPassCount']})]
+        # YueXi's handler indexes its own POV configuration for every pass
+        # pair. Other themes must not dispatch this event into YueXiModule.
+        if period.theme['group'] == 99:
+            messages.insert(1, OutboundMessage('L2C_QueryActivityMissionRecord', self.records(player, period)))
         for row in period.theme['activities']:
             if enum(row['ActivityType']) == 13:
                 messages.append(OutboundMessage('L2C_QueryShuangHanActivity', self.a.frost_values(player)))

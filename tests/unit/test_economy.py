@@ -125,6 +125,36 @@ def test_battle_first_and_repeat_rewards_atomic_and_idempotent(env):
     assert store.db.execute("SELECT quantity FROM inventory").fetchone()[0] == 5
     assert store.get(1)["snapshot"]["gold"] == 360
     assert store.get(1)["snapshot"]["crystal"] == 30
+
+
+def test_checkout_receipt_replays_after_entry_timeout_without_new_rewards(env):
+    store, economy, ctx = env
+    battle = BattleService(store, economy)
+    asyncio.run(battle.enter(ctx, packet(request())))
+    original = asyncio.run(battle.checkout(ctx, checkout()))
+    assert original.values['result'] == 10
+    # A reconnect may replace the auxiliary battle-file upload; this is not a
+    # change to the actual settlement payload.
+    original_request = checkout()
+    from x2server.messages.battle import BATTLE_SCHEMAS
+    envelope = BATTLE_SCHEMAS['C2L_CheckoutMainMissionSign'].decode(original_request.body)
+    upload_retry = packet({**envelope, 'battleFileString': 'reconnect-upload', 'sendTag': True},
+                          name='C2L_CheckoutMainMissionSign')
+    with store.db:
+        # Emulate a receipt written by the pre-fix server.
+        store.db.execute("UPDATE battle_receipts SET request_hash='legacy-envelope-hash'")
+    assert asyncio.run(battle.checkout(ctx, upload_retry)).values == original.values
+    grants = store.db.execute('SELECT count(*) FROM economy_grants').fetchone()[0]
+    with store.db:
+        store.db.execute('UPDATE battle_entries SET created_at=0 WHERE player_id=1')
+    assert asyncio.run(battle.checkout(ctx, checkout())).values == original.values
+    assert asyncio.run(battle.checkout(ctx, checkout(False))).values['result'] == 13
+    assert store.db.execute('SELECT count(*) FROM economy_grants').fetchone()[0] == grants
+    asyncio.run(battle.enter(ctx, packet(request(), 2)))
+    with store.db:
+        store.db.execute('UPDATE battle_entries SET created_at=0 WHERE player_id=1')
+    assert asyncio.run(battle.checkout(ctx, checkout())).values['result'] == 13
+    assert store.db.execute('SELECT count(*) FROM economy_grants').fetchone()[0] == grants
     assert store.db.execute("SELECT COUNT(*) FROM economy_clears").fetchone()[0] == 1
 
 
