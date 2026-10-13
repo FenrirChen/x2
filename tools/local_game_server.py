@@ -40,7 +40,7 @@ from x2server.player.appearance import AppearanceService
 from x2server.player.mail import MailService
 from x2server.player.terminal import TerminalService
 from x2server.player.college import CollegeService, CollegeStateRepository
-from x2server.player.system_mail import daily_welfare_watch, deliver_hero_choice, deliver_ultimate_causality, deliver_revival_supply
+from x2server.player.system_mail import daily_welfare_watch, deliver_hero_choice, deliver_ultimate_causality, deliver_revival_supply, deliver_player_gift
 from x2server.player.tutorial import TutorialService
 from x2server.player.star_chart import StarChartService
 from x2server.player.equip_plans import EquipPlanService
@@ -79,6 +79,9 @@ async def run(database: Path, seconds: float) -> None:
     store = PlayerStore(database)
     logging.getLogger("x2.local").info("active database=%s server_source=%s",
         store.path.resolve(), Path(__file__).resolve())
+    # Approved 35-day Origin season is on by default in actual deployments.
+    # Administrators may explicitly disable it with X2_ORIGIN_SEASON_ENABLED=0.
+    os.environ.setdefault('X2_ORIGIN_SEASON_ENABLED', '1')
     accounts = AccountStore(store)
     save_manager = SaveManager(store)
     identity = LocalIdentityService(contract, account=os.environ.get("X2_LOCAL_ACCOUNT"),
@@ -99,6 +102,8 @@ async def run(database: Path, seconds: float) -> None:
     supply_minted, supply_failed = deliver_revival_supply(store, clock.now())
     logging.getLogger("x2.system_mail").info(
         "revival supply mail backfill minted=%s failed=%s", supply_minted, supply_failed)
+    extra_minted, extra_failed = deliver_player_gift(store, clock.now(), "causality_oct13")
+    logging.getLogger("x2.system_mail").info("October causality gift minted=%s failed=%s", extra_minted, extra_failed)
     economy = EconomyService(store, clock=clock.now)
     # 星相屋/每日占卜 (362/363): 读写自己的签到状态并真发货, 见 player/divination.py。
     divination = DivinationService(store, economy)
@@ -124,7 +129,7 @@ async def run(database: Path, seconds: float) -> None:
                          mail=mail, gift_packages=gift_packages, college=college)
     http = BootstrapHTTPServer(endpoints.bind_host, endpoints.http_port, identity)
     tcp = X2TCPServer(Settings(tcp_host=endpoints.bind_host, tcp_port=endpoints.game_port, read_timeout=120),
-        Dispatcher({**star_chart.handlers(), **LobbyService(clock, college).handlers(), **college_flows.handlers(), **TutorialService(store).handlers(), **BirthdayService(store).handlers(), **economy.handlers(), **divination.handlers(), **shop.handlers(), **gift_packages.handlers(), **collection.handlers(), **favor.handlers(), **appearance.handlers(), **appearance_shop.handlers(), **mail.handlers(), **terminal.handlers(), **equipment.handlers(), **equip_plans.handlers(), **wish.handlers(), **ProgressionService(store, economy, appearance).handlers(), **BattleService(store, economy).handlers(), **BattleShopService(store, economy).handlers(), "C2L_HeroAll": HeroService(store).query_all,
+        Dispatcher({**star_chart.handlers(), **LobbyService(clock, college).handlers(), **college_flows.handlers(), **TutorialService(store).handlers(), **BirthdayService(store).handlers(), **economy.handlers(), **divination.handlers(), **shop.handlers(), **gift_packages.handlers(), **collection.handlers(), **favor.handlers(), **appearance.handlers(), **appearance_shop.handlers(), **mail.handlers(), **terminal.handlers(), **equipment.handlers(), **equip_plans.handlers(), **wish.handlers(), **ProgressionService(store, economy, appearance).handlers(), **BattleService(store, economy).handlers(), **BattleShopService(store, economy).handlers(), "C2L_HeroAll": HeroService(store, economy).query_all,
                     **activity_runtime.handlers(), "C2L_Login": login.login, "C2L_ReConnect": login.reconnect,
                     "C2L_ServerTableConfig": login.server_config}))
     chat = X2TCPServer(Settings(tcp_host=endpoints.bind_host, tcp_port=endpoints.chat_port, read_timeout=120),
@@ -136,7 +141,11 @@ async def run(database: Path, seconds: float) -> None:
     activity_task = None
 
     async def settle_monthcards(day_start):
-        """Pay the month-card allowance at the local midnight, even online."""
+        """Settle month cards and expire terminal wishes at server midnight."""
+        for (player_id,) in store.db.execute('SELECT player_id FROM favor_wish_state WHERE day<>?', (day_start,)).fetchall():
+            update = economy.terminal_wish.expire_day(player_id)
+            if update and player_id in tcp.authenticated_player_ids():
+                await tcp.push_to_player(player_id, update)
         for (player_id,) in store.db.execute(
                 "SELECT DISTINCT player_id FROM gift_package_claims WHERE package_id=?",
                 (gift_packages.MONTHCARD_ID,)):

@@ -36,6 +36,11 @@ class WishService:
             "limited": sorted(int(i) for i, v in self.catalog.items() if v["type"] == "E_Limited"),
             "jewel": sorted(int(i) for i, v in self.catalog.items() if v["type"] == "E_Jewel"),
         }
+        rotation = json.loads(files("x2server").joinpath("data/wish_rotation.json").read_text("utf8"))
+        order = rotation['up']
+        if len(order) != len(set(order)) or set(order) != set(self.groups['up']):
+            raise ValueError('invalid fixed UP rotation')
+        self.groups['up'] = order
         if [len(self.groups[k]) for k in ("up", "limited", "jewel")] != [30, 3, 10]:
             raise ValueError("unexpected recovered wish pool groups")
         with store.db:
@@ -332,7 +337,7 @@ class WishService:
         pushes.extend(self._balance_sync(player_id)[1:])
         if any(1211000 <= prize["item_id"] < 1212000 for prize in prizes):
             pushes.insert(0, OutboundMessage("L2C_HeroUpdate", {"code": 10,
-                "heros": [encode_hero_data(h) for h in self.store.get(player_id)["snapshot"]["heroes"]]}))
+                "heros": [encode_hero_data(h, season=self.economy.season if self.economy else None, player_id=player_id) for h in self.store.get(player_id)["snapshot"]["heroes"]]}))
         return OutboundMessage("L2C_LuckDraw", values, pushes=tuple(pushes))
 
     async def result(self, context, packet):

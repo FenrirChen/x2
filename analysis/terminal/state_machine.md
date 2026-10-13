@@ -1,3 +1,7 @@
+## 2026-10-13 最新实现
+
+服务端已恢复分析候选3个等权、每日接取3个、服务器北京时间00:00刷新，351条官方任务的五类行为、原版奖励和好感结算均已接入。迁移、重登、防重和主动日切实现见 `docs/knowledge/terminal_wish_restore_20261013.md`。连续在线跨日的isAnalyse客户端缓存边界需要用户授权的客户端补丁，不能称已修复；本轮APK保持原版。下文旧服务端空响应结论仅描述恢复前代码。
+
 # 终端 / 心愿分析客户端状态机
 
 入口为 `MainPage.mBtnPrivateLetter` → `PrivateMailModule.Show` → `FavorCommunityMain` (`UI_PrivateMail`) → `FavorWishTab`。容器另有私信和动态 Tab；「开始分析」只属于心愿任务 Tab。

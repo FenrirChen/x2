@@ -44,6 +44,7 @@ class FavorService:
                           for r in data["sendgiftcontrol"]}
         self.files = {r["FilesID"]: r for r in data["favorabilityfiles"]}
         self.dairy = data["favorabilitydairy"]
+        self.battle_sections = json.loads(files("x2server").joinpath("data/battle_favor.json").read_text(encoding="utf-8"))["sections"]
         step_fields = ("Level", "FavorabilityLevel", "StarLevel", "HeroLevel", "CurrencyNum")
         candidates = Counter(tuple(tuple(r[key]) for key in step_fields)
             for r in data["favorabilityfetters"] if r.get("CurrencyID") == 901
@@ -102,7 +103,7 @@ class FavorService:
             from .hero import encode_hero_data
             return OutboundMessage(reply, {"code": 10 if hero else 13, "needRefresh": bool(hero)},
                 pushes=(OutboundMessage("L2C_HeroUpdate", {"code": 10,
-                    "heros": [encode_hero_data(hero)]}),) if hero else ())
+                    "heros": [encode_hero_data(hero, season=self.economy.season, player_id=player_id)]}),) if hero else ())
         if name == "C2L_QueryHeroJournal":
             journal = []
             if hero:
@@ -130,7 +131,7 @@ class FavorService:
             from .hero import encode_hero_data
             return OutboundMessage(reply, {"code": 10, "heroID": hero_id, "archivesID": file_id},
                 pushes=(OutboundMessage("L2C_HeroUpdate", {"code": 10,
-                    "heros": [encode_hero_data(target)]}),))
+                    "heros": [encode_hero_data(target, season=self.economy.season, player_id=player_id)]}),))
         return OutboundMessage(reply, {"code": 13,
             "mainHeroId": hero_id, "positionId": req.get("positionId", 0)})
 
@@ -162,7 +163,7 @@ class FavorService:
         from .hero import encode_hero_data
         values["code"] = 10
         return OutboundMessage("L2C_UpgradeFetters", values, pushes=(
-            OutboundMessage("L2C_HeroUpdate", {"code": 10, "heros": [encode_hero_data(hero)]}),
+            OutboundMessage("L2C_HeroUpdate", {"code": 10, "heros": [encode_hero_data(hero, season=self.economy.season, player_id=player_id)]}),
             *self.economy.pushes(player_id)))
 
     def _advance(self, hero_id, state, breaks):
@@ -175,6 +176,39 @@ class FavorService:
                 break
             state["level"] += 1
         return state
+
+    def battle(self, player_id, run_uuid, section):
+        """Within settlement receipt transaction: award the bound owned combat team."""
+        config = self.battle_sections.get(str(section), {})
+        gain = config.get("gain", 0)
+        if type(gain) is not int or gain <= 0:
+            return {}
+        team_row = self.store.db.execute("SELECT team_json FROM battle_entries WHERE uuid=? AND player_id=?",
+                                         (run_uuid, player_id)).fetchone()
+        team = set(json.loads(team_row[0])) if team_row else set()
+        # Story trial units never alter the account hero they temporarily replace.
+        if (self.economy.entry_catalog.sections.get(section, {}).get("Type") == 5
+                or config.get("trial", False)
+                or section == 2110607 and len(team) == 1 and bool(team & {1003, 1303})):
+            return {}
+        snapshot = self.store.get(player_id)["snapshot"]
+        changes = {}
+        for hero in snapshot.get("heroes", []):
+            hid = hero["id"]
+            if hid not in team or hid not in self.heroes or hero.get("state") != 2:
+                continue
+            before = favor_state(hero, self.heroes[hid]["InitialLevel"]).copy()
+            state = before.copy()
+            maximum = self.levels[self.heroes[hid]["LevelLimit"]]["Exp"]
+            added = min(gain, max(0, maximum - state["exp"]))
+            state["exp"] += added
+            hero["favor"] = self._advance(hid, state, hero.get("favor_breaks", []))
+            changes[hid] = added
+        if changes:
+            self.economy.save_snapshot(player_id, snapshot)
+            self.economy._event(player_id, f"battle-favor:{run_uuid}", 73, 0, 1)
+            LOGGER.info("battle favor run=%s player=%s section=%s added=%s", run_uuid, player_id, section, changes)
+        return changes
 
     def _break(self, player_id, hero_id, hero):
         failure = OutboundMessage("L2C_FavorBreak", {"code": 13, "heroId": hero_id})
@@ -208,7 +242,7 @@ class FavorService:
             self.economy.save_snapshot(player_id, snapshot)
         from .hero import encode_hero_data
         return OutboundMessage("L2C_FavorBreak", {"code": 10, "heroId": hero_id}, pushes=(
-            OutboundMessage("L2C_HeroUpdate", {"code": 10, "heros": [encode_hero_data(target)]}),
+            OutboundMessage("L2C_HeroUpdate", {"code": 10, "heros": [encode_hero_data(target, season=self.economy.season, player_id=player_id)]}),
             *self.economy.pushes(player_id)))
 
     def _add(self, player_id, req, hero):
@@ -276,10 +310,12 @@ class FavorService:
             target["favor_gifts"] = {"day": day, "count": count}
             self.economy.save_snapshot(player_id, snapshot)
             self.economy.achievements.record(player_id, f'gift:{hero_id}:{day}:{count}', 18, num)
+            self.economy._event(player_id, f'gift:{hero_id}:{day}:{count}', 68, hero_id, num, item_id)
+            self.economy._event(player_id, f'gift:{hero_id}:{day}:{count}:send-gift', 20, hero_id, num, item_id)
         values.update(code=10, newExp=state["exp"], newLevel=state["level"], giftsTimes=count)
         change = FAVOR_CHANGE_INFO.encode({"beforeLevel": before["level"], "beforeExp": before["exp"],
             "afterLevel": state["level"], "afterExp": state["exp"], "heroID": hero_id, "type": 7})
         from .hero import encode_hero_data
         return OutboundMessage("L2C_AddFavor", values, pushes=(OutboundMessage(
             "L2C_FavorChangeInfo", {"data": [change]}), OutboundMessage("L2C_HeroUpdate",
-            {"code": 10, "heros": [encode_hero_data(target)]}), *self.economy.pushes(player_id)))
+            {"code": 10, "heros": [encode_hero_data(target, season=self.economy.season, player_id=player_id)]}), *self.economy.pushes(player_id)))

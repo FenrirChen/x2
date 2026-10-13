@@ -1,3 +1,4 @@
+from tests.activity_calendar_helpers import activity_start, next_activity_cycle
 import asyncio
 import json
 
@@ -94,7 +95,7 @@ def test_missing_duplicate_ledger_destinations_are_repaired_once(env, monkeypatc
 
 
 def activity(economy, slot=0):
-    economy.clock = lambda: ActivityRotation.ANCHOR + slot * ActivityRotation.SECONDS + 3600
+    economy.clock = lambda: activity_start(slot) + 3600
     service = ActivityService(economy)
     economy.activity = service
     return service
@@ -118,7 +119,8 @@ def test_activity_currency_identity_repair_and_repeat_cycle(env):
         a.rotation.put(1, p, 'tasks', task['ChallengeTaskID'], {'progress': 0, 'claimed': False})
     a.task_values(1, 9)
     assert a.rotation.get(1, p, 'tasks', task['ChallengeTaskID'])['progress'] == 7
-    economy.clock = lambda: p.start + 35 * 86400 + 3600
+    next_time = next_activity_cycle(p.start + 3600)
+    economy.clock = lambda: next_time
     a.rotation.clock = economy.clock
     new = a.period(1)
     a.task_values(1, 9)

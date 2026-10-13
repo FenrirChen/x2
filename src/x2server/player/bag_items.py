@@ -53,6 +53,27 @@ def resolve_bag_gifts(economy, item_id, groups, selected):
     return rewards
 
 
+def bag_reward_view(raw):
+    """BagModule keys rewardItem by item ID; unique items must appear once.
+
+    Keep the per-draw transformHero history for mixed new/duplicate outcomes.
+    A mixed item is displayed as newly obtained, with its conversions separately
+    represented by the already-granted fragment and ticket entries.
+    """
+    reward = REWARD.decode(raw)
+    items = {}
+    for entry in reward.get('rewardItem', []):
+        item = REWARD_ITEM.decode(entry)
+        key = item['itemId']
+        if key in items:
+            items[key]['itemNum'] += item.get('itemNum', 0)
+            items[key]['transform'] = items[key].get('transform', False) and item.get('transform', False)
+        else:
+            items[key] = dict(item)
+    reward['rewardItem'] = [REWARD_ITEM.encode(item) for item in items.values()]
+    return REWARD.encode(reward)
+
+
 def grant_bag_rewards(economy, player, source, rewards, used_item):
     from .equipment_factory import materialize_instances
     from .progression import catalog
@@ -106,13 +127,13 @@ def grant_bag_rewards(economy, player, source, rewards, used_item):
     if heroes:
         logging.getLogger('x2.rewards').info('bag hero delivered player=%s source=%s box=%s heroes=%s converted=%s',
             player, source, used_item, heroes, dict(ordinary))
-    return REWARD.encode({
+    return bag_reward_view(REWARD.encode({
         "rewardItem": [REWARD_ITEM.encode({"itemId": item, "itemNum": n}) for item, n in granted.items()]
             + [REWARD_ITEM.encode({"itemId": item, "itemNum": 1, "transform": duplicate}) for item, duplicate in heroes],
         "rewardEquip": equips,
         "transformHero": [WishService.TRANSFORM_HERO.encode({"heroId": item - 1210000,
             "transform": duplicate}) for item, duplicate in heroes],
-    })
+    }))
 
 
 def recover_hero_boxes(economy, player):
@@ -144,7 +165,10 @@ def recover_hero_boxes(economy, player):
                 rewards = REWARD.decode(receipt.get('rewardData', b''))
                 entries = [REWARD_ITEM.decode(x) for x in rewards.get('rewardItem', [])]
                 ledger = {int(i): n for i, n in json.loads(original[0]).items()}
-                if not any(r.get('itemId', 0) - 1210000 in prototypes for r in entries):
+                if rewards.get('transformHero'):
+                    # Display rows aggregate repeated hero IDs. Per-draw records
+                    # preserve which copies unlocked a hero versus converted.
+                    entries = [r for r in entries if r.get('itemId', 0) - 1210000 not in prototypes]
                     from .wish import WishService
                     for raw_hero in rewards.get('transformHero', []):
                         hero = WishService.TRANSFORM_HERO.decode(raw_hero)
@@ -212,7 +236,7 @@ def bag_pushes(economy, player):
     # All read-model updates precede the success callback, which immediately
     # rereads the bag and equipped jewel state on the client.
     result = [OutboundMessage("L2C_HeroUpdate", {"code": 10,
-        "heros": [encode_hero_data(h) for h in economy.store.get(player)["snapshot"].get("heroes", [])]})]
+        "heros": [encode_hero_data(h, season=economy.season, player_id=player) for h in economy.store.get(player)["snapshot"].get("heroes", [])]})]
     if economy.store.db.execute("SELECT 1 FROM sqlite_master WHERE name='equipment_instances'").fetchone():
         # values() needs only store; avoid constructing a service/committing DDL
         # from inside the caller's transaction when replaying a receipt.
@@ -287,7 +311,7 @@ class BagItemService:
             logging.getLogger('x2.economy').info('equipped compose rejected player=%s request=%s reason=%s', player, req, exc)
             return failure
         logging.getLogger('x2.economy').info('equipped compose accepted player=%s request=%s product=%s', player, req, values['ID'])
-        heroes = [encode_hero_data(h) for h in self.store.get(player)['snapshot']['heroes']]
+        heroes = [encode_hero_data(h, season=self.economy.season, player_id=player) for h in self.store.get(player)['snapshot']['heroes']]
         return OutboundMessage(schema.name, values, before_response=(
             OutboundMessage('L2C_HeroUpdate', {'code': 10, 'heros': heroes}), *self.economy.pushes(player)))
 

@@ -96,6 +96,7 @@ class AccountStore:
                 insert_system_mail(self.db, player_id, cursor.lastrowid, "hero_choice", now)
                 insert_system_mail(self.db, player_id, cursor.lastrowid, "ultimate_causality", now)
                 insert_system_mail(self.db, player_id, cursor.lastrowid, "revival_supply", now)
+                insert_system_mail(self.db, player_id, cursor.lastrowid, "causality_oct13", now)
                 self.db.commit()
             except sqlite3.IntegrityError as exc:
                 self.db.rollback()
@@ -129,6 +130,9 @@ class AccountStore:
     def ensure_ultimate_causality_mail(self, player_id: int, now: int) -> bool:
         return self.ensure_player_gift_mail(player_id, now, "ultimate_causality")
 
+    def ensure_causality_oct13_mail(self, player_id: int, now: int) -> bool:
+        return self.ensure_player_gift_mail(player_id, now, "causality_oct13")
+
     def ensure_revival_supply_mail(self, player_id: int, now: int) -> bool:
         return self.ensure_player_gift_mail(player_id, now, "revival_supply")
 
@@ -156,6 +160,8 @@ class AccountStore:
                 if row is None:
                     raise ValueError("player has no active account")
                 created = insert_system_mail(self.db, player_id, row["account_id"], "daily_login", now)
+                ticket_created = insert_system_mail(self.db, player_id, row["account_id"], "daily_season_ticket", now)
+                created = created or ticket_created
                 self.db.commit()
                 return created
             except BaseException:

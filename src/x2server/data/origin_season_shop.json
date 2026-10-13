@@ -1,0 +1,486 @@
+{
+  "shopId": 898,
+  "activityId": 74001,
+  "currencyItemId": 1237998,
+  "currencyType": 998,
+  "source": "User approved five-stage shop, 2026-10-13; generic manuscript assumed blank pending clarification.",
+  "goods": [
+    {
+      "goodsId": 1970101,
+      "stage": 1,
+      "unlockLevel": 0,
+      "itemId": 1202901,
+      "num": 1,
+      "canBuyTimes": 10,
+      "price": 40
+    },
+    {
+      "goodsId": 1970201,
+      "stage": 1,
+      "unlockLevel": 0,
+      "itemId": 1238106,
+      "num": 1,
+      "canBuyTimes": 999,
+      "price": 8
+    },
+    {
+      "goodsId": 1970301,
+      "stage": 1,
+      "unlockLevel": 0,
+      "itemId": 1237907,
+      "num": 5000,
+      "canBuyTimes": 10,
+      "price": 10
+    },
+    {
+      "goodsId": 1970401,
+      "stage": 1,
+      "unlockLevel": 0,
+      "itemId": 1237901,
+      "num": 10000,
+      "canBuyTimes": 10,
+      "price": 4
+    },
+    {
+      "goodsId": 1970501,
+      "stage": 1,
+      "unlockLevel": 0,
+      "itemId": 1203001,
+      "num": 1,
+      "canBuyTimes": 10,
+      "price": 12
+    },
+    {
+      "goodsId": 1970601,
+      "stage": 1,
+      "unlockLevel": 0,
+      "itemId": 1238047,
+      "num": 10,
+      "canBuyTimes": 5,
+      "price": 6
+    },
+    {
+      "goodsId": 1970701,
+      "stage": 1,
+      "unlockLevel": 0,
+      "itemId": 1237831,
+      "num": 1,
+      "canBuyTimes": 30,
+      "price": 2
+    },
+    {
+      "goodsId": 1970801,
+      "stage": 1,
+      "unlockLevel": 0,
+      "itemId": 1238101,
+      "num": 15,
+      "canBuyTimes": 6,
+      "price": 8
+    },
+    {
+      "goodsId": 1971001,
+      "stage": 1,
+      "unlockLevel": 0,
+      "itemId": 1203004,
+      "num": 1,
+      "canBuyTimes": 20,
+      "price": 40
+    },
+    {
+      "goodsId": 1971901,
+      "stage": 2,
+      "unlockLevel": 20,
+      "itemId": 1206036,
+      "num": 1,
+      "canBuyTimes": 2,
+      "price": 600
+    },
+    {
+      "goodsId": 1971101,
+      "stage": 2,
+      "unlockLevel": 20,
+      "itemId": 1202901,
+      "num": 1,
+      "canBuyTimes": 10,
+      "price": 40
+    },
+    {
+      "goodsId": 1971201,
+      "stage": 2,
+      "unlockLevel": 20,
+      "itemId": 1238107,
+      "num": 1,
+      "canBuyTimes": 999,
+      "price": 16
+    },
+    {
+      "goodsId": 1971301,
+      "stage": 2,
+      "unlockLevel": 20,
+      "itemId": 1237907,
+      "num": 5000,
+      "canBuyTimes": 10,
+      "price": 10
+    },
+    {
+      "goodsId": 1971401,
+      "stage": 2,
+      "unlockLevel": 20,
+      "itemId": 1237901,
+      "num": 10000,
+      "canBuyTimes": 10,
+      "price": 4
+    },
+    {
+      "goodsId": 1971501,
+      "stage": 2,
+      "unlockLevel": 20,
+      "itemId": 1203002,
+      "num": 1,
+      "canBuyTimes": 10,
+      "price": 12
+    },
+    {
+      "goodsId": 1971601,
+      "stage": 2,
+      "unlockLevel": 20,
+      "itemId": 1238048,
+      "num": 10,
+      "canBuyTimes": 5,
+      "price": 12
+    },
+    {
+      "goodsId": 1971701,
+      "stage": 2,
+      "unlockLevel": 20,
+      "itemId": 1202080,
+      "num": 1,
+      "canBuyTimes": 10,
+      "price": 10
+    },
+    {
+      "goodsId": 1970901,
+      "stage": 2,
+      "unlockLevel": 20,
+      "itemId": 1237831,
+      "num": 1,
+      "canBuyTimes": 30,
+      "price": 2
+    },
+    {
+      "goodsId": 1971801,
+      "stage": 2,
+      "unlockLevel": 20,
+      "itemId": 1238102,
+      "num": 15,
+      "canBuyTimes": 6,
+      "price": 18
+    },
+    {
+      "goodsId": 1972001,
+      "stage": 2,
+      "unlockLevel": 20,
+      "itemId": 1203004,
+      "num": 1,
+      "canBuyTimes": 20,
+      "price": 40
+    },
+    {
+      "goodsId": 1973101,
+      "stage": 3,
+      "unlockLevel": 40,
+      "itemId": 1206036,
+      "num": 1,
+      "canBuyTimes": 3,
+      "price": 600
+    },
+    {
+      "goodsId": 1972101,
+      "stage": 3,
+      "unlockLevel": 40,
+      "itemId": 1202901,
+      "num": 1,
+      "canBuyTimes": 10,
+      "price": 40
+    },
+    {
+      "goodsId": 1972201,
+      "stage": 3,
+      "unlockLevel": 40,
+      "itemId": 1238108,
+      "num": 1,
+      "canBuyTimes": 999,
+      "price": 24
+    },
+    {
+      "goodsId": 1972301,
+      "stage": 3,
+      "unlockLevel": 40,
+      "itemId": 1237907,
+      "num": 5000,
+      "canBuyTimes": 10,
+      "price": 10
+    },
+    {
+      "goodsId": 1972401,
+      "stage": 3,
+      "unlockLevel": 40,
+      "itemId": 1237901,
+      "num": 10000,
+      "canBuyTimes": 10,
+      "price": 4
+    },
+    {
+      "goodsId": 1972501,
+      "stage": 3,
+      "unlockLevel": 40,
+      "itemId": 1203002,
+      "num": 1,
+      "canBuyTimes": 10,
+      "price": 12
+    },
+    {
+      "goodsId": 1972601,
+      "stage": 3,
+      "unlockLevel": 40,
+      "itemId": 1238049,
+      "num": 10,
+      "canBuyTimes": 5,
+      "price": 18
+    },
+    {
+      "goodsId": 1972701,
+      "stage": 3,
+      "unlockLevel": 40,
+      "itemId": 1202080,
+      "num": 1,
+      "canBuyTimes": 10,
+      "price": 10
+    },
+    {
+      "goodsId": 1972801,
+      "stage": 3,
+      "unlockLevel": 40,
+      "itemId": 1237831,
+      "num": 1,
+      "canBuyTimes": 30,
+      "price": 2
+    },
+    {
+      "goodsId": 1972901,
+      "stage": 3,
+      "unlockLevel": 40,
+      "itemId": 1238103,
+      "num": 15,
+      "canBuyTimes": 6,
+      "price": 26
+    },
+    {
+      "goodsId": 1973201,
+      "stage": 3,
+      "unlockLevel": 40,
+      "itemId": 1203004,
+      "num": 1,
+      "canBuyTimes": 20,
+      "price": 40
+    },
+    {
+      "goodsId": 1974301,
+      "stage": 4,
+      "unlockLevel": 60,
+      "itemId": 1206036,
+      "num": 1,
+      "canBuyTimes": 4,
+      "price": 600
+    },
+    {
+      "goodsId": 1973301,
+      "stage": 4,
+      "unlockLevel": 60,
+      "itemId": 1202901,
+      "num": 1,
+      "canBuyTimes": 10,
+      "price": 40
+    },
+    {
+      "goodsId": 1973401,
+      "stage": 4,
+      "unlockLevel": 60,
+      "itemId": 1238109,
+      "num": 1,
+      "canBuyTimes": 999,
+      "price": 30
+    },
+    {
+      "goodsId": 1973501,
+      "stage": 4,
+      "unlockLevel": 60,
+      "itemId": 1237907,
+      "num": 5000,
+      "canBuyTimes": 10,
+      "price": 10
+    },
+    {
+      "goodsId": 1973601,
+      "stage": 4,
+      "unlockLevel": 60,
+      "itemId": 1237901,
+      "num": 10000,
+      "canBuyTimes": 10,
+      "price": 4
+    },
+    {
+      "goodsId": 1973701,
+      "stage": 4,
+      "unlockLevel": 60,
+      "itemId": 1203002,
+      "num": 1,
+      "canBuyTimes": 10,
+      "price": 12
+    },
+    {
+      "goodsId": 1973801,
+      "stage": 4,
+      "unlockLevel": 60,
+      "itemId": 1238050,
+      "num": 10,
+      "canBuyTimes": 5,
+      "price": 24
+    },
+    {
+      "goodsId": 1973901,
+      "stage": 4,
+      "unlockLevel": 60,
+      "itemId": 1202080,
+      "num": 1,
+      "canBuyTimes": 10,
+      "price": 10
+    },
+    {
+      "goodsId": 1974001,
+      "stage": 4,
+      "unlockLevel": 60,
+      "itemId": 1237831,
+      "num": 1,
+      "canBuyTimes": 30,
+      "price": 2
+    },
+    {
+      "goodsId": 1974101,
+      "stage": 4,
+      "unlockLevel": 60,
+      "itemId": 1238104,
+      "num": 15,
+      "canBuyTimes": 6,
+      "price": 32
+    },
+    {
+      "goodsId": 1974401,
+      "stage": 4,
+      "unlockLevel": 60,
+      "itemId": 1203004,
+      "num": 1,
+      "canBuyTimes": 20,
+      "price": 40
+    },
+    {
+      "goodsId": 1975401,
+      "stage": 5,
+      "unlockLevel": 80,
+      "itemId": 1206036,
+      "num": 1,
+      "canBuyTimes": 5,
+      "price": 600
+    },
+    {
+      "goodsId": 1974501,
+      "stage": 5,
+      "unlockLevel": 80,
+      "itemId": 1202901,
+      "num": 1,
+      "canBuyTimes": 10,
+      "price": 40
+    },
+    {
+      "goodsId": 1974601,
+      "stage": 5,
+      "unlockLevel": 80,
+      "itemId": 1238110,
+      "num": 1,
+      "canBuyTimes": 999,
+      "price": 36
+    },
+    {
+      "goodsId": 1974701,
+      "stage": 5,
+      "unlockLevel": 80,
+      "itemId": 1237907,
+      "num": 5000,
+      "canBuyTimes": 10,
+      "price": 10
+    },
+    {
+      "goodsId": 1974801,
+      "stage": 5,
+      "unlockLevel": 80,
+      "itemId": 1237901,
+      "num": 10000,
+      "canBuyTimes": 10,
+      "price": 4
+    },
+    {
+      "goodsId": 1974901,
+      "stage": 5,
+      "unlockLevel": 80,
+      "itemId": 1203002,
+      "num": 1,
+      "canBuyTimes": 10,
+      "price": 12
+    },
+    {
+      "goodsId": 1975001,
+      "stage": 5,
+      "unlockLevel": 80,
+      "itemId": 1238051,
+      "num": 10,
+      "canBuyTimes": 5,
+      "price": 30
+    },
+    {
+      "goodsId": 1975101,
+      "stage": 5,
+      "unlockLevel": 80,
+      "itemId": 1202080,
+      "num": 1,
+      "canBuyTimes": 10,
+      "price": 10
+    },
+    {
+      "goodsId": 1975201,
+      "stage": 5,
+      "unlockLevel": 80,
+      "itemId": 1237831,
+      "num": 1,
+      "canBuyTimes": 30,
+      "price": 2
+    },
+    {
+      "goodsId": 1975301,
+      "stage": 5,
+      "unlockLevel": 80,
+      "itemId": 1238105,
+      "num": 15,
+      "canBuyTimes": 6,
+      "price": 40
+    },
+    {
+      "goodsId": 1975501,
+      "stage": 5,
+      "unlockLevel": 80,
+      "itemId": 1203004,
+      "num": 1,
+      "canBuyTimes": 20,
+      "price": 40
+    }
+  ]
+}

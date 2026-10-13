@@ -89,16 +89,17 @@ def test_account_token_reads_only_own_mail_and_tcp_claim_survives_relogin(tmp_pa
                     pending.extend(decoder.feed(data))
 
             await send("C2L_Login", {"id": player_id, "token": game["token"]}, 1, "L2C_Login")
+            expected_total = flow.store.db.execute("SELECT count(*) FROM player_mail WHERE player_id=? AND deleted=0", (player_id,)).fetchone()[0]
             args = {"appid": flow.identity.contract.web_config.service_app_id,
                     "userid": str(player_id), "page": 1, "page_num": 20, "state": -1}
             status, page = await http_post("/MailService.GetMailPage", args, account["token"])
-            assert status == 200 and page["data"]["total"] == 5
+            assert status == 200 and page["data"]["total"] == expected_total
             assert any(row["body"] == "" and row["state"] == 0 for row in page["data"]["mails"])
             welcome = next(row for row in page["data"]["mails"] if row["body"] == "")
             assert (await http_post("/MailService.GetMailPage", args, game["token"]))[0] == 200
             bare_status, bare_page = await http_post(
                 "/MailService.GetMailPage", args, bare_bearer=True)
-            assert bare_status == 200 and bare_page["data"]["total"] == 5
+            assert bare_status == 200 and bare_page["data"]["total"] == expected_total
             bare_get_status, bare_get = await http_post(
                 "/MailService.GetMail", {"appid": args["appid"], "userid": args["userid"],
                                           "id": welcome["id"]}, bare_bearer=True)

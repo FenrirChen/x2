@@ -45,7 +45,7 @@ def test_import_does_not_reissue_once_mail_across_accounts_or_old_archives(tmp_p
         manager.import_save(new, archive)
         count = store.db.execute('SELECT count(*) FROM player_mail WHERE player_id=?', (new,)).fetchone()[0]
         for ensure in (accounts.ensure_welcome_mail, accounts.ensure_hero_choice_mail,
-                       accounts.ensure_ultimate_causality_mail, accounts.ensure_revival_supply_mail):
+                       accounts.ensure_ultimate_causality_mail, accounts.ensure_revival_supply_mail, accounts.ensure_causality_oct13_mail):
             assert ensure(new, 200) is False
         assert store.db.execute('SELECT count(*) FROM player_mail WHERE player_id=?', (new,)).fetchone()[0] == count
         # Even an archive lacking the once-mail rows cannot erase server history.
@@ -55,6 +55,7 @@ def test_import_does_not_reissue_once_mail_across_accounts_or_old_archives(tmp_p
         manager.import_save(new, archive)
         assert not accounts.ensure_welcome_mail(new, 201)
         assert not accounts.ensure_ultimate_causality_mail(new, 201)
+        assert not accounts.ensure_causality_oct13_mail(new, 201)
         assert store.db.execute('SELECT count(*) FROM system_mail_issues WHERE player_id=?', (new,)).fetchone()[0] == len(ONCE_MAIL_PREFIXES)
     finally:
         manager.close()
@@ -182,7 +183,7 @@ def populate_rich_state(db: sqlite3.Connection, player_id: int):
             row["uuid"] = f"run-{player_id}"
         elif table in ("pending_reward_instances", "reward_settlement_audit"):
             row["run_id"] = f"run-{player_id}"
-        elif table in ("equipment_enhancements", "equipment_main_growth"):
+        elif table in ("equipment_enhancements", "equipment_main_growth", "college_washing_pending", "college_washing_receipts"):
             row["equip_id"] = 40  # references the instance inserted above
         db.execute(f"INSERT INTO {table} ({','.join(row)}) VALUES ({','.join('?' * len(row))})",
                    list(row.values()))
@@ -273,6 +274,23 @@ def test_export_refuses_to_silently_omit_new_persisted_tables(env):
         manager.export_save(alpha)
 
 
+@pytest.mark.parametrize('schema', [SERVER_SAVE_SCHEMA, 'x2-revival/4'])
+def test_pre_washing_archives_clear_stale_preview_without_reopening_welfare(env, schema):
+    from x2server.player.save_manager import WASHING_ADDED_TABLES, SEASON_ADDED_TABLES
+    store, _, manager, alpha, _ = env
+    archive = manager.export_save(alpha)
+    with zipfile.ZipFile(io.BytesIO(archive)) as z:
+        manifest = json.loads(z.read('manifest.json'))
+        document = json.loads(z.read('save.json'))
+        blobs = [z.read(name) for name in sorted(z.namelist()) if name.startswith('blobs/')]
+    for table in WASHING_ADDED_TABLES | (SEASON_ADDED_TABLES if schema == 'x2-revival/4' else set()):
+        del document['tables'][table]
+    manifest['server_save_schema'] = schema
+    manager.import_save(alpha, manager._container_bytes(manifest, document, blobs))
+    for table in WASHING_ADDED_TABLES:
+        assert not store.db.execute(f'SELECT 1 FROM {table} WHERE player_id=?', (alpha,)).fetchone()
+
+
 def test_legacy_export_preserves_destination_welfare_claims(env):
     from x2server.player.save_manager import RELEASE_ADDED_TABLES
     _, _, manager, alpha, _ = env
@@ -288,7 +306,7 @@ def test_legacy_export_preserves_destination_welfare_claims(env):
     legacy = manager._container_bytes(manifest, document, blobs)
     manager.import_save(alpha, legacy)
     after = manager.canonical_state(alpha)
-    for table in RELEASE_ADDED_TABLES - {'battle_element_compose', 'battle_element_compose_receipts'}:
+    for table in RELEASE_ADDED_TABLES - {'battle_element_compose', 'battle_element_compose_receipts', 'college_washing_pending', 'college_washing_receipts', 'favor_wish_state', 'favor_wish_events', 'favor_wish_receipts'}:
         assert after['tables'][table] == before['tables'][table]
     manifest['server_save_schema'] = SERVER_SAVE_SCHEMA
     with pytest.raises(ValueError, match='表集不符'):

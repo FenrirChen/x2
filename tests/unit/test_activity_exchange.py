@@ -1,3 +1,4 @@
+from tests.activity_calendar_helpers import activity_start, next_activity_cycle
 """All supplied exchange rows must deliver, charge and cap atomically."""
 import pytest
 import asyncio
@@ -44,7 +45,7 @@ def test_all_stages_visible_before_unlock_but_purchase_gates_remain(activity, gr
     _, economy, service, now = activity
     exchange = ActivityExchange(service)
     index = next(i for i, theme in enumerate(service.rotation.themes) if theme['group'] == group)
-    now[0] = ActivityRotation.ANCHOR + index * ActivityRotation.SECONDS
+    now[0] = activity_start(index)
     period = service.period(1)
     family = 2 if group == 7 else 1 if group == 99 else 3
     result = exchange.activity_listing(1, family)
@@ -70,7 +71,7 @@ def test_purchase_details_use_exact_wire_contract(activity, shop_id):
     exchange = ActivityExchange(service)
     shop = exchange.shops[shop_id]
     index = next(i for i, theme in enumerate(service.rotation.themes) if theme['group'] == shop['group'])
-    now[0] = ActivityRotation.ANCHOR + index * ActivityRotation.SECONDS
+    now[0] = activity_start(index)
     period = service.period(1)
     open_shop(service, economy, shop, period)
     from x2server.network.dispatcher import DispatchContext
@@ -92,7 +93,7 @@ def test_every_supplied_offer_delivers_and_period_stock_resets(activity, shop_id
     exchange = ActivityExchange(service)
     shop = exchange.shops[shop_id]
     index = next(i for i, t in enumerate(service.rotation.themes) if t['group'] == shop['group'])
-    now[0] = ActivityRotation.ANCHOR + index * ActivityRotation.SECONDS
+    now[0] = activity_start(index)
     period = service.period(1)
     open_shop(service, economy, shop, period)
     assert exchange.listing(1, shop_id)['code'] == 10
@@ -111,7 +112,7 @@ def test_every_supplied_offer_delivers_and_period_stock_resets(activity, shop_id
         assert exchange.count(1, period, gid) == 1
         with pytest.raises(UnresolvedEconomy, match='stock exhausted'):
             exchange.buy(1, shop_id, gid, offer['canBuyTimes'], f'over:{gid}')
-    now[0] += 35 * 86400
+    now[0] = next_activity_cycle(now[0])
     assert all(exchange.count(1, service.period(1), g['goodsId']) == 0 for g in shop['goods'])
 
 
@@ -132,7 +133,7 @@ def test_sakura_derived_stages_match_osiris_amount_and_stock(activity):
 def test_insufficient_currency_and_failure_leave_no_purchase(activity, monkeypatch):
     store, economy, service, now = activity
     exchange = ActivityExchange(service)
-    now[0] = ActivityRotation.ANCHOR + ActivityRotation.SECONDS
+    now[0] = activity_start(1)
     offer = exchange.shops[871]['goods'][0]
     period = service.period(1)
     gid = offer['goodsId']
@@ -154,7 +155,7 @@ def test_insufficient_currency_and_failure_leave_no_purchase(activity, monkeypat
 def test_locked_wrong_theme_and_mismatched_goods_rejected(activity):
     _, economy, service, now = activity
     exchange = ActivityExchange(service)
-    now[0] = ActivityRotation.ANCHOR + ActivityRotation.SECONDS
+    now[0] = activity_start(1)
     with pytest.raises(UnresolvedEconomy, match='locked'):
         exchange.listing(1, 872)
     with pytest.raises(UnresolvedEconomy, match='closed'):

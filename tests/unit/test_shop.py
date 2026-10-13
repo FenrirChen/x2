@@ -69,7 +69,7 @@ def test_shop_currency_balances_follow_inventory(env):
     base = BASE_INFO.decode(LoginService.snapshot_push(store.get(1), store).values["BaseInfo"])
     assert {field: base[field] for field, _ in currencies.values()} == {
         field: balance for field, balance in currencies.values()}
-    assert {shop_id for shop_id, _ in service.compat_offers} == {801, 804}
+    assert {shop_id for shop_id, _ in service.compat_offers} == {801, 803, 804, 805, 806}
 
 
 def test_unresolved_shop_goods_and_invalid_purchase_never_charge(env):

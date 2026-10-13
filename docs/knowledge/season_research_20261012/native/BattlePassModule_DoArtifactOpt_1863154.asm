@@ -1,0 +1,70 @@
+; BattlePassModule$$DoArtifactOpt
+; RVA [0x1863154,0x1863260), inferred from adjacent unique ScriptMethod addresses
+; byte SHA256 ecb904e52d1640c535fa586e5462edb1576afc52ad48032c8c8f13f4e474b139
+001863154: stp      x24, x23, [sp, #-0x40]! ;
+001863158: stp      x22, x21, [sp, #0x10] ;
+00186315c: stp      x20, x19, [sp, #0x20] ;
+001863160: stp      x29, x30, [sp, #0x30] ;
+001863164: add      x29, sp, #0x30 ;
+001863168: adrp     x23, #0x5577000 ;
+00186316c: ldrb     w8, [x23, #0x6bf] ;
+001863170: mov      w20, w3 ;
+001863174: mov      w21, w2 ;
+001863178: mov      w22, w1 ;
+00186317c: mov      x19, x0 ;
+001863180: tbnz     w8, #0, #0x186319c ;
+001863184: adrp     x8, #0x51e0000 ;
+001863188: ldr      x8, [x8, #0xaa0] ;
+00186318c: ldr      w0, [x8] ;
+001863190: bl       #0x3f2aed0 ;
+001863194: mov      w8, #1 ;
+001863198: strb     w8, [x23, #0x6bf] ;
+00186319c: ldr      x23, [x19, #0x188] ;
+0018631a0: cbnz     x23, #0x18631c8 ;
+0018631a4: adrp     x8, #0x51f0000 ;
+0018631a8: ldr      x8, [x8, #0xcb8] ;
+0018631ac: ldr      x0, [x8] ;
+0018631b0: bl       #0x3f6452c ;
+0018631b4: mov      x1, xzr ;
+0018631b8: mov      x23, x0 ;
+0018631bc: bl       #0x3c95d00 ; CommandX2.C2L_BattlepassArtifactOpt$$.ctor
+0018631c0: str      x23, [x19, #0x188] ;
+0018631c4: cbz      x23, #0x186325c ;
+0018631c8: str      w22, [x23, #0x10] ;
+0018631cc: ldr      x22, [x19, #0x188] ;
+0018631d0: cbnz     x22, #0x18631d8 ;
+0018631d4: bl       #0x3f564f0 ;
+0018631d8: str      w21, [x22, #0x14] ;
+0018631dc: ldr      x21, [x19, #0x188] ;
+0018631e0: cbnz     x21, #0x18631e8 ;
+0018631e4: bl       #0x3f564f0 ;
+0018631e8: str      w20, [x21, #0x18] ;
+0018631ec: adrp     x8, #0x5227000 ;
+0018631f0: ldr      x8, [x8, #0x168] ;
+0018631f4: ldr      x0, [x8] ;
+0018631f8: ldrb     w8, [x0, #0x10a] ;
+0018631fc: tbz      w8, #0, #0x186320c ;
+001863200: ldr      w8, [x0, #0xbc] ;
+001863204: cbnz     w8, #0x186320c ;
+001863208: bl       #0x3f3f378 ;
+00186320c: mov      x0, xzr ;
+001863210: mov      x1, xzr ;
+001863214: bl       #0x141a6c8 ; MarsNetManager$$get_Instance
+001863218: ldr      x19, [x19, #0x188] ;
+00186321c: mov      x20, x0 ;
+001863220: cbnz     x20, #0x1863228 ;
+001863224: bl       #0x3f564f0 ;
+001863228: adrp     x8, #0x5218000 ;
+00186322c: ldr      x8, [x8, #0x730] ;
+001863230: mov      x0, x20 ;
+001863234: mov      x1, x19 ;
+001863238: mov      w2, wzr ;
+00186323c: ldr      x5, [x8] ;
+001863240: ldp      x29, x30, [sp, #0x30] ;
+001863244: ldp      x20, x19, [sp, #0x20] ;
+001863248: ldp      x22, x21, [sp, #0x10] ;
+00186324c: mov      w4, wzr ;
+001863250: mov      w3, #1 ;
+001863254: ldp      x24, x23, [sp], #0x40 ;
+001863258: b        #0x233d7ac ; MarsNetManager$$Send<C2L_ReissueDialogReciveInfo>
+00186325c: bl       #0x3f564f0 ;

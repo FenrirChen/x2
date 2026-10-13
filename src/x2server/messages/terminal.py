@@ -8,7 +8,7 @@ TERMINAL_IDS = (("QueryPrivateLetter", 476, 477),
                 ("ReplyLetter", 482, 483),
                 ("QueryNpcBlog", 484, 485),
                 ("ReplyNpcBlog", 486, 487),
-                ("LikeNpcBlog", 488, 489))
+                ("LikeNpcBlog", 488, 489), ("AcceptFavorTask", 459, 460))
 
 PAIR = S("KeyValuePair_Int32_Int32", (F(1, "Key", K.INT32), F(2, "Value", K.INT32)))
 LETTER_DATA = S("NpcLetterData", (F(1, "letterID", K.INT32),
@@ -25,6 +25,8 @@ BLOG_GROUP = S("NpcBlogGroup", (F(1, "groupID", K.INT32), F(2, "startTime", K.IN
 BLOG_BOX = S("NpcBlogBox", (F(1, "heroID", K.INT32), F(2, "blogGroup", K.MESSAGE, True)))
 
 TERMINAL_SCHEMAS = {s.name: s for s in (
+    S("C2L_AcceptFavorTask", (F(1, "taskIds", K.INT32, True), F(2, "type", K.ENUM))),
+    S("L2C_AcceptFavorTask", (F(1, "code", K.ENUM),)),
     PAIR, LETTER_DATA, LETTER_GROUP, LETTER_BOX, SYSTEM_LETTER, CHAT_GROUP, BLOG_GROUP, BLOG_BOX,
     S("C2L_QueryPrivateLetter", (F(1, "type", K.ENUM),)),
     S("L2C_QueryPrivateLetter", (F(1, "code", K.ENUM), F(2, "letterBoxs", K.MESSAGE, True),

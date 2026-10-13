@@ -30,8 +30,8 @@ from .store import validate_snapshot
 
 SAVE_FORMAT = "X2_REVIVAL_SAVE"
 SAVE_FORMAT_VERSION = 1
-SERVER_SAVE_SCHEMA = "x2-revival/4"
-ACCEPTED_SCHEMAS = {SERVER_SAVE_SCHEMA, "x2-revival/3"}
+SERVER_SAVE_SCHEMA = "x2-revival/5"
+ACCEPTED_SCHEMAS = {SERVER_SAVE_SCHEMA, "x2-revival/3", "x2-revival/4"}
 
 MAX_UPLOAD_BYTES = 96 * 1024 * 1024
 MAX_ENTRY_COUNT = 65535  # accumulated battle BLOBs; bounded by byte limits below
@@ -79,7 +79,13 @@ TABLES_WITH_OWNER_COLUMN = [
     "sweep_receipts", "task_boxes", "task_history", "task_periods",
     "wish_last_result", "wish_pity", "wish_receipts", "wish_state",
 ]
+SEASON_ADDED_TABLES = {"season_state", "season_events", "season_receipts", "season_runs"}
+WASHING_ADDED_TABLES = {"college_washing_pending", "college_washing_receipts"}
+TERMINAL_WISH_ADDED_TABLES = {"favor_wish_state", "favor_wish_events", "favor_wish_receipts"}
 RELEASE_ADDED_TABLES = {
+    *SEASON_ADDED_TABLES,
+    *WASHING_ADDED_TABLES,
+    *TERMINAL_WISH_ADDED_TABLES,
     "activity_exchange_stats", "battle_element_compose", "battle_element_compose_receipts",
     "course_claims", "player_divination", "player_novice_sign", "player_total_login_claimed",
     "recharge_first", "simple_activity_claims", "simple_activity_unlocks",
@@ -88,7 +94,7 @@ TABLES_WITH_OWNER_COLUMN.extend(sorted(RELEASE_ADDED_TABLES))
 PLAYER_TABLES = sorted(TABLES_WITH_OWNER_COLUMN) + sorted(JOIN_OWNERS)
 LEGACY_PLAYER_TABLES = set(PLAYER_TABLES) - RELEASE_ADDED_TABLES
 # These are server-wide encounters/calendars, not a single player's save.
-GLOBAL_TABLES = {"accounts", "players", "repair_history", "world_boss_runs", "world_boss_days", "system_mail_issues"}
+GLOBAL_TABLES = {"accounts", "players", "repair_history", "world_boss_runs", "world_boss_days", "system_mail_issues", "season_calendar"}
 
 # Global AUTOINCREMENT integer keys that may need remapping on import, with the
 # referencing tables/columns. player_mail ids are always re-allocated (no DB
@@ -97,6 +103,8 @@ REMAPPABLE = {
     "equipment_instances": ("id", {
         "equipment_enhancements": ["equip_id"],
         "equipment_main_growth": ["equip_id"],
+        "college_washing_pending": ["equip_id"],
+        "college_washing_receipts": ["equip_id"],
         "snapshot": ["heroes[].equips[].equip_id"],
     }),
     "fight_drop_observations": ("id", {
@@ -110,7 +118,7 @@ REMAPPABLE = {
 # another account's row must be remapped together to keep the joins intact.
 UUID_FAMILY_COLUMNS = {
     "sweep_receipts": "request_key",
-    "activity_runs": "uuid", "battle_drop_budget_versions": "uuid",
+    "season_runs": "uuid", "activity_runs": "uuid", "battle_drop_budget_versions": "uuid",
     "battle_entries": "uuid", "battle_costs": "uuid",
     "battle_unresolved_rewards": "uuid", "battle_receipts": "uuid",
     "battle_checkout_wire": "uuid", "economy_runs": "uuid",
@@ -119,6 +127,7 @@ UUID_FAMILY_COLUMNS = {
     "battle_element_compose": "run_uuid",
 }
 GLOBAL_KEY_COLUMNS = {
+    "season_receipts": "request_key",
     "world_boss_tickets": "ticket",
     "equip_plan_receipts": "request_key", "equipment_lock_receipts": "request_key",
     "appearance_shop_receipts": "request_key", "gift_package_receipts": "request_key",
@@ -334,18 +343,27 @@ class SaveManager:
         tables_doc = save_doc["tables"]
         if not isinstance(tables_doc, dict):
             raise ValueError('存档表集必须为对象')
-        legacy = (manifest['server_save_schema'] == 'x2-revival/3'
-                  and set(tables_doc) == LEGACY_PLAYER_TABLES)
-        if not legacy and set(tables_doc) != set(PLAYER_TABLES):
-            missing = sorted(set(PLAYER_TABLES) - set(tables_doc))[:3]
-            extra = sorted(set(tables_doc) - set(PLAYER_TABLES))[:3]
-            raise ValueError(f"存档表集不符 missing={missing} extra={extra}")
-        # Legacy exports omitted these tables. Preserve destination welfare
-        # claims instead of reopening rewards; transient battle data resets.
-        preserve = (RELEASE_ADDED_TABLES - {'battle_element_compose', 'battle_element_compose_receipts'}
-                    if legacy else set())
-        if legacy:
-            tables_doc.update({table: {'rows': []} for table in RELEASE_ADDED_TABLES})
+        actual = set(tables_doc)
+        optional = WASHING_ADDED_TABLES | TERMINAL_WISH_ADDED_TABLES
+        missing = set(PLAYER_TABLES) - actual
+        optional_complete = all(not (missing & group) or group <= missing
+                                for group in (WASHING_ADDED_TABLES, TERMINAL_WISH_ADDED_TABLES))
+        legacy = manifest['server_save_schema'] == 'x2-revival/3' and actual == LEGACY_PLAYER_TABLES
+        previous = (manifest['server_save_schema'] == 'x2-revival/4'
+                    and SEASON_ADDED_TABLES <= missing and missing <= SEASON_ADDED_TABLES | optional
+                    and optional_complete and not (actual - set(PLAYER_TABLES)))
+        pre_optional = (manifest['server_save_schema'] == SERVER_SAVE_SCHEMA
+                        and missing <= optional and optional_complete and not (actual - set(PLAYER_TABLES)))
+        if not legacy and not previous and not pre_optional and actual != set(PLAYER_TABLES):
+            raise ValueError(f"存档表集不符 missing={sorted(missing)[:3]} extra={sorted(actual-set(PLAYER_TABLES))[:3]}")
+        # Welfare claims remain protected. Task candidates and washing previews
+        # absent from older exports must reset with their associated save data.
+        transient = {'battle_element_compose', 'battle_element_compose_receipts'} | optional
+        preserve = RELEASE_ADDED_TABLES - transient if legacy else set()
+        if previous:
+            preserve = set(SEASON_ADDED_TABLES)
+        if legacy or previous or pre_optional:
+            tables_doc.update({table: {'rows': []} for table in missing})
         source_pid = manifest["source_player"]["player_id"]
         rows_by_table: dict[str, list[dict[str, Any]]] = {}
         blob_refs: set[str] = set()
@@ -562,7 +580,7 @@ class SaveManager:
                 if row["report_id"] not in observation_ids:
                     raise ValueError(f"{table}.report_id 引用不存在")
         equip_ids = {row["id"] for row in plan.rows["equipment_instances"]}
-        for table in ("equipment_enhancements", "equipment_main_growth"):
+        for table in ("equipment_enhancements", "equipment_main_growth", "college_washing_pending", "college_washing_receipts"):
             for row in plan.rows[table]:
                 if row["equip_id"] not in equip_ids:
                     raise ValueError(f"{table}.equip_id 引用不存在")
@@ -705,7 +723,7 @@ class SaveManager:
                 column = GLOBAL_KEY_COLUMNS[table]
                 if isinstance(values.get(column), str) and values[column] in key_maps.get(table, {}):
                     values[column] = key_maps[table][values[column]]
-            if table in ("equipment_enhancements", "equipment_main_growth") \
+            if table in ("equipment_enhancements", "equipment_main_growth", "college_washing_pending", "college_washing_receipts") \
                     and values.get("equip_id") in equip_map:
                 values["equip_id"] = equip_map[values["equip_id"]]
             if table in ("fight_drop_items", "fight_drop_claims") \
@@ -820,7 +838,9 @@ class SaveManager:
         for row in equip_rows:
             equip_map[row[idx_id]] = f"equip:{row[idx_type]}:{row[idx_marker]}"
             row[idx_id] = equip_map[row[idx_id]]
-        for table in ("equipment_enhancements", "equipment_main_growth"):
+        for table in ("equipment_enhancements", "equipment_main_growth", "college_washing_pending", "college_washing_receipts"):
+            if not tables.get(table):
+                continue
             index = column_index(table, "equip_id")
             for row in tables[table]:
                 if isinstance(row[index], int) and row[index] in equip_map:
@@ -856,6 +876,7 @@ class SaveManager:
         intern: dict[str, str] = {}
         key_columns: dict[str, str] = dict(UUID_FAMILY_COLUMNS)
         key_columns.update(GLOBAL_KEY_COLUMNS)
+        season_intern: dict[str, str] = {}
         for table, column in [*key_columns.items(), *BOSS_ID_COLUMNS.items()]:
             schema = self.columns(table)
             if column not in schema or not self.exists(table):
@@ -864,7 +885,9 @@ class SaveManager:
             for row in tables[table]:
                 value = row[index]
                 if isinstance(value, str):
-                    row[index] = intern.setdefault(f"{value}", f"#k{len(intern)}")
+                    symbols = season_intern if table == "season_receipts" else intern
+                    prefix = "#season" if table == "season_receipts" else "#k"
+                    row[index] = symbols.setdefault(f"{value}", f"{prefix}{len(symbols)}")
         if self.exists("world_boss_runs"):
             index = list(self.columns("world_boss_runs")).index("finder")
             for row in tables["world_boss_runs"]:

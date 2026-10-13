@@ -22,6 +22,8 @@ class BattleService:
         self.store = store
         self.economy = economy
         self.catalog = BattleEntryCatalog()
+        from .favor import FavorService
+        self.favor_service = FavorService(store, economy, clock=economy.clock) if economy else None
         self.monster_levels = {int(k): v for k, v in json.loads(
             files("x2server").joinpath("data/battle_monster_levels.json").read_text(encoding="utf-8"))["levels"].items()}
         self.unit_types = {int(k): v for k, v in json.loads(
@@ -173,6 +175,7 @@ class BattleService:
                         activity = getattr(self.economy, 'activity', None)
                         if activity:
                             activity.battle_kills(context.session.player_id, row['uuid'], unit_totals)
+                        self.economy.season.kills(context.session.player_id, row['uuid'], unit_totals)
                         self.economy._event(context.session.player_id, f"kills:{row['uuid']}", 1, 0, total)
                         self.economy.dp.refresh(context.session.player_id, chapter)
                         for kind, count in by_type.items():
@@ -304,6 +307,17 @@ class BattleService:
                         request.get('extraData', []),
                         [h.get('heroId', 0) for h in map(PROFILE_HERO.decode, request.get('heros', []))
                          if h.get('state', 0) == 0])
+                    if section_type == 20:
+                        from x2server.messages.equipment import HERO_EQUIP
+                        self.economy.season.completed(player_id, row['uuid'], request.get('success', False),
+                            fight_seconds, [HERO_EQUIP.decode(b) for b in reward_equips],
+                            [item['id'] for item in map(OUTSIDE_ITEM.decode, request.get('mazeItems', []))
+                             if item.get('num', 0) > 0 and self.economy.items.get(item.get('id'), {}).get('ItemType', {}).get('value') == 4])
+                    if request.get('success', False) and section_type != 5:
+                        from x2server.messages.equipment import HERO_EQUIP
+                        self.economy.season.loot(player_id, row['uuid'], [HERO_EQUIP.decode(raw) for raw in reward_equips],
+                            [item['id'] for item in map(OUTSIDE_ITEM.decode, request.get('mazeItems', []))
+                             if item.get('num', 0) > 0 and self.economy.items.get(item.get('id'), {}).get('ItemType', {}).get('value') == 4])
                     from .endless import KILLS
                     from x2server.messages.core import INT_PAIR
                     units = Counter()
@@ -318,9 +332,20 @@ class BattleService:
                         activity = getattr(self.economy, 'activity', None)
                         if activity:
                             activity.battle_kills(player_id, row['uuid'], units)
+                        self.economy.season.kills(player_id, row['uuid'], units, confirmed=request.get('success', False))
                     if section_type == 6:
                         self.economy.world_boss.finish_battle(player_id,row['uuid'],request.get('success',False),confirmed=True)
+                    from .favor import FavorService, favor_state
+                    favor_service = self.favor_service
+                    added = (favor_service.battle(player_id, row["uuid"], section)
+                             if request.get("success", False) else {})
                     updated = self.store.get(player_id)["snapshot"]
+                    updated_heroes = {h["id"]: h for h in updated.get("heroes", [])}
+                    states = [favor_state(updated_heroes[h["id"]], favor_service.heroes.get(h["id"], {}).get("InitialLevel", 1)) for h in heroes]
+                    values.update(heroFavorExp=[f["exp"] for f in states],
+                        heroAddFavorExp=[added.get(h["id"], 0) for h in heroes],
+                        heroFavorLevel=[f["level"] for f in states],
+                        favorFullLevel=[f["level"] >= favor_service.heroes.get(h["id"], {}).get("LevelLimit", 999) for h, f in zip(heroes, states)])
                     values.update(roleExp=updated.get("exp", 0), roleLevel=updated["level"], UpLevelNum=updated["level"]-snapshot["level"])
                 self.store.db.execute("INSERT INTO battle_receipts VALUES (?,?,?,?)",
                     (row["uuid"], digest, int(time.time()), schema.encode(values)))
@@ -344,6 +369,11 @@ class BattleService:
                                before_response=star_before + self._activity_progress_sync(player_id, section))
 
     def _activity_progress_sync(self, player, section):
+        if self.economy and section in self.economy.season.section_configs and self.economy.season.active(player):
+            from x2server.messages.season import encode as season_encode, SEASON_SCHEMAS
+            with self.economy.transaction():
+                values = SEASON_SCHEMAS["L2C_BattlePassMissionInfo"].decode(season_encode("L2C_BattlePassMissionInfo", self.economy.season.mission_values(player)))
+                return (OutboundMessage("L2C_BattlePassMissionInfo", values),)
         activity = getattr(self.economy, 'activity', None) if self.economy else None
         period = activity.rotation.at() if activity else None
         if (activity and section in activity.rotation.section_groups
@@ -406,6 +436,7 @@ class BattleService:
                     if static['Type'] == 6:
                         boss_confirmed = self.economy.world_boss.confirm_battle(context.session.player_id, entry['uuid'])
                     self.economy.endless.save(context.session.player_id, entry, request)
+                    self.economy.season.report_npcs(context.session.player_id, entry["uuid"], request.get("npcData", []))
                     activity = getattr(self.economy, 'activity', None)
                     if activity:
                         from .endless import KILLS
@@ -572,6 +603,8 @@ class BattleService:
                 collected = {r[0] for r in self.store.db.execute(
                     "SELECT item_id FROM inventory WHERE player_id=? AND quantity>0", (player["id"],))
                     if r[0] in relic_item_ids()}
+            if self.economy:
+                collected.update(self.economy.season.owned_relics(player['id']))
             if (len(set(selected_relics)) != len(selected_relics)
                     or not set(selected_relics) <= collected | defaults):
                 logging.getLogger("x2.battle").info(
@@ -592,6 +625,9 @@ class BattleService:
                     equipped, suit_effects = battle_equipment(self.store, player['id'], hero)
                     other_bonus = other_attributes(self.store, player['id'], hero)
                 artifact_bonus = artifact_attributes(stat_hero)
+                if hero.get('trial_unit'):
+                    from .trial_units import chapter7_equipment
+                    equipped = chapter7_equipment(section, hero, equipped, artifact_bonus)
             except (ValueError, KeyError, TypeError) as exc:
                 logging.getLogger('x2.battle').warning(
                     'battle entry denied player=%s hero=%s equipment=%s', player['id'], hero['id'], exc)
@@ -604,6 +640,13 @@ class BattleService:
             base_values = battle_hero_base()[str(stat_hero["id"])]
             raw_attributes = {r["attrId"]: base_values[r["name"]]
                               for r in catalog()["battle_base_1003"]["attributes"]}
+            if self.economy:
+                # Account season talents and saved erosion also affect ordinary
+                # combat, as confirmed by the user; expire with the season.
+                extras = Counter(other_bonus)
+                extras.update(self.economy.season.attributes(player['id']))
+                extras.update(self.economy.season.artifact.attributes(player['id'], hero))
+                other_bonus = dict(extras)
             for attr_id, value in other_bonus.items():
                 raw_attributes[attr_id] = raw_attributes.get(attr_id, 0) + value
             base = [HERO_ATTR_ADD.encode({"attrId": attr_id, "attrValue": value})
@@ -627,6 +670,7 @@ class BattleService:
                 len(artifact_bonus), other_bonus, self.store.path.resolve())
             fight_heroes.append(FIGHT_HERO.encode({**hero_values, "heroGodEquip": god_equip, "battleSkinId": hero.get("trial_skin", skin[0] if skin else 0),
                 "heroSkill": skills, "heroAttrCount": attrs, "attrAdd": base,
+                "talentAttr": self.economy.season.battle_talents(player["id"]) if self.economy else [],
                 "heroEquip": equipped, "equipSuitAttr": suit_effects}))
         # Official chain (ARM64 2026-09-25): BattleInfo.SetSceneInfo copies
         # FightData.dropData.dropValues -> BattleInfo.dropValues, which JudgeDropItem
@@ -667,11 +711,18 @@ class BattleService:
                         self.economy.refund_battle(player["id"], old[0])
                         self.store.db.execute("UPDATE economy_runs SET settled=1 WHERE uuid=?", (old[0],))
                         self.economy.world_boss.finish_battle(player['id'],old[0],False)
+                        self.economy.season.completed(player['id'], old[0], False, 0)
                     cost = entry_context.stamina_cost
+                    if entry_context.section_type == 20:
+                        self.economy.season.bind_run(player['id'], section, values['uuid'])
                     if activity and section in activity.rotation.section_groups:
                         activity.rotation.bind_run(player['id'], section, values['uuid'])
                         cost = activity.runtime.prepare_buffs(player['id'], section, values['uuid'], cost)
                     self.economy.charge_battle(player["id"], values["uuid"], section, cost)
+                    configured = self.store.get(player['id'])['snapshot']
+                    if selected_relics or 'selected_relics' in configured:
+                        configured['selected_relics'] = list(selected_relics)
+                        self.economy.save_snapshot(player['id'], configured)
                     ai_cost = 0
                     if request.get('useAIPoint'):
                         from .star_chart import consume_battle_ai

@@ -9,9 +9,12 @@ from x2server.protocol.errors import ProtocolError
 from x2server.protocol.types import DecodedPacket
 
 from .store import PlayerStore
+from x2server.messages.season import encode as season_encode
 
 
-def encode_hero_data(hero: dict) -> bytes:
+def encode_hero_data(hero: dict, *, season=None, player_id=None) -> bytes:
+    if season is not None and player_id is not None:
+        hero = season.artifact.view(player_id, hero)
     # TEMPORARY_COMPAT: the client initializes GoldEquipAttr for every owned hero.
     # An empty nested object represents no equipped god item; omitting it throws.
     from .progression import hero_skills
@@ -20,6 +23,10 @@ def encode_hero_data(hero: dict) -> bytes:
     artifact = hero.get("god_equip")
     god_equip = HERO_GOD_EQUIP.encode({"id": artifact["id"], "level": artifact["level"],
         "star": artifact["star"], "godEquipAttr": b"",
+        "artifactProperties": [season_encode('BattlepassArtifactProperty', p)
+                               for p in artifact.get('artifact_properties', [])],
+        "lastRandomartifactProperty": [season_encode('BattlepassArtifactProperty', p)
+                               for p in artifact.get('random_artifact_properties', [])],
         "godSlotLockInfo": [GOD_SLOT_LOCK_INFO.encode({"slot": int(slot), "state": 1})
                             for slot in sorted(artifact.get("god_slot_lock", []))],
         "jewel": [INT_PAIR.encode({"Key": int(slot), "Value": int(item)})
@@ -48,17 +55,17 @@ def favor_catalog():
     return catalog()
 
 
-def encode_hero_all(snapshot: dict) -> bytes:
-    return HERO_ALL.encode({"heros": [encode_hero_data(hero) for hero in snapshot.get("heroes", [])]})
+def encode_hero_all(snapshot: dict, *, season=None, player_id=None) -> bytes:
+    return HERO_ALL.encode({"heros": [encode_hero_data(hero, season=season, player_id=player_id) for hero in snapshot.get("heroes", [])]})
 
 
 class HeroService:
-    def __init__(self, store: PlayerStore) -> None:
-        self.store = store
+    def __init__(self, store: PlayerStore, economy=None) -> None:
+        self.store, self.economy = store, economy
 
     async def query_all(self, context: DispatchContext, packet: DecodedPacket) -> OutboundMessage:
         if context.session.player_id is None:
             raise ProtocolError("hero query requested before login")
         snapshot = self.store.get(context.session.player_id)["snapshot"]
-        return OutboundMessage("L2C_HeroAll", {"heros": [encode_hero_data(hero)
+        return OutboundMessage("L2C_HeroAll", {"heros": [encode_hero_data(hero, season=self.economy.season if self.economy else None, player_id=context.session.player_id)
             for hero in snapshot.get("heroes", [])]})

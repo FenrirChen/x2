@@ -612,17 +612,12 @@ class WorldBossService:
             JOIN world_boss_player_days d ON d.boss_id=b.boss_id AND d.player_id=m.player_id
             WHERE m.player_id=? AND m.active=1 AND b.state IN (1,2) AND d.day=?''',(player,day(self.now()))).fetchall()
         match=next((r for r in rows if self.bosses[r['type_id']]['StageID']==section and set(json.loads(r['team']))==set(team)),None)
-        if not match and not allow_bound:
-            # 编队页选出来的人才是权威: 大厅登记时服务端只是随手取了前三个已上场
-            # 神格, 与玩家真正选的队伍不同就会卡住入场。同一 StageID 只有一个活跃
-            # 登记, 直接采纳客户端这次送来的队伍, 并把 state 1 推进到 2。
-            match=next((r for r in rows if self.bosses[r['type_id']]['StageID']==section),None)
-            if match is not None:
-                self.store.db.execute('UPDATE world_boss_members SET team=? WHERE boss_id=? AND player_id=?',
-                    (json.dumps(list(team)),match['boss_id'],player))
-                self.store.db.execute('UPDATE world_boss_runs SET state=2 WHERE boss_id=? AND state=1',(match['boss_id'],))
-                match=dict(match)
-                match['team']=json.dumps(list(team))
+        if not match:
+            # Lobby registration can precede the real formation selection.
+            # Only unbound registrations may adopt a different team. Admission
+            # remains read-only: a later rejected entry must change nothing.
+            match=next((r for r in rows if self.bosses[r['type_id']]['StageID']==section
+                        and not r['run_id']),None)
         if not match:
             raise ValueError('Boss battle has no matching admitted team')
         if match['run_id'] and not allow_bound:
@@ -643,7 +638,9 @@ class WorldBossService:
 
     def bind_battle(self, player, section, team, run):
         boss_id=self.battle_admission(player,section,team)
-        self.store.db.execute('UPDATE world_boss_members SET run_id=? WHERE boss_id=? AND player_id=?',(run,boss_id,player))
+        self.store.db.execute('UPDATE world_boss_members SET team=?,run_id=? WHERE boss_id=? AND player_id=?',
+                              (json.dumps(list(team)),run,boss_id,player))
+        self.store.db.execute('UPDATE world_boss_runs SET state=2 WHERE boss_id=? AND state=1',(boss_id,))
 
     async def broadcast(self, boss_id, excluded, actor=None, action=None):
         for connection,(reference,player,bid) in list(self.clients.items()):

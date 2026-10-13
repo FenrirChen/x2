@@ -84,7 +84,7 @@ class LocalIdentityService(RecoveredBootstrapService):
             status, content_type, payload = self._save_manager_api.respond(
                 method, path, body, authorization)
             return HTTPResponse(status, content_type, payload)
-        if path in ("/MailService.GetMailPage", "/MailService.GetMail"):
+        if path in ("/MailService.GetMailPage", "/MailService.GetMail", "/MailService.MarkRead"):
             return self._mail_http(method, path, body, authorization)
         if path == "/apply/chatNode" and method.upper() == "POST":
             # ChatModule.GetChatServers parses a list of ChannelInfo, with a
@@ -153,6 +153,15 @@ class LocalIdentityService(RecoveredBootstrapService):
                 state = int(args.get("state", -1))
                 if state not in (-1, 0, 1, 2, 3, 4):
                     raise ValueError("invalid state")
+            elif path == "/MailService.MarkRead":
+                ids = args.get("ids")
+                if not isinstance(ids, list) or not 1 <= len(ids) <= 100:
+                    raise ValueError("invalid ids")
+                if any(type(i) not in (str, int) or isinstance(i, bool) for i in ids):
+                    raise ValueError("invalid ids")
+                ids = list(dict.fromkeys(int(i) for i in ids))
+                if any(i <= 0 for i in ids):
+                    raise ValueError("invalid ids")
             else:
                 mail_id = int(args["id"])
                 if mail_id <= 0:
@@ -161,6 +170,16 @@ class LocalIdentityService(RecoveredBootstrapService):
             return self._json({"error": "invalid_request"}, 400)
         with self._accounts._lock:
             db = self._accounts.db
+            if path == "/MailService.MarkRead":
+                marks = ','.join('?' for _ in ids)
+                rows = db.execute(f"SELECT id FROM player_mail WHERE player_id=? AND deleted=0 AND id IN ({marks})",
+                                  (requested_player, *ids)).fetchall()
+                if len(rows) != len(ids):
+                    return self._json({"error":"not_found","data":{},"code":404},404)
+                with db:
+                    db.execute(f"UPDATE player_mail SET state=CASE state WHEN 0 THEN 1 WHEN 2 THEN 3 ELSE state END "
+                               f"WHERE player_id=? AND deleted=0 AND id IN ({marks})", (requested_player,*ids))
+                return self._json({"error":"","data":{},"code":0})
             if path == "/MailService.GetMailPage":
                 condition = "player_id=? AND deleted=0"
                 params: list[int] = [requested_player]
@@ -324,6 +343,9 @@ class LocalIdentityService(RecoveredBootstrapService):
 
     def ensure_ultimate_causality_mail(self, player_id: int, now: int) -> bool:
         return self._accounts.ensure_ultimate_causality_mail(player_id, now) if self._accounts is not None else False
+
+    def ensure_causality_oct13_mail(self, player_id: int, now: int) -> bool:
+        return self._accounts.ensure_causality_oct13_mail(player_id, now) if self._accounts is not None else False
 
     def ensure_revival_supply_mail(self, player_id: int, now: int) -> bool:
         return self._accounts.ensure_revival_supply_mail(player_id, now) if self._accounts is not None else False

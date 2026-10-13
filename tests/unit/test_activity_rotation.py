@@ -26,11 +26,11 @@ def test_calendar_exact_boundaries_and_full_cycle(activity):
     rotation = service.rotation
     assert rotation.at(rotation.ANCHOR - 1) is None
     for index in range(17):
-        start = rotation.ANCHOR + index * rotation.SECONDS
+        start, end = rotation.bounds(index)
         period = rotation.at(start)
-        assert period.index == (index // 7) * 8 + [0, 1, 2, 4, 5, 6, 7][index % 7]
+        assert period.index == (1_000_000 if index else 0) + (index // 7) * 8 + [0, 1, 2, 4, 5, 6, 7][index % 7]
         assert period.theme['title'] == ORDER[index % 7]
-        assert period.start == start and period.end == start + 5 * 86400
+        assert period.start == start and period.end == end
         assert rotation.at(period.end - 1) == period
         assert rotation.at(period.end).start == period.end
 
@@ -41,7 +41,7 @@ def test_local_review_calendar_keeps_game_clock_and_default_anchor(activity, mon
     monkeypatch.setenv('X2_ACTIVITY_ANCHOR', str(original_now - ActivityRotation.SECONDS))
     rotation = ActivityRotation(store, economy.clock)
     period = rotation.at()
-    assert period.index == 1 and period.theme['title'] == '伪生樱之岛'
+    assert period.index == 1_000_001 and period.theme['title'] == '伪生樱之岛'
     assert period.start == original_now
     assert economy.clock() == original_now
     monkeypatch.delenv('X2_ACTIVITY_ANCHOR')
@@ -61,9 +61,9 @@ def test_retired_sections_and_old_runs_are_closed_without_deleting_progress(acti
                      ('retired-run', 1, 3, 2160911, now[0]))
     with pytest.raises(ValueError, match='closed'):
         service.rotation.run_period(1, 'retired-run')
-    now[0] += 3 * ActivityRotation.SECONDS
+    now[0] = service.rotation.bounds(3)[0]
     period = service.period(1)
-    assert period.theme['group'] == 13 and period.index == 4
+    assert period.theme['group'] == 13 and period.index == 1_000_004
     with economy.transaction():
         service.rotation.put(1, period, 'task', 'keep-existing', {'claimed': True})
     assert ActivityService(economy).rotation.get(1, period, 'task', 'keep-existing')['claimed']
@@ -76,7 +76,7 @@ def test_period_reset_preserves_inventory_and_previous_audit(activity):
         service.rotation.put(1, period, 'task', 123, {'claimed': True})
         economy._grant(1, 'test:keep', {1237902: 100})
     snapshot = store.get(1)
-    now[0] += 35 * 86400
+    now[0] = service.rotation.bounds(7)[0]
     second = service.period(1)
     assert second.theme['title'] == period.theme['title']
     assert service.rotation.get(1, second, 'task', 123) is None
@@ -90,7 +90,7 @@ def test_period_reset_preserves_inventory_and_previous_audit(activity):
 def test_all_themes_wire_has_current_dates_and_only_current_group(activity):
     _, _, service, now = activity
     for index in range(7):
-        now[0] = ActivityRotation.ANCHOR + index * ActivityRotation.SECONDS
+        now[0] = service.rotation.bounds(index)[0]
         period = service.period(1)
         rows = [ACTIVITY_SCHEMAS['ActivityData'].decode(raw)
                 for raw in service.query_activity(1)['activityData']]
@@ -122,7 +122,7 @@ def test_tasks_only_active_event_deduplicate_and_reset(activity):
     account = store.get(1)
     assert service.claim_task(1, tid, 9, task['ActivityID'])['code'] == 13
     assert store.get(1) == account
-    now[0] += 35 * 86400
+    now[0] = service.rotation.bounds(7)[0]
     state = next(r for r in map(TASK.decode, service.task_values(1, 9)['taskList']) if r['taskId'] == tid)
     assert state['taskProgress'] == 0 and state['taskStatus'] == 2
 
@@ -176,7 +176,7 @@ def test_pool_cost_stock_and_failed_delivery_rollback(activity, monkeypatch):
 @pytest.mark.parametrize('theme_index', [0, 2, 5])
 def test_pool_wire_opens_stages_in_order_and_resets_each_period(activity, theme_index):
     store, economy, service, now = activity
-    now[0] += theme_index * ActivityRotation.SECONDS
+    now[0] = service.rotation.bounds(theme_index)[0]
     period = service.period(1)
     row = service.rotation.of_type(26)
     ids = row['ActivityParam1']
@@ -207,13 +207,13 @@ def test_pool_wire_opens_stages_in_order_and_resets_each_period(activity, theme_
         assert [info['rewardPoolId'] for info in visible()] == ids[:index + 2]
     reopened = ActivityService(economy)
     assert reopened.unlocked_pools(1, period, row) == ids
-    now[0] += 7 * ActivityRotation.SECONDS
+    now[0] = service.rotation.bounds(theme_index + 7)[0]
     assert [info['rewardPoolId'] for info in visible()] == ids[:1]
 
 
 def test_pool_draw_response_unlocks_next_stage_without_reopening(activity, monkeypatch):
     _, economy, service, now = activity
-    now[0] += 2 * ActivityRotation.SECONDS
+    now[0] = service.rotation.bounds(2)[0]
     period = service.period(1)
     row = service.rotation.of_type(26)
     first, second = row['ActivityParam1'][:2]
@@ -240,7 +240,7 @@ def test_pool_draw_response_unlocks_next_stage_without_reopening(activity, monke
 
 def test_pool_cannot_skip_locked_ancestors(activity):
     _, economy, service, now = activity
-    now[0] += 2 * ActivityRotation.SECONDS
+    now[0] = service.rotation.bounds(2)[0]
     period = service.period(1)
     row = service.rotation.of_type(26)
     predecessor = service.boxes[row['ActivityParam1'][-2]]
@@ -261,7 +261,7 @@ def test_preview_claim_once_and_again_next_cycle(activity):
     again = service.pre_notice(1, 3, claim=True)
     assert again['code'] == 10 and again['lastPreNoticSec'] == now[0]
     assert not again.get('rewardData')
-    now[0] += 35 * 86400
+    now[0] = service.rotation.bounds(7)[0]
     assert service.pre_notice(1, 3)['lastPreNoticSec'] == 0
     assert service.pre_notice(1, 3, claim=True)['code'] == 10
 

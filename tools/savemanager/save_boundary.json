@@ -5,7 +5,8 @@
     "system_mail_issues": "服务器一次性邮件发放历史，禁止随存档迁移或回滚以防重复领取。",
     "world_boss_days": "全服 BOSS 日历，不随单个玩家存档覆盖。",
     "accounts": "账号认证身份（username/password_hash/status/created_at/last_login_at）。存档代表游戏状态，不代表登录身份；导入必须保留目标账号的凭据。",
-    "repair_history": "服务器运维修复记录（repair_key/applied_at/backup_path），不属于任何玩家游戏状态。"
+    "repair_history": "服务器运维修复记录（repair_key/applied_at/backup_path），不属于任何玩家游戏状态。",
+    "season_calendar": "全服赛季日历，不随单个玩家存档覆盖。"
   },
   "excluded_player_columns": {
     "id": "player 主键 = 认证身份绑定键，导入保持目标 player 行不变",
@@ -756,6 +757,50 @@
       "autoincrement": null
     },
     {
+      "table": "college_washing_pending",
+      "columns": [
+        "player_id",
+        "equip_id",
+        "fingerprint",
+        "candidate",
+        "session_id"
+      ],
+      "primary_key": [
+        "player_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [
+        "fingerprint",
+        "candidate"
+      ],
+      "autoincrement": null
+    },
+    {
+      "table": "college_washing_receipts",
+      "columns": [
+        "player_id",
+        "receipt_key",
+        "digest",
+        "equip_id",
+        "response"
+      ],
+      "primary_key": [
+        "player_id",
+        "receipt_key"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [
+        "response"
+      ],
+      "autoincrement": null
+    },
+    {
       "table": "course_claims",
       "columns": [
         "player_id",
@@ -1093,6 +1138,64 @@
       "included": true,
       "blob_columns": [],
       "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "favor_wish_events",
+      "columns": [
+        "player_id",
+        "event_key"
+      ],
+      "primary_key": [
+        "player_id",
+        "event_key"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "favor_wish_receipts",
+      "columns": [
+        "player_id",
+        "request_key",
+        "digest",
+        "day",
+        "response"
+      ],
+      "primary_key": [
+        "player_id",
+        "request_key"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [
+        "response"
+      ],
+      "autoincrement": null
+    },
+    {
+      "table": "favor_wish_state",
+      "columns": [
+        "player_id",
+        "day",
+        "state_json"
+      ],
+      "primary_key": [
+        "player_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [
+        "state_json"
+      ],
       "autoincrement": null
     },
     {
@@ -1508,6 +1611,108 @@
       "json_columns": [
         "sources",
         "blocked"
+      ],
+      "autoincrement": null
+    },
+    {
+      "table": "season_calendar",
+      "columns": [
+        "instance_id",
+        "activity_id",
+        "start_sec",
+        "end_sec",
+        "closed"
+      ],
+      "primary_key": [
+        "instance_id"
+      ],
+      "owner_column": null,
+      "owner_join": null,
+      "included": false,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "season_events",
+      "columns": [
+        "player_id",
+        "instance_id",
+        "event_key"
+      ],
+      "primary_key": [
+        "player_id",
+        "instance_id",
+        "event_key"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "season_receipts",
+      "columns": [
+        "player_id",
+        "instance_id",
+        "request_key",
+        "message",
+        "response"
+      ],
+      "primary_key": [
+        "player_id",
+        "instance_id",
+        "request_key"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [
+        "response"
+      ],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "season_runs",
+      "columns": [
+        "uuid",
+        "player_id",
+        "instance_id",
+        "config_id",
+        "section_id",
+        "settled",
+        "success"
+      ],
+      "primary_key": [
+        "uuid"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "season_state",
+      "columns": [
+        "player_id",
+        "instance_id",
+        "state_json"
+      ],
+      "primary_key": [
+        "player_id",
+        "instance_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [
+        "state_json"
       ],
       "autoincrement": null
     },

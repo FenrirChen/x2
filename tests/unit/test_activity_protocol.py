@@ -1,3 +1,4 @@
+from tests.activity_calendar_helpers import activity_start, next_activity_cycle
 """Exercise message ownership independently of protobuf encodability."""
 import asyncio
 import pytest
@@ -22,7 +23,7 @@ def test_every_registered_route_has_an_explicit_contract(runtime):
 @pytest.mark.parametrize('theme', range(7))
 def test_every_route_in_every_theme_returns_a_valid_owned_response(runtime, theme):
     _, _, ctx, rt, now = runtime
-    now[0] = ActivityRotation.ANCHOR + theme * ActivityRotation.SECONDS + 3600
+    now[0] = activity_start(theme) + 3600
     period = rt.r.at()
     family = 2 if period.theme['group'] == 7 else 1 if period.theme['group'] == 99 else 3
     for rid, op in enumerate(sorted(ALL_ROUTES), 40000):
@@ -57,15 +58,17 @@ def test_foreign_activity_id_is_rejected_before_operation(runtime, op):
     assert not response.before_response and not response.pushes
 
 
-def test_cached_response_cannot_escape_period_or_theme_checks(runtime):
+def test_query_replay_rechecks_theme_and_reads_next_occurrence(runtime):
     _, _, ctx, rt, now = runtime
     query = packet({'activityId': 72046}, 42000, 'C2L_LanternShowQueryData')
     assert asyncio.run(rt.handle(ctx, query)).values['code'] == 10
-    now[0] += ActivityRotation.SECONDS
+    now[0] = rt.r.at().end
     assert asyncio.run(rt.handle(ctx, query)).values['code'] == 13
     now[0] += 6 * ActivityRotation.SECONDS
     assert rt.r.at().theme['group'] == 37
-    assert asyncio.run(rt.handle(ctx, query)).values['code'] == 13
+    # A query describes the current occurrence; old query receipts must not
+    # block it when its owning theme comes back. Foreign themes still reject.
+    assert asyncio.run(rt.handle(ctx, query)).values['code'] == 10
     fresh = packet({'activityId': 72046}, 42001, 'C2L_LanternShowQueryData')
     assert asyncio.run(rt.handle(ctx, fresh)).values['code'] == 10
 
@@ -121,7 +124,7 @@ def test_optional_progress_failure_cannot_abort_successful_checkout(runtime, mon
 
 def test_boundary_checkout_does_not_push_next_themes_progress(runtime):
     rt, now = runtime[3:]
-    now[0] = ActivityRotation.ANCHOR + ActivityRotation.SECONDS - 10
+    now[0] = ActivityRotation.FIRST_END - 10
     old_period = rt.r.at()
     battle, request, sid = battle_entry(runtime)
     now[0] += 20

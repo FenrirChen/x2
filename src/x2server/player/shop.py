@@ -1,4 +1,4 @@
-"""Evidence-bounded shop listings and purchases for the recovered 809 goods."""
+"""Recovered shop listings and transactional purchases with explicit Revival policies."""
 
 from __future__ import annotations
 
@@ -49,8 +49,8 @@ class ShopService:
             self.offers[row["GoodsID"]] = (item_id, row["ItemPrice"], row.get("GoodsTag", {}).get("value", 0))
         if len(self.offers) != 15:
             raise ValueError("shop 809 static goods evidence changed")
-        # Restore only the requested random shop. Other speculative community
-        # shop catalogs stay retired; shop 809 keeps its separate static route.
+        # Random shops retain their established catalogs. Explicit user catalogs
+        # restore medal, ticket and gem shops below; other shops stay retired.
         random_shop = json.loads(files("x2server").joinpath(
             "data/random_shop_801.json").read_text(encoding="utf-8"))
         equib_shop = json.loads(files("x2server").joinpath(
@@ -60,7 +60,7 @@ class ShopService:
                 or any(type(weight) is not int or weight <= 0 for weight in self.equib_star_weights.values())):
             raise ValueError("shop 804 star weights invalid")
         compat = {"shops": {"801": random_shop["goods"], "804": equib_shop["goods"]}}
-        self.retired_shop_ids = set(range(801, 812)) - {self.SHOP_ID, 801, 804}
+        self.retired_shop_ids = set(range(801, 812)) - {self.SHOP_ID, 801, 803, 804, 805, 806}
         self.compat_offers = {}
         self.compat_disabled = []
         for shop_id, rows in compat["shops"].items():
@@ -95,6 +95,10 @@ class ShopService:
                         continue
                     row["poolItems"] = pool
                 self.compat_offers[(int(shop_id), row["goodsId"])] = row
+        restored = json.loads(files("x2server").joinpath("data/restored_shops.json").read_text(encoding="utf-8"))
+        for row in restored["goods"]:
+            self.compat_offers[(row["shopId"], row["goodsId"])] = row
+
         with store.db:
             store.db.execute("""CREATE TABLE IF NOT EXISTS shop_purchase_counts (
                 player_id INTEGER NOT NULL, goods_id INTEGER NOT NULL, quantity INTEGER NOT NULL,
@@ -166,6 +170,22 @@ class ShopService:
             "hasBuyTimes": self._compat_count(player_id, shop_id, row),
             "goodsTag": row.get("goodsTag") or 0, "limited": row.get("limited") or 0}
 
+    def _available(self, player, shop, row):
+        if shop != 805 or not row.get("round"):
+            return True
+        previous = [r for (sid, _), r in self.compat_offers.items()
+                    if sid == 805 and r.get("round", 99) < row["round"]]
+        return all(self._compat_count(player, shop, r) >= 1 for r in previous) and self._compat_count(player, shop, row) == 0
+
+    def _next_refresh(self, shop):
+        local = datetime.fromtimestamp(int(self.economy.clock()), timezone(timedelta(hours=8)))
+        tomorrow = (local + timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
+        if shop == 805:
+            return int(tomorrow.timestamp())  # Daily hero rotation; quota remains weekly.
+        if shop == 803:
+            return int((tomorrow + timedelta(days=(7 - tomorrow.weekday()) % 7)).timestamp())
+        return 0
+
     def _refresh_count(self, player, shop):
         row = self.store.db.execute("SELECT count FROM shop_refreshes WHERE player_id=? AND shop_id=? AND period=?", (player, shop, self._period(3))).fetchone()
         return row[0] if row else 0
@@ -180,6 +200,10 @@ class ShopService:
     def _stock_row(self, player, shop, row):
         # Slot identity and daily purchase count stay fixed; the full content,
         # quantity and pricing tuple rotates together, excluding exchange slots.
+        if shop == 805 and row.get("heroPool"):
+            day = datetime.fromtimestamp(int(self.economy.clock()), timezone(timedelta(hours=8))).date().toordinal()
+            pool = row["heroPool"]
+            return {**row, "itemId": pool[day % len(pool)]}
         if shop != 801 or row.get("poolItems") or row["itemId"] in self.economy.CURRENCIES:
             return row
         rows = [r for (s, _), r in sorted(self.compat_offers.items()) if s == shop
@@ -215,6 +239,9 @@ class ShopService:
             raise ProtocolError("shop requested before login")
         name = CORE_MESSAGE_REGISTRY.name_for(packet.message_id)
         request = ECONOMY_SCHEMAS[name].decode(packet.body)
+        season_shop = self.economy.season.shop
+        if season_shop.owns(name, request):
+            return await season_shop.handle(context, packet, name, request)
         activity = getattr(self.economy, 'activity', None)
         if activity and activity.runtime.exchange.owns(name, request):
             return await activity.runtime.exchange.handle(context, packet, name, request)
@@ -236,9 +263,9 @@ class ShopService:
                 return OutboundMessage(response_name, {"code": 13, "shopId": shop_id})
             goods = ([GOODS.encode(self._goods(player_id, goods_id)) for goods_id in sorted(self.offers)]
                 if shop_id == self.SHOP_ID else [GOODS.encode(self._compat_goods(player_id, shop_id, row))
-                for (id_, _), row in sorted(self.compat_offers.items()) if id_ == shop_id])
+                for (id_, _), row in sorted(self.compat_offers.items()) if id_ == shop_id and self._available(player_id, shop_id, row)])
             return OutboundMessage(response_name, {"code": 10, "shopId": shop_id,
-                "NextRefreshTime": 0, "RefreshTimes": self._refresh_count(player_id, shop_id),
+                "NextRefreshTime": self._next_refresh(shop_id), "RefreshTimes": self._refresh_count(player_id, shop_id),
                 "RefreshPrice": self._refresh_price(player_id, shop_id) if shop_id == 801 else 0, "goods": goods})
         if name == "C2L_QueryGoodsInfo":
             goods_id = request.get("goodsId", 0)
@@ -250,6 +277,8 @@ class ShopService:
                 if found is None:
                     return OutboundMessage(response_name, {"code": 13, "goodsId": goods_id})
                 shop_id, row = found
+                if not self._available(player_id, shop_id, row):
+                    return OutboundMessage(response_name, {"code": 13, "goodsId": goods_id})
                 offer = self._compat_goods(player_id, shop_id, row)
             return OutboundMessage(response_name, {"code": 10, "shopId": shop_id,
                 "goodsId": goods_id, "price": offer["price"],
@@ -354,9 +383,11 @@ class ShopService:
         total = row["price"] * buy_num
         item_count = row["num"] * buy_num
         reward_equips = ()
+        hero_reward = None
         try:
             with self.economy.transaction():
-                if self._compat_count(player_id, shop_id, row) + buy_num > cap:
+                if (not self._available(player_id, shop_id, row)
+                        or self._compat_count(player_id, shop_id, row) + buy_num > cap):
                     return reject
                 if currency == 1237900:
                     self.economy.refresh_stamina(player_id)
@@ -384,7 +415,14 @@ class ShopService:
                     reward_equips = self._roll_shop_equips(player_id, row["pool"], buy_num, key)
                 else:
                     item_id = self._compat_item_id(shop_id, row, player_id)
-                    granted = self.economy._grant(player_id, f"compat-shop:{key}", {item_id: item_count})
+                    if row.get("heroPool"):
+                        from .bag_items import grant_bag_rewards
+                        hero_reward = grant_bag_rewards(self.economy, player_id,
+                            f"compat-shop:{key}", {item_id: item_count}, item_id)
+                        granted = {}
+                    else:
+                        granted = self.economy._grant(player_id, f"compat-shop:{key}",
+                            {item_id: item_count}, stackable_types=(11,))
                 period = self._compat_period(shop_id, row)
                 self.store.db.execute("""INSERT INTO shop_compat_counts VALUES (?,?,?,?,?)
                     ON CONFLICT(player_id,shop_id,goods_id,period)
@@ -395,7 +433,7 @@ class ShopService:
                     "price": row["price"], "originalPrice": row.get("originalPrice") or row["price"],
                     "hasBuyTimes": self._compat_count(player_id, shop_id, row),
                     "changeItemID": currency,
-                    "rewardData": self.economy.reward_bytes(granted, reward_equips)}
+                    "rewardData": hero_reward if hero_reward is not None else self.economy.reward_bytes(granted, reward_equips)}
                 self.store.db.execute("INSERT INTO shop_receipts VALUES (?,?,?)",
                                       (key, player_id, schema.encode(values)))
                 self.economy._event(player_id, f"compat-shop:{key}", 24, goods_id, buy_num, shop_id)
@@ -405,6 +443,16 @@ class ShopService:
             LOGGER.info("compat purchase rejected goods=%s reason=%s", goods_id, exc)
             return reject
         pushes = self.economy.pushes(player_id)
+        if hero_reward is not None:
+            from .hero import encode_hero_data
+            pushes += (OutboundMessage("L2C_HeroUpdate", {"code": 10,
+                "heros": [encode_hero_data(h, season=self.economy.season, player_id=player_id) for h in self.store.get(player_id)["snapshot"]["heroes"]]}),)
+        if shop_id == 805:
+            pushes += (OutboundMessage("L2C_ShopGoods", {"code": 10, "shopId": shop_id,
+                "NextRefreshTime": self._next_refresh(shop_id), "RefreshTimes": 0, "RefreshPrice": 0,
+                "goods": [GOODS.encode(self._compat_goods(player_id, shop_id, r))
+                          for (sid, _), r in sorted(self.compat_offers.items())
+                          if sid == shop_id and self._available(player_id, sid, r)]}),)
         if reward_equips:
             pushes = pushes + (OutboundMessage("L2C_EquipUpdate",
                                                {"code": 10, "equip": list(reward_equips)}),)

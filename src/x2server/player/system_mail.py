@@ -1,5 +1,9 @@
 """User-approved Revival mail policy; not an official server reward schedule."""
 import json
+import logging
+import os
+
+from .season_schedule import current_season
 
 from .mail import ensure_mail_schema
 from .task_calendar import task_period
@@ -19,6 +23,7 @@ ONCE_MAIL_PREFIXES = {
     'hero_choice': ('hero_choice_1290005:',),
     'ultimate_causality': ('ultimate_causality_50:',),
     'revival_supply': ('revival_supply_200_7200_140:',),
+    'causality_oct13': ('causality_gift_20261013_50:',),
 }
 
 
@@ -50,6 +55,16 @@ def insert_system_mail(db, player_id, account_id, kind, now):
         source_key = f"daily_login:{account_id}:{day_start}"
         body, rewards = "祝您玩的开心", {BRILLIANCE: 200, WISH_COIN: 10,
                                         CAUSALITY_CARD: 10, PURE_CRYSTAL: 10}
+    elif kind == "daily_season_ticket":
+        season = current_season(now)
+        if (os.getenv('X2_ORIGIN_SEASON_ENABLED','0') != '1' or not season
+                or not season['implemented']):
+            return False
+        day_start, _ = task_period(1, now)
+        source_key = f"daily_season_ticket:{player_id}:{day_start}"
+        title = "每日赛季挑战券"
+        body = f"为您送上10张{season['name']}挑战券。"
+        rewards = {season['ticket']: 10}
     elif kind == "hero_choice":
         # Stable per player even when a legacy save is later bound to an account.
         source_key = f"hero_choice_1290005:{player_id}"
@@ -59,6 +74,10 @@ def insert_system_mail(db, player_id, account_id, kind, now):
         source_key = f"ultimate_causality_50:{player_id}"
         title = "终极因果卡赠礼"
         body, rewards = "为您送上50张终极因果卡，祝您旅途愉快。", {ULTIMATE_CAUSALITY_CARD: 50}
+    elif kind == "causality_oct13":
+        source_key = f"causality_gift_20261013_50:{player_id}"
+        title = "终极因果卡补给"
+        body, rewards = "为您送上50张终极因果卡。每位玩家仅可领取一次。", {ULTIMATE_CAUSALITY_CARD: 50}
     elif kind == "revival_supply":
         source_key = f"revival_supply_200_7200_140:{player_id}"
         title = "旅途补给赠礼"
@@ -132,6 +151,8 @@ def deliver_daily_welfare(store, now):
                 if insert_system_mail(store.db, player_id, account_id or player_id,
                                        "daily_login", int(now)):
                     minted += 1
+                minted += insert_system_mail(store.db, player_id, account_id or player_id,
+                                              "daily_season_ticket", int(now))
         except Exception as exc:  # one broken row must not stop the sweep
             failed.append((player_id, str(exc)))
     return minted, failed
@@ -154,9 +175,9 @@ async def daily_welfare_watch(store, clock, poll=WELFARE_POLL_SECONDS, on_new_da
                 try:
                     await on_new_day(day_start)
                 except Exception:  # rollover callbacks must not kill the sweep
-                    import logging
                     logging.getLogger("x2.system_mail").exception("daily rollover callback failed")
-            _, failed = deliver_daily_welfare(store, now)
+            minted, failed = deliver_daily_welfare(store, now)
+            logging.getLogger("x2.system_mail").info("daily welfare sweep minted=%s failed=%s", minted, failed)
             if not failed:
                 completed_day = day_start
         await asyncio.sleep(poll)

@@ -86,6 +86,10 @@ def test_login_push_heartbeat_reconnect_and_authentication(tmp_path):
             assert STRING_PAIR.decode(config_values["keyVal"][0]) == {"key": "PowerBuyNum", "val": "120"}
             before_queries = store.get(1)
             for index, (name, _, response_id) in enumerate(LOBBY_IDS, 100):
+                if name == 'Logout' or name in LobbyService.DELEGATED:
+                    # This fixture registers LobbyService only; delegated
+                    # activity handlers have their own service tests.
+                    continue
                 request = {"type": 3, "chapterId": 1} if name == "GameTask" else {}
                 if name == "ReceiveGiftRew":
                     request = {"type": 2}
@@ -102,6 +106,9 @@ def test_login_push_heartbeat_reconnect_and_authentication(tmp_path):
                 if name == "AccountBuffData":
                     assert decoded["buffId"] == [1, 2]
             assert store.get(1) == before_queries  # Queries/denied gifts cannot grant anything.
+            send(writer, 'C2L_Logout', {}, 500, session)
+            logout, = await read(reader, 1)
+            assert CORE_SCHEMAS['L2C_Logout'].decode(logout.body)['code'] == 10
             writer.close()
             await writer.wait_closed()
 

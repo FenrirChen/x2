@@ -1,0 +1,65 @@
+; BattlePassModule$$OnHandleArtifactOpt
+; RVA [0x1863260,0x1863358), inferred from adjacent unique ScriptMethod addresses
+; byte SHA256 e655c6c3c4b8867a20333c6077e8466a24dcbb2f3fdedf13a250799b12d016ee
+001863260: stp      x20, x19, [sp, #-0x20]! ;
+001863264: stp      x29, x30, [sp, #0x10] ;
+001863268: add      x29, sp, #0x10 ;
+00186326c: adrp     x20, #0x5577000 ;
+001863270: ldrb     w8, [x20, #0x6c0] ;
+001863274: mov      x19, x1 ;
+001863278: tbnz     w8, #0, #0x1863294 ;
+00186327c: adrp     x8, #0x530f000 ;
+001863280: ldr      x8, [x8, #0x328] ;
+001863284: ldr      w0, [x8] ;
+001863288: bl       #0x3f2aed0 ;
+00186328c: mov      w8, #1 ;
+001863290: strb     w8, [x20, #0x6c0] ;
+001863294: cbz      x19, #0x18632cc ;
+001863298: adrp     x8, #0x51e4000 ;
+00186329c: ldr      x8, [x8, #0xb78] ;
+0018632a0: ldr      x9, [x19] ;
+0018632a4: ldr      x8, [x8] ;
+0018632a8: ldrb     w11, [x9, #0x104] ;
+0018632ac: ldrb     w10, [x8, #0x104] ;
+0018632b0: cmp      w11, w10 ;
+0018632b4: b.lo     #0x18632cc ;
+0018632b8: ldr      x9, [x9, #0xb0] ;
+0018632bc: add      x9, x9, x10, lsl #3 ;
+0018632c0: ldur     x9, [x9, #-8] ;
+0018632c4: cmp      x9, x8 ;
+0018632c8: b.eq     #0x18632d8 ;
+0018632cc: ldp      x29, x30, [sp, #0x10] ;
+0018632d0: ldp      x20, x19, [sp], #0x20 ;
+0018632d4: ret       ;
+0018632d8: ldr      w19, [x19, #0x10] ;
+0018632dc: cmp      w19, #0xa ;
+0018632e0: b.ne     #0x186331c ;
+0018632e4: adrp     x8, #0x5210000 ;
+0018632e8: ldr      x8, [x8, #0xf98] ;
+0018632ec: ldr      x0, [x8] ;
+0018632f0: ldrb     w8, [x0, #0x10a] ;
+0018632f4: tbz      w8, #0, #0x1863304 ;
+0018632f8: ldr      w8, [x0, #0xbc] ;
+0018632fc: cbnz     w8, #0x1863304 ;
+001863300: bl       #0x3f3f378 ;
+001863304: ldp      x29, x30, [sp, #0x10] ;
+001863308: mov      x0, xzr ;
+00186330c: mov      w1, #0x185 ;
+001863310: mov      x2, xzr ;
+001863314: ldp      x20, x19, [sp], #0x20 ;
+001863318: b        #0x3e48998 ; CommonX2.X2EventManager$$FireEvent
+00186331c: adrp     x8, #0x528b000 ;
+001863320: ldr      x8, [x8, #0x2e0] ;
+001863324: ldr      x0, [x8] ;
+001863328: ldrb     w8, [x0, #0x10a] ;
+00186332c: tbz      w8, #0, #0x186333c ;
+001863330: ldr      w8, [x0, #0xbc] ;
+001863334: cbnz     w8, #0x186333c ;
+001863338: bl       #0x3f3f378 ;
+00186333c: ldp      x29, x30, [sp, #0x10] ;
+001863340: mov      x0, xzr ;
+001863344: mov      x2, xzr ;
+001863348: mov      w1, w19 ;
+00186334c: mov      x3, xzr ;
+001863350: ldp      x20, x19, [sp], #0x20 ;
+001863354: b        #0x1529eb8 ; GameAPI$$ShowErrorCodeBubble

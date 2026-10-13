@@ -326,4 +326,4 @@ class ProgressionService:
 
     def pushes(self, player_id):
         from .hero import encode_hero_data
-        return (OutboundMessage("L2C_HeroUpdate", {"code":10,"heros":[encode_hero_data(h) for h in self.store.get(player_id)["snapshot"]["heroes"]]}), *self.economy.pushes(player_id))
+        return (OutboundMessage("L2C_HeroUpdate", {"code":10,"heros":[encode_hero_data(h, season=self.economy.season, player_id=player_id) for h in self.store.get(player_id)["snapshot"]["heroes"]]}), *self.economy.pushes(player_id))

@@ -463,7 +463,7 @@ class AlchemyService:
             from .hero import encode_hero_data
             pushes += (OutboundMessage('L2C_FavorChangeInfo', {'data': [bytes.fromhex(change)]}),
                        OutboundMessage('L2C_HeroUpdate', {'code': 10, 'heros': [
-                           encode_hero_data(h) for h in self.repo.store.get(player_id)['snapshot']['heroes']]}))
+                           encode_hero_data(h, season=self.economy.season, player_id=player_id) for h in self.repo.store.get(player_id)['snapshot']['heroes']]}))
         before = ((OutboundMessage('L2C_QueryGrowthBase', self.repo.growth_base(player_id)),)
                   if flow in ('MakIngSpeed', 'AlchemyFinish', 'AlchemyButtonClick') and values['code'] == 10 else ())
         if flow == 'AlchemyBuy' and values['code'] == 10:

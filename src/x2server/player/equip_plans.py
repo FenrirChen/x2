@@ -151,7 +151,7 @@ class EquipPlanService:
     def sync(self, player_id):
         snapshot = self.store.get(player_id)["snapshot"]
         pushes = (OutboundMessage("L2C_HeroUpdate", {"code": 10,
-                    "heros": [encode_hero_data(h) for h in snapshot.get("heroes", [])]}),)
+                    "heros": [encode_hero_data(h, season=self.economy.season if self.economy else None, player_id=player_id) for h in snapshot.get("heroes", [])]}),)
         if self.equipment is not None:
             pushes += (OutboundMessage("L2C_EquipUpdate", {"code": 10,
                        "equip": self.equipment.values(player_id)["equip"]}),)
@@ -316,7 +316,7 @@ class EquipPlanService:
         # 所以带新穿戴状态的推送必须排在回包之前；排在之后 (=pushes) 它读到的
         # 还是换装前的缓存，兽主图标要退出页面再进才会变。
         before = (OutboundMessage("L2C_HeroUpdate", {"code": 10,
-                      "heros": [encode_hero_data(h) for h in snapshot["heroes"]]}),)
+                      "heros": [encode_hero_data(h, season=self.economy.season if self.economy else None, player_id=player_id) for h in snapshot["heroes"]]}),)
         if self.equipment is not None:
             before += (OutboundMessage("L2C_EquipUpdate", {"code": 10,
                            "equip": self.equipment.values(player_id)["equip"]}),)

@@ -74,8 +74,9 @@ class ActivityService:
 
     def query_activity(self, player):
         period = self.rotation.at()
+        season_rows = self.economy.season.activity_values()
         if period is None:
-            return {'code': 10}
+            return {"code": 10, "activityData": season_rows}
         rows = []
         for row in period.theme['activities']:
             end = self.yuexi_preview_end(period) if period.theme['group'] == 99 and enum(row['ActivityType']) == 1 else period.end
@@ -95,7 +96,7 @@ class ActivityService:
                 values[f'param{index}'] = row.get(f'ActivityParam{index}', []) or [0]
             values['activityReward'] = row.get('ActivityReward', []) or [0]
             rows.append(encode('ActivityData', values))
-        return {'code': 10, 'activityData': rows}
+        return {'code': 10, 'activityData': rows + season_rows}
 
     def task_catalog(self, period, kind, activity=0):
         catalog = self.food_tasks if kind == 20 else self.tasks if kind == 9 else {}
@@ -158,12 +159,20 @@ class ActivityService:
                 'activityId': task['ActivityID'], 'stage': task.get('TaskGroupID', 0),
                 'finishTimes': int(state['claimed'])}))
         boxes = []
+        completed = {}
         for box in self.tables['ActivityTaskBox']:
             if self.rotation.activity(box['ActivityID'], period) is None or activity and box['ActivityID'] != activity:
                 continue
+            aid = box['ActivityID']
+            if not self.task_catalog(period, kind, aid):
+                continue
+            completed.setdefault(aid, self.completed_task_count(player, period, kind, aid))
             key = f"{box['ActivityID']}:{box['BoxID']}"
             boxes.append(TREASURE_BOX.encode({'boxId': box['BoxID'], 'activityId': box['ActivityID'],
-                'pickStatus': int(bool(self.rotation.get(player, period, 'task-box', key, False)))}))
+                # RefreshData looks up the static BoxID; claiming instead sends
+                # the zero-based index within this activity's box list.
+                'pickStatus': 2 if self.rotation.get(player, period, 'task-box', key, False)
+                    else int(completed[aid] >= box['ActivityParam1'])}))
         return {'code': 10, 'type': kind, 'activityId': activity,
                 'taskList': tasks, 'boxList': boxes}
 
@@ -253,18 +262,29 @@ class ActivityService:
             result.update(code=10, activityId=task['ActivityID'], rewardData=self.economy.reward_bytes(rewards))
         return result
 
-    def claim_task_box(self, player, activity, box_id):
+    def completed_task_count(self, player, period, kind, activity):
+        # Native NewYear2TaskView.Refresh counts TaskStatus == 4, i.e. tasks
+        # whose rewards have been claimed, not hidden successor progress.
+        return sum(bool(self.rotation.get(player, period, self.task_namespace(task), tid, {}).get('claimed'))
+                   for tid, task in self.task_catalog(period, kind, activity).items())
+
+    def claim_task_box(self, player, activity, box_id, kind=9):
         period, _ = self.require(player, activity)
-        box = next((r for r in self.tables['ActivityTaskBox'] if r['ActivityID'] == activity and r['BoxID'] == box_id), None)
-        if box is None or enum(box['CompeteType']) != 1:
+        boxes = [r for r in self.tables['ActivityTaskBox'] if r['ActivityID'] == activity]
+        if (kind not in (9, 20) or not self.task_catalog(period, kind, activity)
+                or not 0 <= box_id < len(boxes)):
             raise UnresolvedEconomy('unknown activity task box')
+        box = boxes[box_id]
+        if enum(box['CompeteType']) != 1:
+            raise UnresolvedEconomy('unknown activity task box condition')
         with self.economy.transaction():
-            key = f'{activity}:{box_id}'
+            self.repair_tasks(player, period)
+            # Preserve the historical durable key so already-paid boxes cannot
+            # be paid again after changing the wire index interpretation.
+            key = f"{activity}:{box['BoxID']}"
             if self.rotation.get(player, period, 'task-box', key, False):
                 raise UnresolvedEconomy('task box already claimed')
-            completed = sum(self.rotation.get(player, period, self.task_namespace(t), tid, {}).get('progress', 0)
-                >= self.conditions[t['TaskConditionID']]['CompleteNum']
-                for tid, t in self.task_catalog(period, 9, activity).items())
+            completed = self.completed_task_count(player, period, kind, activity)
             if completed < box['ActivityParam1']:
                 raise UnresolvedEconomy('not enough completed tasks')
             rewards = self.grant(player, period, 'task-box', key, [box['GiftID']])

@@ -83,6 +83,7 @@ class LoginService:
             self.identity.ensure_hero_choice_mail(player["id"], now)
             self.identity.ensure_ultimate_causality_mail(player["id"], now)
             self.identity.ensure_revival_supply_mail(player["id"], now)
+            self.identity.ensure_causality_oct13_mail(player["id"], now)
         context.session.session_id = secrets.token_urlsafe(24)
         context.session.player_id = player["id"]
         result: dict[str, Any] = {"code": 10, "id": player["id"], "loginCount": player["login_count"],
@@ -95,7 +96,7 @@ class LoginService:
         from x2server.messages.lobby import GROWTH_BASE, growth_base_values
         result["growthBase"] = GROWTH_BASE.encode(self.college.growth_base(player["id"])
                                                   if self.college else growth_base_values())
-        result["heroAll"] = encode_hero_all(player["snapshot"])
+        result["heroAll"] = encode_hero_all(player["snapshot"], season=self.economy.season if self.economy else None, player_id=player["id"])
         if self.equipment:
             from x2server.messages.lobby import LOBBY_SCHEMAS
             result["equipAll"] = LOBBY_SCHEMAS["L2C_EquipAll"].encode(self.equipment.values(player["id"]))
@@ -155,6 +156,21 @@ class LoginService:
             from .extra_activity import exchange_count, novice_sign_values
             extra_base = novice_sign_values(store.db, player["id"], stamp, player.get("created_at"))
             extra_base["ForeverExchangeCount"] = exchange_count(store.db, player["id"])
+        extra_base['BattlePassWeeklyActive'] = 0
+        if store is not None and len(store.db.execute("SELECT name FROM sqlite_master WHERE name IN ('season_state','season_calendar')").fetchall()) == 2:
+            from .task_calendar import task_period
+            row = store.db.execute('SELECT s.instance_id,s.state_json FROM season_state s JOIN season_calendar c ON s.instance_id=c.instance_id '
+                'WHERE s.player_id=? AND c.closed=0 AND c.start_sec<=? AND c.end_sec>? ORDER BY c.start_sec DESC LIMIT 1',
+                (player['id'], stamp, stamp)).fetchone()
+            if row:
+                state = json.loads(row[1])
+                if state.get('week') == task_period(2, stamp)[0]:
+                    if state.get('weekly_active_period') == state['week']:
+                        extra_base['BattlePassWeeklyActive'] = state.get('weekly_active', 0)
+                    else:
+                        prefix = f"season:{row[0]}:task:{state['week']}:"
+                        extra_base['BattlePassWeeklyActive'] = sum(json.loads(r[0]).get('1237999', 0) for r in store.db.execute(
+                            'SELECT rewards FROM economy_grants WHERE player_id=? AND substr(source,1,?)=?', (player['id'], len(prefix), prefix)))
         base = BASE_INFO.encode({"Id": player["id"], "NickName": snapshot["nickname"],
             "Level": snapshot["level"], "Show": show,
             "Gold": snapshot.get("gold", 0), "Crystal": snapshot.get("crystal", 0),
@@ -210,6 +226,11 @@ class LoginService:
             owned_relics = [item_id for item_id, quantity in store.db.execute(
                 "SELECT item_id,quantity FROM inventory WHERE player_id=? ORDER BY item_id",
                 (player["id"],)) if quantity > 0 and item_id in relic_ids]
+            # Collection unlocks are usable outside the season too.
+            if store.db.execute("SELECT 1 FROM sqlite_master WHERE name='season_state'").fetchone():
+                for row in store.db.execute('SELECT state_json FROM season_state WHERE player_id=?', (player['id'],)):
+                    owned_relics.extend(i for i in json.loads(row[0]).get('relics', []) if i in relic_ids)
+                owned_relics = sorted(set(owned_relics))
             values["RelicPack"] = [INT_PAIR.encode({"Key": index, "Value": item_id})
                                    for index, item_id in enumerate(owned_relics)]
             # f9 EquipPlan (兽主套装预设). 客户端 EquipModule 只在 PlayerData 里认识
@@ -242,6 +263,7 @@ class LoginService:
         choice_created = self.identity.ensure_hero_choice_mail(player["id"], now) if self.mail else False
         causality_created = self.identity.ensure_ultimate_causality_mail(player["id"], now) if self.mail else False
         supply_created = self.identity.ensure_revival_supply_mail(player["id"], now) if self.mail else False
+        extra_created = self.identity.ensure_causality_oct13_mail(player["id"], now) if self.mail else False
         daily_granted = self.gift_packages.settle_daily(player["id"]) if self.gift_packages else False
         # Same-process reconnect keeps the authenticated transport session supplied
         # by the client; a fresh login is required after identity-service restart.
@@ -249,7 +271,7 @@ class LoginService:
             context.session.session_id = secrets.token_urlsafe(24)
         LOGGER.info("authenticated reconnect player=%s", player["id"])
         pushes = self.economy.pushes(player["id"]) if daily_granted and self.economy else ()
-        if welcome_created or daily_created or choice_created or causality_created or supply_created:
+        if welcome_created or daily_created or choice_created or causality_created or supply_created or extra_created:
             pushes += (self.mail.list_message(player["id"]),)
         return OutboundMessage("L2C_ReConnect", {"code": 10, "id": player["id"],
             "serverTime": now}, pushes=pushes)
@@ -269,6 +291,9 @@ class LoginService:
                  STRING_PAIR.encode({"key": "EquipPageLimit", "val": "40"}),
                  STRING_PAIR.encode({"key": "EquipCellLimit", "val": "32"}),
                  STRING_PAIR.encode({"key": "Energy", "val": "600"})]
+        pairs += [STRING_PAIR.encode({'key': 'WishTaskList', 'val': '3'}),
+                  STRING_PAIR.encode({'key': 'WishTaskCanTake', 'val': '3'}),
+                  STRING_PAIR.encode({'key': 'HeroWishTaskLimit', 'val': '3'})]
         LOGGER.info("server configuration response prepared with %s-second power recovery",
                     recovery_seconds)
         return OutboundMessage("L2C_ServerTableConfig", {"code": 10, "keyVal": pairs})

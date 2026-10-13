@@ -81,3 +81,35 @@ def equipment(hero):
         'passiveID': suits[str(suit)]['passives'] if count >= 4 else []})
         for suit, count in counts.items() if count >= 2]
     return encoded, effects
+
+
+def chapter7_equipment(section, hero, equipped, artifact_bonus):
+    """User-approved attack compensation, only on this ephemeral story loadout.
+
+    Account gear and the shared canonical trial plates are never modified.
+    Fixed damage and dynamic client buffs can still differ from an exact damage
+    multiplier; the pre-buff attack subtotal is multiplied by ten.
+    """
+    if section != 2110607 or hero.get('trial_unit') != 1303:
+        return equipped
+    from x2server.messages.equipment import HERO_EQUIP, EQUIP_PARAM
+    from .battle_bonuses import GOD_EQUIP_ATTR, JEWEL_ATTR, LONG_PAIR
+    from .progression import hero_attributes
+    rows = [HERO_EQUIP.decode(raw) for raw in equipped]
+    params = [EQUIP_PARAM.decode(row['param']) for row in rows]
+    attack = hero_attributes({**hero, 'id': hero.get('battle_base_id', hero['id'])})['atk']
+    attack += sum(p.get(f'av{s}', 0) for p in params for s in range(1, 7)
+                  if p.get(f'at{s}') == 100)
+    bonus = GOD_EQUIP_ATTR.decode(artifact_bonus)
+    pairs = [LONG_PAIR.decode(raw) for raw in bonus.get('godAttr', [])]
+    for raw in bonus.get('jewelAttr', []):
+        jewel = JEWEL_ATTR.decode(raw)
+        if jewel.get('effect1'):
+            pairs.append(LONG_PAIR.decode(jewel['effect1']))
+    attack += sum(p.get('Value', 0) for p in pairs if p.get('Key') == 100)
+    target = next((i, s) for i, p in enumerate(params) for s in range(1, 7)
+                  if p.get(f'at{s}') == 100)
+    index, slot = target
+    params[index][f'av{slot}'] += 9 * attack
+    rows[index]['param'] = EQUIP_PARAM.encode(params[index])
+    return [HERO_EQUIP.encode(row) for row in rows]

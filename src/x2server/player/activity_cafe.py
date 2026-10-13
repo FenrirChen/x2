@@ -88,9 +88,13 @@ class ActivityCafe:
             return result
         if operation == 'CafeStoreUnLock':
             if not state['unlocked']:
-                if any(not self.owns_recipe(player, item)
-                       for item in config['CafeUnlockCon']):
-                    raise UnresolvedEconomy('food store unlock recipe not obtained')
+                # Native CheckStoreCanUnlock always reads the level-one
+                # repair condition, independently of the saved store level.
+                unlock = self.levels[store_type, 1]
+                missing = [item for item in unlock['CafeUnlockCon'] if not self.owns_recipe(player, item)]
+                if missing:
+                    raise UnresolvedEconomy(f'food store repair denied: store={store_type} '
+                        f'period={period.index} missing_recipes={missing}')
                 state['unlocked'] = True
             result['lockState'] = 1
         else:
@@ -148,9 +152,7 @@ class ActivityCafe:
             elif operation == 'CafeStoreLevelUp':
                 if (store_type, state['level'] + 1) not in self.levels or state['exp'] < config.get('Exp', 2**31):
                     raise UnresolvedEconomy('food level/experience requirement')
-                currency = next(i for i in self.e.items.values()
-                    if i.get('EffData') == [config['CafeStoreCurr']] and enum(i.get('ItemType')) == 16)['ItemID']
-                self.a.spend(player, period, currency, config['CafeStoreNum'], f'cafe-level:{token}')
+                # Both native cafe upgrade buttons check store XP only.
                 state['exp'] -= config['Exp']
                 state['level'] += 1
                 result.update(level=state['level'], exp=state['exp'])

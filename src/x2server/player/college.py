@@ -183,6 +183,8 @@ class CollegeStateRepository:
     def settle(self, state):
         """Apply each persisted target once; offline progress uses the same clock."""
         completed = []
+        from .college_washing import settle_washing_day
+        settle_washing_day(state, self.clock.now())
         from .college_alchemy import settle_elements, settle_energy
         # Recover with the OLD level up to each upgrade's completion instant,
         # then use the new speed/capacity. Offline upgrades cannot retroactively
@@ -267,6 +269,8 @@ class CollegeService:
         self.jobs = CollegeJobsService(college, economy) if college and economy else None
         from .college_pray import CollegePrayService
         self.prayers = CollegePrayService(college, economy, self.upgrades) if college and economy else None
+        from .college_washing import CollegeWashingService
+        self.washing = CollegeWashingService(college, economy, self.upgrades) if college and economy else None
 
     def handlers(self):
         return {"C2L_" + name: self.dispatch for name, _, _ in COLLEGE_IDS}
@@ -285,6 +289,8 @@ class CollegeService:
             return self.jobs.handle(context, packet, flow, request)
         if self.prayers and flow in self.prayers.FLOWS:
             return self.prayers.handle(context, packet, flow, request)
+        if self.washing and flow in self.washing.FLOWS:
+            return self.washing.handle(context, packet, flow, request)
         if flow == "SingleCustomerInfo":
             return self._single_customer(context.session.player_id, request)
         if flow == "AlchemyMainData":

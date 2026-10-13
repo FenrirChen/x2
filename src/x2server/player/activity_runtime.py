@@ -17,6 +17,19 @@ from .activity_exchange import ActivityExchange
 from .economy import UnresolvedEconomy
 
 
+# Request receipts protect mutations; a state query must reflect subsequent
+# repairs, settlements and calendar changes even when its transport is retried.
+LIVE_QUERIES = frozenset({
+    'QueryActivity', 'EntryidStatus', 'SceneGlobalParam', 'ActivityPassRecord',
+    'QueryActivityMissionRecord', 'ActivityMissionData', 'ActivityRewardPoolInfo',
+    'CafeStoreInfo', 'CafeStoreUpdate', 'QueryFoodMissionReward',
+    'LanternShowQueryData', 'ExtraDropData', 'AccountBuffData',
+    'ActivityReissueState', 'QueryShuangHanActivity', 'ActivityPreNoticInfo',
+    'ActivityDialogReciveInfo', 'QueryActivityTower', 'ActivityTowerPassive',
+    'ActivityShop',
+})
+
+
 class ActivityRuntime:
     def __init__(self, activity, mail):
         self.a, self.e, self.r, self.mail = activity, activity.economy, activity.rotation, mail
@@ -157,7 +170,7 @@ class ActivityRuntime:
             return self.a.query_activity(player)
         if op == 'EntryidStatus':
             return {'code': 10, 'entryidStatus': [MISSION_PAIR.encode({'Key': 19, 'Value': 1})]}
-        period = self.a.period(player)
+        period = self.a.rotation.at() if op == 'SceneGlobalParam' else self.a.period(player)
         if op == 'QueryShuangHanActivity':
             return self.a.frost_values(player)
         if op == 'PlayShuangHanPV':
@@ -167,12 +180,18 @@ class ActivityRuntime:
             # prerequisite section ID/count from ActivityDungeon. Preserve
             # actual progress; receiving this reply also ends the login wait.
             groups = {}
-            for sid in period.theme['section_ids']:
+            for sid in (period.theme['section_ids'] if period else []):
                 section_type = enum(self.a.sections[sid]['Type'])
                 groups.setdefault(section_type, []).append(encode('KeyValuePair_Int32_Int32',
                     {'Key': sid, 'Value': self.r.get(player, period, 'clear', sid, 0)}))
-            return {'code': 10, 'sceneSectionParam': [encode('SceneSectionParam',
-                {'sectionType': kind, 'sectionParam': rows}) for kind, rows in sorted(groups.items())]
+            if self.e.season.active(player):
+                groups[20] = []
+                season_param = self.e.season.scene_params(player)
+            else:
+                season_param = None
+            return {'code': 10, 'sceneSectionParam': ([encode('SceneSectionParam',
+                {'sectionType': kind, 'sectionParam': rows}) for kind, rows in sorted(groups.items()) if kind != 20]
+                + ([season_param] if season_param else []))
                 or [encode('SceneSectionParam', {'sectionType': 0,
                     'sectionParam': [encode('KeyValuePair_Int32_Int32', {})]})]}
         if op.startswith('CafeStore'):
@@ -321,10 +340,23 @@ class ActivityRuntime:
         response = name.replace('C2L_', 'L2C_', 1)
         response_schema = ACTIVITY_SCHEMAS.get(response) or LOBBY_SCHEMAS[response]
         token = hashlib.sha256(f'{context.session.session_id}:{packet.header.request_id}:{name}'.encode() + packet.body).hexdigest()
+        if name == 'C2L_ActivityShop' and req.get('activityType') == 4:
+            try:
+                with self.e.transaction():
+                    values = self.e.season.shop.activity_listing(player)
+                    response_schema.encode(values)
+            except UnresolvedEconomy as exc:
+                logging.getLogger('x2.season').info('season shop entry rejected player=%s reason=%s', player, exc)
+                values = {'code': 13, 'activityType': 4}
+            return OutboundMessage(response, values)
         try:
             from .activity_protocol import check_request
             check_request(self, player, name[4:], req)
             with self.e.transaction():
+                if name[4:] in LIVE_QUERIES:
+                    live = self.operate(player, name[4:], req, token)
+                    response_schema.encode(live)
+                    return OutboundMessage(response, live)
                 cached = self.a.store.db.execute('SELECT period,message,response FROM activity_receipts WHERE player_id=? AND request_key=?', (player, token)).fetchone()
                 if cached:
                     current = self.r.at()
@@ -335,11 +367,7 @@ class ActivityRuntime:
                     if cached['message'] != response:
                         raise UnresolvedEconomy('receipt mismatch')
                     values = response_schema.decode(cached['response'])
-                    # Queries describe live completion/calendar state, not the
-                    # old snapshot cached before a claim or review-calendar move.
-                    if name[4:] in {'QueryActivity', 'ActivityPreNoticInfo', 'ActivityDialogReciveInfo'}:
-                        values = self.operate(player, name[4:], req, token)
-                    elif name == 'C2L_ActivityPreNotic' and values.get('code') == 10:
+                    if name == 'C2L_ActivityPreNotic' and values.get('code') == 10:
                         fresh = self.a.pre_notice(player, req.get('activityType', 0))
                         values['lastPreNoticSec'] = fresh['lastPreNoticSec']
                     elif name == 'C2L_ActivityDialogue' and values.get('code') == 10:
@@ -429,6 +457,7 @@ class ActivityRuntime:
         while True:
             period = self.r.at()
             current = (period.index, self.a.yuexi_preview_end(period) > int(self.e.clock())) if period else None
+            current = (current, self.e.season.instance, self.e.season.active())
             for player in server.authenticated_player_ids():
                 self.deliver_daily_mail(player)
                 if previous != current:

@@ -1,0 +1,1282 @@
+{
+  "status": "DRAFT_NOT_ACTIVE",
+  "shopId": 898,
+  "rows": [
+    {
+      "goodsId": 1970101,
+      "groupId": 661,
+      "unlockExp": 0,
+      "itemId": 1237914,
+      "name": "许愿币",
+      "quantity": 1,
+      "price": 40,
+      "currency": 1237998,
+      "periodLimit": 2,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1970201,
+      "groupId": 662,
+      "unlockExp": 0,
+      "itemId": 1237900,
+      "name": "因果",
+      "quantity": 20,
+      "price": 8,
+      "currency": 1237998,
+      "periodLimit": 20,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1970301,
+      "groupId": 663,
+      "unlockExp": 0,
+      "itemId": 1237901,
+      "name": "金币",
+      "quantity": 10000,
+      "price": 10,
+      "currency": 1237998,
+      "periodLimit": 20,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1970401,
+      "groupId": 664,
+      "unlockExp": 0,
+      "itemId": 1237907,
+      "name": "神格经验",
+      "quantity": 1000,
+      "price": 4,
+      "currency": 1237998,
+      "periodLimit": 20,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1970501,
+      "groupId": 665,
+      "unlockExp": 0,
+      "itemId": 1237906,
+      "name": "兽魂",
+      "quantity": 500,
+      "price": 4,
+      "currency": 1237998,
+      "periodLimit": 20,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1970601,
+      "groupId": 666,
+      "unlockExp": 0,
+      "itemId": 1237801,
+      "name": "1★炼金尘",
+      "quantity": 10,
+      "price": 6,
+      "currency": 1237998,
+      "periodLimit": 20,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1970701,
+      "groupId": 667,
+      "unlockExp": 0,
+      "itemId": 1237802,
+      "name": "2★聚灵枝",
+      "quantity": 5,
+      "price": 2,
+      "currency": 1237998,
+      "periodLimit": 20,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1970801,
+      "groupId": 668,
+      "unlockExp": 0,
+      "itemId": 1237831,
+      "name": "加速卡：10分钟",
+      "quantity": 2,
+      "price": 8,
+      "currency": 1237998,
+      "periodLimit": 20,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1970901,
+      "groupId": 669,
+      "unlockExp": 0,
+      "itemId": 1238100,
+      "name": "1★灵魂石",
+      "quantity": 10,
+      "price": 30,
+      "currency": 1237998,
+      "periodLimit": 20,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1971001,
+      "groupId": 670,
+      "unlockExp": 0,
+      "itemId": 1203001,
+      "name": "迷你礼物盒",
+      "quantity": 1,
+      "price": 40,
+      "currency": 1237998,
+      "periodLimit": 10,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1971101,
+      "groupId": 671,
+      "unlockExp": 20000,
+      "itemId": 1237914,
+      "name": "许愿币",
+      "quantity": 1,
+      "price": 40,
+      "currency": 1237998,
+      "periodLimit": 3,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1971201,
+      "groupId": 672,
+      "unlockExp": 20000,
+      "itemId": 1237925,
+      "name": "纯晶石",
+      "quantity": 1,
+      "price": 16,
+      "currency": 1237998,
+      "periodLimit": 2,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1971301,
+      "groupId": 673,
+      "unlockExp": 20000,
+      "itemId": 1237900,
+      "name": "因果",
+      "quantity": 20,
+      "price": 8,
+      "currency": 1237998,
+      "periodLimit": 25,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1971401,
+      "groupId": 674,
+      "unlockExp": 20000,
+      "itemId": 1237901,
+      "name": "金币",
+      "quantity": 10000,
+      "price": 4,
+      "currency": 1237998,
+      "periodLimit": 25,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1971501,
+      "groupId": 675,
+      "unlockExp": 20000,
+      "itemId": 1237907,
+      "name": "神格经验",
+      "quantity": 1000,
+      "price": 12,
+      "currency": 1237998,
+      "periodLimit": 25,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1971601,
+      "groupId": 676,
+      "unlockExp": 20000,
+      "itemId": 1237803,
+      "name": "3★奇迹铁",
+      "quantity": 5,
+      "price": 10,
+      "currency": 1237998,
+      "periodLimit": 20,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1971701,
+      "groupId": 677,
+      "unlockExp": 20000,
+      "itemId": 1237832,
+      "name": "加速卡：1小时",
+      "quantity": 1,
+      "price": 10,
+      "currency": 1237998,
+      "periodLimit": 20,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1971801,
+      "groupId": 678,
+      "unlockExp": 20000,
+      "itemId": 1238101,
+      "name": "2★灵魂石",
+      "quantity": 10,
+      "price": 18,
+      "currency": 1237998,
+      "periodLimit": 20,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1971901,
+      "groupId": 679,
+      "unlockExp": 20000,
+      "itemId": 1238048,
+      "name": "铜粒子",
+      "quantity": 3,
+      "price": 600,
+      "currency": 1237998,
+      "periodLimit": 10,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1972001,
+      "groupId": 680,
+      "unlockExp": 20000,
+      "itemId": 1203002,
+      "name": "精致礼物盒",
+      "quantity": 1,
+      "price": 40,
+      "currency": 1237998,
+      "periodLimit": 10,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1972101,
+      "groupId": 681,
+      "unlockExp": 40000,
+      "itemId": 1237914,
+      "name": "许愿币",
+      "quantity": 1,
+      "price": 40,
+      "currency": 1237998,
+      "periodLimit": 3,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1972201,
+      "groupId": 682,
+      "unlockExp": 40000,
+      "itemId": 1237925,
+      "name": "纯晶石",
+      "quantity": 1,
+      "price": 24,
+      "currency": 1237998,
+      "periodLimit": 2,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1972301,
+      "groupId": 683,
+      "unlockExp": 40000,
+      "itemId": 1237900,
+      "name": "因果",
+      "quantity": 30,
+      "price": 10,
+      "currency": 1237998,
+      "periodLimit": 25,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1972401,
+      "groupId": 684,
+      "unlockExp": 40000,
+      "itemId": 1237901,
+      "name": "金币",
+      "quantity": 20000,
+      "price": 12,
+      "currency": 1237998,
+      "periodLimit": 25,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1972501,
+      "groupId": 685,
+      "unlockExp": 40000,
+      "itemId": 1237907,
+      "name": "神格经验",
+      "quantity": 2000,
+      "price": 36,
+      "currency": 1237998,
+      "periodLimit": 25,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1972601,
+      "groupId": 686,
+      "unlockExp": 40000,
+      "itemId": 1237804,
+      "name": "4★炼金土",
+      "quantity": 5,
+      "price": 14,
+      "currency": 1237998,
+      "periodLimit": 20,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1972701,
+      "groupId": 687,
+      "unlockExp": 40000,
+      "itemId": 1237833,
+      "name": "加速卡：2小时",
+      "quantity": 1,
+      "price": 10,
+      "currency": 1237998,
+      "periodLimit": 12,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1972801,
+      "groupId": 688,
+      "unlockExp": 40000,
+      "itemId": 1238102,
+      "name": "3★灵魂石",
+      "quantity": 10,
+      "price": 19,
+      "currency": 1237998,
+      "periodLimit": 20,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1972901,
+      "groupId": 689,
+      "unlockExp": 40000,
+      "itemId": 1238049,
+      "name": "银粒子",
+      "quantity": 3,
+      "price": 38,
+      "currency": 1237998,
+      "periodLimit": 10,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1973001,
+      "groupId": 690,
+      "unlockExp": 40000,
+      "itemId": 1202080,
+      "name": "神权拓本·空白",
+      "quantity": 1,
+      "price": 72,
+      "currency": 1237998,
+      "periodLimit": 10,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1973101,
+      "groupId": 691,
+      "unlockExp": 40000,
+      "itemId": 1237912,
+      "name": "月钻",
+      "quantity": 100,
+      "price": 600,
+      "currency": 1237998,
+      "periodLimit": 20,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1973201,
+      "groupId": 692,
+      "unlockExp": 40000,
+      "itemId": 1203002,
+      "name": "精致礼物盒",
+      "quantity": 1,
+      "price": 40,
+      "currency": 1237998,
+      "periodLimit": 10,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1973301,
+      "groupId": 693,
+      "unlockExp": 60000,
+      "itemId": 1237914,
+      "name": "许愿币",
+      "quantity": 1,
+      "price": 40,
+      "currency": 1237998,
+      "periodLimit": 4,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1973401,
+      "groupId": 694,
+      "unlockExp": 60000,
+      "itemId": 1237925,
+      "name": "纯晶石",
+      "quantity": 1,
+      "price": 32,
+      "currency": 1237998,
+      "periodLimit": 3,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1973501,
+      "groupId": 695,
+      "unlockExp": 60000,
+      "itemId": 1237900,
+      "name": "因果",
+      "quantity": 30,
+      "price": 10,
+      "currency": 1237998,
+      "periodLimit": 30,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1973601,
+      "groupId": 696,
+      "unlockExp": 60000,
+      "itemId": 1237901,
+      "name": "金币",
+      "quantity": 20000,
+      "price": 16,
+      "currency": 1237998,
+      "periodLimit": 30,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1973701,
+      "groupId": 697,
+      "unlockExp": 60000,
+      "itemId": 1237907,
+      "name": "神格经验",
+      "quantity": 2000,
+      "price": 9,
+      "currency": 1237998,
+      "periodLimit": 30,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1973801,
+      "groupId": 698,
+      "unlockExp": 60000,
+      "itemId": 1237805,
+      "name": "5★聚灵木",
+      "quantity": 3,
+      "price": 14,
+      "currency": 1237998,
+      "periodLimit": 20,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1973901,
+      "groupId": 699,
+      "unlockExp": 60000,
+      "itemId": 1237834,
+      "name": "加速卡：4小时",
+      "quantity": 1,
+      "price": 10,
+      "currency": 1237998,
+      "periodLimit": 10,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1974001,
+      "groupId": 700,
+      "unlockExp": 60000,
+      "itemId": 1238103,
+      "name": "4★灵魂石",
+      "quantity": 5,
+      "price": 33,
+      "currency": 1237998,
+      "periodLimit": 20,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1974101,
+      "groupId": 701,
+      "unlockExp": 60000,
+      "itemId": 1238050,
+      "name": "金粒子",
+      "quantity": 3,
+      "price": 81,
+      "currency": 1237998,
+      "periodLimit": 10,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1974201,
+      "groupId": 702,
+      "unlockExp": 60000,
+      "itemId": 1202080,
+      "name": "神权拓本·空白",
+      "quantity": 1,
+      "price": 72,
+      "currency": 1237998,
+      "periodLimit": 10,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1974301,
+      "groupId": 703,
+      "unlockExp": 60000,
+      "itemId": 1237912,
+      "name": "月钻",
+      "quantity": 100,
+      "price": 600,
+      "currency": 1237998,
+      "periodLimit": 20,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1974401,
+      "groupId": 704,
+      "unlockExp": 60000,
+      "itemId": 1203003,
+      "name": "惊喜礼物盒",
+      "quantity": 1,
+      "price": 40,
+      "currency": 1237998,
+      "periodLimit": 10,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1974501,
+      "groupId": 705,
+      "unlockExp": 80000,
+      "itemId": 1237914,
+      "name": "许愿币",
+      "quantity": 1,
+      "price": 40,
+      "currency": 1237998,
+      "periodLimit": 5,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1974601,
+      "groupId": 706,
+      "unlockExp": 80000,
+      "itemId": 1237925,
+      "name": "纯晶石",
+      "quantity": 1,
+      "price": 40,
+      "currency": 1237998,
+      "periodLimit": 3,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1974701,
+      "groupId": 707,
+      "unlockExp": 80000,
+      "itemId": 1237900,
+      "name": "因果",
+      "quantity": 60,
+      "price": 10,
+      "currency": 1237998,
+      "periodLimit": 30,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1974801,
+      "groupId": 708,
+      "unlockExp": 80000,
+      "itemId": 1237901,
+      "name": "金币",
+      "quantity": 20000,
+      "price": 20,
+      "currency": 1237998,
+      "periodLimit": 30,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1974901,
+      "groupId": 709,
+      "unlockExp": 80000,
+      "itemId": 1237907,
+      "name": "神格经验",
+      "quantity": 2000,
+      "price": 64,
+      "currency": 1237998,
+      "periodLimit": 30,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1975001,
+      "groupId": 710,
+      "unlockExp": 80000,
+      "itemId": 1237806,
+      "name": "6★奇迹合金",
+      "quantity": 2,
+      "price": 28,
+      "currency": 1237998,
+      "periodLimit": 12,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1975101,
+      "groupId": 711,
+      "unlockExp": 80000,
+      "itemId": 1237835,
+      "name": "加速卡：8小时",
+      "quantity": 1,
+      "price": 33,
+      "currency": 1237998,
+      "periodLimit": 8,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1975201,
+      "groupId": 712,
+      "unlockExp": 80000,
+      "itemId": 1238104,
+      "name": "5★灵魂石",
+      "quantity": 5,
+      "price": 115,
+      "currency": 1237998,
+      "periodLimit": 20,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1975301,
+      "groupId": 713,
+      "unlockExp": 80000,
+      "itemId": 1238051,
+      "name": "水晶粒子",
+      "quantity": 2,
+      "price": 40,
+      "currency": 1237998,
+      "periodLimit": 10,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1975401,
+      "groupId": 714,
+      "unlockExp": 80000,
+      "itemId": 1202080,
+      "name": "神权拓本·空白",
+      "quantity": 1,
+      "price": 600,
+      "currency": 1237998,
+      "periodLimit": 10,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1975501,
+      "groupId": 715,
+      "unlockExp": 80000,
+      "itemId": 1203000,
+      "name": "3★神格随机礼包",
+      "quantity": 1,
+      "price": 20,
+      "currency": 1237998,
+      "periodLimit": 1,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1975601,
+      "groupId": 716,
+      "unlockExp": 80000,
+      "itemId": 1203003,
+      "name": "惊喜礼物盒",
+      "quantity": 1,
+      "price": 20,
+      "currency": 1237998,
+      "periodLimit": 10,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1975701,
+      "groupId": 717,
+      "unlockExp": 80000,
+      "itemId": 1202085,
+      "name": "疾时之沙",
+      "quantity": 1,
+      "price": 20,
+      "currency": 1237998,
+      "periodLimit": 20,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    },
+    {
+      "goodsId": 1975801,
+      "groupId": 718,
+      "unlockExp": 80000,
+      "itemId": 1202901,
+      "name": "跃迁通行证",
+      "quantity": 1,
+      "price": 20,
+      "currency": 1237998,
+      "periodLimit": 5,
+      "originalEvidence": [
+        "goodsId",
+        "groupId",
+        "unlockExp",
+        "price"
+      ],
+      "proposedFields": [
+        "itemId",
+        "quantity",
+        "periodLimit"
+      ]
+    }
+  ]
+}

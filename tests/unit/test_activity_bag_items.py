@@ -1,3 +1,4 @@
+from tests.activity_calendar_helpers import activity_start, next_activity_cycle
 """Exercise bag operations against activity progress and balances, not UI mocks."""
 from collections import Counter
 
@@ -11,7 +12,7 @@ from x2server.player.activity_rotation import ActivityRotation
 
 
 def setup_activity(economy, slot):
-    now = [ActivityRotation.ANCHOR + slot * ActivityRotation.SECONDS + 3600]
+    now = [activity_start(slot) + 3600]
     economy.clock = lambda: now[0]
     activity = ActivityService(economy)
     economy.activity = activity
@@ -39,7 +40,7 @@ def test_ancient_box_currency_reaches_task_and_stat_once_then_resets_next_cycle(
     use(economy, ctx, 1203027, count=2)
     assert a.rotation.get(1, period, 'tasks', tid)['progress'] == 100
     assert a.rotation.get(1, period, 'obtained-item', 1237981) == 100
-    now[0] += 35 * 86400
+    now[0] = next_activity_cycle(now[0])
     new = a.period(1)
     a.task_values(1, 9)
     assert a.rotation.get(1, new, 'tasks', tid)['progress'] == 0
@@ -140,7 +141,7 @@ def test_old_successful_box_currency_is_credited_only_to_its_original_period(env
     assert a.rotation.get(1, p, 'tasks', task['ChallengeTaskID'])['progress'] == 50
     assert a.rotation.get(1, p, 'obtained-item', 1237981) == 50
     assert store.db.execute('SELECT quantity FROM inventory WHERE item_id=1237981').fetchone()[0] == balance
-    now[0] += 35 * 86400
+    now[0] = next_activity_cycle(now[0])
     new = a.period(1)
     a.task_values(1,9)
     assert a.rotation.get(1, new, 'tasks', task['ChallengeTaskID'])['progress'] == 0

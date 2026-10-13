@@ -34,7 +34,7 @@ class EconomyService:
     # Item.EffData -> BaseInfoProto; only supported currency destinations.
     CURRENCIES = {1237901: "gold", 1237902: "crystal", 1237906: "equip_exp", 1237907: "hero_exp",
                   1237908: "exp", 1237910: "daily_activity", 1237911: "week_activity"}
-    STACKABLE_REWARD_TYPES = frozenset((5, 12, 13, 14, 17, 18, 20, 22, 23, 24, 25, 26, 33, 34, 40, 41))
+    STACKABLE_REWARD_TYPES = frozenset((5, 12, 13, 14, 17, 18, 20, 22, 23, 24, 25, 26, 33, 34, 40, 41, 42, 43))
     ACTIVITY_FIELDS = {1: "daily_activity", 2: "week_activity"}
     MAP_TYPE_CHALLENGE = 2  # 现世复刻: the difficulty stages of a chapter
     # TaskCondition CompleteType enums that server events can authoritatively fire.
@@ -260,6 +260,10 @@ class EconomyService:
         # 自选三星 (100005)。只依赖 store, 自建领取状态表并真发货 (见 player/extra_activity.py)。
         from .extra_activity import ExtraActivityService
         self.extra_activity = ExtraActivityService(self)
+        from .season import SeasonService
+        self.season = SeasonService(self)
+        from .terminal_wish import TerminalWishService
+        self.terminal_wish = TerminalWishService(self)
         # 降临纪念 / 累计登录 (100004): 按创号时刻判天数门槛并真发货 (见 player/total_login.py)。
         from .total_login import TotalLoginService
         self.total_login = TotalLoginService(self)
@@ -469,12 +473,16 @@ class EconomyService:
             return {int(i): n for i, n in json.loads(existing[0]).items()}
         if self.auto_used_items and any(item in self.auto_used_items for item in rewards):
             rewards = self.expand_auto_used(rewards)
+        if getattr(self, "season", None):
+            rewards = self.season.accept_reward(player_id, source, rewards)
         player = self.store.get(player_id)
         snapshot = player["snapshot"]
         for item, count in rewards.items():
             if type(count) is not int or count <= 0 or item not in self.items:
                 raise UnresolvedEconomy("invalid reward")
             kind = self.items[item].get("ItemType", {}).get("value")
+            if self.season.active(player_id) and item in (self.season.EXP_ITEM, self.season.POINT_ITEM, self.season.ACTIVE_ITEM):
+                continue  # Already consumed by the period-scoped season ledger.
             if kind == 20:
                 snapshot.setdefault("medal_earned", {}).setdefault(str(item), int(self.clock()))
             if item in self.CURRENCIES:
@@ -868,7 +876,7 @@ class EconomyService:
         if reward.get("rewardEquip"):
             extra.append(OutboundMessage("L2C_EquipUpdate", {"code": 10, "equip": reward["rewardEquip"]}))
         if reward.get("transformHero"):
-            extra.append(OutboundMessage("L2C_HeroUpdate", {"code": 10, "heros": [encode_hero_data(h) for h in self.store.get(player_id)["snapshot"]["heroes"]]}))
+            extra.append(OutboundMessage("L2C_HeroUpdate", {"code": 10, "heros": [encode_hero_data(h, season=self.season, player_id=player_id) for h in self.store.get(player_id)["snapshot"]["heroes"]]}))
         return OutboundMessage("L2C_PickTreasureBox", result, pushes=self.pushes(player_id) + tuple(extra))
 
     def challenge_chain(self, chapter) -> list:
@@ -974,6 +982,10 @@ class EconomyService:
             self._event(player_id, key, condition_type, value, amount, value2)
 
     def _event(self, player_id, key, condition_type, value, amount, value2=0):
+        if getattr(self, 'terminal_wish', None):
+            self.terminal_wish.event(player_id, key, condition_type, value, amount, value2)
+        if getattr(self, "season", None):
+            self.season.event(player_id, key, condition_type, value, amount, value2)
         activity = getattr(self, 'activity', None)
         if activity:
             period = None
@@ -1022,7 +1034,8 @@ class EconomyService:
         if not task or task["RefreshCycle"]["value"] != kind or task["AcceptLevel"] > self.store.get(player_id)["snapshot"]["level"]:
             return result
         try:
-            rewards = self.gifts([task["GiftGroup"]])
+            group = self.season.daily_gift(player_id, task_id, task["GiftGroup"])
+            rewards = self.gifts([group])
             with self.transaction():
                 row = self.store.db.execute("SELECT progress,claimed FROM economy_tasks WHERE player_id=? AND task_id=?", (player_id, task_id)).fetchone()
                 if not row or row[0] < self.catalog["task_conditions"][str(task_id)]["CompleteNum"]:
@@ -1091,7 +1104,8 @@ class EconomyService:
                         or item.get("num", 0) <= 0):
                     continue
                 inserted = self.store.db.execute("""INSERT OR IGNORE INTO inventory
-                    (player_id,item_id,quantity) VALUES (?,?,1)""", (player_id, item_id))
+                    (player_id,item_id,quantity) VALUES (?,?,1)
+                    ON CONFLICT(player_id,item_id) DO UPDATE SET quantity=1 WHERE inventory.quantity<1""", (player_id, item_id))
                 if inserted.rowcount:
                     sources["RELIC_COLLECTION"].append({"item_id": item_id,
                         "source": "checkout mazeItems"})
@@ -1101,6 +1115,8 @@ class EconomyService:
             # USER_DECISION: reset the eight named activities each period.
             # Only a run explicitly bound by ActivityRotation can override this
             # gate. Normal stages keep the original lifetime first-clear rule.
+            if section_type == 20 and self.season.active(player_id):
+                first = not self.store.db.execute('SELECT 1 FROM season_runs WHERE player_id=? AND instance_id=? AND section_id=? AND success=1', (player_id, self.season.instance, section)).fetchone()
             if activity_period:
                 first = not activity.rotation.get(player_id, activity_period, 'clear', section, 0)
             for source, groups in (("NORMAL_CLEAR_FIXED", profile["normal_reward"]),
@@ -1189,6 +1205,7 @@ class EconomyService:
                 [{"star": spec["quality"], "item_id": spec["item_id"]} for spec in equipment_specs for _ in range(spec["quantity"])])
             self.dp.refresh(player_id, config["ChapterID"])
             self._event(player_id, f"clear:{run_uuid}", 3, section, 1)
+            self.terminal_wish.battle(player_id, run_uuid, section)
             spent = self.store.db.execute("SELECT amount FROM battle_costs WHERE uuid=? AND player_id=?",
                 (run_uuid, player_id)).fetchone()
             if spent and spent[0]:
@@ -1255,6 +1272,8 @@ class EconomyService:
 
     def mark_section_cleared(self, player_id, section, run_uuid, section_type):
         """Shared clear record with a type-specific frontier policy."""
+        if section_type == 20:
+            return  # Season progression lives in its instance, never the lifetime clear table.
         self.store.db.execute("INSERT OR IGNORE INTO economy_clears VALUES (?,?,?)", (player_id, section, run_uuid))
         if section_type == 0:
             snapshot = self.store.get(player_id)["snapshot"]
@@ -1426,7 +1445,8 @@ class EconomyService:
             *((OutboundMessage("L2C_ItemRemove", {"ids": removed}),) if removed else ()),
             *(OutboundMessage("L2C_TaskUpdate", {"type": k, "taskList": self.task_values(player_id, k)["taskList"]}) for k in (1, 2)),
             OutboundMessage("L2C_TaskUpdate", {"type": 3, "taskList": self.challenge_values(player_id)["taskList"]}),
-            self.achievements.update(player_id))
+            self.achievements.update(player_id), *self.season.pushes(player_id),
+            *self.terminal_wish.pushes(player_id))
 
     # ---- 首充 ------------------------------------------------------------
     #
@@ -1476,7 +1496,7 @@ class EconomyService:
     def handlers(self):
         from .bag_items import BagItemService
         from .medals import MedalService
-        handlers = {**self.world_boss.handlers(), **self.endless.handlers(), **self.element_compose.handlers(), **MedalService(self).handlers(), **BagItemService(self.store, self).handlers(), **self.achievements.handlers(),
+        handlers = {**self.season.handlers(), **self.world_boss.handlers(), **self.endless.handlers(), **self.element_compose.handlers(), **MedalService(self).handlers(), **BagItemService(self.store, self).handlers(), **self.achievements.handlers(),
                 "C2L_FetchMobilityPower": self.fetch_mobility_power,
                 **{name: self.handle for name in ("C2L_ItemAll", "C2L_ItemOpt", "C2L_ShopGoods", "C2L_RefreshShop", "C2L_BuyGoods",
             "C2L_QueryGoodsInfo", "C2L_GameTask", "C2L_DailyAndWeekTask", "C2L_FinishGameTask",
@@ -1486,6 +1506,7 @@ class EconomyService:
         # 降临纪念 (TotalLoginService) 各答自己的请求。
         handlers.update(self.extra_activity.handlers())
         handlers.update(self.total_login.handlers())
+        handlers.update(self.terminal_wish.handlers())
         return handlers
 
     async def fetch_mobility_power(self, context, packet):
@@ -1535,6 +1556,8 @@ class EconomyService:
             logging.getLogger("x2.economy").info(
                 "item opt player=%s item=%s opt=%s count=%s", player_id,
                 item_id, request.get("opt", 0), request.get("count", 0))
+            if item_id in (self.season.EXP_ITEM, self.season.POINT_ITEM) and self.season.active(player_id):
+                return self.season.use_item(context, packet, request)
             if item_id in self.CAUSALITY_CARDS:
                 return self.use_causality_card(context, packet, request)
             return self.use_bag_item(context, packet, request)
@@ -1549,6 +1572,10 @@ class EconomyService:
             return self.unlock_story(player_id, request)
         if name in ("C2L_GameTask", "C2L_DailyAndWeekTask"):
             kind = request.get("type", 0)
+            if kind == 6:
+                return self.terminal_wish.query(context, packet, request)
+            if kind == 15:
+                return OutboundMessage("L2C_GameTask", self.season.task_values(player_id))
             # Only the separately verified activity task types are routed here;
             # ordinary daily, weekly, challenge and chapter tasks stay below.
             if kind in (9, 20) and getattr(self, 'activity', None):
@@ -1571,26 +1598,47 @@ class EconomyService:
                 else self.challenge_values(player_id) if kind == 3
                 else {"code": 10, "type": kind, "chapterId": request.get("chapterId", 0)})
         if name in ("C2L_FinishGameTask", "C2L_FinishGameTaskAsync"):
+            favor_changes = []
             requests = [FINISH_REQUEST.decode(b) for b in request.get("data", [])] if name == "C2L_FinishGameTask" else [request]
             if len(requests) > 40:
                 raise ProtocolError("too many task claims")
             results = [FINISH_RESULT.encode(
+                self.terminal_wish.claim(player_id, r.get('taskId', 0), favor_changes) if r.get('type', 0) == 6 and not r.get('activityId') else
                 self.activity.claim_task(player_id, r.get('taskId', 0), r.get('type', 0), r.get('activityId', 0)) if r.get('type', 0) in (9, 20) and getattr(self, 'activity', None) else
+                self.season.claim_task_response(player_id, r.get("taskId", 0), context.session.session_id + ":" + str(packet.header.request_id) + ":" + hashlib.sha256(packet.body).hexdigest() + ":" + str(r.get("taskId", 0))) if r.get("type", 0) == 15 else
                 self.endless.claim(player_id, r.get("taskId", 0), context.session.session_id + ":" + str(packet.header.request_id)) if r.get("type", 0) == 12 else
                 self.claim_challenge(player_id, r.get("taskId", 0)) if r.get("type", 0) == 3 else
                 self.claim(player_id, r.get("taskId", 0), r.get("type", 0))
                 if not r.get("activityId") else {"code": 13, "taskId": r.get("taskId", 0), "type": r.get("type", 0)}) for r in requests]
-            return OutboundMessage(response_name, {"data": results if name == "C2L_FinishGameTask" else results[0]}, pushes=self.pushes(player_id))
+            return OutboundMessage(response_name, {"data": results if name == "C2L_FinishGameTask" else results[0]},
+                pushes=((OutboundMessage('L2C_FavorChangeInfo', {'data': favor_changes}),) if favor_changes else ()) + self.pushes(player_id))
         if name == "C2L_ShopGoods":
             shop = request.get("shopId", 0)
             # Client 2.4 dereferences a null goods list on success. With no fully
             # confirmed goods, reject the query before that success-only path.
             return OutboundMessage(response_name, {"code": 13, "shopId": shop})
         if name == "C2L_PickTreasureBox":
+            if request.get("type", 0) == self.season.TASK_KIND:
+                return self.season.claim_weekly_box(context, packet, request)
             if request.get('type', 0) in (9, 20) and getattr(self, 'activity', None):
                 try:
-                    rewards = self.activity.claim_task_box(player_id, request.get('activityId', 0), request.get('boxId', -1))
-                    return OutboundMessage(response_name, {'code': 10, **request, 'rewardData': self.reward_bytes(rewards)}, before_response=self.pushes(player_id))
+                    token = hashlib.sha256(f'{context.session.session_id}:{packet.header.request_id}:{name}'.encode()
+                                           + packet.body).hexdigest()
+                    with self.transaction():
+                        period = self.activity.period(player_id)
+                        cached = self.store.db.execute('SELECT period,message,response FROM activity_receipts '
+                            'WHERE player_id=? AND request_key=?', (player_id, token)).fetchone()
+                        if cached:
+                            if cached['period'] != period.index or cached['message'] != response_name:
+                                raise UnresolvedEconomy('activity box receipt belongs to another period')
+                            values = ECONOMY_SCHEMAS[response_name].decode(cached['response'])
+                        else:
+                            rewards = self.activity.claim_task_box(player_id, request.get('activityId', 0),
+                                request.get('boxId', -1), request['type'])
+                            values = {'code': 10, **request, 'rewardData': self.reward_bytes(rewards)}
+                            self.store.db.execute('INSERT INTO activity_receipts VALUES (?,?,?,?,?)',
+                                (player_id, token, period.index, response_name, ECONOMY_SCHEMAS[response_name].encode(values)))
+                    return OutboundMessage(response_name, values, before_response=self.pushes(player_id))
                 except UnresolvedEconomy:
                     return OutboundMessage(response_name, {'code': 13, **request})
             logging.getLogger("x2.economy").info(
@@ -1629,8 +1677,10 @@ class EconomyService:
                 row = self.store.db.execute("SELECT response FROM item_opt_receipts WHERE request_key=? AND player_id=?",
                                             (key, player_id)).fetchone()
                 if row:
-                    from .bag_items import bag_pushes
-                    return OutboundMessage("L2C_ItemOpt", ECONOMY_SCHEMAS["L2C_ItemOpt"].decode(row[0]),
+                    from .bag_items import bag_pushes, bag_reward_view
+                    values = ECONOMY_SCHEMAS["L2C_ItemOpt"].decode(row[0])
+                    values['rewardData'] = bag_reward_view(values.get('rewardData', b''))
+                    return OutboundMessage("L2C_ItemOpt", values,
                                            before_response=bag_pushes(self, player_id))
                 charged = self.store.db.execute("UPDATE inventory SET quantity=quantity-? "
                     "WHERE player_id=? AND item_id=? AND quantity>=?", (count, player_id, item_id, count))

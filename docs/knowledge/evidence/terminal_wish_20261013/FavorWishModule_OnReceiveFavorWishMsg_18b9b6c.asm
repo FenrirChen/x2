@@ -1,0 +1,107 @@
+; FavorWishModule$$OnReceiveFavorWishMsg
+; RVA [0x18b9b6c,0x18b9d0c), inferred from adjacent unique ScriptMethod addresses
+; byte SHA256 c6b922fd38ee5ec2733149ca5c0fba5e7045eeebafb0c19c44f2fdbc978dbaaa
+0018b9b6c: stp      x24, x23, [sp, #-0x40]! ;
+0018b9b70: stp      x22, x21, [sp, #0x10] ;
+0018b9b74: stp      x20, x19, [sp, #0x20] ;
+0018b9b78: stp      x29, x30, [sp, #0x30] ;
+0018b9b7c: add      x29, sp, #0x30 ;
+0018b9b80: adrp     x21, #0x5577000 ;
+0018b9b84: ldrb     w8, [x21, #0x908] ;
+0018b9b88: mov      x20, x1 ;
+0018b9b8c: mov      x19, x0 ;
+0018b9b90: tbnz     w8, #0, #0x18b9bac ;
+0018b9b94: adrp     x8, #0x5208000 ;
+0018b9b98: ldr      x8, [x8, #0xfe0] ;
+0018b9b9c: ldr      w0, [x8] ;
+0018b9ba0: bl       #0x3f2aed0 ;
+0018b9ba4: mov      w8, #1 ;
+0018b9ba8: strb     w8, [x21, #0x908] ;
+0018b9bac: ldr      x21, [x19, #0x18] ;
+0018b9bb0: cbnz     x21, #0x18b9bb8 ;
+0018b9bb4: bl       #0x3f564f0 ;
+0018b9bb8: adrp     x8, #0x52b9000 ;
+0018b9bbc: ldr      x8, [x8, #0xa8] ;
+0018b9bc0: mov      x0, x21 ;
+0018b9bc4: ldr      x1, [x8] ;
+0018b9bc8: bl       #0x3d4fb64 ; System.Collections.Generic.List<FutureErrorCallback>$$Clear
+0018b9bcc: cbnz     x20, #0x18b9bd4 ;
+0018b9bd0: bl       #0x3f564f0 ;
+0018b9bd4: ldr      x20, [x20, #0x18] ;
+0018b9bd8: cbz      x20, #0x18b9cb8 ;
+0018b9bdc: ldr      x21, [x19, #0x18] ;
+0018b9be0: cbnz     x21, #0x18b9be8 ;
+0018b9be4: bl       #0x3f564f0 ;
+0018b9be8: adrp     x8, #0x5244000 ;
+0018b9bec: ldr      x8, [x8, #0xd70] ;
+0018b9bf0: mov      x0, x21 ;
+0018b9bf4: mov      x1, x20 ;
+0018b9bf8: ldr      x2, [x8] ;
+0018b9bfc: bl       #0x3d4fa44 ; System.Collections.Generic.List<L2C_Goods>$$AddRange
+0018b9c00: adrp     x24, #0x51cc000 ;
+0018b9c04: ldr      x24, [x24, #0x1b0] ;
+0018b9c08: ldr      x20, [x19, #0x18] ;
+0018b9c0c: ldr      x0, [x24] ;
+0018b9c10: ldrb     w8, [x0, #0x10a] ;
+0018b9c14: tbz      w8, #0, #0x18b9c28 ;
+0018b9c18: ldr      w8, [x0, #0xbc] ;
+0018b9c1c: cbnz     w8, #0x18b9c28 ;
+0018b9c20: bl       #0x3f3f378 ;
+0018b9c24: ldr      x0, [x24] ;
+0018b9c28: ldr      x8, [x0, #0xa0] ;
+0018b9c2c: ldr      x21, [x8, #8] ;
+0018b9c30: cbnz     x21, #0x18b9c98 ;
+0018b9c34: ldrb     w9, [x0, #0x10a] ;
+0018b9c38: tbz      w9, #0, #0x18b9c50 ;
+0018b9c3c: ldr      w9, [x0, #0xbc] ;
+0018b9c40: cbnz     w9, #0x18b9c50 ;
+0018b9c44: bl       #0x3f3f378 ;
+0018b9c48: ldr      x8, [x24] ;
+0018b9c4c: ldr      x8, [x8, #0xa0] ;
+0018b9c50: ldr      x22, [x8] ;
+0018b9c54: adrp     x8, #0x52a0000 ;
+0018b9c58: adrp     x9, #0x5276000 ;
+0018b9c5c: ldr      x8, [x8, #0x90] ;
+0018b9c60: ldr      x9, [x9, #0x110] ;
+0018b9c64: ldr      x23, [x8] ;
+0018b9c68: ldr      x0, [x9] ;
+0018b9c6c: bl       #0x3f6452c ;
+0018b9c70: adrp     x8, #0x52aa000 ;
+0018b9c74: ldr      x8, [x8, #0xa48] ;
+0018b9c78: mov      x1, x22 ;
+0018b9c7c: mov      x2, x23 ;
+0018b9c80: mov      x21, x0 ;
+0018b9c84: ldr      x3, [x8] ;
+0018b9c88: bl       #0x2ded1b4 ; System.Comparison<TowerDefenseModuleNeo.TowerItemInfo>$$.ctor
+0018b9c8c: ldr      x8, [x24] ;
+0018b9c90: ldr      x8, [x8, #0xa0] ;
+0018b9c94: str      x21, [x8, #8] ;
+0018b9c98: cbnz     x20, #0x18b9ca0 ;
+0018b9c9c: bl       #0x3f564f0 ;
+0018b9ca0: adrp     x8, #0x52de000 ;
+0018b9ca4: ldr      x8, [x8, #0xba8] ;
+0018b9ca8: mov      x0, x20 ;
+0018b9cac: mov      x1, x21 ;
+0018b9cb0: ldr      x2, [x8] ;
+0018b9cb4: bl       #0x3d516a0 ; System.Collections.Generic.List<TowerDefenseModuleNeo.TowerItemInfo>$$Sort
+0018b9cb8: adrp     x8, #0x5210000 ;
+0018b9cbc: ldr      x8, [x8, #0xf98] ;
+0018b9cc0: ldr      x0, [x8] ;
+0018b9cc4: ldrb     w8, [x0, #0x10a] ;
+0018b9cc8: tbz      w8, #0, #0x18b9cd8 ;
+0018b9ccc: ldr      w8, [x0, #0xbc] ;
+0018b9cd0: cbnz     w8, #0x18b9cd8 ;
+0018b9cd4: bl       #0x3f3f378 ;
+0018b9cd8: adrp     x8, #0x52a7000 ;
+0018b9cdc: ldr      x8, [x8, #0xd00] ;
+0018b9ce0: mov      x0, xzr ;
+0018b9ce4: mov      w1, #0xda ;
+0018b9ce8: mov      w2, #6 ;
+0018b9cec: ldr      x3, [x8] ;
+0018b9cf0: bl       #0x221c4e4 ; CommonX2.X2EventManager$$FireEvent<int>
+0018b9cf4: mov      x0, x19 ;
+0018b9cf8: ldp      x29, x30, [sp, #0x30] ;
+0018b9cfc: ldp      x20, x19, [sp, #0x20] ;
+0018b9d00: ldp      x22, x21, [sp, #0x10] ;
+0018b9d04: ldp      x24, x23, [sp], #0x40 ;
+0018b9d08: b        #0x18b9d0c ; FavorWishModule$$CheckBadge

@@ -116,6 +116,9 @@ from x2server.messages.activity import ACTIVITY_SCHEMAS
 CORE_SCHEMAS.update({name: schema for name, schema in ACTIVITY_SCHEMAS.items()
                      if name.startswith(('C2L_', 'L2C_'))})
 CORE_SCHEMAS.update(COLLEGE_SCHEMAS)
+from x2server.messages.season import SEASON_SCHEMAS
+CORE_SCHEMAS.update({name: schema for name, schema in SEASON_SCHEMAS.items()
+                     if name.startswith(("C2L_", "L2C_"))})
 CORE_SCHEMAS.update(ACHIEVEMENT_SCHEMAS)
 CORE_SCHEMAS.update(MEDAL_SCHEMAS)
 CORE_SCHEMAS.update(WORLD_BOSS_SCHEMAS)
@@ -181,6 +184,7 @@ BASE_INFO = ProtoSchema("BaseInfoProto", (
     ProtoField(59, "RMBCrystal", FieldKind.INT32),
     ProtoField(60, "JewelCoin", FieldKind.INT32),
     ProtoField(66, "FragmentMoney", FieldKind.INT32),
+    ProtoField(67, "BattlePassWeeklyActive", FieldKind.INT32),
     # 活动中心写在 BaseInfoProto 上的计数 (客户端自己的字段号):
     #   53 NoviceSignInCount / 54 NoviceLastSignInTime / 55 NoviceSignInStartTime
     #      —— 献祭福利 (限时签到 100003)。页签要求 55 非 0 才可点, 53 是已签到天数,
@@ -268,6 +272,8 @@ HERO_GOD_EQUIP = ProtoSchema("HeroGodEquip", (
     ProtoField(3, "star", FieldKind.INT32),
     ProtoField(4, "jewel", FieldKind.MESSAGE, repeated=True),
     ProtoField(5, "godEquipAttr", FieldKind.MESSAGE),
+    ProtoField(6, "artifactProperties", FieldKind.MESSAGE, repeated=True),
+    ProtoField(7, "lastRandomartifactProperty", FieldKind.MESSAGE, repeated=True),
     ProtoField(8, "godSlotLockInfo", FieldKind.MESSAGE, repeated=True),
 ))
 HERO_ALL = ProtoSchema("L2C_HeroAll", (ProtoField(1, "heros", FieldKind.MESSAGE, repeated=True),))

@@ -174,6 +174,10 @@ class EquipmentService:
                 rewards = self.economy._grant(player_id, "equip_reclaim:" + ",".join(map(str, sorted(ids))), rewards)
                 self.store.db.execute(f"DELETE FROM equipment_main_growth WHERE player_id=? AND equip_id IN ({placeholders})",
                                       (player_id, *ids))
+                for table in ('college_washing_pending', 'college_washing_receipts'):
+                    if self.store.db.execute('SELECT 1 FROM sqlite_master WHERE name=?', (table,)).fetchone():
+                        self.store.db.execute(f'DELETE FROM {table} WHERE player_id=? AND equip_id IN ({placeholders})',
+                                              (player_id, *ids))
         except UnresolvedEconomy:
             return reject
         removed = OutboundMessage("L2C_EquipRemove", {"ids": ids})
@@ -306,7 +310,7 @@ class EquipmentService:
         from .hero import encode_hero_data
         values["code"] = 10
         pushes = (OutboundMessage("L2C_HeroUpdate", {"code": 10,
-                     "heros": [encode_hero_data(h) for h in snapshot["heroes"]]}),
+                     "heros": [encode_hero_data(h, season=self.economy.season if self.economy else None, player_id=player_id) for h in snapshot["heroes"]]}),
                   OutboundMessage("L2C_EquipUpdate", {"code": 10,
                      "equip": self.values(player_id)["equip"]}))
         # The success callback immediately reads hero wearing state.

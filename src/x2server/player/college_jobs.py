@@ -114,6 +114,7 @@ class CollegeJobsService:
         # Count once on successful collection, never on start or cancellation.
         self.economy._event(player_id, 'college-train:' + job['job_id'],
             self.economy.TASK_EVENT_HERO_TRAIN, 0, 1)
+        self.economy._event(player_id, 'college-train:' + job['job_id'], 69, hero['id'], 1)
         return dict(result, code=10, heroId=hero['id'], heroLevel=hero['level'],
                     heroExp=hero['exp'], gainExp=job['gain_exp'])
 
@@ -239,6 +240,8 @@ class CollegeJobsService:
             {i: n for i, n in rewards.items() if i not in element_items and n > 0})
         self.economy._event(player_id, 'college-explore:' + job['job_id'],
             self.economy.TASK_EVENT_HERO_ADVENTURE, 0, 1)
+        for hid in job['heroList']:
+            self.economy._event(player_id, 'college-explore:' + job['job_id'], 67, hid, 1, job['ruinId'])
         state['explore'].remove(job)
         ruin = next(r for r in state['ruins'] if r['ruinId'] == job['ruinId'])
         ruin['exp'] = min(row['Exp'][-1], ruin['exp'] + 1)
@@ -281,7 +284,7 @@ class CollegeJobsService:
         if values['code'] == 10:
             growth = self.repo.growth_base(pid)
             before = (OutboundMessage('L2C_QueryGrowthBase', growth),
-                OutboundMessage('L2C_HeroUpdate', {'code': 10, 'heros': [encode_hero_data(h)
+                OutboundMessage('L2C_HeroUpdate', {'code': 10, 'heros': [encode_hero_data(h, season=self.economy.season, player_id=pid)
                     for h in self.store.get(pid)['snapshot']['heroes']]}),
                 OutboundMessage('L2C_UnlockExploreRuin', {'code': 10, 'unlockExploreRuin':
                     [UNLOCK_EXPLORE_RUIN.encode(r) for r in self.repo.unlock_ruins(pid)]}),

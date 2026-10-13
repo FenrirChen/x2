@@ -307,6 +307,7 @@ class BattleShopService:
                     self.economy.dp.observe(player_id, chapter, key, "buy", item_id, offer["num"])
                     self.economy.dp.observe(player_id, chapter, key, "spend", offer["moneyType"], offer["price"])
                     self.economy.dp.refresh(player_id, chapter)
+                    self.economy.season.battle_spend(player_id, run["uuid"], key, offer["moneyType"], offer["price"])
         LOGGER.info("in-battle purchase shop=%s level=%s item=%s x%s price=%s type=%s wallet=%s player=%s",
                     shop_id, level, item_id, offer["num"], offer["price"], offer["moneyType"],
                     wallet, player_id)

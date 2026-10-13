@@ -1,3 +1,4 @@
+from tests.activity_calendar_helpers import activity_start, next_activity_cycle
 import asyncio
 import pytest
 from tests.unit.test_economy import env, rewards
@@ -35,7 +36,7 @@ def runtime(env):
 
 def test_yuexi_frontier_updates_on_checkout_and_resets_next_period(runtime):
     _, _, _, rt, now = runtime
-    now[0] = ActivityRotation.ANCHOR + 6 * ActivityRotation.SECONDS + 3600
+    now[0] = activity_start(6) + 3600
     period = rt.a.period(1)
     assert rt.records(1, period)['previousRecord'] == 0
     for sid in period.theme['section_ids']:
@@ -45,7 +46,7 @@ def test_yuexi_frontier_updates_on_checkout_and_resets_next_period(runtime):
         pushed = next(m for m in rt.progress_messages(1)
                       if m.message_name == 'L2C_QueryActivityMissionRecord')
         assert pushed.values['previousRecord'] == sid
-    now[0] += 7 * ActivityRotation.SECONDS
+    now[0] = next_activity_cycle(now[0])
     assert rt.records(1, rt.a.period(1))['previousRecord'] == 0
 
 
@@ -56,7 +57,7 @@ def test_yuexi_pov_soul_paid_only_after_all_successful_stages(runtime, chapter_i
     from x2server.player.battle import BattleService
     BattleService(store, economy)
     economy.activity = rt.a
-    now[0] = ActivityRotation.ANCHOR + 6 * ActivityRotation.SECONDS + 3600
+    now[0] = activity_start(6) + 3600
     chapter = next(c for c in rt.a.tables['POVChapterInfo'] if c['ChapterID'] == chapter_id)
     def finish(sid, key, success=True):
         with economy.transaction():
@@ -77,7 +78,7 @@ def test_yuexi_pov_soul_paid_only_after_all_successful_stages(runtime, chapter_i
 @pytest.mark.parametrize('theme', [3])
 def test_tower_entry_queries_use_real_catalog_and_stable_passives(runtime, theme):
     _, _, context, rt, now = runtime
-    now[0] = ActivityRotation.ANCHOR + theme * ActivityRotation.SECONDS + 3600
+    now[0] = activity_start(theme) + 3600
     for op in ('QueryActivityTower', 'ActivityTowerPassive'):
         response = asyncio.run(rt.handle(context, packet({}, 990 + theme, 'C2L_' + op)))
         assert response.values['code'] == 10
@@ -107,7 +108,7 @@ def test_retired_activity_battle_entry_and_query_are_rejected(runtime):
 
 def test_yuexi_skipped_intro_claim_persists_and_cannot_pay_twice(runtime):
     store, e, ctx, rt, now = runtime
-    now[0] = ActivityRotation.ANCHOR + 6 * ActivityRotation.SECONDS + 3600
+    now[0] = activity_start(6) + 3600
     request = packet({}, 975, 'C2L_ActivityDialogue')
     assert rt.operate(1, 'ActivityDialogReciveInfo', {}, 'query')['lastReciveTimeSec'] == 0
     claimed = asyncio.run(rt.handle(ctx, request))
@@ -128,14 +129,14 @@ def test_yuexi_skipped_intro_claim_persists_and_cannot_pay_twice(runtime):
     assert next(r for r in rows if r['actId'] == 70010)['state'] == 1
     acknowledged = asyncio.run(rt.handle(ctx, packet({}, 977, 'C2L_ActivityDialogue')))
     assert acknowledged.values['code'] == 10 and not acknowledged.values.get('rewardData')
-    now[0] += 34 * 86400
+    now[0] += 48 * 86400
     assert rt.operate(1, 'ActivityDialogReciveInfo', {}, 'next-period')['lastReciveTimeSec'] == 0
 
 
 def test_yuexi_midday_review_closes_only_preview_at_beijing_midnight(runtime):
     _, _, _, rt, now = runtime
     rt.r.anchor += 23 * 3600
-    now[0] = rt.r.anchor + 6 * ActivityRotation.SECONDS + 60
+    now[0] = rt.r.bounds(6)[0] + 60
     period = rt.r.at()
     assert rt.a.yuexi_preview_end(period) == period.start + 3600
     now[0] = period.start + 3600
@@ -147,7 +148,7 @@ def test_yuexi_midday_review_closes_only_preview_at_beijing_midnight(runtime):
 
 def test_yuexi_generic_preview_claim_is_shared_with_plot_completion(runtime):
     _, _, _, rt, now = runtime
-    now[0] = ActivityRotation.ANCHOR + 6 * ActivityRotation.SECONDS + 3600
+    now[0] = activity_start(6) + 3600
     assert rt.a.pre_notice(1, 1, claim=True)['code'] == 10
     assert rt.operate(1, 'ActivityDialogReciveInfo', {}, 'query')['lastReciveTimeSec'] == now[0]
     acknowledged = rt.operate(1, 'ActivityDialogue', {}, 'alternate-route')
@@ -156,7 +157,7 @@ def test_yuexi_generic_preview_claim_is_shared_with_plot_completion(runtime):
 
 def test_winter_progress_and_story_protocols_use_current_period(runtime):
     _, e, ctx, rt, now = runtime
-    now[0] = ActivityRotation.ANCHOR + 4 * ActivityRotation.SECONDS + 3600
+    now[0] = activity_start(4) + 3600
     period = rt.r.at()
     response = asyncio.run(rt.handle(ctx, packet({}, 981, 'C2L_QueryShuangHanActivity')))
     assert response.values['code'] == 10
@@ -173,7 +174,7 @@ def test_winter_progress_and_story_protocols_use_current_period(runtime):
     assert rt.a.frost_values(1)['activityInfo'][0] == ACTIVITY_SCHEMAS['ActivityShuangHan'].encode(
         {'chapterId': 2060251, 'storyPlayState': True, 'lastPassMissionId': 2160259})
     assert asyncio.run(rt.handle(ctx, packet({'chapterId': 2060261}, 984, 'C2L_PlayShuangHanPV'))).values['code'] == 10
-    now[0] += 35 * 86400
+    now[0] = next_activity_cycle(now[0])
     reset = rt.a.frost_values(1)
     assert all(not ACTIVITY_SCHEMAS['ActivityShuangHan'].decode(raw)['lastPassMissionId']
                for raw in reset['activityInfo'])
@@ -185,7 +186,7 @@ def test_purchase_refreshes_all_activity_shop_stock_caches(runtime, group):
     from x2server.messages.economy import GOODS
     _, e, ctx, rt, now = runtime
     index = next(i for i, t in enumerate(rt.r.themes) if t['group'] == group)
-    now[0] = ActivityRotation.ANCHOR + index * ActivityRotation.SECONDS + 3600
+    now[0] = activity_start(index) + 3600
     period = rt.r.at()
     shop = next(s for s in rt.exchange.shops.values() if s['group'] == group and s['stage'] == 1)
     open_shop(rt.a, e, shop, period)
@@ -248,7 +249,7 @@ def test_activity_protocol_error_rolls_back_and_returns_error_not_disconnect(run
 def test_every_activity_route_returns_encodable_response_in_every_period(runtime, theme_index):
     from x2server.messages.lobby import LOBBY_SCHEMAS
     _, _, ctx, rt, now = runtime
-    now[0] = ActivityRotation.ANCHOR + theme_index * ActivityRotation.SECONDS + 3600
+    now[0] = activity_start(theme_index) + 3600
     for seq, name in enumerate(rt.handlers(), 3000):
         response = asyncio.run(rt.handle(ctx, packet({}, seq, name)))
         schema = ACTIVITY_SCHEMAS.get(response.message_name) or LOBBY_SCHEMAS[response.message_name]
@@ -260,7 +261,7 @@ def test_all_theme_login_scene_parameters_and_real_shop_requests(runtime, theme_
     _, _, ctx, rt, now = runtime
     from x2server.protocol.registry import CORE_MESSAGE_REGISTRY
     assert CORE_MESSAGE_REGISTRY.name_for(1038) == 'C2L_SceneGlobalParam'
-    now[0] = ActivityRotation.ANCHOR + theme_index * ActivityRotation.SECONDS + 3600
+    now[0] = activity_start(theme_index) + 3600
     response = asyncio.run(rt.handle(ctx, packet({}, 6100, 'C2L_SceneGlobalParam')))
     assert response.message_name == 'L2C_SceneGlobalParam' and response.values['code'] == 10
     rows = [ACTIVITY_SCHEMAS['SceneSectionParam'].decode(wire)
@@ -315,7 +316,7 @@ def test_cafe_paid_cooking_sale_level_staff_restart(runtime):
 @pytest.mark.parametrize('theme_index', [0, 5])
 def test_all_cafe_recipes_exact_ingredients_in_every_store(runtime, theme_index):
     store, e, ctx, rt, now = runtime
-    base_time = ActivityRotation.ANCHOR + theme_index * ActivityRotation.SECONDS + 3600
+    base_time = activity_start(theme_index) + 3600
     now[0] = base_time
     food = rt.r.of_type(27, rt.r.at())
     recipes = [r for r in rt.cafe.recipes.values()
@@ -406,7 +407,7 @@ def test_cafe_empty_queue_staff_busy_capacity_sale_and_level_loop(runtime):
 def test_cafe_retained_recipe_unlocks_next_occurrence(runtime):
     _, e, _, rt, now = runtime
     seed(rt, {1290301: 1, 1290317: 10, 1290318: 10})
-    now[0] += 7 * ActivityRotation.SECONDS
+    now[0] = next_activity_cycle(now[0])
     with e.transaction():
         assert rt.r.get(1, rt.r.at(), 'obtained-item', 1290301, 0) == 0
         rt.operate(1, 'CafeStoreUnLock', {'storeType': 7}, 'next-unlock')
@@ -419,7 +420,7 @@ def test_activity_currency_snapshot_balances_follow_inventory(runtime, theme_ind
     from x2server.messages.core import BASE_INFO
     from x2server.player.login import LoginService, SHOP_CURRENCY_FIELDS
     store, e, ctx, rt, now = runtime
-    now[0] = ActivityRotation.ANCHOR + theme_index * ActivityRotation.SECONDS + 3600
+    now[0] = activity_start(theme_index) + 3600
     items = {i: 7 + n for n, i in enumerate(SHOP_CURRENCY_FIELDS) if i >= 1237976}
     seed(rt, items)
     base = BASE_INFO.decode(LoginService.snapshot_push(store.get(1), store, now[0]).values['BaseInfo'])
@@ -592,7 +593,7 @@ def test_all_activity_sections_enter_and_settle_in_their_period(runtime, theme_i
     from x2server.player.battle import BattleService
     from x2server.messages.battle import CHECKOUT, PROFILE_HERO, FIGHT_PROFILE
     store, e, ctx, rt, now = runtime
-    now[0] = ActivityRotation.ANCHOR + theme_index * ActivityRotation.SECONDS + 3600
+    now[0] = activity_start(theme_index) + 3600
     e.activity = rt.a
     battle = BattleService(store, e)
     state = store.get(1)
@@ -644,7 +645,7 @@ def test_nian_feast_trial_entry_checkout_and_replay(runtime, theme_index, sectio
     from x2server.player.battle import BattleService
     from x2server.messages.battle import CHECKOUT, PROFILE_HERO, FIGHT_DATA, FIGHT_HERO, BATTLE_SCHEMAS
     store, economy, context, rt, now = runtime
-    now[0] = ActivityRotation.ANCHOR + theme_index * ActivityRotation.SECONDS + 3600
+    now[0] = activity_start(theme_index) + 3600
     economy.activity = rt.a
     battle = BattleService(store, economy)
     player = store.get(1)
@@ -678,5 +679,5 @@ def test_nian_feast_trial_entry_checkout_and_replay(runtime, theme_index, sectio
     assert BATTLE_SCHEMAS['L2C_CheckoutMainMission'].encode(replay.values) == BATTLE_SCHEMAS['L2C_CheckoutMainMission'].encode(result.values)
     assert rt.r.get(1, rt.r.at(), 'clear', section) == 1
     assert store.get(1)['snapshot']['heroes'] == []
-    now[0] += ActivityRotation.SECONDS
+    now[0] = rt.r.at().end
     assert asyncio.run(battle.enter(context, packet(values, 503))).values['result'] == 13

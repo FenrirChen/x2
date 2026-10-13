@@ -185,9 +185,10 @@ def test_customer_refusal_rotation_replay_query_and_restart(game):
 def test_customer_refusal_write_failure_rolls_back_rotation(game, monkeypatch):
     game[2].growth_base(1)
     original = game[3]._customer_for(1, 1)
-    monkeypatch.setattr(game[2], 'save', lambda *a: (_ for _ in ()).throw(RuntimeError('disk')))
-    with pytest.raises(RuntimeError):
-        send(game, 'AlchemyFinish', type=2, posIndex=1)
+    with monkeypatch.context() as failure:
+        failure.setattr(game[2], 'save', lambda *a: (_ for _ in ()).throw(RuntimeError('disk')))
+        with pytest.raises(RuntimeError):
+            send(game, 'AlchemyFinish', type=2, posIndex=1)
     assert game[3]._customer_for(1, 1) == original
     assert game[0].db.execute('SELECT count(*) FROM college_alchemy_receipts').fetchone()[0] == 0
 

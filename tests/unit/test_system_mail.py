@@ -86,13 +86,13 @@ def test_welcome_daily_claim_and_restart(tmp_path):
     assert accounts.create("new", "pw", day) == "duplicate"
     player_id = accounts.get_by_name("new")["player_id"]
     rows = store.db.execute("SELECT * FROM player_mail WHERE player_id=?", (player_id,)).fetchall()
-    assert len(rows) == 4 and rows[0]["body"] == "" and rows[0]["title"] == ""
+    assert len(rows) == 5 and rows[0]["body"] == "" and rows[0]["title"] == ""
     assert rows[0]["source_key"] == f"welcome_mail:{accounts.get_by_name('new')['account_id']}"
     assert not accounts.ensure_welcome_mail(player_id, day + 1)
     assert accounts.ensure_daily_login_mail(player_id, day)
     assert not accounts.ensure_daily_login_mail(player_id, day + 1800)
     rows = store.db.execute("SELECT * FROM player_mail WHERE player_id=? ORDER BY id", (player_id,)).fetchall()
-    assert len(rows) == 5 and rows[4]["body"] == "祝您玩的开心"
+    assert len(rows) == 6 and rows[5]["body"] == "祝您玩的开心"
     before = store.get(player_id)["snapshot"]
     ctx = DispatchContext("test", "local", SessionState("test", "session", player_id=player_id))
     for row in rows:
@@ -100,13 +100,13 @@ def test_welcome_daily_claim_and_restart(tmp_path):
         assert response.values["code"] == 10
         assert asyncio.run(mail.handle(ctx, packet({"mailid": row["id"]}, name="C2L_ReceiveAttachment"))).values["code"] == 13
     assert not accounts.ensure_welcome_mail(player_id, day + 2)
-    assert store.db.execute("SELECT count(*) FROM player_mail WHERE player_id=?", (player_id,)).fetchone()[0] == 5
+    assert store.db.execute("SELECT count(*) FROM player_mail WHERE player_id=?", (player_id,)).fetchone()[0] == 6
     after = store.get(player_id)["snapshot"]
     assert after["crystal"] - before["crystal"] == 11000
     assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=? AND item_id=?",
                             (player_id, WISH_COIN)).fetchone()[0] == 230
     assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=? AND item_id=?",
-                            (player_id, CAUSALITY_CARD)).fetchone()[0] == 260
+                            (player_id, CAUSALITY_CARD)).fetchone()[0] == 310
     assert BRILLIANCE == 1237902
     assert store.db.execute('SELECT quantity FROM inventory WHERE player_id=? AND item_id=?',
                             (player_id, PURE_CRYSTAL)).fetchone()[0] == 10
@@ -116,7 +116,7 @@ def test_welcome_daily_claim_and_restart(tmp_path):
     accounts = AccountStore(reopened)
     assert not accounts.ensure_daily_login_mail(player_id, day + 3600)
     assert accounts.ensure_daily_login_mail(player_id, day + 86400)
-    assert reopened.db.execute("SELECT count(*) FROM player_mail WHERE player_id=?", (player_id,)).fetchone()[0] == 6
+    assert reopened.db.execute("SELECT count(*) FROM player_mail WHERE player_id=?", (player_id,)).fetchone()[0] == 7
     accounts.close()
     reopened.close()
 

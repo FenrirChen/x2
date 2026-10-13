@@ -1,0 +1,2253 @@
+{
+  "ids": {
+    "L2C_BattlePassHistoryInfo": 1024,
+    "C2L_BattlePassHistoryInfo": 1023,
+    "L2C_QuerySeasonRankReward": 1016,
+    "C2L_QuerySeasonRankReward": 1015,
+    "L2C_SeasonRankReward": 1007,
+    "C2L_SeasonRankReward": 1006,
+    "L2C_BattlePassLevelReceiveReward": 1060,
+    "C2L_BattlePassLevelReceiveReward": 1059,
+    "L2C_BattlePassTalentUpdate": 955,
+    "L2C_BuyBattlePassLevel": 940,
+    "C2L_BuyBattlePassLevel": 939,
+    "L2C_SeasonAchvOverView": 991,
+    "C2L_SeasonAchvOverView": 990,
+    "L2C_UpgradeBattlePass": 938,
+    "L2C_RefreshBattleTask": 948,
+    "C2L_RefreshBattleTask": 947,
+    "L2C_BattlePassTalentInfo": 952,
+    "C2L_BattlePassTalentInfo": 951,
+    "L2C_ReceiveBattlePass": 942,
+    "C2L_ReceiveBattlePass": 941,
+    "L2C_SeasonAchvPointReward": 997,
+    "C2L_SeasonAchvPointReward": 996,
+    "L2C_SeasonAchvDetialData": 993,
+    "C2L_SeasonAchvDetialData": 992,
+    "L2C_BattlePassTalentReset": 957,
+    "C2L_BattlePassTalentReset": 956,
+    "L2C_QuerySeasonLevelRankReward": 1079,
+    "C2L_QuerySeasonLevelRankReward": 1078,
+    "L2C_SignBattlePass": 950,
+    "C2L_SignBattlePass": 949,
+    "L2C_QueryBattlePassInfo": 936,
+    "C2L_QueryBattlePassInfo": 935,
+    "L2C_SeasonRelic": 1005,
+    "C2L_SeasonRelic": 1004,
+    "L2C_BattlePassTalentLevel": 954,
+    "C2L_BattlePassTalentLevel": 953,
+    "L2C_BattlepassArtifactOpt": 1012,
+    "C2L_BattlepassArtifactOpt": 1011,
+    "L2C_SeasonAchvReward": 995,
+    "C2L_SeasonAchvReward": 994,
+    "L2C_BattlePassMissionInfo": 985,
+    "C2L_BattlePassMissionInfo": 984,
+    "L2C_SeasonAchvUpdate": 998,
+    "L2C_SeasonLevelRankReward": 1081,
+    "C2L_SeasonLevelRankReward": 1080
+  },
+  "schemas": {
+    "TalentAttr": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "level",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "id",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "upValue",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 4,
+          "name": "attrId",
+          "type": "int",
+          "repeated": true,
+          "native_offset": "0x20"
+        },
+        {
+          "number": 5,
+          "name": "passiveId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x28"
+        }
+      ],
+      "native_serialize": 60259928,
+      "native_tags": [
+        8,
+        16,
+        24,
+        32,
+        40
+      ],
+      "verified": true
+    },
+    "FightHero": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "id",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "state",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "level",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 4,
+          "name": "star",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x1C"
+        },
+        {
+          "number": 5,
+          "name": "heroGodEquip",
+          "type": "HeroGodEquip",
+          "repeated": false,
+          "native_offset": "0x20"
+        },
+        {
+          "number": 6,
+          "name": "heroEquip",
+          "type": "HeroEquip",
+          "repeated": true,
+          "native_offset": "0x28"
+        },
+        {
+          "number": 7,
+          "name": "exp",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x30"
+        },
+        {
+          "number": 8,
+          "name": "heroSkill",
+          "type": "HeroSkill",
+          "repeated": true,
+          "native_offset": "0x38"
+        },
+        {
+          "number": 9,
+          "name": "attrAdd",
+          "type": "HeroAttrAdd",
+          "repeated": true,
+          "native_offset": "0x40"
+        },
+        {
+          "number": 10,
+          "name": "battleSkinId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x48"
+        },
+        {
+          "number": 11,
+          "name": "equipSuitAttr",
+          "type": "EquipSuitAttr",
+          "repeated": true,
+          "native_offset": "0x50"
+        },
+        {
+          "number": 12,
+          "name": "heroAttrCount",
+          "type": "HeroAttrCount",
+          "repeated": false,
+          "native_offset": "0x58"
+        },
+        {
+          "number": 13,
+          "name": "talentAttr",
+          "type": "TalentAttr",
+          "repeated": true,
+          "native_offset": "0x60"
+        },
+        {
+          "number": 14,
+          "name": "seasonUnitAttr",
+          "type": "int",
+          "repeated": true,
+          "native_offset": "0x68"
+        }
+      ],
+      "native_serialize": 55640760,
+      "native_tags": [
+        8,
+        16,
+        24,
+        32,
+        42,
+        50,
+        56,
+        66,
+        74,
+        80,
+        90,
+        98,
+        106,
+        112
+      ],
+      "verified": true
+    },
+    "HeroAttrCount": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "atk",
+          "type": "long",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "def",
+          "type": "long",
+          "repeated": false,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 3,
+          "name": "hp",
+          "type": "long",
+          "repeated": false,
+          "native_offset": "0x20"
+        },
+        {
+          "number": 4,
+          "name": "sp",
+          "type": "long",
+          "repeated": false,
+          "native_offset": "0x28"
+        }
+      ],
+      "native_serialize": 55683064,
+      "native_tags": [
+        8,
+        16,
+        24,
+        32
+      ],
+      "verified": true
+    },
+    "EquipSuitAttr": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "suitId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "suitNum",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "attribType1",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 4,
+          "name": "value1",
+          "type": "long",
+          "repeated": false,
+          "native_offset": "0x20"
+        },
+        {
+          "number": 5,
+          "name": "passiveID",
+          "type": "int",
+          "repeated": true,
+          "native_offset": "0x28"
+        }
+      ],
+      "native_serialize": 55617132,
+      "native_tags": [
+        8,
+        16,
+        24,
+        32,
+        40
+      ],
+      "verified": true
+    },
+    "HeroAttrAdd": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "attrId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "attrValue",
+          "type": "long",
+          "repeated": false,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 55682576,
+      "native_tags": [
+        8,
+        16
+      ],
+      "verified": true
+    },
+    "HeroSkill": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "id",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "level",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        }
+      ],
+      "native_serialize": 58292532,
+      "native_tags": [
+        8,
+        16
+      ],
+      "verified": true
+    },
+    "HeroEquip": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "id",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "typeId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "level",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 4,
+          "name": "exp",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x1C"
+        },
+        {
+          "number": 5,
+          "name": "star",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x20"
+        },
+        {
+          "number": 6,
+          "name": "status",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x24"
+        },
+        {
+          "number": 7,
+          "name": "param",
+          "type": "EquipParam",
+          "repeated": false,
+          "native_offset": "0x28"
+        },
+        {
+          "number": 8,
+          "name": "lockState",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x30"
+        },
+        {
+          "number": 9,
+          "name": "timeSec",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x34"
+        },
+        {
+          "number": 10,
+          "name": "seasonId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x38"
+        }
+      ],
+      "native_serialize": 58268708,
+      "native_tags": [
+        8,
+        16,
+        24,
+        32,
+        40,
+        48,
+        58,
+        64,
+        72,
+        80
+      ],
+      "verified": true
+    },
+    "EquipParam": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "at1",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "av1",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "at2",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 4,
+          "name": "av2",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x1C"
+        },
+        {
+          "number": 5,
+          "name": "at3",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x20"
+        },
+        {
+          "number": 6,
+          "name": "av3",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x24"
+        },
+        {
+          "number": 7,
+          "name": "at4",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x28"
+        },
+        {
+          "number": 8,
+          "name": "av4",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x2C"
+        },
+        {
+          "number": 9,
+          "name": "at5",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x30"
+        },
+        {
+          "number": 10,
+          "name": "av5",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x34"
+        },
+        {
+          "number": 11,
+          "name": "at6",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x38"
+        },
+        {
+          "number": 12,
+          "name": "av6",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x3C"
+        },
+        {
+          "number": 13,
+          "name": "lock1",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x40"
+        },
+        {
+          "number": 14,
+          "name": "lock2",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x44"
+        },
+        {
+          "number": 15,
+          "name": "lock3",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x48"
+        },
+        {
+          "number": 16,
+          "name": "lock4",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x4C"
+        },
+        {
+          "number": 17,
+          "name": "lock5",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x50"
+        },
+        {
+          "number": 18,
+          "name": "lock6",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x54"
+        }
+      ],
+      "native_serialize": 55607548,
+      "native_tags": [
+        8,
+        16,
+        24,
+        32,
+        40,
+        48,
+        56,
+        64,
+        72,
+        80,
+        88,
+        96,
+        104,
+        112,
+        120,
+        128,
+        136,
+        144
+      ],
+      "verified": true
+    },
+    "HeroGodEquip": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "id",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "level",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "star",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 4,
+          "name": "jewel",
+          "type": "KeyValuePair_Int32_Int32",
+          "repeated": true,
+          "native_offset": "0x20"
+        },
+        {
+          "number": 5,
+          "name": "godEquipAttr",
+          "type": "HeroGodEquipAttr",
+          "repeated": false,
+          "native_offset": "0x28"
+        },
+        {
+          "number": 6,
+          "name": "artifactProperties",
+          "type": "BattlepassArtifactProperty",
+          "repeated": true,
+          "native_offset": "0x30"
+        },
+        {
+          "number": 7,
+          "name": "lastRandomartifactProperty",
+          "type": "BattlepassArtifactProperty",
+          "repeated": true,
+          "native_offset": "0x38"
+        },
+        {
+          "number": 8,
+          "name": "godSlotLockInfo",
+          "type": "GodSlotLockInfo",
+          "repeated": true,
+          "native_offset": "0x40"
+        }
+      ],
+      "native_serialize": 58278452,
+      "native_tags": [
+        8,
+        16,
+        24,
+        34,
+        42,
+        50,
+        58,
+        66
+      ],
+      "verified": true
+    },
+    "GodSlotLockInfo": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "slot",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "state",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        }
+      ],
+      "native_serialize": 55707540,
+      "native_tags": [
+        8,
+        16
+      ],
+      "verified": true
+    },
+    "BattlepassArtifactProperty": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "slot",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "attrType",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "attrVal",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 58476948,
+      "native_tags": [
+        8,
+        16,
+        24
+      ],
+      "verified": true
+    },
+    "HeroGodEquipAttr": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "godAttr",
+          "type": "KeyValuePair_Int32_Int64",
+          "repeated": true,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "jewelAttr",
+          "type": "JewelAttr",
+          "repeated": true,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 58286756,
+      "native_tags": [
+        10,
+        18
+      ],
+      "verified": true
+    },
+    "JewelAttr": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "effect1",
+          "type": "KeyValuePair_Int32_Int64",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "effect2",
+          "type": "int",
+          "repeated": true,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 58291160,
+      "native_tags": [
+        10,
+        16
+      ],
+      "verified": true
+    },
+    "KeyValuePair_Int32_Int64": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "Key",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "Value",
+          "type": "long",
+          "repeated": false,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 58290672,
+      "native_tags": [
+        8,
+        16
+      ],
+      "verified": true
+    },
+    "KeyValuePair_Int32_Int32": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "Key",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "Value",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        }
+      ],
+      "native_serialize": 58286268,
+      "native_tags": [
+        8,
+        16
+      ],
+      "verified": true
+    },
+    "L2C_BattlePassHistoryInfo": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "historyInfo",
+          "type": "BattlePassHistoryInfo",
+          "repeated": true,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 57783436,
+      "native_tags": [
+        8,
+        18
+      ],
+      "verified": true
+    },
+    "BattlePassHistoryInfo": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "activityId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "relicCount",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "taskFinishCount",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 4,
+          "name": "battlePassLv",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x1C"
+        },
+        {
+          "number": 5,
+          "name": "finishAchiveId",
+          "type": "int",
+          "repeated": true,
+          "native_offset": "0x20"
+        },
+        {
+          "number": 6,
+          "name": "passCount",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x28"
+        },
+        {
+          "number": 7,
+          "name": "npcEvent",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x2C"
+        },
+        {
+          "number": 8,
+          "name": "passTotalTime",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x30"
+        },
+        {
+          "number": 9,
+          "name": "killBossNum",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x34"
+        },
+        {
+          "number": 10,
+          "name": "killMonsterNum",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x38"
+        },
+        {
+          "number": 11,
+          "name": "costShopMonty",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x3C"
+        },
+        {
+          "number": 12,
+          "name": "boxCount",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x40"
+        }
+      ],
+      "native_serialize": 58485380,
+      "native_tags": [
+        8,
+        16,
+        24,
+        32,
+        40,
+        48,
+        56,
+        64,
+        72,
+        80,
+        88,
+        96
+      ],
+      "verified": true
+    },
+    "C2L_BattlePassHistoryInfo": {
+      "fields": [],
+      "native_serialize": 63530864,
+      "native_tags": [],
+      "verified": true
+    },
+    "L2C_QuerySeasonRankReward": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        }
+      ],
+      "native_serialize": 53003388,
+      "native_tags": [
+        8
+      ],
+      "verified": true
+    },
+    "C2L_QuerySeasonRankReward": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "id",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        }
+      ],
+      "native_serialize": 63641420,
+      "native_tags": [
+        8
+      ],
+      "verified": true
+    },
+    "L2C_SeasonRankReward": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "rewardData",
+          "type": "RewardData",
+          "repeated": false,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 55290612,
+      "native_tags": [
+        8,
+        18
+      ],
+      "verified": true
+    },
+    "RewardData": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "rewardItem",
+          "type": "RewardItem",
+          "repeated": true,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "rewardEquip",
+          "type": "HeroEquip",
+          "repeated": true,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 3,
+          "name": "transformHero",
+          "type": "TransformHero",
+          "repeated": true,
+          "native_offset": "0x20"
+        }
+      ],
+      "native_serialize": 60152808,
+      "native_tags": [
+        10,
+        18,
+        26
+      ],
+      "verified": true
+    },
+    "TransformHero": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "heroId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "transform",
+          "type": "bool",
+          "repeated": false,
+          "native_offset": "0x14"
+        }
+      ],
+      "native_serialize": 25354780,
+      "native_tags": [
+        8,
+        16
+      ],
+      "verified": true
+    },
+    "RewardItem": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "itemId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "itemNum",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "transform",
+          "type": "bool",
+          "repeated": false,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 60157848,
+      "native_tags": [
+        8,
+        16,
+        24
+      ],
+      "verified": true
+    },
+    "C2L_SeasonRankReward": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "id",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "rankId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        }
+      ],
+      "native_serialize": 60944556,
+      "native_tags": [
+        8,
+        16
+      ],
+      "verified": true
+    },
+    "L2C_BattlePassLevelReceiveReward": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "rewardId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "rewardData",
+          "type": "RewardData",
+          "repeated": false,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 57787688,
+      "native_tags": [
+        8,
+        16,
+        26
+      ],
+      "verified": true
+    },
+    "C2L_BattlePassLevelReceiveReward": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "rewardId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        }
+      ],
+      "native_serialize": 63533844,
+      "native_tags": [
+        8
+      ],
+      "verified": true
+    },
+    "L2C_BattlePassTalentUpdate": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "leftPoint",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        }
+      ],
+      "native_serialize": 57810324,
+      "native_tags": [
+        8,
+        16
+      ],
+      "verified": true
+    },
+    "L2C_BuyBattlePassLevel": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "baseInfo",
+          "type": "BattlePassBaseInfo",
+          "repeated": false,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 61869552,
+      "native_tags": [
+        8,
+        18
+      ],
+      "verified": true
+    },
+    "BattlePassBaseInfo": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "exp",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "type",
+          "type": "BattlePassType",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "configId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 4,
+          "name": "refreshTaskCount",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x1C"
+        },
+        {
+          "number": 5,
+          "name": "lastBattlePassSign",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x20"
+        },
+        {
+          "number": 6,
+          "name": "weekMaxExp",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x24"
+        }
+      ],
+      "native_serialize": 58480768,
+      "native_tags": [
+        8,
+        16,
+        24,
+        32,
+        40,
+        48
+      ],
+      "verified": true
+    },
+    "C2L_BuyBattlePassLevel": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "buyCount",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        }
+      ],
+      "native_serialize": 63600220,
+      "native_tags": [
+        8
+      ],
+      "verified": true
+    },
+    "L2C_SeasonAchvOverView": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "achvOverViewData",
+          "type": "SeasonAchvOverViewData",
+          "repeated": true,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 3,
+          "name": "achvPoint",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x20"
+        },
+        {
+          "number": 4,
+          "name": "maxAchvPoint",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x24"
+        },
+        {
+          "number": 5,
+          "name": "achvPointRewardList",
+          "type": "int",
+          "repeated": true,
+          "native_offset": "0x28"
+        }
+      ],
+      "native_serialize": 55254860,
+      "native_tags": [
+        8,
+        18,
+        24,
+        32,
+        40
+      ],
+      "verified": true
+    },
+    "SeasonAchvOverViewData": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "achvType",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "achvProgress",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        }
+      ],
+      "native_serialize": 60183416,
+      "native_tags": [
+        8,
+        16
+      ],
+      "verified": true
+    },
+    "C2L_SeasonAchvOverView": {
+      "fields": [],
+      "native_serialize": 60924632,
+      "native_tags": [],
+      "verified": true
+    },
+    "L2C_UpgradeBattlePass": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "baseInfo",
+          "type": "BattlePassBaseInfo",
+          "repeated": false,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 3,
+          "name": "rewardData",
+          "type": "RewardData",
+          "repeated": false,
+          "native_offset": "0x20"
+        }
+      ],
+      "native_serialize": 59768860,
+      "native_tags": [
+        8,
+        18,
+        26
+      ],
+      "verified": true
+    },
+    "L2C_RefreshBattleTask": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "baseInfo",
+          "type": "BattlePassBaseInfo",
+          "repeated": false,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 3,
+          "name": "taskId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x20"
+        }
+      ],
+      "native_serialize": 55201324,
+      "native_tags": [
+        8,
+        18,
+        24
+      ],
+      "verified": true
+    },
+    "C2L_RefreshBattleTask": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "taskId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        }
+      ],
+      "native_serialize": 60885756,
+      "native_tags": [
+        8
+      ],
+      "verified": true
+    },
+    "L2C_BattlePassTalentInfo": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "info",
+          "type": "TalentInfo",
+          "repeated": true,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 3,
+          "name": "leftPoint",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x20"
+        }
+      ],
+      "native_serialize": 57797180,
+      "native_tags": [
+        8,
+        18,
+        24
+      ],
+      "verified": true
+    },
+    "TalentInfo": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "id",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "level",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        }
+      ],
+      "native_serialize": 60265016,
+      "native_tags": [
+        8,
+        16
+      ],
+      "verified": true
+    },
+    "C2L_BattlePassTalentInfo": {
+      "fields": [],
+      "native_serialize": 63540100,
+      "native_tags": [],
+      "verified": true
+    },
+    "L2C_ReceiveBattlePass": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "rewardInfo",
+          "type": "BattlePassRewardInfo",
+          "repeated": true,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 3,
+          "name": "rewardData",
+          "type": "RewardData",
+          "repeated": false,
+          "native_offset": "0x20"
+        }
+      ],
+      "native_serialize": 57858244,
+      "native_tags": [
+        8,
+        18,
+        26
+      ],
+      "verified": true
+    },
+    "BattlePassRewardInfo": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "id",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "lastReceivedType",
+          "type": "BattlePassType",
+          "repeated": false,
+          "native_offset": "0x14"
+        }
+      ],
+      "native_serialize": 58492064,
+      "native_tags": [
+        8,
+        16
+      ],
+      "verified": true
+    },
+    "C2L_ReceiveBattlePass": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "configIds",
+          "type": "int",
+          "repeated": true,
+          "native_offset": "0x10"
+        }
+      ],
+      "native_serialize": 63717340,
+      "native_tags": [
+        8
+      ],
+      "verified": true
+    },
+    "L2C_SeasonAchvPointReward": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "status",
+          "type": "AchvStatus",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "achvPointId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 4,
+          "name": "rewardData",
+          "type": "RewardData",
+          "repeated": false,
+          "native_offset": "0x20"
+        }
+      ],
+      "native_serialize": 55260564,
+      "native_tags": [
+        8,
+        16,
+        24,
+        34
+      ],
+      "verified": true
+    },
+    "C2L_SeasonAchvPointReward": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "achvPointId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        }
+      ],
+      "native_serialize": 60927612,
+      "native_tags": [
+        8
+      ],
+      "verified": true
+    },
+    "L2C_SeasonAchvDetialData": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "achvDataList",
+          "type": "SeasonAchvData",
+          "repeated": true,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 3,
+          "name": "achvType",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x20"
+        }
+      ],
+      "native_serialize": 55250224,
+      "native_tags": [
+        8,
+        18,
+        24
+      ],
+      "verified": true
+    },
+    "SeasonAchvData": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "achvProgress",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "status",
+          "type": "AchvStatus",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "achvId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 4,
+          "name": "stage",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x1C"
+        }
+      ],
+      "native_serialize": 60179100,
+      "native_tags": [
+        8,
+        16,
+        24,
+        32
+      ],
+      "verified": true
+    },
+    "C2L_SeasonAchvDetialData": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "achvType",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "startIndex",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "endIndex",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 60920636,
+      "native_tags": [
+        8,
+        16,
+        24
+      ],
+      "verified": true
+    },
+    "L2C_BattlePassTalentReset": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "update",
+          "type": "TalentInfo",
+          "repeated": false,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 3,
+          "name": "leftPoint",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x20"
+        }
+      ],
+      "native_serialize": 57806268,
+      "native_tags": [
+        8,
+        18,
+        24
+      ],
+      "verified": true
+    },
+    "C2L_BattlePassTalentReset": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "id",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        }
+      ],
+      "native_serialize": 63546996,
+      "native_tags": [
+        8
+      ],
+      "verified": true
+    },
+    "L2C_QuerySeasonLevelRankReward": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        }
+      ],
+      "native_serialize": 53000056,
+      "native_tags": [
+        8
+      ],
+      "verified": true
+    },
+    "C2L_QuerySeasonLevelRankReward": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "id",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        }
+      ],
+      "native_serialize": 63638100,
+      "native_tags": [
+        8
+      ],
+      "verified": true
+    },
+    "L2C_SignBattlePass": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "rewardData",
+          "type": "RewardData",
+          "repeated": false,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 3,
+          "name": "baseInfo",
+          "type": "BattlePassBaseInfo",
+          "repeated": false,
+          "native_offset": "0x20"
+        }
+      ],
+      "native_serialize": 57312216,
+      "native_tags": [
+        8,
+        18,
+        26
+      ],
+      "verified": true
+    },
+    "C2L_SignBattlePass": {
+      "fields": [],
+      "native_serialize": 62425032,
+      "native_tags": [],
+      "verified": true
+    },
+    "L2C_QueryBattlePassInfo": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "baseInfo",
+          "type": "BattlePassBaseInfo",
+          "repeated": false,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 3,
+          "name": "rewardInfo",
+          "type": "BattlePassRewardInfo",
+          "repeated": true,
+          "native_offset": "0x20"
+        }
+      ],
+      "native_serialize": 51496568,
+      "native_tags": [
+        8,
+        18,
+        26
+      ],
+      "verified": true
+    },
+    "C2L_QueryBattlePassInfo": {
+      "fields": [],
+      "native_serialize": 63930940,
+      "native_tags": [],
+      "verified": true
+    },
+    "L2C_SeasonRelic": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "collectedRelic",
+          "type": "int",
+          "repeated": true,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 55294376,
+      "native_tags": [
+        8,
+        16
+      ],
+      "verified": true
+    },
+    "C2L_SeasonRelic": {
+      "fields": [],
+      "native_serialize": 60948216,
+      "native_tags": [],
+      "verified": true
+    },
+    "L2C_BattlePassTalentLevel": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "info",
+          "type": "TalentInfo",
+          "repeated": true,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 3,
+          "name": "leftPoint",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x20"
+        }
+      ],
+      "native_serialize": 57801724,
+      "native_tags": [
+        8,
+        18,
+        24
+      ],
+      "verified": true
+    },
+    "C2L_BattlePassTalentLevel": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "info",
+          "type": "TalentLevel",
+          "repeated": true,
+          "native_offset": "0x10"
+        }
+      ],
+      "native_serialize": 63543080,
+      "native_tags": [
+        10
+      ],
+      "verified": true
+    },
+    "TalentLevel": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "id",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "level",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        }
+      ],
+      "native_serialize": 60268564,
+      "native_tags": [
+        8,
+        16
+      ],
+      "verified": true
+    },
+    "L2C_BattlepassArtifactOpt": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "type",
+          "type": "BattlepassArtifactOpt",
+          "repeated": false,
+          "native_offset": "0x14"
+        }
+      ],
+      "native_serialize": 57779736,
+      "native_tags": [
+        8,
+        16
+      ],
+      "verified": true
+    },
+    "C2L_BattlepassArtifactOpt": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "type",
+          "type": "BattlepassArtifactOpt",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "heroId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "slot",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 63527000,
+      "native_tags": [
+        8,
+        16,
+        24
+      ],
+      "verified": true
+    },
+    "L2C_SeasonAchvReward": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "status",
+          "type": "AchvStatus",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "achvId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 4,
+          "name": "rewardData",
+          "type": "RewardData",
+          "repeated": false,
+          "native_offset": "0x20"
+        }
+      ],
+      "native_serialize": 55264992,
+      "native_tags": [
+        8,
+        16,
+        24,
+        34
+      ],
+      "verified": true
+    },
+    "C2L_SeasonAchvReward": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "achvId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        }
+      ],
+      "native_serialize": 60930932,
+      "native_tags": [
+        8
+      ],
+      "verified": true
+    },
+    "L2C_BattlePassMissionInfo": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "maxSeasonId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        },
+        {
+          "number": 3,
+          "name": "lastSeasonId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 4,
+          "name": "levelRewardList",
+          "type": "int",
+          "repeated": true,
+          "native_offset": "0x20"
+        },
+        {
+          "number": 6,
+          "name": "maxPassId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x28"
+        },
+        {
+          "number": 7,
+          "name": "maxChallengepassId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x2C"
+        },
+        {
+          "number": 8,
+          "name": "lastChallengepassId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x30"
+        }
+      ],
+      "native_serialize": 57791712,
+      "native_tags": [
+        8,
+        16,
+        24,
+        32,
+        48,
+        56,
+        64
+      ],
+      "verified": true
+    },
+    "C2L_BattlePassMissionInfo": {
+      "fields": [],
+      "native_serialize": 63537124,
+      "native_tags": [],
+      "verified": true
+    },
+    "L2C_SeasonAchvUpdate": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "achvDataList",
+          "type": "SeasonAchvData",
+          "repeated": true,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "achvPoint",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 55269420,
+      "native_tags": [
+        10,
+        16
+      ],
+      "verified": true
+    },
+    "L2C_SeasonLevelRankReward": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "rewardData",
+          "type": "RewardData",
+          "repeated": false,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 55286848,
+      "native_tags": [
+        8,
+        18
+      ],
+      "verified": true
+    },
+    "C2L_SeasonLevelRankReward": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "id",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "rankId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x14"
+        }
+      ],
+      "native_serialize": 60940892,
+      "native_tags": [
+        8,
+        16
+      ],
+      "verified": true
+    }
+  }
+}

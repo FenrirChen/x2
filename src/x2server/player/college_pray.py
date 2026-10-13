@@ -158,6 +158,6 @@ class CollegePrayService:
         if values['code'] == 10:
             before = (OutboundMessage('L2C_QueryGrowthBase', self.repo.growth_base(pid)),
                 OutboundMessage('PlayerDataProto', {'Daily': daily_fields(state, self.repo.clock.now())}, data_version=1),
-                OutboundMessage('L2C_HeroUpdate', {'code': 10, 'heros': [encode_hero_data(h)
+                OutboundMessage('L2C_HeroUpdate', {'code': 10, 'heros': [encode_hero_data(h, season=self.economy.season, player_id=pid)
                     for h in self.repo.store.get(pid)['snapshot'].get('heroes', [])]}), *self.economy.pushes(pid))
         return OutboundMessage('L2C_' + flow, values, before_response=before)

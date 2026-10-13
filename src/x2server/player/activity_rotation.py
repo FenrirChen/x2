@@ -19,14 +19,17 @@ class ActivityPeriod:
 
 
 class ActivityRotation:
-    SECONDS = 5 * 86400
+    SECONDS = 7 * 86400
     ANCHOR = int(datetime(2026, 10, 10, tzinfo=timezone(timedelta(hours=8))).timestamp())
+
+    FIRST_END = int(datetime(2026,10,19,tzinfo=timezone(timedelta(hours=8))).timestamp())
 
     def __init__(self, store, clock):
         self.store, self.clock = store, clock
         # Local acceptance can advance the event calendar without changing the
         # game clock, daily resets, or the production calendar default.
         self.anchor = int(os.environ.get('X2_ACTIVITY_ANCHOR', self.ANCHOR))
+        self.first_duration = self.FIRST_END - self.ANCHOR if self.anchor == self.ANCHOR else self.SECONDS
         self.catalog = json.loads(files('x2server').joinpath(
             'data/activity_rotation_catalog.json').read_text(encoding='utf-8'))
         self.themes = self.catalog['themes']
@@ -54,16 +57,28 @@ class ActivityRotation:
                 message TEXT NOT NULL, response BLOB NOT NULL,
                 PRIMARY KEY(player_id,request_key))''')
 
+    @property
+    def first_end(self):
+        return self.anchor + self.first_duration
+
     def at(self, now=None):
         now = int(self.clock() if now is None else now)
         if now < self.anchor:
             return None
-        calendar_index = (now - self.anchor) // self.SECONDS
+        calendar_index = 0 if now < self.first_end else 1 + (now - self.first_end) // self.SECONDS
         cycle, slot = divmod(calendar_index, len(self.themes))
         theme = self.themes[slot]
         index = cycle * self.state_cycle_size + theme.get('state_slot', slot)
-        start = self.anchor + calendar_index * self.SECONDS
-        return ActivityPeriod(index, start, start + self.SECONDS, theme)
+        if calendar_index > 0:
+            index += 1_000_000  # New weekly periods cannot reuse old five-day rewards.
+        start, end = self.bounds(calendar_index)
+        return ActivityPeriod(index, start, end, theme)
+
+    def bounds(self, calendar_index):
+        if calendar_index == 0:
+            return self.anchor, self.first_end
+        start = self.first_end + (calendar_index - 1) * self.SECONDS
+        return start, start + self.SECONDS
 
     def get(self, player, period, namespace, key, default=None):
         row = self.store.db.execute('''SELECT value FROM activity_state
@@ -105,9 +120,10 @@ class ActivityRotation:
         # A fight opened before the boundary can finish in its original period.
         if not 0 <= int(self.clock()) - row['created_at'] <= 3600:
             raise ValueError('expired activity run')
-        cycle, state_slot = divmod(row['period'], self.state_cycle_size)
+        state_index = row['period'] - 1_000_000 if row['period'] >= 1_000_000 else row['period']
+        cycle, state_slot = divmod(state_index, self.state_cycle_size)
         if state_slot not in self.state_slots:
             raise ValueError('activity is closed')
         slot = self.state_slots[state_slot]
-        start = self.anchor + (cycle * len(self.themes) + slot) * self.SECONDS
-        return ActivityPeriod(row['period'], start, start + self.SECONDS, self.themes[slot])
+        start, end = self.bounds(cycle * len(self.themes) + slot)
+        return ActivityPeriod(row['period'], start, end, self.themes[slot])
