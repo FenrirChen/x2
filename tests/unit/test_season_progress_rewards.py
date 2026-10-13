@@ -23,6 +23,7 @@ def test_achievement_five_original_point_rewards_and_replay(env):
     store,e,s=env
     overview=call(s,'SeasonAchvOverView',{},1)
     assert overview.values['achvPointRewardList']==[0]*5
+    assert call(s,'SeasonAchvPointReward',{'achvPointId':5},2).values['code']==13
     assert call(s,'SeasonAchvPointReward',{'achvPointId':0},2).values['code']==13
     with e.transaction():
         state=s.state(1)
@@ -35,15 +36,22 @@ def test_achievement_five_original_point_rewards_and_replay(env):
     overview=call(s,'SeasonAchvOverView',{},3)
     assert overview.values['achvPoint']>=60
     assert overview.values['achvPointRewardList']==[1]*5
-    for i in range(5):
-        result=call(s,'SeasonAchvPointReward',{'achvPointId':i},10+i)
+    targets=s.e.catalog['task_control']['CompleteBpAchievementNumber']
+    assert targets==[5,10,20,40,60]
+    # 客户端 C2L_SeasonAchvPointReward.achvPointId 发的是里程碑阈值本身 (5/10/20/40/60),
+    # 不是下标 —— 见 season.py 该分支的说明; 下标写法作为兼容路径另行保留。
+    for i,n in enumerate(targets):
+        result=call(s,'SeasonAchvPointReward',{'achvPointId':n},10+i)
         assert result.values['code']==10 and result.values['status']==2
+        assert result.values['achvPointId']==n
         rewards={r['itemId']:r['itemNum'] for r in map(REWARD_ITEM.decode, REWARD.decode(result.values['rewardData'])['rewardItem'])}
         assert rewards=={1237840:i+1,1237925:1}
         before=[tuple(r) for r in store.db.execute('SELECT * FROM inventory')]
-        assert call(s,'SeasonAchvPointReward',{'achvPointId':i},10+i).values==result.values
+        assert call(s,'SeasonAchvPointReward',{'achvPointId':n},10+i).values==result.values
         assert [tuple(r) for r in store.db.execute('SELECT * FROM inventory')]==before
-        assert call(s,'SeasonAchvPointReward',{'achvPointId':i},100+i).values['code']==13
+        assert call(s,'SeasonAchvPointReward',{'achvPointId':n},100+i).values['code']==13
+    for i in range(5):
+        assert call(s,'SeasonAchvPointReward',{'achvPointId':i},300+i).values['code']==13
     assert call(s,'SeasonAchvOverView',{},200).values['achvPointRewardList']==[2]*5
 
 
