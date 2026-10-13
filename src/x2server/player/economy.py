@@ -137,6 +137,16 @@ class EconomyService:
             for row in self.catalog["items"]:
                 if str(row["ItemID"]) in used and not row.get("Used"):
                     row["Used"] = used[str(row["ItemID"])]["used"]
+        # Item.FunctionEff == E_AutoUsed(7): the row is a receipt for its
+        # Item.EffData Gift group and opens the moment it is acquired. It carries
+        # no Item.Used, so the client can never open it and _grant would otherwise
+        # park a dead receipt in the bag (e.g. the red packet's 光能 receipts).
+        # reward_items omits FunctionEff/EffData, so restore the links from their
+        # own catalog, mirroring item_used_catalog above.
+        auto_path = files("x2server").joinpath("data/item_auto_used_catalog.json")
+        self.auto_used_items = ({int(k): list(v) for k, v in
+            json.loads(auto_path.read_text(encoding="utf-8"))["items"].items()}
+            if auto_path.is_file() else {})
         self.sections = {r["SectionID"]: r for r in self.catalog["sections"]}
         self.daily_sections = {r["SectionID"]: r for r in self.catalog.get("daily_sections", [])}
         self.reward_sections = {**self.sections, **self.daily_sections}
@@ -426,12 +436,39 @@ class EconomyService:
             for i, n in sorted(rewards.items())],
             "rewardEquip": reward_equips})
 
+    def expand_auto_used(self, rewards):
+        """Convert Item.FunctionEff == E_AutoUsed(7) receipts into their Gift.
+
+        The receipt row is a wrapper: it exposes no Item.Used, so the client can
+        never open it and a stored receipt loses the reward entirely (the red
+        packet's 光能 receipts). Resolve each receipt through the
+        same ``gifts`` path a manual box uses, recursively, because a receipt may
+        itself yield another receipt. A group that is not recovered yet keeps its
+        receipt untouched rather than silently dropping the reward.
+        """
+        resolved = Counter()
+        for item, count in rewards.items():
+            groups = self.auto_used_items.get(item)
+            if not groups:
+                resolved[item] += count
+                continue
+            try:
+                contents = self.gifts(groups, allow_daily_random=True)
+            except UnresolvedEconomy:
+                resolved[item] += count
+                continue
+            for produced, amount in self.expand_auto_used(contents).items():
+                resolved[produced] += amount * count
+        return resolved
+
     def _grant(self, player_id, source, rewards, *, stackable_types=()):
         """Called inside the owner's transaction; never commits independently."""
         existing = self.store.db.execute("SELECT rewards FROM economy_grants WHERE player_id=? AND source=?",
                                          (player_id, source)).fetchone()
         if existing:
             return {int(i): n for i, n in json.loads(existing[0]).items()}
+        if self.auto_used_items and any(item in self.auto_used_items for item in rewards):
+            rewards = self.expand_auto_used(rewards)
         player = self.store.get(player_id)
         snapshot = player["snapshot"]
         for item, count in rewards.items():
