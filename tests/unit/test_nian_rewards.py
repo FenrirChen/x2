@@ -112,6 +112,29 @@ def test_normal_failed_battle_never_converts_nian_currency(runtime):
     assert not store.db.execute('SELECT 1 FROM inventory WHERE player_id=1 AND item_id=1203021').fetchone()
 
 
+def test_red_packet_light_receipt_credits_currency_instead_of_a_dead_item(env):
+    """Item.FunctionEff == E_AutoUsed(7): the opened packet pays out, never banks a receipt.
+
+    1290179 is the 光能*2022 receipt (EffData 776228 -> E_Currency 1237913) the
+    red packet can draw; it exposes no Item.Used, so storing it loses the reward.
+    """
+    store, economy, _ = env
+    with economy.transaction():
+        granted = economy._grant(1, 'red-packet:1290179', {1290179: 1})
+    assert granted == {1237913: 2022}
+    assert store.db.execute('SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1237913').fetchone()[0] == 2022
+    assert not store.db.execute('SELECT 1 FROM inventory WHERE player_id=1 AND item_id=1290179').fetchone()
+
+
+def test_red_packet_receipts_scale_and_manual_packets_stay_in_the_bag(env):
+    _, economy, _ = env
+    # Every 光能 tier the packet draws resolves the same way, scaled by quantity.
+    assert economy.expand_auto_used({1290177: 1}) == {1237913: 68}
+    assert economy.expand_auto_used({1290178: 3}) == {1237913: 88 * 3}
+    # 1203021 is a manual packet (Item.Used = 776193), not an auto-used receipt.
+    assert economy.expand_auto_used({1203021: 1}) == {1203021: 1}
+
+
 def test_client_outside_packet_cannot_duplicate_server_exchange(runtime):
     g = game(runtime)
     response, _, _ = finish(g, 840, 981, success=True,

@@ -1,0 +1,14 @@
+{
+ "provenance": "Item.FunctionEff == E_AutoUsed(7): Item.EffData names the Gift group the row converts into the moment it is acquired (the client opens it automatically). These are the receipts the red packet (Item 1203021 -> Gift 776193) can draw, restored as data because reward_items.json omits FunctionEff/EffData.",
+ "items": {
+  "1290177": [
+   776226
+  ],
+  "1290178": [
+   776227
+  ],
+  "1290179": [
+   776228
+  ]
+ }
+}
