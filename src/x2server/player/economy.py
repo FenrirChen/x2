@@ -1378,7 +1378,19 @@ class EconomyService:
             (json.dumps(snapshot, ensure_ascii=False, sort_keys=True), player_id))
 
     def refresh_stamina(self, player_id):
-        """Settle earned points once, retaining the partial interval in the save."""
+        """Settle earned points once, retaining the partial interval in the save.
+
+        ``recover_anchor`` stays the server-authoritative anchor (field name kept to
+        avoid churn), but two things happen alongside it:
+
+        * 镜像 —— 只要改动了 ``recover_anchor``, 就把 ``mobility["shop_power_fetch_time"]``
+          写成同一个值 (客户端 Mobility.ShopPowerFetchTime)。客户端 CollegeModule.RefreshPower
+          正是用它外推启明之塔 702 的显示值, 起点与服务端一致才不会重复计数 (结算完的瞬间
+          外推项 = floor(余数/周期 × 转化率) = 0)。
+        * 溢出进塔 —— 体力条填满之后剩下的 ``earned`` 整期交给启明之塔 702 存储
+          (``college.credit_overflow``)。``college`` 由 run_server 注入 (``self.college``),
+          未接线时退化为"只回体力、不进塔"(不依赖学院的单测仍能过)。
+        """
         now = int(self.clock())
         with self.transaction():
             snapshot = self.store.get(player_id)["snapshot"]
@@ -1389,17 +1401,28 @@ class EconomyService:
             if cap is None:
                 return
             anchor = mobility.get("recover_anchor")
-            if mobility["power"] >= cap or type(anchor) is not int or anchor <= 0 or anchor > now:
+            if type(anchor) is not int or anchor <= 0 or anchor > now:
+                # 客户端 PowerModule_CheckPowerRecover 在 ShopPowerFetchTime <= 0 时完全不
+                # 恢复, 所以无效锚点只能按 now 起算; 同时镜像外推起点。
                 if anchor != now:
                     mobility["recover_anchor"] = now
+                    mobility["shop_power_fetch_time"] = now
                     self.save_snapshot(player_id, snapshot)
                 return
             earned = (now - anchor) // self.POWER_RECOVER_SECONDS
-            if earned:
-                mobility["power"] = min(cap, mobility["power"] + earned)
-                mobility["recover_anchor"] = (now if mobility["power"] == cap
-                    else anchor + earned * self.POWER_RECOVER_SECONDS)
-                self.save_snapshot(player_id, snapshot)
+            if not earned:
+                return
+            room = max(0, cap - mobility["power"])
+            filled = min(earned, room)
+            mobility["power"] += filled
+            overflow = earned - filled
+            college = getattr(self, "college", None)
+            if overflow and college is not None:
+                college.credit_overflow(player_id, overflow)
+            mobility["recover_anchor"] = (now if mobility["power"] == cap and not overflow
+                else anchor + earned * self.POWER_RECOVER_SECONDS)
+            mobility["shop_power_fetch_time"] = mobility["recover_anchor"]
+            self.save_snapshot(player_id, snapshot)
 
     def charge_battle(self, player_id, run_uuid, section, amount=None):
         # BattleEntryContext supplies an explicit policy cost for non-main modes.
