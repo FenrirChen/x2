@@ -36,6 +36,7 @@
 | `club_messages.py` | `src/x2server/messages/club.py` | 新增。`CLUB_IDS` 号段表 + `CLUB_SCHEMAS`（含 `SIMPLE_CLUB_DATA`） |
 | `club_catalog.json` | `src/x2server/data/club_catalog.json` | 新增。社团招募/图标等静态配置 |
 | `ai_players.json` | `src/x2server/data/ai_players.json` | 社团成员名册（复用好友系统同一份人机数据） |
+| `college_help.py` | `src/x2server/player/college.py`（**并入**，非新文件） | 片段。公会助力 879 `C2L_HelpPowerSpeed` 的处理逻辑（`CollegeService._HelpPowerSpeed`）+ 3 处接线说明 |
 
 ## 需要新增的协议（参考）
 
@@ -87,8 +88,10 @@ SIMPLE_CLUB_DATA = S("SimpleClubData", (
 2. `src/x2server/bootstrap/local_identity.py`：加 `/ClubService.*`（社团页/推荐/祈愿页，动态应答）、
    `/RankingService.QueryRank`（社团排行，直接回合法 `QueryRankReply`）、
    `/KVStoreService.GetValuesV2`（公会助力页建筑列表）三条 HTTP 路由。
-3. `src/x2server/player/college.py`：`879 C2L_HelpPowerSpeed` 公会助力（建筑加速协助），
-   按 `/KVStoreService.GetValuesV2` 的 `club_speed_*` 键对接。
+3. `src/x2server/player/college.py`：`879 C2L_HelpPowerSpeed` 公会助力（建筑加速协助）。
+   本目录 `college_help.py` 已把 `CollegeService._HelpPowerSpeed` 与常量/接线片段摘出来，
+   按该文件开头的 3 个接入点并入即可；建筑列表按 `/KVStoreService.GetValuesV2` 的
+   `club_speed_*` 键对接。
 4. `src/x2server/player/battle.py`：镜域试炼（SectionType 12）结算钩子，调 `club.settle_mirror_checkout`。
 5. `tools/local_game_server.py`：接线 `ClubReader`（挂到 identity 的 `club_reader`）与 `ClubService`
    （注册 `C2L_*` handler）。
@@ -97,6 +100,7 @@ SIMPLE_CLUB_DATA = S("SimpleClubData", (
 
 - 直接把 `club.py` 拷进去**不能跑**：它依赖上面的 `CORE_SCHEMAS` / HTTP 路由 / handler 接线与
   `battle.py` 镜域钩子，这几处是本地改过的共享文件，我没有一起放出来（会给主仓库带来大量无关 diff）。
+  唯一例外是公会助力 879 —— 它的处理逻辑已在 `college_help.py` 单独摘出。
 - 镜域伤害→活动积分的换算比（`MIRROR_SCORE_DIV`）是本地自造，官方换算表未反出。
 - 人机名册是本地数据，不是从官方表还原的。
 - 没有配套单测。
