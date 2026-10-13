@@ -99,7 +99,10 @@ async def run(database: Path, seconds: float) -> None:
     supply_minted, supply_failed = deliver_revival_supply(store, clock.now())
     logging.getLogger("x2.system_mail").info(
         "revival supply mail backfill minted=%s failed=%s", supply_minted, supply_failed)
-    economy = EconomyService(store, clock=clock.now)
+    # resource_double_drop=True: 资源本额外掉落常驻 (客户端「限时掉落活动」
+    # E_ExtraDroop / 表-ExtraDroop 口径, 每关每天前 NumLimit 次结算产出 +100%,
+    # 见 player/extra_drop.py)。默认构造保持关闭, 与既有单元测试口径一致。
+    economy = EconomyService(store, clock=clock.now, resource_double_drop=True)
     # 星相屋/每日占卜 (362/363): 读写自己的签到状态并真发货, 见 player/divination.py。
     divination = DivinationService(store, economy)
     college_flows = CollegeService(college, economy=economy)
