@@ -4,229 +4,229 @@
   {
    "customerId": 38001,
    "heroId": 1003,
-   "like": 992,
+   "likes": [991, 992],
    "sellQuestId": 35303
   },
   {
    "customerId": 38002,
    "heroId": 1004,
-   "like": 993,
+   "likes": [991, 993],
    "sellQuestId": 35304
   },
   {
    "customerId": 38003,
    "heroId": 1005,
-   "like": 994,
+   "likes": [991, 994],
    "sellQuestId": 35305
   },
   {
    "customerId": 38004,
    "heroId": 1006,
-   "like": 995,
+   "likes": [991, 995],
    "sellQuestId": 35306
   },
   {
    "customerId": 38005,
    "heroId": 1007,
-   "like": 996,
+   "likes": [991, 996],
    "sellQuestId": 35307
   },
   {
    "customerId": 38006,
    "heroId": 1008,
-   "like": 993,
+   "likes": [992, 993],
    "sellQuestId": 35308
   },
   {
    "customerId": 38007,
    "heroId": 1009,
-   "like": 994,
+   "likes": [992, 994],
    "sellQuestId": 35309
   },
   {
    "customerId": 38008,
    "heroId": 1010,
-   "like": 995,
+   "likes": [992, 995],
    "sellQuestId": 35310
   },
   {
    "customerId": 38009,
    "heroId": 1011,
-   "like": 996,
+   "likes": [992, 996],
    "sellQuestId": 35311
   },
   {
    "customerId": 38010,
    "heroId": 1012,
-   "like": 994,
+   "likes": [993, 994],
    "sellQuestId": 35312
   },
   {
    "customerId": 38011,
    "heroId": 1013,
-   "like": 995,
+   "likes": [993, 995],
    "sellQuestId": 35313
   },
   {
    "customerId": 38012,
    "heroId": 1014,
-   "like": 996,
+   "likes": [993, 996],
    "sellQuestId": 35314
   },
   {
    "customerId": 38013,
    "heroId": 1015,
-   "like": 995,
+   "likes": [994, 995],
    "sellQuestId": 35315
   },
   {
    "customerId": 38014,
    "heroId": 1016,
-   "like": 996,
+   "likes": [994, 996],
    "sellQuestId": 35316
   },
   {
    "customerId": 38015,
    "heroId": 1017,
-   "like": 996,
+   "likes": [995, 996],
    "sellQuestId": 35317
   },
   {
    "customerId": 38016,
    "heroId": 1018,
-   "like": 992,
+   "likes": [991, 992],
    "sellQuestId": 35318
   },
   {
    "customerId": 38017,
    "heroId": 1019,
-   "like": 993,
+   "likes": [991, 993],
    "sellQuestId": 35319
   },
   {
    "customerId": 38018,
    "heroId": 1020,
-   "like": 994,
+   "likes": [991, 994],
    "sellQuestId": 35320
   },
   {
    "customerId": 38019,
    "heroId": 1021,
-   "like": 995,
+   "likes": [991, 995],
    "sellQuestId": 35321
   },
   {
    "customerId": 38020,
    "heroId": 1022,
-   "like": 996,
+   "likes": [991, 996],
    "sellQuestId": 35322
   },
   {
    "customerId": 38021,
    "heroId": 1023,
-   "like": 994,
+   "likes": [992, 994],
    "sellQuestId": 35323
   },
   {
    "customerId": 38025,
    "heroId": 1025,
-   "like": 994,
+   "likes": [993, 994],
    "sellQuestId": 35325
   },
   {
    "customerId": 38026,
    "heroId": 1026,
-   "like": 994,
+   "likes": [993, 994],
    "sellQuestId": 35326
   },
   {
    "customerId": 38027,
    "heroId": 1027,
-   "like": 996,
+   "likes": [992, 996],
    "sellQuestId": 35327
   },
   {
    "customerId": 38028,
    "heroId": 1028,
-   "like": 995,
+   "likes": [992, 995],
    "sellQuestId": 35328
   },
   {
    "customerId": 38029,
    "heroId": 1029,
-   "like": 994,
+   "likes": [993, 994],
    "sellQuestId": 35329
   },
   {
    "customerId": 38030,
    "heroId": 1030,
-   "like": 995,
+   "likes": [992, 995],
    "sellQuestId": 35330
   },
   {
    "customerId": 38031,
    "heroId": 1031,
-   "like": 996,
+   "likes": [993, 996],
    "sellQuestId": 35331
   },
   {
    "customerId": 38032,
    "heroId": 1032,
-   "like": 996,
+   "likes": [992, 996],
    "sellQuestId": 35332
   },
   {
    "customerId": 38033,
    "heroId": 1033,
-   "like": 994,
+   "likes": [993, 994],
    "sellQuestId": 35333
   },
   {
    "customerId": 38034,
    "heroId": 1034,
-   "like": 996,
+   "likes": [994, 996],
    "sellQuestId": 35334
   },
   {
    "customerId": 38035,
    "heroId": 1035,
-   "like": 996,
+   "likes": [994, 996],
    "sellQuestId": 35335
   },
   {
    "customerId": 38036,
    "heroId": 1036,
-   "like": 993,
+   "likes": [991, 993],
    "sellQuestId": 35336
   },
   {
    "customerId": 38039,
    "heroId": 1039,
-   "like": 996,
+   "likes": [992, 996],
    "sellQuestId": 35339
   },
   {
    "customerId": 38040,
    "heroId": 1040,
-   "like": 993,
+   "likes": [992, 993],
    "sellQuestId": 35340
   },
   {
    "customerId": 38197,
    "heroId": 1197,
-   "like": 995,
+   "likes": [992, 995],
    "sellQuestId": 35497
   },
   {
    "customerId": 38198,
    "heroId": 1198,
-   "like": 996,
+   "likes": [992, 996],
    "sellQuestId": 35498
   },
   {
    "customerId": 38199,
    "heroId": 1199,
-   "like": 994,
+   "likes": [993, 994],
    "sellQuestId": 35499
   }
  ],
