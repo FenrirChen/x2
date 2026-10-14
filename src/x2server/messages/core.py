@@ -6,6 +6,8 @@ schemas are required by a later milestone. This file defines no handlers.
 
 from x2server.protocol.protobuf import FieldKind, ProtoField, ProtoSchema
 from x2server.messages.lobby import LOBBY_SCHEMAS
+from x2server.messages.club import CLUB_SCHEMAS
+from x2server.messages.social import SOCIAL_SCHEMAS
 from x2server.messages.achievements import ACHIEVEMENT_SCHEMAS
 from x2server.messages.chat import CHAT_SCHEMAS
 from x2server.messages.battle import BATTLE_SCHEMAS
@@ -112,6 +114,8 @@ CORE_SCHEMAS = {
 }
 from x2server.messages.college import COLLEGE_SCHEMAS
 CORE_SCHEMAS.update(LOBBY_SCHEMAS)
+CORE_SCHEMAS.update(CLUB_SCHEMAS)
+CORE_SCHEMAS.update(SOCIAL_SCHEMAS)
 from x2server.messages.activity import ACTIVITY_SCHEMAS
 CORE_SCHEMAS.update({name: schema for name, schema in ACTIVITY_SCHEMAS.items()
                      if name.startswith(('C2L_', 'L2C_'))})
@@ -241,6 +245,7 @@ PLAYER_DATA = ProtoSchema("PlayerDataProto", (
     # 一份 PlayerData 来刷新；这个成员缺席时预设页永远是空的，保存也拿不到回包。形状见
     # messages/equip_plan.py，值由 player/equip_plans.snapshot_value 生成。
     ProtoField(9, "EquipPlan", FieldKind.MESSAGE),
+    ProtoField(10, "FriendData", FieldKind.MESSAGE),
     ProtoField(11, "RelicPack", FieldKind.MESSAGE, repeated=True),
     ProtoField(15, "favor", FieldKind.MESSAGE, repeated=True),
 ))

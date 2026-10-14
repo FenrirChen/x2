@@ -307,6 +307,8 @@ class BattleService:
                         request.get('extraData', []),
                         [h.get('heroId', 0) for h in map(PROFILE_HERO.decode, request.get('heros', []))
                          if h.get('state', 0) == 0])
+                    if section_type == 12 and getattr(self.economy, "social", None):
+                        self.economy.social.completed(player_id, section, request.get("success", False))
                     if section_type == 20:
                         from x2server.messages.equipment import HERO_EQUIP
                         self.economy.season.completed(player_id, row['uuid'], request.get('success', False),
@@ -694,6 +696,14 @@ class BattleService:
         values = {"result": 10, "uuid": str(uuid.uuid4()), "sign": secrets.token_bytes(32),
                   "data": data, "fightDataProfile": profile, "playerLevel": snapshot["level"],
                   "monsterInitLevel": self.monster_levels.get(scene, 0)}
+        if request.get('assistData') and self.economy and getattr(self.economy,'social',None):
+            try:
+                assist=self.economy.social.assist(player['id'],request['assistData'],section_config)
+            except (ValueError,KeyError) as exc:
+                logging.getLogger('x2.battle').info('friend support denied player=%s reason=%s',player['id'],exc)
+                return reject
+            if assist:
+                values['assistData']=assist
         if self.economy and self.catalog.sections[section].get('Type') == 6:
             boss_id = self.economy.world_boss.public_bosses(player['id'])
             values['monsterInitLevel'] = self.economy.world_boss.get_boss(boss_id)['monster_level']
@@ -713,6 +723,8 @@ class BattleService:
                         self.economy.world_boss.finish_battle(player['id'],old[0],False)
                         self.economy.season.completed(player['id'], old[0], False, 0)
                     cost = entry_context.stamina_cost
+                    if entry_context.section_type == 12 and getattr(self.economy, "social", None):
+                        self.economy.social.bind_run(player["id"], section, values["uuid"])
                     if entry_context.section_type == 20:
                         self.economy.season.bind_run(player['id'], section, values['uuid'])
                     if activity and section in activity.rotation.section_groups:

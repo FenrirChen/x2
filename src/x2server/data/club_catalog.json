@@ -1,0 +1,1687 @@
+{
+ "mirror": [
+  {
+   "bossId": 2070001,
+   "bossName": 50261,
+   "challengeReward": 778201,
+   "difficulty": 0,
+   "monsterId": 5801,
+   "stageIds": [
+    2070001,
+    2170001
+   ],
+   "winConsume": [
+    1283201,
+    1
+   ],
+   "winReward": 778101
+  },
+  {
+   "bossId": 2070002,
+   "bossName": 50271,
+   "challengeReward": 778201,
+   "difficulty": 2,
+   "monsterId": 5802,
+   "stageIds": [
+    2170002
+   ],
+   "winConsume": [
+    1283201,
+    1
+   ],
+   "winReward": 778102
+  },
+  {
+   "bossId": 2070003,
+   "bossName": 50281,
+   "challengeReward": 778201,
+   "difficulty": 3,
+   "monsterId": 5803,
+   "stageIds": [
+    2170003
+   ],
+   "winConsume": [
+    1283201,
+    1
+   ],
+   "winReward": 778103
+  },
+  {
+   "bossId": 2070004,
+   "bossName": 59101,
+   "challengeReward": 778201,
+   "difficulty": 4,
+   "monsterId": 5804,
+   "stageIds": [
+    2170004
+   ],
+   "winConsume": [
+    1283201,
+    1
+   ],
+   "winReward": 778104
+  },
+  {
+   "bossId": 2070005,
+   "bossName": 50161,
+   "challengeReward": 778201,
+   "difficulty": 5,
+   "monsterId": 5805,
+   "stageIds": [
+    2170005
+   ],
+   "winConsume": [
+    1283201,
+    1
+   ],
+   "winReward": 778105
+  },
+  {
+   "bossId": 2070006,
+   "bossName": 50171,
+   "challengeReward": 778201,
+   "difficulty": 6,
+   "monsterId": 5806,
+   "stageIds": [
+    2170006
+   ],
+   "winConsume": [
+    1283201,
+    1
+   ],
+   "winReward": 778106
+  },
+  {
+   "bossId": 2070007,
+   "bossName": 50181,
+   "challengeReward": 778201,
+   "difficulty": 7,
+   "monsterId": 5807,
+   "stageIds": [
+    2170007
+   ],
+   "winConsume": [
+    1283201,
+    1
+   ],
+   "winReward": 778107
+  },
+  {
+   "bossId": 2070008,
+   "bossName": 59001,
+   "challengeReward": 778201,
+   "difficulty": 8,
+   "monsterId": 5808,
+   "stageIds": [
+    2170008
+   ],
+   "winConsume": [
+    1283202,
+    1
+   ],
+   "winReward": 778108
+  },
+  {
+   "bossId": 2070009,
+   "bossName": 50141,
+   "challengeReward": 778201,
+   "difficulty": 9,
+   "monsterId": 5809,
+   "stageIds": [
+    2170009
+   ],
+   "winConsume": [
+    1283202,
+    1
+   ],
+   "winReward": 778109
+  },
+  {
+   "bossId": 2070010,
+   "bossName": 50201,
+   "challengeReward": 778201,
+   "difficulty": 10,
+   "monsterId": 5810,
+   "stageIds": [
+    2170010
+   ],
+   "winConsume": [
+    1283202,
+    1
+   ],
+   "winReward": 778110
+  },
+  {
+   "bossId": 2070011,
+   "bossName": 164879,
+   "challengeReward": 778201,
+   "difficulty": 11,
+   "monsterId": 5811,
+   "stageIds": [
+    2170011
+   ],
+   "winConsume": [
+    1283202,
+    1
+   ],
+   "winReward": 778111
+  },
+  {
+   "bossId": 2070012,
+   "bossName": 59031,
+   "challengeReward": 778201,
+   "difficulty": 12,
+   "monsterId": 5812,
+   "stageIds": [
+    2170012
+   ],
+   "winConsume": [
+    1283202,
+    1
+   ],
+   "winReward": 778112
+  },
+  {
+   "bossId": 2070013,
+   "bossName": 50011,
+   "challengeReward": 778201,
+   "difficulty": 13,
+   "monsterId": 5813,
+   "stageIds": [
+    2170013
+   ],
+   "winConsume": [
+    1283202,
+    1
+   ],
+   "winReward": 778113
+  },
+  {
+   "bossId": 2070014,
+   "bossName": 50021,
+   "challengeReward": 778201,
+   "difficulty": 14,
+   "monsterId": 5814,
+   "stageIds": [
+    2170014
+   ],
+   "winConsume": [
+    1283202,
+    1
+   ],
+   "winReward": 778114
+  },
+  {
+   "bossId": 2070015,
+   "bossName": 50031,
+   "challengeReward": 778201,
+   "difficulty": 15,
+   "monsterId": 5815,
+   "stageIds": [
+    2170015
+   ],
+   "winConsume": [
+    1283202,
+    1
+   ],
+   "winReward": 778115
+  },
+  {
+   "bossId": 2070016,
+   "bossName": 50041,
+   "challengeReward": 778201,
+   "difficulty": 16,
+   "monsterId": 5816,
+   "stageIds": [
+    2170016
+   ],
+   "winConsume": [
+    1283202,
+    1
+   ],
+   "winReward": 778116
+  },
+  {
+   "bossId": 2070017,
+   "bossName": 59051,
+   "challengeReward": 778201,
+   "difficulty": 17,
+   "monsterId": 5817,
+   "stageIds": [
+    2170017
+   ],
+   "winConsume": [
+    1283203,
+    1
+   ],
+   "winReward": 778117
+  },
+  {
+   "bossId": 2070018,
+   "bossName": 50051,
+   "challengeReward": 778201,
+   "difficulty": 18,
+   "monsterId": 5818,
+   "stageIds": [
+    2170018
+   ],
+   "winConsume": [
+    1283203,
+    1
+   ],
+   "winReward": 778118
+  },
+  {
+   "bossId": 2070019,
+   "bossName": 50061,
+   "challengeReward": 778201,
+   "difficulty": 19,
+   "monsterId": 5819,
+   "stageIds": [
+    2170019
+   ],
+   "winConsume": [
+    1283203,
+    1
+   ],
+   "winReward": 778119
+  },
+  {
+   "bossId": 2070020,
+   "bossName": 50071,
+   "challengeReward": 778201,
+   "difficulty": 20,
+   "monsterId": 5820,
+   "stageIds": [
+    2170020
+   ],
+   "winConsume": [
+    1283203,
+    1
+   ],
+   "winReward": 778120
+  },
+  {
+   "bossId": 2070021,
+   "bossName": 50151,
+   "challengeReward": 778201,
+   "difficulty": 21,
+   "monsterId": 5821,
+   "stageIds": [
+    2170021
+   ],
+   "winConsume": [
+    1283203,
+    1
+   ],
+   "winReward": 778121
+  },
+  {
+   "bossId": 2070022,
+   "bossName": 59061,
+   "challengeReward": 778201,
+   "difficulty": 22,
+   "monsterId": 5822,
+   "stageIds": [
+    2170022
+   ],
+   "winConsume": [
+    1283204,
+    1
+   ],
+   "winReward": 778122
+  },
+  {
+   "bossId": 2070023,
+   "bossName": 50291,
+   "challengeReward": 778201,
+   "difficulty": 23,
+   "monsterId": 5823,
+   "stageIds": [
+    2170023
+   ],
+   "winConsume": [
+    1283204,
+    1
+   ],
+   "winReward": 778123
+  },
+  {
+   "bossId": 2070024,
+   "bossName": 50301,
+   "challengeReward": 778201,
+   "difficulty": 24,
+   "monsterId": 5824,
+   "stageIds": [
+    2170024,
+    1
+   ],
+   "winConsume": [
+    1283204
+   ],
+   "winReward": 778124
+  },
+  {
+   "bossId": 2070025,
+   "bossName": 50311,
+   "challengeReward": 778201,
+   "difficulty": 25,
+   "monsterId": 5825,
+   "stageIds": [
+    2170025
+   ],
+   "winConsume": [
+    1283204,
+    1
+   ],
+   "winReward": 778125
+  },
+  {
+   "bossId": 2070026,
+   "bossName": 59181,
+   "challengeReward": 778201,
+   "difficulty": 26,
+   "monsterId": 5826,
+   "stageIds": [
+    2170026
+   ],
+   "winConsume": [
+    1283205,
+    1
+   ],
+   "winReward": 778126
+  },
+  {
+   "bossId": 2070027,
+   "bossName": 50221,
+   "challengeReward": 778201,
+   "difficulty": 27,
+   "monsterId": 5827,
+   "stageIds": [
+    2170027
+   ],
+   "winConsume": [
+    1283205,
+    1
+   ],
+   "winReward": 778127
+  },
+  {
+   "bossId": 2070028,
+   "bossName": 50231,
+   "challengeReward": 778201,
+   "difficulty": 28,
+   "monsterId": 5828,
+   "stageIds": [
+    2170028
+   ],
+   "winConsume": [
+    1283205,
+    1
+   ],
+   "winReward": 778128
+  },
+  {
+   "bossId": 2070029,
+   "bossName": 50241,
+   "challengeReward": 778201,
+   "difficulty": 29,
+   "monsterId": 5829,
+   "stageIds": [
+    2170029
+   ],
+   "winConsume": [
+    1283205,
+    1
+   ],
+   "winReward": 778129
+  },
+  {
+   "bossId": 2070030,
+   "bossName": 50251,
+   "challengeReward": 778201,
+   "difficulty": 30,
+   "monsterId": 5830,
+   "stageIds": [
+    2170030
+   ],
+   "winConsume": [
+    1283205,
+    1
+   ],
+   "winReward": 778130
+  },
+  {
+   "bossId": 2070031,
+   "bossName": 59091,
+   "challengeReward": 778201,
+   "difficulty": 31,
+   "monsterId": 5831,
+   "stageIds": [
+    2170031
+   ],
+   "winConsume": [
+    1283206,
+    1
+   ],
+   "winReward": 778131
+  },
+  {
+   "bossId": 2070032,
+   "bossName": 50101,
+   "challengeReward": 778201,
+   "difficulty": 32,
+   "monsterId": 5832,
+   "stageIds": [
+    2170032
+   ],
+   "winConsume": [
+    1283206,
+    1
+   ],
+   "winReward": 778132
+  },
+  {
+   "bossId": 2070033,
+   "bossName": 50111,
+   "challengeReward": 778201,
+   "difficulty": 33,
+   "monsterId": 5833,
+   "stageIds": [
+    2170033
+   ],
+   "winConsume": [
+    1283206,
+    1
+   ],
+   "winReward": 778133
+  },
+  {
+   "bossId": 2070034,
+   "bossName": 50121,
+   "challengeReward": 778201,
+   "difficulty": 34,
+   "monsterId": 5834,
+   "stageIds": [
+    2170034
+   ],
+   "winConsume": [
+    1283206,
+    1
+   ],
+   "winReward": 778134
+  },
+  {
+   "bossId": 2070035,
+   "bossName": 50131,
+   "challengeReward": 778201,
+   "difficulty": 35,
+   "monsterId": 5835,
+   "stageIds": [
+    2170035
+   ],
+   "winConsume": [
+    1283206,
+    1
+   ],
+   "winReward": 778135
+  },
+  {
+   "bossId": 2070036,
+   "bossName": 57141,
+   "challengeReward": 778201,
+   "difficulty": 36,
+   "monsterId": 5836,
+   "stageIds": [
+    2170036
+   ],
+   "winConsume": [
+    1283207,
+    1
+   ],
+   "winReward": 778136
+  },
+  {
+   "bossId": 2070037,
+   "bossName": 50353,
+   "challengeReward": 778201,
+   "difficulty": 37,
+   "monsterId": 5837,
+   "stageIds": [
+    2170037
+   ],
+   "winConsume": [
+    1283204,
+    1
+   ],
+   "winReward": 778137
+  },
+  {
+   "bossId": 2070038,
+   "bossName": 50354,
+   "challengeReward": 778201,
+   "difficulty": 38,
+   "monsterId": 5838,
+   "stageIds": [
+    2170038
+   ],
+   "winConsume": [
+    1283205,
+    1
+   ],
+   "winReward": 778138
+  },
+  {
+   "bossId": 2070039,
+   "bossName": 50355,
+   "challengeReward": 778201,
+   "difficulty": 39,
+   "monsterId": 5839,
+   "stageIds": [
+    2170039
+   ],
+   "winConsume": [
+    1283206,
+    1
+   ],
+   "winReward": 778139
+  },
+  {
+   "bossId": 2070040,
+   "bossName": 50356,
+   "challengeReward": 778201,
+   "difficulty": 40,
+   "monsterId": 5840,
+   "stageIds": [
+    2170040
+   ],
+   "winConsume": [
+    1283207,
+    1
+   ],
+   "winReward": 778140
+  },
+  {
+   "bossId": 2070041,
+   "bossName": 56202,
+   "challengeReward": 778201,
+   "difficulty": 41,
+   "monsterId": 5841,
+   "stageIds": [
+    2170041
+   ],
+   "winConsume": [
+    1283204,
+    1
+   ],
+   "winReward": 778137
+  },
+  {
+   "bossId": 2070042,
+   "bossName": 56203,
+   "challengeReward": 778201,
+   "difficulty": 42,
+   "monsterId": 5842,
+   "stageIds": [
+    2170042
+   ],
+   "winConsume": [
+    1283205,
+    1
+   ],
+   "winReward": 778138
+  },
+  {
+   "bossId": 2070043,
+   "bossName": 56204,
+   "challengeReward": 778201,
+   "difficulty": 43,
+   "monsterId": 5843,
+   "stageIds": [
+    2170043
+   ],
+   "winConsume": [
+    1283206,
+    1
+   ],
+   "winReward": 778139
+  },
+  {
+   "bossId": 2070044,
+   "bossName": 56205,
+   "challengeReward": 778201,
+   "difficulty": 44,
+   "monsterId": 5844,
+   "stageIds": [
+    2170044
+   ],
+   "winConsume": [
+    1283207,
+    1
+   ],
+   "winReward": 778140
+  },
+  {
+   "bossId": 2070045,
+   "bossName": 56212,
+   "challengeReward": 778201,
+   "difficulty": 45,
+   "monsterId": 5845,
+   "stageIds": [
+    2170045
+   ],
+   "winConsume": [
+    1283204,
+    1
+   ],
+   "winReward": 778137
+  },
+  {
+   "bossId": 2070046,
+   "bossName": 56213,
+   "challengeReward": 778201,
+   "difficulty": 46,
+   "monsterId": 5846,
+   "stageIds": [
+    2170046
+   ],
+   "winConsume": [
+    1283205,
+    1
+   ],
+   "winReward": 778138
+  },
+  {
+   "bossId": 2070047,
+   "bossName": 56214,
+   "challengeReward": 778201,
+   "difficulty": 47,
+   "monsterId": 5847,
+   "stageIds": [
+    2170047
+   ],
+   "winConsume": [
+    1283206,
+    1
+   ],
+   "winReward": 778139
+  },
+  {
+   "bossId": 2070048,
+   "bossName": 56215,
+   "challengeReward": 778201,
+   "difficulty": 48,
+   "monsterId": 5848,
+   "stageIds": [
+    2170048
+   ],
+   "winConsume": [
+    1283207,
+    1
+   ],
+   "winReward": 778140
+  },
+  {
+   "bossId": 2070049,
+   "bossName": 56443,
+   "challengeReward": 778201,
+   "difficulty": 49,
+   "monsterId": 5849,
+   "stageIds": [
+    2170049
+   ],
+   "winConsume": [
+    1283204,
+    1
+   ],
+   "winReward": 778137
+  },
+  {
+   "bossId": 2070050,
+   "bossName": 56444,
+   "challengeReward": 778201,
+   "difficulty": 50,
+   "monsterId": 5850,
+   "stageIds": [
+    2170050
+   ],
+   "winConsume": [
+    1283205,
+    1
+   ],
+   "winReward": 778138
+  },
+  {
+   "bossId": 2070051,
+   "bossName": 56445,
+   "challengeReward": 778201,
+   "difficulty": 51,
+   "monsterId": 5851,
+   "stageIds": [
+    2170051
+   ],
+   "winConsume": [
+    1283206,
+    1
+   ],
+   "winReward": 778139
+  },
+  {
+   "bossId": 2070052,
+   "bossName": 56446,
+   "challengeReward": 778201,
+   "difficulty": 52,
+   "monsterId": 5852,
+   "stageIds": [
+    2170052
+   ],
+   "winConsume": [
+    1283207,
+    1
+   ],
+   "winReward": 778140
+  }
+ ],
+ "mirrorLayerIds": [
+  1,
+  2070001,
+  2070002,
+  2070003,
+  2070004,
+  2070005,
+  2070006,
+  2070007,
+  2070008,
+  2070009,
+  2070010,
+  2070011,
+  2070012,
+  2070013,
+  2070014,
+  2070015,
+  2070016,
+  2070017,
+  2070018,
+  2070019,
+  2070020,
+  2070021,
+  2070022,
+  2070023,
+  2070024,
+  2070025,
+  2070026,
+  2070027,
+  2070028,
+  2070029,
+  2070030,
+  2070031,
+  2070032,
+  2070033,
+  2070034,
+  2070035,
+  2070036,
+  2070037,
+  2070038,
+  2070039,
+  2070040,
+  2070041,
+  2070042,
+  2070043,
+  2070044,
+  2070045,
+  2070046,
+  2070047,
+  2070048,
+  2070049,
+  2070050,
+  2070051,
+  2070052,
+  2170001,
+  2170002,
+  2170003,
+  2170004,
+  2170005,
+  2170006,
+  2170007,
+  2170008,
+  2170009,
+  2170010,
+  2170011,
+  2170012,
+  2170013,
+  2170014,
+  2170015,
+  2170016,
+  2170017,
+  2170018,
+  2170019,
+  2170020,
+  2170021,
+  2170022,
+  2170023,
+  2170024,
+  2170025,
+  2170026,
+  2170027,
+  2170028,
+  2170029,
+  2170030,
+  2170031,
+  2170032,
+  2170033,
+  2170034,
+  2170035,
+  2170036,
+  2170037,
+  2170038,
+  2170039,
+  2170040,
+  2170041,
+  2170042,
+  2170043,
+  2170044,
+  2170045,
+  2170046,
+  2170047,
+  2170048,
+  2170049,
+  2170050,
+  2170051,
+  2170052
+ ],
+ "wishes": {
+  "1201003": {
+   "award": [
+    778003,
+    778000
+   ],
+   "consume": [
+    901,
+    1000
+   ],
+   "numLimit": 3,
+   "unlockLevel": 1,
+   "wishType": 2
+  },
+  "1201004": {
+   "award": [
+    778002,
+    778000
+   ],
+   "consume": [
+    901,
+    2000
+   ],
+   "numLimit": 3,
+   "unlockLevel": 1,
+   "wishType": 2
+  },
+  "1201005": {
+   "award": [
+    778001,
+    778000
+   ],
+   "consume": [
+    901,
+    3000
+   ],
+   "numLimit": 2,
+   "unlockLevel": 1,
+   "wishType": 2
+  },
+  "1201006": {
+   "award": [
+    778003,
+    778000
+   ],
+   "consume": [
+    901,
+    1000
+   ],
+   "numLimit": 3,
+   "unlockLevel": 1,
+   "wishType": 2
+  },
+  "1201007": {
+   "award": [
+    778002,
+    778000
+   ],
+   "consume": [
+    901,
+    2000
+   ],
+   "numLimit": 3,
+   "unlockLevel": 1,
+   "wishType": 2
+  },
+  "1201008": {
+   "award": [
+    778001,
+    778000
+   ],
+   "consume": [
+    901,
+    3000
+   ],
+   "numLimit": 2,
+   "unlockLevel": 1,
+   "wishType": 2
+  },
+  "1201009": {
+   "award": [
+    778002,
+    778000
+   ],
+   "consume": [
+    901,
+    2000
+   ],
+   "numLimit": 3,
+   "unlockLevel": 1,
+   "wishType": 2
+  },
+  "1201010": {
+   "award": [
+    778002,
+    778000
+   ],
+   "consume": [
+    901,
+    2000
+   ],
+   "numLimit": 3,
+   "unlockLevel": 1,
+   "wishType": 2
+  },
+  "1201011": {
+   "award": [
+    778002,
+    778000
+   ],
+   "consume": [
+    901,
+    2000
+   ],
+   "numLimit": 3,
+   "unlockLevel": 1,
+   "wishType": 2
+  },
+  "1201012": {
+   "award": [
+    778001,
+    778000
+   ],
+   "consume": [
+    901,
+    3000
+   ],
+   "numLimit": 2,
+   "unlockLevel": 1,
+   "wishType": 2
+  },
+  "1201013": {
+   "award": [
+    778002,
+    778000
+   ],
+   "consume": [
+    901,
+    2000
+   ],
+   "numLimit": 3,
+   "unlockLevel": 1,
+   "wishType": 2
+  },
+  "1201014": {
+   "award": [
+    778001,
+    778000
+   ],
+   "consume": [
+    901,
+    3000
+   ],
+   "numLimit": 2,
+   "unlockLevel": 1,
+   "wishType": 2
+  },
+  "1201015": {
+   "award": [
+    778002,
+    778000
+   ],
+   "consume": [
+    901,
+    2000
+   ],
+   "numLimit": 3,
+   "unlockLevel": 1,
+   "wishType": 2
+  },
+  "1201016": {
+   "award": [
+    778001,
+    778000
+   ],
+   "consume": [
+    901,
+    3000
+   ],
+   "numLimit": 2,
+   "unlockLevel": 1,
+   "wishType": 2
+  },
+  "1201017": {
+   "award": [
+    778002,
+    778000
+   ],
+   "consume": [
+    901,
+    2000
+   ],
+   "numLimit": 3,
+   "unlockLevel": 1,
+   "wishType": 2
+  },
+  "1201018": {
+   "award": [
+    778001,
+    778000
+   ],
+   "consume": [
+    901,
+    3000
+   ],
+   "numLimit": 2,
+   "unlockLevel": 1,
+   "wishType": 2
+  },
+  "1201019": {
+   "award": [
+    778001,
+    778000
+   ],
+   "consume": [
+    901,
+    3000
+   ],
+   "numLimit": 2,
+   "unlockLevel": 1,
+   "wishType": 2
+  },
+  "1201020": {
+   "award": [
+    778001,
+    778000
+   ],
+   "consume": [
+    901,
+    3000
+   ],
+   "numLimit": 2,
+   "unlockLevel": 1,
+   "wishType": 2
+  },
+  "1201021": {
+   "award": [
+    778002,
+    778000
+   ],
+   "consume": [
+    901,
+    2000
+   ],
+   "numLimit": 3,
+   "unlockLevel": 1,
+   "wishType": 2
+  },
+  "1201022": {
+   "award": [
+    778001,
+    778000
+   ],
+   "consume": [
+    901,
+    3000
+   ],
+   "numLimit": 2,
+   "unlockLevel": 1,
+   "wishType": 2
+  },
+  "1201023": {
+   "award": [
+    778001,
+    778000
+   ],
+   "consume": [
+    901,
+    3000
+   ],
+   "numLimit": 2,
+   "unlockLevel": 1,
+   "wishType": 2
+  },
+  "1201024": {
+   "award": [
+    778001,
+    778000
+   ],
+   "consume": [
+    901,
+    3000
+   ],
+   "numLimit": 2,
+   "unlockLevel": 1,
+   "wishType": 2
+  },
+  "1201025": {
+   "award": [
+    778001,
+    778000
+   ],
+   "consume": [
+    901,
+    3000
+   ],
+   "numLimit": 2,
+   "unlockLevel": 1,
+   "wishType": 2
+  },
+  "1201027": {
+   "award": [
+    778001,
+    778000
+   ],
+   "consume": [
+    901,
+    3000
+   ],
+   "numLimit": 2,
+   "unlockLevel": 1,
+   "wishType": 2
+  },
+  "1201028": {
+   "award": [
+    778001,
+    778000
+   ],
+   "consume": [
+    901,
+    3000
+   ],
+   "numLimit": 2,
+   "unlockLevel": 1,
+   "wishType": 2
+  },
+  "1201029": {
+   "award": [
+    775825,
+    778000
+   ],
+   "consume": [
+    901,
+    3000
+   ],
+   "numLimit": 2,
+   "unlockLevel": 1,
+   "wishType": 2
+  },
+  "1201030": {
+   "award": [
+    778001,
+    778000
+   ],
+   "consume": [
+    901,
+    3000
+   ],
+   "numLimit": 2,
+   "unlockLevel": 1,
+   "wishType": 2
+  },
+  "1201031": {
+   "award": [
+    778001,
+    778000
+   ],
+   "consume": [
+    901,
+    3000
+   ],
+   "numLimit": 2,
+   "unlockLevel": 1,
+   "wishType": 2
+  },
+  "1201032": {
+   "award": [
+    778001,
+    778000
+   ],
+   "consume": [
+    901,
+    3000
+   ],
+   "numLimit": 2,
+   "unlockLevel": 1,
+   "wishType": 2
+  },
+  "1201033": {
+   "award": [
+    778001,
+    778000
+   ],
+   "consume": [
+    901,
+    3000
+   ],
+   "numLimit": 2,
+   "unlockLevel": 1,
+   "wishType": 2
+  },
+  "1201034": {
+   "award": [
+    778001,
+    778000
+   ],
+   "consume": [
+    901,
+    3000
+   ],
+   "numLimit": 2,
+   "unlockLevel": 1,
+   "wishType": 2
+  },
+  "1201035": {
+   "award": [
+    778001,
+    778000
+   ],
+   "consume": [
+    901,
+    3000
+   ],
+   "numLimit": 2,
+   "unlockLevel": 1,
+   "wishType": 2
+  },
+  "1201036": {
+   "award": [
+    778001,
+    778000
+   ],
+   "consume": [
+    901,
+    3000
+   ],
+   "numLimit": 2,
+   "unlockLevel": 1,
+   "wishType": 2
+  },
+  "1201039": {
+   "award": [
+    778001,
+    778000
+   ],
+   "consume": [
+    901,
+    3000
+   ],
+   "numLimit": 2,
+   "unlockLevel": 1,
+   "wishType": 2
+  },
+  "1201040": {
+   "award": [
+    778001,
+    778000
+   ],
+   "consume": [
+    901,
+    3000
+   ],
+   "numLimit": 2,
+   "unlockLevel": 1,
+   "wishType": 2
+  },
+  "1201197": {
+   "award": [
+    778001,
+    778000
+   ],
+   "consume": [
+    901,
+    3000
+   ],
+   "numLimit": 2,
+   "unlockLevel": 1,
+   "wishType": 2
+  },
+  "1201198": {
+   "award": [
+    778002,
+    778000
+   ],
+   "consume": [
+    901,
+    2000
+   ],
+   "numLimit": 3,
+   "unlockLevel": 1,
+   "wishType": 2
+  },
+  "1201199": {
+   "award": [
+    778003,
+    778000
+   ],
+   "consume": [
+    901,
+    1000
+   ],
+   "numLimit": 3,
+   "unlockLevel": 1,
+   "wishType": 2
+  },
+  "1204003": {
+   "award": [
+    778005,
+    778000
+   ],
+   "consume": [
+    901,
+    1000
+   ],
+   "numLimit": 3,
+   "unlockLevel": 1,
+   "wishType": 1
+  },
+  "1204004": {
+   "award": [
+    778005,
+    778000
+   ],
+   "consume": [
+    901,
+    1000
+   ],
+   "numLimit": 3,
+   "unlockLevel": 1,
+   "wishType": 1
+  },
+  "1204005": {
+   "award": [
+    778005,
+    778000
+   ],
+   "consume": [
+    901,
+    1000
+   ],
+   "numLimit": 3,
+   "unlockLevel": 1,
+   "wishType": 1
+  },
+  "1204006": {
+   "award": [
+    778005,
+    778000
+   ],
+   "consume": [
+    901,
+    1000
+   ],
+   "numLimit": 3,
+   "unlockLevel": 1,
+   "wishType": 1
+  },
+  "1204007": {
+   "award": [
+    778005,
+    778000
+   ],
+   "consume": [
+    901,
+    1000
+   ],
+   "numLimit": 3,
+   "unlockLevel": 1,
+   "wishType": 1
+  },
+  "1204008": {
+   "award": [
+    778005,
+    778000
+   ],
+   "consume": [
+    901,
+    1000
+   ],
+   "numLimit": 3,
+   "unlockLevel": 1,
+   "wishType": 1
+  },
+  "1204009": {
+   "award": [
+    778005,
+    778000
+   ],
+   "consume": [
+    901,
+    1000
+   ],
+   "numLimit": 3,
+   "unlockLevel": 1,
+   "wishType": 1
+  },
+  "1204010": {
+   "award": [
+    778005,
+    778000
+   ],
+   "consume": [
+    901,
+    1000
+   ],
+   "numLimit": 3,
+   "unlockLevel": 1,
+   "wishType": 1
+  },
+  "1204011": {
+   "award": [
+    778005,
+    778000
+   ],
+   "consume": [
+    901,
+    1000
+   ],
+   "numLimit": 3,
+   "unlockLevel": 1,
+   "wishType": 1
+  },
+  "1204012": {
+   "award": [
+    778005,
+    778000
+   ],
+   "consume": [
+    901,
+    1000
+   ],
+   "numLimit": 3,
+   "unlockLevel": 1,
+   "wishType": 1
+  },
+  "1204013": {
+   "award": [
+    778005,
+    778000
+   ],
+   "consume": [
+    901,
+    1000
+   ],
+   "numLimit": 3,
+   "unlockLevel": 1,
+   "wishType": 1
+  },
+  "1204014": {
+   "award": [
+    778005,
+    778000
+   ],
+   "consume": [
+    901,
+    1000
+   ],
+   "numLimit": 3,
+   "unlockLevel": 1,
+   "wishType": 1
+  },
+  "1204015": {
+   "award": [
+    778005,
+    778000
+   ],
+   "consume": [
+    901,
+    1000
+   ],
+   "numLimit": 3,
+   "unlockLevel": 1,
+   "wishType": 1
+  },
+  "1204016": {
+   "award": [
+    778005,
+    778000
+   ],
+   "consume": [
+    901,
+    1000
+   ],
+   "numLimit": 3,
+   "unlockLevel": 1,
+   "wishType": 1
+  },
+  "1204017": {
+   "award": [
+    778005,
+    778000
+   ],
+   "consume": [
+    901,
+    1000
+   ],
+   "numLimit": 3,
+   "unlockLevel": 1,
+   "wishType": 1
+  },
+  "1204018": {
+   "award": [
+    778005,
+    778000
+   ],
+   "consume": [
+    901,
+    1000
+   ],
+   "numLimit": 3,
+   "unlockLevel": 1,
+   "wishType": 1
+  },
+  "1283201": {
+   "award": [
+    778006,
+    778000
+   ],
+   "consume": [
+    901,
+    1000
+   ],
+   "numLimit": 1,
+   "unlockLevel": 1,
+   "wishType": 1
+  },
+  "1283202": {
+   "award": [
+    778006,
+    778000
+   ],
+   "consume": [
+    901,
+    1000
+   ],
+   "numLimit": 1,
+   "unlockLevel": 1,
+   "wishType": 1
+  },
+  "1283203": {
+   "award": [
+    778007,
+    778000
+   ],
+   "consume": [
+    901,
+    2000
+   ],
+   "numLimit": 1,
+   "unlockLevel": 1,
+   "wishType": 1
+  },
+  "1283204": {
+   "award": [
+    778007,
+    778000
+   ],
+   "consume": [
+    901,
+    2000
+   ],
+   "numLimit": 1,
+   "unlockLevel": 1,
+   "wishType": 1
+  },
+  "1283205": {
+   "award": [
+    778007,
+    778000
+   ],
+   "consume": [
+    901,
+    2000
+   ],
+   "numLimit": 1,
+   "unlockLevel": 1,
+   "wishType": 1
+  },
+  "1283206": {
+   "award": [
+    778008,
+    778000
+   ],
+   "consume": [
+    901,
+    3000
+   ],
+   "numLimit": 1,
+   "unlockLevel": 1,
+   "wishType": 1
+  },
+  "1283207": {
+   "award": [
+    778008,
+    778000
+   ],
+   "consume": [
+    901,
+    3000
+   ],
+   "numLimit": 1,
+   "unlockLevel": 40,
+   "wishType": 1
+  }
+ }
+}

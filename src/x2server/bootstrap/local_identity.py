@@ -58,6 +58,7 @@ class LocalIdentityService(RecoveredBootstrapService):
         self._chat_entry = chat_entry
         self._clock = clock
         self._save_manager_api = save_manager_api
+        self.social_api = None
         self._account_token = secrets.token_urlsafe(32)
         self._game_token = secrets.token_urlsafe(32)
         self._start = int(clock())
@@ -75,6 +76,8 @@ class LocalIdentityService(RecoveredBootstrapService):
 
     def respond(self, method: str, target: str, body: bytes = b"", *, authorization: str = "") -> HTTPResponse:
         path = urlsplit(target).path
+        if self.social_api is not None and self.social_api.supports(path):
+            return self.social_api.respond(method, path, body, authorization)
         if path.startswith("/gifticon/"):
             from x2server.player.recommendations import banner_response
             return banner_response(method, path)

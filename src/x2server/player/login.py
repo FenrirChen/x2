@@ -220,7 +220,10 @@ class LoginService:
         # REVIVAL_COMPAT 2026-10-02: CollegeModule.IsCollegeEnable (0x1AF9FF8)
         # enables the base entry only when PlayerData.ModuleStatus.GrowthBaseStatus
         # == 1; the official server value is unrecoverable, keep the module open.
-        values["ModuleStatus"] = MODULE_STATUS.encode({"GrowthBaseStatus": 1})
+        values["ModuleStatus"] = MODULE_STATUS.encode({"GrowthBaseStatus": 1, "ClubStatus": 1})
+        if store is not None and store.db.execute("SELECT 1 FROM sqlite_master WHERE name='activity_state'").fetchone():
+            from .social import snapshot_value as friend_value
+            values["FriendData"] = friend_value(store, player["id"], stamp)
         if store is not None:
             relic_ids = relic_item_ids()
             owned_relics = [item_id for item_id, quantity in store.db.execute(
@@ -294,6 +297,8 @@ class LoginService:
         pairs += [STRING_PAIR.encode({'key': 'WishTaskList', 'val': '3'}),
                   STRING_PAIR.encode({'key': 'WishTaskCanTake', 'val': '3'}),
                   STRING_PAIR.encode({'key': 'HeroWishTaskLimit', 'val': '3'})]
+        from .social import PARAMETERS
+        pairs += [STRING_PAIR.encode({'key': key, 'val': val}) for key,val in PARAMETERS.items()]
         LOGGER.info("server configuration response prepared with %s-second power recovery",
                     recovery_seconds)
         return OutboundMessage("L2C_ServerTableConfig", {"code": 10, "keyVal": pairs})

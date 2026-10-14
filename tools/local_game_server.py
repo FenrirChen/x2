@@ -45,6 +45,8 @@ from x2server.player.tutorial import TutorialService
 from x2server.player.star_chart import StarChartService
 from x2server.player.equip_plans import EquipPlanService
 from x2server.player.divination import DivinationService
+from x2server.player.social import SocialService
+from x2server.bootstrap.social_api import SocialAPI
 
 
 def _online_player_ids(loop: asyncio.AbstractEventLoop, tcp: "X2TCPServer") -> set[int]:
@@ -107,6 +109,9 @@ async def run(database: Path, seconds: float) -> None:
     from x2server.player.extra_drop import resource_drop_enabled
     economy = EconomyService(store, clock=clock.now, resource_double_drop=resource_drop_enabled())
     economy.college = college
+    social = SocialService(store, economy, college)
+    economy.social = social
+    identity.social_api = SocialAPI(identity, social, main_loop)
     # 星相屋/每日占卜 (362/363): 读写自己的签到状态并真发货, 见 player/divination.py。
     divination = DivinationService(store, economy)
     college_flows = CollegeService(college, economy=economy)
@@ -132,7 +137,7 @@ async def run(database: Path, seconds: float) -> None:
     http = BootstrapHTTPServer(endpoints.bind_host, endpoints.http_port, identity)
     tcp = X2TCPServer(Settings(tcp_host=endpoints.bind_host, tcp_port=endpoints.game_port, read_timeout=120),
         Dispatcher({**star_chart.handlers(), **LobbyService(clock, college).handlers(), **college_flows.handlers(), **TutorialService(store).handlers(), **BirthdayService(store).handlers(), **economy.handlers(), **divination.handlers(), **shop.handlers(), **gift_packages.handlers(), **collection.handlers(), **favor.handlers(), **appearance.handlers(), **appearance_shop.handlers(), **mail.handlers(), **terminal.handlers(), **equipment.handlers(), **equip_plans.handlers(), **wish.handlers(), **ProgressionService(store, economy, appearance).handlers(), **BattleService(store, economy).handlers(), **BattleShopService(store, economy).handlers(), "C2L_HeroAll": HeroService(store, economy).query_all,
-                    **activity_runtime.handlers(), "C2L_Login": login.login, "C2L_ReConnect": login.reconnect,
+                    **activity_runtime.handlers(), **social.handlers(), "C2L_Login": login.login, "C2L_ReConnect": login.reconnect,
                     "C2L_ServerTableConfig": login.server_config}))
     chat = X2TCPServer(Settings(tcp_host=endpoints.bind_host, tcp_port=endpoints.chat_port, read_timeout=120),
                        Dispatcher(SilentChatService().handlers()))

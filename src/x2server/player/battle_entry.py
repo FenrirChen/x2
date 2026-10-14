@@ -62,6 +62,8 @@ class BattleEntryCatalog:
         if section_type not in SECTION_TYPES:
             raise EntryDenied("unknown SectionType")
         source = "MainMission" if section_type == 0 else SECTION_TYPES[section_type]
+        if section_type == 12 and economy and getattr(economy, "social", None):
+            economy.social.admission(player_id, section_id)
         if section_type == 20:
             if not economy or section_id not in economy.season.section_configs:
                 raise EntryDenied("season section is not part of Origin Paradox")

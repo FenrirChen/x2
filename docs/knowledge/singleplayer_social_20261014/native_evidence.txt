@@ -1,0 +1,28 @@
+Client libil2cpp.so + dump.cs (2.4); no APK edited.
+ClubRequestMember.OnClubRequestNodeOKClick:
+0x1882468 mov w1,#1
+0x1882474 bl #0x157e454 (ClubModule.SendClubApproval)
+ClubRequestMember.OnClubRequestNodeCancelClick:
+0x1882554 mov w1,#2
+0x1882560 bl #0x157e454
+UpdateClubInfo call sites (tail calls):
+0x164b754 mov w1,#1 ; name
+0x164b76c b #0x156fc08
+0x156fbe8 mov w1,#2 ; icon
+0x156fc04 b #0x156fc08
+0x164a908 mov w1,#3 ; notice
+0x164a91c b #0x156fc08
+ClubCreate.OnInit:
+0x1569c4c bl #0x1b42624 (LogicX2.TableMgr.GetIntGlobalParam)
+0x1569c50 str w0,[x19,#0xc0] (mNeedCost)
+FoundGuildConsume is a scalar integer, not a currency/value pair.
+FriendDataProto fields: SendPlayer,ReceivePlayer,SendCount,ReceiveCount,FriendPos,FriendPoint,FriendChat,LastRecommendTime,SendReqCount.
+L2C_SendFriendReq/L2C_SendFriendCoin/L2C_ReceiveFriendCoin: code,playerid. No friendPoint response field.
+L2C_QueryChatFriendsTime: chatFriendsTime (field 1), no code.
+ClubApply: Userid,Time,Metadata,IsOnline,Attrib (native dump.cs).
+GetAttribReply: AttribList.
+C2L_FightData: assistData is field 8.
+L2C_FightData: assistData is field 6.
+AssistData fields: assistPlayerID,friendShipLevel,playerName,heroID,heroSkinID,heroStar,heroPower,assistTimes,heroLevel,battleData,md5.
+
+SO SHA256 37f092f117c11d7e0cdae1e9ac9f7123487c97b6d91c4e7ab699d380646a1dca

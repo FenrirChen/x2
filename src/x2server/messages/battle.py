@@ -80,9 +80,9 @@ BATTLE_SCHEMAS = {
     "L2C_DelFightProfile": S("L2C_DelFightProfile", (F(1, "code", K.ENUM), F(2, "sectionID", K.INT32))),
     "C2L_FightData": S("C2L_FightData", (F(1, "heros", K.MESSAGE, repeated=True), F(2, "missionId", K.INT32),
         F(3, "chapter", K.INT32), F(4, "expertMode", K.BOOL), F(5, "checkGm", K.BOOL),
-        F(6, "isFromProfile", K.BOOL), F(9, "useAIPoint", K.BOOL), F(10, "selectedRelicList", K.INT32, repeated=True), F(11, "randomSeed", K.INT32), F(13, "sceneId", K.INT32))),
+        F(6, "isFromProfile", K.BOOL), F(8,"assistData",K.MESSAGE), F(9, "useAIPoint", K.BOOL), F(10, "selectedRelicList", K.INT32, repeated=True), F(11, "randomSeed", K.INT32), F(13, "sceneId", K.INT32))),
     "L2C_FightData": S("L2C_FightData", (F(1, "result", K.ENUM), F(2, "uuid", K.STRING),
-        F(3, "sign", K.BYTES), F(4, "data", K.BYTES), F(5, "fightDataProfile", K.MESSAGE),
+        F(3, "sign", K.BYTES), F(4, "data", K.BYTES), F(5, "fightDataProfile", K.MESSAGE),F(6,"assistData",K.MESSAGE),
         F(9, "selectedRelicList", K.INT32, repeated=True), F(16, "monsterInitLevel", K.INT32),
         F(19, "playerLevel", K.INT32))),
 }
