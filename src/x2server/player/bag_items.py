@@ -71,6 +71,18 @@ def bag_reward_view(raw):
         else:
             items[key] = dict(item)
     reward['rewardItem'] = [REWARD_ITEM.encode(item) for item in items.values()]
+    # UIAPI.ShowGetAwardItem uses TransformHero.heroId directly as an
+    # ItemManager key (0x134c0e0-0x134c0f8), despite its misleading name.
+    # Normalize legacy bag receipts as well as fresh outcomes. Wish results
+    # have a separate client consumer and are deliberately outside this helper.
+    from .wish import WishService
+    history = []
+    for raw_hero in reward.get('transformHero', []):
+        hero = WishService.TRANSFORM_HERO.decode(raw_hero)
+        if 1000 <= hero.get('heroId', 0) < 2000:
+            hero['heroId'] += 1210000
+        history.append(WishService.TRANSFORM_HERO.encode(hero))
+    reward['transformHero'] = history
     return REWARD.encode(reward)
 
 
@@ -131,7 +143,7 @@ def grant_bag_rewards(economy, player, source, rewards, used_item):
         "rewardItem": [REWARD_ITEM.encode({"itemId": item, "itemNum": n}) for item, n in granted.items()]
             + [REWARD_ITEM.encode({"itemId": item, "itemNum": 1, "transform": duplicate}) for item, duplicate in heroes],
         "rewardEquip": equips,
-        "transformHero": [WishService.TRANSFORM_HERO.encode({"heroId": item - 1210000,
+        "transformHero": [WishService.TRANSFORM_HERO.encode({"heroId": item,
             "transform": duplicate}) for item, duplicate in heroes],
     }))
 
@@ -172,8 +184,11 @@ def recover_hero_boxes(economy, player):
                     from .wish import WishService
                     for raw_hero in rewards.get('transformHero', []):
                         hero = WishService.TRANSFORM_HERO.decode(raw_hero)
-                        if hero.get('heroId') in prototypes:
-                            entries.append({'itemId': 1210000 + hero['heroId'], 'itemNum': 1,
+                        hero_id = hero.get('heroId', 0)
+                        if 1211000 <= hero_id < 1212000:
+                            hero_id -= 1210000
+                        if hero_id in prototypes:
+                            entries.append({'itemId': 1210000 + hero_id, 'itemNum': 1,
                                             'transform': hero.get('transform', False)})
             except (ProtocolError, ValueError, TypeError, AttributeError):
                 logging.getLogger('x2.rewards').warning('invalid hero reward receipt skipped player=%s key=%s', player, key)
