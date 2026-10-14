@@ -1,16 +1,32 @@
 {
-  "policy": "User approved 2026-10-13; medal weekly from Goods.Limited; gem cumulative limits (no original refresh rule).",
+  "policy": "User approved 2026-10-13; medal weekly from Goods.Limited; gem cumulative limits (no original refresh rule). 803 group 94 is one slot whose 许愿币/纯晶石/兽骸 content rotates weekly via weekSlot.",
   "goods": [
     {
       "shopId": 803,
+      "goodsId": 1908101,
+      "itemId": 1201016,
+      "num": 1,
+      "canBuyTimes": 20,
+      "price": 300,
+      "currency": 918,
+      "currencyItemId": 1237918,
+      "limited": 2
+    },
+    {
+      "shopId": 803,
       "goodsId": 1909401,
-      "itemId": 1237914,
+      "itemId": 1237925,
       "num": 1,
       "canBuyTimes": 3,
       "price": 1200,
       "currency": 918,
       "currencyItemId": 1237918,
-      "limited": 2
+      "limited": 2,
+      "weekSlot": [
+        1909401,
+        1909402,
+        1909403
+      ]
     },
     {
       "shopId": 803,
@@ -132,6 +148,49 @@
       "currency": 918,
       "currencyItemId": 1237918,
       "limited": 2
+    },
+    {
+      "shopId": 803,
+      "goodsId": 1909402,
+      "itemId": 1237920,
+      "num": 1,
+      "canBuyTimes": 3,
+      "price": 500,
+      "currency": 918,
+      "currencyItemId": 1237918,
+      "limited": 2,
+      "weekSlot": [
+        1909401,
+        1909402,
+        1909403
+      ]
+    },
+    {
+      "shopId": 803,
+      "goodsId": 1909403,
+      "itemId": 1237914,
+      "num": 1,
+      "canBuyTimes": 3,
+      "price": 1200,
+      "currency": 918,
+      "currencyItemId": 1237918,
+      "limited": 2,
+      "weekSlot": [
+        1909401,
+        1909402,
+        1909403
+      ]
+    },
+    {
+      "shopId": 803,
+      "goodsId": 1909501,
+      "itemId": 1206003,
+      "num": 1,
+      "canBuyTimes": 5,
+      "price": 4800,
+      "currency": 918,
+      "currencyItemId": 1237918,
+      "limited": 5
     },
     {
       "shopId": 806,
