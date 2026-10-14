@@ -324,6 +324,12 @@ class AlchemyService:
         self.economy.record_event(
             player_id, source + ':quest', self.economy.TASK_EVENT_ALCHEMY_QUEST, 0, 1)
         change = self.discount_favor(player_id, customer, favor_gain)
+        # The next single-customer query starts a fresh order using the latest
+        # unlocked tiers, while the customer's identity and neighbours stay fixed.
+        state['alchemy'].setdefault('customer_orders', {}).pop(str(pos), None)
+        pinned = state['alchemy'].get('customer_positions', {}).get(str(pos), {})
+        for field in ('itemId', 'itemNum', 'adviseItemId'):
+            pinned.pop(field, None)
         result = dict(values, code=10, alchemyType=2,
                       rewardData=self.economy.reward_bytes(reward).hex())
         if change:

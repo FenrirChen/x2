@@ -533,7 +533,7 @@ class CollegeService:
             row = by_quest.get(saved.get('questId'))
             if (row and saved.get('rotation') == rotation
                     and row['heroId'] not in used):
-                valid[key] = {'questId': row['sellQuestId'], 'rotation': rotation}
+                valid[key] = {**saved, 'questId': row['sellQuestId'], 'rotation': rotation}
                 used.add(row['heroId'])
         for pos in range(self._customer_count(player_id)):
             key = str(pos)
@@ -559,15 +559,42 @@ class CollegeService:
         # (991..996) is reachable and the preference is stable across rotation.
         likes = row["likes"]
         element = str(likes[row["customerId"] % len(likes)])
-        first = catalog["recipes"][element]["1"]
-        second = catalog["recipes"][element]["2"]
-        customer = {"questId": row["sellQuestId"], "itemId": [first["productId"]],
-                "itemNum": [first["productNum"]], "type": self.ALCHEMY_TRANSACTION,
-                "adviseItemId": second["productId"], "param": int(row["heroId"]), "result": 0}
-        saved = state.get('alchemy', {}).get('customer_orders', {}).get(str(pos_index), {})
-        if saved.get('rotation') == rotation and saved.get('questId') == customer['questId']:
-            for key in ('itemId', 'itemNum', 'adviseItemId'):
-                customer[key] = saved[key]
+        if self.alchemy:
+            exp = self.alchemy.recipe_exp(state)  # Same unlock closure used by manufacturing.
+        else:
+            exp = {int(r['Key']): int(r['Value']) for r in alchemy.get('recipe_exp', [])}
+        # First-tier recipes are always available; negative placeholders are locked.
+        available = []
+        for liked in likes:
+            for level, recipe in catalog['recipes'][str(liked)].items():
+                if int(level) == 1 or exp.get(recipe['recipeId'], -1) >= 0:
+                    available.append({**recipe, 'element': str(liked), 'level': int(level)})
+        by_item = {r['productId']: r for r in available}
+        primary = max((r for r in available if r['element'] == element),
+                      key=lambda r: (r['level'], r['recipeId']))
+        # Freeze displayed orders until completion/refusal/daily refresh. New
+        # unlocks must not silently change the item a player is about to sell.
+        pinned = valid[str(pos_index)]
+        suggested = alchemy.get('customer_orders', {}).get(str(pos_index), {})
+        for saved in (pinned, suggested):
+            if (saved.get('rotation') == rotation and saved.get('questId') == row['sellQuestId']
+                    and len(saved.get('itemId', [])) == 1):
+                candidate = by_item.get(saved['itemId'][0])
+                if candidate and saved.get('itemNum') == [candidate['productNum']]:
+                    primary = candidate
+        alternatives = [r for r in available if r['productId'] != primary['productId']]
+        advised = max(alternatives, key=lambda r: (r['level'], r['element'] == element,
+                                                  r['recipeId']), default=primary)
+        # A completed suggestion swaps the old requested product into advice.
+        for saved in (pinned, suggested):
+            if (saved.get('rotation') == rotation and saved.get('questId') == row['sellQuestId']
+                    and saved.get('adviseItemId') in by_item
+                    and saved['adviseItemId'] != primary['productId']):
+                advised = by_item[saved['adviseItemId']]
+        customer = {'questId': row['sellQuestId'], 'itemId': [primary['productId']],
+                    'itemNum': [primary['productNum']], 'type': self.ALCHEMY_TRANSACTION,
+                    'adviseItemId': advised['productId'], 'param': int(row['heroId']), 'result': 0}
+        pinned.update({k: customer[k] for k in ('itemId', 'itemNum', 'adviseItemId')})
         return customer
 
     def _load_catalog(self) -> dict:
