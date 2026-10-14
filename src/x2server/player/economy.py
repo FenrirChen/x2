@@ -481,6 +481,8 @@ class EconomyService:
             rewards = self.expand_auto_used(rewards)
         if getattr(self, "season", None):
             rewards = self.season.accept_reward(player_id, source, rewards)
+        from .friend_currency import capped_rewards
+        rewards = capped_rewards(self.store, player_id, rewards)
         player = self.store.get(player_id)
         snapshot = player["snapshot"]
         for item, count in rewards.items():
@@ -559,6 +561,8 @@ class EconomyService:
         return equips
 
     def inventory_values(self, player_id):
+        from .friend_currency import repair
+        repair(self.store, player_id)
         from .appearance import avatar_frames
         items = dict(self.store.db.execute("SELECT item_id,quantity FROM inventory WHERE player_id=? AND quantity>0", (player_id,)))
         for frame in avatar_frames():

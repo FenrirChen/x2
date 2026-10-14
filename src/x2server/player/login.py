@@ -146,6 +146,8 @@ class LoginService:
         currency_balances = {name: 0 for name in SHOP_CURRENCY_FIELDS.values()}
         extra_base: dict[str, Any] = {}
         if store is not None:
+            from .friend_currency import repair
+            repair(store, player["id"])
             for item_id, quantity in store.db.execute(
                     "SELECT item_id,quantity FROM inventory WHERE player_id=?", (player["id"],)):
                 name = SHOP_CURRENCY_FIELDS.get(item_id)

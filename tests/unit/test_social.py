@@ -91,14 +91,15 @@ def test_coin_receive_retries_and_midnight_and_cap(social):
     assert s.quantity(1,1237917)==300
     assert act(s,ctx,'ReceiveFriendCoin',{'playerid':ids,'friendPoint':[999]*39}).values==result.values
     assert s.quantity(1,1237917)==300
-    assert act(s,ctx,'ReceiveFriendCoin',{'playerid':ids},2).values['code']==13
+    assert act(s,ctx,'ReceiveFriendCoin',{'playerid':ids},2).values['code']==193
     stamp[0]+=86400
     assert act(s,ctx,'ReceiveFriendCoin',{'playerid':ids},3).values['code']==10
     assert s.quantity(1,1237917)==600
     fund(s,1237917,4395)
     assert act(s,ctx,'SendFriendCoin',{'playerid':[ids[0]]},4).values['code']==10
     assert s.quantity(1,1237917)==5000
-    assert act(s,ctx,'SendFriendCoin',{'playerid':[ids[1]]},5).values['code']==13
+    assert act(s,ctx,'SendFriendCoin',{'playerid':[ids[1]]},5).values['code']==10
+    assert s.quantity(1,1237917)==5000
 
 
 def test_friend_state_in_login_snapshot_and_same_id_conflict(social):
@@ -329,3 +330,91 @@ def test_friend_support_complete_battle_entry_and_replay(social):
     replay=asyncio.run(service.enter(ctx,packet(req,50)))
     assert replay.values==result.values
     assert [h['id'] for h in s.store.get(1)['snapshot']['heroes']]==[1003]
+
+
+def test_approval_native_reserved_field_and_wish_closed_loop(social):
+    from dataclasses import replace
+    from x2server.protocol.protobuf import encode_varint
+    s,ctx,_=social
+    act(s,ctx,'CreateClub',{'name':'native'})
+    target=roster()[0]['id']
+    # Independent native wire fixture: field 2 is absent, opt=1 is field 3.
+    body=b'\x08'+encode_varint(npc_id(1,target))+b'\x18\x01'
+    p=replace(packet({},2,'C2L_ClubApproval'),body=body)
+    reply=asyncio.run(s.handle(ctx,p))
+    assert reply.values['code']==10
+    assert str(target) in s.state(1)['club']['members']
+    fund(s,1201003,1)
+    fund(s,1237901,10000)
+    assert act(s,ctx,'ClubWishing',{'itemId':1201003},3).values['code']==10
+    assert act(s,ctx,'ClubWishingReceive',{'donateId':target},4).values['code']==10
+    assert s.quantity(1,1201003)==4
+    assert act(s,ctx,'ClubWishingReceive',{'donateId':target},5).values['code']==13
+
+
+def test_club_and_attribute_http_use_each_characters_real_icon(social):
+    s,ctx,_=social
+    create(s,ctx)
+    club=s.http('/ClubService.GetClub',{},1)['Club']
+    candidates=club['ApplyList']
+    for row in candidates:
+        canonical=700000000+(int(row['Userid'])-700000000000)%10000
+        assert row['Attrib']['Ext']['iconID']==str(s.characters[canonical]['head'])
+        assert row['Attrib']['Ext']['firstMedal']=='0'
+    assert len({row['Attrib']['Ext']['iconID'] for row in candidates})>1
+    attrs=s.http('/AttribService.GetAttrib',{'users':[r['Userid'] for r in candidates]},None)['AttribList']
+    assert [r['Ext']['iconID'] for r in attrs]==[r['Attrib']['Ext']['iconID'] for r in candidates]
+
+
+def test_friend_reset_at_midnight_and_all_npcs_send(social):
+    from datetime import datetime,timedelta,timezone
+    s,ctx,stamp=social
+    def at(d,h,m=0):
+        return int(datetime(2026,10,d,h,m,tzinfo=timezone(timedelta(hours=8))).timestamp())
+    stamp[0]=at(14,23)
+    target=roster()[0]['id']
+    assert act(s,ctx,'ReceiveFriendCoin',{'playerid':[target]}).values['code']==10
+    stamp[0]=at(14,23,59)
+    assert s.state(1)['received']==[target]
+    assert act(s,ctx,'ReceiveFriendCoin',{'playerid':[target]},2).values['code']==192
+    assert s.refresh_friends(1) is None
+    stamp[0]=at(15,0)
+    push=s.refresh_friends(1)
+    assert FRIEND_DATA.decode(push.values['FriendData'])['ReceiveCount']==0
+    assert s.refresh_friends(1) is None
+    rows=s.http('/FriendService.GetFriendList',{},1)['Friends']['Friends']
+    assert len(rows)==39 and all(row['Values'][0]['Value']['VInt64']==1 for row in rows)
+    assert act(s,ctx,'ReceiveFriendCoin',{'playerid':[target]},3).values['code']==10
+    assert s.quantity(1,1237917)==40
+
+
+def test_legacy_imported_and_other_grant_friend_points_are_capped(social):
+    s,ctx,_=social
+    with s.economy.transaction():
+        s.store.db.execute('INSERT INTO inventory VALUES (1,1237917,9000)')
+    wire=LoginService.snapshot_push(s.store.get(1),s.store,now=s.clock())
+    assert s.quantity(1,1237917)==5000
+    target=roster()[0]['id']
+    assert act(s,ctx,'SendFriendCoin',{'playerid':[target]}).values['code']==10
+    assert s.quantity(1,1237917)==5000
+    assert act(s,ctx,'ReceiveFriendCoin',{'playerid':[target]},2).values['code']==252
+    assert not s.state(1)['received']
+    with s.economy.transaction():
+        s.store.db.execute('UPDATE inventory SET quantity=4995 WHERE item_id=1237917')
+        reward=s.economy._grant(1,'mail:cap-regression',{1237917:100})
+    assert reward=={1237917:5} and s.quantity(1,1237917)==5000
+
+
+def test_legacy_daily_claim_migration_preserves_today_but_resets_yesterday(social):
+    s,ctx,stamp=social
+    target=roster()[0]['id']
+    state=s.state(1)
+    state.pop('friend_day')
+    state.update(sent=[target],received=[target])
+    with s.economy.transaction():
+        s.save(1,state)
+    assert s.state(1)['received']==[target]
+    state['day']-=1
+    with s.economy.transaction():
+        s.save(1,state)
+    assert not s.state(1)['received'] and not s.state(1)['sent']

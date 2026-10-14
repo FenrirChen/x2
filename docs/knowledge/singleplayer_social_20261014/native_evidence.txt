@@ -26,3 +26,17 @@ L2C_FightData: assistData is field 6.
 AssistData fields: assistPlayerID,friendShipLevel,playerName,heroID,heroSkinID,heroStar,heroPower,assistTimes,heroLevel,battleData,md5.
 
 SO SHA256 37f092f117c11d7e0cdae1e9ac9f7123487c97b6d91c4e7ab699d380646a1dca
+
+Manual acceptance fix, 2026-10-14:
+C2L_ClubApproval.Serialize 0x3A5C014:
+0x3A5C100 mov w1,#8 -> applyId field 1.
+0x3A5C130 mov w1,#0x18 -> opt field 3 (field 2 reserved).
+0x3A5C180 ldrsw x2,[x20,#0x18] -> opt WriteUInt64.
+ClubRequestMember.ClubRequestNode.RefreshItem 0x1882004:
+Reads BaseAttrib.Ext[iconID] and Ext[firstMedal], then HeadIconItem.SetClickInfo 0x13EC574.
+String relocation 0x52eb5b0 -> iconID; 0x530a1e8 -> firstMedal.
+Head alone is insufficient for this avatar UI.
+FriendModule.OnReceiveFriendDataDirty 0x152CA70 handles FriendData partial pushes.
+GameLogicErrCode: 192 received, 193 receive daily max, 194 send daily max,
+195 already sent, 252 currency holding cap.
+Daily refresh 00:00 Beijing is user-authorized; all NPCs provide pending gifts.

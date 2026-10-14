@@ -146,6 +146,7 @@ async def run(database: Path, seconds: float) -> None:
     world_boss_task = None
     college_task = None
     activity_task = None
+    social_task = None
 
     async def settle_monthcards(day_start):
         """Settle month cards and expire terminal wishes at server midnight."""
@@ -164,6 +165,7 @@ async def run(database: Path, seconds: float) -> None:
         await http.start()
         await tcp.start()
         await chat.start()
+        social_task = asyncio.create_task(social.watch(tcp), name="local-friend-midnight-refresh")
         mail_task = asyncio.create_task(mail.watch(tcp), name="local-mail-push")
         activity_task = asyncio.create_task(activity_runtime.watch(tcp), name='local-activity-rotation')
         world_boss_task = asyncio.create_task(economy.world_boss.watch(),name="local-world-boss")
@@ -179,7 +181,7 @@ async def run(database: Path, seconds: float) -> None:
         else:
             await asyncio.sleep(seconds)
     finally:
-        for task in (mail_task, welfare_task, world_boss_task, college_task, activity_task):
+        for task in (mail_task, welfare_task, world_boss_task, college_task, activity_task, social_task):
             if task:
                 task.cancel()
                 await asyncio.gather(task, return_exceptions=True)

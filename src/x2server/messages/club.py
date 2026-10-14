@@ -1,6 +1,6 @@
 """社团 (Club) TCP 报文的 protobuf schema。
 
-字段取自客户端自己的声明 ``protocol/commandx2_messages.json`` (字段号=声明顺序),
+字段类型取自客户端声明，字段号按 native Serialize 核对（并非总等于声明顺序）。
 消息号已登记在 ``protocol/recovered_ids.py`` (742..799 的 club 段)。抓包 logs/packets.jsonl
 里用户进社团页时客户端发的是 C2L_RecommandClub(744)/C2L_CreateClub(742), 当时服务端
 完全没有实现社团, 所以一律收不到回包 —— 本文件只为给 player/club.py 的 handler 提供
@@ -50,7 +50,9 @@ CLUB_SCHEMAS = {s.name: s for s in (
                                 F(3, "applyAbleAutoLevel", K.INT32))),
     S("L2C_UpdateClubRecruit", (F(1, "code", K.ENUM),)),
     S("C2L_JoinClubListner", ()), S("L2C_JoinClubListner", (F(1, "code", K.ENUM),)),
-    S("C2L_ClubApproval", (F(1, "applyId", K.INT64), F(2, "opt", K.INT32))),
+    # Native Serialize 0x3A5C014 writes applyId tag 0x08 and opt tag 0x18.
+    # Field 2 is reserved; declaration order is not a protobuf field map.
+    S("C2L_ClubApproval", (F(1, "applyId", K.INT64), F(3, "opt", K.INT32))),
     S("L2C_ClubApproval", (F(1, "code", K.ENUM),)),
     S("C2L_UpdateMemberPrivilege", (F(1, "optedId", K.INT64), F(2, "opt", K.INT32))),
     S("L2C_UpdateMemberPrivilege", (F(1, "code", K.ENUM),)),

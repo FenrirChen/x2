@@ -44,6 +44,17 @@ def day(now):
     return (int(now) + 8*3600)//86400
 
 
+def friend_day(now):
+    """Friend gifts reset at Beijing/server 00:00."""
+    return day(now)
+
+
+class SocialRefused(ValueError):
+    def __init__(self,code,reason):
+        super().__init__(reason)
+        self.code=code
+
+
 def npc_id(pid,canonical):
     return 700000000000+pid*10000+canonical-700000000
 
@@ -61,7 +72,9 @@ def canonical_id(pid,uid):
 
 def attrib(uid, name, head, level):
     return dict(Uid=str(uid),CreateTime=0,Name=name,Head=str(head),Level=level,
-                Zone='',Server='local',Channel='local',SubChannel='',Os='',Online=True,Ext={})
+                Zone='',Server='local',Channel='local',SubChannel='',Os='',Online=True,
+                # Club nodes read Ext[iconID]/Ext[firstMedal], not BaseAttrib.Head.
+                Ext={'iconID':str(head),'firstMedal':'0'})
 
 
 def value(name, number):
@@ -73,14 +86,24 @@ def load_state(store, pid, now):
                            (pid,PERIOD,NAMESPACE,'state')).fetchone()
     state = json.loads(row[0]) if row else {'version':1,'removed':[],'black':[],'notes':{},'club':None,
         'wishes':[],'wish_counts':{},'history':[],'helped':{},'serial':0,'mirror':{'count':3,'clears':[],'claimed':[]}}
+    old_day=state.get('day')
     if state.get('day') != day(now):
         elapsed = max(0,day(now)-state.get('day',day(now)))
-        state.update(day=day(now),sent=[],received=[],wish_counts={},given=0,help_count=0,today_score=0)
+        state.update(day=day(now),wish_counts={},given=0,help_count=0,today_score=0)
         mirror = state['mirror']
         mirror['count'] = min(5,mirror['count']+3*elapsed)
         # Unclaimed player donations survive midnight; completed history is bounded.
         state['wishes'] = [w for w in state['wishes'] if w['owner']=='self' and w['got'] < w['num']]
         state['history'] = state['history'][-100:]
+    if state.get('friend_day') is None:
+        # Preserve current-day claims when upgrading the original midnight version.
+        state['friend_day']=friend_day(now)
+        state.setdefault('sent',[])
+        state.setdefault('received',[])
+        if old_day is not None and old_day!=day(now):
+            state.update(sent=[],received=[])
+    elif state['friend_day'] != friend_day(now):
+        state.update(friend_day=friend_day(now),sent=[],received=[])
     return state
 
 
@@ -114,9 +137,35 @@ class SocialService:
             store.db.execute('''CREATE TABLE IF NOT EXISTS activity_receipts (
                 player_id INTEGER NOT NULL,request_key TEXT NOT NULL,period INTEGER NOT NULL,
                 message TEXT NOT NULL,response BLOB NOT NULL,PRIMARY KEY(player_id,request_key))''')
+        from .friend_currency import repair
+        repair(store)
 
     def state(self,pid):
         return load_state(self.store,pid,self.clock())
+
+    def refresh_friends(self,pid):
+        """One midnight rollover push; offline accounts refresh on their next request."""
+        row=self.store.db.execute('SELECT value FROM activity_state WHERE player_id=? AND period=? AND namespace=? AND state_key=?',
+                                  (pid,PERIOD,NAMESPACE,'state')).fetchone()
+        if row and json.loads(row[0]).get('friend_day')==friend_day(self.clock()):
+            return None
+        with self.economy.transaction():
+            self.save(pid,self.state(pid))
+        # Native FriendModule.OnReceiveFriendDataDirty refreshes the coin buttons.
+        return OutboundMessage('PlayerDataProto',{'FriendData':snapshot_value(self.store,pid,self.clock())},data_version=1)
+
+    async def watch(self,tcp):
+        import asyncio
+        while True:
+            for pid in tcp.authenticated_player_ids():
+                try:
+                    push=self.refresh_friends(pid)
+                    if push:
+                        await tcp.push_to_player(pid,push)
+                except Exception:
+                    LOG.exception('friend midnight refresh player=%s',pid)
+            next_midnight=(friend_day(self.clock())+1)*86400-8*3600
+            await asyncio.sleep(min(60,max(1,next_midnight-self.clock())))
 
     def save(self,pid,state):
         self.store.db.execute('''INSERT INTO activity_state VALUES (?,?,?,?,?)
@@ -183,7 +232,7 @@ class SocialService:
     def friend_list(self,pid,state):
         level=self.store.get(pid)['snapshot']['level']
         return {'Friends':{'Friends':[dict(Friendid=str(r['id']),Nickname=state['notes'].get(str(r['id']),''),Time=0,
-            Online=True,Values=[value('FriendCoin',1)] if r['id'] not in state['received'] and len(state['received'])<15 else [],
+            Online=True,Values=[value('FriendCoin',1)] if r['id'] not in state['received'] else [],
             SharingValues=[],Attrib=attrib(r['id'],r['name'],r['head'],level)) for r in self.friends(state)],
             'Applys':None,'Blacks':[dict(Friendid=str(n),Time=0,Attrib=attrib(n,self.characters[n]['name'],self.characters[n]['head'],level))
                 for n in state['black'] if n in self.characters],'SendApplys':[]}}
@@ -416,7 +465,7 @@ class SocialService:
                 self.store.db.execute('INSERT INTO activity_receipts VALUES (?,?,?,?,?)',(pid,key,PERIOD,signature,raw))
         except (ValueError,KeyError,UnresolvedEconomy) as exc:
             LOG.info('social refused player=%s flow=%s reason=%s',pid,name,exc)
-            result={'code':13}
+            result={'code':getattr(exc,'code',13)}
         before=(OutboundMessage('L2C_QueryGrowthBase',self.college.growth_base(pid)),) if name=='C2L_HelpPowerSpeed' and result.get('code')==10 else ()
         return OutboundMessage(reply,result,before_response=before,pushes=self.pushes(pid))
 
@@ -448,13 +497,16 @@ class SocialService:
             limit=10 if field=='sent' else 15
             eligible=[n for n in ids if n not in state[field]][:max(0,limit-len(state[field]))]
             if not eligible:
-                raise ValueError('daily friendship limit or already collected')
+                if len(state[field])>=limit:
+                    raise SocialRefused(194 if field=='sent' else 193,'daily friendship limit')
+                raise SocialRefused(195 if field=='sent' else 192,'already sent or collected')
             room=max(0,5000-self.quantity(pid,COIN))
             gain=min(room,20*len(eligible))
-            if gain<=0:
-                raise ValueError('friendship point cap')
+            if gain<=0 and field=='received':
+                raise SocialRefused(252,'friendship point holding cap')
             state[field]+=eligible
-            self.grant(pid,state,{COIN:gain})
+            if gain:
+                self.grant(pid,state,{COIN:gain})
             return {**result,'playerid':eligible}
         if flow=='RecommandClub':
             club=state['club']
