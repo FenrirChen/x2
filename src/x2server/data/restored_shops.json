@@ -1,5 +1,5 @@
 {
-  "policy": "User approved 2026-10-13; medal weekly from Goods.Limited; gem cumulative limits (no original refresh rule). 803 group 94 is one slot whose 许愿币/纯晶石/兽骸 content rotates weekly via weekSlot.",
+  "policy": "User approved 2026-10-13; medal weekly from Goods.Limited; gem cumulative limits (no original refresh rule). 803 group 94 is one slot whose 许愿币/纯晶石/兽骸 content rotates weekly via weekSlot. 2026-10-15 club shop 807 restored from shop_compat_catalog 807 (E_Week slots capped at 2 per week, E_Forever slots unlimited).",
   "goods": [
     {
       "shopId": 803,
@@ -497,6 +497,354 @@
       "currencyItemId": 1237915,
       "limited": 2,
       "round": 5
+    },
+    {
+      "shopId": 807,
+      "goodsId": 1914701,
+      "itemId": 1283001,
+      "num": 1,
+      "price": 2000,
+      "currency": 924,
+      "currencyItemId": 1237924,
+      "limited": 5
+    },
+    {
+      "shopId": 807,
+      "goodsId": 1914801,
+      "itemId": 1283002,
+      "num": 1,
+      "price": 2000,
+      "currency": 924,
+      "currencyItemId": 1237924,
+      "limited": 5
+    },
+    {
+      "shopId": 807,
+      "goodsId": 1915101,
+      "itemId": 1203001,
+      "num": 1,
+      "canBuyTimes": 2,
+      "price": 50,
+      "currency": 924,
+      "currencyItemId": 1237924,
+      "limited": 2
+    },
+    {
+      "shopId": 807,
+      "goodsId": 1915201,
+      "itemId": 1237831,
+      "num": 1,
+      "canBuyTimes": 2,
+      "price": 25,
+      "currency": 924,
+      "currencyItemId": 1237924,
+      "limited": 2
+    },
+    {
+      "shopId": 807,
+      "goodsId": 1915301,
+      "itemId": 1237832,
+      "num": 1,
+      "canBuyTimes": 2,
+      "price": 15,
+      "currency": 924,
+      "currencyItemId": 1237924,
+      "limited": 2
+    },
+    {
+      "shopId": 807,
+      "goodsId": 1915302,
+      "itemId": 1237833,
+      "num": 1,
+      "canBuyTimes": 2,
+      "price": 30,
+      "currency": 924,
+      "currencyItemId": 1237924,
+      "limited": 2
+    },
+    {
+      "shopId": 807,
+      "goodsId": 1915303,
+      "itemId": 1237834,
+      "num": 1,
+      "canBuyTimes": 2,
+      "price": 60,
+      "currency": 924,
+      "currencyItemId": 1237924,
+      "limited": 2
+    },
+    {
+      "shopId": 807,
+      "goodsId": 1915304,
+      "itemId": 1237835,
+      "num": 1,
+      "canBuyTimes": 2,
+      "price": 120,
+      "currency": 924,
+      "currencyItemId": 1237924,
+      "limited": 2
+    },
+    {
+      "shopId": 807,
+      "goodsId": 1915401,
+      "itemId": 1203002,
+      "num": 1,
+      "canBuyTimes": 2,
+      "price": 1200,
+      "currency": 924,
+      "currencyItemId": 1237924,
+      "limited": 2
+    },
+    {
+      "shopId": 807,
+      "goodsId": 1915501,
+      "itemId": 1203003,
+      "num": 1,
+      "canBuyTimes": 2,
+      "price": 65,
+      "currency": 924,
+      "currencyItemId": 1237924,
+      "limited": 2
+    },
+    {
+      "shopId": 807,
+      "goodsId": 1915601,
+      "itemId": 1286001,
+      "num": 1,
+      "canBuyTimes": 2,
+      "price": 250,
+      "currency": 924,
+      "currencyItemId": 1237924,
+      "limited": 2
+    },
+    {
+      "shopId": 807,
+      "goodsId": 1915701,
+      "itemId": 1237840,
+      "num": 1,
+      "canBuyTimes": 2,
+      "price": 100,
+      "currency": 924,
+      "currencyItemId": 1237924,
+      "limited": 2
+    },
+    {
+      "shopId": 807,
+      "goodsId": 1915801,
+      "itemId": 1237904,
+      "num": 1,
+      "canBuyTimes": 2,
+      "price": 25,
+      "currency": 924,
+      "currencyItemId": 1237924,
+      "limited": 2
+    },
+    {
+      "shopId": 807,
+      "goodsId": 1916101,
+      "itemId": 1206008,
+      "num": 1,
+      "price": 7500,
+      "currency": 924,
+      "currencyItemId": 1237924,
+      "limited": 5
+    },
+    {
+      "shopId": 807,
+      "goodsId": 1916201,
+      "itemId": 1202080,
+      "num": 1,
+      "price": 1000,
+      "currency": 924,
+      "currencyItemId": 1237924,
+      "limited": 5
+    },
+    {
+      "shopId": 807,
+      "goodsId": 1916301,
+      "itemId": 1202081,
+      "num": 1,
+      "price": 1000,
+      "currency": 924,
+      "currencyItemId": 1237924,
+      "limited": 5
+    },
+    {
+      "shopId": 807,
+      "goodsId": 1916401,
+      "itemId": 1202082,
+      "num": 1,
+      "price": 1000,
+      "currency": 924,
+      "currencyItemId": 1237924,
+      "limited": 5
+    },
+    {
+      "shopId": 807,
+      "goodsId": 1916501,
+      "itemId": 1202083,
+      "num": 1,
+      "price": 2000,
+      "currency": 924,
+      "currencyItemId": 1237924,
+      "limited": 5
+    },
+    {
+      "shopId": 807,
+      "goodsId": 1916601,
+      "itemId": 1202084,
+      "num": 1,
+      "price": 2000,
+      "currency": 924,
+      "currencyItemId": 1237924,
+      "limited": 5
+    },
+    {
+      "shopId": 807,
+      "goodsId": 1916701,
+      "itemId": 1201003,
+      "num": 1,
+      "canBuyTimes": 2,
+      "price": 150,
+      "currency": 924,
+      "currencyItemId": 1237924,
+      "limited": 2
+    },
+    {
+      "shopId": 807,
+      "goodsId": 1916801,
+      "itemId": 1201006,
+      "num": 1,
+      "canBuyTimes": 2,
+      "price": 180,
+      "currency": 924,
+      "currencyItemId": 1237924,
+      "limited": 2
+    },
+    {
+      "shopId": 807,
+      "goodsId": 1916901,
+      "itemId": 1201009,
+      "num": 1,
+      "canBuyTimes": 2,
+      "price": 210,
+      "currency": 924,
+      "currencyItemId": 1237924,
+      "limited": 2
+    },
+    {
+      "shopId": 807,
+      "goodsId": 1917001,
+      "itemId": 1201013,
+      "num": 1,
+      "canBuyTimes": 2,
+      "price": 240,
+      "currency": 924,
+      "currencyItemId": 1237924,
+      "limited": 2
+    },
+    {
+      "shopId": 807,
+      "goodsId": 1917101,
+      "itemId": 1201015,
+      "num": 1,
+      "canBuyTimes": 2,
+      "price": 270,
+      "currency": 924,
+      "currencyItemId": 1237924,
+      "limited": 2
+    },
+    {
+      "shopId": 807,
+      "goodsId": 1917201,
+      "itemId": 1201016,
+      "num": 1,
+      "canBuyTimes": 2,
+      "price": 300,
+      "currency": 924,
+      "currencyItemId": 1237924,
+      "limited": 2
+    },
+    {
+      "shopId": 807,
+      "goodsId": 1917301,
+      "itemId": 1201019,
+      "num": 1,
+      "canBuyTimes": 2,
+      "price": 600,
+      "currency": 924,
+      "currencyItemId": 1237924,
+      "limited": 2
+    },
+    {
+      "shopId": 807,
+      "goodsId": 1917401,
+      "itemId": 1238056,
+      "num": 1,
+      "price": 2000,
+      "currency": 924,
+      "currencyItemId": 1237924,
+      "limited": 5
+    },
+    {
+      "shopId": 807,
+      "goodsId": 1917501,
+      "itemId": 1238057,
+      "num": 1,
+      "price": 2000,
+      "currency": 924,
+      "currencyItemId": 1237924,
+      "limited": 5
+    },
+    {
+      "shopId": 807,
+      "goodsId": 1917601,
+      "itemId": 1238058,
+      "num": 1,
+      "price": 2000,
+      "currency": 924,
+      "currencyItemId": 1237924,
+      "limited": 5
+    },
+    {
+      "shopId": 807,
+      "goodsId": 1917701,
+      "itemId": 1238059,
+      "num": 1,
+      "price": 2000,
+      "currency": 924,
+      "currencyItemId": 1237924,
+      "limited": 5
+    },
+    {
+      "shopId": 807,
+      "goodsId": 1917801,
+      "itemId": 1237922,
+      "num": 1,
+      "price": 1000,
+      "currency": 924,
+      "currencyItemId": 1237924,
+      "limited": 5
+    },
+    {
+      "shopId": 807,
+      "goodsId": 1917901,
+      "itemId": 1238050,
+      "num": 1,
+      "price": 2000,
+      "currency": 924,
+      "currencyItemId": 1237924,
+      "limited": 5
+    },
+    {
+      "shopId": 807,
+      "goodsId": 1918001,
+      "itemId": 1238051,
+      "num": 1,
+      "price": 1000,
+      "currency": 924,
+      "currencyItemId": 1237924,
+      "limited": 5
     }
   ]
 }
