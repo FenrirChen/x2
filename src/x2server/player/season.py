@@ -793,10 +793,19 @@ class SeasonService:
                 _, reward = self.grant(player, 'achievement', aid, self.achievements[aid]['GiftGroup'])
                 return {'code': 10, 'achvId': aid, 'status': 2, 'rewardData': reward}
             if op == 'SeasonAchvPointReward':
-                index = req.get('achvPointId', 0)
+                # ``achvPointId`` 是里程碑的「点数阈值」(5/10/20/40/60), 不是下标。
+                # BattlePassAchievementModule.RequestPointsReward (0x1809500) 会先取
+                # TaskControlManager.GetItem(5)[+0x88] (CompleteBpAchievementNumber), 把
+                # get_Item(index) 得到的阈值数值写进 C2L_SeasonAchvPointReward 后才发送;
+                # 回包处理 BattlePassAchievementModule.GetPointsReward (0x180C05C) 也把回包
+                # 的同一字段与这张阈值表逐项比较。原生 AchievementModule 的同名函数
+                # (0x1319DE4) 才是直接发下标 —— 两个模块语义不同, 本协议按阈值数值取值,
+                # 同时保留下标写法兼容 (两个集合不相交, 映射唯一)。
+                value = req.get('achvPointId', 0)
                 state = self.state(player)
                 control = self.e.catalog['task_control']
                 targets = control['CompleteBpAchievementNumber']
+                index = targets.index(value) if type(value) is int and value in targets else value
                 if (type(index) is not int or index not in range(len(targets))
                         or points < targets[index] or index in state['point_claimed']):
                     raise UnresolvedEconomy('season achievement-point reward unavailable')
@@ -804,7 +813,7 @@ class SeasonService:
                 self.write(player, state)
                 _, reward = self.grant(player, 'achievement-point', index,
                     [control['CompleteBpAchievementNumberGiftGroup'][index]])
-                return {'code': 10, 'status': 2, 'achvPointId': index, 'rewardData': reward}
+                return {'code': 10, 'status': 2, 'achvPointId': targets[index], 'rewardData': reward}
             raise UnresolvedEconomy('unknown achievement operation')
         if op == 'BattlePassHistoryInfo':
             return {'code': 10, 'historyInfo': [encode('BattlePassHistoryInfo', {
