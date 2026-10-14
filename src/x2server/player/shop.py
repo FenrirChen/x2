@@ -153,10 +153,15 @@ class ShopService:
 
     def _compat_count(self, player_id, shop_id, row):
         period = self._compat_period(shop_id, row)
-        count = self.store.db.execute("""SELECT quantity FROM shop_compat_counts
-            WHERE player_id=? AND shop_id=? AND goods_id=? AND period=?""",
-            (player_id, shop_id, row["goodsId"], period)).fetchone()
-        return count[0] if count else 0
+        # A rotating shelf has one quota, including purchases made before its
+        # original wish-coin ID was corrected to the crystal slot by PR #41.
+        slots = row.get("weekSlot") or [row["goodsId"]]
+        placeholders = ",".join("?" for _ in slots)
+        count = self.store.db.execute(f"""SELECT COALESCE(SUM(quantity),0)
+            FROM shop_compat_counts WHERE player_id=? AND shop_id=?
+            AND period=? AND goods_id IN ({placeholders})""",
+            (player_id, shop_id, period, *slots)).fetchone()
+        return count[0]
 
     def _compat_period(self, shop_id, row):
         return self._period(3 if shop_id == 801 else row.get("limited"))
@@ -172,7 +177,10 @@ class ShopService:
 
     def _active_week_slot(self, slots):
         local = datetime.fromtimestamp(int(self.economy.clock()), timezone(timedelta(hours=8)))
-        return slots[local.isocalendar()[1] % len(slots)]
+        # Keep the current October 2026 phase, then advance continuously across years.
+        anchor = datetime(2026, 10, 12).date().toordinal()  # Monday; first slot.
+        week = (local.date().toordinal() - anchor) // 7
+        return slots[week % len(slots)]
 
     def _available(self, player, shop, row):
         # 803 group 94 is one shelf that swaps 许愿币/纯晶石/兽骸 every week: only the

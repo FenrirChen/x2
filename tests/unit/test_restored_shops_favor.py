@@ -74,7 +74,7 @@ def test_ticket_five_rounds_exact_batch_cost_hidden_future_and_replay(env):
     assert not [x for x in listing(service, ctx, 805) if 1905301 <= x['goodsId'] <= 1905305]
 
 
-@pytest.mark.parametrize('sid,currency,size', [(803, 1237918, 12), (806, 1237905, 17)])
+@pytest.mark.parametrize('sid,currency,size', [(803, 1237918, 14), (806, 1237905, 17)])
 def test_catalog_debit_delivery_limit_and_rejection_rollback(env, sid, currency, size):
     store, e, ctx = env
     service = ShopService(store, e)
