@@ -1,5 +1,6 @@
 """Production lifecycle, offline recovery and atomic inventory on isolated saves."""
 import asyncio
+import random
 import pytest
 from x2server.player.college_upgrade import _catalog
 
@@ -369,6 +370,25 @@ def test_recipe_effects_match_thresholds_and_building_tier(game):
     result = send(game, 'MakeItem', posIndex=0, recipeId=36011)
     assert PRODUCTION_BAR.decode(result.values['productionBar'])['endTime'] == game[1].value + 3000
     assert repo.load(1)['alchemy']['elements'][0]['num'] == 17  # 4 minus 1
+
+
+def test_fifth_slot_doubles_collected_output_at_full_proficiency(game):
+    store, clock, repo, service, _ = game
+    seed_elements(game, 20)
+    assert send(game, 'MakeItem', posIndex=0, recipeId=36011).values['code'] == 10
+    state = repo.load(1)
+    state['alchemy']['recipe_exp'] = [{'Key': 36011, 'Value': 18}]
+    # The fifth slot carries the doubled-output effect and must stay reachable
+    # once every threshold is met.
+    assert service.alchemy.effects(service.alchemy.recipes[36011], 18, 5) == [200]
+    end = next(t for t in range(1, 1000) if random.Random(
+        'college-double:1:0:%s' % t).randrange(1000) < 200)
+    state['alchemy']['production_bars'][0]['endTime'] = end
+    repo.save(1, state)
+    collected = send(game, 'AlchemyCollect', seq=2, posIndex=0)
+    assert collected.values['code'] == 10
+    assert store.db.execute(
+        'SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1280011').fetchone()[0] == 2
 
 
 def test_save_failure_rolls_back_element_queue_rewards_and_receipts(game, monkeypatch):
