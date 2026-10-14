@@ -101,10 +101,8 @@ class EconomyService:
     def __init__(self, store, clock=time.time, *, resource_double_drop=False):
         self.store = store
         self.clock = clock
-        # resource_double_drop: 资源本额外掉落常驻化 (客户端「限时掉落活动」
-        # E_ExtraDroop / 表-ExtraDroop, 每关每天前 NumLimit 次结算产出 +100%,
-        # 见 player/extra_drop.py)。默认关: 该数量口径尚未证实, 打开会改掉资源本既定
-        # 产出, 所以只有显式传入的服务器 (tools/local_game_server.py) 才启用。
+        # Eligibility, official resource targets and quotas are governed by
+        # the same activity 71004 controller advertised in QueryActivity.
         self.resource_double_drop = bool(resource_double_drop)
         self.catalog = json.loads(files("x2server").joinpath("data/economy_catalog.json").read_text(encoding="utf-8"))
         # 挑战任务 (ChallengeTask): 60 rows in 10 groups of 6, keyed to the client's
@@ -279,8 +277,7 @@ class EconomyService:
             recover(self, row[0])
             from .bag_items import recover_hero_boxes
             recover_hero_boxes(self, row[0])
-        # 资源本额外掉落 (常驻 +100%, 见 player/extra_drop.py)。默认空转: 只有
-        # resource_double_drop=True 时才读表、建 extra_drop_usage、在结算里加发。
+        # Counts live in the existing exported activity_state table.
         from .extra_drop import ExtraDropService
         self.extra_drop = ExtraDropService(self, enabled=self.resource_double_drop)
 
@@ -1167,20 +1164,11 @@ class EconomyService:
                 grants.extend(RewardGrant('EXTRA_DROP', section, run_uuid, item, count,
                     reason='current activity ExtraDroop/AccountBuff') for item, count in extra.items())
                 sources['EXTRA_DROP'].extend({'item_id': i, 'quantity': n} for i, n in extra.items())
-            # 资源本额外掉落 (常驻 +100%, 见 player/extra_drop.py): 每个资源本每天前
-            # NumLimit 次结算, 该次产出再给一份。与上面 activity.runtime.extra_rewards
-            # 的 EXTRA_DROP 分工: 那条只在活动周期内按 AccountBuff/DroopType 1 发; 本条
-            # 不需要活动在期, 且基数排除 EXTRA_DROP 本身, 免得两份互相叠加。放在 _grant
-            # 之前, 折算出来的货币/道具与固定奖励一起入账。
-            bonus = self.extra_drop.consume(player_id, section)
-            if bonus:
-                base = sum_grants([grant for grant in grants if grant.source != 'EXTRA_DROP'])
-                for item, count in base.items():
-                    extra_count = count * bonus // 100
-                    if extra_count:
-                        grants.append(RewardGrant('EXTRA_DROP', section, run_uuid, item, extra_count,
-                            reason=f'resource-dungeon ExtraDroop permanent +{bonus}%'))
-                        sources['EXTRA_DROP'].append({'item_id': item, 'quantity': extra_count})
+            base = sum_grants([grant for grant in grants if grant.source != 'EXTRA_DROP'])
+            for item, count in self.extra_drop.rewards(player_id, section, base).items():
+                grants.append(RewardGrant('EXTRA_DROP', section, run_uuid, item, count,
+                    reason='resource activity 71004 +100%'))
+                sources['EXTRA_DROP'].append({'item_id':item,'quantity':count})
             if activity:
                 chapter_rewards = activity.pov_chapter_rewards(player_id, section)
                 for item, count in chapter_rewards.items():
@@ -1274,19 +1262,15 @@ class EconomyService:
         pending = Counter()
         grants = []
         for _ in range(count):
-            # 资源本额外掉落 (常驻 +100%, 见 player/extra_drop.py): 扫荡的每一局各算一次,
-            # 用完这关当天的 NumLimit(=10) 次为止 (第 11 局起按原样发)。
-            bonus = self.extra_drop.consume(player_id, section)
+            per_run = Counter()
             for group in profile["sweep_reward"]:
-                resolved = self.gifts([group], deferred=pending,
-                                      allow_daily_random=profile["section_type"] != 0)
-                for item, amount in resolved.items():
-                    grants.append(RewardGrant("SWEEP_REWARD", section, request_key, item, amount,
-                        reason=f"SectionTable MopReward GiftGroup {group}"))
-                    extra_amount = amount * bonus // 100
-                    if extra_amount:
-                        grants.append(RewardGrant("EXTRA_DROP", section, request_key, item, extra_amount,
-                            reason=f"resource-dungeon ExtraDroop permanent +{bonus}%"))
+                per_run.update(self.gifts([group], deferred=pending,
+                    allow_daily_random=profile["section_type"] != 0))
+            grants.extend(RewardGrant("SWEEP_REWARD", section, request_key, item, amount,
+                reason='SectionTable MopReward') for item, amount in per_run.items())
+            grants.extend(RewardGrant("EXTRA_DROP", section, request_key, item, amount,
+                reason='resource activity 71004 +100%')
+                for item, amount in self.extra_drop.rewards(player_id, section, per_run).items())
         snapshot["mobility"]["power"] -= cost * count
         self.save_snapshot(player_id, snapshot)
         rewards = self._grant(player_id, f"sweep:{request_key}", sum_grants(grants))

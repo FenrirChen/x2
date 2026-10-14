@@ -12,7 +12,7 @@ TalentLevel.level 是客户端本次新增点数，非最终等级。TalentItemD
 
 普通/UP/限定神格池，按 CommonPrize 直接归一化的自然三星概率范围 0.1920%–0.5939%。当前常驻 22203 为 0.5939%，陵光 22218 为 0.4234%。十抽二星保底及四十抽三星保底正常，抽到三星立即重置计数；十连逐次抽取且保留十个奖励位置，没有限制一十连只能抽到一个三星。隔离测试证明首次两抽连续三星、同角色重复转碎片、剩余八抽计数和重放均正常。
 
-客户端 Language 4301033 公示 4.00%（含保底），DrawParam 还含 DrawnLucky/LuckyParam/LuckyOrigin/FirstLuckyRate。当前服务端忽略幸运值参数，luckyValue 和 luckyValueCurrent 恒为零。权重本身准确，但整个概率链不完整；不能宣称已经还原官方出货概率。尚无法从客户端证明原服务端幸运值公式。暂不改变经济规则；提议自然三星改 2%、保留四十保底及三星内部奖品权重，仅为待用户审查的兼容方案。
+客户端 Language 4301033 公示 4.00%（含保底），DrawParam 还含 DrawnLucky/LuckyParam/LuckyOrigin/FirstLuckyRate。【2026-10-14 订正】幸运值字段是官方遗留，但全部 48 条 DrawParam 的 DrawnLucky 实际为 0；字段存在不足以证明 2.4 仍启用幸运增长。当前 luckyValue 恒零不能单独判为缺失现行官方规则。暂未恢复幸运值，也未调整自然三星概率；2% 只是未经批准的兼容提议，非已确认的官方概率。
 
 ## PR 审查
 - [#35](https://github.com/FenrirChen/x2/pull/35)：值得合并。原始 CollegeCustomer 的 Like repeated 字段确为二元素，全部 38 名顾客与 PR 配置一致；补回 991 偏好，保持每位顾客稳定选择。按顾客 ID 选一个偏好属于兼容选择，非声称官方算法。
@@ -23,3 +23,5 @@ TalentLevel.level 是客户端本次新增点数，非最终等级。TalentItemD
 - [#37](https://github.com/FenrirChen/x2/pull/37)：参考保留、不合并。作者明确标注不请求合并，仍含模拟玩家和兼容规则，不是已验收的真实多玩家闭环。
 
 本轮未合并任何 PR、未推送。原生证据见同目录 gacha_talent_20261014，审查概率见 gacha_audit.json。
+
+2026-10-14 后续：用户批准除 #37 外全部合并。#35/#36/#38/#39/#40 均已 GitHub 合并并合入本地。补修见 pr_merge_followup_20261014.md。

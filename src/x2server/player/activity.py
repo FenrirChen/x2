@@ -74,7 +74,8 @@ class ActivityService:
 
     def query_activity(self, player):
         period = self.rotation.at()
-        season_rows = self.economy.season.activity_values()
+        season_rows = (self.economy.season.activity_values()
+                       + self.economy.extra_drop.activity_values(player))
         if period is None:
             return {"code": 10, "activityData": season_rows}
         rows = []

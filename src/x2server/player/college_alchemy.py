@@ -84,15 +84,18 @@ class AlchemyService:
 
     @staticmethod
     def phase(recipe, exp):
-        # GetExpPhase returns the index of the first unmet threshold.
-        # FindEffectInRecipeLevel enables slots index < phase, so capping at
-        # len(Exp) - 1 dropped the fifth (doubled-output) slot for good.
+        # Preserve the client's display phase, which caps at Count - 1.
         thresholds = recipe.get('Exp', [])
-        return sum(exp >= threshold for threshold in thresholds)
+        return min(sum(exp >= threshold for threshold in thresholds), max(0,len(thresholds)-1))
 
     def effects(self, recipe, exp, kind):
+        phase = self.phase(recipe, exp)
+        # The server restores the fifth-slot yield perk when the final threshold
+        # is met, without changing the client's displayed phase semantics.
+        if kind == 5 and recipe.get('Exp') and exp >= recipe['Exp'][-1]:
+            phase = 5
         values = []
-        for index in range(1, self.phase(recipe, exp) + 1):
+        for index in range(1, phase + 1):
             if recipe.get(f'RecipeEffect{index}') == kind:
                 values.extend(recipe.get(f'RecipeEffectParam{index}', []))
         return values
@@ -229,19 +232,19 @@ class AlchemyService:
             rid = bar['recipeId']
             recipe = self.recipes[rid]
             # kind 5 doubles the haul with the slot's per-mille chance. The roll
-            # is seeded on the bar so a replayed collection reports the same
-            # reward it granted the first time.
+            # uses immutable production identity, so speed-ups, replays and
+            # account migration cannot alter the roll.
             product_num = recipe['ProductNum']
             bonus = self.effects(recipe, exp.get(rid, 0), 5)
             if bonus and random.Random(
-                    'college-double:%s:%s:%s' % (player_id, pos, bar['endTime'])
+                    'college-double:' + bar['production_id']
             ).randrange(1000) < bonus[0]:
                 product_num *= 2
             reward = {recipe['ProductID']: product_num}
             self.economy._grant(player_id, 'college-production:' + bar['production_id'], reward)
             rewards.update(reward)
             exp[rid] = min(recipe['Exp'][-1], exp.get(rid, 0)
-                           + recipe['ProductNum'] * self.EXPERIENCE_PER_ITEM)
+                           + product_num * self.EXPERIENCE_PER_ITEM)
             groups.setdefault(rid, []).append(pos)
             bars[pos] = None
         state['alchemy']['recipe_exp'] = [{'Key': rid, 'Value': value} for rid, value in sorted(exp.items())]

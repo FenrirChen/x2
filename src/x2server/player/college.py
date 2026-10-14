@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import logging
 from importlib.resources import files
 from contextlib import contextmanager
@@ -367,7 +368,7 @@ class CollegeService:
         if self.washing and flow in self.washing.FLOWS:
             return self.washing.handle(context, packet, flow, request)
         if flow == "ExchangePower":
-            return self._exchange_power(context.session.player_id, request)
+            return self._exchange_power(context.session.player_id, request, context, packet)
         if flow == "SingleCustomerInfo":
             return self._single_customer(context.session.player_id, request)
         if flow == "AlchemyMainData":
@@ -412,37 +413,44 @@ class CollegeService:
             "customere": CUSTOMER_INFO.encode(customer),
             "transactionNum": 1, "transactionLastRecoverTime": 0})
 
-    def _exchange_power(self, player_id: int, request: dict) -> OutboundMessage:
-        """C2L_ExchangePower (238) -> L2C_ExchangePower (249): 从启明之塔取出已存储的因果。
-
-        请求字段 1 = 要取出的因果数量 (客户端 CollegeAddPower_OnConfirmClick 自己先校验
-        `amount <= CollegeModule.GetEnergyCurPower()`, 即塔里已存储的因果)。每取出 1 因果
-        消耗 EXCHANGE_PER_POINT 点星能。先 refresh_stamina 把时间外推的部分落到服务端
-        extra_power (否则客户端按老锚点外推出的数量会比服务端多, 玩家照客户端显示取出就会被
-        判成不足), 再校验并扣减 extra_power / star_energy, 最后把体力加回去 (取回后允许
-        超过上限, 保留, 不回收)。
-        """
-        amount = int(request.get("power", 0))
-        if amount <= 0:
-            return OutboundMessage("L2C_ExchangePower", {"code": E_ERROR_OPT})
-        if self.economy is None or self.college is None:
-            return OutboundMessage("L2C_ExchangePower", {"code": E_ERROR_OPT})
-        self.economy.refresh_stamina(player_id)
+    def _exchange_power(self, player_id: int, request: dict, context=None, packet=None) -> OutboundMessage:
+        amount = request.get('power', 0)
+        values = {'code':E_ERROR_OPT}
+        if type(amount) is not int or amount <= 0 or self.economy is None or self.college is None:
+            return OutboundMessage('L2C_ExchangePower',values)
+        key = (f'{context.session.session_id}:{packet.header.request_id}:ExchangePower'
+               if context and packet else None)
+        digest = hashlib.sha256(packet.body).hexdigest() if packet else ''
         with self.college.transaction():
-            state = self.college.load(player_id)
-            stored = int(state.get("extra_power", 0)) // MILLI_POWER
-            available = int(state.get("star_energy", 0))
-            if amount > stored or available < amount * EXCHANGE_PER_POINT:
-                return OutboundMessage("L2C_ExchangePower", {"code": COLLEGE_NO_ITEM})
-            state["extra_power"] -= amount * MILLI_POWER
-            state["star_energy"] = available - amount * EXCHANGE_PER_POINT
-            self.college.save(player_id, state)
-        snapshot = self.economy.store.get(player_id)["snapshot"]
-        mobility = snapshot.setdefault("mobility", {})
-        mobility["power"] = int(mobility.get("power", 0)) + amount
-        self.economy.save_snapshot(player_id, snapshot)
-        return OutboundMessage("L2C_ExchangePower",
-            {"code": COLLEGE_OK, "power": amount, "extraPower": state["extra_power"]})
+            cached = self.college.store.db.execute('SELECT digest,response FROM college_upgrade_receipts '
+                'WHERE player_id=? AND receipt_key=?',(player_id,key)).fetchone() if key else None
+            if cached:
+                values = json.loads(cached[1]) if cached[0]==digest else {'code':E_ERROR_OPT}
+            else:
+                self.economy.refresh_stamina(player_id)
+                state = self.college.load(player_id)
+                stored = int(state.get('extra_power',0))
+                available = int(state.get('star_energy',0))
+                if amount*MILLI_POWER > stored or available < amount*EXCHANGE_PER_POINT:
+                    values = {'code':COLLEGE_NO_ITEM}
+                else:
+                    state['extra_power'] = stored-amount*MILLI_POWER
+                    state['star_energy'] = available-amount*EXCHANGE_PER_POINT
+                    self.college.save(player_id,state)
+                    snapshot = self.economy.store.get(player_id)['snapshot']
+                    mobility = snapshot.setdefault('mobility',{})
+                    mobility['power'] = int(mobility.get('power',0))+amount
+                    self.economy.save_snapshot(player_id,snapshot)
+                    values = {'code':COLLEGE_OK,'power':amount,'extraPower':state['extra_power']}
+                if key:
+                    self.college.store.db.execute('INSERT INTO college_upgrade_receipts VALUES (?,?,?,?)',
+                        (player_id,key,digest,json.dumps(values)))
+        # The native success callback adds the returned amount. Authoritative
+        # snapshots follow it so retries cannot inflate the displayed balance.
+        from .login import LoginService
+        pushes = (LoginService.snapshot_push(self.economy.store.get(player_id), self.economy.store),
+            OutboundMessage('L2C_QueryGrowthBase',self.college.growth_base(player_id)))
+        return OutboundMessage('L2C_ExchangePower',values,pushes=pushes)
 
     def _alchemy_main(self, player_id: int) -> OutboundMessage:
         # 591: the handler null-checks every list (first NRE at recipeIdExp,

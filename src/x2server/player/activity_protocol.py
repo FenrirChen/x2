@@ -40,7 +40,7 @@ ALL_ROUTES = GLOBAL_ROUTES | SHARED_ROUTES | UNSUPPORTED_ROUTES | REQUIRED_KINDS
 def check_request(runtime, player, op, request):
     if op not in ALL_ROUTES or op in UNSUPPORTED_ROUTES:
         raise UnresolvedEconomy('activity operation has no implemented contract')
-    if op in GLOBAL_ROUTES or (op == 'SceneGlobalParam' and runtime.e.season.active(player)):
+    if op in GLOBAL_ROUTES or op == 'ExtraDropData' or (op == 'SceneGlobalParam' and runtime.e.season.active(player)):
         return
     period = runtime.a.period(player)
     kinds = {enum(row['ActivityType']) for row in period.theme['activities']}

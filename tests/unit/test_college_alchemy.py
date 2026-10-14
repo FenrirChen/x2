@@ -381,9 +381,10 @@ def test_fifth_slot_doubles_collected_output_at_full_proficiency(game):
     # The fifth slot carries the doubled-output effect and must stay reachable
     # once every threshold is met.
     assert service.alchemy.effects(service.alchemy.recipes[36011], 18, 5) == [200]
-    end = next(t for t in range(1, 1000) if random.Random(
-        'college-double:1:0:%s' % t).randrange(1000) < 200)
-    state['alchemy']['production_bars'][0]['endTime'] = end
+    production = next(str(t) for t in range(1, 1000) if random.Random(
+        'college-double:' + str(t)).randrange(1000) < 200)
+    state['alchemy']['production_bars'][0]['production_id'] = production
+    state['alchemy']['production_bars'][0]['endTime'] = clock.value
     repo.save(1, state)
     collected = send(game, 'AlchemyCollect', seq=2, posIndex=0)
     assert collected.values['code'] == 10

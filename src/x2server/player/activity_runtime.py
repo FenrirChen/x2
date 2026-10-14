@@ -168,6 +168,16 @@ class ActivityRuntime:
         check_request(self, player, op, req)
         if op == 'QueryActivity':
             return self.a.query_activity(player)
+        if op == 'ExtraDropData':
+            period = self.a.rotation.at()
+            day = (int(self.e.clock()) + 28800) // 86400
+            ids = {i for a in period.theme['activities'] if enum(a['ActivityType']) == 23
+                   for i in a['ActivityParam1']} if period else set()
+            values = self.e.extra_drop.values(player)
+            values += [encode('KeyValuePair_Int32_Int32', {'Key':row['ID'],
+                'Value':self.r.get(player, period, f'extra:{day}' if row['RefreshCycle']==1 else 'extra',row['ID'],0)})
+                for row in self.a.tables['ExtraDroop'] if row['ID'] in ids]
+            return {'data':values or [encode('KeyValuePair_Int32_Int32', {})]}
         if op == 'EntryidStatus':
             return {'code': 10, 'entryidStatus': [MISSION_PAIR.encode({'Key': 19, 'Value': 1})]}
         period = self.a.rotation.at() if op == 'SceneGlobalParam' else self.a.period(player)
@@ -251,12 +261,6 @@ class ActivityRuntime:
                 raise UnresolvedEconomy('YueXi mission records are not open in this theme')
             result = self.records(player, period)
             return {'code': 10, 'missionPassCount': result['missionPassCount']} if op == 'ActivityPassRecord' else result
-        if op == 'ExtraDropData':
-            day = (int(self.e.clock()) + 28800) // 86400
-            ids = {i for a in period.theme['activities'] if enum(a['ActivityType']) == 23 for i in a['ActivityParam1']}
-            return {'data': [encode('KeyValuePair_Int32_Int32', {'Key': row['ID'],
-                'Value': self.r.get(player, period, f'extra:{day}' if row['RefreshCycle'] == 1 else 'extra', row['ID'], 0)})
-                for row in self.a.tables['ExtraDroop'] if row['ID'] in ids] or [encode('KeyValuePair_Int32_Int32', {})]}
         if op == 'ActivityMissionRecordSave':
             sid, score = req.get('missionId', 0), req.get('recordVal', -1)
             row = self.a.sections.get(sid)

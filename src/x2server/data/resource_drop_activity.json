@@ -1,0 +1,34 @@
+{
+  "enabled": true,
+  "start": 1791907200,
+  "end": 2147454847,
+  "activity": {
+    "actId": 71004,
+    "actType": 23,
+    "activityParentType": 1,
+    "activityGroup": 11,
+    "activityName": 710041,
+    "openLever": 12,
+    "param1": [
+      100002,
+      100003,
+      100004,
+      100005
+    ],
+    "param2": [
+      2030100,
+      2030200,
+      2032000,
+      2032100
+    ],
+    "param3": [
+      2
+    ]
+  },
+  "source": {
+    "apk": "X2_Eclipse_v2_4.apk",
+    "table": "ActivityReal",
+    "id": 71004,
+    "sha256": "db18b9e6c9b8e6a84492ebad2fc009052aa99f8410dad47e4986513e2ecf23c6"
+  }
+}
