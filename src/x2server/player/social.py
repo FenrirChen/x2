@@ -519,6 +519,15 @@ class SocialService:
             state[field]+=eligible
             if gain:
                 self.grant(pid,state,{COIN:gain})
+            # 每日 630023「赠送好友 1 次友情点」: TaskCondition.CompleteType 71
+            # (E_GiveFriendCoin)。此前只发了友情点、没有任何事件上报, 任务进度永远是 0,
+            # 所以「赠送友情点」的每日任务完成不了。只在**赠送**时记 (收取侧不算赠送),
+            # 且只按本次新赠送的好友数 (已扣除今天送过的人) 计数; 事件键带这批好友,
+            # economy_events 按 (task_period, key) 幂等去重, 同一批 targets 重发不会重复计。
+            if flow=='SendFriendCoin' and eligible:
+                self.economy.record_event(
+                    pid, f"sendcoin:{pid}:{','.join(str(n) for n in sorted(eligible))}",
+                    71, 0, len(eligible))
             return {**result,'playerid':eligible}
         if flow=='RecommandClub':
             club=state['club']
