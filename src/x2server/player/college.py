@@ -435,7 +435,13 @@ class CollegeService:
         alchemy['customer_positions'] = valid
         row = by_quest[valid[str(pos_index)]['questId']]
         rotation = int(rotations.get(str(pos_index), 0))
-        element = str(row["like"])
+        # CollegeCustomer.Like holds TWO elements (e.g. 38001 -> [991, 992]); the
+        # old single `like` field had been flattened to Like[1], so element 991
+        # (whose level-1 recipe is 1280011) was never selected for any customer.
+        # Pick one liked element per customer deterministically so every element
+        # (991..996) is reachable and the preference is stable across rotation.
+        likes = row["likes"]
+        element = str(likes[row["customerId"] % len(likes)])
         first = catalog["recipes"][element]["1"]
         second = catalog["recipes"][element]["2"]
         customer = {"questId": row["sellQuestId"], "itemId": [first["productId"]],
