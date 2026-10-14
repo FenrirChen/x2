@@ -256,7 +256,9 @@ def test_endless_full_wire_task_chain_and_historical_survival_repair(env, alive,
     assert reply.values['result'] == 10
     assert asyncio.run(battle.checkout(ctx, checkout)).values == reply.values
     progress = dict(store.db.execute('SELECT task_id,progress FROM endless_tasks'))
-    assert progress[100001] == 25 and progress[100018] == 60
+    light_awarded=sum(item['itemNum'] for item in map(REWARD_ITEM.decode,
+        REWARD.decode(reply.values.get('rewardData',b'')).get('rewardItem',[])) if item['itemId']==1237913)
+    assert progress[100001] == 25 and progress[100018] == max(60,light_awarded)
     assert bool(progress.get(100006)) == success
     assert bool(progress.get(100010)) == (success and alive == 3)
     with store.db:

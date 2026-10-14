@@ -206,6 +206,9 @@ class LoginService:
         boss_fields, boss_daily = boss_snapshot_fields(store, player["id"],
             int(time.time()) if now is None else now)
         values.update(boss_fields)
+        if store is not None:
+            from .endless import weekly_values,WEEKLY
+            values['Weekly']=WEEKLY.encode(weekly_values(store,player['id'],int(time.time()) if now is None else now))
         if boss_daily:
             values['Daily'] = values.get('Daily', b'') + boss_daily
         if store is not None and store.db.execute("SELECT 1 FROM sqlite_master WHERE name='college_state'").fetchone():

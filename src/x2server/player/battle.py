@@ -526,6 +526,8 @@ class BattleService:
                 activity.admission(player['id'], section)
             except UnresolvedEconomy:
                 return reject
+        if self.economy and self.catalog.sections.get(section,{}).get('Type')==7:
+            self.economy.endless.ensure_period(player['id'])
         selected = [PROFILE_HERO.decode(raw) for raw in request.get("heros", [])]
         if not 1 <= len(selected) <= 3 or len({h.get("heroId") for h in selected}) != len(selected):
             return reject

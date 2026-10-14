@@ -247,6 +247,7 @@ PLAYER_DATA = ProtoSchema("PlayerDataProto", (
     ProtoField(9, "EquipPlan", FieldKind.MESSAGE),
     ProtoField(10, "FriendData", FieldKind.MESSAGE),
     ProtoField(11, "RelicPack", FieldKind.MESSAGE, repeated=True),
+    ProtoField(12, "Weekly", FieldKind.MESSAGE),
     ProtoField(15, "favor", FieldKind.MESSAGE, repeated=True),
 ))
 HERO_DATA = ProtoSchema("HeroData", (

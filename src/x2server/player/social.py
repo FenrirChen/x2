@@ -162,6 +162,14 @@ class SocialService:
                     push=self.refresh_friends(pid)
                     if push:
                         await tcp.push_to_player(pid,push)
+                        state=self.state(pid)
+                        if state['club']:
+                            await tcp.push_to_player(pid,OutboundMessage('L2C_ClubWishingCount',{
+                                'code':10,'wishingCount':int(sum(state['wish_counts'].values())>0),
+                                'guildWishGiveCount':state['given'],'guildHelpPowerCount':state['help_count']}))
+                    weekly=self.economy.endless.refresh_week(pid)
+                    if weekly:
+                        await tcp.push_to_player(pid,weekly)
                 except Exception:
                     LOG.exception('friend midnight refresh player=%s',pid)
             next_midnight=(friend_day(self.clock())+1)*86400-8*3600
@@ -471,7 +479,11 @@ class SocialService:
 
     def pushes(self,pid):
         from .login import LoginService
+        state=self.state(pid)
         return (LoginService.snapshot_push(self.store.get(pid),self.store,now=self.clock()),
+                OutboundMessage('L2C_ClubWishingCount',{'code':10,
+                    'wishingCount':int(sum(state['wish_counts'].values())>0),
+                    'guildWishGiveCount':state['given'],'guildHelpPowerCount':state['help_count']}),
                 OutboundMessage('L2C_ItemUpdate',{'code':10,**self.economy.inventory_values(pid)}))
 
     def operate(self,pid,state,flow,req):
@@ -581,6 +593,8 @@ class SocialService:
                 raise ValueError('wish locked or no NPC donor')
             if self.economy.items.get(item,{}).get('ItemType',{}).get('value')==12 and self.quantity(pid,item)<=0:
                 raise ValueError('wish for unowned character fragment')
+            if sum(state['wish_counts'].values())>0:
+                raise ValueError('one club wish per day')
             count=state['wish_counts'].get(str(item),0)
             if count>=row['numLimit'] or any(w['owner']=='self' and w['item']==item and w['got']<w['num'] for w in state['wishes']):
                 raise ValueError('wish daily limit or pending')
@@ -594,7 +608,7 @@ class SocialService:
             state['wish_counts'][str(item)]=count+w['num']
             result['itemId']=item
         elif flow=='ClubWishingCount':
-            result.update(wishingCount=sum(w['owner']=='self' and w['got']<w['num'] for w in state['wishes']),
+            result.update(wishingCount=int(sum(state['wish_counts'].values())>0),
                 guildWishGiveCount=state['given'],guildHelpPowerCount=state['help_count'])
         elif flow=='ClubWishingReceive':
             target=req.get('donateId',0)

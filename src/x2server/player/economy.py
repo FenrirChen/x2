@@ -481,6 +481,8 @@ class EconomyService:
             rewards = self.expand_auto_used(rewards)
         if getattr(self, "season", None):
             rewards = self.season.accept_reward(player_id, source, rewards)
+        if getattr(self,'endless',None):
+            rewards=self.endless.battle_rewards(player_id,source,rewards)
         from .friend_currency import capped_rewards
         rewards = capped_rewards(self.store, player_id, rewards)
         player = self.store.get(player_id)

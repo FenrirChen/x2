@@ -2,6 +2,7 @@
 import json
 import logging
 import time
+from contextlib import nullcontext
 from functools import lru_cache
 from importlib.resources import files
 from x2server.messages.lobby import LOBBY_SCHEMAS
@@ -23,11 +24,66 @@ def catalog():
     return json.loads(files('x2server').joinpath('data/endless.json').read_text(encoding='utf-8'))
 
 
+WEEKLY = ProtoSchema('WeeklyProto', (
+    F(1,'EndlessWeekVowOfStone',K.INT32), F(2,'WeeklyRefreshTime',K.INT32),
+    F(3,'EndlessWeekMaxVowOfStone',K.INT32), F(4,'EndlessWeekExp',K.INT32),
+    F(5,'FormulaComposeAll',K.MESSAGE,repeated=True), F(6,'ElementExpAll',K.INT32),
+    F(7,'PassMission',K.MESSAGE,repeated=True), F(8,'MaxWeeklyRefreshTime',K.INT32)))
+PERIOD = -38
+NAMESPACE = 'endless-week'
+
+
+def week_start(now):
+    # Unix Thursday -> Monday; account calendar is Beijing, 00:00.
+    days=(int(now)+8*3600)//86400
+    return (days-(days+3)%7)*86400-8*3600
+
+
+def ensure_week(store,player,now):
+    start=week_start(now)
+    # Existing activity state is already inside the full save boundary.
+    with store.db if not store.db.in_transaction else nullcontext():
+        row=store.db.execute('SELECT value FROM activity_state WHERE player_id=? AND period=? AND namespace=? AND state_key=?',
+                             (player,PERIOD,NAMESPACE,'state')).fetchone()
+        state=json.loads(row[0]) if row else {'week':start,'light':0}
+        if state['week']!=start:
+            # Cap-upgrade achievements persist; only this week's acquisition/save resets.
+            for table in ('endless_profiles',):
+                store.db.execute('DELETE FROM '+table+' WHERE player_id=?',(player,))
+            store.db.execute('UPDATE economy_runs SET settled=1 WHERE player_id=? AND settled=0 AND section_id IN (2110191,2110192,2110193,2110194,2110291,2110292,2110293,2110294)',(player,))
+            state={'week':start,'light':0}
+        # Upgrade recovers only confirmed light grants made in this week.
+        if not row:
+            for source,raw,stamp in store.db.execute('SELECT source,rewards,created_at FROM economy_grants WHERE player_id=? AND created_at>=?',(player,start)):
+                if source.startswith('battle:'):
+                    run=store.db.execute('SELECT section_id FROM economy_runs WHERE uuid=? AND player_id=?',(source[7:],player)).fetchone()
+                    if run and run[0] in (2110191,2110192,2110193,2110194,2110291,2110292,2110293,2110294):
+                        state['light']+=json.loads(raw).get('1237913',0)
+        if not row or json.loads(row[0])['week']!=start:
+            store.db.execute('INSERT INTO activity_state VALUES (?,?,?,?,?) ON CONFLICT(player_id,period,namespace,state_key) DO UPDATE SET value=excluded.value',
+                             (player,PERIOD,NAMESPACE,'state',json.dumps(state)))
+    return state
+
+
+def weekly_values(store,player,now):
+    ready=store.db.execute("SELECT 1 FROM sqlite_master WHERE name='endless_tasks'").fetchone()
+    state=ensure_week(store,player,now) if ready else {'week':week_start(now),'light':0}
+    rows={r['EndlessDungeonTaskID']:r for r in catalog()['tasks']}
+    bonus=sum(sum(rows[t]['VomLimit'][:n]) for t,n in store.db.execute('SELECT task_id,claimed FROM endless_tasks WHERE player_id=?',(player,)) if t in rows) if ready else 0
+    zero=[INT_PAIR.encode({'Key':0,'Value':0})]
+    return {'EndlessWeekVowOfStone':state['light'],'WeeklyRefreshTime':state['week'],
+            'EndlessWeekMaxVowOfStone':bonus,'MaxWeeklyRefreshTime':state['week'],
+            'EndlessWeekExp':0,'ElementExpAll':0,'FormulaComposeAll':zero,'PassMission':zero}
+
+
 class EndlessService:
     def __init__(self, economy):
         self.economy, self.store = economy, economy.store
         self.tasks = {r['EndlessDungeonTaskID']: r for r in catalog()['tasks']}
         with self.store.db:
+            self.store.db.execute('''CREATE TABLE IF NOT EXISTS activity_state (
+                player_id INTEGER NOT NULL,period INTEGER NOT NULL,namespace TEXT NOT NULL,
+                state_key TEXT NOT NULL,value TEXT NOT NULL,PRIMARY KEY(player_id,period,namespace,state_key))''')
             self.store.db.execute('CREATE TABLE IF NOT EXISTS endless_task_receipts (player_id INTEGER, request_key TEXT, task_id INTEGER, response BLOB, PRIMARY KEY(player_id,request_key,task_id))')
             self.store.db.execute('''CREATE TABLE IF NOT EXISTS endless_profiles (
                 player_id INTEGER PRIMARY KEY, run_id TEXT NOT NULL, section_id INTEGER NOT NULL,
@@ -40,6 +96,37 @@ class EndlessService:
                 value INTEGER NOT NULL, amount INTEGER NOT NULL,
                 PRIMARY KEY(player_id,run_id,kind,value))''')
 
+    def ensure_period(self,player):
+        return ensure_week(self.store,player,self.economy.clock())
+
+    def refresh_week(self,player):
+        row=self.store.db.execute('SELECT value FROM activity_state WHERE player_id=? AND period=? AND namespace=? AND state_key=?',
+                                  (player,PERIOD,NAMESPACE,'state')).fetchone()
+        if row and json.loads(row[0])['week']==week_start(self.economy.clock()):
+            return None
+        self.ensure_period(player)
+        return OutboundMessage('PlayerDataProto',{'Weekly':WEEKLY.encode(weekly_values(self.store,player,self.economy.clock()))},data_version=1)
+
+    def battle_rewards(self,player,source,rewards):
+        if not source.startswith('battle:') or not rewards.get(1237913):
+            return rewards
+        run=source[7:]
+        row=self.store.db.execute('SELECT section_id FROM economy_runs WHERE uuid=? AND player_id=?',(run,player)).fetchone()
+        if not row or self.economy.entry_catalog.sections.get(row[0],{}).get('Type')!=7:
+            return rewards
+        state=self.ensure_period(player)
+        bonus=weekly_values(self.store,player,self.economy.clock())['EndlessWeekMaxVowOfStone']
+        amount=min(rewards[1237913],max(0,880+bonus-state['light']))
+        result=dict(rewards)
+        result[1237913]=amount
+        if not amount:
+            del result[1237913]
+        state['light']+=amount
+        self.store.db.execute('UPDATE activity_state SET value=? WHERE player_id=? AND period=? AND namespace=? AND state_key=?',
+                              (json.dumps(state),player,PERIOD,NAMESPACE,'state'))
+        self.observe(player,run,38,913,amount)
+        return result
+
     def handlers(self):
         return {'C2L_CheckFightProfile': self.check_profile}
 
@@ -47,6 +134,7 @@ class EndlessService:
         player = context.session.player_id
         if player is None:
             raise ProtocolError('profile query before login')
+        self.ensure_period(player)
         req = LOBBY_SCHEMAS['C2L_CheckFightProfile'].decode(packet.body)
         values = {'code': 10, 'isProfileExist': False, 'isProfileValid': False}
         if req.get('profileType') == 2:
@@ -64,6 +152,7 @@ class EndlessService:
         return OutboundMessage('L2C_CheckFightProfile', values)
 
     def active_run(self, run_id, player):
+        self.ensure_period(player)
         return self.store.db.execute('SELECT 1 FROM economy_runs WHERE uuid=? AND player_id=? AND settled=0', (run_id, player)).fetchone()
 
     def save(self, player, entry, req):
@@ -99,6 +188,7 @@ class EndlessService:
                 self.observe(player, entry['uuid'], 1, row.get('Key', 0), row.get('Value', 0))
 
     def observe(self, player, run, kind, value, amount, value2=0):
+        self.ensure_period(player)
         if not 0 <= amount <= 100000:
             return
         matched = []
@@ -154,15 +244,24 @@ class EndlessService:
                 'stage': stage, 'finishTimes': claimed, 'difficulty': 0}))
             light += sum(row['VomLimit'][:claimed])
         return {'code': 10, 'type': 12, 'chapterId': chapter, 'taskList': tasks,
-                'chapterTaskPoint': light, 'chapterTaskTotalPoint': 880}
+                'chapterTaskPoint': light, 'chapterTaskTotalPoint': sum(sum(r['VomLimit']) for r in self.tasks.values())}
 
     def repair(self, player):
         """Rebuild omitted events from server compose rows and saved checkouts."""
         from x2server.messages.battle import CHECKOUT, PROFILE_HERO
+        self.ensure_period(player)
+        marker='endless-repair-v3'
         with self.economy.transaction():
-            if self.store.db.execute("SELECT 1 FROM economy_events WHERE player_id=? AND event_key='endless-repair-v1'", (player,)).fetchone():
+            if self.store.db.execute("SELECT 1 FROM economy_events WHERE player_id=? AND event_key=?", (player,marker)).fetchone():
                 return
-            for row in self.store.db.execute('SELECT DISTINCT run_uuid FROM battle_element_compose WHERE player_id=?', (player,)).fetchall():
+            if not self.store.db.execute("SELECT 1 FROM sqlite_master WHERE name='battle_entries'").fetchone():
+                return
+            for source,raw in self.store.db.execute('SELECT source,rewards FROM economy_grants WHERE player_id=?',(player,)).fetchall():
+                if source.startswith('battle:'):
+                    run=self.store.db.execute('SELECT section_id FROM economy_runs WHERE uuid=? AND player_id=?',(source[7:],player)).fetchone()
+                    if run and self.economy.entry_catalog.sections.get(run[0],{}).get('Type')==7:
+                        self.observe(player,source[7:],38,913,json.loads(raw).get('1237913',0))
+            for row in self.store.db.execute('SELECT DISTINCT c.run_uuid FROM battle_element_compose c JOIN battle_entries e ON e.uuid=c.run_uuid WHERE c.player_id=?', (player,)).fetchall():
                 self.composed(player, row[0])
             if not self.store.db.execute("SELECT 1 FROM sqlite_master WHERE name='battle_checkout_wire'").fetchone():
                 return
@@ -202,7 +301,7 @@ class EndlessService:
                     for raw_detail in KILLS.decode(report.get('killMonster', b'')).get('killDetail', [])[:512]:
                         detail = INT_PAIR.decode(raw_detail)
                         self.observe(player, run, 1, detail.get('Key', 0), detail.get('Value', 0))
-            self.store.db.execute("INSERT OR IGNORE INTO economy_events VALUES (?, 'endless-repair-v1')", (player,))
+            self.store.db.execute("INSERT OR IGNORE INTO economy_events VALUES (?, ?)", (player,marker))
 
     def claim(self, player, task, request_key):
         from .economy import UnresolvedEconomy
