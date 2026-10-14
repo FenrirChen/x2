@@ -119,6 +119,12 @@ class AchievementService:
                     parts = [rule['parts'][str(r[2])] for r in equipment if r[1] == 6 and str(r[2]) in rule['parts']]
                     # Six copies of one slot are not a full set.
                     progress = int(len(set(parts)) == 6) if kind == 'equipment_set' else len(parts)
+                elif kind == 'completed':
+                    # 没有计数源的那批成就 (世界频道发言 / 每个好友的友情级别) 算不出进度,
+                    # rule 原本是 unsupported。直接按最后一档目标给满进度, 于是每一档都变成
+                    # 「可领取」; 领取仍由玩家点击推进 claimed, 奖励走原有的
+                    # achievement:{id}:{stage} 发放, 不额外造数。
+                    progress = row['targets'][-1]
                 self.store.db.execute('INSERT OR IGNORE INTO achievements(player_id,achv_id) VALUES (?,?)', (player_id, achv_id))
                 # Reaching a condition remains achieved after consuming an item.
                 self.store.db.execute('UPDATE achievements SET progress=MAX(progress,?) WHERE player_id=? AND achv_id=?',
