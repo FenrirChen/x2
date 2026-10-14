@@ -1,0 +1,175 @@
+{
+  "catalog_mismatches": [],
+  "rates": [
+    {
+      "pool": 22202,
+      "natural_top_rate": 0.004799548277809147,
+      "ten_two_top_without_pity": 0.0010104020279313938
+    },
+    {
+      "pool": 22203,
+      "natural_top_rate": 0.005938930992421364,
+      "ten_two_top_without_pity": 0.0015376937537153745
+    },
+    {
+      "pool": 22204,
+      "natural_top_rate": 0.004937618480800599,
+      "ten_two_top_without_pity": 0.0010685838694990124
+    },
+    {
+      "pool": 22205,
+      "natural_top_rate": 0.004427077920728286,
+      "ten_two_top_without_pity": 0.000861372209402321
+    },
+    {
+      "pool": 22206,
+      "natural_top_rate": 0.004884451521280716,
+      "ten_two_top_without_pity": 0.0010459919838847753
+    },
+    {
+      "pool": 22207,
+      "natural_top_rate": 0.0040024630541871924,
+      "ten_two_top_without_pity": 0.0007056592271855455
+    },
+    {
+      "pool": 22208,
+      "natural_top_rate": 0.005057099629007855,
+      "ten_two_top_without_pity": 0.0011202107045945042
+    },
+    {
+      "pool": 22209,
+      "natural_top_rate": 0.004164342073802503,
+      "ten_two_top_without_pity": 0.0007632346577616453
+    },
+    {
+      "pool": 22210,
+      "natural_top_rate": 0.004780842782196649,
+      "ten_two_top_without_pity": 0.0010026416635020505
+    },
+    {
+      "pool": 22211,
+      "natural_top_rate": 0.0026807583267439393,
+      "ten_two_top_without_pity": 0.00031879968930324104
+    },
+    {
+      "pool": 22212,
+      "natural_top_rate": 0.005620807059250156,
+      "ten_two_top_without_pity": 0.001379710055991204
+    },
+    {
+      "pool": 22213,
+      "natural_top_rate": 0.00451713081530178,
+      "ten_two_top_without_pity": 0.0008963408756991753
+    },
+    {
+      "pool": 22214,
+      "natural_top_rate": 0.0045902035392885185,
+      "ten_two_top_without_pity": 0.0009252145175020349
+    },
+    {
+      "pool": 22215,
+      "natural_top_rate": 0.0041062546301195895,
+      "ten_two_top_without_pity": 0.0007423208023458125
+    },
+    {
+      "pool": 22216,
+      "natural_top_rate": 0.004993236253680274,
+      "ten_two_top_without_pity": 0.0010924684668480594
+    },
+    {
+      "pool": 22217,
+      "natural_top_rate": 0.0047483942152342674,
+      "ten_two_top_without_pity": 0.000989248827283823
+    },
+    {
+      "pool": 22218,
+      "natural_top_rate": 0.004233734890475119,
+      "ten_two_top_without_pity": 0.0007885910161753509
+    },
+    {
+      "pool": 22219,
+      "natural_top_rate": 0.005129716981132075,
+      "ten_two_top_without_pity": 0.0011521664962366382
+    },
+    {
+      "pool": 22220,
+      "natural_top_rate": 0.0019202140283501262,
+      "ten_two_top_without_pity": 0.00016423426386934573
+    },
+    {
+      "pool": 22221,
+      "natural_top_rate": 0.004199872979451353,
+      "ten_two_top_without_pity": 0.0007761671818839813
+    },
+    {
+      "pool": 22222,
+      "natural_top_rate": 0.0025369805839147246,
+      "ten_two_top_without_pity": 0.0002857392778192157
+    },
+    {
+      "pool": 22223,
+      "natural_top_rate": 0.0025252525252525255,
+      "ten_two_top_without_pity": 0.00028312124178396514
+    },
+    {
+      "pool": 22224,
+      "natural_top_rate": 0.005070634142269891,
+      "ten_two_top_without_pity": 0.0011261335316206725
+    },
+    {
+      "pool": 22225,
+      "natural_top_rate": 0.005085946050344428,
+      "ten_two_top_without_pity": 0.0011328524687336458
+    },
+    {
+      "pool": 22226,
+      "natural_top_rate": 0.005108160648550275,
+      "ten_two_top_without_pity": 0.0011426348787271015
+    },
+    {
+      "pool": 22228,
+      "natural_top_rate": 0.005519018499288489,
+      "ten_two_top_without_pity": 0.0013309141496408092
+    },
+    {
+      "pool": 22229,
+      "natural_top_rate": 0.005108160648550275,
+      "ten_two_top_without_pity": 0.0011426348787271015
+    },
+    {
+      "pool": 22230,
+      "natural_top_rate": 0.0048014226437462955,
+      "ten_two_top_without_pity": 0.0010111812536802642
+    },
+    {
+      "pool": 22231,
+      "natural_top_rate": 0.004211150652431791,
+      "ten_two_top_without_pity": 0.0007802942211430075
+    },
+    {
+      "pool": 22232,
+      "natural_top_rate": 0.005129716981132075,
+      "ten_two_top_without_pity": 0.0011521664962366382
+    },
+    {
+      "pool": 22234,
+      "natural_top_rate": 0.004211150652431791,
+      "ten_two_top_without_pity": 0.0007802942211430075
+    },
+    {
+      "pool": 22235,
+      "natural_top_rate": 0.005553405572755418,
+      "ten_two_top_without_pity": 0.0013473035161844296
+    },
+    {
+      "pool": 22401,
+      "natural_top_rate": 0.004035619552860932,
+      "ten_two_top_without_pity": 0.0007172721582516667
+    },
+    {
+      "pool": 22402,
+      "natural_top_rate": 0.004160809671071127,
+      "ten_two_top_without_pity": 0.0007619547389295933
+    }
+  ]
+}

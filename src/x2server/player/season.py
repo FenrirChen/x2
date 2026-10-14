@@ -734,26 +734,32 @@ class SeasonService:
                 changes = [SEASON_SCHEMAS['TalentLevel'].decode(raw) for raw in req.get('info', [])]
                 if not changes or len({r['id'] for r in changes}) != len(changes):
                     raise UnresolvedEconomy('invalid talent change list')
+                # TalentLevel.level is the unsaved increment (curPoint), not
+                # the resulting level. Native RefreshLevelNum adds it to the
+                # module's saved level; OnBtnAddTalentView sends only curPoint.
                 total = 0
                 for change in changes:
-                    tid, level = change['id'], change['level']
+                    tid, added = change['id'], change['level']
                     before = state['talents'].get(str(tid), 0)
-                    if tid not in self.talents or not before <= level <= self.talents[tid]['MaxLevel']:
-                        raise UnresolvedEconomy('invalid talent level')
-                    total += level - before
-                if total <= 0 or total > state['points']:
+                    if (tid not in self.talents or type(added) is not int
+                            or added < 0 or before + added > self.talents[tid]['MaxLevel']):
+                        raise UnresolvedEconomy('invalid talent increment')
+                    total += added
+                if total > state['points']:
                     raise UnresolvedEconomy('insufficient talent points')
                 for change in changes:
-                    state['talents'][str(change['id'])] = change['level']
+                    key = str(change['id'])
+                    state['talents'][key] = state['talents'].get(key, 0) + change['level']
                 state['points'] -= total
-                state['stats']['talent_add'] = state['stats'].get('talent_add', 0) + 1
-                self.write(player, state)
+                if total:
+                    state['stats']['talent_add'] = state['stats'].get('talent_add', 0) + 1
+                    self.write(player, state)
             elif op == 'BattlePassTalentReset':
                 tid = req.get('id')
                 level = state['talents'].get(str(tid), 0)
                 if tid not in self.talents or not level:
                     raise UnresolvedEconomy('talent not allocated')
-                self.spend(player, 1237902, self.activities[0]['ActivityParam3'][0])
+                self.spend(player, 1237902, level * self.activities[0]['ActivityParam3'][0])
                 state['points'] += level
                 state['talents'][str(tid)] = 0
                 state['stats']['talent_reset'] = state['stats'].get('talent_reset', 0) + 1
