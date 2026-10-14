@@ -519,6 +519,14 @@ class SocialService:
             state[field]+=eligible
             if gain:
                 self.grant(pid,state,{COIN:gain})
+                # 成就 660010「累计获得友情点 N 点」按**实际入账点数**累计 (赠送方自己
+                # 也能拿到一份)。必须用自定事件号 620010, 不能复用 71 (E_GiveFriendCoin
+                # 是「赠送次数」, 那是每日任务 630023 的, 收取友情点记 71 会把它顶成完成)。
+                # eligible 已按「好友+当天只记一次」去重, 键含本地日, 重放同一批不会重复累加。
+                self.economy.achievements.record(
+                    pid, f"friendcoin-gain:{flow}:{state['friend_day']}:"
+                         f"{','.join(str(n) for n in sorted(eligible))}",
+                    self.economy.ACHV_EVENT_FRIEND_COIN, gain)
             return {**result,'playerid':eligible}
         if flow=='RecommandClub':
             club=state['club']
