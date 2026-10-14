@@ -1059,6 +1059,26 @@ class EconomyService:
         except UnresolvedEconomy:
             return result
 
+    def challenge_chest_for_run(self, player_id, run_uuid, profile):
+        """SectionTable chest fields are bag items, selected by admitted expertMode."""
+        if profile['section_type'] != 2:
+            return None
+        entry = self.store.db.execute('SELECT response FROM battle_entries WHERE uuid=? AND player_id=?',
+                                      (run_uuid, player_id)).fetchone()
+        if not entry:
+            return None
+        from x2server.messages.battle import BATTLE_SCHEMAS, FIGHT_DATA
+        admitted = BATTLE_SCHEMAS['L2C_FightData'].decode(entry[0])
+        expert = FIGHT_DATA.decode(admitted.get('data', b'')).get('expertMode', False)
+        field = 'ExpertChestReward' if expert else 'ChestReward'
+        item = int(profile.get('special_reward_fields', {}).get(field, 0) or 0)
+        if not item:
+            return None
+        if (self.items.get(item, {}).get('ItemType', {}).get('value') != 18
+                or not self.bag_catalog['items'].get(str(item), {}).get('used')):
+            raise UnresolvedEconomy('unresolved challenge chest item')
+        return item, expert, field
+
     def settle(self, player_id, run_uuid, section, success, section_type=0,
                outside_items=(), maze_items=(), extra_data=(), surviving_heroes=()):
         """Part of BattleService's receipt transaction, including first-clear key."""
@@ -1088,8 +1108,19 @@ class EconomyService:
                        and config['ChapterID'] in row.get('ActivityParam1', [])
                        for item in row.get('ActivityParam4', [])}
             outside_items = [raw for raw in outside_items if OUTSIDE_ITEM.decode(raw).get('id') not in outputs]
+        chest = self.challenge_chest_for_run(player_id, run_uuid, profile) if success else None
+        if chest:
+            # This fixed clear reward has one authoritative source. Ignore client
+            # echoes of either configured chest, including an inflated quantity.
+            chest_ids = {int(profile.get('special_reward_fields', {}).get(f, 0) or 0)
+                         for f in ('ChestReward', 'ExpertChestReward')}
+            outside_items = [raw for raw in outside_items
+                             if OUTSIDE_ITEM.decode(raw).get('id') not in chest_ids]
         grants, pending_instances, blocked, equipment_specs = self.runtime_drops.resolve(
             run=run, profile=profile, outside_items=outside_items, success=success)
+        if chest:
+            grants.append(RewardGrant('NORMAL_CLEAR_FIXED', section, run_uuid, chest[0], 1,
+                                      reason=f'SectionTable.{chest[2]}'))
         reward_equips: list = []
         sources = {name: [] for name in ("FIRST_CLEAR_FIXED", "NORMAL_CLEAR_FIXED",
             "RUNTIME_BATTLE_DROP", "REPORT_CURRENCY", "SWEEP_REWARD", "EXTRA_DROP",
@@ -1202,6 +1233,8 @@ class EconomyService:
                     sources["EQUIP_INSTANCE"].append(
                         {"instance_id": instance["id"], "type_id": instance["typeId"],
                          "star": instance["star"], "marker": instance["marker"]})
+            if chest and chest[1]:
+                self._event(player_id, f'expert-chest:{run_uuid}', 42, 0, 1)
             self.mark_section_cleared(player_id, section, run_uuid, section_type)
             if section_type == 7 or activity_period:
                 team_row = self.store.db.execute('SELECT team_json FROM battle_entries WHERE uuid=? AND player_id=?',
