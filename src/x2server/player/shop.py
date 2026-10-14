@@ -170,7 +170,15 @@ class ShopService:
             "hasBuyTimes": self._compat_count(player_id, shop_id, row),
             "goodsTag": row.get("goodsTag") or 0, "limited": row.get("limited") or 0}
 
+    def _active_week_slot(self, slots):
+        local = datetime.fromtimestamp(int(self.economy.clock()), timezone(timedelta(hours=8)))
+        return slots[local.isocalendar()[1] % len(slots)]
+
     def _available(self, player, shop, row):
+        # 803 group 94 is one shelf that swaps 许愿币/纯晶石/兽骸 every week: only the
+        # current week's item is listed, the other two stay hidden until their turn.
+        if row.get("weekSlot") and row["goodsId"] != self._active_week_slot(row["weekSlot"]):
+            return False
         if shop != 805 or not row.get("round"):
             return True
         previous = [r for (sid, _), r in self.compat_offers.items()
