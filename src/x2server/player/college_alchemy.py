@@ -4,6 +4,7 @@ from functools import lru_cache
 from importlib.resources import files
 import hashlib
 import json
+import random
 import struct
 import uuid
 import math
@@ -83,10 +84,11 @@ class AlchemyService:
 
     @staticmethod
     def phase(recipe, exp):
-        # GetExpPhase returns the index of the first unmet threshold, capped at
-        # the last index. FindEffectInRecipeLevel enables slots index < phase.
+        # GetExpPhase returns the index of the first unmet threshold.
+        # FindEffectInRecipeLevel enables slots index < phase, so capping at
+        # len(Exp) - 1 dropped the fifth (doubled-output) slot for good.
         thresholds = recipe.get('Exp', [])
-        return min(sum(exp >= threshold for threshold in thresholds), max(0, len(thresholds) - 1))
+        return sum(exp >= threshold for threshold in thresholds)
 
     def effects(self, recipe, exp, kind):
         values = []
@@ -226,7 +228,16 @@ class AlchemyService:
             bar = bars[pos]
             rid = bar['recipeId']
             recipe = self.recipes[rid]
-            reward = {recipe['ProductID']: recipe['ProductNum']}
+            # kind 5 doubles the haul with the slot's per-mille chance. The roll
+            # is seeded on the bar so a replayed collection reports the same
+            # reward it granted the first time.
+            product_num = recipe['ProductNum']
+            bonus = self.effects(recipe, exp.get(rid, 0), 5)
+            if bonus and random.Random(
+                    'college-double:%s:%s:%s' % (player_id, pos, bar['endTime'])
+            ).randrange(1000) < bonus[0]:
+                product_num *= 2
+            reward = {recipe['ProductID']: product_num}
             self.economy._grant(player_id, 'college-production:' + bar['production_id'], reward)
             rewards.update(reward)
             exp[rid] = min(recipe['Exp'][-1], exp.get(rid, 0)

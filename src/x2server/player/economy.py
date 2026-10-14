@@ -98,9 +98,14 @@ class EconomyService:
     POWER_BUY_PRICES = (20, 20, 40, 60, 80, 100, 120, 150, 180, 220,
                         260, 300, 350, 400, 460, 520, 600, 700, 800, 1000)
 
-    def __init__(self, store, clock=time.time):
+    def __init__(self, store, clock=time.time, *, resource_double_drop=False):
         self.store = store
         self.clock = clock
+        # resource_double_drop: 资源本额外掉落常驻化 (客户端「限时掉落活动」
+        # E_ExtraDroop / 表-ExtraDroop, 每关每天前 NumLimit 次结算产出 +100%,
+        # 见 player/extra_drop.py)。默认关: 该数量口径尚未证实, 打开会改掉资源本既定
+        # 产出, 所以只有显式传入的服务器 (tools/local_game_server.py) 才启用。
+        self.resource_double_drop = bool(resource_double_drop)
         self.catalog = json.loads(files("x2server").joinpath("data/economy_catalog.json").read_text(encoding="utf-8"))
         # 挑战任务 (ChallengeTask): 60 rows in 10 groups of 6, keyed to the client's
         # own ChallengeTask/TaskCondition tables. Boxes 1..10 are the group ids.
@@ -274,6 +279,10 @@ class EconomyService:
             recover(self, row[0])
             from .bag_items import recover_hero_boxes
             recover_hero_boxes(self, row[0])
+        # 资源本额外掉落 (常驻 +100%, 见 player/extra_drop.py)。默认空转: 只有
+        # resource_double_drop=True 时才读表、建 extra_drop_usage、在结算里加发。
+        from .extra_drop import ExtraDropService
+        self.extra_drop = ExtraDropService(self, enabled=self.resource_double_drop)
 
     @contextmanager
     def transaction(self):
@@ -1158,6 +1167,20 @@ class EconomyService:
                 grants.extend(RewardGrant('EXTRA_DROP', section, run_uuid, item, count,
                     reason='current activity ExtraDroop/AccountBuff') for item, count in extra.items())
                 sources['EXTRA_DROP'].extend({'item_id': i, 'quantity': n} for i, n in extra.items())
+            # 资源本额外掉落 (常驻 +100%, 见 player/extra_drop.py): 每个资源本每天前
+            # NumLimit 次结算, 该次产出再给一份。与上面 activity.runtime.extra_rewards
+            # 的 EXTRA_DROP 分工: 那条只在活动周期内按 AccountBuff/DroopType 1 发; 本条
+            # 不需要活动在期, 且基数排除 EXTRA_DROP 本身, 免得两份互相叠加。放在 _grant
+            # 之前, 折算出来的货币/道具与固定奖励一起入账。
+            bonus = self.extra_drop.consume(player_id, section)
+            if bonus:
+                base = sum_grants([grant for grant in grants if grant.source != 'EXTRA_DROP'])
+                for item, count in base.items():
+                    extra_count = count * bonus // 100
+                    if extra_count:
+                        grants.append(RewardGrant('EXTRA_DROP', section, run_uuid, item, extra_count,
+                            reason=f'resource-dungeon ExtraDroop permanent +{bonus}%'))
+                        sources['EXTRA_DROP'].append({'item_id': item, 'quantity': extra_count})
             if activity:
                 chapter_rewards = activity.pov_chapter_rewards(player_id, section)
                 for item, count in chapter_rewards.items():
@@ -1251,11 +1274,19 @@ class EconomyService:
         pending = Counter()
         grants = []
         for _ in range(count):
+            # 资源本额外掉落 (常驻 +100%, 见 player/extra_drop.py): 扫荡的每一局各算一次,
+            # 用完这关当天的 NumLimit(=10) 次为止 (第 11 局起按原样发)。
+            bonus = self.extra_drop.consume(player_id, section)
             for group in profile["sweep_reward"]:
                 resolved = self.gifts([group], deferred=pending,
                                       allow_daily_random=profile["section_type"] != 0)
-                grants.extend(RewardGrant("SWEEP_REWARD", section, request_key, item, amount,
-                    reason=f"SectionTable MopReward GiftGroup {group}") for item, amount in resolved.items())
+                for item, amount in resolved.items():
+                    grants.append(RewardGrant("SWEEP_REWARD", section, request_key, item, amount,
+                        reason=f"SectionTable MopReward GiftGroup {group}"))
+                    extra_amount = amount * bonus // 100
+                    if extra_amount:
+                        grants.append(RewardGrant("EXTRA_DROP", section, request_key, item, extra_amount,
+                            reason=f"resource-dungeon ExtraDroop permanent +{bonus}%"))
         snapshot["mobility"]["power"] -= cost * count
         self.save_snapshot(player_id, snapshot)
         rewards = self._grant(player_id, f"sweep:{request_key}", sum_grants(grants))
@@ -1266,7 +1297,10 @@ class EconomyService:
         if cost:
             self._event(player_id, f"sweep-power:{request_key}", 10, 900, cost * count)
         self.store.db.execute("INSERT INTO reward_settlement_audit VALUES (?,?,?,?,?,?)",
-            (request_key, player_id, section, json.dumps({"SWEEP_REWARD": audit_grants(grants)},
+            (request_key, player_id, section, json.dumps({
+                "SWEEP_REWARD": audit_grants([g for g in grants if g.source == "SWEEP_REWARD"]),
+                **({"EXTRA_DROP": audit_grants([g for g in grants if g.source == "EXTRA_DROP"])}
+                   if any(g.source == "EXTRA_DROP" for g in grants) else {})},
              ensure_ascii=False), json.dumps({"pending": dict(pending)}), int(time.time())))
         return self.reward_bytes(rewards)
 
@@ -1378,7 +1412,19 @@ class EconomyService:
             (json.dumps(snapshot, ensure_ascii=False, sort_keys=True), player_id))
 
     def refresh_stamina(self, player_id):
-        """Settle earned points once, retaining the partial interval in the save."""
+        """Settle earned points once, retaining the partial interval in the save.
+
+        ``recover_anchor`` stays the server-authoritative anchor (field name kept to
+        avoid churn), but two things happen alongside it:
+
+        * 镜像 —— 只要改动了 ``recover_anchor``, 就把 ``mobility["shop_power_fetch_time"]``
+          写成同一个值 (客户端 Mobility.ShopPowerFetchTime)。客户端 CollegeModule.RefreshPower
+          正是用它外推启明之塔 702 的显示值, 起点与服务端一致才不会重复计数 (结算完的瞬间
+          外推项 = floor(余数/周期 × 转化率) = 0)。
+        * 溢出进塔 —— 体力条填满之后剩下的 ``earned`` 整期交给启明之塔 702 存储
+          (``college.credit_overflow``)。``college`` 由 run_server 注入 (``self.college``),
+          未接线时退化为"只回体力、不进塔"(不依赖学院的单测仍能过)。
+        """
         now = int(self.clock())
         with self.transaction():
             snapshot = self.store.get(player_id)["snapshot"]
@@ -1389,17 +1435,28 @@ class EconomyService:
             if cap is None:
                 return
             anchor = mobility.get("recover_anchor")
-            if mobility["power"] >= cap or type(anchor) is not int or anchor <= 0 or anchor > now:
+            if type(anchor) is not int or anchor <= 0 or anchor > now:
+                # 客户端 PowerModule_CheckPowerRecover 在 ShopPowerFetchTime <= 0 时完全不
+                # 恢复, 所以无效锚点只能按 now 起算; 同时镜像外推起点。
                 if anchor != now:
                     mobility["recover_anchor"] = now
+                    mobility["shop_power_fetch_time"] = now
                     self.save_snapshot(player_id, snapshot)
                 return
             earned = (now - anchor) // self.POWER_RECOVER_SECONDS
-            if earned:
-                mobility["power"] = min(cap, mobility["power"] + earned)
-                mobility["recover_anchor"] = (now if mobility["power"] == cap
-                    else anchor + earned * self.POWER_RECOVER_SECONDS)
-                self.save_snapshot(player_id, snapshot)
+            if not earned:
+                return
+            room = max(0, cap - mobility["power"])
+            filled = min(earned, room)
+            mobility["power"] += filled
+            overflow = earned - filled
+            college = getattr(self, "college", None)
+            if overflow and college is not None:
+                college.credit_overflow(player_id, overflow)
+            mobility["recover_anchor"] = (now if mobility["power"] == cap and not overflow
+                else anchor + earned * self.POWER_RECOVER_SECONDS)
+            mobility["shop_power_fetch_time"] = mobility["recover_anchor"]
+            self.save_snapshot(player_id, snapshot)
 
     def charge_battle(self, player_id, run_uuid, section, amount=None):
         # BattleEntryContext supplies an explicit policy cost for non-main modes.

@@ -22,6 +22,62 @@ LOGGER = logging.getLogger("x2.college")
 
 E_ERROR_OPT = 13  # GameLogicErrCode.E_ERROR_OPT: refused, unsupported mutation.
 
+# 取出因果 (C2L_ExchangePower 238 / L2C_ExchangePower 249) 的返回码, 与客户端
+# CollegeModule_OnReceiveExchangePowerMsg 的判断一致: 10 = 成功; 22 = 塔里的因果不够,
+# 或星能不足以支付 EXCHANGE_PER_POINT 的取出成本 (GameLogicErrCode.E_ERROR_ITEM_NOT_ENOUGH)。
+COLLEGE_OK = 10
+COLLEGE_NO_ITEM = 22
+
+# extra_power 的单位是"毫因果": 客户端 CollegeModule_GetEnergyCurPower 把它乘 0.001
+# 才是显示用的整数因果; 上限比较用 GetEnergyMaxPower()*1000 (RefreshPower 里的 movz #0x3E8)。
+MILLI_POWER = 1000
+
+# 启明之塔 = 建筑 702, Language 210124 里它就是"把溢出的因果存起来"的那座塔。
+# 因果存储上限 = CollegeLevel[BuildType=702][当前等级].EffectValue2[0] (客户端
+# CollegeModule_GetEnergyMaxPower 读的就是这一个数)。下面 30 个数逐字抄自客户端
+# CollegeLevel[702] 的 L1..L30 (几乎每级 +5, 只有 L30 是 +10)。
+POWER_STORAGE_BUILDING = 702
+POWER_STORAGE_CAPS = (100, 105, 110, 115, 120, 125, 130, 135, 140, 145, 150, 155, 160, 165, 170,
+                      175, 180, 185, 190, 195, 200, 205, 210, 215, 220, 225, 230, 235, 240, 250)
+
+# 启明之塔 702 每个恢复周期往塔里存的因果, 单位千分比: 客户端 CollegeModule_GetPowerConversion
+# 读 CollegeStarLevel[702][当前星级] 里 StarEffectType2 == 5 那行的 StarEffectValue2[0],
+# 再乘 0.001。下面 6 个数逐字抄自 CollegeStarLevel[702] 的 1★..6★。注意本仓库
+# data/college_catalog.json 导出时只保留了 StarEffectType1 = 4 那一列(星能量), 漏掉了 type = 5,
+# 所以这张表按 POWER_STORAGE_CAPS 的老办法在代码里硬编码。
+POWER_CONVERSION_PERMILLE = (500, 600, 600, 700, 700, 800)
+
+# 取出比例: 每取出 1 因果消耗 5 星能 (Language 13100467, 与客户端 CollegeAddPower 的
+# InputItemNum 步进一致)。
+EXCHANGE_PER_POINT = 5
+
+
+def _row(state: dict, building_id: int) -> dict | None:
+    """The owned building/wonder row for ``building_id``, or None."""
+    for name in ("buildings", "wonders"):
+        for row in state.get(name) or ():
+            if int(row.get("buildingId", 0)) == building_id:
+                return row
+    return None
+
+
+def storage_cap(state: dict) -> int:
+    """启明之塔当前等级的因果存储上限 (整数因果); 塔不在档里时按 1 级算, 越界取端点。"""
+    row = _row(state, POWER_STORAGE_BUILDING)
+    level = int(row.get("buildingLevel", 1)) if row else 1
+    return POWER_STORAGE_CAPS[min(max(level, 1), len(POWER_STORAGE_CAPS)) - 1]
+
+
+def power_conversion(state: dict) -> int:
+    """启明之塔 702 当前星级每期往塔里存的因果, 单位毫因果/期 (千分比)。
+
+    与客户端 CollegeModule_GetPowerConversion 同源 (千分比 × 0.001 就是客户端的小数比例)。
+    越界取端点, 塔不在档里时按 1★ = 500 毫因果/期算。
+    """
+    row = _row(state, POWER_STORAGE_BUILDING)
+    star = int(row.get("buildingStar", 1)) if row else 1
+    return POWER_CONVERSION_PERMILLE[min(max(star, 1), len(POWER_CONVERSION_PERMILLE)) - 1]
+
 
 def initial_state() -> dict:
     """Copy only initial levels/stars explicitly present in CollegeBuilding."""
@@ -114,6 +170,24 @@ class CollegeStateRepository:
                 (json.dumps(state, sort_keys=True), self.clock.now(), player_id))
             if cursor.rowcount != 1:
                 raise ValueError("college state missing or version mismatch")
+
+    def credit_overflow(self, player_id: int, periods: int) -> None:
+        """把超过体力上限的 periods 个恢复周期按 702 星级转化率记进塔(单位毫因果)。
+
+        体力条填满之后剩下的整期才进塔 (客户端 CollegeModule_StartPowerTimer 只在体力满时
+        注册 RefreshPower 计时器), 每期按 power_conversion(state) 千分比累加, 上限
+        storage_cap(state)*MILLI_POWER 毫因果, 塔满则丢弃多余的期数。periods <= 0 时不做任何事。
+        """
+        if periods <= 0:
+            return
+        with self.transaction():
+            state = self.load(player_id)
+            cap = storage_cap(state) * MILLI_POWER
+            stored = int(state.get("extra_power", 0))
+            if stored >= cap:
+                return
+            state["extra_power"] = min(cap, stored + periods * power_conversion(state))
+            self.save(player_id, state)
 
     def growth_base(self, player_id: int) -> dict:
         with self.transaction():
@@ -256,6 +330,7 @@ class CollegeService:
 
     def __init__(self, college: CollegeStateRepository | None = None, clock=None, economy=None):
         self.college = college
+        self.economy = economy
         self.clock = clock or (college.clock if college else ServerClock())
         self._catalog: dict | None = None
         from .college_upgrade import BuildingUpgradeService
@@ -291,6 +366,8 @@ class CollegeService:
             return self.prayers.handle(context, packet, flow, request)
         if self.washing and flow in self.washing.FLOWS:
             return self.washing.handle(context, packet, flow, request)
+        if flow == "ExchangePower":
+            return self._exchange_power(context.session.player_id, request)
         if flow == "SingleCustomerInfo":
             return self._single_customer(context.session.player_id, request)
         if flow == "AlchemyMainData":
@@ -334,6 +411,38 @@ class CollegeService:
             "code": 10, "posIndex": pos_index,
             "customere": CUSTOMER_INFO.encode(customer),
             "transactionNum": 1, "transactionLastRecoverTime": 0})
+
+    def _exchange_power(self, player_id: int, request: dict) -> OutboundMessage:
+        """C2L_ExchangePower (238) -> L2C_ExchangePower (249): 从启明之塔取出已存储的因果。
+
+        请求字段 1 = 要取出的因果数量 (客户端 CollegeAddPower_OnConfirmClick 自己先校验
+        `amount <= CollegeModule.GetEnergyCurPower()`, 即塔里已存储的因果)。每取出 1 因果
+        消耗 EXCHANGE_PER_POINT 点星能。先 refresh_stamina 把时间外推的部分落到服务端
+        extra_power (否则客户端按老锚点外推出的数量会比服务端多, 玩家照客户端显示取出就会被
+        判成不足), 再校验并扣减 extra_power / star_energy, 最后把体力加回去 (取回后允许
+        超过上限, 保留, 不回收)。
+        """
+        amount = int(request.get("power", 0))
+        if amount <= 0:
+            return OutboundMessage("L2C_ExchangePower", {"code": E_ERROR_OPT})
+        if self.economy is None or self.college is None:
+            return OutboundMessage("L2C_ExchangePower", {"code": E_ERROR_OPT})
+        self.economy.refresh_stamina(player_id)
+        with self.college.transaction():
+            state = self.college.load(player_id)
+            stored = int(state.get("extra_power", 0)) // MILLI_POWER
+            available = int(state.get("star_energy", 0))
+            if amount > stored or available < amount * EXCHANGE_PER_POINT:
+                return OutboundMessage("L2C_ExchangePower", {"code": COLLEGE_NO_ITEM})
+            state["extra_power"] -= amount * MILLI_POWER
+            state["star_energy"] = available - amount * EXCHANGE_PER_POINT
+            self.college.save(player_id, state)
+        snapshot = self.economy.store.get(player_id)["snapshot"]
+        mobility = snapshot.setdefault("mobility", {})
+        mobility["power"] = int(mobility.get("power", 0)) + amount
+        self.economy.save_snapshot(player_id, snapshot)
+        return OutboundMessage("L2C_ExchangePower",
+            {"code": COLLEGE_OK, "power": amount, "extraPower": state["extra_power"]})
 
     def _alchemy_main(self, player_id: int) -> OutboundMessage:
         # 591: the handler null-checks every list (first NRE at recipeIdExp,
@@ -435,7 +544,13 @@ class CollegeService:
         alchemy['customer_positions'] = valid
         row = by_quest[valid[str(pos_index)]['questId']]
         rotation = int(rotations.get(str(pos_index), 0))
-        element = str(row["like"])
+        # CollegeCustomer.Like holds TWO elements (e.g. 38001 -> [991, 992]); the
+        # old single `like` field had been flattened to Like[1], so element 991
+        # (whose level-1 recipe is 1280011) was never selected for any customer.
+        # Pick one liked element per customer deterministically so every element
+        # (991..996) is reachable and the preference is stable across rotation.
+        likes = row["likes"]
+        element = str(likes[row["customerId"] % len(likes)])
         first = catalog["recipes"][element]["1"]
         second = catalog["recipes"][element]["2"]
         customer = {"questId": row["sellQuestId"], "itemId": [first["productId"]],

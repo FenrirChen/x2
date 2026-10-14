@@ -206,3 +206,38 @@ def test_college_flow_chain_answers(tmp_path):
                                                    "C2L_StartTrain")))
     assert train.values["code"] == 13
     store.close()
+
+
+def test_exchange_power_fetches_stored_causality(tmp_path):
+    """238/249: 从启明之塔取出已存储因果, 每点消耗 5 星能, 体力加回 (允许超上限)。"""
+    from x2server.player.college import CollegeService, CollegeStateRepository
+    from x2server.player.economy import EconomyService
+
+    store = PlayerStore(tmp_path / "college-power.db")
+    p = store.login("college-power", 1, 0)
+    now = 1_800_000_000
+    store.save_snapshot(1, dict(p["snapshot"], level=60,
+        mobility={"power": 149, "recover_anchor": now}), p["revision"])
+    repo = CollegeStateRepository(store, FixedClock())
+    economy = EconomyService(store, clock=lambda: now)
+    economy.college = repo
+    state = repo.load(1)
+    state["extra_power"] = 3 * 1000  # 3 因果 (单位毫因果)
+    state["star_energy"] = 40
+    repo.save(1, state)
+    ctx = DispatchContext("power", "local", SessionState("power", "session", player_id=1))
+    flows = CollegeService(repo, economy=economy)
+
+    reply = asyncio.run(flows.dispatch(ctx, packet({"power": 3}, 1, "C2L_ExchangePower")))
+    assert reply.message_name == "L2C_ExchangePower"
+    assert reply.values == {"code": 10, "power": 3, "extraPower": 0}
+    assert repo.load(1)["extra_power"] == 0
+    assert repo.load(1)["star_energy"] == 40 - 3 * 5
+    # 取回的体力可以超过上限, 原样保留。
+    assert store.get(1)["snapshot"]["mobility"]["power"] == 152
+
+    # 塔里已无因果 → COLLEGE_NO_ITEM (22), 不改存档。
+    empty = asyncio.run(flows.dispatch(ctx, packet({"power": 1}, 2, "C2L_ExchangePower")))
+    assert empty.values["code"] == 22
+    assert repo.load(1)["star_energy"] == 25
+    store.close()
