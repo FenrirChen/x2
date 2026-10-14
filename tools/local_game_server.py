@@ -105,6 +105,8 @@ async def run(database: Path, seconds: float) -> None:
     extra_minted, extra_failed = deliver_player_gift(store, clock.now(), "causality_oct13")
     logging.getLogger("x2.system_mail").info("October causality gift minted=%s failed=%s", extra_minted, extra_failed)
     economy = EconomyService(store, clock=clock.now)
+    # refresh_stamina 里的"溢出进塔"要写启明之塔(702)的状态, 见 economy.refresh_stamina。
+    economy.college = college
     # 星相屋/每日占卜 (362/363): 读写自己的签到状态并真发货, 见 player/divination.py。
     divination = DivinationService(store, economy)
     college_flows = CollegeService(college, economy=economy)
