@@ -1,6 +1,7 @@
 """Persisted hero jobs. Costs, occupancy and claims share one savepoint."""
 import hashlib
 import json
+import logging
 import uuid
 
 from x2server.network.dispatcher import OutboundMessage
@@ -8,6 +9,10 @@ from x2server.messages.lobby import UNLOCK_EXPLORE_RUIN
 from .college_upgrade import _catalog
 from .progression import catalog as progression_catalog
 from .hero import encode_hero_data
+
+# 派遣/培训被拒时把判定用的实际数值打进日志: 客户端只回一个 GameLogicErrCode
+# (13/14/38/62~64/186/205/22), 没有上下文时无法区分「星能不够」和「参数/槽位不对」。
+LOGGER = logging.getLogger("x2.college")
 
 
 class CollegeJobsService:
@@ -62,21 +67,29 @@ class CollegeJobsService:
         result = {'code': 13, 'trainId': pos}
         capacity = self.repo.catalog.effect(state, 704, 6, star=True)[0]
         if not 0 <= pos < capacity or any(r['trainingId'] == pos for r in state['training']):
+            LOGGER.warning('StartTrain refused: player=%s trainId=%s capacity=%s busy=%s',
+                           player_id, pos, capacity, [r['trainingId'] for r in state['training']])
             return result
         code, heroes = self.heroes(state, snapshot, [hid])
         if code != 10:
+            LOGGER.warning('StartTrain refused: player=%s heroId=%s hero check code=%s', player_id, hid, code)
             return dict(result, code=code)
         hero = heroes[0]
         level = self.levels.get(hero['level'])
         if not level or not level['next_level'] or hero['level'] >= snapshot['level']:
+            LOGGER.warning('StartTrain refused: player=%s heroId=%s heroLevel=%s playerLevel=%s',
+                           player_id, hid, hero['level'], snapshot['level'])
             return dict(result, code=14)
         building = self.repo.catalog.state_row(state, 704)
         row = self.repo.catalog.row(704, building['buildingLevel'])
         cost = row['PowerConsume']
         if state['star_energy'] < cost:
+            LOGGER.warning('StartTrain refused: player=%s starEnergy=%s < cost=%s', player_id,
+                           state['star_energy'], cost)
             return dict(result, code=38)
         duration = self.repo.catalog.effect(state, 704, 7)[0] * 3600
         if duration <= 0:
+            LOGGER.warning('StartTrain refused: player=%s duration=%s', player_id, duration)
             return result
         now = self.repo.clock.now()
         # Existing user decision: 25% of the next-level requirement per job.
@@ -125,9 +138,12 @@ class CollegeJobsService:
         result = {'code': 13, reply_id: pos}
         job = next((r for r in state[kind] if r[id_field] == pos), None)
         if not job:
+            LOGGER.warning('Cancel refused: %s slot=%s has no job (busy=%s)', kind, pos,
+                           [r[id_field] for r in state[kind]])
             return result
         # Completed jobs must be claimed, never converted into a free refund.
         if job[kind + 'EndTime'] <= self.repo.clock.now():
+            LOGGER.warning('Cancel refused: %s slot=%s already finished, claim it instead', kind, pos)
             return dict(result, code=205)
         ids = [job['heroId']] if training else job['heroList']
         for hero in snapshot['heroes']:
@@ -150,17 +166,28 @@ class CollegeJobsService:
         row = self.explores.get(rid)
         if (not 0 <= pos < capacity or not row or not ruin or not 1 <= len(ids) <= 3
                 or any(r['exploreId'] == pos for r in state['explore']) or difficulty not in range(3)):
+            LOGGER.warning('StartExplore refused: player=%s exploreId=%s capacity=%s ruinId=%s inRuinTable=%s '
+                           'inState=%s heroIds=%s busySlots=%s difficulty=%s',
+                           player_id, pos, capacity, rid, bool(row), bool(ruin), ids,
+                           [r['exploreId'] for r in state['explore']], difficulty)
             return result
         max_difficulty = max([1, *self.effects(row, ruin['exp'], 2)]) - 1
         if difficulty > max_difficulty:
+            LOGGER.warning('StartExplore refused: player=%s ruinId=%s ruinExp=%s difficulty=%s > max=%s',
+                           player_id, rid, ruin['exp'], difficulty, max_difficulty)
             return result
         code, heroes = self.heroes(state, snapshot, ids)
         if code != 10:
+            LOGGER.warning('StartExplore refused: player=%s heroIds=%s hero check code=%s', player_id, ids, code)
             return dict(result, code=code)
         power = sum(hero_power(self.store, player_id, h, self.repo.clock) for h in heroes)
         if power < row['Conditon'][difficulty]:
+            LOGGER.warning('StartExplore refused: player=%s ruinId=%s difficulty=%s power=%s < required=%s',
+                           player_id, rid, difficulty, power, row['Conditon'][difficulty])
             return dict(result, code=186)
         if state['star_energy'] < row['PowerConsume']:
+            LOGGER.warning('StartExplore refused: player=%s ruinId=%s starEnergy=%s < cost=%s',
+                           player_id, rid, state['star_energy'], row['PowerConsume'])
             return dict(result, code=38)
         coefficient = self.repo.catalog.effect(state, 705, 9)[0]
         duration = max(1, (row['WaitTimes'] - sum(self.effects(row, ruin['exp'], 4)))

@@ -52,6 +52,14 @@ POWER_CONVERSION_PERMILLE = (500, 600, 600, 700, 700, 800)
 # InputItemNum 步进一致)。
 EXCHANGE_PER_POINT = 5
 
+# 客户端 CollegeModule__cctor (0x01B09108) 把 CollegeModule 静态字段 EXPLORE_MAX_NUM
+# (+0x0) 与 TRAIN_MAX_NUM (+0x4) 都赋成 6; CollegeExploreTab_Refresh (0x01BC30A0) 直接
+# LoopListView2_SetListItemCount(list, EXPLORE_MAX_NUM), CollegeTrainingTab 同理。客户端
+# 按 index 取行 (CollegeExploreTab_GetExploreByIndex 0x01BBA434 越界返回 null), 所以两个
+# 列表恒画 6 行; 服务端少发的行在客户端是空行。
+EXPLORE_MAX_NUM = 6
+TRAIN_MAX_NUM = 6
+
 
 def _row(state: dict, building_id: int) -> dict | None:
     """The owned building/wonder row for ``building_id``, or None."""
@@ -234,7 +242,9 @@ class CollegeStateRepository:
         rows = {r[id_field]: r for r in state.get(kind, []) if isinstance(r, dict)}
         fields = {f.name for f in schema.fields}
         result = []
-        for index in range(max(1, capacity)):
+        # 客户端探险/训练页恒画 EXPLORE_MAX_NUM / TRAIN_MAX_NUM 行, 未解锁的槽位用
+        # status=0 占位下发, 否则客户端画出的空行拿不到计时/状态数据。
+        for index in range(max(capacity, TRAIN_MAX_NUM if training else EXPLORE_MAX_NUM)):
             row = dict(rows.get(index, {id_field: index}))
             # Native UI enums differ: training 0=locked/1=idle/2=running/3=done;
             # exploration 0=locked/1=idle/2=occupied (end time decides claim).
@@ -294,10 +304,24 @@ class CollegeStateRepository:
         """622/623 is a state query: repeat calls must return the same stored ruins."""
         with self.transaction():
             state = self.load(player_id)
-            if not state.get('ruins'):
-                state['ruins'] = [{'ruinId': 34001, 'exp': 0, 'queueCount': 0}]
+            from .college_upgrade import _catalog
+            # 客户端 CollegeExploreRuinSelect_RefreshShowNode (0x01BBEADC) 的遗迹页条数只由
+            # L2C_UnlockExploreRuin 下发的条数决定: 每条都会经 GetShowCountByIndex 追加进
+            # ShowNodeList, 最后 LoopListView2_SetListItemCount(list, ShowNodeList.Count);
+            # 而 RuinNode_Refresh (0x01BC07E8) 里 mBtn.interactable = (content.Data != null),
+            # 也就是「服务端下发了这一条」== 遗迹页上这个遗迹可点击。只下发一条 34001 时遗迹页
+            # 只有一个可点遗迹, 需要 10 星能的遗迹 (34003 等) 根本没得选, 所以这里按客户端
+            # CollegeExplore 全表 (34001..34015) 下发, 保留已存的 exp。
+            known = {int(r.get('ruinId', 0)): int(r.get('exp', 0)) for r in state.get('ruins') or ()}
+            # queueCount 是每条遗迹自带的队列数, 取时空之门 705 当前星级解锁的槽位数
+            # (CollegeStarLevel[705].StarEffectValue1, 1..6); 至少为 1, 不允许出现 0。
+            slots = max(1, int(self.catalog.effect(state, 705, 1, star=True)[0]))
+            rows = [{'ruinId': row['ID'], 'exp': known.get(row['ID'], 0), 'queueCount': slots}
+                    for row in _catalog()['explores']]
+            if rows != state.get('ruins'):
+                state['ruins'] = rows
                 self.save(player_id, state)
-            return [dict(row) for row in state['ruins']]
+            return [dict(row) for row in rows]
 
     def alchemy_main(self, player_id: int) -> dict:
         """590/591 snapshot; every list stays a constructed (possibly empty) list."""

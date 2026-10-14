@@ -32,9 +32,12 @@ def test_growth_base_static_initial_and_persistence(tmp_path):
     assert len(first.values["buildingList"]) == 8
     assert len(first.values["civilization"]) == 8  # All wonders incl. 728 state row.
     # Absent repeated fields decode to null client-side (SilentOrbit); the
-    # snapshot always carries one zero-filled idle entry per queue list.
+    # snapshot always carries the client's fixed row count per queue list.
+    # CollegeModule__cctor (0x01B09108) pins EXPLORE_MAX_NUM/TRAIN_MAX_NUM to 6
+    # and CollegeExploreTab_Refresh (0x01BC30A0) calls SetListItemCount(list, 6),
+    # so both tabs always render six rows even when fewer slots are unlocked.
     for field in ("exploreList", "trainingList"):
-        assert len(first.values[field]) == 1 and first.values[field] != b""
+        assert len(first.values[field]) == 6 and first.values[field] != b""
     prayer_rows = [PRAY_QUEUE.decode(row) for row in first.values["prayQueue"]]
     assert {row["buildingId"] for row in prayer_rows} == set(range(721, 729))
     assert all(row["prayStatus"] == 0 for row in prayer_rows)
@@ -91,9 +94,14 @@ def test_entry_queries_ruins_and_alchemy_initial_state(tmp_path):
     repeat = asyncio.run(lobby.query(ctx, packet({}, 2, "C2L_UnlockExploreRuin")))
     assert first.message_name == "L2C_UnlockExploreRuin"
     assert first.values["code"] == 10
-    # The official GlobalParamString.AlchemyExploreDefault unlocks the first ruin.
-    assert first.values["unlockExploreRuin"] == [UNLOCK_EXPLORE_RUIN.encode(
-        {'queueCount': 0, 'exp': 0, 'ruinId': 34001})]
+    # The official CollegeExplore table lists 34001..34015. RefreshShowNode
+    # (0x01BBEADC) draws exactly one clickable node per served UnlockExploreRuin
+    # (RuinNode_Refresh 0x01BC07E8: mBtn.interactable = content.Data != null), so
+    # the whole table ships and every node stays selectable; queueCount comes
+    # from the unlocked 705 star slots and must never be zero.
+    rows = [UNLOCK_EXPLORE_RUIN.decode(raw) for raw in first.values["unlockExploreRuin"]]
+    assert [row["ruinId"] for row in rows] == list(range(34001, 34016))
+    assert all(row["exp"] == 0 and row["queueCount"] >= 1 for row in rows)
     assert repeat.values == first.values
 
     # 591 moved to CollegeService; its initial state ships the six starter
@@ -119,7 +127,8 @@ def test_entry_queries_ruins_and_alchemy_initial_state(tmp_path):
     # Round-trip preserves the non-null initial alchemy lists.
     assert len(decoded["customeres"]) == 5 and len(decoded["elements"]) == 6
 
-    # A persisted non-empty ruin list is served verbatim after relogin.
+    # Persisted ruin progress survives relogin: the reply rebuilds the full
+    # CollegeExplore table and carries the stored 34001 exp over.
     state = repo.load(1)
     state["ruins"] = [{"ruinId": 34001, "exp": 12, "queueCount": 1}]
     repo.save(1, state)
@@ -127,8 +136,10 @@ def test_entry_queries_ruins_and_alchemy_initial_state(tmp_path):
     restored = LobbyService(college=CollegeStateRepository(restored_store, FixedClock()))
     resumed = asyncio.run(restored.query(ctx, packet({}, 5, "C2L_UnlockExploreRuin")))
     assert resumed.values["code"] == 10
-    assert UNLOCK_EXPLORE_RUIN.decode(resumed.values["unlockExploreRuin"][0]) == {
-        "ruinId": 34001, "exp": 12, "queueCount": 1}
+    rows = [UNLOCK_EXPLORE_RUIN.decode(raw) for raw in resumed.values["unlockExploreRuin"]]
+    assert [row["ruinId"] for row in rows] == list(range(34001, 34016))
+    first_ruin = next(row for row in rows if row["ruinId"] == 34001)
+    assert first_ruin["exp"] == 12 and first_ruin["queueCount"] >= 1
     restored_store.close()
 
 

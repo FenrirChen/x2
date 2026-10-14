@@ -224,7 +224,9 @@ def test_exploration_gates_cancel_and_claim(game, monkeypatch):
     assert hero_power(store, 1, hero, clock) >= 100
     assert send(game, 'StartExplore', exploreId=0, ruinId=34001, heroIds=[hid], diffdifficulty=1).values['code'] == 13
     assert send(game, 'StartExplore', exploreId=0, ruinId=34001, heroIds=[hid, hid]).values['code'] == 13
-    assert send(game, 'StartExplore', exploreId=0, ruinId=34002, heroIds=[hid]).values['code'] == 13
+    # unlock_ruins now serves every CollegeExplore row (34001..34015), so an id
+    # absent from the table is the remaining "unknown ruin" rejection.
+    assert send(game, 'StartExplore', exploreId=0, ruinId=34099, heroIds=[hid]).values['code'] == 13
     result = send(game, 'StartExplore', seq=2, exploreId=0, ruinId=34001, heroIds=[hid])
     assert result.values['code'] == 10
     assert repo.load(1)['star_energy'] == 194
@@ -242,7 +244,10 @@ def test_exploration_gates_cancel_and_claim(game, monkeypatch):
     clock.value += 10800
     result = send(game, 'FinishExplore', seq=8, exploreId=0)
     assert result.values['code'] == 10 and result.values['exp'] == 1
-    assert [r['ruinId'] for r in repo.load(1)['ruins']] == [34001, 34002]
+    # Every CollegeExplore row stays served; the finished ruin keeps its exp.
+    ruins = repo.load(1)['ruins']
+    assert [r['ruinId'] for r in ruins] == list(range(34001, 34016))
+    assert next(r['exp'] for r in ruins if r['ruinId'] == 34001) == 1
     assert repo.load(1)['alchemy']['elements'][0]['num'] == 56
     quantity = store.db.execute('SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1281001').fetchone()[0]
     assert 2 <= quantity <= 4
