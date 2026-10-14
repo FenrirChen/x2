@@ -82,9 +82,9 @@ def snapshot_fields(store, player, now):
             if row:
                 member = store.db.execute('SELECT damage FROM world_boss_members WHERE boss_id=? AND player_id=?',(slot['boss'],player)).fetchone()
                 bosses.append(CONTAINER.encode({'idx':index,'val':BOSS.encode({
-                    'BossID':slot.get('ticket',row['boss_id']),'ID':row['type_id'],'Group':row['group_id'],'Start':row['created'],
+                    'BossID':slot.get('ticket',row['boss_id']),'ID':row['type_id'],'Group':row['group_id'],'Start':row['created']*1000,
                     'State':row['state'],'FinderId':row['finder'],'FinderName':row['finder_name'],
-                    'World':int(row['type_id']<2040200),'StateFinishTime':row['finish'],
+                    'World':int(row['type_id']<2040200),'StateFinishTime':row['finish']*1000,
                     'MaxHP':row['max_hp'],'CurHP':row['hp'],'JoinPlayerNum':0,'Level':row['monster_level'],
                     'SelfPlayer':BOSS_PLAYER.encode({'Name':store.get(player)['snapshot']['nickname'],
                         'Damage':member[0] if member else 0,'Order':1 if member else 0})})}))
@@ -402,7 +402,8 @@ class WorldBossService:
             if member['player_id']==player:
                 own=wire
         return {'bossId':self.client_id(boss['boss_id'],player),'typeId':boss['type_id'],'group':boss['group_id'],
-            'findTime':boss['created'],'state':boss['state'],'stateFinishTime':boss['finish'],
+            # Native mass timer divides these epoch milliseconds by 1000.
+            'findTime':boss['created']*1000,'state':boss['state'],'stateFinishTime':boss['finish']*1000,
             'finderId':boss['finder'],'finderName':boss['finder_name'],
             # Type=6 FightData is accepted only after entering MassScene.
             # Faking a common Boss skips that scene and silently discards 126.
@@ -535,6 +536,22 @@ class WorldBossService:
         return {'code':10,'bossId':self.client_id(boss['boss_id'],player),'bossGroup':boss['group_id']}
 
     def act(self, player, state, req, network=False):
+        # LEAVE is cleanup, valid for the admitted instance even after expiry
+        # or a daily rotation. Do not create today's Boss merely to exit yesterday's.
+        if req.get('act') == 2:
+            boss_id=self.internal_id(req.get('bossid',''))
+            boss=self.store.db.execute('SELECT * FROM world_boss_runs WHERE boss_id=?',(boss_id,)).fetchone()
+            owned=self.store.db.execute('''SELECT 1 FROM world_boss_player_days
+                WHERE boss_id=? AND player_id=?''',(boss_id,player)).fetchone()
+            member=self.store.db.execute('''SELECT 1 FROM world_boss_members
+                WHERE boss_id=? AND player_id=?''',(boss_id,player)).fetchone()
+            if (not boss or not (owned or member)
+                    or not network and req.get('bossGroup','') != boss['group_id']):
+                raise ValueError('leave without owned Boss admission')
+            self.store.db.execute('UPDATE world_boss_members SET active=0 WHERE boss_id=? AND player_id=?',(boss_id,player))
+            # A terminal bossInfo would re-enter dismissal handling before the
+            # LEAVE callback. Native UpdateChallenge... accepts a null info.
+            return {'code':10,'bossid':self.client_id(boss_id,player),'act':2}
         boss=self.get_boss(req.get('bossid',''),None if network else req.get('bossGroup',''))
         if boss['boss_id']!=self.public_bosses(player):
             raise ValueError('Boss is not today\'s scheduled instance')
@@ -579,10 +596,6 @@ class WorldBossService:
             # -> 客户端「操作失败」。
             if boss['state']==1:
                 self.store.db.execute('UPDATE world_boss_runs SET state=2 WHERE boss_id=?',(boss['boss_id'],))
-        elif action==2:
-            if not member:
-                raise ValueError('leave without admission')
-            self.store.db.execute('UPDATE world_boss_members SET active=0 WHERE boss_id=? AND player_id=?',(boss['boss_id'],player))
         elif action==3 and network:
             amounts=req.get('value',[])
             if not member or not member['active'] or not member['run_id'] or len(amounts)!=1 or not 0<=amounts[0]<=boss['max_hp']:
@@ -680,7 +693,8 @@ class WorldBossService:
                 ticket=self.store.db.execute('''SELECT b.state,b.finish FROM world_boss_tickets t
                     JOIN world_boss_runs b ON b.boss_id=t.boss_id
                     WHERE t.ticket=? AND t.player_id=?''',(req.get('bossid',''),claimed)).fetchone()
-                ticket_ok=bool(ticket and ticket['state'] in (1,2) and ticket['finish']>self.now())
+                ticket_ok=bool(ticket and (req.get('act')==2 or
+                    ticket['state'] in (1,2) and ticket['finish']>self.now()))
                 if not token_ok and not session_ok and not ticket_ok:
                     LOG.info('Boss network authentication rejected player=%s token_present=%s session_present=%s',claimed,bool(req.get('token')),bool(context.session.session_id))
                     return OutboundMessage(response,{'code':13,'act':req.get('act',0),'bossid':req.get('bossid','')})
@@ -697,19 +711,22 @@ class WorldBossService:
         failed={'code':13,**{k:v for k,v in req.items() if k in ('bossId','bossGroup','bossid','act','slotId','slotIdx','questIdx','answerIdx')}}
         try:
             with self.economy.transaction():
-                if self.store.get(player)['snapshot']['level']<self.activity['OpenLever']:
+                leaving=name in ('C2L_WorldBossAct','C2W_WorldBossAct') and req.get('act')==2
+                if not leaving and self.store.get(player)['snapshot']['level']<self.activity['OpenLever']:
                     raise ValueError('level requirement')
                 cached=self.store.db.execute('SELECT * FROM world_boss_receipts WHERE player_id=? AND request_key=?',(player,key)).fetchone()
                 if cached:
                     values=W[response].decode(cached['response'])
-                    if network:
+                    if leaving:
+                        values.pop('bossInfo',None)
+                    if network and not leaving:
                         if self.internal_id(req.get('bossid',''))!=self.public_bosses(player):
                             raise ValueError('retired or foreign Boss receipt')
                         # Replaying an old damage receipt must not restore an
                         # obsolete HP/state on the client after newer attacks.
                         values['bossInfo']=INFO.encode(self.info(self.get_boss(req.get('bossid','')),player,combat=True))
                 else:
-                    state=account_state(self.store,player,self.now())
+                    state={} if leaving else account_state(self.store,player,self.now())
                     if name=='C2L_WorldBossSearch':values=self.search(player,state,key)
                     elif name=='C2L_WorldBossQuestSelect':values=self.choice(player,state,req,key)
                     elif name=='C2L_WorldBossOpenSearchChest':values=self.chest(player,state,req,key)
@@ -722,23 +739,25 @@ class WorldBossService:
                     # Never let a Boss kill reappear as a live radar slot.
                     if network and req.get('act')==3:
                         self.ensure_boss_slot(player,state)
-                    self.save(player,state)
+                    if not leaving:
+                        self.save(player,state)
                     if name!='C2L_QueryWorldBossInfo':
                         self.store.db.execute('INSERT INTO world_boss_receipts VALUES (?,?,?,?)',(player,key,response,W[response].encode(values)))
             LOG.info('Boss request name=%s player=%s code=10 boss=%s slot=%s',name,player,self.internal_id(req.get('bossid',req.get('bossId',''))),values.get('slotIdx',values.get('slotId','-')))
             if network:
-                send=getattr(context,'send',None)
-                if send:
-                    self.clients[context.connection_id]=(weakref.WeakMethod(send),player,self.internal_id(req['bossid']))
-                await self.broadcast(self.internal_id(req['bossid']),context.connection_id,
-                    actor=player if not cached else None,action=req.get('act'))
-                if req.get('act')==2:
+                if leaving:
                     self.clients.pop(context.connection_id,None)
+                else:
+                    send=getattr(context,'send',None)
+                    if send:
+                        self.clients[context.connection_id]=(weakref.WeakMethod(send),player,self.internal_id(req['bossid']))
+                    await self.broadcast(self.internal_id(req['bossid']),context.connection_id,
+                        actor=player if not cached else None,action=req.get('act'))
             elif name=='C2L_WorldBossAct' and req.get('act')==1:
                 self.lobby_sessions[context.session.session_id]=(player,self.now()+3600)
             # Client callbacks inspect NetSyncData immediately, so account
             # counters and event states must precede the response.
-            sync=not network and name not in ('C2L_QueryWorldBossInfo','C2L_WorldBossSelectHero')
+            sync=not network and not leaving and name not in ('C2L_QueryWorldBossInfo','C2L_WorldBossSelectHero')
             before=self.economy.pushes(player) if sync else ()
             if name=='C2L_QueryWorldBossInfo':
                 fields,_=snapshot_fields(self.store,player,self.now())
