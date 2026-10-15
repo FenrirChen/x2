@@ -50,7 +50,7 @@ class ShopService:
         if len(self.offers) != 15:
             raise ValueError("shop 809 static goods evidence changed")
         # Random shops retain their established catalogs. Explicit user catalogs
-        # restore medal, ticket and gem shops below; other shops stay retired.
+        # restore medal, ticket, gem, friend and divine-letter shops below; other shops stay retired.
         random_shop = json.loads(files("x2server").joinpath(
             "data/random_shop_801.json").read_text(encoding="utf-8"))
         equib_shop = json.loads(files("x2server").joinpath(
@@ -60,7 +60,7 @@ class ShopService:
                 or any(type(weight) is not int or weight <= 0 for weight in self.equib_star_weights.values())):
             raise ValueError("shop 804 star weights invalid")
         compat = {"shops": {"801": random_shop["goods"], "804": equib_shop["goods"]}}
-        self.retired_shop_ids = set(range(801, 812)) - {self.SHOP_ID, 801, 803, 804, 805, 806}
+        self.retired_shop_ids = set(range(801, 812)) - {self.SHOP_ID, 801, 802, 803, 804, 805, 806, 810}
         self.compat_offers = {}
         self.compat_disabled = []
         for shop_id, rows in compat["shops"].items():
@@ -437,8 +437,11 @@ class ShopService:
                             f"compat-shop:{key}", {item_id: item_count}, item_id)
                         granted = {}
                     else:
+                        # Jewels (11) and 心意/special-effect gifts (44) are ordinary
+                        # stacked bag items; only 806 and 802 sell them, so the shop
+                        # grants them here instead of widening the global whitelist.
                         granted = self.economy._grant(player_id, f"compat-shop:{key}",
-                            {item_id: item_count}, stackable_types=(11,))
+                            {item_id: item_count}, stackable_types=(11, 44))
                 period = self._compat_period(shop_id, row)
                 self.store.db.execute("""INSERT INTO shop_compat_counts VALUES (?,?,?,?,?)
                     ON CONFLICT(player_id,shop_id,goods_id,period)
