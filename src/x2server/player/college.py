@@ -562,26 +562,11 @@ class CollegeService:
         alchemy['customer_positions'] = valid
         row = by_quest[valid[str(pos_index)]['questId']]
         rotation = int(rotations.get(str(pos_index), 0))
-        # CollegeCustomer.Like holds TWO elements (e.g. 38001 -> [991, 992]); the
-        # old single `like` field had been flattened to Like[1], so element 991
-        # (whose level-1 recipe is 1280011) was never selected for any customer.
-        # Pick one liked element per customer deterministically so every element
-        # (991..996) is reachable and the preference is stable across rotation.
-        likes = row["likes"]
-        element = str(likes[row["customerId"] % len(likes)])
-        if self.alchemy:
-            exp = self.alchemy.recipe_exp(state)  # Same unlock closure used by manufacturing.
-        else:
-            exp = {int(r['Key']): int(r['Value']) for r in alchemy.get('recipe_exp', [])}
-        # First-tier recipes are always available; negative placeholders are locked.
-        available = []
-        for liked in likes:
-            for level, recipe in catalog['recipes'][str(liked)].items():
-                if int(level) == 1 or exp.get(recipe['recipeId'], -1) >= 0:
-                    available.append({**recipe, 'element': str(liked), 'level': int(level)})
+        # An entry in the UI's recipe table is not an unlock. Use exactly the
+        # non-negative proficiency closure accepted by AlchemyService._make.
+        available, owned, highest = self._customer_candidates(player_id, state)
         by_item = {r['productId']: r for r in available}
-        primary = max((r for r in available if r['element'] == element),
-                      key=lambda r: (r['level'], r['recipeId']))
+        primary = None
         # Freeze displayed orders until completion/refusal/daily refresh. New
         # unlocks must not silently change the item a player is about to sell.
         pinned = valid[str(pos_index)]
@@ -592,20 +577,59 @@ class CollegeService:
                 candidate = by_item.get(saved['itemId'][0])
                 if candidate and saved.get('itemNum') == [candidate['productNum']]:
                     primary = candidate
-        alternatives = [r for r in available if r['productId'] != primary['productId']]
-        advised = max(alternatives, key=lambda r: (r['level'], r['element'] == element,
-                                                  r['recipeId']), default=primary)
-        # A completed suggestion swaps the old requested product into advice.
+        if primary is None:
+            primary = self._choose_customer_product(owned, highest)
+        # Suggestions use the same eligible sources, always excluding the current
+        # product. A successful suggestion remains a reversible, persisted swap.
+        advised = None
         for saved in (pinned, suggested):
             if (saved.get('rotation') == rotation and saved.get('questId') == row['sellQuestId']
                     and saved.get('adviseItemId') in by_item
                     and saved['adviseItemId'] != primary['productId']):
                 advised = by_item[saved['adviseItemId']]
+        if advised is None:
+            advised = self._choose_customer_product(owned, highest, primary['productId'])
         customer = {'questId': row['sellQuestId'], 'itemId': [primary['productId']],
                     'itemNum': [primary['productNum']], 'type': self.ALCHEMY_TRANSACTION,
                     'adviseItemId': advised['productId'], 'param': int(row['heroId']), 'result': 0}
         pinned.update({k: customer[k] for k in ('itemId', 'itemNum', 'adviseItemId')})
         return customer
+
+    def _customer_candidates(self, player_id, state):
+        catalog=self._load_catalog()
+        if self.alchemy:
+            exp=self.alchemy.recipe_exp(state)
+        else:
+            exp={int(r['Key']):int(r['Value']) for r in state['alchemy'].get('recipe_exp',[])}
+        available=[]
+        for element, recipes in catalog['recipes'].items():
+            for level, recipe in recipes.items():
+                if int(level)==1 or exp.get(recipe['recipeId'],-1)>=0:
+                    available.append({**recipe,'element':int(element),'level':int(level)})
+        highest={}
+        for recipe in available:
+            old=highest.get(recipe['element'])
+            if old is None or (recipe['level'],recipe['recipeId'])>(old['level'],old['recipeId']):
+                highest[recipe['element']]=recipe
+        quantities={}
+        if self.economy:
+            quantities=dict(self.economy.store.db.execute(
+                'SELECT item_id,quantity FROM inventory WHERE player_id=? AND quantity>0',(player_id,)))
+        # One entry per product, regardless of how many copies are held. Possession
+        # never bypasses the recipe unlock check (e.g. gifts from another system).
+        owned={r['productId']:r for r in available if quantities.get(r['productId'],0)>0}
+        return available,list(owned.values()),list(highest.values())
+
+    @staticmethod
+    def _choose_customer_product(owned, highest, exclude=None):
+        import secrets
+        # User decision: union the two sources, deduplicate by product ID,
+        # then give every distinct product exactly one uniformly sampled slot.
+        unique={r['productId']:r for r in (*owned,*highest) if r['productId']!=exclude}
+        if not unique:
+            return next(r for r in (*owned,*highest) if r['productId']==exclude)
+        candidates=[unique[item] for item in sorted(unique)]
+        return candidates[secrets.randbelow(len(candidates))]
 
     def _load_catalog(self) -> dict:
         if self._catalog is None:

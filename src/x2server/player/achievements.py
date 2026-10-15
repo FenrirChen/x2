@@ -51,7 +51,28 @@ class AchievementService:
         day = task_period(1, int(self.economy.clock()))[0]
         self.record(player_id, f'login:{day}', 58)
 
+    def repair_legacy_sources(self, player_id):
+        marker='achievement-sources-backfill-20261015-v1'
+        with self.economy.transaction():
+            if self.store.db.execute('SELECT 1 FROM economy_events WHERE player_id=? AND event_key=?',(player_id,marker)).fetchone():
+                return
+            # Prefix ranges use economy_grants(player_id,source), not a scan of
+            # every historical battle. All events reuse live-path receipt keys.
+            for prefix in ('college-trade:','social:','terminal-wish:'):
+                rows=self.store.db.execute('SELECT source,rewards FROM economy_grants WHERE player_id=? AND source>=? AND source<?',
+                                           (player_id,prefix,prefix+'\uffff')).fetchall()
+                for source,raw in rows:
+                    rewards=json.loads(raw)
+                    if prefix=='college-trade:':
+                        self.record(player_id,source+':gold',self.economy.ACHV_EVENT_ALCHEMY_GOLD,rewards.get('1237901',0))
+                    elif prefix=='social:':
+                        self.record(player_id,'friendcoin:'+source,self.economy.ACHV_EVENT_FRIEND_COIN,rewards.get('1237917',0))
+                    else:
+                        self.record(player_id,'event:72:'+source,72)
+            self.store.db.execute('INSERT INTO economy_events VALUES (?,?)',(player_id,marker))
+
     def refresh(self, player_id):
+        self.repair_legacy_sources(player_id)
         snapshot = self.store.get(player_id)['snapshot']
         heroes = [h for h in snapshot.get('heroes', []) if h.get('state') == 2]
         has_equipment = self.store.db.execute("SELECT 1 FROM sqlite_master WHERE name='equipment_instances'").fetchone()

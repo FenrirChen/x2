@@ -17,10 +17,18 @@ def product(service,item):
     return next(r for r in service.alchemy.recipes.values() if r['ProductID']==item)
 
 @pytest.mark.parametrize('level',[1,2,4,7,10])
-def test_each_element_requests_highest_unlocked_tier_never_negative_placeholders(game,level):
+def test_each_element_requests_highest_unlocked_tier_never_negative_placeholders(game,level,monkeypatch):
     _,clock,_,service,_=game
     levels={element:max(1,level-(element%3)) for element in range(991,997)}
     seed_levels(game,levels)
+    cursor=[0]
+    def choose(owned,highest,exclude=None):
+        candidates=[r for r in highest if r['productId']!=exclude]
+        if exclude is None:
+            row=candidates[cursor[0]%len(candidates)];cursor[0]+=1
+            return row
+        return candidates[0]
+    monkeypatch.setattr(service,'_choose_customer_product',choose)
     seen=set()
     for day in range(8):
         clock.value+=86400
@@ -91,3 +99,60 @@ def test_legacy_locked_advice_is_replaced_by_real_unlocked_product(game):
     repo.save(1,state)
     order=service._customer_for(1,0)
     assert product(service,order['adviseItemId'])['RecipeLevel']==1
+
+
+def test_order_candidates_filter_locked_inventory_and_visible_recipes(game):
+    store,_,repo,service,_=game
+    seed_levels(game,{element:3 for element in range(991,997)})
+    recipes=list(service.alchemy.recipes.values())
+    owned=next(r for r in recipes if r['RecipeType']==991 and r['RecipeLevel']==1)
+    locked=next(r for r in recipes if r['RecipeType']==991 and r['RecipeLevel']==4)
+    with store.db:
+        store.db.execute('INSERT INTO inventory VALUES (?,?,?)',(1,owned['ProductID'],99))
+        store.db.execute('INSERT INTO inventory VALUES (?,?,?)',(1,locked['ProductID'],99))
+    available,stock,highest=service._customer_candidates(1,repo.load(1))
+    assert {r['productId'] for r in stock}=={owned['ProductID']}
+    assert locked['ProductID'] not in {r['productId'] for r in available}
+    assert {r['element'] for r in highest}==set(range(991,997))
+    assert {r['level'] for r in highest}=={3}
+
+
+@pytest.mark.parametrize('index',range(7))
+def test_order_equal_weight_unique_candidates(game,monkeypatch,index):
+    store,_,repo,service,_=game
+    seed_levels(game,{element:3 for element in range(991,997)})
+    first=next(r for r in service.alchemy.recipes.values() if r['RecipeType']==991 and r['RecipeLevel']==1)
+    with store.db:store.db.execute('INSERT INTO inventory VALUES (?,?,?)',(1,first['ProductID'],999))
+    _,owned,highest=service._customer_candidates(1,repo.load(1))
+    bounds=[]
+    def choose(bound):
+        bounds.append(bound)
+        return index
+    monkeypatch.setattr('secrets.randbelow',choose)
+    row=service._choose_customer_product(owned,highest)
+    expected=sorted({r['productId'] for r in (*owned,*highest)})
+    assert bounds==[7]
+    assert row['productId']==expected[index]
+
+
+def test_highest_owned_product_has_only_one_candidate_slot(game,monkeypatch):
+    _,_,repo,service,_=game
+    _,_,highest=service._customer_candidates(1,repo.load(1))
+    bounds=[]
+    monkeypatch.setattr('secrets.randbelow',lambda n:(bounds.append(n) or 0))
+    service._choose_customer_product([highest[0]],highest)
+    assert bounds==[6]
+
+
+def test_locked_cached_order_and_suggestion_are_replaced(game):
+    store,_,repo,service,_=game
+    old=service._customer_for(1,0)
+    locked=next(r for r in service.alchemy.recipes.values() if r['RecipeType']==991 and r['RecipeLevel']==10)
+    state=repo.load(1)
+    pinned=state['alchemy']['customer_positions']['0']
+    pinned.update(itemId=[locked['ProductID']],itemNum=[locked['ProductNum']],adviseItemId=locked['ProductID'])
+    state['alchemy']['customer_orders']={'0':dict(pinned)}
+    repo.save(1,state)
+    order=service._customer_for(1,0)
+    assert order['itemId']!=[locked['ProductID']]
+    assert order['adviseItemId']!=locked['ProductID']

@@ -198,7 +198,7 @@ class ShopService:
         tomorrow = (local + timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
         if shop == 805:
             return int(tomorrow.timestamp())  # Daily hero rotation; quota remains weekly.
-        if shop == 803:
+        if shop in (803, 807, 810):
             return int((tomorrow + timedelta(days=(7 - tomorrow.weekday()) % 7)).timestamp())
         return 0
 
@@ -438,7 +438,7 @@ class ShopService:
                         granted = {}
                     else:
                         # Jewels (11) and 心意/special-effect gifts (44) are ordinary
-                        # stacked bag items; only 806 and 802 sell them, so the shop
+                        # stacked bag items; 806, 802 and 807 sell them, so the shop
                         # grants them here instead of widening the global whitelist.
                         granted = self.economy._grant(player_id, f"compat-shop:{key}",
                             {item_id: item_count}, stackable_types=(11, 44))

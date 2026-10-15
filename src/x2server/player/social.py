@@ -443,7 +443,7 @@ class SocialService:
             if old[0]!=signature:
                 return OutboundMessage(reply,{'code':13})
             before=(OutboundMessage('L2C_QueryGrowthBase',self.college.growth_base(pid)),) if name=='C2L_HelpPowerSpeed' else ()
-            return OutboundMessage(reply,schemas[reply].decode(old[1]),before_response=before,pushes=self.pushes(pid))
+            return OutboundMessage(reply,schemas[reply].decode(old[1]),before_response=before,pushes=self.pushes(pid,gift=name in ('C2L_SendFriendCoin','C2L_ReceiveFriendCoin')))
         try:
             with self.economy.transaction():
                 state=self.state(pid)
@@ -475,16 +475,24 @@ class SocialService:
             LOG.info('social refused player=%s flow=%s reason=%s',pid,name,exc)
             result={'code':getattr(exc,'code',13)}
         before=(OutboundMessage('L2C_QueryGrowthBase',self.college.growth_base(pid)),) if name=='C2L_HelpPowerSpeed' and result.get('code')==10 else ()
-        return OutboundMessage(reply,result,before_response=before,pushes=self.pushes(pid))
+        return OutboundMessage(reply,result,before_response=before,pushes=self.pushes(pid,gift=name in ('C2L_SendFriendCoin','C2L_ReceiveFriendCoin')))
 
-    def pushes(self,pid):
+    def pushes(self,pid,gift=False):
         from .login import LoginService
         state=self.state(pid)
-        return (LoginService.snapshot_push(self.store.get(pid),self.store,now=self.clock()),
+        if state['sent']:
+            self.economy.ensure_periods(pid)
+            with self.economy.transaction():
+                self.store.db.execute('UPDATE economy_tasks SET progress=1 WHERE player_id=? AND task_id=630023 AND progress<1',(pid,))
+        pushes=(LoginService.snapshot_push(self.store.get(pid),self.store,now=self.clock()),
                 OutboundMessage('L2C_ClubWishingCount',{'code':10,
                     'wishingCount':int(sum(state['wish_counts'].values())>0),
                     'guildWishGiveCount':state['given'],'guildHelpPowerCount':state['help_count']}),
                 OutboundMessage('L2C_ItemUpdate',{'code':10,**self.economy.inventory_values(pid)}))
+        if gift:
+            pushes+=(OutboundMessage('L2C_TaskUpdate',{'type':1,'taskList':self.economy.task_values(pid,1)['taskList']}),
+                     self.economy.achievements.update(pid))
+        return pushes
 
     def operate(self,pid,state,flow,req):
         result={'code':10}
@@ -519,14 +527,6 @@ class SocialService:
             state[field]+=eligible
             if gain:
                 self.grant(pid,state,{COIN:gain})
-                # 成就 660010「累计获得友情点 N 点」按**实际入账点数**累计 (赠送方自己
-                # 也能拿到一份)。必须用自定事件号 620010, 不能复用 71 (E_GiveFriendCoin
-                # 是「赠送次数」, 那是每日任务 630023 的, 收取友情点记 71 会把它顶成完成)。
-                # eligible 已按「好友+当天只记一次」去重, 键含本地日, 重放同一批不会重复累加。
-                self.economy.achievements.record(
-                    pid, f"friendcoin-gain:{flow}:{state['friend_day']}:"
-                         f"{','.join(str(n) for n in sorted(eligible))}",
-                    self.economy.ACHV_EVENT_FRIEND_COIN, gain)
             # 每日 630023「赠送好友 1 次友情点」: TaskCondition.CompleteType 71
             # (E_GiveFriendCoin)。此前只发了友情点、没有任何事件上报, 任务进度永远是 0,
             # 所以「赠送友情点」的每日任务完成不了。只在**赠送**时记 (收取侧不算赠送),
@@ -534,7 +534,7 @@ class SocialService:
             # economy_events 按 (task_period, key) 幂等去重, 同一批 targets 重发不会重复计。
             if flow=='SendFriendCoin' and eligible:
                 self.economy.record_event(
-                    pid, f"sendcoin:{pid}:{','.join(str(n) for n in sorted(eligible))}",
+                    pid, f"sendcoin:{pid}:{state['friend_day']}:{','.join(str(n) for n in sorted(eligible))}",
                     71, 0, len(eligible))
             return {**result,'playerid':eligible}
         if flow=='RecommandClub':

@@ -32,7 +32,7 @@ def test_growth_base_static_initial_and_persistence(tmp_path):
     assert len(first.values["buildingList"]) == 8
     assert len(first.values["civilization"]) == 8  # All wonders incl. 728 state row.
     # Absent repeated fields decode to null client-side (SilentOrbit); the
-    # snapshot always carries one zero-filled idle entry per queue list.
+    # snapshot carries six rows, including locked placeholders, per queue list.
     for field in ("exploreList", "trainingList"):
         assert len(first.values[field]) == 6 and first.values[field] != b""
     prayer_rows = [PRAY_QUEUE.decode(row) for row in first.values["prayQueue"]]

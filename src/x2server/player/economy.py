@@ -84,8 +84,8 @@ class EconomyService:
     ACHV_EVENT_ALCHEMY_GOLD = 622300
     # 成就 660010「累计获得友情点 N 点」: E_ 枚举里 71 (E_GiveFriendCoin) 的语义只是
     # 「赠送」, 那一条要留给每日任务 630023, 收取友情点不能再记 71, 否则会被顶掉。所以
-    # 同样自定一个只喂这条成就的事件号 (沿用成就条件号 620010), 由 player/social.py 的
-    # 赠送/收取两处按**实际入账点数**直接记 (amount = 点数)。
+    # 自定事件号沿用成就条件号620010；统一_grant按实际入账点数记录，
+    # 覆盖赠收与其他发奖来源，不与每日赠送次数重复计数。
     ACHV_EVENT_FRIEND_COIN = 620010
     # GameTaskType.CHALLENGE: 60 tasks in 10 groups, no period, no rollover.
     CHALLENGE_KIND = 3
@@ -546,6 +546,9 @@ class EconomyService:
             (json.dumps(snapshot, ensure_ascii=False, sort_keys=True), player_id))
         self.store.db.execute("INSERT INTO economy_grants VALUES (?,?,?,?)",
             (player_id, source, json.dumps(rewards, sort_keys=True), int(time.time())))
+        if rewards.get(1237917) and getattr(self,'achievements',None):
+            self.achievements.record(player_id,'friendcoin:'+source,
+                                     self.ACHV_EVENT_FRIEND_COIN,rewards[1237917])
         return rewards
 
     def materialize_equipment(self, player_id, run_uuid, specs):
