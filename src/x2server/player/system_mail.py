@@ -12,6 +12,7 @@ WELFARE_POLL_SECONDS = 300.0
 
 BRILLIANCE = 1237902  # Item E_Currency, EffData 902
 WISH_COIN = 1237914  # Item E_Currency, EffData 914
+BIO_POWER = 1237922  # 生物电源
 PURE_CRYSTAL = 1237925
 CAUSALITY_CARD = 1202014  # Client Item.Used 720004 -> 100 power; closest existing card to 120.
 HERO_CHOICE_BOX = 1290005
@@ -54,7 +55,7 @@ def insert_system_mail(db, player_id, account_id, kind, now):
         day_start, _ = task_period(1, now)
         source_key = f"daily_login:{account_id}:{day_start}"
         body, rewards = "祝您玩的开心", {BRILLIANCE: 200, WISH_COIN: 10,
-                                        CAUSALITY_CARD: 10, PURE_CRYSTAL: 10}
+                                        CAUSALITY_CARD: 10, PURE_CRYSTAL: 10, BIO_POWER: 700}
     elif kind == "daily_season_ticket":
         season = current_season(now)
         if (os.getenv('X2_ORIGIN_SEASON_ENABLED','0') != '1' or not season
