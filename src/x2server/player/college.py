@@ -52,6 +52,14 @@ POWER_CONVERSION_PERMILLE = (500, 600, 600, 700, 700, 800)
 # InputItemNum 步进一致)。
 EXCHANGE_PER_POINT = 5
 
+# 客户端 CollegeModule__cctor (0x01B09108) 把 CollegeModule 静态字段 EXPLORE_MAX_NUM
+# (+0x0) 与 TRAIN_MAX_NUM (+0x4) 都赋成 6; CollegeExploreTab_Refresh (0x01BC30A0) 直接
+# LoopListView2_SetListItemCount(list, EXPLORE_MAX_NUM), CollegeTrainingTab 同理。客户端
+# 按 index 取行 (CollegeExploreTab_GetExploreByIndex 0x01BBA434 越界返回 null), 所以两个
+# 列表恒画 6 行; 服务端少发的行在客户端是空行。
+EXPLORE_MAX_NUM = 6
+TRAIN_MAX_NUM = 6
+
 
 def _row(state: dict, building_id: int) -> dict | None:
     """The owned building/wonder row for ``building_id``, or None."""
@@ -234,7 +242,9 @@ class CollegeStateRepository:
         rows = {r[id_field]: r for r in state.get(kind, []) if isinstance(r, dict)}
         fields = {f.name for f in schema.fields}
         result = []
-        for index in range(max(1, capacity)):
+        # 客户端探险/训练页恒画 EXPLORE_MAX_NUM / TRAIN_MAX_NUM 行, 未解锁的槽位用
+        # status=0 占位下发, 否则客户端画出的空行拿不到计时/状态数据。
+        for index in range(max(capacity, TRAIN_MAX_NUM if training else EXPLORE_MAX_NUM)):
             row = dict(rows.get(index, {id_field: index}))
             # Native UI enums differ: training 0=locked/1=idle/2=running/3=done;
             # exploration 0=locked/1=idle/2=occupied (end time decides claim).

@@ -34,7 +34,7 @@ def test_growth_base_static_initial_and_persistence(tmp_path):
     # Absent repeated fields decode to null client-side (SilentOrbit); the
     # snapshot always carries one zero-filled idle entry per queue list.
     for field in ("exploreList", "trainingList"):
-        assert len(first.values[field]) == 1 and first.values[field] != b""
+        assert len(first.values[field]) == 6 and first.values[field] != b""
     prayer_rows = [PRAY_QUEUE.decode(row) for row in first.values["prayQueue"]]
     assert {row["buildingId"] for row in prayer_rows} == set(range(721, 729))
     assert all(row["prayStatus"] == 0 for row in prayer_rows)

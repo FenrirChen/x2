@@ -117,7 +117,9 @@ def test_star_level_gate_and_real_unlock_effects(game):
     assert all(row['Value'] == 0 for row in recipes)
     assert send(game, 'BuildStarUP', bid=704, seq=4).values['code'] == 10
     slots = [TRAINING_DATA.decode(v) for v in repo.growth_base(1)['trainingList']]
-    assert [r['trainingId'] for r in slots] == [0, 1]
+    # The client always draws TRAIN_MAX_NUM rows; hall star 2 unlocks slot 1.
+    assert [r['trainingId'] for r in slots] == list(range(6))
+    assert [r['trainingStatus'] for r in slots] == [1, 1, 0, 0, 0, 0]
     assert send(game, 'BuildStarUP', bid=704, seq=4).values['code'] == 10
     assert repo.load(1)['buildings'][3]['buildingStar'] == 2
 
