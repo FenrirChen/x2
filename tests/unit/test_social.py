@@ -157,6 +157,20 @@ def test_npc_wish_exact_material_quantity_and_no_overdonation(social):
     assert s.http('/ClubService.GetWishingPage',{},1)['Total']==1
 
 
+def test_npc_wish_donation_accepts_client_zero_time(social):
+    # The real client always sends wishingTime=0 (captured C2L_ClubWishingDonate
+    # body 08eb071000 = wishingId 1003, wishingTime 0), so the donate lookup must
+    # not require an exact wish-row time match.
+    s,ctx,_=social
+    target=create(s,ctx)
+    fund(s,1201003,3)
+    assert s.http('/ClubService.GetWishingPage',{},1)['Total']==1
+    w=s.state(1)['wishes'][0]
+    reply=act(s,ctx,'ClubWishingDonate',{'wishingId':target,'wishingTime':0},3)
+    assert reply.values['code']==10
+    assert s.quantity(1,w['item'])==2
+
+
 def test_help_validates_members_and_does_not_repeat(social):
     s,ctx,_=social
     target=create(s,ctx)

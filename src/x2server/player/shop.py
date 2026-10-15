@@ -50,7 +50,7 @@ class ShopService:
         if len(self.offers) != 15:
             raise ValueError("shop 809 static goods evidence changed")
         # Random shops retain their established catalogs. Explicit user catalogs
-        # restore medal, ticket and gem shops below; other shops stay retired.
+        # restore medal, ticket, gem and club shops below; other shops stay retired.
         random_shop = json.loads(files("x2server").joinpath(
             "data/random_shop_801.json").read_text(encoding="utf-8"))
         equib_shop = json.loads(files("x2server").joinpath(
@@ -60,7 +60,7 @@ class ShopService:
                 or any(type(weight) is not int or weight <= 0 for weight in self.equib_star_weights.values())):
             raise ValueError("shop 804 star weights invalid")
         compat = {"shops": {"801": random_shop["goods"], "804": equib_shop["goods"]}}
-        self.retired_shop_ids = set(range(801, 812)) - {self.SHOP_ID, 801, 803, 804, 805, 806}
+        self.retired_shop_ids = set(range(801, 812)) - {self.SHOP_ID, 801, 803, 804, 805, 806, 807}
         self.compat_offers = {}
         self.compat_disabled = []
         for shop_id, rows in compat["shops"].items():

@@ -647,7 +647,8 @@ class SocialService:
             target=req.get('wishingId',0)
             stamp=req.get('wishingTime',0)
             w=next((w for w in state['wishes'] if w['owner']!='self' and int(w['owner'])==target
-                    and w['time']==stamp and w['got']<w['num'] and w['owner'] in club['members']),None)
+                    and (not stamp or stamp in (w['time'],w['time']+1514736000))
+                    and w['got']<w['num'] and w['owner'] in club['members']),None)
             if not w:
                 raise ValueError('invalid donation target or already full')
             if state['given']>=10:
