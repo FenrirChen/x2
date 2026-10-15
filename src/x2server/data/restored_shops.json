@@ -1,5 +1,5 @@
 {
-  "policy": "User approved 2026-10-13; medal weekly from Goods.Limited; gem cumulative limits (no original refresh rule). 803 group 94 is one slot whose 许愿币/纯晶石/兽骸 content rotates weekly via weekSlot. 2026-10-15 club shop 807 restored from shop_compat_catalog 807 (E_Week slots capped at 2 per week, E_Forever slots unlimited). User approved 2026-10-13; medal weekly from Goods.Limited; gem cumulative limits (no original refresh rule). 803 group 94 is one slot whose 许愿币/纯晶石/兽骸 content rotates weekly via weekSlot. 2026-10-15 ticket shop 805 group 51 GoodsID 1905102-1905112 restored from the client ItemSource->Jump->ShopModule(805) mapping (the shelf's other goods rows remain unrestored: they carry no item link in the original client tables); their Limited is E_Month and the client table carries no per-slot count, so they keep the unlimited default. 2026-10-15 friend shop 802 restored from client ShopConfig(802)/ShopGoodsGroup groups 31-36 (currency 917, nine slots, no Limited = permanent); its GoodsID->ItemID pairs come from the project's original 802 shelf because the client ItemSource has no shop-802 item link, and every other field matches the client table. 2026-10-15 divine-letter shop 810 restored from client ShopConfig(810)/ShopGoodsGroup groups 181-185 (currency 927, E_Week slots); its remaining eight goods rows (groups 186-192,198) stay unrestored because the client ItemSource links no item to them.",
+  "policy": "User approved 2026-10-13; medal weekly from Goods.Limited; gem cumulative limits (no original refresh rule). 803 group 94 is one slot whose 许愿币/纯晶石/兽骸 content rotates weekly via weekSlot. 2026-10-15 club shop 807 restored from shop_compat_catalog 807 (E_Week slots capped at 2 per week, E_Forever slots unlimited). User approved 2026-10-13; medal weekly from Goods.Limited; gem cumulative limits (no original refresh rule). 803 group 94 is one slot whose 许愿币/纯晶石/兽骸 content rotates weekly via weekSlot. 2026-10-15 user reverted ticket shop 805 extra shelves 1905102-1905112: retain only one daily rotating 3-star hero and one 2-star hero with existing weekly quotas; keep the existing five sequential wish-coin offers. 2026-10-15 friend shop 802 restored from client ShopConfig(802)/ShopGoodsGroup groups 31-36 (currency 917, nine slots, no Limited = permanent); its GoodsID->ItemID pairs come from the project's original 802 shelf because the client ItemSource has no shop-802 item link, and every other field matches the client table. 2026-10-15 divine-letter shop 810 restored from client ShopConfig(810)/ShopGoodsGroup groups 181-185 (currency 927, E_Week slots); its remaining eight goods rows (groups 186-192,198) stay unrestored because the client ItemSource links no item to them. User update 2026-10-15: shop810 four daily random distinct hero SunMoon tracks (10 each), universal track (2), all 270 divine letters, daily Beijing midnight. Ticket wish-coin final tier remains visible sold out until Monday reset.",
   "goods": [
     {
       "shopId": 803,
@@ -847,127 +847,6 @@
       "limited": 5
     },
     {
-      "shopId": 805,
-      "goodsId": 1905102,
-      "itemId": 1201019,
-      "num": 1,
-      "price": 200,
-      "currency": 915,
-      "currencyItemId": 1237915,
-      "goodsTag": 3,
-      "limited": 1
-    },
-    {
-      "shopId": 805,
-      "goodsId": 1905103,
-      "itemId": 1202081,
-      "num": 1,
-      "price": 200,
-      "currency": 915,
-      "currencyItemId": 1237915,
-      "goodsTag": 3,
-      "limited": 1
-    },
-    {
-      "shopId": 805,
-      "goodsId": 1905104,
-      "itemId": 1202082,
-      "num": 1,
-      "price": 200,
-      "currency": 915,
-      "currencyItemId": 1237915,
-      "goodsTag": 3,
-      "limited": 1
-    },
-    {
-      "shopId": 805,
-      "goodsId": 1905105,
-      "itemId": 1202083,
-      "num": 1,
-      "price": 200,
-      "currency": 915,
-      "currencyItemId": 1237915,
-      "goodsTag": 3,
-      "limited": 1
-    },
-    {
-      "shopId": 805,
-      "goodsId": 1905106,
-      "itemId": 1202084,
-      "num": 1,
-      "price": 200,
-      "currency": 915,
-      "currencyItemId": 1237915,
-      "goodsTag": 3,
-      "limited": 1
-    },
-    {
-      "shopId": 805,
-      "goodsId": 1905107,
-      "itemId": 1206000,
-      "num": 1,
-      "price": 200,
-      "currency": 915,
-      "currencyItemId": 1237915,
-      "goodsTag": 3,
-      "limited": 1
-    },
-    {
-      "shopId": 805,
-      "goodsId": 1905108,
-      "itemId": 1238060,
-      "num": 1,
-      "price": 200,
-      "currency": 915,
-      "currencyItemId": 1237915,
-      "goodsTag": 3,
-      "limited": 1
-    },
-    {
-      "shopId": 805,
-      "goodsId": 1905109,
-      "itemId": 1238061,
-      "num": 1,
-      "price": 200,
-      "currency": 915,
-      "currencyItemId": 1237915,
-      "goodsTag": 3,
-      "limited": 1
-    },
-    {
-      "shopId": 805,
-      "goodsId": 1905110,
-      "itemId": 1238062,
-      "num": 1,
-      "price": 200,
-      "currency": 915,
-      "currencyItemId": 1237915,
-      "goodsTag": 3,
-      "limited": 1
-    },
-    {
-      "shopId": 805,
-      "goodsId": 1905111,
-      "itemId": 1238063,
-      "num": 1,
-      "price": 200,
-      "currency": 915,
-      "currencyItemId": 1237915,
-      "goodsTag": 3,
-      "limited": 1
-    },
-    {
-      "shopId": 805,
-      "goodsId": 1905112,
-      "itemId": 1283001,
-      "num": 1,
-      "price": 200,
-      "currency": 915,
-      "currencyItemId": 1237915,
-      "goodsTag": 3,
-      "limited": 1
-    },
-    {
       "shopId": 802,
       "goodsId": 1903101,
       "itemId": 1203001,
@@ -1069,24 +948,15 @@
     {
       "shopId": 810,
       "goodsId": 1918101,
-      "itemId": 1201039,
-      "num": 1,
-      "price": 300,
-      "currency": 927,
-      "currencyItemId": 1237927,
-      "goodsTag": 3,
-      "limited": 2
-    },
-    {
-      "shopId": 810,
-      "goodsId": 1918201,
-      "itemId": 1206000,
+      "itemId": 1206003,
       "num": 1,
       "price": 270,
       "currency": 927,
       "currencyItemId": 1237927,
       "goodsTag": 3,
-      "limited": 2
+      "limited": 3,
+      "canBuyTimes": 10,
+      "dailyTrackSlot": 0
     },
     {
       "shopId": 810,
@@ -1097,7 +967,9 @@
       "currency": 927,
       "currencyItemId": 1237927,
       "goodsTag": 3,
-      "limited": 2
+      "limited": 3,
+      "canBuyTimes": 10,
+      "dailyTrackSlot": 1
     },
     {
       "shopId": 810,
@@ -1108,18 +980,34 @@
       "currency": 927,
       "currencyItemId": 1237927,
       "goodsTag": 3,
-      "limited": 2
+      "limited": 3,
+      "canBuyTimes": 10,
+      "dailyTrackSlot": 2
     },
     {
       "shopId": 810,
       "goodsId": 1918501,
       "itemId": 1206023,
       "num": 1,
-      "price": 40,
+      "price": 270,
       "currency": 927,
       "currencyItemId": 1237927,
       "goodsTag": 3,
-      "limited": 2
+      "limited": 3,
+      "canBuyTimes": 10,
+      "dailyTrackSlot": 3
+    },
+    {
+      "shopId": 810,
+      "goodsId": 1918201,
+      "itemId": 1206000,
+      "num": 1,
+      "price": 270,
+      "currency": 927,
+      "currencyItemId": 1237927,
+      "goodsTag": 3,
+      "limited": 3,
+      "canBuyTimes": 2
     }
   ]
 }

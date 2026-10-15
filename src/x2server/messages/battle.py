@@ -40,7 +40,7 @@ CHECKOUT = S("C2L_CheckoutMainMission", (F(1, "chapterId", K.INT32), F(2, "secti
     F(6, "expertMode", K.BOOL), F(8, "checkGm", K.BOOL),
     F(9, "fightTime", K.INT32), F(10, "heros", K.MESSAGE, repeated=True),
     F(11, "extraData", K.MESSAGE, repeated=True),
-    F(19, "useAIPoint", K.BOOL),
+    F(19, "useAIPoint", K.BOOL), F(28, "hp", K.INT64),
     F(12, "mazeItems", K.MESSAGE, repeated=True),
     F(22, "killMonster", K.MESSAGE), F(30, "npcEventOnNumber", K.MESSAGE, repeated=True)))
 BATTLE_SCHEMAS = {

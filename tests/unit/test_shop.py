@@ -78,26 +78,19 @@ def test_ticket_shop_805_lists_client_goods_and_purchases(env):
     listing = asyncio.run(service.handle(ctx, packet({"shopId": 805}, name="C2L_ShopGoods")))
     assert listing.values["code"] == 10
     goods = {row["goodsId"]: row for row in map(GOODS.decode, listing.values["goods"])}
-    # Group 51 GoodsID 1905102-1905112 come straight from the client
-    # ItemSource->Jump->ShopModule(805) mapping; the two rotating god slots
-    # (1905101/1905201) and the first wish-coin round (1905301) sit alongside.
-    assert set(goods) == {1905102, 1905103, 1905104, 1905105, 1905106, 1905107,
-        1905108, 1905109, 1905110, 1905111, 1905112, 1905101, 1905201, 1905301}
-    tomes = goods[1905103]
-    assert (tomes["itemId"], tomes["num"], tomes["price"]) == (1202081, 1, 200)
-    assert tomes["currencyType"] == 915
-    assert (tomes["canBuyTimes"], tomes["limited"]) == (999999, 1)
+    # User catalog: one rotating 3-star hero, one 2-star hero, plus the
+    # existing sequential wish-coin offer. Extra PR48 shelves are retired.
+    assert set(goods) == {1905101, 1905201, 1905301}
+    assert (goods[1905101]['price'], goods[1905201]['price']) == (200, 50)
     with store.db:
         store.db.execute("INSERT INTO inventory VALUES (?,?,?)", (1, 1237915, 400))
-    purchase = packet({"shopId": 805, "goodsId": 1905103, "buyNum": 1},
-                      request_id=40, name="C2L_BuyGoods")
-    first = asyncio.run(service.handle(ctx, purchase))
-    assert first.values["code"] == 10
-    assert rewards(first.values["rewardData"]) == {1202081: 1}
+    for rid, gid in enumerate(range(1905102,1905113),40):
+        purchase = packet({"shopId": 805, "goodsId": gid, "buyNum": 1},
+                          request_id=rid, name="C2L_BuyGoods")
+        assert asyncio.run(service.handle(ctx, purchase)).values['code'] == 13
     assert store.db.execute(
-        "SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1237915").fetchone()[0] == 200
-    assert store.db.execute(
-        "SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1202081").fetchone()[0] == 1
+        "SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1237915").fetchone()[0] == 400
+
 
 
 def test_friend_shop_802_lists_client_goods_and_purchases(env):
@@ -127,17 +120,16 @@ def test_friend_shop_802_lists_client_goods_and_purchases(env):
         "SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1286001").fetchone()[0] == 1
 
 
-def test_divine_letter_shop_810_lists_weekly_client_goods(env):
+def test_divine_letter_shop_810_lists_daily_tracks(env):
     store, economy, ctx = env
     service = ShopService(store, economy)
     listing = asyncio.run(service.handle(ctx, packet({"shopId": 810}, name="C2L_ShopGoods")))
     assert listing.values["code"] == 10
     goods = {row["goodsId"]: row for row in map(GOODS.decode, listing.values["goods"])}
-    # Client ShopConfig(810) 神笺商店 -> the five groups (181-185) whose item link is
-    # explicit; the client table marks them E_Week.
+    # User catalog: four distinct daily hero tracks and two universal tracks.
     assert set(goods) == {1918101, 1918201, 1918301, 1918401, 1918501}
     assert {row["currencyType"] for row in goods.values()} == {927}
-    assert {row["limited"] for row in goods.values()} == {2}
+    assert {row["limited"] for row in goods.values()} == {3}
     track = goods[1918201]
     assert (track["itemId"], track["num"], track["price"]) == (1206000, 1, 270)
     with store.db:

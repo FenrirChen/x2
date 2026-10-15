@@ -134,7 +134,7 @@ class BattleService:
             settled = BATTLE_SCHEMAS['L2C_CheckoutMainMission'].decode(receipt[0]) if receipt else {}
             if settled.get('result') == 10 and settled.get('success'):
                 with self.economy.transaction():
-                    credited = self.economy.dp.report_money_events(
+                    credited = self.economy.dp.report_task_events(
                         context.session.player_id, self.catalog.sections[section]['ChapterID'],
                         row['uuid'], request['chapterTaskEvent'])
         if (accepted and self.economy and request.get("datas")
@@ -308,7 +308,8 @@ class BattleService:
                         [h.get('heroId', 0) for h in map(PROFILE_HERO.decode, request.get('heros', []))
                          if h.get('state', 0) == 0])
                     if section_type == 12 and getattr(self.economy, "social", None):
-                        self.economy.social.completed(player_id, section, request.get("success", False))
+                        self.economy.social.completed(player_id, section, request.get("success", False),
+                            damage=request.get("hp"), run=row["uuid"])
                     if section_type == 20:
                         from x2server.messages.equipment import HERO_EQUIP
                         self.economy.season.completed(player_id, row['uuid'], request.get('success', False),
@@ -371,6 +372,12 @@ class BattleService:
                                before_response=star_before + self._activity_progress_sync(player_id, section))
 
     def _activity_progress_sync(self, player, section):
+        social = getattr(self.economy, 'social', None) if self.economy else None
+        if social and section in social.mirror_sections:
+            with self.economy.transaction():
+                state = social.state(player)
+                values = social.operate(player, state, 'ClubActiMainData', {})
+                return (OutboundMessage('L2C_ClubActiMainData', values),)
         if self.economy and section in self.economy.season.section_configs and self.economy.season.active(player):
             from x2server.messages.season import encode as season_encode, SEASON_SCHEMAS
             with self.economy.transaction():
@@ -551,14 +558,20 @@ class BattleService:
         owned = {h["id"]: h for h in snapshot.get("heroes", [])}
         # Activity trial teams are absent from the main-story-only economy catalog.
         section_config = self.catalog.sections.get(section)
-        from .trial_units import section_trial
-        trial_unit = section_trial(section_config or {}, [h.get('heroId') for h in selected])
-        if trial_unit is not None:
+        from .trial_units import trial_team
+        selected_ids = [h.get('heroId') for h in selected]
+        try:
+            trial_units = trial_team(section_config or {}, selected_ids)
+        except ValueError as exc:
             logging.getLogger('x2.battle').info(
-                'battle trial loadout section=%s trial=%s compatibility=%s',
-                section, trial_unit, section_config.get('AssistType', {}).get('value') != 1)
+                'battle trial team denied section=%s selected=%s reason=%s', section, selected_ids, exc)
+            return reject
+        if any(unit is not None for unit in trial_units):
+            logging.getLogger('x2.battle').info(
+                'battle trial loadout section=%s selected=%s trials=%s compatibility=%s',
+                section, selected_ids, trial_units, section_config.get('AssistType', {}).get('value') != 1)
         heroes = []
-        for selected_hero in selected:
+        for selected_hero, trial_unit in zip(selected, trial_units, strict=True):
             hero_id = selected_hero.get("heroId")
             if trial_unit is not None:
                 from .trial_units import trial_hero

@@ -126,10 +126,12 @@ class SocialService:
         self.store,self.economy,self.college = store,economy,college
         self.clock = clock or economy.clock
         self.choose = chooser or random.SystemRandom().choice
+        self._daily_notify_day = {}
         self.characters = {r['id']:r for r in roster()}
         self.catalog = json.loads(files('x2server').joinpath('data/club_catalog.json').read_text(encoding='utf8'))
         self.wish_rows = {int(k):v for k,v in self.catalog['wishes'].items()}
-        self.mirror_sections = {s:r for r in self.catalog['mirror'] for s in r['stageIds']}
+        self.mirror_health = json.loads(files('x2server').joinpath('data/club_mirror_health.json').read_text(encoding='utf8'))['bosses']
+        self.mirror_sections = {r['section']:next(v for v in self.catalog['mirror'] if v['bossId']==r['bossId']) for r in self.mirror_health}
         with store.db:
             store.db.execute('''CREATE TABLE IF NOT EXISTS activity_state (
                 player_id INTEGER NOT NULL,period INTEGER NOT NULL,namespace TEXT NOT NULL,
@@ -141,38 +143,84 @@ class SocialService:
         repair(store)
 
     def state(self,pid):
-        return load_state(self.store,pid,self.clock())
+        state=load_state(self.store,pid,self.clock())
+        self.repair_mirror_daily_score(pid,state)
+        return state
 
-    def refresh_friends(self,pid):
+    def repair_mirror_daily_score(self,pid,state):
+        """Backfill only recorded, receipt-confirmed damage from today's runs."""
+        pending={run:a for run,a in state['mirror'].get('runs',{}).items()
+                 if a.get('done') and 'score_day' not in a}
+        if not pending or not self.store.db.execute(
+                "SELECT 1 FROM sqlite_master WHERE name='battle_receipts'").fetchone():
+            return
+        confirmed={}
+        keys=list(pending)
+        for offset in range(0,len(keys),200):
+            batch=keys[offset:offset+200]
+            sql='SELECT r.uuid,r.created_at FROM battle_receipts r JOIN battle_entries e ON r.uuid=e.uuid WHERE e.player_id=? AND r.uuid IN ('+','.join('?' for _ in batch)+')'
+            confirmed.update(self.store.db.execute(sql,[pid,*batch]))
+        for run,attempt in pending.items():
+            stamp=confirmed.get(run)
+            if stamp is None:
+                continue
+            attempt['score_day']=day(stamp)
+            if day(stamp)==state['day']:
+                actual=sum(t.get('applied',0) for t in attempt.get('turns',[]))
+                state['today_score']=min(self.catalog['mirrorDaily']['target'],state['today_score']+max(0,actual))
+
+    def mirror_claimed_sections(self,state):
+        old=set(state['mirror']['claimed'])
+        return [r['section'] for r in self.mirror_health if r['section'] in old or r['bossId'] in old]
+
+    def refresh_friends(self,pid,force=False):
         """One midnight rollover push; offline accounts refresh on their next request."""
         row=self.store.db.execute('SELECT value FROM activity_state WHERE player_id=? AND period=? AND namespace=? AND state_key=?',
                                   (pid,PERIOD,NAMESPACE,'state')).fetchone()
-        if row and json.loads(row[0]).get('friend_day')==friend_day(self.clock()):
+        if not force and row and json.loads(row[0]).get('friend_day')==friend_day(self.clock()):
             return None
         with self.economy.transaction():
             self.save(pid,self.state(pid))
         # Native FriendModule.OnReceiveFriendDataDirty refreshes the coin buttons.
         return OutboundMessage('PlayerDataProto',{'FriendData':snapshot_value(self.store,pid,self.clock())},data_version=1)
 
+    async def refresh_online_daily(self,pid,tcp):
+        """Track delivered notifications independently of persisted game days.
+
+        HTTP or another mutation may save today's state before the watcher runs.
+        That proves the counters rolled over, not that the client received them.
+        """
+        today=day(self.clock())
+        if self._daily_notify_day.get(pid)==today:
+            return False
+        push=self.refresh_friends(pid,force=True)
+        if not await tcp.push_to_player(pid,push):
+            return False
+        state=self.state(pid)
+        if state['club']:
+            message=OutboundMessage('L2C_ClubWishingCount',{
+                'code':10,'wishingCount':int(sum(state['wish_counts'].values())>0),
+                'guildWishGiveCount':state['given'],'guildHelpPowerCount':state['help_count']})
+            if not await tcp.push_to_player(pid,message):
+                return False
+        self._daily_notify_day[pid]=today
+        LOG.info('social daily counters delivered player=%s day=%s',pid,today)
+        return True
+
     async def watch(self,tcp):
         import asyncio
         while True:
-            for pid in tcp.authenticated_player_ids():
+            active=tcp.authenticated_player_ids()
+            self._daily_notify_day={pid:d for pid,d in self._daily_notify_day.items() if pid in active}
+            for pid in active:
                 try:
-                    push=self.refresh_friends(pid)
-                    if push:
-                        await tcp.push_to_player(pid,push)
-                        state=self.state(pid)
-                        if state['club']:
-                            await tcp.push_to_player(pid,OutboundMessage('L2C_ClubWishingCount',{
-                                'code':10,'wishingCount':int(sum(state['wish_counts'].values())>0),
-                                'guildWishGiveCount':state['given'],'guildHelpPowerCount':state['help_count']}))
+                    await self.refresh_online_daily(pid,tcp)
                     weekly=self.economy.endless.refresh_week(pid)
                     if weekly:
                         await tcp.push_to_player(pid,weekly)
                 except Exception:
-                    LOG.exception('friend midnight refresh player=%s',pid)
-            next_midnight=(friend_day(self.clock())+1)*86400-8*3600
+                    LOG.exception('social midnight refresh player=%s',pid)
+            next_midnight=(day(self.clock())+1)*86400-8*3600
             await asyncio.sleep(min(60,max(1,next_midnight-self.clock())))
 
     def save(self,pid,state):
@@ -189,8 +237,17 @@ class SocialService:
 
     def metadata(self,pid,state):
         club=state['club']
-        return [value('clubGroupChatUUID',self.club_id(pid)),value('clubLevel',1),
+        meta = [value('clubGroupChatUUID',self.club_id(pid)),value('clubLevel',1),
                 value('clubMemLimit',50),value('clubIconId',club['icon']),value('clubTodayScore',state['today_score'])]
+        mirror = state['mirror']
+        for index, row in enumerate(self.mirror_health, 1):
+            damage = mirror.get('damage', {}).get(str(row['bossId']), 0)
+            if row['bossId'] in mirror['clears']:
+                meta.append(value(f'clubLayer_{index}', 1))
+                damage = row['maxHP']
+            if damage:
+                meta.append(value(f'clubDamage_{index}', damage))
+        return meta
 
     def member(self,pid,state,uid):
         snap=self.store.get(pid)['snapshot']
@@ -666,17 +723,33 @@ class SocialService:
             return self.help(pid,state,req)
         elif flow=='ClubActiMainData':
             m=state['mirror']
-            result.update(challegeCount=m['count'],receivedLayer=m['claimed'] or [-1],scoreRewardFlag=0,battledSectionIds=m.get('sections') or [-1])
+            result.update(challegeCount=m['count'],receivedLayer=self.mirror_claimed_sections(state) or [-1],scoreRewardFlag=int(m.get('daily_claim_day')==state['day']),battledSectionIds=m.get('sections') or [-1])
         elif flow=='ClubReceiveReward':
             m=state['mirror']
             param=req.get('param',0)
-            if req.get('opt')!=0 or param not in m['clears'] or param in m['claimed']:
-                raise ValueError('mirror reward not eligible')
-            row=next((r for r in self.catalog['mirror'] if r['bossId']==param),None)
-            if not row:
-                raise ValueError('unknown mirror reward')
-            rewards=self.economy.gifts([row['challengeReward']])
-            m['claimed'].append(param)
+            opt=req.get('opt',0)
+            if opt==1:
+                daily=self.catalog['mirrorDaily']
+                if param!=0 or state['today_score']<daily['target'] or m.get('daily_claim_day')==state['day']:
+                    raise ValueError('mirror daily reward not eligible')
+                rewards=self.economy.gifts([daily['reward']])
+                m['daily_claim_day']=state['day']
+            elif opt in (0,2):
+                # Native opt=2 carries StageID, not BossID; retain old alias
+                # requests against the same receipt/claim ledger.
+                health=next((r for r in self.mirror_health if param in (r['section'],r['bossId'])),None)
+                if not health or health['bossId'] not in m['clears'] or health['section'] in self.mirror_claimed_sections(state):
+                    raise ValueError('mirror reward not eligible')
+                row=self.mirror_sections[health['section']]
+                if health['section'] not in m.get('sections',[]):
+                    consume=row.get('winConsume') or []
+                    if len(consume)!=2:
+                        raise ValueError('mirror reward key unavailable')
+                    self.charge(pid,{consume[0]:consume[1]})
+                rewards=self.economy.gifts([row['winReward']])
+                m['claimed'].append(health['section'])
+            else:
+                raise ValueError('unknown mirror reward option')
             self.grant(pid,state,rewards)
             result.update(param=param,rewardData=self.economy.reward_bytes(rewards))
         else:
@@ -723,6 +796,9 @@ class SocialService:
         state=self.state(pid)
         if not state['club'] or section not in self.mirror_sections or state['mirror']['count']<=0:
             raise UnresolvedEconomy('mirror locked or attempts exhausted')
+        current = self.mirror_current(state)
+        if current is None or current['bossId'] != self.mirror_sections[section]['bossId']:
+            raise UnresolvedEconomy('mirror boss is not the current layer')
 
     def assist(self,pid,raw,config):
         from x2server.messages.social import ASSIST_DATA
@@ -746,18 +822,74 @@ class SocialService:
         return ASSIST_DATA.encode(dict(assistPlayerID=npc_id(pid,uid),friendShipLevel=1,playerName=entry['name'],
             heroID=hero['id'],heroSkinID=0,heroStar=hero['star'],heroPower=0,assistTimes=1,heroLevel=hero['level'],battleData=data,md5=''))
 
+    def mirror_current(self, state):
+        return next((r for r in self.mirror_health if r['bossId'] not in state['mirror']['clears']), None)
+
     def bind_run(self,pid,section,run):
-        self.admission(pid,section)
         state=self.state(pid)
+        if run in state['mirror'].get('runs', {}):
+            return
+        self.admission(pid,section)
         state['mirror']['count']-=1
+        state['mirror'].setdefault('runs', {})[run] = {
+            'section':section, 'club_time':state['club']['time'], 'done':False}
         self.save(pid,state)
 
-    def completed(self,pid,section,success):
-        if success:
-            state=self.state(pid)
-            layer=self.mirror_sections[section]['bossId']
-            if layer not in state['mirror']['clears']:
-                state['mirror']['clears'].append(layer)
-            if section not in state['mirror'].setdefault('sections',[]):
-                state['mirror']['sections'].append(section)
-            self.save(pid,state)
+    def completed(self,pid,section,success,damage=None,run=None):
+        """One turn per NPC: 90% damage, halved per boss crossed in this run.
+
+        CHECKOUT.hp is GetTotalHurtToBoss, not remaining HP (native 0x14424F8).
+        Each turn stops at the death of its target; only the next member can
+        attack the next boss. A battle receipt and this run marker are atomic.
+        """
+        state=self.state(pid)
+        mirror=state['mirror']
+        attempt=mirror.get('runs', {}).get(run)
+        if not attempt or attempt['section']!=section:
+            raise UnresolvedEconomy('mirror run is not bound')
+        if attempt['done']:
+            return attempt
+        if not state['club'] or state['club']['time']!=attempt['club_time']:
+            raise UnresolvedEconomy('mirror club changed during battle')
+        if damage is not None and (type(damage) is not int or not 0<=damage<=2**63-1):
+            raise UnresolvedEconomy('invalid mirror damage')
+        current=self.mirror_current(state)
+        if current is None or current['bossId']!=self.mirror_sections[section]['bossId']:
+            raise UnresolvedEconomy('mirror run targets a stale boss')
+        damage_map=mirror.setdefault('damage', {})
+        remaining=current['maxHP']-damage_map.get(str(current['bossId']),0)
+        # Older clients can omit hp. A confirmed kill proves the remaining HP;
+        # an unsuccessful battle without a damage counter proves no damage.
+        player_damage=damage if damage is not None else remaining if success else 0
+        turns=[]
+        def hit(uid, amount):
+            target=self.mirror_current(state)
+            if target is None or amount<=0:
+                return
+            key=str(target['bossId'])
+            left=target['maxHP']-damage_map.get(key,0)
+            applied=min(amount,left)
+            damage_map[key]=damage_map.get(key,0)+applied
+            turns.append({'member':str(uid),'boss':target['bossId'],
+                          'requested':amount,'applied':applied})
+            if applied==left:
+                mirror['clears'].append(target['bossId'])
+        hit(pid,player_damage)
+        npc_damage=player_damage*9//10
+        start_index=next(i for i,r in enumerate(self.mirror_health) if r['bossId']==current['bossId'])
+        for uid in sorted(state['club']['members'],key=int):
+            target=self.mirror_current(state)
+            if target is None:
+                break
+            target_index=next(i for i,r in enumerate(self.mirror_health) if r['bossId']==target['bossId'])
+            crossed=target_index-start_index
+            hit(uid,player_damage*9//(10*(2**crossed)))
+        if section not in mirror.setdefault('sections',[]):
+            mirror['sections'].append(section)
+        attempt.update(done=True,player_damage=player_damage,npc_damage=npc_damage,turns=turns,score_day=state['day'])
+        state['today_score']=min(self.catalog['mirrorDaily']['target'],state['today_score']+sum(t['applied'] for t in turns))
+        self.save(pid,state)
+        LOG.info('mirror settlement player=%s run=%s section=%s damage=%s npc_damage=%s turns=%s current=%s',
+                 pid,run,section,player_damage,npc_damage,len(turns),
+                 (self.mirror_current(state) or {}).get('bossId'))
+        return attempt

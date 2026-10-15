@@ -215,7 +215,7 @@ def test_mirror_attempts_and_reward_eligibility(social):
         s.admission(1,2170001)
     assert act(s,ctx,'ClubReceiveReward',{'opt':0,'param':2070001},3).values['code']==13
     with s.economy.transaction():
-        s.completed(1,2170001,True)
+        s.completed(1,2170001,True,run='2')
     assert act(s,ctx,'ClubReceiveReward',{'opt':0,'param':2070001},4).values['code']==10
     assert act(s,ctx,'ClubReceiveReward',{'opt':0,'param':2070001},5).values['code']==13
     stamp[0]+=86400

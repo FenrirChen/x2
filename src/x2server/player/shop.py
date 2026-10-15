@@ -99,6 +99,13 @@ class ShopService:
         for row in restored["goods"]:
             self.compat_offers[(row["shopId"], row["goodsId"])] = row
 
+        from .progression import catalog as progression_catalog
+        self.divine_track_pool = sorted({1205000+r['hero_id']
+            for r in progression_catalog()['hero_unlock']
+            if economy.items.get(1205000+r['hero_id'],{}).get('ItemType',{}).get('value')==13})
+        if len(self.divine_track_pool)<4:
+            raise ValueError('divine-letter shop requires four distinct character tracks')
+
         with store.db:
             store.db.execute("""CREATE TABLE IF NOT EXISTS shop_purchase_counts (
                 player_id INTEGER NOT NULL, goods_id INTEGER NOT NULL, quantity INTEGER NOT NULL,
@@ -191,14 +198,16 @@ class ShopService:
             return True
         previous = [r for (sid, _), r in self.compat_offers.items()
                     if sid == 805 and r.get("round", 99) < row["round"]]
-        return all(self._compat_count(player, shop, r) >= 1 for r in previous) and self._compat_count(player, shop, row) == 0
+        last_round=max(r.get('round',0) for (sid,_),r in self.compat_offers.items() if sid==805)
+        return all(self._compat_count(player, shop, r) >= 1 for r in previous) and (
+            self._compat_count(player, shop, row) == 0 or row['round']==last_round)
 
     def _next_refresh(self, shop):
         local = datetime.fromtimestamp(int(self.economy.clock()), timezone(timedelta(hours=8)))
         tomorrow = (local + timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
-        if shop == 805:
-            return int(tomorrow.timestamp())  # Daily hero rotation; quota remains weekly.
-        if shop in (803, 807, 810):
+        if shop in (805,810):
+            return int(tomorrow.timestamp())  # Daily goods refresh; ticket-shop quotas remain weekly.
+        if shop in (803, 807):
             return int((tomorrow + timedelta(days=(7 - tomorrow.weekday()) % 7)).timestamp())
         return 0
 
@@ -216,6 +225,11 @@ class ShopService:
     def _stock_row(self, player, shop, row):
         # Slot identity and daily purchase count stay fixed; the full content,
         # quantity and pricing tuple rotates together, excluding exchange slots.
+        if shop == 810 and 'dailyTrackSlot' in row:
+            date=datetime.fromtimestamp(int(self.economy.clock()),timezone(timedelta(hours=8))).date().isoformat()
+            seed=hashlib.sha256(f'x2:divine-letter:{date}'.encode()).digest()
+            chosen=random.Random(int.from_bytes(seed,'big')).sample(self.divine_track_pool,4)
+            return {**row,'itemId':chosen[row['dailyTrackSlot']]}
         if shop == 805 and row.get("heroPool"):
             day = datetime.fromtimestamp(int(self.economy.clock()), timezone(timedelta(hours=8))).date().toordinal()
             pool = row["heroPool"]
@@ -466,7 +480,7 @@ class ShopService:
             from .hero import encode_hero_data
             pushes += (OutboundMessage("L2C_HeroUpdate", {"code": 10,
                 "heros": [encode_hero_data(h, season=self.economy.season, player_id=player_id) for h in self.store.get(player_id)["snapshot"]["heroes"]]}),)
-        if shop_id == 805:
+        if shop_id in (805,810):
             pushes += (OutboundMessage("L2C_ShopGoods", {"code": 10, "shopId": shop_id,
                 "NextRefreshTime": self._next_refresh(shop_id), "RefreshTimes": 0, "RefreshPrice": 0,
                 "goods": [GOODS.encode(self._compat_goods(player_id, shop_id, r))

@@ -24,8 +24,8 @@ LOGGER = logging.getLogger("x2.college")
 E_ERROR_OPT = 13  # GameLogicErrCode.E_ERROR_OPT: refused, unsupported mutation.
 
 # 取出因果 (C2L_ExchangePower 238 / L2C_ExchangePower 249) 的返回码, 与客户端
-# CollegeModule_OnReceiveExchangePowerMsg 的判断一致: 10 = 成功; 22 = 塔里的因果不够,
-# 或星能不足以支付 EXCHANGE_PER_POINT 的取出成本 (GameLogicErrCode.E_ERROR_ITEM_NOT_ENOUGH)。
+# CollegeModule_OnReceiveExchangePowerMsg 的判断一致: 10 = 成功; 22 = 塔里的因果不够
+# (GameLogicErrCode.E_ERROR_ITEM_NOT_ENOUGH)。
 COLLEGE_OK = 10
 COLLEGE_NO_ITEM = 22
 
@@ -48,9 +48,10 @@ POWER_STORAGE_CAPS = (100, 105, 110, 115, 120, 125, 130, 135, 140, 145, 150, 155
 # 所以这张表按 POWER_STORAGE_CAPS 的老办法在代码里硬编码。
 POWER_CONVERSION_PERMILLE = (500, 600, 600, 700, 700, 800)
 
-# 取出比例: 每取出 1 因果消耗 5 星能 (Language 13100467, 与客户端 CollegeAddPower 的
-# InputItemNum 步进一致)。
-EXCHANGE_PER_POINT = 5
+# Current native contract: EnergyToPower is not supplied, so the withdrawal
+# dialog displays zero energy cost. Keep the server consistent with that UI.
+# A missing server parameter does not establish the historical official rate;
+# Language 13100467 alone is also insufficient evidence to charge five energy.
 
 # 客户端 CollegeModule__cctor (0x01B09108) 把 CollegeModule 静态字段 EXPLORE_MAX_NUM
 # (+0x0) 与 TRAIN_MAX_NUM (+0x4) 都赋成 6; CollegeExploreTab_Refresh (0x01BC30A0) 直接
@@ -440,16 +441,18 @@ class CollegeService:
                 self.economy.refresh_stamina(player_id)
                 state = self.college.load(player_id)
                 stored = int(state.get('extra_power',0))
-                available = int(state.get('star_energy',0))
-                if amount*MILLI_POWER > stored or available < amount*EXCHANGE_PER_POINT:
+                snapshot = self.economy.store.get(player_id)['snapshot']
+                mobility = snapshot.setdefault('mobility',{})
+                current = int(mobility.get('power',0))
+                receive_cap = self.economy.items[1237900]['ItemValue']
+                if amount*MILLI_POWER > stored:
                     values = {'code':COLLEGE_NO_ITEM}
+                elif current+amount > receive_cap:
+                    values = {'code':E_ERROR_OPT}
                 else:
                     state['extra_power'] = stored-amount*MILLI_POWER
-                    state['star_energy'] = available-amount*EXCHANGE_PER_POINT
                     self.college.save(player_id,state)
-                    snapshot = self.economy.store.get(player_id)['snapshot']
-                    mobility = snapshot.setdefault('mobility',{})
-                    mobility['power'] = int(mobility.get('power',0))+amount
+                    mobility['power'] = current+amount
                     self.economy.save_snapshot(player_id,snapshot)
                     values = {'code':COLLEGE_OK,'power':amount,'extraPower':state['extra_power']}
                 if key:

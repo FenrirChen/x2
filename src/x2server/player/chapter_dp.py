@@ -151,21 +151,30 @@ class ChapterDP:
             self.observe(player, chapter, run, "quality", quality, count, 4)
         self.refresh(player, chapter)
 
-    def report_money_events(self, player, chapter, run, events):
-        """Final client StatsManager totals carried by 316, scoped to this run."""
+    def report_task_events(self, player, chapter, run, events):
+        """Final per-run counters from native ChapterAchievement.GetDPDatas (316).
+
+        Item pickups such as arcade big coins are consumed in-stage and are not
+        relicList entries or persistent bag items. Credit their explicit type-35
+        event; never infer pickups from the generated candidate drop pool.
+        """
         from x2server.messages.battle import CHAPTER_TASK_EVENT
-        subjects = {subject for task in self.chapters.get(str(chapter), {}).get('tasks', [])
-                    if task.get('completeType') == 'E_GetMoneyPer'
-                    for subject in task['completeValues1']}
+        allowed = {}
+        for task in self.chapters.get(str(chapter), {}).get('tasks', []):
+            wire_kind = {'E_GetMoneyPer': 39, 'E_GetItemID': 35}.get(task.get('completeType'))
+            if wire_kind is not None:
+                for subject in task['completeValues1']:
+                    for scope in task['completeValues2']:
+                        allowed[wire_kind, subject, scope] = 'money' if wire_kind == 39 else 'item'
         changed = False
         for raw in events[:512]:
             event = CHAPTER_TASK_EVENT.decode(raw)
-            # Native GetDPDatas converts E_GetMoney(38) to E_GetMoneyPer(39),
-            # then emits param1=currency, param2=0, num=GetMoneyInGame(...,true).
-            if (event.get('completeType') != 39 or event.get('param1') not in subjects
-                    or event.get('param2', 0) != 0 or not 0 < event.get('num', 0) <= 10**7):
+            kind = allowed.get((event.get('completeType'), event.get('param1'), event.get('param2', 0)))
+            if not kind or not 0 < event.get('num', 0) <= 10**7:
                 continue
-            self.observe(player, chapter, run, 'money', event['param1'], event['num'])
+            # Same run/source as 264: MAX prevents retries, later smaller tallies
+            # and overlapping relic/settlement observations from double counting.
+            self.observe(player, chapter, run, kind, event['param1'], event['num'])
             changed = True
         if changed:
             self.refresh(player, chapter)

@@ -25,6 +25,23 @@ def section_trial(row, selected_ids):
     return None
 
 
+def trial_team(row, selected_ids):
+    """Resolve each selected normal/trial alias against this section's roster."""
+    if row.get('AssistType', {}).get('value') != 1:
+        unit = section_trial(row, selected_ids)
+        return [unit] * len(selected_ids)
+    allowed = {unit for unit in row.get('AssistParam', []) if unit > 0}
+    aliases = {}
+    for unit in catalog()['units']:
+        if unit['TrialHeroID'] in allowed:
+            aliases[unit['TrialHeroID']] = unit['TrialHeroID']
+            aliases[unit['UnitID']] = unit['TrialHeroID']
+    resolved = [aliases.get(hero) for hero in selected_ids]
+    if any(unit is None for unit in resolved) or len(set(resolved)) != len(resolved):
+        raise ValueError('selected heroes do not match distinct section trial units')
+    return resolved
+
+
 def trial_hero(unit_id, wire_id):
     from .progression import catalog as progression
     row = next((r for r in catalog()['units'] if r['TrialHeroID'] == unit_id), None)

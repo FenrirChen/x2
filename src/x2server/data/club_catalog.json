@@ -1683,5 +1683,10 @@
    "unlockLevel": 40,
    "wishType": 1
   }
+ },
+ "mirrorDaily": {
+  "target": 100000000,
+  "reward": 778202,
+  "provenance": "ClubModule.cctor 0x1588B20 TODAY_REWARD_MAX_SCORE=100000000; GuildLevel Level1 DailyAward=778202, static_dictionary/tables.json active_source_hash d3f495a9230eb0e4c9c2a7d3112fa79f"
  }
 }

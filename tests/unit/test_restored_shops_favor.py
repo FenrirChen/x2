@@ -71,7 +71,9 @@ def test_ticket_five_rounds_exact_batch_cost_hidden_future_and_replay(env):
         assert buy(service, ctx, 805, gid, rid=300 + index).values == result.values
     assert store.db.execute('SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1237915').fetchone()[0] == 0
     assert store.db.execute('SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1237914').fetchone()[0] == 38
-    assert not [x for x in listing(service, ctx, 805) if 1905301 <= x['goodsId'] <= 1905305]
+    sold=[x for x in listing(service, ctx, 805) if 1905301 <= x['goodsId'] <= 1905305]
+    assert len(sold)==1 and sold[0]['goodsId']==1905305 and sold[0]['hasBuyTimes']==1
+    assert buy(service,ctx,805,1905305,rid=400).values['code']==13
 
 
 @pytest.mark.parametrize('sid,currency,size', [(803, 1237918, 14), (806, 1237905, 17)])

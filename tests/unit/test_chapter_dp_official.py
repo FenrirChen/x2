@@ -75,19 +75,19 @@ def test_final_money_events_all_chapters_keep_runs_separate_and_survive_restart(
         return CHAPTER_TASK_EVENT.encode(dict(completeType=39, param1=903, param2=0, num=amount))
     with economy.transaction():
         for change in ({'completeType': 38}, {'param1': 902}, {'param2': 1}, {'num': -1}, {'num': 10**7 + 1}):
-            assert not economy.dp.report_money_events(1, 2010100, 'invalid', [CHAPTER_TASK_EVENT.encode(
+            assert not economy.dp.report_task_events(1, 2010100, 'invalid', [CHAPTER_TASK_EVENT.encode(
                 dict({'completeType': 39, 'param1': 903, 'param2': 0, 'num': 4500}, **change))])
     assert economy.chapter_dp(1, 2010100) == 0
     for chapter in map(int, economy.dp.chapters):
         task = next(t for t in economy.dp.chapters[str(chapter)]['tasks']
                     if t.get('completeType') == 'E_GetMoneyPer')
         with economy.transaction():
-            economy.dp.report_money_events(1, chapter, 'a', [event(2500)])
-            economy.dp.report_money_events(1, chapter, 'b', [event(2000)])
+            economy.dp.report_task_events(1, chapter, 'a', [event(2500)])
+            economy.dp.report_task_events(1, chapter, 'b', [event(2000)])
         assert economy.chapter_dp(1, chapter) == 0  # Separate games do not sum to 4500.
         with economy.transaction():
             for amount in (4500, 1000, 4500):
-                economy.dp.report_money_events(1, chapter, 'a', [event(amount)])
+                economy.dp.report_task_events(1, chapter, 'a', [event(amount)])
         assert economy.chapter_dp(1, chapter) == sum(task['dpPoints'])
     restored = EconomyService(store)
     assert restored.chapter_dp(1, 2010100) == 2
@@ -217,3 +217,56 @@ def test_client_prologue_has_zero_marker_and_no_reward_box(env):
     assert economy.chapter_dp_catalog['2010000']['dpThresholds'] == [0]
     assert economy.chapter_dp_boxes(1, 2010000) == []
     assert economy.pick_chapter_dp_box(1, {'type': 7, 'param': 2010000, 'boxId': 0}).values['code'] == 13
+
+
+def test_arcade_big_coin_pickups_accumulate_once_per_successful_run(env):
+    from x2server.messages.battle import CHAPTER_TASK_EVENT, FIGHT_DATA
+    from x2server.messages.economy import TASK
+    from x2server.player.economy import EconomyService
+    store, economy, context = env
+    battle = BattleService(store, economy)
+    # Bind the authentic chapter-7 entry to the handler, without replaying all
+    # prerequisite story battles (entry gates have their own tests).
+    values = BATTLE_SCHEMAS['L2C_FightData'].encode({'result': 10,
+        'data': FIGHT_DATA.encode({'missionId': 2110601})})
+    assert battle.catalog.sections[2110601]['ChapterID'] == 2010700
+    import time
+    with store.db:
+        store.db.execute('INSERT INTO battle_entries (player_id,request_key,uuid,created_at,response) '
+            'VALUES (1,?,?,?,?)', ('arcade-a','arcade-a',int(time.time()),values))
+    def report(amount, **changes):
+        event = dict(completeType=35,param1=1107003,param2=0,num=amount)
+        event.update(changes)
+        return packet({'sectionId': 2110601,'chapterTaskEvent':[CHAPTER_TASK_EVENT.encode(event)]},
+                      2,'C2L_FightKillInfo')
+    def progress():
+        return next(t for t in map(TASK.decode,economy.dp.task_list(1,2010700)) if t['taskId']==650727)
+    # Neither an unsettled nor a failed run can contribute final pickup events.
+    assert not asyncio.run(battle.kill_info(context,report(233))).pushes
+    assert progress()['taskProgress']==0
+    with store.db:
+        store.db.execute('INSERT INTO battle_receipts VALUES (?,?,?,?)', ('arcade-a','test',0,
+            BATTLE_SCHEMAS['L2C_CheckoutMainMission'].encode({'result':10,'success':False})))
+    assert not asyncio.run(battle.kill_info(context,report(233))).pushes
+    with store.db:
+        store.db.execute('UPDATE battle_receipts SET response=? WHERE uuid=?', (
+            BATTLE_SCHEMAS['L2C_CheckoutMainMission'].encode({'result':10,'success':True}), 'arcade-a'))
+    for change in ({'param1':1107002},{'param2':1},{'completeType':38},{'num':-1},{'num':10**7+1}):
+        assert not asyncio.run(battle.kill_info(context,report(233,**change))).pushes
+    assert progress()['taskProgress']==0
+    for amount in (120,80,120):
+        assert asyncio.run(battle.kill_info(context,report(amount))).pushes
+    assert progress()['taskProgress']==120
+    # Another successful run adds to the cumulative task, unlike per-run prism.
+    with store.db:
+        store.db.execute('INSERT INTO battle_entries (player_id,request_key,uuid,created_at,response) '
+            'VALUES (1,?,?,?,?)', ('arcade-b','arcade-b',int(time.time()),values))
+        store.db.execute('INSERT INTO battle_receipts VALUES (?,?,?,?)', ('arcade-b','test',0,
+            BATTLE_SCHEMAS['L2C_CheckoutMainMission'].encode({'result':10,'success':True})))
+    for amount in (113,113,50):
+        asyncio.run(battle.kill_info(context,report(amount)))
+    task=progress()
+    assert (task['taskProgress'],task['taskStatus'])==(233,3)
+    assert economy.chapter_dp(1,2010700)==2
+    assert EconomyService(store).chapter_dp(1,2010700)==2
+    assert store.db.execute('SELECT quantity FROM inventory WHERE item_id=1107003').fetchone() is None
