@@ -61,6 +61,7 @@ class AccountStore:
             self.db.execute("CREATE UNIQUE INDEX IF NOT EXISTS accounts_player_id_unique "
                             "ON accounts(player_id)")
             ensure_mail_schema(self.db)
+            self.db.execute("CREATE TABLE IF NOT EXISTS server_settings (key TEXT PRIMARY KEY, value TEXT NOT NULL)")
 
     def create(self, username: str, password: str, now: int, *, allow_legacy: bool = False) -> str:
         """Create both rows atomically; only the configured seed can claim a legacy player."""
@@ -74,6 +75,10 @@ class AccountStore:
         with self._lock:
             try:
                 self.db.execute("BEGIN IMMEDIATE")
+                gate = self.db.execute("SELECT value FROM server_settings WHERE key='registration_enabled'").fetchone()
+                if gate is not None and gate[0] != '1':
+                    self.db.rollback()
+                    return "closed"
                 if self.db.execute("SELECT 1 FROM accounts WHERE username=?", (username,)).fetchone():
                     self.db.rollback()
                     return "duplicate"

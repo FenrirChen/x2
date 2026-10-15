@@ -511,13 +511,14 @@ def test_import_transaction_rollback_on_failure(env, monkeypatch):
     assert manager.canonical_state(alpha) == before
 
 
-def test_import_always_writes_new_pre_import_backup(env):
+def test_import_retains_only_latest_pre_import_backup(env):
     store, accounts, manager, alpha, _ = env
     save_a = manager.export_save(alpha)
     manager.import_save(alpha, save_a)
     first = manager.import_save(alpha, save_a)
     second = manager.import_save(alpha, save_a)
-    assert first["backup"] != second["backup"]
+    assert first["backup"] == second["backup"]
+    assert len(list(manager.backup_root.rglob("*.x2save"))) == 1
     # the backups are themselves valid containers that can be re-imported
     manager.parse_save(open(first["backup"], "rb").read())
 
@@ -573,3 +574,100 @@ def test_full_state_in_every_exported_table(env):
             count = store.db.execute(f"SELECT count(*) FROM {table} WHERE player_id=?",
                                      (alpha,)).fetchone()[0]
             assert count == len(plan.rows[table]), table
+
+
+def test_backup_atomic_replace_failure_keeps_old_and_player_state(env, monkeypatch):
+    from pathlib import Path
+    import x2server.player.save_manager as module
+    store, _, manager, alpha, _ = env
+    archive = manager.export_save(alpha)
+    path = Path(manager.import_save(alpha, archive)['backup'])
+    original = path.read_bytes()
+    before = manager.canonical_state(alpha)
+    def fail(*args):
+        raise OSError('simulated replace failure')
+    monkeypatch.setattr(module.os, 'replace', fail)
+    with pytest.raises(OSError, match='replace failure'):
+        manager.import_save(alpha, archive)
+    assert path.read_bytes() == original
+    assert manager.canonical_state(alpha) == before
+    assert not list(path.parent.glob('*.tmp'))
+
+
+def test_legacy_cleanup_preserves_other_accounts_and_unknown_files(env):
+    from pathlib import Path
+    store, accounts, manager, alpha, beta = env
+    folder = manager.backup_root / 'account_alpha'
+    folder.mkdir(parents=True)
+    archive = manager.export_save(alpha)
+    old = folder / '20261014_000000.x2save'
+    old.write_bytes(archive)
+    newer = folder / '20261015_000000.x2save'
+    newer.write_bytes(archive)
+    # A foreign archive and a user-named file must never be removed.
+    foreign = folder / '20261015_000001.x2save'
+    foreign.write_bytes(manager.export_save(beta))
+    unknown = folder / 'manual.x2save'
+    unknown.write_bytes(archive)
+    assert manager.prune_import_backups() == 1
+    assert sum(path.exists() for path in (old, newer)) == 1
+    assert foreign.exists() and unknown.exists()
+    result = manager.import_save(alpha, archive)
+    assert not old.exists() and not newer.exists()
+    assert Path(result['backup']).exists() and foreign.exists() and unknown.exists()
+    manager.parse_save(Path(result['backup']).read_bytes())
+    assert manager.prune_import_backups() == 0
+
+
+def test_backup_write_failure_preserves_old_backup(env, monkeypatch):
+    from pathlib import Path
+    import x2server.player.save_manager as module
+    store, _, manager, alpha, _ = env
+    archive = manager.export_save(alpha)
+    path = Path(manager.import_save(alpha, archive)['backup'])
+    original = path.read_bytes()
+    before = manager.canonical_state(alpha)
+    def fail(*args):
+        raise OSError('simulated fsync failure')
+    monkeypatch.setattr(module.os, 'fsync', fail)
+    with pytest.raises(OSError, match='fsync failure'):
+        manager.import_save(alpha, archive)
+    assert path.read_bytes() == original and manager.canonical_state(alpha) == before
+    assert not list(path.parent.glob('*.tmp'))
+
+
+def test_retention_separates_colliding_legacy_account_names(env):
+    store, accounts, manager, _, _ = env
+    folder = manager.backup_root / 'account_a_b'
+    folder.mkdir(parents=True)
+    ids = []
+    for i, name in enumerate(('a.b', 'a?b')):
+        assert accounts.create(name, 'pw', 1) == 'created'
+        pid = accounts.get_by_name(name)['player_id']
+        ids.append(pid)
+        archive = manager.export_save(pid)
+        for j in range(2):
+            (folder / f'20261015_00000{i*2+j}.x2save').write_bytes(archive)
+    assert manager.prune_import_backups() == 2
+    assert len(list(folder.glob('*.x2save'))) == 2
+    owners = set()
+    for path in folder.glob('*.x2save'):
+        with zipfile.ZipFile(path) as z:
+            owners.add(json.loads(z.read('manifest.json'))['source_player']['player_id'])
+    assert owners == set(ids)
+
+
+def test_repeated_and_concurrent_imports_keep_one_backup(env):
+    from concurrent.futures import ThreadPoolExecutor
+    store, _, manager, alpha, _ = env
+    archive = manager.export_save(alpha)
+    with ThreadPoolExecutor(max_workers=3) as executor:
+        results = list(executor.map(lambda _: manager.import_save(alpha, archive), range(6)))
+    assert len({r['backup'] for r in results}) == 1
+    files = list(manager.backup_root.rglob('*.x2save'))
+    assert len(files) == 1
+    before = files[0].read_bytes()
+    with pytest.raises(ValueError):
+        manager.import_save(alpha, b'bad archive')
+    assert files[0].read_bytes() == before
+    manager.parse_save(before)

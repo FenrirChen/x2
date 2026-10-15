@@ -16,7 +16,10 @@ from __future__ import annotations
 
 import hashlib
 import io
+import os
+import tempfile
 import json
+import logging
 import re
 import sqlite3
 import threading
@@ -94,7 +97,7 @@ TABLES_WITH_OWNER_COLUMN.extend(sorted(RELEASE_ADDED_TABLES))
 PLAYER_TABLES = sorted(TABLES_WITH_OWNER_COLUMN) + sorted(JOIN_OWNERS)
 LEGACY_PLAYER_TABLES = set(PLAYER_TABLES) - RELEASE_ADDED_TABLES
 # These are server-wide encounters/calendars, not a single player's save.
-GLOBAL_TABLES = {"accounts", "players", "repair_history", "world_boss_runs", "world_boss_days", "system_mail_issues", "season_calendar"}
+GLOBAL_TABLES = {"accounts", "players", "repair_history", "world_boss_runs", "world_boss_days", "system_mail_issues", "season_calendar", "server_settings"}
 
 # Global AUTOINCREMENT integer keys that may need remapping on import, with the
 # referencing tables/columns. player_mail ids are always re-allocated (no DB
@@ -480,7 +483,10 @@ class SaveManager:
         """Validate, back up the current archive, then land the new state in a
         single transaction. Any failure rolls the database back completely."""
         with self._lock:
-            plan = self.parse_save(data)
+            try:
+                plan = self.parse_save(data)
+            except zipfile.BadZipFile as exc:
+                raise ValueError('存档压缩包损坏') from exc
             target = self.db.execute(
                 "SELECT id, account FROM players WHERE id=?", (player_id,)).fetchone()
             if target is None:
@@ -594,19 +600,92 @@ class SaveManager:
                             and equip["equip_id"] not in equip_ids:
                         raise ValueError("snapshot.heroes[].equips[].equip_id 引用不存在")
 
+    def _backup_files(self, player_id: int, account: str) -> list[Path]:
+        # Legacy names can collide after sanitizing. Verify the archive owner;
+        # never delete another player's file, arbitrary files, or linked paths.
+        root = self.backup_root.resolve()
+        safe = re.sub(r"[^A-Za-z0-9_-]", "_", account)[:48] or f"player{player_id}"
+        found = []
+        for name in (f"player_{player_id}", f"account_{safe}"):
+            directory = root / name
+            if not directory.is_dir() or directory.resolve() != directory.absolute():
+                continue
+            for path in directory.iterdir():
+                if not re.fullmatch(r"(?:latest|[0-9]{8}_[0-9]{6}(?:_[0-9]{2,})?)\.x2save", path.name):
+                    continue
+                if not path.is_file() or path.resolve() != path.absolute():
+                    continue
+                try:
+                    with zipfile.ZipFile(path) as archive:
+                        info = archive.getinfo('manifest.json')
+                        if info.file_size > 1024 * 1024:
+                            continue
+                        owner = json.loads(archive.read(info))['source_player']
+                    if owner['player_id'] == player_id and owner['account'] == account:
+                        found.append(path)
+                except (OSError, ValueError, TypeError, KeyError, zipfile.BadZipFile):
+                    continue
+        return found
+
+    def _prune_backups(self, player_id: int, account: str, keep: Path | None = None) -> int:
+        candidates = self._backup_files(player_id, account)
+        if not candidates:
+            return 0
+        survivor = keep or max(candidates, key=lambda f: (f.stat().st_mtime_ns, f.name))
+        if survivor not in candidates:
+            raise ValueError('backup owner verification failed')
+        # Do not remove any recovery point unless the retained file is valid.
+        self.parse_save(survivor.read_bytes())
+        removed = 0
+        for path in candidates:
+            if path != survivor:
+                path.unlink()
+                removed += 1
+        return removed
+
+    def prune_import_backups(self) -> int:
+        """Startup migration: retain one verified backup per player only."""
+        with self._lock:
+            removed = 0
+            for row in self.db.execute('SELECT id, account FROM players').fetchall():
+                try:
+                    removed += self._prune_backups(row['id'], row['account'])
+                except (OSError, ValueError, zipfile.BadZipFile):
+                    logging.getLogger('x2.save_manager').exception(
+                        'backup cleanup refused; recovery files preserved player=%s', row['id'])
+            return removed
+
     def _write_backup(self, player_id: int, account: str) -> Path:
-        """Server-side PRE_IMPORT_BACKUP; never overwrites an earlier backup."""
+        """Durable atomic replacement: old backup survives any pre-replace error."""
         current = self.export_save(player_id)
-        safe_name = re.sub(r"[^A-Za-z0-9_-]", "_", account)[:48] or f"player{player_id}"
-        directory = self.backup_root / f"account_{safe_name}"
-        directory.mkdir(parents=True, exist_ok=True)
-        stamp = time.strftime("%Y%m%d_%H%M%S")
-        path = directory / f"{stamp}.x2save"
-        suffix = 0
-        while path.exists():
-            suffix += 1
-            path = directory / f"{stamp}_{suffix:02d}.x2save"
-        path.write_bytes(current)
+        self.parse_save(current)
+        root = self.backup_root.resolve()
+        root.mkdir(parents=True, exist_ok=True)
+        directory = root / f"player_{player_id}"
+        directory.mkdir(exist_ok=True)
+        if directory.resolve() != directory.absolute():
+            raise ValueError('linked backup directory is not allowed')
+        path = directory / 'latest.x2save'
+        if path.is_symlink():
+            raise ValueError('linked backup file is not allowed')
+        temporary = None
+        try:
+            with tempfile.NamedTemporaryFile(dir=directory, prefix='.backup-', suffix='.tmp', delete=False) as fh:
+                temporary = Path(fh.name)
+                fh.write(current)
+                fh.flush()
+                os.fsync(fh.fileno())
+            os.replace(temporary, path)
+            if os.name != 'nt':
+                fd = os.open(directory, os.O_RDONLY | os.O_DIRECTORY)
+                try:
+                    os.fsync(fd)
+                finally:
+                    os.close(fd)
+        finally:
+            if temporary is not None and temporary.exists():
+                temporary.unlink()
+        self._prune_backups(player_id, account, keep=path)
         return path
 
     def _delete_target_state(self, db: sqlite3.Connection, player_id: int,

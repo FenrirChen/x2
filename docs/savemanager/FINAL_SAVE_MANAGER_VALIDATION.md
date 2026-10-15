@@ -58,7 +58,7 @@ repair_history（运维）；session token/nonce（纯内存）；导入审计�
 | 确认目标账号 | token 绑定 account_id/player_id；`LookupError` 拒绝未知账号 |
 | 锁定目标 | `BEGIN IMMEDIATE`；且要求目标账号无活动 game TCP session（在线→409） |
 | 在线 session | HTTP 线程经 `run_coroutine_threadsafe` 到主循环取 `authenticated_player_ids()`；在线拒绝：**"账号当前在线，请先退出游戏后再导入存档。"** |
-| 自动备份 | PRE_IMPORT_BACKUP：`server_backups/save_import/account_<name>/<ts>.x2save`，永不覆盖，可用同一 importer 人工恢复 |
+| 自动备份 | PRE_IMPORT_BACKUP：`server_backups/save_import/player_<id>/latest.x2save`，完整写入后原子替换、每账号保留一份，可用同一 importer 人工恢复 |
 | 事务 | 删除目标全部边界行→插入+remap（player_id 一律改写；equipment/observation 自增 id 冲突才重映射并同步重写 snapshot/引用；player_mail id 一律重分配；uuid/request_key 族冲突整族一致重映射）→ sqlite_sequence 前推 → `PRAGMA foreign_key_check` → COMMIT；任何异常 ROLLBACK，导入前状态原样保留（测试强制中途失败验证） |
 
 # 6 Round-trip Verification

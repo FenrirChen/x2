@@ -86,6 +86,8 @@ async def run(database: Path, seconds: float) -> None:
     os.environ.setdefault('X2_ORIGIN_SEASON_ENABLED', '1')
     accounts = AccountStore(store)
     save_manager = SaveManager(store)
+    removed_backups = save_manager.prune_import_backups()
+    logging.getLogger("x2.local").info("import backup retention removed=%s keep_per_player=1", removed_backups)
     identity = LocalIdentityService(contract, account=os.environ.get("X2_LOCAL_ACCOUNT"),
         password=os.environ.get("X2_LOCAL_PASSWORD"), accounts=accounts, players=store,
         chat_entry=f"{endpoints.public_host}:{endpoints.chat_port}",

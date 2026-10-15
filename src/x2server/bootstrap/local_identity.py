@@ -246,6 +246,8 @@ class LocalIdentityService(RecoveredBootstrapService):
             outcome = "duplicate"
         except sqlite3.Error:
             return self._json({"success": False}, 500)
+        if outcome == "closed":
+            return self._json({"success": False, "message": "注册暂时关闭"})
         return self._json({"success": outcome == "created"})
 
     def _password_login(self, values: dict[str, str], path: str) -> HTTPResponse:

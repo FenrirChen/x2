@@ -93,7 +93,7 @@ blobs/NNNNNN.bin       BLOB 列原始字节（按导出顺序编号，000001 起
 
 ## 7. 服务器内部备份（PRE_IMPORT_BACKUP）
 
-- 位置：`<DB 目录>/server_backups/save_import/account_<safe_name>/<YYYYmmdd_HHMMSS>.x2save`（重名自动加序号，**永不覆盖**）。
+- 位置：`<DB 目录>/server_backups/save_import/player_<player_id>/latest.x2save`（只保留最近一份；完整写入并 fsync 后原子替换；历史备份启动时核对归属后清理）。
 - 内容：导入动作前一刻的完整 export_save 容器——可用同一 importer 人工恢复（管理操作）。
 - 审计：`server_backups/save_import/import_audit.log`（JSON 行：账号/备份路径/逐表行数/来源 player），不记录任何凭据。
 
