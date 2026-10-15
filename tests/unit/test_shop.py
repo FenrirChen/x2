@@ -294,9 +294,9 @@ def test_club_shop_807_lists_and_purchases_with_guild_score(env):
     listing = asyncio.run(service.handle(ctx, packet({"shopId": 807}, name="C2L_ShopGoods")))
     assert listing.values["code"] == 10
     goods = {row["goodsId"]: row for row in map(GOODS.decode, listing.values["goods"])}
-    assert len(goods) == 33
+    assert len(goods) == 29
     shard = goods[1916701]
-    assert (shard["itemId"], shard["num"], shard["price"]) == (1201003, 1, 150)
+    assert (shard["itemId"], shard["num"], shard["price"]) == (1283201, 1, 150)
     assert shard["currencyType"] == 924
     assert (shard["canBuyTimes"], shard["limited"]) == (2, 2)
     with store.db:
@@ -305,8 +305,8 @@ def test_club_shop_807_lists_and_purchases_with_guild_score(env):
                       request_id=30, name="C2L_BuyGoods")
     first = asyncio.run(service.handle(ctx, purchase))
     assert first.values["code"] == 10
-    assert rewards(first.values["rewardData"]) == {1201003: 1}
+    assert rewards(first.values["rewardData"]) == {1283201: 1}
     assert store.db.execute(
         "SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1237924").fetchone()[0] == 350
     assert store.db.execute(
-        "SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1201003").fetchone()[0] == 1
+        "SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1283201").fetchone()[0] == 1
