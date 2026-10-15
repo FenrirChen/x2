@@ -404,7 +404,8 @@
       ],
       "description": "累计获得友情点 {0} 点",
       "rule": {
-        "kind": "unsupported"
+        "kind": "event",
+        "event": 620010
       }
     },
     "660030": {
@@ -719,7 +720,8 @@
       ],
       "description": "通过终端，累计完成 {0} 个心愿任务",
       "rule": {
-        "kind": "unsupported"
+        "kind": "event",
+        "event": 72
       }
     },
     "660290": {
@@ -5476,7 +5478,8 @@
       ],
       "description": "在炼金实验室中，收获金币数量达到 {0} ",
       "rule": {
-        "kind": "unsupported"
+        "kind": "event",
+        "event": 622300
       }
     },
     "662310": {

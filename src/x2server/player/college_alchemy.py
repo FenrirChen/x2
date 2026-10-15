@@ -323,6 +323,12 @@ class AlchemyService:
             player_id, source + ':deal', self.economy.TASK_EVENT_ALCHEMY_DEAL, 0, 1)
         self.economy.record_event(
             player_id, source + ':quest', self.economy.TASK_EVENT_ALCHEMY_QUEST, 0, 1)
+        # 成就 662300「在炼金实验室中，收获金币数量达到 N」按**金币数量**累计 (不是次数):
+        # 记本单实际发出的金币 (加价/打折后的值)。source 是本单的唯一 grant 键, 重放/重发
+        # 同一笔成交不会重复累加。
+        if gold > 0:
+            self.economy.achievements.record(
+                player_id, source + ':gold', self.economy.ACHV_EVENT_ALCHEMY_GOLD, gold)
         change = self.discount_favor(player_id, customer, favor_gain)
         # The next single-customer query starts a fresh order using the latest
         # unlocked tiers, while the customer's identity and neighbours stay fixed.

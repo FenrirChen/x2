@@ -77,6 +77,16 @@ class EconomyService:
     # Internal counters keep achievement sources narrower than shared task types.
     ACHV_EVENT_COLLEGE_EXPLORE = 622310
     ACHV_EVENT_SUPPLY_PURCHASE = 622700
+    # 成就 662300「在炼金实验室中，收获金币数量达到 N」: 这条条件的量是**金币数**而不是
+    # 次数, 客户端 E_ 枚举里没有对应项。自定一个只喂这条成就的 event_type, 数字沿用客户端
+    # 的成就条件号 622300 (与 E_ 枚举的小整数不会撞号)。生产者见 player/college_alchemy.py
+    # 的 _trade 成交路径, amount = 本单实际发出的金币。
+    ACHV_EVENT_ALCHEMY_GOLD = 622300
+    # 成就 660010「累计获得友情点 N 点」: E_ 枚举里 71 (E_GiveFriendCoin) 的语义只是
+    # 「赠送」, 那一条要留给每日任务 630023, 收取友情点不能再记 71, 否则会被顶掉。所以
+    # 同样自定一个只喂这条成就的事件号 (沿用成就条件号 620010), 由 player/social.py 的
+    # 赠送/收取两处按**实际入账点数**直接记 (amount = 点数)。
+    ACHV_EVENT_FRIEND_COIN = 620010
     # GameTaskType.CHALLENGE: 60 tasks in 10 groups, no period, no rollover.
     CHALLENGE_KIND = 3
     # GameTaskType.CHAPTER (7): the chapter DP query and its DP 宝箱 claims.
