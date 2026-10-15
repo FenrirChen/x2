@@ -10,6 +10,7 @@ from x2server.messages.core import HERO_DATA, INT_PAIR
 from x2server.messages.economy import ITEM, REWARD
 from x2server.player.appearance import avatar_frames
 from x2server.player.bag_items import BagItemService
+from x2server.player.college import CollegeStateRepository
 from x2server.player.equipment import EquipmentService
 from x2server.player.hero import encode_hero_data
 
@@ -17,6 +18,28 @@ from x2server.player.hero import encode_hero_data
 def stock(store, item, amount):
     with store.db:
         store.db.execute("INSERT OR REPLACE INTO inventory VALUES (1,?,?)", (item, amount))
+
+
+class FixedClock:
+    """Pinned server clock so college star energy never regens mid-test."""
+
+    def __init__(self, now):
+        self.now = lambda: int(now)
+
+
+def wire_college(store, economy, star_energy=240):
+    """Attach the college repository run_server injects, pre-loaded with 星能.
+
+    240 is 启明之塔 702's level-1 cap (CollegeLevel 702 EffectType1 == 5), which is the
+    most star energy a fresh save can hold; the furnace 707 sits at level 1, i.e. no
+    PowerNeed discount, so a RecipeType 3/4 row costs its full PowerNeed per batch.
+    """
+    repo = CollegeStateRepository(store, FixedClock(economy.clock()))
+    state = repo.load(1)
+    state["star_energy"] = star_energy
+    repo.save(1, state)
+    economy.college = repo
+    return repo
 
 
 def use(economy, ctx, item, count=1, selected=(), request=20):
@@ -97,38 +120,47 @@ def test_compose_costs_replay_reopen_and_insufficient_material(env):
     assert store.db.execute("SELECT quantity FROM inventory WHERE item_id=1250012").fetchone()[0] == 2
 
 
-def test_type3_compose_charges_stamina_and_rolls_extra_drop(env, monkeypatch):
+def test_type3_compose_charges_star_energy_and_rolls_extra_drop(env, monkeypatch):
     store, economy, ctx = env
     service = BagItemService(store, economy)
+    repo = wire_college(store, economy)
     # Force the OtherProduct permille roll to always hit (secrets.randbelow(1000) -> 0).
     monkeypatch.setattr("x2server.player.bag_items.secrets.randbelow", lambda n: 0)
     stock(store, 1202080, 6)
-    before = store.get(1)["snapshot"]["mobility"]["power"]
+    power = store.get(1)["snapshot"]["mobility"]["power"]
     reply = asyncio.run(service.compose(ctx, packet({"RecipeID": 29201, "composeCount": 1},
         name="C2L_JewelCompose", request_id=301)))
     assert reply.values["result"] == 10
     # 3 spent on the recipe cost and 1 returned by the always-hit extra drop.
     assert store.db.execute("SELECT quantity FROM inventory WHERE item_id=1202080").fetchone()[0] == 4
     assert store.db.execute("SELECT quantity FROM inventory WHERE item_id=1202081").fetchone()[0] == 1
-    # RecipeType 3 also charges PowerNeed (体力) straight from the snapshot.
-    assert store.get(1)["snapshot"]["mobility"]["power"] == before - 10
+    # RecipeType 3 charges PowerNeed as 星能 at the furnace's price, not as 体力 from
+    # the snapshot: 启明之塔 level 1 holds at most 240 and 熔炉 707 level 1 discounts
+    # nothing, so one 10-PowerNeed batch costs 10.
+    assert repo.load(1)["star_energy"] == 240 - 10
+    assert store.get(1)["snapshot"]["mobility"]["power"] == power
+    # The refreshed growth base has to land before the answer so the compose page
+    # re-quotes the star energy the next craft needs.
+    assert reply.before_response[0].message_name == "L2C_QueryGrowthBase"
+    assert reply.before_response[0].values["starEnergy"] == 230
 
 
 def test_type4_compose_materializes_equipment_box(env, monkeypatch):
     store, economy, ctx = env
     service = BagItemService(store, economy)
+    repo = wire_college(store, economy)
     monkeypatch.setattr("x2server.player.bag_items.secrets.randbelow", lambda n: 0)
     stock(store, 1237920, 40)
     p = store.get(1)
     store.save_snapshot(1, dict(p["snapshot"], gold=100000), p["revision"])
-    before = store.get(1)["snapshot"]["mobility"]["power"]
     reply = asyncio.run(service.compose(ctx, packet({"RecipeID": 29301, "composeCount": 1},
         name="C2L_JewelCompose", request_id=401)))
     assert reply.values["result"] == 10
     assert store.db.execute("SELECT quantity FROM inventory WHERE item_id=1237920").fetchone()[0] == 20
     snapshot = store.get(1)["snapshot"]
     assert snapshot["gold"] == 50000
-    assert snapshot["mobility"]["power"] == before - 50
+    # RecipeType 4 pays its 50 PowerNeed in 星能 as well (furnace level 1 = no discount).
+    assert repo.load(1)["star_energy"] == 240 - 50
     # The 775xxx box expands into a real 兽主 equipment instance, delivered both in
     # rewardData and as an L2C_EquipUpdate push so the bag refreshes.
     assert REWARD.decode(reply.values["rewardData"]).get("rewardEquip")
@@ -141,15 +173,18 @@ def test_type4_compose_materializes_equipment_box(env, monkeypatch):
     assert next(m.values for m in replay.before_response if m.message_name == "L2C_EquipUpdate") == updates[0].values
     assert store.db.execute("SELECT COUNT(*) FROM equipment_instances WHERE player_id=1").fetchone()[0] == 1
     assert store.db.execute("SELECT quantity FROM inventory WHERE item_id=1237920").fetchone()[0] == 20
-    assert store.get(1)["snapshot"]["mobility"]["power"] == before - 50
+    # Replays serve the receipt and must not charge the star energy twice.
+    assert repo.load(1)["star_energy"] == 240 - 50
     # The client caps RecipeType 4 at ten per request; anything larger is refused.
     assert asyncio.run(service.compose(ctx, packet({"RecipeID": 29301, "composeCount": 11},
         name="C2L_JewelCompose", request_id=402))).values["result"] == 13
+    assert repo.load(1)["star_energy"] == 240 - 50
 
 
-def test_type3_unresolved_extra_rolls_back_materials_and_stamina(env, monkeypatch):
+def test_type3_unresolved_extra_rolls_back_materials_and_star_energy(env, monkeypatch):
     store, economy, ctx = env
     service = BagItemService(store, economy)
+    repo = wire_college(store, economy)
     stock(store, 1202080, 3)
     before = store.get(1)
     monkeypatch.setattr("x2server.player.bag_items.secrets.randbelow", lambda n: 0)
@@ -161,6 +196,9 @@ def test_type3_unresolved_extra_rolls_back_materials_and_stamina(env, monkeypatc
         name="C2L_JewelCompose", request_id=403)))
     assert reply.values["result"] == 13
     assert store.get(1) == before
+    # The star energy debit shares the compose savepoint, so an unresolved extra drop
+    # must refund it along with the materials.
+    assert repo.load(1)["star_energy"] == 240
     assert store.db.execute("SELECT quantity FROM inventory WHERE item_id=1202080").fetchone()[0] == 3
     assert store.db.execute("SELECT COUNT(*) FROM bag_operation_receipts").fetchone()[0] == 0
 
@@ -170,6 +208,7 @@ def test_every_furnace_recipe_grants_outputs_and_replays_without_extra_charge(en
     service = BagItemService(store, economy)
     now = int(economy.clock())
     monkeypatch.setattr(economy, "clock", lambda: now)
+    repo = wire_college(store, economy)
     monkeypatch.setattr("x2server.player.bag_items.secrets.randbelow", lambda n: 0)
     for recipe_id, recipe in economy.bag_catalog["recipes"].items():
         if recipe["type"] not in (3, 4):
@@ -180,6 +219,9 @@ def test_every_furnace_recipe_grants_outputs_and_replays_without_extra_charge(en
         snapshot = dict(p["snapshot"], gold=1000000,
             mobility={"power": 100000, "recover_anchor": int(economy.clock())})
         store.save_snapshot(1, snapshot, p["revision"])
+        state = repo.load(1)
+        state["star_energy"] = 240
+        repo.save(1, state)
         if recipe["unlockType"]:
             with store.db:
                 store.db.execute("INSERT OR IGNORE INTO economy_clears VALUES (1,?,?)", (recipe["unlockParam"], "furnace-test"))
@@ -188,12 +230,15 @@ def test_every_furnace_recipe_grants_outputs_and_replays_without_extra_charge(en
         result = asyncio.run(service.compose(ctx, operation))
         assert result.values["result"] == 10, recipe_id
         after = store.get(1)
-        assert after["snapshot"]["mobility"]["power"] == 100000 - recipe["power"]
+        # PowerNeed is paid in 星能 at the furnace's discount, and 体力 is left alone.
+        assert repo.load(1)["star_energy"] == 240 - recipe["power"], recipe_id
+        assert after["snapshot"]["mobility"]["power"] == 100000
         assert after["snapshot"]["gold"] == 1000000 - recipe["gold"]
         reward = REWARD.decode(result.values["rewardData"])
         assert reward.get("rewardEquip") if recipe["type"] == 4 else reward.get("rewardItem")
         assert asyncio.run(service.compose(ctx, operation)).values == result.values
         assert store.get(1) == after
+        assert repo.load(1)["star_energy"] == 240 - recipe["power"], recipe_id
 
 
 def test_every_canonical_gem_recipe_and_invalid_counts(env):

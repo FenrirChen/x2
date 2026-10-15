@@ -358,6 +358,11 @@ class BagItemService:
         # 0x1BC9064 csel w22, w0, w9 with w9 = 10 when RecipeType == 4).
         if recipe["type"] == 4 and count > 10:
             return failure
+        # RecipeType 3/4 also charge PowerNeed (Recipe offset 0x1C), which the client
+        # prices as 星能 at the furnace level's discount, not as 体力. Compute it before
+        # the transaction so the answer below can announce the new star energy. Rows of
+        # RecipeType 1/2 carry power == 0 and pay nothing.
+        energy = self._compose_star_energy(player, recipe, count)
         key = hashlib.sha256(f"{player}:{context.session.session_id}:{packet.header.request_id}:compose".encode() + packet.body).hexdigest()
         reward_equips: tuple = ()
         try:
@@ -379,22 +384,16 @@ class BagItemService:
                             raise UnresolvedEconomy("invalid recipe cost")
                         costs[item] += num * count
                     costs[1237901] += recipe["gold"] * count
-                    # PowerNeed is the 体力 cost (Recipe offset 0x1C). It lives in the
-                    # snapshot, not the inventory, so settle the regen clock first and
-                    # debit it exactly like charge_battle does. refresh_stamina() commits
-                    # its own snapshot, so it has to run before the read below.
-                    power = recipe["power"] * count
-                    if power:
-                        self.economy.refresh_stamina(player)
+                    # PowerNeed is 星能 (currency 9), not 体力. It is not an inventory row
+                    # either: the college state owns it, so settle that clock first and
+                    # debit it there.
+                    if energy:
+                        self._spend_star_energy(player, energy)
                     snapshot = self.store.get(player)["snapshot"]
-                    if power and snapshot.get("mobility", {}).get("power", 0) < power:
-                        raise UnresolvedEconomy("insufficient stamina")
                     # spend() has no service state beyond economy/store.
                     spender = object.__new__(ProgressionService)
                     spender.store, spender.economy = self.store, self.economy
                     spender.spend(player, snapshot, costs)
-                    if power:
-                        snapshot["mobility"]["power"] -= power
                     granted = Counter()
                     if recipe["type"] == 4:
                         granted, reward_equips = self._compose_equip_box(player, recipe, count, key)
@@ -416,7 +415,48 @@ class BagItemService:
         pushes = self.economy.pushes(player)
         if reward_equips:
             pushes = pushes + (OutboundMessage("L2C_EquipUpdate", {"code": 10, "equip": list(reward_equips)}),)
+        college = getattr(self.economy, "college", None)
+        if energy and college is not None:
+            # The compose page re-reads its 星能 quote for the next craft, and the client
+            # keeps that number in the college module, so the refreshed growth base (584)
+            # has to land before the answer.
+            pushes = (OutboundMessage("L2C_QueryGrowthBase", college.growth_base(player)),) + pushes
         return OutboundMessage("L2C_JewelCompose", values, before_response=pushes)
+
+    def _compose_star_energy(self, player, recipe, count):
+        """星能 (currency 9) that ``count`` compose batches cost, or 0 for free rows.
+
+        CollegeFurnaceComposeTab_RefreshConsume 0x1BC913C prices ONE batch at
+        ``ceil(PowerNeed × GetFurnaceRecipePowerDiscount / 1000)`` and compares it with
+        GameAPI_GetCurrencyNum(0, 9, 0) — currency 9 is 星能 (CurrencyType 909, icon 909),
+        and GetFurnaceRecipePowerDiscount (0x1B00B6C) is CollegeLevel[707]'s EffectValue1
+        for EffectType1 == 13. The same panel derives the quantity widget from
+        ``current star energy // that price``, so the total is the per-batch price × count.
+        """
+        power = int(recipe.get("power") or 0)
+        if power <= 0:
+            return 0
+        return -(-power * self._furnace_power_ratio(player) // 1000) * count
+
+    def _spend_star_energy(self, player, amount):
+        """Debit the college star energy, settling its regen clock first.
+
+        The college state lives in CollegeStateRepository (``economy.college`` in
+        run_server), so this goes through that repository's savepoints instead of
+        writing college_state by hand. A BagItemService without one refuses the craft
+        rather than granting it for free.
+        """
+        college = getattr(self.economy, "college", None)
+        if college is None:
+            raise UnresolvedEconomy("college state unavailable")
+        with college.transaction():
+            state = college.load(player)
+            college.settle(state)
+            available = int(state.get("star_energy", 0))
+            if available < amount:
+                raise UnresolvedEconomy("insufficient star energy")
+            state["star_energy"] = available - amount
+            college.save(player, state)
 
     def _compose_extra_drop(self, player, recipe, count):
         """RecipeType 3 OtherProduct / OtherProductID (Recipe offsets 0x44 / 0x48).
@@ -444,14 +484,20 @@ class BagItemService:
             raise UnresolvedEconomy("unresolved compose extra reward")
         return Counter(extra)
 
-    def _furnace_extra_permille(self, player):
-        """CollegeModule_GetFurnaceRecipeExtraPercent(707) for the saved furnace level."""
+    def _furnace_level_row(self, player):
+        """The saved CollegeLevel row for the furnace (building 707), or None.
+
+        Both furnace effects the compose panel reads come off this row: EffectType2 == 14
+        is the extra-drop bonus (GetFurnaceRecipeExtraPercent, 0x1B00C28) and
+        EffectType1 == 13 is the PowerNeed discount (GetFurnaceRecipePowerDiscount,
+        0x1B00B6C).
+        """
         from .college_upgrade import _catalog
         if not self.store.db.execute("SELECT 1 FROM sqlite_master WHERE name='college_state'").fetchone():
-            return 0
+            return None
         row = self.store.db.execute("SELECT state_json FROM college_state WHERE player_id=?", (player,)).fetchone()
         if not row:
-            return 0
+            return None
         state = json.loads(row[0])
         buildings = (state.get("buildings") or []) + (state.get("wonders") or [])
         level = next((b.get("buildingLevel", 1) for b in buildings if b.get("buildingId") == 707), 1)
@@ -459,11 +505,26 @@ class BagItemService:
         building = next((b for b in catalog["buildings"] if b["ID"] == 707), None)
         ids = (building or {}).get("LevelID") or []
         if not 1 <= level <= len(ids):
-            return 0
-        level_row = next((r for r in catalog["levels"] if r["BuildID"] == ids[level - 1]), None)
+            return None
+        return next((r for r in catalog["levels"] if r["BuildID"] == ids[level - 1]), None)
+
+    def _furnace_extra_permille(self, player):
+        """CollegeModule_GetFurnaceRecipeExtraPercent(707) for the saved furnace level."""
+        level_row = self._furnace_level_row(player)
         if not level_row or level_row.get("EffectType2") != 14:
             return 0
         return (level_row.get("EffectValue2") or [0])[0]
+
+    def _furnace_power_ratio(self, player):
+        """CollegeModule_GetFurnaceRecipePowerDiscount(707), in permille.
+
+        The furnace level scales the 星能 a recipe's PowerNeed costs; 1000 means full
+        price (level 1 has no discount) and 660 would price 50 at 33.
+        """
+        level_row = self._furnace_level_row(player)
+        if not level_row or level_row.get("EffectType1") != 13:
+            return 1000
+        return (level_row.get("EffectValue1") or [1000])[0] or 1000
 
     def _compose_equip_box(self, player, recipe, count, key):
         """RecipeType 4's ProductID is a Gift group of 兽主 type ids (775001..775019).
