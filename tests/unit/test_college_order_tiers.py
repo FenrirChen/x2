@@ -17,7 +17,7 @@ def product(service,item):
     return next(r for r in service.alchemy.recipes.values() if r['ProductID']==item)
 
 @pytest.mark.parametrize('level',[1,2,4,7,10])
-def test_each_element_requests_highest_unlocked_tier_never_negative_placeholders(game,level):
+def test_each_element_requests_lowest_unlocked_tier_never_negative_placeholders(game,level):
     _,clock,_,service,_=game
     levels={element:max(1,level-(element%3)) for element in range(991,997)}
     seed_levels(game,levels)
@@ -28,7 +28,7 @@ def test_each_element_requests_highest_unlocked_tier_never_negative_placeholders
             order=service._customer_for(1,pos)
             recipe=product(service,order['itemId'][0])
             seen.add(recipe['RecipeType'])
-            assert recipe['RecipeLevel']==levels[recipe['RecipeType']]
+            assert recipe['RecipeLevel']==1
             advice=product(service,order['adviseItemId'])
             assert advice['RecipeLevel']<=levels[advice['RecipeType']]
             assert advice['ProductID']!=recipe['ProductID']
@@ -42,9 +42,10 @@ def test_recipe_threshold_unlock_closure_is_used_without_extra_collection(game):
     repo.save(1,state)
     for pos in range(5):
         order=service._customer_for(1,pos)
-        assert product(service,order['itemId'][0])['RecipeLevel']==2
+        assert product(service,order['itemId'][0])['RecipeLevel']==1
+        assert product(service,order['adviseItemId'])['RecipeLevel']==2
 
-def test_displayed_order_survives_unlock_restart_then_trade_refreshes_to_highest(game):
+def test_displayed_order_survives_unlock_restart_then_trade_refreshes_to_lowest(game):
     store,clock,repo,service,_=game
     before=[service._customer_for(1,pos) for pos in range(5)]
     seed_levels(game,{element:10 for element in range(991,997)})
@@ -59,7 +60,7 @@ def test_displayed_order_survives_unlock_restart_then_trade_refreshes_to_highest
     result=send(game,'AlchemyFinish',seq=51,type=1,posIndex=0)
     assert result.values['code']==10 and quantity(store,item)==0
     new=service._customer_for(1,0)
-    assert product(service,new['itemId'][0])['RecipeLevel']==10
+    assert product(service,new['itemId'][0])['RecipeLevel']==1
     assert [service._customer_for(1,pos) for pos in range(1,5)]==before[1:]
     assert send(game,'AlchemyFinish',seq=51,type=1,posIndex=0).values==result.values
     assert service._customer_for(1,0)==new
@@ -81,7 +82,7 @@ def test_high_tier_suggestion_trade_and_refusal_form_closed_loop(game):
     assert store.get(1)['snapshot']['gold']==gold+recipe['Gold']
     assert quantity(store,recipe['ProductID'])==0
     assert send(game,'AlchemyFinish',seq=62,type=2,posIndex=0).values['code']==10
-    assert product(service,service._customer_for(1,0)['itemId'][0])['RecipeLevel']==10
+    assert product(service,service._customer_for(1,0)['itemId'][0])['RecipeLevel']==1
 
 def test_legacy_locked_advice_is_replaced_by_real_unlocked_product(game):
     _,_,repo,service,_=game

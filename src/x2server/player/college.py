@@ -570,7 +570,12 @@ class CollegeService:
                 if int(level) == 1 or exp.get(recipe['recipeId'], -1) >= 0:
                     available.append({**recipe, 'element': str(liked), 'level': int(level)})
         by_item = {r['productId']: r for r in available}
-        primary = max((r for r in available if r['element'] == element),
+        # The order is a cheap "低价回收" buyback, so the customer asks for the
+        # element's lowest unlocked tier. Taking the highest tier instead hid
+        # every first-tier product once a higher recipe was unlocked, leaving
+        # no low-tier buyers. First-tier recipes are always in `available`, so
+        # a low-tier buyer always remains reachable; locked tiers stay filtered.
+        primary = min((r for r in available if r['element'] == element),
                       key=lambda r: (r['level'], r['recipeId']))
         # Freeze displayed orders until completion/refusal/daily refresh. New
         # unlocks must not silently change the item a player is about to sell.
