@@ -22,7 +22,7 @@ def test_exchange_replay_and_authoritative_sync(game):
     assert game[0].get(1)['snapshot'].get('mobility',{}).get('power',0)==before+3
     assert request(game).values==result.values
     assert game[0].get(1)['snapshot'].get('mobility',{}).get('power',0)==before+3
-    assert game[2].load(1)['star_energy']==85
+    assert game[2].load(1)['star_energy']==100
     assert [m.message_name for m in result.pushes]==['PlayerDataProto','L2C_QueryGrowthBase']
 
 

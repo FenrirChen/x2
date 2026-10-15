@@ -24,8 +24,8 @@ LOGGER = logging.getLogger("x2.college")
 E_ERROR_OPT = 13  # GameLogicErrCode.E_ERROR_OPT: refused, unsupported mutation.
 
 # 取出因果 (C2L_ExchangePower 238 / L2C_ExchangePower 249) 的返回码, 与客户端
-# CollegeModule_OnReceiveExchangePowerMsg 的判断一致: 10 = 成功; 22 = 塔里的因果不够,
-# 或星能不足以支付 EXCHANGE_PER_POINT 的取出成本 (GameLogicErrCode.E_ERROR_ITEM_NOT_ENOUGH)。
+# CollegeModule_OnReceiveExchangePowerMsg 的判断一致: 10 = 成功; 22 = 塔里的因果不够
+# (GameLogicErrCode.E_ERROR_ITEM_NOT_ENOUGH)。
 COLLEGE_OK = 10
 COLLEGE_NO_ITEM = 22
 
@@ -48,9 +48,18 @@ POWER_STORAGE_CAPS = (100, 105, 110, 115, 120, 125, 130, 135, 140, 145, 150, 155
 # 所以这张表按 POWER_STORAGE_CAPS 的老办法在代码里硬编码。
 POWER_CONVERSION_PERMILLE = (500, 600, 600, 700, 700, 800)
 
-# 取出比例: 每取出 1 因果消耗 5 星能 (Language 13100467, 与客户端 CollegeAddPower 的
-# InputItemNum 步进一致)。
-EXCHANGE_PER_POINT = 5
+# 取出因果**免费**: 客户端取出弹窗 (CollegeAddPower) 的兑换率来自服务端
+# L2C_ServerTableConfig 的 "EnergyToPower" 键 (MainModule.ServerData+0x68), 而
+# ServerData..ctor (0x13CD7D0) 不写它 → 不下发就是 0; 速率为 0 时
+# CollegeAddPower_Refresh (0x0189BD44) 的 cbz 跳过 min(塔内因果, 星能/速率) 夹逼 ——
+# 弹窗默认取全塔、需消耗显示 0, 这就是"取出免费"的客户端表现, 与官方行为一致
+# (老玩家证词: 点取出直接拿体力, 不扣星能/金币; 星能只被光之密室训练等消耗)。
+# Language 13100467「每取出 1 因果需消耗 5 星能」是早期设计的遗留文案, 不能作为
+# 收费依据: 客户端 SendExchangePower (0x1AFC738) 发包前只校验 1<=数量<=已存储因果
+# 与接收容量 (GameAPI_GetCurrencyNum + CurrencyTypeManager_GetItem(900)), 从不校验
+# 星能; NGA 社区帖也只说"每天把存的体力捞一下", 无人提及成本。此前按遗留文案实现
+# 的 5 星能/因果 扣费是"因果取不出来"的根因 (塔满全量需 5×塔容量 > 星能上限,
+# 必然被拒), 已删除。
 
 # 客户端 CollegeModule__cctor (0x01B09108) 把 CollegeModule 静态字段 EXPLORE_MAX_NUM
 # (+0x0) 与 TRAIN_MAX_NUM (+0x4) 都赋成 6; CollegeExploreTab_Refresh (0x01BC30A0) 直接
@@ -440,12 +449,10 @@ class CollegeService:
                 self.economy.refresh_stamina(player_id)
                 state = self.college.load(player_id)
                 stored = int(state.get('extra_power',0))
-                available = int(state.get('star_energy',0))
-                if amount*MILLI_POWER > stored or available < amount*EXCHANGE_PER_POINT:
+                if amount*MILLI_POWER > stored:
                     values = {'code':COLLEGE_NO_ITEM}
                 else:
                     state['extra_power'] = stored-amount*MILLI_POWER
-                    state['star_energy'] = available-amount*EXCHANGE_PER_POINT
                     self.college.save(player_id,state)
                     snapshot = self.economy.store.get(player_id)['snapshot']
                     mobility = snapshot.setdefault('mobility',{})

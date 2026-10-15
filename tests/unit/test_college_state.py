@@ -209,7 +209,11 @@ def test_college_flow_chain_answers(tmp_path):
 
 
 def test_exchange_power_fetches_stored_causality(tmp_path):
-    """238/249: 从启明之塔取出已存储因果, 每点消耗 5 星能, 体力加回 (允许超上限)。"""
+    """238/249: 从启明之塔**免费**取出已存储因果, 体力加回 (允许超上限)。
+
+    star_energy 特意留下余额: 取出不碰星能 (速率键 EnergyToPower 不下发,
+    客户端 CollegeAddPower 显示需消耗 0; SendExchangePower 0x1AFC738 从不校验星能)。
+    """
     from x2server.player.college import CollegeService, CollegeStateRepository
     from x2server.player.economy import EconomyService
 
@@ -232,12 +236,12 @@ def test_exchange_power_fetches_stored_causality(tmp_path):
     assert reply.message_name == "L2C_ExchangePower"
     assert reply.values == {"code": 10, "power": 3, "extraPower": 0}
     assert repo.load(1)["extra_power"] == 0
-    assert repo.load(1)["star_energy"] == 40 - 3 * 5
+    assert repo.load(1)["star_energy"] == 40
     # 取回的体力可以超过上限, 原样保留。
     assert store.get(1)["snapshot"]["mobility"]["power"] == 152
 
     # 塔里已无因果 → COLLEGE_NO_ITEM (22), 不改存档。
     empty = asyncio.run(flows.dispatch(ctx, packet({"power": 1}, 2, "C2L_ExchangePower")))
     assert empty.values["code"] == 22
-    assert repo.load(1)["star_energy"] == 25
+    assert repo.load(1)["star_energy"] == 40
     store.close()
