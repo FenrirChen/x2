@@ -92,8 +92,11 @@ class CollegeJobsService:
             LOGGER.warning('StartTrain refused: player=%s duration=%s', player_id, duration)
             return result
         now = self.repo.clock.now()
-        # Existing user decision: 25% of the next-level requirement per job.
-        gain = max(1, level['exp_required'] // 4)
+        # CollegeModule.GetHeroTrainExp (0x1AFC734) reads EffectType2=8,
+        # EffectValue2[0] from the training building's CollegeLevel row.
+        gain = self.repo.catalog.effect(state, 704, 8)[0]
+        if gain <= 0:
+            return result
         state['star_energy'] -= cost
         hero['college_status'] = 3
         job_id = uuid.uuid4().hex
@@ -115,13 +118,15 @@ class CollegeJobsService:
         hero = next((h for h in snapshot['heroes'] if h['id'] == job['heroId'] and h['state'] == 2), None)
         if not hero:
             return result
-        hero['exp'] = hero.get('exp', 0) + job['gain_exp']
-        while hero['level'] < snapshot['level']:
-            row = self.levels.get(hero['level'])
-            if not row or not row['next_level'] or hero['exp'] < row['exp_required']:
-                break
-            hero['exp'] -= row['exp_required']
-            hero['level'] = row['next_level']
+        from .hero_experience import add_hero_exp
+        # Correct unfinished legacy jobs using the building row captured at start.
+        # Upgrading the building afterwards must not change an existing job's XP.
+        started_row = self.repo.catalog.levels.get(job.get('buildID'), {})
+        gain = (started_row.get('EffectValue2', [0])[0]
+                if started_row.get('EffectType2') == 8 else job['gain_exp'])
+        credited = add_hero_exp(hero, gain, snapshot['level'])
+        LOGGER.info('training XP player=%s hero=%s build=%s configured=%s credited=%s level=%s exp=%s',
+                    player_id, hero['id'], job.get('buildID'), gain, credited, hero['level'], hero.get('exp', 0))
         hero['college_status'] = 0
         state['training'].remove(job)
         # Count once on successful collection, never on start or cancellation.
@@ -129,7 +134,7 @@ class CollegeJobsService:
             self.economy.TASK_EVENT_HERO_TRAIN, 0, 1)
         self.economy._event(player_id, 'college-train:' + job['job_id'], 69, hero['id'], 1)
         return dict(result, code=10, heroId=hero['id'], heroLevel=hero['level'],
-                    heroExp=hero['exp'], gainExp=job['gain_exp'])
+                    heroExp=hero.get('exp', 0), gainExp=credited)
 
     def _cancel(self, state, snapshot, request, training):
         kind, id_field = ('training', 'trainingId') if training else ('explore', 'exploreId')

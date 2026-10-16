@@ -254,7 +254,10 @@ class ProgressionService:
                         # current hero level against BaseInfo.Level before sending.
                         if not row["next_level"] or hero["level"] >= snapshot["level"] or req.get("upstarConsumeItemId",0) not in (0,1237907):
                             raise UnresolvedEconomy("invalid level request")
-                        costs[1237907] = row["exp_required"]
+                        # Battle/training XP already earned pays part of this level.
+                        current_exp = hero.get("exp", 0)
+                        costs[1237907] = max(0, row["exp_required"] - current_exp)
+                        hero["exp"] = max(0, current_exp - row["exp_required"])
                         hero["level"] = row["next_level"]
                         event = 7
                         events.append(self.economy.TASK_EVENT_HERO_LEVEL_UP)

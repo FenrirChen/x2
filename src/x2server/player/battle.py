@@ -24,6 +24,8 @@ class BattleService:
         self.catalog = BattleEntryCatalog()
         from .favor import FavorService
         self.favor_service = FavorService(store, economy, clock=economy.clock) if economy else None
+        from .hero_experience import BattleHeroExperience
+        self.hero_experience = BattleHeroExperience(store, economy) if economy else None
         self.monster_levels = {int(k): v for k, v in json.loads(
             files("x2server").joinpath("data/battle_monster_levels.json").read_text(encoding="utf-8"))["levels"].items()}
         self.unit_types = {int(k): v for k, v in json.loads(
@@ -248,7 +250,7 @@ class BattleService:
                     return reject_with('conflicting checkout replay')
             before, pushes = self._checkout_star_sync(self.economy.pushes(player_id) if self.economy else ())
             return OutboundMessage("L2C_CheckoutMainMission", schema.decode(cached["response"]),
-                                   before_response=before + self._activity_progress_sync(player_id, section), pushes=pushes)
+                                   before_response=before + self._hero_progress_sync(player_id) + self._activity_progress_sync(player_id, section), pushes=pushes)
         # A completed settlement remains replayable after the entry timeout.
         # Only a new settlement is bounded by the one-hour combat window.
         if int(time.time()) - row['created_at'] > 3600:
@@ -338,6 +340,8 @@ class BattleService:
                         self.economy.season.kills(player_id, row['uuid'], units, confirmed=request.get('success', False))
                     if section_type == 6:
                         self.economy.world_boss.finish_battle(player_id,row['uuid'],request.get('success',False),confirmed=True)
+                    if request.get("success", False):
+                        self.hero_experience.battle(player_id, row["uuid"], section)
                     from .favor import FavorService, favor_state
                     favor_service = self.favor_service
                     added = (favor_service.battle(player_id, row["uuid"], section)
@@ -345,7 +349,13 @@ class BattleService:
                     updated = self.store.get(player_id)["snapshot"]
                     updated_heroes = {h["id"]: h for h in updated.get("heroes", [])}
                     states = [favor_state(updated_heroes[h["id"]], favor_service.heroes.get(h["id"], {}).get("InitialLevel", 1)) for h in heroes]
-                    values.update(heroFavorExp=[f["exp"] for f in states],
+                    from .hero_experience import levels as hero_levels
+                    hero_cap = min(updated["level"], max(hero_levels()))
+                    values.update(heroLevel=[updated_heroes[h["id"]]["level"] for h in heroes],
+                        heroExp=[updated_heroes[h["id"]].get("exp", 0) for h in heroes],
+                        heroUpLevelNum=[updated_heroes[h["id"]]["level"] - h["level"] for h in heroes],
+                        heroFullLevel=[updated_heroes[h["id"]]["level"] >= hero_cap for h in heroes],
+                        heroFavorExp=[f["exp"] for f in states],
                         heroAddFavorExp=[added.get(h["id"], 0) for h in heroes],
                         heroFavorLevel=[f["level"] for f in states],
                         favorFullLevel=[f["level"] >= favor_service.heroes.get(h["id"], {}).get("LevelLimit", 999) for h, f in zip(heroes, states)])
@@ -369,7 +379,15 @@ class BattleService:
         # its ability immediately without requiring another login.
         star_before, pushes = self._checkout_star_sync(pushes)
         return OutboundMessage("L2C_CheckoutMainMission", values, pushes=pushes,
-                               before_response=star_before + self._activity_progress_sync(player_id, section))
+                               before_response=star_before + self._hero_progress_sync(player_id) + self._activity_progress_sync(player_id, section))
+
+    def _hero_progress_sync(self, player_id):
+        if not self.economy:
+            return ()
+        from .hero import encode_hero_data
+        return (OutboundMessage('L2C_HeroUpdate', {'code': 10, 'heros': [
+            encode_hero_data(h, season=self.economy.season, player_id=player_id)
+            for h in self.store.get(player_id)['snapshot'].get('heroes', [])]}),)
 
     def _activity_progress_sync(self, player, section):
         social = getattr(self.economy, 'social', None) if self.economy else None

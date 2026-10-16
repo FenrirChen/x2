@@ -117,7 +117,9 @@ def test_battle_first_and_repeat_rewards_atomic_and_idempotent(env):
     assert store.get(1) == snapshot
     assert asyncio.run(battle.checkout(ctx, checkout(False))).values["result"] == 13
     assert snapshot["snapshot"]["mobility"]["power"] == 143
-    assert snapshot["snapshot"]["heroes"][0]["level"] == 1
+    assert snapshot["snapshot"]["heroes"][0]["level"] == 2
+    assert snapshot["snapshot"]["heroes"][0]["exp"] == 0
+    assert first.values["heroUpLevelNum"] == [1]
     assert snapshot["snapshot"]["level"] == 60
     asyncio.run(battle.enter(ctx, packet(request(), 2)))
     second = asyncio.run(battle.checkout(ctx, checkout()))

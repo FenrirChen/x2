@@ -175,9 +175,10 @@ def test_training_timed_claim_and_replay(game):
     clock.value += 7200
     assert TRAINING_DATA.decode(repo.growth_base(1)['trainingList'][0])['trainingStatus'] == 3
     result = send(game, 'FinishTrain', seq=3, trainId=0)
-    assert result.values['code'] == 10 and result.values['gainExp'] == 30
+    assert result.values['code'] == 10 and result.values['gainExp'] == 500
     hero = next(h for h in store.get(1)['snapshot']['heroes'] if h['id'] == hid)
-    assert hero['exp'] == 30 and hero['college_status'] == 0 and hero['state'] == 2
+    assert hero['level'] == 4 and hero['exp'] == 80
+    assert hero['college_status'] == 0 and hero['state'] == 2
     assert send(game, 'FinishTrain', seq=3, trainId=0).values == result.values
     assert send(game, 'FinishTrain', seq=4, trainId=0).values['code'] == 13
     assert not restored_repo.load(1)['training']
