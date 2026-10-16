@@ -127,13 +127,15 @@ class ProgressionService:
         cached = self.store.db.execute("SELECT response FROM progression_receipts WHERE player_id=? AND request_key=?", (player_id,key)).fetchone()
         if cached:
             pushes = self.pushes(player_id)
-            if name in ("C2L_HeroGodLike", "C2L_GodSlotLock"):
+            if name in ("C2L_HeroGodLike", "C2L_GodSlotLock", "C2L_Artifact"):
+                # Same ordering as the fresh path: the callback redraws its page
+                # (the artifact page including its material row) when the answer
+                # arrives, so the whole refresh batch has to be delivered first.
                 return OutboundMessage(response, schema.decode(cached[0]), before_response=pushes)
             skin_update = (self.stage_skin_update(player_id, req.get("id"))
                            if name == "C2L_HeroOpt" and req.get("opt") == 2 else ())
-            return (OutboundMessage(response, schema.decode(cached[0]), before_response=pushes[:1], pushes=pushes[1:])
-                    if name == "C2L_Artifact" else OutboundMessage(response, schema.decode(cached[0]),
-                        before_response=skin_update, pushes=pushes))
+            return OutboundMessage(response, schema.decode(cached[0]),
+                                   before_response=skin_update, pushes=pushes)
         try:
             stage_skin_hero = None
             with self.economy.transaction():
@@ -314,15 +316,20 @@ class ProgressionService:
             values["code"] = 13
             return OutboundMessage(response,values)
         pushes = self.pushes(player_id)
-        if name in ("C2L_HeroGodLike", "C2L_GodSlotLock"):
-            # Both native callbacks synchronously refresh the godlike page from
+        if name in ("C2L_HeroGodLike", "C2L_GodSlotLock", "C2L_Artifact"):
+            # All three native callbacks synchronously refresh their page from
             # HeroModule data. Deliver skills, slots and materials first so the
             # callback advances to the next step or hides the completed button.
+            # C2L_Artifact needs the same treatment for one more reason: the
+            # artifact page redraws its 升级消耗 row from the bag's material count,
+            # so it has to see L2C_ItemUpdate before the answer. With only pushes[0]
+            # delivered ahead of the answer the redraw still shows the count from
+            # before the spend (6/6 while the client's balance is already 0), the
+            # next click is refused by the client's own material check and only a
+            # page switch resyncs the row.
             return OutboundMessage(response, values, before_response=pushes)
         skin_update = self.stage_skin_update(player_id, stage_skin_hero)
-        return (OutboundMessage(response, values, before_response=pushes[:1], pushes=pushes[1:])
-                if name == "C2L_Artifact" else OutboundMessage(response, values,
-                    before_response=skin_update, pushes=pushes))
+        return OutboundMessage(response, values, before_response=skin_update, pushes=pushes)
 
     def pushes(self, player_id):
         from .hero import encode_hero_data
