@@ -61,6 +61,8 @@ class WishService:
             store.db.execute("""CREATE TABLE IF NOT EXISTS wish_last_result (
                 player_id INTEGER NOT NULL, pool_id INTEGER NOT NULL, response BLOB NOT NULL,
                 PRIMARY KEY(player_id,pool_id))""")
+            # since_featured 曾也放在这张共享表里, 现已按池独立、只留在 wish_state 里
+            # (见 state()); 这一列只为兼容旧存档保留, 不再读写。
             store.db.execute("""CREATE TABLE IF NOT EXISTS wish_pity (
                 player_id INTEGER NOT NULL, category TEXT NOT NULL,
                 since_hero INTEGER NOT NULL DEFAULT 0, since_top INTEGER NOT NULL DEFAULT 0,
@@ -76,11 +78,27 @@ class WishService:
                 if not store.db.execute("SELECT 1 FROM wish_pity WHERE player_id=? AND category=?",
                         (player_id, category)).fetchone():
                     ids = [int(i) for i in self.catalog if self._pity_category(int(i)) == category]
-                    maximum = store.db.execute("""SELECT max(since_hero),max(since_top),max(since_featured)
+                    maximum = store.db.execute("""SELECT max(since_hero),max(since_top)
                         FROM wish_state WHERE player_id=? AND pool_id IN ({})""".format(
                             ",".join("?" for _ in ids)), (player_id, *ids)).fetchone()
-                    store.db.execute("INSERT INTO wish_pity VALUES (?,?,?,?,?)",
+                    # since_featured 是按池独立的 (见 state()), 不种子化到共享行里;
+                    # 这里只镜像 10 抽/40 抽两个计数。
+                    store.db.execute("INSERT INTO wish_pity (player_id,category,since_hero,since_top) VALUES (?,?,?)",
                         (player_id, category, *[int(n or 0) for n in maximum]))
+            # since_featured 以前按 category 共享, 会被上限更高的池 (或永不归零的无保底
+            # 池) 推过本池自己的 limit_num; 客户端拿 `limit_num - limitValue` 渲染, 于是
+            # 显示成负数 (斩念源氏那条 -9)。现在按池独立: 超上限的截到本池 limit_num,
+            # 无保底的池清零。
+            for player_id, pool_id, value in store.db.execute(
+                    "SELECT player_id,pool_id,since_featured FROM wish_state WHERE since_featured!=0"):
+                entry = self.catalog.get(str(pool_id))
+                if entry is None:
+                    continue
+                limit_num = int(entry["limit_num"])
+                capped = min(int(value), limit_num) if entry["limit_items"] and limit_num else 0
+                if capped != int(value):
+                    store.db.execute("UPDATE wish_state SET since_featured=? WHERE player_id=? AND pool_id=?",
+                                     (capped, player_id, pool_id))
 
     def _pity_category(self, pool_id):
         kind = self.catalog[str(pool_id)]["type"]
@@ -96,9 +114,12 @@ class WishService:
         pool_id = pool_id or self.POOL_ID
         row = self.store.db.execute("SELECT total,singles,tens,since_hero,since_top,first_three_star,since_featured FROM wish_state WHERE player_id=? AND pool_id=?", (player_id,pool_id)).fetchone()
         local = tuple(row) if row else (0, 0, 0, 0, 0, 0, 0)
-        shared = self.store.db.execute("SELECT since_hero,since_top,since_featured FROM wish_pity WHERE player_id=? AND category=?",
+        # 10 抽/40 抽两个计数按 category 共享 (换池不掉保底); since_featured 则按池独立
+        # (pool_id=22401/22402 上限 60, 22204 上限 80), 否则共享计数会越过某池自己的
+        # 上限, 客户端算出的 `limit_num - limitValue` 就成了负数 (斩念源氏那条 -9)。
+        shared = self.store.db.execute("SELECT since_hero,since_top FROM wish_pity WHERE player_id=? AND category=?",
             (player_id, self._pity_category(pool_id))).fetchone()
-        return (local[0], local[1], local[2], *shared[:2], local[5], shared[2]) if shared else local
+        return (local[0], local[1], local[2], *shared[:2], local[5], local[6]) if shared else local
 
     def active_periods(self, now=None, player_id=None):
         """Half-open windows beginning at Beijing midnight on 2026-09-24."""
@@ -275,7 +296,10 @@ class WishService:
                 else:
                     since_hero += 1
                 since_top = 0 if got_top else since_top + 1
-                since_featured = 0 if item_id in config["limit_items"] else since_featured + 1
+                # 限定保底计数只在有 UP 保底的池里走 (limit_items 非空); 没有保底的池
+                # 既不触发保底也不会归零, 让它继续 +1 只会把别的池的倒计时推成负数。
+                since_featured = (0 if item_id in config["limit_items"] else since_featured + 1
+                                  ) if config["limit_items"] else 0
                 total += 1
                 if 1211000 <= item_id < 1212000:
                     hero_id = item_id - 1210000
@@ -308,8 +332,9 @@ class WishService:
             tens += count == 10
             self.store.db.execute("INSERT OR REPLACE INTO wish_state VALUES (?,?,?,?,?,?,?,?,?)",
                                   (player_id, pool_id, total, singles, tens, since_hero, since_top, first_three_star, since_featured))
-            self.store.db.execute("INSERT OR REPLACE INTO wish_pity VALUES (?,?,?,?,?)",
-                                  (player_id, self._pity_category(pool_id), since_hero, since_top, since_featured))
+            # since_featured 不进共享表 (见 state()): 这里只镜像 10 抽/40 抽两个计数。
+            self.store.db.execute("INSERT OR REPLACE INTO wish_pity (player_id,category,since_hero,since_top) VALUES (?,?,?)",
+                                  (player_id, self._pity_category(pool_id), since_hero, since_top))
             self.store.db.execute("UPDATE players SET snapshot=?,revision=revision+1 WHERE id=?",
                                   (json.dumps(snapshot, ensure_ascii=False, sort_keys=True), player_id))
             values = {"code": 10, "drawnId": pool_id, "rewardData": self._reward(prizes, transforms),
