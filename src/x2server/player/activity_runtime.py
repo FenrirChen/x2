@@ -280,12 +280,36 @@ class ActivityRuntime:
             received = self.r.get(player, period, 'score-box', aid, [])
             result = {'code': 10, 'activityId': aid, 'receivedList': received or [0]}
             if op == 'ReceiveFoodMissionReward':
-                threshold = req.get('scoreCount', 0)
-                score = sum(self.r.get(player, period, 'record', sid, 0)
-                    for cid in row['ActivityParam1'] for sid in self.a.chapters[cid]['SectionID'])
-                if threshold not in row['ActivityParam4'] or threshold in received or score < threshold:
+                # 客户端点箱子发来的 scoreCount 是「阈值」还是「下标」, 现有产物里钉不死
+                # (客户端那侧是 OpenFoodMissionDpBox(int stage), 箱子按 stage 取
+                # ActivityParam4[stage] 显示): 在阈值表里就按阈值用, 否则当合法下标取阈值,
+                # 两者都不是才拒绝。反着猜一种会直接把所有箱子拒掉。
+                tiers = row['ActivityParam4']
+                count = req.get('scoreCount', 0)
+                if count in tiers:
+                    threshold = count
+                elif 0 <= count < len(tiers):
+                    threshold = tiers[count]
+                else:
                     raise UnresolvedEconomy('food score reward not available')
-                idx = row['ActivityParam4'].index(threshold)
+                # 「探索值」= 活动自己那个货币的持有量 (ActivityParam2, 美食幻境 =
+                # 1290174 食谱残页)。客户端那条 512/2000 进度条画的、箱子上的阈值比的,
+                # 都是这一个数: 分段 2161191-3 通关发的礼包 776784/776785/776786 就是
+                # 食谱残页 x100/x150/x200。原来拿 ActivityMissionRecordSave 的 record
+                # 求和当进度, 而 record 只有 620 会写、客户端从不为美食幻境的分段存,
+                # 于是 score 恒为 0, 每个箱子都过不了 score < threshold -> 领不了。
+                # 行里没写活动货币时才退回 record 求和 (旧行为)。
+                currency = (row['ActivityParam2'] or [None])[0]
+                if currency:
+                    owned = self.a.store.db.execute('SELECT quantity FROM inventory '
+                        'WHERE player_id=? AND item_id=?', (player, currency)).fetchone()
+                    score = owned['quantity'] if owned else 0
+                else:
+                    score = sum(self.r.get(player, period, 'record', sid, 0)
+                        for cid in row['ActivityParam1'] for sid in self.a.chapters[cid]['SectionID'])
+                if threshold in received or score < threshold:
+                    raise UnresolvedEconomy('food score reward not available')
+                idx = tiers.index(threshold)
                 rewards = self.a.grant(player, period, 'score-box', f'{aid}:{threshold}', [row['ActivityReward'][idx]])
                 received.append(threshold)
                 self.r.put(player, period, 'score-box', aid, received)
