@@ -149,6 +149,11 @@ def test_artifact_unlock_persists_and_has_client_stage_fields(env):
     assert first.values["code"] == 10
     assert first.message_name == "L2C_Artifact"
     assert first.before_response[0].message_name == "L2C_HeroUpdate"
+    assert any(p.message_name == 'L2C_ItemUpdate' for p in first.before_response)
+    assert not first.pushes
+    replay = asyncio.run(service.handle(ctx, packet(request, 91, 'C2L_Artifact')))
+    assert any(p.message_name == 'L2C_ItemUpdate' for p in replay.before_response)
+    assert not replay.pushes
     artifact = store.get(1)["snapshot"]["heroes"][0]["god_equip"]
     assert (artifact["id"], artifact["level"], artifact["star"]) == (1503, 0, 1)
     from x2server.player.hero import encode_hero_data

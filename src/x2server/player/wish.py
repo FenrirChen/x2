@@ -83,7 +83,7 @@ class WishService:
                             ",".join("?" for _ in ids)), (player_id, *ids)).fetchone()
                     # since_featured 是按池独立的 (见 state()), 不种子化到共享行里;
                     # 这里只镜像 10 抽/40 抽两个计数。
-                    store.db.execute("INSERT INTO wish_pity (player_id,category,since_hero,since_top) VALUES (?,?,?)",
+                    store.db.execute("INSERT INTO wish_pity (player_id,category,since_hero,since_top) VALUES (?,?,?,?)",
                         (player_id, category, *[int(n or 0) for n in maximum]))
             # since_featured 以前按 category 共享, 会被上限更高的池 (或永不归零的无保底
             # 池) 推过本池自己的 limit_num; 客户端拿 `limit_num - limitValue` 渲染, 于是
@@ -95,7 +95,7 @@ class WishService:
                 if entry is None:
                     continue
                 limit_num = int(entry["limit_num"])
-                capped = min(int(value), limit_num) if entry["limit_items"] and limit_num else 0
+                capped = max(0, min(int(value), limit_num)) if entry["limit_items"] and limit_num else 0
                 if capped != int(value):
                     store.db.execute("UPDATE wish_state SET since_featured=? WHERE player_id=? AND pool_id=?",
                                      (capped, player_id, pool_id))
@@ -119,7 +119,12 @@ class WishService:
         # 上限, 客户端算出的 `limit_num - limitValue` 就成了负数 (斩念源氏那条 -9)。
         shared = self.store.db.execute("SELECT since_hero,since_top FROM wish_pity WHERE player_id=? AND category=?",
             (player_id, self._pity_category(pool_id))).fetchone()
-        return (local[0], local[1], local[2], *shared[:2], local[5], local[6]) if shared else local
+        # Imports can restore legacy counters while this service stays alive.
+        # Bound on read as well as startup, without discarding valid pool progress.
+        config = self.catalog[str(pool_id)]
+        limit = int(config['limit_num']) if config['limit_items'] else 0
+        featured = max(0, min(int(local[6]), limit))
+        return (local[0], local[1], local[2], *(shared[:2] if shared else local[3:5]), local[5], featured)
 
     def active_periods(self, now=None, player_id=None):
         """Half-open windows beginning at Beijing midnight on 2026-09-24."""
@@ -333,7 +338,7 @@ class WishService:
             self.store.db.execute("INSERT OR REPLACE INTO wish_state VALUES (?,?,?,?,?,?,?,?,?)",
                                   (player_id, pool_id, total, singles, tens, since_hero, since_top, first_three_star, since_featured))
             # since_featured 不进共享表 (见 state()): 这里只镜像 10 抽/40 抽两个计数。
-            self.store.db.execute("INSERT OR REPLACE INTO wish_pity (player_id,category,since_hero,since_top) VALUES (?,?,?)",
+            self.store.db.execute("INSERT OR REPLACE INTO wish_pity (player_id,category,since_hero,since_top) VALUES (?,?,?,?)",
                                   (player_id, self._pity_category(pool_id), since_hero, since_top))
             self.store.db.execute("UPDATE players SET snapshot=?,revision=revision+1 WHERE id=?",
                                   (json.dumps(snapshot, ensure_ascii=False, sort_keys=True), player_id))

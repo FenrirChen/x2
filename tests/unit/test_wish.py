@@ -77,7 +77,7 @@ def test_newcomer_ten_draw_guarantee_cost_replay_and_limit(env, monkeypatch):
     first = asyncio.run(wish.draw(context, request))
     assert first.values["code"] == 10
     assert store.get(1)["snapshot"]["crystal"] == 0
-    assert wish.state(1) == (10, 0, 1, 0, 0, 1, 10)
+    assert wish.state(1) == (10, 0, 1, 0, 0, 1, 0)  # This pool has no featured guarantee.
     assert first.values["allHeroCardFirstThreeStar"] is True
     assert any(h["id"] == 1012 for h in store.get(1)["snapshot"]["heroes"])
     items = [REWARD_ITEM.decode(raw) for raw in REWARD.decode(first.values["rewardData"])["rewardItem"]]

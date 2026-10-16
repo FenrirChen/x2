@@ -60,6 +60,7 @@ def test_insufficient_mixed_funds_do_not_partially_spend_and_refresh_client(env,
     store, economy, ctx = env
     wish = WishService(store, economy, clock=ServerClock(lambda: WishService.ANCHOR + 1))
     funds(store, 4, 1499, 180)
+    economy.pushes(1)  # Materialize weekly UI state before the atomicity snapshot.
     before = '\n'.join(store.db.iterdump())
     with caplog.at_level(logging.INFO, logger='x2.wish'):
         answer = draw(wish, ctx)

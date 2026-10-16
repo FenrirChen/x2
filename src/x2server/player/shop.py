@@ -171,7 +171,11 @@ class ShopService:
         return count[0]
 
     def _compat_period(self, shop_id, row):
-        return self._period(3 if shop_id == 801 else row.get("limited"))
+        period = self._period(3 if shop_id == 801 else row.get("limited"))
+        # A corrected shelf selling a different item must not inherit the old
+        # placeholder's quota, especially a lifetime purchase of a cosmetic.
+        revision = row.get('quotaRevision')
+        return f'{period}:{revision}' if revision else period
 
     def _compat_goods(self, player_id, shop_id, row):
         row = self._stock_row(player_id, shop_id, row)
