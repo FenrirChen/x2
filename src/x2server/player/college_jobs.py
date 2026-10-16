@@ -186,9 +186,15 @@ class CollegeJobsService:
             LOGGER.warning('StartExplore refused: player=%s heroIds=%s hero check code=%s', player_id, ids, code)
             return dict(result, code=code)
         power = sum(hero_power(self.store, player_id, h, self.repo.clock) for h in heroes)
-        if power < row['Conditon'][difficulty]:
-            LOGGER.warning('StartExplore refused: player=%s ruinId=%s difficulty=%s power=%s < required=%s',
-                           player_id, rid, difficulty, power, row['Conditon'][difficulty])
+        # CollegeExplorePage ctor 0x1BBDA64 sets MINUAS_POINT=.5 for the
+        # Chinese client (1 for Japanese). OnExploreButtonClick 0x1BBD35C
+        # accepts TotalFightPoint / Conditon[difficulty] >= MINUAS_POINT.
+        # Keep the configured full target separate from the admission minimum.
+        target_power = row['Conditon'][difficulty]
+        required_power = (target_power + 1) // 2
+        if power < required_power:
+            LOGGER.warning('StartExplore refused: player=%s ruinId=%s difficulty=%s power=%s < minimum=%s target=%s',
+                           player_id, rid, difficulty, power, required_power, target_power)
             return dict(result, code=186)
         if state['star_energy'] < row['PowerConsume']:
             LOGGER.warning('StartExplore refused: player=%s ruinId=%s starEnergy=%s < cost=%s',
@@ -197,6 +203,8 @@ class CollegeJobsService:
         coefficient = self.repo.catalog.effect(state, 705, 9)[0]
         duration = max(1, (row['WaitTimes'] - sum(self.effects(row, ruin['exp'], 4)))
                        * coefficient // (1000 * len(ids)))
+        LOGGER.info('StartExplore accepted: player=%s ruinId=%s difficulty=%s heroIds=%s power=%s minimum=%s target=%s',
+                    player_id, rid, difficulty, ids, power, required_power, target_power)
         state['star_energy'] -= row['PowerConsume']
         for hero in heroes:
             hero['college_status'] = 2

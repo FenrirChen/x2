@@ -198,3 +198,8 @@ Evidence: official 2.4 decoded tables (rows, not just schemas); dump.cs/script.j
 重新反汇编CollegeModule.GetHeroTrainExp(0x1AFC734)：直接检查建筑等级行EffectType2==8并返回EffectValue2[0]，并非读取全局参数。以上早期关于训练经验“键8/官方值缺失”的结论已被此证据替代。光之密室1级500经验、2级800、10级4000、30级12000。训练时长仍取等级行效果7（小时），消耗仍取PowerConsume。
 
 服务端按任务开始时保存的buildID冻结收益，升级建筑不改变已有任务；旧任务尚未领取时重算正确收益。使用PlayerLevelBonus经验链逐级升级，账号等级封顶，不新增封顶溢出经验，不删除旧存档已有经验。已领取历史任务不重发。
+
+
+### 2026-10-16 派遣神力门槛对齐
+
+CollegeExplorePage构造器0x1BBDA64：中文客户端MINUAS_POINT为0.5，日文为1.0。OnExploreButtonClick 0x1BBD35C在0x1BBD49C取得队伍神力，0x1BBD4AC除以CollegeExplore.Conditon[difficulty]，与MINUAS_POINT比较。因此中文服应允许达到配置目标50%的队伍出发，非要求100%。服务端现按ceil(Conditon/2)判定，达标含等号，低1点返回186；仍校验英雄归属、占用、遗迹解锁、官方经验链、难度和星能。队伍神力来自服务端计算，忽略客户端伪造值。日志分别输出power/minimum/target以便区分出发底线和完整配置目标。
