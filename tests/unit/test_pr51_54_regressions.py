@@ -29,7 +29,11 @@ def test_club_shelves_all_deliver_and_limits(env):
         assert result.values['itemNum'] == good['num']
     for gid in (1916201, 1916301, 1916401, 1917801):
         assert buy(service, ctx, 807, gid, rid=9000+gid).values['code'] == 13
-    assert next(g for g in goods if g['goodsId'] == 1915101)['itemId'] == 1203023
+    # 价格与客户端 ShopGoodsGroup.ItemPrice 绑死在货位号上: 151 表价 50 ->
+    # 迷你礼物盒, 154 表价 1200 -> 6★随机兽主, 否则客户端按表价准备扣费、
+    # 服务端按高价校验失败回 13 而客户端静默忽略 (「兑换了但东西没发」)。
+    assert next(g for g in goods if g['goodsId'] == 1915101)['itemId'] == 1203001
+    assert next(g for g in goods if g['goodsId'] == 1915401)['itemId'] == 1203023
     assert next(g for g in goods if g['goodsId'] == 1916101)['canBuyTimes'] == 1
     assert buy(service, ctx, 807, 1916101, rid=9999).values['code'] == 13
 
