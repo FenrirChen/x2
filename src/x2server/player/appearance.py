@@ -156,6 +156,31 @@ class AppearanceService:
                 logging.getLogger("x2.tutorial").info("first name player=%s set=%s", player_id, not current)
                 return OutboundMessage("L2C_Account", {"result": 10, "opt": opt},
                     before_response=(self.economy.pushes(player_id)[0],))
+            # 设置/取消「喜爱的神格」：神格详情页右上角那枚叠层菱形图标。客户端
+            # AccountInfoModule.HeroIsEnjoy(heroId, isEnjoy) 把 isEnjoy 折成这两档
+            # （tst/csinc：isEnjoy 时 opt 5「设置」，否则 opt 6「取消」），values 只带那一个
+            # 神格 id；成功回包让客户端弹 430004「设置为喜爱的神格」/ 430005
+            # 「不再设置为喜爱的神格」。状态存在该神格自己的 HeroData.Enjoy 上——列表项的
+            # 置顶标记 (HeroEntryListItem_RefreshItem: SetActive(Enjoy > 0)) 和列表排序
+            # (HeroModule_ShowSortRule) 都读它，所以必须排在回包之前下发，否则横幅会弹而
+            # 列表不动。不认这两档就回 13，也就是客户端看到的「操作失败 E_ERROR_OPT」。
+            if opt in (5, 6):
+                if not values or values[0] not in self._owned_heroes(player_id):
+                    return OutboundMessage("L2C_Account", {"result": 13, "opt": opt})
+                enjoy = 1 if opt == 5 else 0
+                with self.economy.transaction():
+                    snapshot = self.store.get(player_id)["snapshot"]
+                    hero = next(h for h in snapshot.get("heroes", [])
+                                if h["id"] == values[0] and h.get("state") == 2)
+                    hero["enjoy"] = enjoy
+                    self.economy.save_snapshot(player_id, snapshot)
+                from .hero import encode_hero_data
+                heroes = [encode_hero_data(h, season=self.economy.season, player_id=player_id)
+                          for h in self.store.get(player_id)["snapshot"].get("heroes", [])]
+                logging.getLogger("x2.appearance").info(
+                    "喜爱神格 player=%s hero=%s enjoy=%s", player_id, values[0], enjoy)
+                return OutboundMessage("L2C_Account", {"result": 10, "opt": opt}, before_response=(
+                    OutboundMessage("L2C_HeroUpdate", {"code": 10, "heros": heroes}),))
             # The 2.4 avatar picker sends the selected id together with a
             # second decoration/slot value in ``values``.  The server only
             # owns the selected id; rejecting the otherwise valid packet

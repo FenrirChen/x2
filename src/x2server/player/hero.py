@@ -42,6 +42,9 @@ def encode_hero_data(hero: dict, *, season=None, player_id=None) -> bytes:
         "level": hero.get("favor_fetters", {}).get(str(row["FettersID"]), 0)})
         for row in data["favorabilityfetters"] if row["HeroID"] == hero["id"] and row.get("IsOpen") == 1]
     return HERO_DATA.encode({**values, "Status": hero.get('college_status', 0), "godEquip": god_equip,
+        # HeroData.Enjoy 是「喜爱的神格」标记 (C2L_Account opt 5/6)，不是好感等级：
+        # 列表项的置顶标记与列表排序都读它，必须随快照下发，缺省 0 = 未设置。
+        "Enjoy": int(hero.get("enjoy", 0)),
         "equips": [INT_PAIR.encode({"Key": e["position"], "Value": e["equip_id"]})
                    for e in hero.get("equips", [])],
         "seasonEquips": [INT_PAIR.encode({"Key": e["position"], "Value": e["equip_id"]})
