@@ -1173,6 +1173,20 @@
       "ItemNum": 1
     },
     {
+      "GiftGroup": 781005,
+      "AwardType": {
+        "value": 1,
+        "enum": "E_material"
+      },
+      "GiftValue": [
+        1237925
+      ],
+      "Num": [
+        1
+      ],
+      "ItemNum": 1
+    },
+    {
       "GiftGroup": 781006,
       "AwardType": {
         "value": 1,
