@@ -1,5 +1,5 @@
 {
-  "policy": "User approved 2026-10-13; medal weekly from Goods.Limited; gem cumulative limits (no original refresh rule). 803 group 94 is one slot whose 许愿币/纯晶石/兽骸 content rotates weekly via weekSlot. 2026-10-15 club shop 807 restored from shop_compat_catalog 807 (E_Week slots capped at 2 per week, E_Forever slots unlimited). 2026-10-15 user restored the 807 shelf contents from the official club-shop screenshot: the placeholder gift-box/shard/medal rows were corrected to their real items (1915201 1237907 神格经验 x2000, 1915401 1203023 6-star random beast-master, 1915501 1203002 精致礼物盒, 1915601 1203003 惊喜礼物盒, 1915701 1203022 社团宝箱, 1915801 1237922 生物电源 x10, 1916101 1260029 偶像加成, 1916701-1917301 1283201-1283207 key series) and the three 伊南娜 expression slots (1916201-1916401) were removed, leaving 29 rows (the duplicate 1917801 bio-power was dropped, keeping the cheaper 158 slot); per-slot canBuyTimes follows the screenshot (152=10, 153=10 each, 154=2, 155=10, 156=10, 157=10, 158=10, 161=1, 167=2, 169-172=1; 1914701/1914801 夕颜曜石/朝颜雾晶 are weekly slots with canBuyTimes 1000; the three gift boxes sit together by swapping 迷你礼物盒 to group 154 (1915401, price 50, cap 10) and 6★随机兽主 to group 151 (1915101, price 1200, cap 2)). User approved 2026-10-13; medal weekly from Goods.Limited; gem cumulative limits (no original refresh rule). 803 group 94 is one slot whose 许愿币/纯晶石/兽骸 content rotates weekly via weekSlot. 2026-10-15 user reverted ticket shop 805 extra shelves 1905102-1905112: retain only one daily rotating 3-star hero and one 2-star hero with existing weekly quotas; keep the existing five sequential wish-coin offers. 2026-10-15 friend shop 802 restored from client ShopConfig(802)/ShopGoodsGroup groups 31-36 (currency 917, nine slots, no Limited = permanent); its GoodsID->ItemID pairs come from the project's original 802 shelf because the client ItemSource has no shop-802 item link, and every other field matches the client table. 2026-10-15 divine-letter shop 810 restored from client ShopConfig(810)/ShopGoodsGroup groups 181-185 (currency 927, E_Week slots); its remaining eight goods rows (groups 186-192,198) stay unrestored because the client ItemSource links no item to them. User update 2026-10-15: shop810 four daily random distinct hero SunMoon tracks (10 each), universal track (2), all 270 divine letters, daily Beijing midnight. Ticket wish-coin final tier remains visible sold out until Monday reset. 2026-10-16: corrected club item identities use quotaRevision=club-items-20261016; old placeholder purchases do not consume the replacement item quota. Unchanged items keep their existing counters.",
+  "policy": "User approved 2026-10-13; medal weekly from Goods.Limited; gem cumulative limits (no original refresh rule). 803 group 94 is one slot whose 许愿币/纯晶石/兽骸 content rotates weekly via weekSlot. 2026-10-15 club shop 807 restored from shop_compat_catalog 807 (E_Week slots capped at 2 per week, E_Forever slots unlimited). 2026-10-15 user restored the 807 shelf contents from the official club-shop screenshot: the placeholder gift-box/shard/medal rows were corrected to their real items (1915201 1237907 神格经验 x2000, 1915401 1203023 6-star random beast-master, 1915501 1203002 精致礼物盒, 1915601 1203003 惊喜礼物盒, 1915701 1203022 社团宝箱, 1915801 1237922 生物电源 x10, 1916101 1260029 偶像加成, 1916701-1917301 1283201-1283207 key series) and the three 伊南娜 expression slots (1916201-1916401) were removed, leaving 29 rows (the duplicate 1917801 bio-power was dropped, keeping the cheaper 158 slot); per-slot canBuyTimes follows the screenshot (152=10, 153=10 each, 154=2, 155=10, 156=10, 157=10, 158=10, 161=1, 167=2, 169-172=1; 1914701/1914801 夕颜曜石/朝颜雾晶 are weekly slots with canBuyTimes 1000; the 1915101/1915401 pair keeps the client ShopGoodsGroup prices (1915101 迷你礼物盒 50 cap 10, 1915401 6★随机兽主 1200 cap 2) because the client renders the purchase dialog, icon and price from its own per-GoodsID ItemPrice and silently ignores result 13, so a server price above the displayed price makes the purchase look like it delivered nothing). User approved 2026-10-13; medal weekly from Goods.Limited; gem cumulative limits (no original refresh rule). 803 group 94 is one slot whose 许愿币/纯晶石/兽骸 content rotates weekly via weekSlot. 2026-10-15 user reverted ticket shop 805 extra shelves 1905102-1905112: retain only one daily rotating 3-star hero and one 2-star hero with existing weekly quotas; keep the existing five sequential wish-coin offers. 2026-10-15 friend shop 802 restored from client ShopConfig(802)/ShopGoodsGroup groups 31-36 (currency 917, nine slots, no Limited = permanent); its GoodsID->ItemID pairs come from the project's original 802 shelf because the client ItemSource has no shop-802 item link, and every other field matches the client table. 2026-10-15 divine-letter shop 810 restored from client ShopConfig(810)/ShopGoodsGroup groups 181-185 (currency 927, E_Week slots); its remaining eight goods rows (groups 186-192,198) stay unrestored because the client ItemSource links no item to them. User update 2026-10-15: shop810 four daily random distinct hero SunMoon tracks (10 each), universal track (2), all 270 divine letters, daily Beijing midnight. Ticket wish-coin final tier remains visible sold out until Monday reset. 2026-10-16: corrected club item identities use quotaRevision=club-items-20261016; old placeholder purchases do not consume the replacement item quota. Unchanged items keep their existing counters. 2026-10-17: the 1915101/1915401 gift-box/random-beast-master swap was reverted because it put a 1200-priced item on a slot the client renders as 50 and a 50-priced item on a slot the client renders as 1200, so a club member could not buy the gift box (client saw 1200) and the beast-master purchase failed silently (client saw 50, server charged 1200, result 13); both rows move to quotaRevision=club-items-20261017 because their identity changed again.",
   "goods": [
     {
       "shopId": 803,
@@ -523,14 +523,14 @@
     {
       "shopId": 807,
       "goodsId": 1915101,
-      "itemId": 1203023,
+      "itemId": 1203001,
       "num": 1,
-      "canBuyTimes": 2,
-      "price": 1200,
+      "canBuyTimes": 10,
+      "price": 50,
       "currency": 924,
       "currencyItemId": 1237924,
       "limited": 2,
-      "quotaRevision": "club-items-20261016"
+      "quotaRevision": "club-items-20261017"
     },
     {
       "shopId": 807,
@@ -591,14 +591,14 @@
     {
       "shopId": 807,
       "goodsId": 1915401,
-      "itemId": 1203001,
+      "itemId": 1203023,
       "num": 1,
-      "canBuyTimes": 10,
-      "price": 50,
+      "canBuyTimes": 2,
+      "price": 1200,
       "currency": 924,
       "currencyItemId": 1237924,
       "limited": 2,
-      "quotaRevision": "club-items-20261016"
+      "quotaRevision": "club-items-20261017"
     },
     {
       "shopId": 807,
