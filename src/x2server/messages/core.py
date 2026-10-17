@@ -169,6 +169,8 @@ BASE_INFO = ProtoSchema("BaseInfoProto", (
     ProtoField(30, "FriendCoin", FieldKind.INT32),
     ProtoField(31, "BossCoin", FieldKind.INT32),
     ProtoField(35, "VowOfCoin", FieldKind.INT32),
+    # PlotHelper.HasPlayerName checks BaseInfo.NickCount > 0, not NickName.
+    ProtoField(36, "NickCount", FieldKind.INT32),
     ProtoField(37, "EquipSeniorChip", FieldKind.INT32),
     ProtoField(42, "RechargeExp", FieldKind.INT32),
     ProtoField(43, "AICoin", FieldKind.INT32),

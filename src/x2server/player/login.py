@@ -173,7 +173,9 @@ class LoginService:
                         prefix = f"season:{row[0]}:task:{state['week']}:"
                         extra_base['BattlePassWeeklyActive'] = sum(json.loads(r[0]).get('1237999', 0) for r in store.db.execute(
                             'SELECT rewards FROM economy_grants WHERE player_id=? AND substr(source,1,?)=?', (player['id'], len(prefix), prefix)))
+        from .naming import nickname_count
         base = BASE_INFO.encode({"Id": player["id"], "NickName": snapshot["nickname"],
+            "NickCount": nickname_count(snapshot),
             "Level": snapshot["level"], "Show": show,
             "Gold": snapshot.get("gold", 0), "Crystal": snapshot.get("crystal", 0),
             "Exp": snapshot.get("exp", 0),

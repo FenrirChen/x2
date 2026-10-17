@@ -410,8 +410,16 @@ class SocialService:
                     for n in ids if int(n) in self.characters]}
             if not pid:
                 raise ValueError('missing account context')
-            if path in ('/FriendService.GetFriendList','/FriendService.GetFriendListV2'):
+            if path=='/FriendService.GetFriendList':
                 return self.friend_list(pid,state)
+            if path=='/FriendService.GetFriendListV2':
+                # V1 wraps FriendList; V2 has Total + a flat FriendItem array.
+                friends = self.friend_list(pid,state)['Friends']['Friends']
+                page = int(args.get('page') or 0)
+                page_num = int(args.get('pagenum') or 200)
+                if page < 0 or not 1 <= page_num <= 200:
+                    raise ValueError('invalid friend page')
+                return {'Total':len(friends), 'Friends':friends[page*page_num:(page+1)*page_num]}
             if path=='/FriendService.GetApplyList':
                 return {'send_applys':[],'applys':None}
             if path=='/FriendService.GetBlackList':

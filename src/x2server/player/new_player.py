@@ -14,6 +14,7 @@ def new_player_snapshot(*, skip_tutorial: bool | None = None) -> dict:
         skip_tutorial = os.getenv("X2_SKIP_TUTORIAL", "false").lower() == "true"
     return {
         "nickname": "Revival" if skip_tutorial else "", "level": 1, "exp": 0,
+        "nick_count": 1 if skip_tutorial else 0,
         "gold": 0, "crystal": 0, "hero_exp": 0, "equip_exp": 0,
         "show": 1003 if not skip_tutorial else 0,
         "heroes": ([] if skip_tutorial else [{"id": 1003, "state": 2, "level": 1,

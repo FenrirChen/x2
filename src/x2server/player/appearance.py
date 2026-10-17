@@ -147,11 +147,16 @@ class AppearanceService:
                 requested = names[0]
                 with self.economy.transaction():
                     snapshot = self.store.get(player_id)["snapshot"]
+                    from .naming import nickname_count
                     current = snapshot.get("nickname", "")
-                    if current and current != requested:
+                    count = nickname_count(snapshot)
+                    if count and current != requested:
                         return OutboundMessage("L2C_Account", {"result": 13, "opt": opt})
-                    if not current:
+                    if not count or snapshot.get('nick_count') != count:
+                        # Persist the marker together with the name, before the
+                        # response unpauses the plot. A retry must not count twice.
                         snapshot["nickname"] = requested
+                        snapshot["nick_count"] = max(1, count)
                         self.economy.save_snapshot(player_id, snapshot)
                 logging.getLogger("x2.tutorial").info("first name player=%s set=%s", player_id, not current)
                 return OutboundMessage("L2C_Account", {"result": 10, "opt": opt},

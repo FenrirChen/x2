@@ -15,6 +15,9 @@ def validate_snapshot(snapshot: dict[str, Any]) -> None:
     """Shared shape rules for players.snapshot; used on write and save import."""
     if not isinstance(snapshot.get("nickname"), str):
         raise ValueError("nickname must be a string")
+    if 'nick_count' in snapshot and (type(snapshot['nick_count']) is not int
+            or not 0 <= snapshot['nick_count'] <= 2**31 - 1):
+        raise ValueError('nick_count must be a nonnegative int32')
     if type(snapshot.get("level")) is not int or snapshot["level"] < 1:
         raise ValueError("level must be positive")
     for name in ("gold", "crystal", "exp", "show", "main_chapter", "main_section"):
