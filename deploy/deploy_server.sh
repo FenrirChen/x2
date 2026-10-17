@@ -84,6 +84,12 @@ echo "PREVIOUS_COMMIT=$PREVIOUS_COMMIT"
 git fetch origin "$BRANCH"
 git merge --ff-only "origin/$BRANCH"
 
+phase verify-backup-tool
+if [[ ! -f tools/deploy_backup.py ]]; then
+  echo "Missing tools/deploy_backup.py; update the complete repository before deployment. Service has not been stopped." >&2
+  false
+fi
+
 phase install-dependencies
 python3 -m venv .venv
 .venv/bin/python -m pip install --upgrade pip

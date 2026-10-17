@@ -94,8 +94,10 @@ def execute(tmp_path, **flags):
     events = base / 'events'
     state = base / 'service-state'
     stubs = base / 'commands'
-    for directory in (root / '.git', root / '.venv/bin', root / 'deploy', home, db.parent, stubs):
+    for directory in (root / '.git', root / '.venv/bin', root / 'deploy', root / 'tools', home, db.parent, stubs):
         directory.mkdir(parents=True, exist_ok=True)
+    if not flags.get('TEST_HELPER_MISSING'):
+        (root / 'tools/deploy_backup.py').write_text('# backup tool fixture\n')
     db.write_bytes(b'live player save - must survive')
     old_backup = db.with_name('historical.bak')
     old_backup.write_bytes(b'old verified archive')
@@ -150,7 +152,7 @@ def test_failed_stop_or_backup_never_starts_service_or_claims_success(tmp_path, 
         assert 'stage=backup-and-verify' in result.stderr
 
 
-@pytest.mark.parametrize('flag', ('TEST_LOCK_BUSY', 'TEST_DB_MISMATCH', 'TEST_DIRTY', 'TEST_INSTALL_FAILED'))
+@pytest.mark.parametrize('flag', ('TEST_LOCK_BUSY', 'TEST_DB_MISMATCH', 'TEST_DIRTY', 'TEST_INSTALL_FAILED', 'TEST_HELPER_MISSING'))
 def test_preflight_and_install_failure_leave_existing_service_running(tmp_path, flag):
     result, events, state = execute(tmp_path, **{flag: 1})
     assert result.returncode != 0

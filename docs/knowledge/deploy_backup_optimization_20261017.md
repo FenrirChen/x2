@@ -42,3 +42,7 @@ sudo bash /opt/x2/deploy/deploy_server.sh
 最终结果：20 项测试全部通过（30.60s），Git Bash 语法和 git diff --check 通过。实际命令行对停服备份副本执行分块复制及 integrity_check 成功，正确输出各阶段和最终 DB_BACKUP。
 
 本地服务已于 2026-10-17 19:05:23 备份并重启，备份 runtime/before_deploy_optimization_20261017_190523/player.sqlite3，日志 runtime/deploy_optimization_20261017_190523.err.log，端口 ready 且 connectInfo 返回 local。活跃存档未覆盖，远程未部署。
+
+补充保护：更新代码后、安装依赖和停服前检查 tools/deploy_backup.py 存在，缺失时提前失败并保留原服务运行；实际 Bash 缺工具回归已纳入。
+
+停服前工具检查补修验证：21 项通过（50.02s），本地于 2026-10-17 21:26:44 备份并重启，connectInfo 返回 local。
