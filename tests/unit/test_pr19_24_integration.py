@@ -121,7 +121,7 @@ def test_behemoth_trial_preserves_original_action_skin_and_loadout(env, wire_id,
 def test_element_compose_transport_replay_limit_and_session_scope(env):
     store, economy, context = env
     with store.db:
-        store.db.execute("INSERT INTO economy_runs (uuid,player_id,session_id,section_id,settled) VALUES ('compose',1,'session',2035101,0)")
+        store.db.execute("INSERT INTO economy_runs (uuid,player_id,session_id,section_id,settled) VALUES ('compose',1,'session',2110291,0)")
     service = economy.element_compose
     compose = packet({'elementID': 420501, 'count': 1}, 10, 'C2L_ElementCompose')
     first = asyncio.run(service.compose(context, compose))

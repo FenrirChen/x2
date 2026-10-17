@@ -571,7 +571,9 @@ class BattleService:
             with self.store.db:
                 self.store.db.execute('UPDATE battle_entries SET created_at=? WHERE uuid=?', (int(time.time()),saved['run_id']))
                 self.store.db.execute('UPDATE economy_runs SET session_id=? WHERE uuid=?', (context.session.session_id,saved['run_id']))
-            return OutboundMessage('L2C_FightData', values, pushes=self.economy.pushes(player['id']))
+            return OutboundMessage('L2C_FightData', values,
+                before_response=(self.economy.element_compose.progress_push(player['id']),),
+                pushes=self.economy.pushes(player['id']))
         from .progression import battle_hero_base, hero_attributes, hero_skills, catalog
         owned = {h["id"]: h for h in snapshot.get("heroes", [])}
         # Activity trial teams are absent from the main-story-only economy catalog.
@@ -607,7 +609,10 @@ class BattleService:
                                       (player["id"], key)).fetchone()
         if cached:
             logging.getLogger("x2.battle").info("battle entry replay player=%s section=%s", player["id"], section)
+            progress = ((self.economy.element_compose.progress_push(player['id']),)
+                        if self.economy and self.catalog.sections[section].get('Type') == 7 else ())
             return OutboundMessage("L2C_FightData", BATTLE_SCHEMAS["L2C_FightData"].decode(cached[0]),
+                                   before_response=progress,
                 pushes=self.economy.pushes(player['id']) if self.economy else ())
         try:
             entry_context = self.catalog.resolve(player_id=player["id"], request=request,
@@ -795,4 +800,7 @@ class BattleService:
             logging.getLogger("x2.battle").info(
                 "checkout rejected section=%s reason=settle: %s", section, exc)
             return reject
-        return OutboundMessage("L2C_FightData", values, pushes=self.economy.pushes(player["id"]) if self.economy else ())
+        progress = ((self.economy.element_compose.progress_push(player['id']),)
+                    if self.economy and entry_context.section_type == 7 else ())
+        return OutboundMessage("L2C_FightData", values, before_response=progress,
+            pushes=self.economy.pushes(player["id"]) if self.economy else ())

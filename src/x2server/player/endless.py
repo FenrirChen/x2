@@ -71,9 +71,11 @@ def weekly_values(store,player,now):
     rows={r['EndlessDungeonTaskID']:r for r in catalog()['tasks']}
     bonus=sum(sum(rows[t]['VomLimit'][:n]) for t,n in store.db.execute('SELECT task_id,claimed FROM endless_tasks WHERE player_id=?',(player,)) if t in rows) if ready else 0
     zero=[INT_PAIR.encode({'Key':0,'Value':0})]
+    from .element_compose import cumulative_values
+    progress = cumulative_values(store, player)
     return {'EndlessWeekVowOfStone':state['light'],'WeeklyRefreshTime':state['week'],
             'EndlessWeekMaxVowOfStone':bonus,'MaxWeeklyRefreshTime':state['week'],
-            'EndlessWeekExp':0,'ElementExpAll':0,'FormulaComposeAll':zero,'PassMission':zero}
+            'EndlessWeekExp':0, **progress, 'PassMission':zero}
 
 
 class EndlessService:
