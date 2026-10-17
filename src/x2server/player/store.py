@@ -1,11 +1,18 @@
 """SQLite player storage. Initial values are explicit local compatibility defaults."""
 from __future__ import annotations
 
+import asyncio
 import json
+import logging
 import sqlite3
-from contextlib import closing
+import threading
+import time
+from contextlib import closing, contextmanager
 from pathlib import Path
 from typing import Any
+
+from .db_guard import CheckpointGuard
+from .transactions import is_database_busy
 
 DEFAULT_SNAPSHOT: dict[str, Any] = {"nickname": "Revival", "level": 1,
     "gold": 0, "crystal": 0, "exp": 0, "show": 0}
@@ -48,12 +55,22 @@ class PlayerStore:
     def __init__(self, path: Path) -> None:
         path.parent.mkdir(parents=True, exist_ok=True)
         self.path = path
-        self.db = sqlite3.connect(path)
+        self.importing = threading.Event()
+        self.checkpoint_guard = CheckpointGuard(path)
+        self.db = sqlite3.connect(path, timeout=.05)
         self.db.row_factory = sqlite3.Row
         version = self.db.execute("PRAGMA user_version").fetchone()[0]
         if version not in (0, 1, 2):
             self.db.close()
+            self.checkpoint_guard.close()
             raise ValueError("unsupported player database version")
+        mode = self.db.execute("PRAGMA journal_mode=WAL").fetchone()[0]
+        if mode != 'wal':
+            self.db.close()
+            self.checkpoint_guard.close()
+            raise RuntimeError('player database requires local-filesystem WAL support')
+        self.db.execute("PRAGMA synchronous=FULL")
+        self.db.execute("PRAGMA wal_autocheckpoint=0")
         with self.db:
             self.db.execute("""CREATE TABLE IF NOT EXISTS players (
                 id INTEGER PRIMARY KEY, account TEXT NOT NULL UNIQUE,
@@ -68,6 +85,40 @@ class PlayerStore:
                 status TEXT NOT NULL DEFAULT 'active', player_id INTEGER)""")
             if version < 2:
                 self.db.execute("PRAGMA user_version=2")
+
+    async def wait_for_import(self):
+        # Never synchronously wait for the HTTP import writer on the game loop.
+        while self.importing.is_set():
+            await asyncio.sleep(.01)
+
+    @contextmanager
+    def import_write(self):
+        self.importing.set()
+        try:
+            with self.checkpoint_guard:
+                yield
+        finally:
+            self.importing.clear()
+
+    async def checkpoint_watch(self, interval=5):
+        # Single checkpoint owner. Disable auto-checkpoint on every app writer;
+        # in particular never race a checkpoint against an HTTP writer/reset.
+        while True:
+            await asyncio.sleep(interval)
+            if self.importing.is_set() or not self.checkpoint_guard.acquire(blocking=False):
+                continue
+            try:
+                if not self.db.in_transaction:
+                    started = time.monotonic()
+                    try:
+                        result = self.db.execute('PRAGMA wal_checkpoint(PASSIVE)').fetchone()
+                        if time.monotonic() - started > .5:
+                            logging.getLogger('x2.database').warning('checkpoint slow elapsed=%.3fs result=%s', time.monotonic() - started, tuple(result))
+                    except sqlite3.OperationalError as exc:
+                        if not is_database_busy(exc):
+                            logging.getLogger('x2.database').exception('checkpoint failed')
+            finally:
+                self.checkpoint_guard.release()
 
     def login(self, account: str, player_id: int, now: int) -> dict[str, Any]:
         """Create once and increment atomically; never replace an existing snapshot."""
@@ -90,6 +141,7 @@ class PlayerStore:
 
     def close(self) -> None:
         self.db.close()
+        self.checkpoint_guard.close()
 
     def backup_to(self, destination: Path) -> None:
         """Consistent SQLite online backup; never overwrite a file or commit callers."""

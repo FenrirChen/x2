@@ -9,6 +9,7 @@ from enum import Enum
 from typing import Any, TypeAlias
 
 from x2server.protocol.errors import UnknownMessageError
+from x2server.player.transactions import is_database_busy
 from x2server.protocol.registry import CORE_MESSAGE_REGISTRY, MessageRegistry
 from x2server.protocol.types import DecodedPacket
 
@@ -66,7 +67,9 @@ class Dispatcher:
         self,
         handlers: Mapping[str, Handler] | None = None,
         registry: MessageRegistry = CORE_MESSAGE_REGISTRY,
+        wait_for_database: Callable[[], Awaitable[None]] | None = None,
     ) -> None:
+        self._wait_for_database = wait_for_database
         self._handlers = dict(handlers or {})
         self._registry = registry
 
@@ -105,5 +108,21 @@ class Dispatcher:
             LOGGER.info("known message has no implemented handler; no response body_bytes=%s decode=%s",
                         len(packet.body), decoded, extra=extra)
             return DispatchOutcome(DispatchStatus.UNIMPLEMENTED, entry.name)
-        response = await handler(context, packet)
+        if self._wait_for_database is not None:
+            await self._wait_for_database()
+        try:
+            response = await handler(context, packet)
+        except Exception as exc:
+            if not is_database_busy(exc):
+                raise
+            from x2server.messages.core import CORE_SCHEMAS
+            name = {'C2L_CheckoutMainMissionSign': 'L2C_CheckoutMainMission'}.get(
+                entry.name, entry.name.replace('C2L_', 'L2C_', 1))
+            schema = CORE_SCHEMAS.get(name)
+            error_field = next((f.name for f in schema.fields if f.name in ('code', 'result')), None) if schema else None
+            if error_field is None:
+                raise
+            # Do not retry a mutation or claim success; keep the transport alive.
+            LOGGER.warning('database busy; request refused response=%s', name, extra=extra)
+            response = OutboundMessage(name, {error_field: 13})
         return DispatchOutcome(DispatchStatus.HANDLED, entry.name, response)

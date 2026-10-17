@@ -273,7 +273,9 @@ class BuildingUpgradeService:
 
     async def watch(self, tcp):
         while True:
+            await self.repo.store.wait_for_import()
             for player_id in tcp.authenticated_player_ids():
+                await self.repo.store.wait_for_import()
                 try:
                     for message in self.complete_due(player_id):
                         await tcp.push_to_player(player_id, message)

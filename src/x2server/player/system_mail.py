@@ -169,6 +169,7 @@ async def daily_welfare_watch(store, clock, poll=WELFARE_POLL_SECONDS, on_new_da
     import asyncio
     completed_day = None
     while True:
+        await store.wait_for_import()
         now = int(clock())
         day_start, _ = task_period(1, now)
         if completed_day != day_start:

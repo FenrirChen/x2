@@ -454,6 +454,7 @@ class WorldBossService:
         """Expire personal battles, persist awards and notify their fighters."""
         while True:
             await asyncio.sleep(interval)
+            await self.store.wait_for_import()
             with self.economy.transaction():
                 expired=list(self.store.db.execute('''SELECT boss_id FROM world_boss_runs
                     WHERE state IN (1,2) AND finish<=?''',(self.now(),)))

@@ -14,6 +14,8 @@ failed() {
 }
 trap 'failed "$?" "$LINENO"' ERR
 phase preflight
+HEALTH_ATTEMPTS=${X2_HEALTH_ATTEMPTS:-180}
+[[ "$HEALTH_ATTEMPTS" =~ ^[1-9][0-9]*$ && "$HEALTH_ATTEMPTS" -le 600 ]] || { echo "Invalid X2_HEALTH_ATTEMPTS" >&2; exit 1; }
 if [[ "$(id -u)" == 0 ]]; then
   ROOT=${X2_DEPLOY_ROOT:-/opt/x2}
   DB_PATH=${X2_DB_PATH:-/var/lib/x2/player.sqlite3}
@@ -124,7 +126,7 @@ phase prepare-storage
 if [[ "$(id -u)" == 0 ]]; then
   # Avoid traversing every historical backup/log on every update.
   chown "$SERVICE_USER:$SERVICE_USER" "$(dirname "$DB_PATH")" runtime logs
-  for active_file in "$DB_PATH" "$DB_PATH-wal" "$DB_PATH-shm" "$DB_PATH-journal"; do
+  for active_file in "$DB_PATH" "$DB_PATH-wal" "$DB_PATH-shm" "$DB_PATH-journal" "$DB_PATH.checkpoint.lock"; do
     if [[ -e "$active_file" ]]; then chown "$SERVICE_USER:$SERVICE_USER" "$active_file"; fi
   done
 fi
@@ -158,7 +160,7 @@ CHAT_PORT=$(sed -n 's/^X2_CHAT_PORT=//p' "$ENV_FILE" | tail -1)
 HTTP_PORT=${HTTP_PORT:-18080}; GAME_PORT=${GAME_PORT:-29000}; CHAT_PORT=${CHAT_PORT:-29001}
 phase health-check
 HEALTH=0
-for attempt in $(seq 1 30); do
+for attempt in $(seq 1 "$HEALTH_ATTEMPTS"); do
   if "${SYSTEMCTL[@]}" is-active --quiet x2server.service && \
      X2_CHECK_PORTS="$HTTP_PORT,$GAME_PORT,$CHAT_PORT" python3 - <<'PY'
 import os, socket, sys
@@ -171,7 +173,7 @@ for port in ports:
         sys.exit(1)
 PY
   then HEALTH=1; break; fi
-  echo "Waiting for service ports (attempt $attempt/30)..."
+  echo "Waiting for service ports (attempt $attempt/$HEALTH_ATTEMPTS)..."
   sleep 1
 done
 if [[ "$HEALTH" != 1 ]]; then

@@ -35,3 +35,9 @@ def transaction(db):
                          stage, nested, time.monotonic() - started,
                          getattr(exc, "sqlite_errorname", type(exc).__name__))
         raise
+
+
+def is_database_busy(error):
+    return isinstance(error, sqlite3.OperationalError) and (
+        getattr(error, 'sqlite_errorcode', 0) & 255 in (sqlite3.SQLITE_BUSY, sqlite3.SQLITE_LOCKED)
+        or str(error).lower() in ('database is locked', 'database table is locked'))

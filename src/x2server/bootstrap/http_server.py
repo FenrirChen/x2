@@ -8,6 +8,8 @@ import logging
 import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
+from x2server.player.transactions import is_database_busy
+
 from .service import BootstrapService, HTTPResponse, RecoveredBootstrapService
 
 LOGGER = logging.getLogger("x2.bootstrap.http")
@@ -85,8 +87,15 @@ def _handler_for(
                                    {"host", "user-agent", "accept", "connection", "content-length"}),
                             authorization.split(" ", 1)[0] if authorization else "absent",
                             len(authorization))
-            response = service.respond("POST", self.path, self.request_body,
-                                       authorization=self.headers.get("Authorization", ""))
+            try:
+                response = service.respond("POST", self.path, self.request_body,
+                                           authorization=self.headers.get("Authorization", ""))
+            except Exception as exc:
+                if not is_database_busy(exc):
+                    raise
+                LOGGER.warning('HTTP database busy route=%s', self.path.split('?', 1)[0])
+                response = HTTPResponse(503, 'application/json; charset=utf-8',
+                                        b'{"error":"database_busy"}', (('Retry-After', '1'),))
             if self.path.split("?", 1)[0].startswith("/MailService."):
                 LOGGER.info("mail HTTP response route=%s status=%s",
                             self.path.split("?", 1)[0], response.status)

@@ -113,7 +113,7 @@ class X2TCPServer:
     def _task_completed(self, connection_id: str, task: asyncio.Task[None]) -> None:
         self._tasks.pop(connection_id, None)
         if not task.cancelled() and (error := task.exception()) is not None:
-            LOGGER.error("connection task failed: %s", error)
+            LOGGER.error("connection task failed: %s", error, exc_info=(type(error), error, error.__traceback__))
 
     async def _notify_connection_change(self) -> None:
         async with self._connection_changed:

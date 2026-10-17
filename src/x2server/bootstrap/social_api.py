@@ -74,6 +74,7 @@ class SocialAPI:
                 # infer an owner from the last login or a global singleton player.
                 return self.response(code=401,error='missing_account_context',status=401)
             async def invoke():
+                await self.service.store.wait_for_import()
                 return self.service.http(path,args,pid)
             pending=asyncio.run_coroutine_threadsafe(invoke(),self.loop)
             try:

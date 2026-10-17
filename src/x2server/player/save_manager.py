@@ -28,6 +28,7 @@ import zipfile
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
+from collections.abc import Iterator
 
 from .store import validate_snapshot
 
@@ -37,6 +38,7 @@ SERVER_SAVE_SCHEMA = "x2-revival/5"
 ACCEPTED_SCHEMAS = {SERVER_SAVE_SCHEMA, "x2-revival/3", "x2-revival/4"}
 
 MAX_UPLOAD_BYTES = 96 * 1024 * 1024
+MAX_MANIFEST_BYTES = 16 * 1024 * 1024
 MAX_ENTRY_COUNT = 65535  # accumulated battle BLOBs; bounded by byte limits below
 MAX_TOTAL_UNCOMPRESSED = 256 * 1024 * 1024
 MAX_ENTRY_UNCOMPRESSED = 128 * 1024 * 1024
@@ -146,6 +148,10 @@ for _name in (*PLAYER_TABLES, *JOIN_OWNERS):
 COLUMN_NAME_RE = re.compile(r"[a-z_][a-z_0-9]*")
 
 
+class AccountOnlineError(ValueError):
+    """The target logged in while import validation/backup was running."""
+
+
 class SaveBoundaryError(RuntimeError):
     """A deployment added persisted tables without defining their save ownership."""
 
@@ -164,7 +170,34 @@ def _connect(store) -> sqlite3.Connection:
                          isolation_level=None)
     db.row_factory = sqlite3.Row
     db.execute("PRAGMA foreign_keys=ON")
+    db.execute("PRAGMA wal_autocheckpoint=0")
     return db
+
+
+def _zip_info(name):
+    info = zipfile.ZipInfo(name, (1980, 1, 1, 0, 0, 0))
+    info.compress_type = zipfile.ZIP_DEFLATED
+    return info
+
+
+class _BlobSpool:
+    def __init__(self, output):
+        self.output = output
+        self.entries = []
+        self.total = 0
+
+    def __len__(self):
+        return len(self.entries)
+
+    def append(self, value):
+        if len(value) > MAX_ENTRY_UNCOMPRESSED or len(self.entries) + 3 > MAX_ENTRY_COUNT:
+            raise ValueError('export BLOB limit exceeded')
+        self.total += len(value)
+        if self.total > MAX_TOTAL_UNCOMPRESSED:
+            raise ValueError('export uncompressed limit exceeded')
+        offset = self.output.tell()
+        self.output.write(value)
+        self.entries.append((offset, len(value), hashlib.sha256(value).hexdigest()))
 
 
 class SaveManager:
@@ -206,6 +239,48 @@ class SaveManager:
             self._missing.discard(table)
         return row is not None
 
+    def prepare_indexes(self):
+        """Run once on the game thread before listeners start (no live DDL)."""
+        started = time.monotonic()
+        db = self.store.db
+        self._columns.clear()  # Services may have added columns since manager construction.
+        with db:
+            for table in PLAYER_TABLES:
+                if not self.exists(table):
+                    continue
+                columns = self.columns(table)
+                wanted = {'player_id'} if 'player_id' in columns else set()
+                if table in UUID_FAMILY_COLUMNS:
+                    wanted.add(UUID_FAMILY_COLUMNS[table])
+                leading = set()
+                single = set()
+                for idx in db.execute(f'PRAGMA index_list({table})').fetchall():
+                    if idx['partial']:
+                        continue
+                    parts = [r['name'] for r in db.execute('PRAGMA index_info("' + idx['name'].replace('"', '""') + '")')]
+                    if parts:
+                        leading.add(parts[0])
+                        if len(parts) == 1:
+                            single.add(parts[0])
+                for column in wanted:
+                    # A single owner index also avoids sorting large payloads by rowid.
+                    covered = column in (single if column == 'player_id' else leading)
+                    if not covered:
+                        logging.getLogger('x2.save_manager').info('creating save index table=%s column=%s', table, column)
+                        db.execute(f'CREATE INDEX IF NOT EXISTS save_lookup_{table}_{column} ON {table}({column})')
+        logging.getLogger('x2.save_manager').info('save indexes ready elapsed=%.3fs', time.monotonic() - started)
+
+    @staticmethod
+    def _existing_candidates(db, table, column, candidates):
+        values = list(candidates)
+        found = set()
+        for start in range(0, len(values), 400):
+            batch = values[start:start + 400]
+            marks = ','.join('?' for _ in batch)
+            found.update(r[0] for r in db.execute(
+                f'SELECT {column} FROM {table} WHERE {column} IN ({marks})', batch))
+        return found
+
     # -- export -------------------------------------------------------------
 
     def _check_boundary(self) -> None:
@@ -216,40 +291,81 @@ class SaveManager:
             raise SaveBoundaryError(f"Uncovered persisted save tables: {sorted(uncovered)}")
 
     def export_save(self, player_id: int) -> bytes:
-        """One consistent read transaction over the whole save boundary."""
-        with self._lock:
+        """Stream one consistent snapshot; never retain every table/JSON copy."""
+        started = time.monotonic()
+        log = logging.getLogger('x2.save_manager')
+        log.info('export start player=%s', player_id)
+        with self._lock, tempfile.TemporaryFile() as blob_file:
             db = self.db
-            db.execute("BEGIN DEFERRED")
-            try:
-                self._check_boundary()
-                player = db.execute(
-                    "SELECT id, account, login_count, snapshot FROM players WHERE id=?",
-                    (player_id,)).fetchone()
-                if player is None:
-                    raise KeyError(player_id)
-                snapshot = json.loads(player["snapshot"])
-                tables: dict[str, dict[str, list[dict[str, Any]]]] = {}
-                blobs: list[bytes] = []
-                for table in PLAYER_TABLES:
-                    tables[table] = {"rows": self._export_table(db, table, player_id, blobs)}
-            except BaseException:
-                db.execute("ROLLBACK")
-                raise
-            db.execute("COMMIT")
-        manifest = {
-            "format": SAVE_FORMAT,
-            "format_version": SAVE_FORMAT_VERSION,
-            "server_save_schema": SERVER_SAVE_SCHEMA,
-            "exported_at": int(time.time()),
-            "source_player": {"player_id": player["id"], "account": player["account"],
-                              "login_count": player["login_count"]},
-            "checksums": {},
-        }
-        save_doc = {"tables": tables, "snapshot": snapshot}
-        return self._container_bytes(manifest, save_doc, blobs)
+            db.execute('BEGIN DEFERRED')
+            buffer = io.BytesIO()
+            blobs = _BlobSpool(blob_file)
+            with zipfile.ZipFile(buffer, 'w', zipfile.ZIP_DEFLATED) as archive:
+                try:
+                    self._check_boundary()
+                    player = db.execute('SELECT id,account,login_count,snapshot FROM players WHERE id=?', (player_id,)).fetchone()
+                    if player is None:
+                        raise KeyError(player_id)
+                    snapshot = json.loads(player['snapshot'])
+                    validate_snapshot(snapshot)
+                    digest = hashlib.sha256()
+                    json_size = 0
+                    with archive.open(_zip_info('save.json'), 'w') as output:
+                        def write(value):
+                            nonlocal json_size
+                            data = value.encode('utf-8')
+                            json_size += len(data)
+                            if json_size > MAX_ENTRY_UNCOMPRESSED or json_size + blobs.total > MAX_TOTAL_UNCOMPRESSED:
+                                raise ValueError('export uncompressed limit exceeded')
+                            digest.update(data)
+                            output.write(data)
+                        def encode(value):
+                            return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(',', ':'), allow_nan=False)
+                        write('{"snapshot":' + encode(snapshot) + ',"tables":{')
+                        for index, table in enumerate(PLAYER_TABLES):
+                            if index:
+                                write(',')
+                            write(encode(table) + ':{"rows":[')
+                            blob_refs = set()
+                            for row_index, row in enumerate(self._iter_export_table(db, table, player_id, blobs)):
+                                row = self._validate_row(table, row, player_id, blob_refs)
+                                if row_index:
+                                    write(',')
+                                write(encode(row))
+                            write(']}')
+                        write('}}')
+                    db.execute('COMMIT')
+                except BaseException:
+                    if db.in_transaction:
+                        db.execute('ROLLBACK')
+                    raise
+                checksums = {'save.json': digest.hexdigest()}
+                for index, (offset, length, checksum) in enumerate(blobs.entries):
+                    name = f'blobs/{index:06d}.bin'
+                    checksums[name] = checksum
+                    blob_file.seek(offset)
+                    with archive.open(_zip_info(name), 'w') as output:
+                        remaining = length
+                        while remaining:
+                            chunk = blob_file.read(min(1024 * 1024, remaining))
+                            output.write(chunk)
+                            remaining -= len(chunk)
+                manifest = {'format': SAVE_FORMAT, 'format_version': SAVE_FORMAT_VERSION,
+                    'server_save_schema': SERVER_SAVE_SCHEMA, 'exported_at': int(time.time()),
+                    'source_player': {'player_id': player['id'], 'account': player['account'],
+                                      'login_count': player['login_count']}, 'checksums': checksums}
+                manifest_data = encode(manifest).encode('utf-8')
+                if json_size + blobs.total + len(manifest_data) > MAX_TOTAL_UNCOMPRESSED:
+                    raise ValueError('export uncompressed limit exceeded')
+                archive.writestr(_zip_info('manifest.json'), manifest_data)
+            result = buffer.getvalue()
+            if len(result) > MAX_UPLOAD_BYTES:
+                raise ValueError('export compressed limit exceeded')
+        log.info('export done player=%s bytes=%s elapsed=%.3fs', player_id, len(result), time.monotonic() - started)
+        return result
 
-    def _export_table(self, db: sqlite3.Connection, table: str, player_id: int,
-                      blobs: list[bytes]) -> list[dict[str, Any]]:
+    def _iter_export_table(self, db: sqlite3.Connection, table: str, player_id: int,
+                      blobs: _BlobSpool) -> Iterator[dict[str, Any]]:
         if not self.exists(table):
             return []  # boundary table absent from this deployment: no state to export
         colnames = list(self.columns(table))
@@ -259,7 +375,6 @@ class SaveManager:
                      f"WHERE p.player_id=? ORDER BY t.rowid")
         else:
             query = f"SELECT * FROM {table} WHERE player_id=? ORDER BY rowid"
-        rows: list[dict[str, Any]] = []
         for row in db.execute(query, (player_id,)):
             encoded: dict[str, Any] = {}
             for name in colnames:
@@ -269,8 +384,7 @@ class SaveManager:
                     blobs.append(bytes(value))
                 else:
                     encoded[name] = value
-            rows.append(encoded)
-        return rows
+            yield encoded
 
     def _container_bytes(self, manifest: dict[str, Any], save_doc: dict[str, Any],
                          blobs: list[bytes]) -> bytes:
@@ -321,6 +435,8 @@ class SaveManager:
                     raise ValueError("ZIP 条目被加密")
                 if name not in SAVE_ENTRY_WHITELIST and not BLOB_ENTRY_RE.match(name):
                     raise ValueError(f"ZIP 含非法条目 {name!r}")
+                if name == "manifest.json" and info.file_size > MAX_MANIFEST_BYTES:
+                    raise ValueError("存档清单过大")
                 if info.file_size > MAX_ENTRY_UNCOMPRESSED:
                     raise ValueError(f"ZIP 条目过大 {name!r}")
                 total_uncompressed += info.file_size
@@ -334,7 +450,8 @@ class SaveManager:
                 if name.startswith("blobs/"):
                     blobs[name] = zf.read(name)
         self._validate_manifest(manifest, blobs, save_bytes)
-        save_doc = json.loads(save_bytes.decode("utf-8"))
+        save_doc = json.loads(save_bytes)
+        del save_bytes
         if not isinstance(save_doc, dict) or set(save_doc) != {"tables", "snapshot"}:
             raise ValueError("save.json 结构非法")
         if not isinstance(save_doc["snapshot"], dict):
@@ -379,8 +496,9 @@ class SaveManager:
                 raise ValueError(f"{table} rows 非法")
             if rows and not self.exists(table):
                 raise ValueError(f"存档包含本服务器不存在的表 {table}")
-            rows_by_table[table] = [self._validate_row(table, row, source_pid, blob_refs)
-                                    for row in rows]
+            for index, row in enumerate(rows):
+                rows[index] = self._validate_row(table, row, source_pid, blob_refs)
+            rows_by_table[table] = rows
         missing_blobs = blob_refs - set(blobs)
         if missing_blobs:
             raise ValueError(f"缺失 BLOB {sorted(missing_blobs)[:3]}")
@@ -479,9 +597,12 @@ class SaveManager:
 
     # -- import --------------------------------------------------------------
 
-    def import_save(self, player_id: int, data: bytes, *, actor: str = "save-manager") -> dict[str, Any]:
+    def import_save(self, player_id: int, data: bytes, *, actor: str = "save-manager", offline_check=None) -> dict[str, Any]:
         """Validate, back up the current archive, then land the new state in a
         single transaction. Any failure rolls the database back completely."""
+        started = time.monotonic()
+        log = logging.getLogger('x2.save_manager')
+        log.info('import start player=%s bytes=%s', player_id, len(data))
         with self._lock:
             try:
                 plan = self.parse_save(data)
@@ -492,40 +613,45 @@ class SaveManager:
             if target is None:
                 raise KeyError(player_id)
             self._validate_references(plan)
+            log.info('import validated player=%s elapsed=%.3fs', player_id, time.monotonic() - started)
             backup_path = self._write_backup(player_id, target["account"])
             db = self.db
-            db.execute("BEGIN IMMEDIATE")
-            try:
-                from .system_mail import remember_once_mail_history
-                remember_once_mail_history(db, player_id)
-                self._delete_target_state(db, player_id, plan.preserve_tables)
-                uuid_map = self._compute_uuid_map(db, plan, target["id"])
-                key_maps = {table: self._compute_key_map(db, table, plan, target["id"])
-                            for table in GLOBAL_KEY_COLUMNS}
-                existing_bosses = {r[0] for r in db.execute("SELECT boss_id FROM world_boss_runs")} if self.exists("world_boss_runs") else set()
-                boss_map = {row["boss_id"]: f"imp-{player_id}-{index}-{row['boss_id']}"
-                            for index, row in enumerate(plan.rows["world_boss_runs"])
-                            if row["boss_id"] in existing_bosses}
-                equip_map = self._insert_equipment(db, player_id, plan)
-                drop_map = self._insert_drop_observations(db, player_id, plan)
-                snapshot = self._remap_snapshot(plan.snapshot, equip_map)
-                for table in PLAYER_TABLES:
-                    if table in ("equipment_instances", "fight_drop_observations"):
-                        continue
-                    self._insert_rows(db, table, player_id, plan.rows[table],
-                                      equip_map, drop_map, plan, uuid_map, key_maps, boss_map)
-                remember_once_mail_history(db, player_id)
-                db.execute("UPDATE players SET snapshot=?, revision=revision+1 WHERE id=?",
-                           (json.dumps(snapshot, ensure_ascii=False, allow_nan=False,
-                                       sort_keys=True), player_id))
-                self._bump_sequences(db)
-                if db.execute("PRAGMA foreign_key_check").fetchone() is not None:
-                    raise ValueError("导入后外键校验失败")
-                counts = {t: len(plan.rows[t]) for t in PLAYER_TABLES}
-                db.execute("COMMIT")
-            except BaseException:
-                db.execute("ROLLBACK")
-                raise
+            with self.store.import_write():
+                if offline_check is not None and not offline_check():
+                    raise AccountOnlineError('target is online')
+                write_started = time.monotonic()
+                log.info('import write start player=%s', player_id)
+                db.execute("BEGIN IMMEDIATE")
+                try:
+                    from .system_mail import remember_once_mail_history
+                    remember_once_mail_history(db, player_id)
+                    self._delete_target_state(db, player_id, plan.preserve_tables)
+                    uuid_map = self._compute_uuid_map(db, plan, target["id"])
+                    key_maps = {table: self._compute_key_map(db, table, plan, target["id"])
+                                for table in GLOBAL_KEY_COLUMNS}
+                    existing_bosses = self._existing_candidates(db, "world_boss_runs", "boss_id", {r["boss_id"] for r in plan.rows["world_boss_runs"]}) if self.exists("world_boss_runs") else set()
+                    boss_map = {row["boss_id"]: f"imp-{player_id}-{index}-{row['boss_id']}"
+                                for index, row in enumerate(plan.rows["world_boss_runs"])
+                                if row["boss_id"] in existing_bosses}
+                    equip_map = self._insert_equipment(db, player_id, plan)
+                    drop_map = self._insert_drop_observations(db, player_id, plan)
+                    snapshot = self._remap_snapshot(plan.snapshot, equip_map)
+                    for table in PLAYER_TABLES:
+                        if table in ("equipment_instances", "fight_drop_observations"):
+                            continue
+                        self._insert_rows(db, table, player_id, plan.rows[table],
+                                          equip_map, drop_map, plan, uuid_map, key_maps, boss_map)
+                    remember_once_mail_history(db, player_id)
+                    db.execute("UPDATE players SET snapshot=?, revision=revision+1 WHERE id=?",
+                               (json.dumps(snapshot, ensure_ascii=False, allow_nan=False,
+                                           sort_keys=True), player_id))
+                    self._bump_sequences(db)
+                    counts = {t: len(plan.rows[t]) for t in PLAYER_TABLES}
+                    db.execute("COMMIT")
+                except BaseException:
+                    db.execute("ROLLBACK")
+                    raise
+            log.info('import write done player=%s write_elapsed=%.3fs total_elapsed=%.3fs', player_id, time.monotonic() - write_started, time.monotonic() - started)
             self._write_audit_log(target["account"], backup_path, plan, counts, actor)
             return {"account": target["account"], "backup": str(backup_path), "rows": counts}
 
@@ -538,17 +664,16 @@ class SaveManager:
         rows were just deleted), which is exactly the cross-account case; a
         same-account round-trip keeps every key verbatim.
         """
+        incoming: set[str] = set()
+        for table, column in UUID_FAMILY_COLUMNS.items():
+            for row in plan.rows[table]:
+                value = row.get(column)
+                if isinstance(value, str):
+                    incoming.add(value)
         existing: set[str] = set()
         for table, column in UUID_FAMILY_COLUMNS.items():
             if self.exists(table):
-                existing.update(r[0] for r in db.execute(f"SELECT {column} FROM {table}"))
-        incoming: set[str] = set()
-        for table, column in UUID_FAMILY_COLUMNS.items():
-            if self.exists(table):
-                for row in plan.rows[table]:
-                    value = row.get(column)
-                    if isinstance(value, str):
-                        incoming.add(value)
+                existing.update(self._existing_candidates(db, table, column, incoming))
         mapping: dict[str, str] = {}
         for old in sorted(incoming):
             if old in existing:
@@ -560,8 +685,8 @@ class SaveManager:
         if not self.exists(table):
             return {}
         column = GLOBAL_KEY_COLUMNS[table]
-        existing = {r[0] for r in db.execute(f"SELECT {column} FROM {table}")}
         incoming = {row[column] for row in plan.rows[table] if isinstance(row.get(column), str)}
+        existing = self._existing_candidates(db, table, column, incoming)
         return {old: f"imp-{account_id}-{index}-{old}"[:300]
                 for index, old in enumerate(sorted(incoming)) if old in existing}
 
@@ -618,7 +743,7 @@ class SaveManager:
                 try:
                     with zipfile.ZipFile(path) as archive:
                         info = archive.getinfo('manifest.json')
-                        if info.file_size > 1024 * 1024:
+                        if info.file_size > MAX_MANIFEST_BYTES:
                             continue
                         owner = json.loads(archive.read(info))['source_player']
                     if owner['player_id'] == player_id and owner['account'] == account:
@@ -627,15 +752,18 @@ class SaveManager:
                     continue
         return found
 
-    def _prune_backups(self, player_id: int, account: str, keep: Path | None = None) -> int:
+    def _prune_backups(self, player_id: int, account: str, keep: Path | None = None, *, verified=False) -> int:
         candidates = self._backup_files(player_id, account)
         if not candidates:
             return 0
         survivor = keep or max(candidates, key=lambda f: (f.stat().st_mtime_ns, f.name))
         if survivor not in candidates:
             raise ValueError('backup owner verification failed')
+        if len(candidates) == 1:
+            return 0  # Nothing to delete; avoid reparsing an entire large save at startup.
         # Do not remove any recovery point unless the retained file is valid.
-        self.parse_save(survivor.read_bytes())
+        if not verified:
+            self.parse_save(survivor.read_bytes())
         removed = 0
         for path in candidates:
             if path != survivor:
@@ -655,10 +783,26 @@ class SaveManager:
                         'backup cleanup refused; recovery files preserved player=%s', row['id'])
             return removed
 
+    @staticmethod
+    def _verify_export(data):
+        # Check our generated archive without constructing a second ImportPlan.
+        source = io.BytesIO(data) if isinstance(data, (bytes, bytearray)) else data
+        with zipfile.ZipFile(source) as archive:
+            manifest = json.loads(archive.read('manifest.json'))
+            expected = manifest['checksums']
+            if set(archive.namelist()) != {'manifest.json', *expected}:
+                raise ValueError('backup archive entries mismatch')
+            for name, checksum in expected.items():
+                digest = hashlib.sha256()
+                with archive.open(name) as entry:
+                    for chunk in iter(lambda: entry.read(1024 * 1024), b''):
+                        digest.update(chunk)
+                if digest.hexdigest() != checksum:
+                    raise ValueError('backup archive checksum mismatch')
+
     def _write_backup(self, player_id: int, account: str) -> Path:
         """Durable atomic replacement: old backup survives any pre-replace error."""
         current = self.export_save(player_id)
-        self.parse_save(current)
         root = self.backup_root.resolve()
         root.mkdir(parents=True, exist_ok=True)
         directory = root / f"player_{player_id}"
@@ -675,6 +819,7 @@ class SaveManager:
                 fh.write(current)
                 fh.flush()
                 os.fsync(fh.fileno())
+            self._verify_export(temporary)
             os.replace(temporary, path)
             if os.name != 'nt':
                 fd = os.open(directory, os.O_RDONLY | os.O_DIRECTORY)
@@ -685,7 +830,7 @@ class SaveManager:
         finally:
             if temporary is not None and temporary.exists():
                 temporary.unlink()
-        self._prune_backups(player_id, account, keep=path)
+        self._prune_backups(player_id, account, keep=path, verified=True)
         return path
 
     def _delete_target_state(self, db: sqlite3.Connection, player_id: int,
@@ -695,10 +840,6 @@ class SaveManager:
             if self.exists(table) and self.exists(parent):
                 db.execute(f"DELETE FROM {table} WHERE {child_col} IN "
                            f"(SELECT {parent_col} FROM {parent} WHERE player_id=?)", (player_id,))
-        entry_uuids = [r[0] for r in db.execute(
-            "SELECT uuid FROM battle_entries WHERE player_id=?", (player_id,))]
-        observation_ids = [r[0] for r in db.execute(
-            "SELECT id FROM fight_drop_observations WHERE player_id=?", (player_id,))]
         for table in PLAYER_TABLES:
             if table in (preserve_tables or set()):
                 continue
@@ -706,25 +847,16 @@ class SaveManager:
                 continue
             if table in JOIN_OWNERS:
                 continue
-            if table in ("battle_receipts", "battle_checkout_wire", "battle_drop_budget_versions"):
-                if entry_uuids:
-                    marks = ",".join("?" * len(entry_uuids))
-                    db.execute(f"DELETE FROM {table} WHERE uuid IN ({marks})", entry_uuids)
-                continue
-            if table in ("fight_drop_items", "fight_drop_claims"):
-                if observation_ids:
-                    marks = ",".join("?" * len(observation_ids))
-                    db.execute(f"DELETE FROM {table} WHERE report_id IN ({marks})", observation_ids)
-                continue
             db.execute(f"DELETE FROM {table} WHERE player_id=?", (player_id,))
 
     def _insert_equipment(self, db: sqlite3.Connection, player_id: int,
                           plan: ImportPlan) -> dict[int, int]:
         rows = plan.rows["equipment_instances"]
-        taken = ({r[0] for r in db.execute("SELECT id FROM equipment_instances")}
-                 if self.exists("equipment_instances") else set())
+        if not rows:
+            return {}
+        taken = self._existing_candidates(db, "equipment_instances", "id", {r["id"] for r in rows}) if self.exists("equipment_instances") else set()
         equip_map: dict[int, int] = {}
-        next_id = (max(taken) if taken else 0) + 1
+        next_id = db.execute("SELECT COALESCE(MAX(id),0)+1 FROM equipment_instances").fetchone()[0]
         for row in rows:
             old = row["id"]
             if old not in taken:
@@ -743,10 +875,11 @@ class SaveManager:
     def _insert_drop_observations(self, db: sqlite3.Connection, player_id: int,
                                   plan: ImportPlan) -> dict[int, int]:
         rows = plan.rows["fight_drop_observations"]
-        taken = ({r[0] for r in db.execute("SELECT id FROM fight_drop_observations")}
-                 if self.exists("fight_drop_observations") else set())
+        if not rows:
+            return {}
+        taken = self._existing_candidates(db, "fight_drop_observations", "id", {r["id"] for r in rows}) if self.exists("fight_drop_observations") else set()
         drop_map: dict[int, int] = {}
-        next_id = (max(taken) if taken else 0) + 1
+        next_id = db.execute("SELECT COALESCE(MAX(id),0)+1 FROM fight_drop_observations").fetchone()[0]
         for row in rows:
             old = row["id"]
             if old not in taken:

@@ -3,6 +3,7 @@ import argparse
 import asyncio
 import os
 import logging
+import time
 from pathlib import Path
 
 from x2server.bootstrap.http_server import BootstrapHTTPServer
@@ -68,6 +69,22 @@ def _online_player_ids(loop: asyncio.AbstractEventLoop, tcp: "X2TCPServer") -> s
         logging.getLogger("x2.local").error("online player snapshot timed out")
         future.cancel()
         raise RuntimeError("online player snapshot timed out")
+
+
+async def loop_health_watch(interval=1):
+    while True:
+        started = time.monotonic()
+        await asyncio.sleep(interval)
+        lag = time.monotonic() - started - interval
+        if lag > .5:
+            memory = {}
+            status = Path('/proc/self/status')
+            if status.exists():
+                for line in status.read_text().splitlines():
+                    key, _, value = line.partition(':')
+                    if key in ('VmRSS', 'VmSwap'):
+                        memory[key] = value.strip()
+            logging.getLogger('x2.local').warning('event loop stalled lag=%.3fs memory=%s', lag, memory)
 
 
 async def run(database: Path, seconds: float) -> None:
@@ -140,7 +157,7 @@ async def run(database: Path, seconds: float) -> None:
     tcp = X2TCPServer(Settings(tcp_host=endpoints.bind_host, tcp_port=endpoints.game_port, read_timeout=120),
         Dispatcher({**star_chart.handlers(), **LobbyService(clock, college).handlers(), **college_flows.handlers(), **TutorialService(store).handlers(), **BirthdayService(store).handlers(), **economy.handlers(), **divination.handlers(), **shop.handlers(), **gift_packages.handlers(), **collection.handlers(), **favor.handlers(), **appearance.handlers(), **appearance_shop.handlers(), **mail.handlers(), **terminal.handlers(), **equipment.handlers(), **equip_plans.handlers(), **wish.handlers(), **ProgressionService(store, economy, appearance).handlers(), **BattleService(store, economy).handlers(), **BattleShopService(store, economy).handlers(), "C2L_HeroAll": HeroService(store, economy).query_all,
                     **activity_runtime.handlers(), **social.handlers(), "C2L_Login": login.login, "C2L_ReConnect": login.reconnect,
-                    "C2L_ServerTableConfig": login.server_config}))
+                    "C2L_ServerTableConfig": login.server_config}, wait_for_database=store.wait_for_import))
     chat = X2TCPServer(Settings(tcp_host=endpoints.bind_host, tcp_port=endpoints.chat_port, read_timeout=120),
                        Dispatcher(SilentChatService().handlers()))
     mail_task = None
@@ -149,6 +166,8 @@ async def run(database: Path, seconds: float) -> None:
     college_task = None
     activity_task = None
     social_task = None
+    checkpoint_task = None
+    health_task = None
 
     async def settle_monthcards(day_start):
         """Settle month cards and expire terminal wishes at server midnight."""
@@ -164,6 +183,9 @@ async def run(database: Path, seconds: float) -> None:
                     {"code": 10, **economy.inventory_values(player_id)}))
 
     try:
+        save_manager.prepare_indexes()
+        health_task = asyncio.create_task(loop_health_watch(), name="local-loop-health")
+        checkpoint_task = asyncio.create_task(store.checkpoint_watch(), name="local-db-checkpoint")
         await http.start()
         await tcp.start()
         await chat.start()
@@ -183,7 +205,7 @@ async def run(database: Path, seconds: float) -> None:
         else:
             await asyncio.sleep(seconds)
     finally:
-        for task in (mail_task, welfare_task, world_boss_task, college_task, activity_task, social_task):
+        for task in (mail_task, welfare_task, world_boss_task, college_task, activity_task, social_task, checkpoint_task, health_task):
             if task:
                 task.cancel()
                 await asyncio.gather(task, return_exceptions=True)

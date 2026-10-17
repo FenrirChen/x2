@@ -17,6 +17,7 @@ SERVICES = (EconomyService, CollegeStateRepository, EquipPlanService)
 @pytest.fixture
 def env(tmp_path):
     store = PlayerStore(tmp_path / "contention.sqlite3")
+    store.db.execute("PRAGMA journal_mode=DELETE")
     store.login("lock-test", 1, 0)
     accounts = AccountStore(store)
     with store.db:

@@ -66,6 +66,7 @@ class MailService:
         last_id = self.store.db.execute("SELECT coalesce(max(id),0) FROM player_mail").fetchone()[0]
         while True:
             await asyncio.sleep(interval)
+            await self.store.wait_for_import()
             rows = self.store.db.execute("SELECT id,player_id FROM player_mail WHERE id>? ORDER BY id",
                                          (last_id,)).fetchall()
             if rows:

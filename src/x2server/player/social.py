@@ -210,9 +210,11 @@ class SocialService:
     async def watch(self,tcp):
         import asyncio
         while True:
+            await self.store.wait_for_import()
             active=tcp.authenticated_player_ids()
             self._daily_notify_day={pid:d for pid,d in self._daily_notify_day.items() if pid in active}
             for pid in active:
+                await self.store.wait_for_import()
                 try:
                     await self.refresh_online_daily(pid,tcp)
                     weekly=self.economy.endless.refresh_week(pid)

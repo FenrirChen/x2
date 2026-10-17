@@ -478,10 +478,12 @@ class ActivityRuntime:
     async def watch(self, server):
         previous = None
         while True:
+            await self.e.store.wait_for_import()
             period = self.r.at()
             current = (period.index, self.a.yuexi_preview_end(period) > int(self.e.clock())) if period else None
             current = (current, self.e.season.instance, self.e.season.active())
             for player in server.authenticated_player_ids():
+                await self.e.store.wait_for_import()
                 self.deliver_daily_mail(player)
                 if previous != current:
                     await server.push_to_player(player, OutboundMessage('L2C_QueryActivity', self.a.query_activity(player)))

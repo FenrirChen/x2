@@ -43,3 +43,23 @@ def test_switch_refuses_missing_database(tmp_path):
     with pytest.raises(FileNotFoundError):
         configure(path, 'close')
     assert not path.exists()
+
+
+def test_status_is_read_only_during_another_write_transaction(tmp_path):
+    import sqlite3
+    from contextlib import closing
+    from x2server.player.store import PlayerStore
+    from x2server.player.accounts import AccountStore
+    store = PlayerStore(tmp_path / 'switch.sqlite3')
+    accounts = AccountStore(store)
+    try:
+        assert configure(store.path, 'close') is False
+        with closing(sqlite3.connect(store.path)) as writer:
+            writer.execute('PRAGMA wal_autocheckpoint=0')
+            writer.execute('BEGIN IMMEDIATE')
+            writer.execute("UPDATE server_settings SET value='1' WHERE key='registration_enabled'")
+            assert configure(store.path, 'status') is False
+            writer.rollback()
+        assert configure(store.path, 'status') is False
+    finally:
+        accounts.close(); store.close()

@@ -114,6 +114,7 @@ def execute(tmp_path, **flags):
         state.write_text('running')
     env = os.environ.copy()
     env.update({
+        'X2_HEALTH_ATTEMPTS': '3',
         'HOME': shell_path(home), 'X2_DEPLOY_ROOT': shell_path(root),
         'X2_DB_PATH': shell_path(db), 'X2_ENV_FILE': shell_path(envfile),
         'HARNESS_BIN': shell_path(stubs), 'HARNESS_EVENTS': shell_path(events),
@@ -171,8 +172,8 @@ def test_first_install_without_existing_unit_can_complete(tmp_path):
 def test_failed_health_check_reports_attempts_and_does_not_claim_success(tmp_path):
     result, events, state = execute(tmp_path, TEST_HEALTH_FAILED=1)
     assert result.returncode != 0
-    assert 'attempt 1/30' in result.stdout
-    assert 'attempt 30/30' in result.stdout
+    assert 'attempt 1/3' in result.stdout
+    assert 'attempt 3/3' in result.stdout
     assert 'Deployment healthy' not in result.stdout
     assert 'stage=health-check' in result.stderr
     assert 'systemctl --user status' in events

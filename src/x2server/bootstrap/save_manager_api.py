@@ -20,7 +20,7 @@ import time
 from collections.abc import Callable
 from urllib.parse import parse_qs
 
-from ..player.save_manager import MAX_UPLOAD_BYTES, SaveManager, SaveBoundaryError
+from ..player.save_manager import MAX_UPLOAD_BYTES, SaveManager, SaveBoundaryError, AccountOnlineError
 
 LOGGER = logging.getLogger("x2.bootstrap.save_manager")
 
@@ -41,6 +41,7 @@ class SaveManagerAPI:
         self._clock = clock
         self._tokens: dict[str, _SaveToken] = {}
         self._lock = threading.Lock()
+        self._jobs = threading.BoundedSemaphore(1)
 
     @property
     def max_body_bytes(self) -> int:
@@ -49,8 +50,14 @@ class SaveManagerAPI:
     def respond(self, method: str, path: str, body: bytes,
                 authorization: str) -> tuple[int, str, bytes]:
         """Return (status, content_type, payload) for a /save-manager/ route."""
+        job = path.rsplit('/', 1)[-1] in ('export', 'import')
+        if job and not self._jobs.acquire(blocking=False):
+            return self._json(503, {'error': 'save_manager_busy'})
         try:
             return self._respond(method, path, body, authorization)
+        except AccountOnlineError:
+            return self._json(409, {'error': 'account_online',
+                                   'message': '账号当前在线，请先退出游戏后再导入存档。'})
         except PermissionError:
             return self._json(401, {"error": "unauthorized"})
         except LookupError:
@@ -66,6 +73,10 @@ class SaveManagerAPI:
         except RuntimeError:
             LOGGER.exception("save-manager online status unavailable")
             return self._json(503, {"error": "online_status_unavailable"})
+
+        finally:
+            if job:
+                self._jobs.release()
 
     def _respond(self, method: str, path: str, body: bytes,
                  authorization: str) -> tuple[int, str, bytes]:
@@ -150,7 +161,8 @@ class SaveManagerAPI:
             return self._json(409, {"error": "account_online",
                                     "message": "账号当前在线，请先退出游戏后再导入存档。"})
         result = self.save_manager.import_save(token.player_id, body,
-                                               actor=f"save-manager:{token.username}")
+                                               actor=f"save-manager:{token.username}",
+                                               offline_check=lambda: token.player_id not in self._safe_online_ids())
         LOGGER.info("save-manager import ok account_id=%s", token.account_id)
         with self._lock:
             for stale in [t for t, v in self._tokens.items() if v.account_id == token.account_id]:

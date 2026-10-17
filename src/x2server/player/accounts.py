@@ -11,7 +11,6 @@ import hashlib
 import secrets
 import sqlite3
 import json
-import threading
 from typing import Any
 
 from .store import PlayerStore
@@ -56,7 +55,8 @@ class AccountStore:
         self.db = sqlite3.connect(store.path, check_same_thread=False, timeout=10)
         self.db.row_factory = sqlite3.Row
         self.db.execute("PRAGMA foreign_keys=ON")
-        self._lock = threading.RLock()
+        self._lock = store.checkpoint_guard
+        self.db.execute("PRAGMA wal_autocheckpoint=0")
         with self.db:
             self.db.execute("CREATE UNIQUE INDEX IF NOT EXISTS accounts_player_id_unique "
                             "ON accounts(player_id)")

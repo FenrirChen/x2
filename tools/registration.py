@@ -2,11 +2,21 @@
 import argparse
 import sqlite3
 from pathlib import Path
+from contextlib import closing
+from x2server.player.db_guard import CheckpointGuard
 
 
 def configure(database, action):
     path = Path(database).resolve(strict=True)
-    with sqlite3.connect(path.as_uri() + '?mode=rw', uri=True, timeout=30) as db:
+    if action == 'status':
+        with closing(sqlite3.connect(path.as_uri() + '?mode=ro', uri=True, timeout=1)) as db:
+            db.execute('SELECT account_id FROM accounts LIMIT 0')
+            if not db.execute("SELECT 1 FROM sqlite_schema WHERE type='table' AND name='server_settings'").fetchone():
+                return True
+            row = db.execute("SELECT value FROM server_settings WHERE key='registration_enabled'").fetchone()
+            return row is None or row[0] == '1'
+    with closing(CheckpointGuard(path)) as guard, guard, closing(sqlite3.connect(path.as_uri() + '?mode=rw', uri=True, timeout=30)) as db, db:
+        db.execute('PRAGMA wal_autocheckpoint=0')
         db.execute('BEGIN IMMEDIATE')
         # Refuse unrelated databases; do not silently create an empty database.
         db.execute('SELECT account_id FROM accounts LIMIT 0')
