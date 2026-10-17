@@ -20,6 +20,12 @@ class GiftPackageService:
     LOCAL_TZ = timezone(timedelta(hours=8))
     MONTHCARD_ID = 2700001
     UNLIMITED_IDS = frozenset({2700092})
+    # GiftPackageType.E_FreeDaily (2700000, the shop's "第 7 次领纯晶石"): one claim a day.
+    # GiftBoxTab_GiftBoxNode_SetData renders the cell as
+    # "领取进度：{PurchaseTime % Param1[0]}/{Param1[0]}" (language key 13100855, Param1=[7]),
+    # so PurchaseTime has to be the running total of claimed days, not a 0/1 flag.
+    FREE_DAILY_TYPE = 2
+
     def __init__(self, store, economy):
         self.store, self.economy = store, economy
         data = json.loads(files("x2server").joinpath("data/selected_gift_packages.json").read_text(encoding="utf-8"))
@@ -41,8 +47,15 @@ class GiftPackageService:
         return {"C2L_QueryGiftPackage": self.query, "C2L_BuyGiftPackage": self.buy,
                 "C2L_RechargeGoodsInfo": self.recharge}
 
+    def _free_daily(self, package):
+        return package["GiftPackageType"]["value"] == self.FREE_DAILY_TYPE
+
+    def _free_daily_cycle(self, package):
+        """Param1: how many daily claims one cycle of the pack runs for."""
+        return int(package["Param1"][0]) if package.get("Param1") else 0
+
     def _period(self, package):
-        if package["GiftPackageType"]["value"] == 2:
+        if self._free_daily(package):
             return datetime.fromtimestamp(self.economy.clock(), self.LOCAL_TZ).strftime("%Y-%m-%d")
         return "once"
 
@@ -112,13 +125,22 @@ class GiftPackageService:
                 continue
             bought = self._bought_count(player_id, package_id)
             limit = int(package.get("Times") or 0)
+            claimed = self.store.db.execute("SELECT 1 FROM gift_package_claims WHERE player_id=? AND package_id=? AND period=?",
+                (player_id, package_id, self._period(package))).fetchone()
+            if self._free_daily(package):
+                # The table's Times=1 means "once a day" for this pack, so it must not be
+                # compared with the lifetime count: that reads the pack as sold out forever
+                # after the first claim (client shows 已领取, progress frozen at 1/7). The
+                # daily period key already caps it at one a day, and the progress bar wants
+                # the running total of claimed days, which is exactly the row count.
+                values.append(GIFT_PACKAGE_DATA.encode({"id": package_id,
+                    "state": int(bool(claimed)), "PurchaseTime": bought, "unShelves": 0}))
+                continue
             if limit and bought >= limit:
                 state = 2
                 values.append(GIFT_PACKAGE_DATA.encode({"id": package_id, "state": state,
                     "PurchaseTime": bought, "unShelves": 0}))
                 continue
-            claimed = self.store.db.execute("SELECT 1 FROM gift_package_claims WHERE player_id=? AND package_id=? AND period=?",
-                (player_id, package_id, self._period(package))).fetchone()
             display_claimed = bought >= limit if limit else bool(claimed)
             state = (3 if package["GiftPackageType"]["value"] == 3
                      and player_level < package["Param1"][0] else int(display_claimed))
@@ -134,9 +156,24 @@ class GiftPackageService:
         return OutboundMessage("L2C_QueryGiftPackage", {"code": 10, "datas": self.listing(player_id)},
                                pushes=self.economy.pushes(player_id) if granted else ())
 
-    def _rewards(self, package):
+    def _reward_groups(self, player_id, package):
+        """The gift groups this claim hands over, or None to use the everyday ones.
+
+        An E_FreeDaily pack cycles: the claim that brings the running total of claimed
+        days up to a multiple of Param1[0] pays the final gift (Param2, gift 781005 =
+        item 1237925 纯晶石) instead of the everyday one (GiftID, gift 781004).
+        """
+        if not self._free_daily(package):
+            return None
+        cycle = self._free_daily_cycle(package)
+        claimed = self._bought_count(player_id, package["GiftPackageID"]) + 1
+        if cycle and claimed % cycle == 0 and package.get("Param2"):
+            return package["Param2"]
+        return None
+
+    def _rewards(self, package, groups=None):
         rewards = Counter()
-        for group in package["GiftID"]:
+        for group in package["GiftID"] if groups is None else groups:
             row = self.gifts[group]
             items, counts = row["GiftValue"], row["Num"]
             if len(items) != len(counts):
@@ -171,7 +208,9 @@ class GiftPackageService:
         if package is None or (package["CurrencyType"] == 919) != recharge:
             return reject
         limit = int(package.get("Times") or 0)
-        if not recharge and package_id not in self.UNLIMITED_IDS and limit:
+        if not recharge and package_id not in self.UNLIMITED_IDS and limit and not self._free_daily(package):
+            # E_FreeDaily is capped by its daily period key instead (one row per local day,
+            # INSERT OR IGNORE below), never by the lifetime count.
             if self._bought_count(player_id, package_id) >= limit:
                 return reject
         if package["GiftPackageType"]["value"] == 3:
@@ -200,7 +239,7 @@ class GiftPackageService:
             return OutboundMessage(reply, ECONOMY_SCHEMAS[reply].decode(cached[0]),
                                    pushes=self.economy.pushes(player_id))
         try:
-            rewards = self._rewards(package)
+            rewards = self._rewards(package, self._reward_groups(player_id, package))
             with self.economy.transaction():
                 inserted = self.store.db.execute("INSERT OR IGNORE INTO gift_package_claims VALUES (?,?,?,?)",
                     (player_id, package_id, period, int(self.economy.clock())))
