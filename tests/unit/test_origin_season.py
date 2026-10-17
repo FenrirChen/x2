@@ -104,7 +104,7 @@ def test_battle_entry_settlement_unlocks_next_layer_once(env):
     again = asyncio.run(battle.checkout(ctx, finish))
     assert again.values == result.values
     assert s.state(1)['stats']['passes'] == 1
-    assert s.mission_values(1)['maxSeasonId'] == 2090002
+    assert s.mission_values(1)['maxSeasonId'] == 2090004
 
 
 def test_all_500_levels_rewards_can_be_received(env):

@@ -129,7 +129,7 @@ class SeasonService:
 
     def initial(self, player):
         heroes = self.store.get(player)['snapshot'].get('heroes', [])
-        return {'exp': 0, 'points': 0, 'levels_claimed': {}, 'talents': {}, 'max_layer': 0,
+        return {'exp': 0, 'points': 0, 'levels_claimed': {}, 'talents': {}, 'max_layer': 0, 'unlocked_layer': 1,
                 'last_config': min(self.configs), 'sign_day': 0, 'bought_levels': 0,
                 'stats': {}, 'tasks': {}, 'task_claimed': [], 'achievements_claimed': [],
                 'achievement_floors': {}, 'point_claimed': [], 'relics': [],
@@ -139,6 +139,16 @@ class SeasonService:
                 'chapter_layers': {}, 'timed_layers': {}, 'week': 0, 'week_exp': 0,
                 'refreshes': 0, 'selected_tasks': [], 'kill_counts': {}, 'task_stages': {}}
 
+    def unlocked_layer(self, state):
+        """Admission frontier is independent of the highest actually cleared floor."""
+        return min(max(r['Level'] for r in self.configs.values()),
+                   max(1, state.get('unlocked_layer', 1), state.get('max_layer', 0) + 1))
+
+    @staticmethod
+    def skipped_layers(seconds):
+        # User policy uses strict intervals: exactly 5 or 10 minutes skips none.
+        return 2 if 0 < seconds < 300 else 1 if 300 < seconds < 600 else 0
+
     def state(self, player):
         with self.e.transaction():
             return self._state(player)
@@ -147,9 +157,10 @@ class SeasonService:
         row = self.store.db.execute('SELECT state_json FROM season_state WHERE player_id=? AND instance_id=?',
                                     (player, self.instance)).fetchone()
         state = json.loads(row[0]) if row else self.initial(player)
+        state['unlocked_layer'] = self.unlocked_layer(state)
         if state.get('last_config') not in self.configs:
             # Imported/legacy state must never select a different season's page.
-            layer = min(max(1, state.get('max_layer', 0) + 1), 100)
+            layer = self.unlocked_layer(state)
             state['last_config'] = next(r['ID'] for r in self.configs.values() if r['Level'] == layer)
         week = task_period(2, int(self.e.clock()))[0]
         if state['week'] != week:
@@ -237,7 +248,7 @@ class SeasonService:
 
     def mission_values(self, player):
         state = self.state(player)
-        level = min(state['max_layer'] + 1, 100)
+        level = self.unlocked_layer(state)
         next_id = next(r['ID'] for r in self.configs.values() if r['Level'] == level)
         last_id = next((r['ID'] for r in self.configs.values() if r['Level'] == state['max_layer']), 0)
         return {'code': 10, 'maxSeasonId': next_id, 'lastSeasonId': state['last_config'],
@@ -494,7 +505,7 @@ class SeasonService:
         self.require(player)
         config = self.section_configs[section]
         state = self.state(player)
-        if config['Level'] > state['max_layer'] + 1:
+        if config['Level'] > self.unlocked_layer(state):
             raise UnresolvedEconomy('previous season level not completed')
         balance = self.store.db.execute('SELECT quantity FROM inventory WHERE player_id=? AND item_id=?',
                                         (player, config.get('ConsumeItem', 0))).fetchone()
@@ -505,7 +516,7 @@ class SeasonService:
         self.require(player)
         config = self.section_configs[section]
         state = self.state(player)
-        if config['Level'] > state['max_layer'] + 1:
+        if config['Level'] > self.unlocked_layer(state):
             raise UnresolvedEconomy('previous season level not completed')
         self.spend(player, config.get('ConsumeItem', 0), config.get('ConsumeNum', 0))
         state['last_config'] = config['ID']
@@ -532,6 +543,12 @@ class SeasonService:
         state = self.state(player)
         config = self.configs[run['config_id']]
         state['max_layer'] = max(state['max_layer'], config['Level'])
+        skipped = self.skipped_layers(seconds)
+        state['unlocked_layer'] = min(max(r['Level'] for r in self.configs.values()),
+                                     max(self.unlocked_layer(state), config['Level'] + 1 + skipped))
+        logging.getLogger('x2.season').info(
+            'tower clear player=%s floor=%s seconds=%s skipped=%s unlocked=%s',
+            player, config['Level'], seconds, skipped, state['unlocked_layer'])
         state['stats']['passes'] = state['stats'].get('passes', 0) + 1
         state['stats']['pass_time'] = state['stats'].get('pass_time', 0) + max(0, seconds)
         chapter = self.sections[run['section_id']].get('NumerChina', '')

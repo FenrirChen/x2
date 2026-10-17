@@ -40,7 +40,7 @@ def test_all_origin_layers_unlock_past_ten_to_one_hundred(env):
         assert season.state(1)['max_layer'] == level
         update = next(m for m in result.before_response if m.message_name=='L2C_BattlePassMissionInfo')
         decoded = SEASON_SCHEMAS['L2C_BattlePassMissionInfo'].decode(encode('L2C_BattlePassMissionInfo',update.values))
-        assert decoded['maxSeasonId'] == 2090000+min(level+1,100)
+        assert decoded['maxSeasonId'] == 2090000+min(level+3,100)
         assert decoded['maxPassId'] == config['ID']
         assert asyncio.run(battle.checkout(ctx,done)).values == result.values
         assert season.state(1)['stats']['passes'] == level
