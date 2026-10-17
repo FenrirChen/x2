@@ -27,6 +27,10 @@ FINISH_RESULT = S("RspFinishTaskData", (F(1, "code", K.ENUM), F(2, "taskId", K.I
 ECONOMY_IDS = (("FetchMobilityPower", 134, 137), ("ShopGoods", 221, 225), ("RefreshShop", 220, 224),
     ("JewelCompose", 144, 147), ("GodEqupJewelCompose", 215, 216), ("GodEquipJewelDot", 725, 726),
     ("ItemOpt", 111, 112),
+    # 神格碎片「转化」. The id pair is already in the client's own route table
+    # (x2offline/src/server/reply_routes.inc:320 -> {982, 983}) but the server had
+    # no schema and no handler for it, so the frame could not even be answered.
+    ("ItemExchangeCurrency", 982, 983),
     ("BuyGoods", 219, 222), ("QueryGoodsInfo", 301, 302),
     ("QueryReCommendShop", 693, 694), ("PaymentStore", 451, 452),
     ("RechargeInfo", 822, 823),
@@ -48,6 +52,21 @@ ECONOMY_SCHEMAS = {s.name: s for s in (
     S("L2C_ItemAll", (F(1, "items", K.MESSAGE, repeated=True),)),
     S("L2C_ItemUpdate", (F(1, "code", K.ENUM), F(2, "items", K.MESSAGE, repeated=True))),
     S("L2C_ItemRemove", (F(1, "ids", K.INT32, repeated=True),)),
+    # 神格碎片「转化」(982/983). Field lists come from the repo's own protocol
+    # catalog (analysis/protocol/protocol_catalog.json entries 982/983, which also
+    # record server_registered=false / server_handler_seen=false): the request
+    # carries only `items`, the reply only `code` + `rewardData`.
+    #
+    # `items` is repeated KeyValuePair_Int32_Int32 (MISSION_PAIR): the client's
+    # ItemInfoWnd_OnUseBtnClick (0x16ED7F0) reads BagModule_ItemType2SelectType
+    # (0x19BA2E8: ItemType 12 -> selectType 4) and selectType 4 calls
+    # BagModule_ItemExchangeCurrency (0x19C6688), which puts (chipId, count) pairs
+    # in that list and sends 982. It renders no preview of its own -
+    # ItemInfoWnd_ShowNum (0x16ED730) only sets the stepper's max to the owned
+    # count - so the 1 -> N rate has to come from the server's RewardData
+    # (see player/economy.exchange_item_currency).
+    S("C2L_ItemExchangeCurrency", (F(1, "items", K.MESSAGE, repeated=True),)),
+    S("L2C_ItemExchangeCurrency", (F(1, "code", K.ENUM), F(2, "rewardData", K.MESSAGE))),
     ints("C2L_ShopGoods", "shopId"), ints("C2L_RefreshShop", "shopId"),
     ints("C2L_BuyGoods", "shopId goodsId buyNum"), ints("C2L_QueryGoodsInfo", "goodsId"),
     S("C2L_QueryReCommendShop", ()),

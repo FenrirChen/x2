@@ -30,6 +30,12 @@ class UnresolvedEconomy(ValueError):
 class EconomyService:
     CAUSALITY_CARDS = {1202010: 10, 1202011: 20, 1202012: 30,
                        1202013: 60, 1202014: 100}  # Item.Used -> Gift.Num
+    # 神格碎片「转化」的兑出货币: Item.Return[0] is a table/CurrencyType TpyeId and
+    # that row's ItemID is the item that actually lands in the bag. Only the
+    # currency this route really pays is listed; an unknown type is refused rather
+    # than guessed. 927 = E_FragmentMoney -> 1237927 神笺 (login.py serves it as
+    # BaseInfo field 66, FragmentMoney).
+    RETURN_CURRENCY_ITEMS = {927: 1237927}
     POWER_RECOVER_SECONDS = 225  # Client ServerData default 300s; user policy: 25% faster.
     # Item.EffData -> BaseInfoProto; only supported currency destinations.
     CURRENCIES = {1237901: "gold", 1237902: "crystal", 1237906: "equip_exp", 1237907: "hero_exp",
@@ -150,6 +156,19 @@ class EconomyService:
             for row in self.catalog["items"]:
                 if str(row["ItemID"]) in used and not row.get("Used"):
                     row["Used"] = used[str(row["ItemID"])]["used"]
+        # Item.Return is the 「转化」 rate: [currencyType, amount] per item. The
+        # curated economy_catalog has it for the chips it happens to list, while
+        # the reward_items export carries no Return column at all (1201041, client
+        # Return [927, 5], only exists there), so restore the whole column from its
+        # own export, exactly like Item.Used above. Without it an exchange on such
+        # a chip is refused as "no rate".
+        return_path = files("x2server").joinpath("data/item_return_catalog.json")
+        if return_path.is_file():
+            returned = json.loads(return_path.read_text(encoding="utf-8"))["items"]
+            for row in self.catalog["items"]:
+                entry = returned.get(str(row["ItemID"]))
+                if entry and not row.get("Return"):
+                    row["Return"] = entry
         # Item.FunctionEff == E_AutoUsed(7): the row is a receipt for its
         # Item.EffData Gift group and opens the moment it is acquired. It carries
         # no Item.Used, so the client can never open it and _grant would otherwise
@@ -1579,7 +1598,8 @@ class EconomyService:
         from .medals import MedalService
         handlers = {**self.season.handlers(), **self.world_boss.handlers(), **self.endless.handlers(), **self.element_compose.handlers(), **MedalService(self).handlers(), **BagItemService(self.store, self).handlers(), **self.achievements.handlers(),
                 "C2L_FetchMobilityPower": self.fetch_mobility_power,
-                **{name: self.handle for name in ("C2L_ItemAll", "C2L_ItemOpt", "C2L_ShopGoods", "C2L_RefreshShop", "C2L_BuyGoods",
+                **{name: self.handle for name in ("C2L_ItemAll", "C2L_ItemOpt", "C2L_ItemExchangeCurrency",
+            "C2L_ShopGoods", "C2L_RefreshShop", "C2L_BuyGoods",
             "C2L_QueryGoodsInfo", "C2L_GameTask", "C2L_DailyAndWeekTask", "C2L_FinishGameTask",
             "C2L_FinishGameTaskAsync", "C2L_PickTreasureBox", "C2L_QueryMission",
             "C2L_UnlockStory", "C2L_QueryFirstReCharge", "C2L_ReciveFirstReCharge")}}
@@ -1642,6 +1662,8 @@ class EconomyService:
             if item_id in self.CAUSALITY_CARDS:
                 return self.use_causality_card(context, packet, request)
             return self.use_bag_item(context, packet, request)
+        if name == "C2L_ItemExchangeCurrency":
+            return self.exchange_item_currency(context, packet, request)
         if name == "C2L_ItemAll":
             return OutboundMessage(response_name, self.inventory_values(player_id))
         if name == "C2L_QueryMission":
@@ -1826,3 +1848,64 @@ class EconomyService:
             self.store.db.execute("INSERT INTO item_opt_receipts VALUES (?,?,?)",
                                   (key, player_id, ECONOMY_SCHEMAS["L2C_ItemOpt"].encode(values)))
         return OutboundMessage("L2C_ItemOpt", values, pushes=self.pushes(player_id))
+
+    def exchange_item_currency(self, context, packet, request):
+        """神格碎片「转化」: spend ItemType 12 chips for the currency in Item.Return.
+
+        The button that lands here is ItemInfoWnd_OnUseBtnClick (0x16ED7F0) /
+        BagModule_ItemExchangeCurrency (0x19C6688), and the client shows nothing
+        that came from itself: ItemInfoWnd_ShowNum (0x16ED730) only sets the
+        stepper's max to the owned count, the 1 -> N rate is drawn from the
+        RewardData below. Every pair is validated before anything is written; a
+        refusal is an explicit code 13, never a silent drop, because the client
+        keeps re-sending a request it got no reply for.
+        """
+        player_id = context.session.player_id
+        plan = []
+        for raw in request.get("items", []):
+            pair = MISSION_PAIR.decode(raw)
+            item_id, count = pair.get("Key", 0), pair.get("Value", 0)
+            row = self.items.get(item_id) or {}
+            returned = row.get("Return")
+            # ItemType 12 is the only type BagModule_ItemType2SelectType maps to
+            # 「转化」. 1201000 万能神格碎片 has no Return at all, so it is refused
+            # as "no rate" instead of paying something invented.
+            if (row.get("ItemType", {}).get("value") != 12 or not returned
+                    or type(count) is not int or not 1 <= count <= 999
+                    or returned[0] not in self.RETURN_CURRENCY_ITEMS):
+                return OutboundMessage("L2C_ItemExchangeCurrency", {"code": 13})
+            plan.append((item_id, count, self.RETURN_CURRENCY_ITEMS[returned[0]], int(returned[1])))
+        if not plan or sum(count for _, count, _, _ in plan) > 999:
+            return OutboundMessage("L2C_ItemExchangeCurrency", {"code": 13})
+        key = hashlib.sha256(f"{player_id}:{context.session.session_id}:{packet.header.request_id}:item-exchange".encode()
+                             + packet.body).hexdigest()
+        try:
+            return self._exchange_item_currency(player_id, plan, key)
+        except UnresolvedEconomy as exc:
+            logging.getLogger("x2.economy").info(
+                "item exchange rejected player=%s reason=%s", player_id, exc)
+            return OutboundMessage("L2C_ItemExchangeCurrency", {"code": 13})
+
+    def _exchange_item_currency(self, player_id, plan, key):
+        with self.transaction():
+            row = self.store.db.execute("SELECT response FROM item_opt_receipts WHERE request_key=? AND player_id=?",
+                                        (key, player_id)).fetchone()
+            if row:
+                return OutboundMessage("L2C_ItemExchangeCurrency",
+                                       ECONOMY_SCHEMAS["L2C_ItemExchangeCurrency"].decode(row[0]),
+                                       pushes=self.pushes(player_id))
+            for item_id, count, _, _ in plan:
+                spent = self.store.db.execute("UPDATE inventory SET quantity=quantity-? "
+                    "WHERE player_id=? AND item_id=? AND quantity>=?", (count, player_id, item_id, count))
+                # The whole order clears or none of it does: raising rolls the
+                # savepoint back instead of charging for a partly served list.
+                if not spent.rowcount:
+                    raise UnresolvedEconomy(f"insufficient chip {item_id}")
+            rewards = Counter()
+            for _, count, payout, amount in plan:
+                rewards[payout] += amount * count
+            granted = self._grant(player_id, f"item-exchange:{key}", rewards)
+            values = {"code": 10, "rewardData": self.reward_bytes(granted)}
+            self.store.db.execute("INSERT INTO item_opt_receipts VALUES (?,?,?)",
+                                  (key, player_id, ECONOMY_SCHEMAS["L2C_ItemExchangeCurrency"].encode(values)))
+        return OutboundMessage("L2C_ItemExchangeCurrency", values, pushes=self.pushes(player_id))
