@@ -165,13 +165,15 @@ class AppearanceService:
             # (HeroModule_ShowSortRule) 都读它，所以必须排在回包之前下发，否则横幅会弹而
             # 列表不动。不认这两档就回 13，也就是客户端看到的「操作失败 E_ERROR_OPT」。
             if opt in (5, 6):
-                if not values or values[0] not in self._owned_heroes(player_id):
+                if len(values) != 1:
                     return OutboundMessage("L2C_Account", {"result": 13, "opt": opt})
                 enjoy = 1 if opt == 5 else 0
                 with self.economy.transaction():
                     snapshot = self.store.get(player_id)["snapshot"]
-                    hero = next(h for h in snapshot.get("heroes", [])
-                                if h["id"] == values[0] and h.get("state") == 2)
+                    hero = next((h for h in snapshot.get("heroes", [])
+                                 if h["id"] == values[0] and h.get("state") == 2), None)
+                    if hero is None:
+                        return OutboundMessage("L2C_Account", {"result": 13, "opt": opt})
                     hero["enjoy"] = enjoy
                     self.economy.save_snapshot(player_id, snapshot)
                 from .hero import encode_hero_data

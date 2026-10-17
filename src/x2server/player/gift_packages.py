@@ -166,7 +166,8 @@ class GiftPackageService:
         if not self._free_daily(package):
             return None
         cycle = self._free_daily_cycle(package)
-        claimed = self._bought_count(player_id, package["GiftPackageID"]) + 1
+        # Called after the daily claim row has been inserted in the same transaction.
+        claimed = self._bought_count(player_id, package["GiftPackageID"])
         if cycle and claimed % cycle == 0 and package.get("Param2"):
             return package["Param2"]
         return None
@@ -174,7 +175,9 @@ class GiftPackageService:
     def _rewards(self, package, groups=None):
         rewards = Counter()
         for group in package["GiftID"] if groups is None else groups:
-            row = self.gifts[group]
+            row = self.gifts.get(group)
+            if row is None:
+                raise UnresolvedEconomy("missing gift group")
             items, counts = row["GiftValue"], row["Num"]
             if len(items) != len(counts):
                 raise UnresolvedEconomy("invalid gift package items")
@@ -239,12 +242,14 @@ class GiftPackageService:
             return OutboundMessage(reply, ECONOMY_SCHEMAS[reply].decode(cached[0]),
                                    pushes=self.economy.pushes(player_id))
         try:
-            rewards = self._rewards(package, self._reward_groups(player_id, package))
             with self.economy.transaction():
                 inserted = self.store.db.execute("INSERT OR IGNORE INTO gift_package_claims VALUES (?,?,?,?)",
                     (player_id, package_id, period, int(self.economy.clock())))
                 if not inserted.rowcount:
                     return reject
+                # Select the cycle reward only after acquiring the write lock and
+                # inserting this claim. Failed delivery rolls the daily row back.
+                rewards = self._rewards(package, self._reward_groups(player_id, package))
                 price = package.get("Price", 0) if package["CurrencyType"] == 902 else 0
                 if price:
                     snapshot = self.store.get(player_id)["snapshot"]
