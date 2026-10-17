@@ -22,3 +22,5 @@ Official-Behavior: NO
 `Item` 静态证据：`1237902` 的 `ItemType=16 E_Currency`、`FunctionEff=2 E_Currency`、`EffData=[902]`、图标 `Ico_Currency_GuangHui`；`1237914` 的对应字段为 `16/2/[914]`、图标 `Ico_Currency_XuYuanBi`。两者均用原有发奖通道，登录本身不直接增加资产。
 
 用户后来明确确认每日附 100 因果卡 `1202014` ×10。客户端 `Item` 与 `Gift` 静态表有 `1202010..1202014` 五档因果卡，对应 10/20/30/60/100 因果。五档卡的 `C2L_ItemOpt` 使用操作均按客户端 `Item.Used -> Gift.Num` 事务扣卡并增加因果。
+
+2026-10-17 用户追加独立一次性邮件：许愿币1237914×120、终极因果卡1202014×100。新号注册、老号启动回填、登录/重连补漏共用 journey_supply_120_100:<player_id>，system_mail_issues 保留发行记录，领取、删除或导入旧存档均不重复发放。远程部署启动后同样回填老账号。

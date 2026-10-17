@@ -84,6 +84,7 @@ class LoginService:
             self.identity.ensure_ultimate_causality_mail(player["id"], now)
             self.identity.ensure_revival_supply_mail(player["id"], now)
             self.identity.ensure_causality_oct13_mail(player["id"], now)
+            self.identity.ensure_journey_supply_mail(player["id"], now)
         context.session.session_id = secrets.token_urlsafe(24)
         context.session.player_id = player["id"]
         result: dict[str, Any] = {"code": 10, "id": player["id"], "loginCount": player["login_count"],
@@ -274,6 +275,7 @@ class LoginService:
         causality_created = self.identity.ensure_ultimate_causality_mail(player["id"], now) if self.mail else False
         supply_created = self.identity.ensure_revival_supply_mail(player["id"], now) if self.mail else False
         extra_created = self.identity.ensure_causality_oct13_mail(player["id"], now) if self.mail else False
+        journey_created = self.identity.ensure_journey_supply_mail(player["id"], now) if self.mail else False
         daily_granted = self.gift_packages.settle_daily(player["id"]) if self.gift_packages else False
         # Same-process reconnect keeps the authenticated transport session supplied
         # by the client; a fresh login is required after identity-service restart.
@@ -281,7 +283,7 @@ class LoginService:
             context.session.session_id = secrets.token_urlsafe(24)
         LOGGER.info("authenticated reconnect player=%s", player["id"])
         pushes = self.economy.pushes(player["id"]) if daily_granted and self.economy else ()
-        if welcome_created or daily_created or choice_created or causality_created or supply_created or extra_created:
+        if welcome_created or daily_created or choice_created or causality_created or supply_created or extra_created or journey_created:
             pushes += (self.mail.list_message(player["id"]),)
         return OutboundMessage("L2C_ReConnect", {"code": 10, "id": player["id"],
             "serverTime": now}, pushes=pushes)

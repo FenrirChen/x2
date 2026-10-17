@@ -25,6 +25,7 @@ ONCE_MAIL_PREFIXES = {
     'ultimate_causality': ('ultimate_causality_50:',),
     'revival_supply': ('revival_supply_200_7200_140:',),
     'causality_oct13': ('causality_gift_20261013_50:',),
+    'journey_supply_120_100': ('journey_supply_120_100:',),
 }
 
 
@@ -79,6 +80,11 @@ def insert_system_mail(db, player_id, account_id, kind, now):
         source_key = f"causality_gift_20261013_50:{player_id}"
         title = "终极因果卡补给"
         body, rewards = "为您送上50张终极因果卡。每位玩家仅可领取一次。", {ULTIMATE_CAUSALITY_CARD: 50}
+    elif kind == "journey_supply_120_100":
+        source_key = f"journey_supply_120_100:{player_id}"
+        title = "旅途许愿补给"
+        body, rewards = "为您送上120枚许愿币和100张终极因果卡。每位玩家仅可领取一次。", {
+            WISH_COIN: 120, ULTIMATE_CAUSALITY_CARD: 100}
     elif kind == "revival_supply":
         source_key = f"revival_supply_200_7200_140:{player_id}"
         title = "旅途补给赠礼"

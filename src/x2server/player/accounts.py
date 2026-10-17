@@ -102,6 +102,7 @@ class AccountStore:
                 insert_system_mail(self.db, player_id, cursor.lastrowid, "ultimate_causality", now)
                 insert_system_mail(self.db, player_id, cursor.lastrowid, "revival_supply", now)
                 insert_system_mail(self.db, player_id, cursor.lastrowid, "causality_oct13", now)
+                insert_system_mail(self.db, player_id, cursor.lastrowid, "journey_supply_120_100", now)
                 self.db.commit()
             except sqlite3.IntegrityError as exc:
                 self.db.rollback()
@@ -134,6 +135,9 @@ class AccountStore:
 
     def ensure_ultimate_causality_mail(self, player_id: int, now: int) -> bool:
         return self.ensure_player_gift_mail(player_id, now, "ultimate_causality")
+
+    def ensure_journey_supply_mail(self, player_id: int, now: int) -> bool:
+        return self.ensure_player_gift_mail(player_id, now, "journey_supply_120_100")
 
     def ensure_causality_oct13_mail(self, player_id: int, now: int) -> bool:
         return self.ensure_player_gift_mail(player_id, now, "causality_oct13")

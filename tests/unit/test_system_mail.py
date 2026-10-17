@@ -86,13 +86,13 @@ def test_welcome_daily_claim_and_restart(tmp_path):
     assert accounts.create("new", "pw", day) == "duplicate"
     player_id = accounts.get_by_name("new")["player_id"]
     rows = store.db.execute("SELECT * FROM player_mail WHERE player_id=?", (player_id,)).fetchall()
-    assert len(rows) == 5 and rows[0]["body"] == "" and rows[0]["title"] == ""
+    assert len(rows) == 6 and rows[0]["body"] == "" and rows[0]["title"] == ""
     assert rows[0]["source_key"] == f"welcome_mail:{accounts.get_by_name('new')['account_id']}"
     assert not accounts.ensure_welcome_mail(player_id, day + 1)
     assert accounts.ensure_daily_login_mail(player_id, day)
     assert not accounts.ensure_daily_login_mail(player_id, day + 1800)
     rows = store.db.execute("SELECT * FROM player_mail WHERE player_id=? ORDER BY id", (player_id,)).fetchall()
-    assert len(rows) == 6 and rows[5]["body"] == "祝您玩的开心"
+    assert len(rows) == 7 and rows[6]["body"] == "祝您玩的开心"
     before = store.get(player_id)["snapshot"]
     ctx = DispatchContext("test", "local", SessionState("test", "session", player_id=player_id))
     for row in rows:
@@ -100,13 +100,13 @@ def test_welcome_daily_claim_and_restart(tmp_path):
         assert response.values["code"] == 10
         assert asyncio.run(mail.handle(ctx, packet({"mailid": row["id"]}, name="C2L_ReceiveAttachment"))).values["code"] == 13
     assert not accounts.ensure_welcome_mail(player_id, day + 2)
-    assert store.db.execute("SELECT count(*) FROM player_mail WHERE player_id=?", (player_id,)).fetchone()[0] == 6
+    assert store.db.execute("SELECT count(*) FROM player_mail WHERE player_id=?", (player_id,)).fetchone()[0] == 7
     after = store.get(player_id)["snapshot"]
     assert after["crystal"] - before["crystal"] == 11000
     assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=? AND item_id=?",
-                            (player_id, WISH_COIN)).fetchone()[0] == 230
+                            (player_id, WISH_COIN)).fetchone()[0] == 350
     assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=? AND item_id=?",
-                            (player_id, CAUSALITY_CARD)).fetchone()[0] == 310
+                            (player_id, CAUSALITY_CARD)).fetchone()[0] == 410
     assert BIO_POWER == 1237922
     assert store.db.execute('SELECT quantity FROM inventory WHERE player_id=? AND item_id=?',
                             (player_id, BIO_POWER)).fetchone()[0] == 700
@@ -119,7 +119,7 @@ def test_welcome_daily_claim_and_restart(tmp_path):
     accounts = AccountStore(reopened)
     assert not accounts.ensure_daily_login_mail(player_id, day + 3600)
     assert accounts.ensure_daily_login_mail(player_id, day + 86400)
-    assert reopened.db.execute("SELECT count(*) FROM player_mail WHERE player_id=?", (player_id,)).fetchone()[0] == 7
+    assert reopened.db.execute("SELECT count(*) FROM player_mail WHERE player_id=?", (player_id,)).fetchone()[0] == 8
     accounts.close()
     reopened.close()
 
@@ -197,3 +197,37 @@ def test_welcome_failure_rolls_back_registration(tmp_path):
     assert store.db.execute("SELECT COUNT(*) FROM players").fetchone()[0] == 0
     accounts.close()
     store.close()
+
+
+def test_journey_supply_backfills_legacy_and_remains_once_after_claim_delete_restart(tmp_path):
+    import json
+    from x2server.player.system_mail import deliver_player_gift
+    path = tmp_path / 'journey.db'
+    store = PlayerStore(path)
+    accounts = AccountStore(store)
+    store.login('legacy', 1, 100)
+    assert deliver_player_gift(store, 200, 'journey_supply_120_100') == (1, [])
+    assert accounts.create('new', 'pw', 201) == 'created'
+    new_id = accounts.get_by_name('new')['player_id']
+    assert not accounts.ensure_journey_supply_mail(new_id, 202)
+    assert deliver_player_gift(store, 203, 'journey_supply_120_100') == (0, [])
+    economy = EconomyService(store)
+    mail = MailService(store, economy)
+    for player_id in (1, new_id):
+        row = store.db.execute("SELECT * FROM player_mail WHERE player_id=? AND source_key=?",
+                               (player_id, f'journey_supply_120_100:{player_id}')).fetchone()
+        assert json.loads(row['attachments']) == {str(WISH_COIN): 120, str(CAUSALITY_CARD): 100}
+        ctx = DispatchContext('test', 'local', SessionState('test', 'session', player_id=player_id))
+        req = packet({'mailid': row['id']}, name='C2L_ReceiveAttachment')
+        assert asyncio.run(mail.handle(ctx, req)).values['code'] == 10
+        assert asyncio.run(mail.handle(ctx, req)).values['code'] == 13
+        for item_id, quantity in ((WISH_COIN, 120), (CAUSALITY_CARD, 100)):
+            assert store.db.execute('SELECT quantity FROM inventory WHERE player_id=? AND item_id=?',
+                                    (player_id, item_id)).fetchone()[0] == quantity
+        with store.db:
+            store.db.execute('DELETE FROM player_mail WHERE id=?', (row['id'],))
+    accounts.close()
+    store.close()
+    reopened = PlayerStore(path)
+    assert deliver_player_gift(reopened, 300, 'journey_supply_120_100') == (0, [])
+    reopened.close()
