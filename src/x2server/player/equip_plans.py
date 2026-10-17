@@ -16,8 +16,8 @@ import logging
 import hashlib
 import json
 import sqlite3
-from contextlib import contextmanager
 from .store import validate_snapshot
+from .transactions import transaction
 
 from x2server.messages.equip_plan import (EQUIP_PLAN, EQUIP_PLAN_SCHEMAS, PLAN,
                                           PLAN_ENTRY, PLAN_POS)
@@ -89,17 +89,8 @@ class EquipPlanService:
                 request_key TEXT PRIMARY KEY, player_id INTEGER NOT NULL,
                 response_name TEXT NOT NULL, response BLOB NOT NULL)""")
 
-    @contextmanager
     def transaction(self):
-        self.store.db.execute("SAVEPOINT equip_plan_operation")
-        try:
-            yield
-        except BaseException:
-            self.store.db.execute("ROLLBACK TO equip_plan_operation")
-            self.store.db.execute("RELEASE equip_plan_operation")
-            raise
-        else:
-            self.store.db.execute("RELEASE equip_plan_operation")
+        return transaction(self.store.db)
 
     def save_snapshot(self, player_id, snapshot, revision):
         validate_snapshot(snapshot)

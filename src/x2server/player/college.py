@@ -6,8 +6,6 @@ import json
 import hashlib
 import logging
 from importlib.resources import files
-from contextlib import contextmanager
-import uuid
 
 from x2server.messages.college import COLLEGE_IDS, COLLEGE_SCHEMAS
 from x2server.messages.lobby import (BUILDING_BASE_INFO, BUILD_QUEUE, CUSTOMER_INFO, ELEMENT,
@@ -18,6 +16,7 @@ from x2server.protocol.errors import ProtocolError
 from x2server.protocol.registry import CORE_MESSAGE_REGISTRY
 from x2server.protocol.types import DecodedPacket
 from .server_clock import ServerClock
+from .transactions import transaction
 
 LOGGER = logging.getLogger("x2.college")
 
@@ -118,19 +117,8 @@ class CollegeStateRepository:
                 version INTEGER NOT NULL, state_json TEXT NOT NULL,
                 created_at INTEGER NOT NULL, updated_at INTEGER NOT NULL)""")
 
-    @contextmanager
     def transaction(self):
-        """Nested snapshots must not commit a caller's inventory transaction."""
-        name = 'college_' + uuid.uuid4().hex
-        self.store.db.execute('SAVEPOINT ' + name)
-        try:
-            yield
-        except BaseException:
-            self.store.db.execute('ROLLBACK TO ' + name)
-            self.store.db.execute('RELEASE ' + name)
-            raise
-        else:
-            self.store.db.execute('RELEASE ' + name)
+        return transaction(self.store.db)
 
     def load(self, player_id: int) -> dict:
         now = self.clock.now()

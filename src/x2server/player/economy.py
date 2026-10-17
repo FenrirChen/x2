@@ -1,7 +1,6 @@
 """Confirmed rewards and tasks with the user-defined Revival calendar."""
 from collections import Counter
 import hashlib
-from contextlib import contextmanager
 from importlib.resources import files
 import json
 import logging
@@ -16,6 +15,7 @@ from x2server.network.dispatcher import OutboundMessage
 from x2server.protocol.errors import ProtocolError
 from x2server.protocol.registry import CORE_MESSAGE_REGISTRY
 from .task_calendar import task_period
+from .transactions import transaction
 from .battle_entry import BattleEntryCatalog
 from .equipment_factory import EquipmentInstanceFactory, materialize_instances
 from .reward_system import (ReportCurrencyResolver, RewardGrant, RuntimeDropResolver,
@@ -291,20 +291,8 @@ class EconomyService:
         from .extra_drop import ExtraDropService
         self.extra_drop = ExtraDropService(self, enabled=self.resource_double_drop)
 
-    @contextmanager
     def transaction(self):
-        # Nested reward/task operations must never commit the battle receipt early.
-        import uuid
-        savepoint = "economy_" + uuid.uuid4().hex
-        self.store.db.execute("SAVEPOINT " + savepoint)
-        try:
-            yield
-        except BaseException:
-            self.store.db.execute("ROLLBACK TO " + savepoint)
-            self.store.db.execute("RELEASE " + savepoint)
-            raise
-        else:
-            self.store.db.execute("RELEASE " + savepoint)
+        return transaction(self.store.db)
 
     def ensure_periods(self, player_id):
         """Lazy rollover at login or the first online operation after a boundary."""

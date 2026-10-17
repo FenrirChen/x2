@@ -1,23 +1,16 @@
 """Friend points: cap grants and repair legacy/imported balances consistently."""
 import logging
-import uuid
+from .transactions import transaction
 
 ITEM_ID = 1237917
 LIMIT = 5000
 
 
 def repair(store,player_id=None):
-    marker='friend_cap_'+uuid.uuid4().hex
-    store.db.execute('SAVEPOINT '+marker)
-    try:
+    with transaction(store.db):
         clause=' AND player_id=?' if player_id is not None else ''
         args=(LIMIT,ITEM_ID,LIMIT,player_id) if player_id is not None else (LIMIT,ITEM_ID,LIMIT)
         changed=store.db.execute('UPDATE inventory SET quantity=? WHERE item_id=? AND quantity>?'+clause,args).rowcount
-    except BaseException:
-        store.db.execute('ROLLBACK TO '+marker)
-        store.db.execute('RELEASE '+marker)
-        raise
-    store.db.execute('RELEASE '+marker)
     if changed:
         logging.getLogger('x2.social').info('friendship point cap repaired player=%s rows=%s',player_id,changed)
     return changed
