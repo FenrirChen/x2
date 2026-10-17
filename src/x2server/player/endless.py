@@ -172,6 +172,12 @@ class EndlessService:
                 ('dropItem','packProfile'), ('killMonster','killMonster')):
             if source in req:
                 profile[dest] = req[source]
+        # Element compose tally (FightDataProfile.elementExp/formulaCompose) must reach the
+        # durable profile: merging it only into the re-enter response dropped it on a new run
+        # or across the weekly reset, so the client's formula list reset to empty.
+        fields = self.economy.element_compose.profile_fields(player, entry['uuid'])
+        if fields:
+            profile.update(fields)
         self.store.db.execute('''INSERT INTO endless_profiles VALUES (?,?,?,?,?)
             ON CONFLICT(player_id) DO UPDATE SET run_id=excluded.run_id,section_id=excluded.section_id,
             profile=excluded.profile,updated_at=excluded.updated_at''',
