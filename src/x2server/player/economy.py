@@ -1871,7 +1871,10 @@ class EconomyService:
         """
         player_id = context.session.player_id
         plan = []
-        for raw in request.get("items", []):
+        entries = request.get("items", [])
+        if not 0 < len(entries) <= 128:
+            return OutboundMessage("L2C_ItemExchangeCurrency", {"code": 13})
+        for raw in entries:
             pair = MISSION_PAIR.decode(raw)
             item_id, count = pair.get("Key", 0), pair.get("Value", 0)
             row = self.items.get(item_id) or {}
@@ -1880,11 +1883,12 @@ class EconomyService:
             # 「转化」. 1201000 万能神格碎片 has no Return at all, so it is refused
             # as "no rate" instead of paying something invented.
             if (row.get("ItemType", {}).get("value") != 12 or not returned
-                    or type(count) is not int or not 1 <= count <= 999
+                    or len(returned) != 2 or type(returned[1]) is not int or returned[1] <= 0
+                    or type(count) is not int or not 1 <= count <= 2**31 - 1
                     or returned[0] not in self.RETURN_CURRENCY_ITEMS):
                 return OutboundMessage("L2C_ItemExchangeCurrency", {"code": 13})
             plan.append((item_id, count, self.RETURN_CURRENCY_ITEMS[returned[0]], int(returned[1])))
-        if not plan or sum(count for _, count, _, _ in plan) > 999:
+        if not plan or sum(count for _, count, _, _ in plan) > 2**31 - 1:
             return OutboundMessage("L2C_ItemExchangeCurrency", {"code": 13})
         key = hashlib.sha256(f"{player_id}:{context.session.session_id}:{packet.header.request_id}:item-exchange".encode()
                              + packet.body).hexdigest()
@@ -1902,7 +1906,7 @@ class EconomyService:
             if row:
                 return OutboundMessage("L2C_ItemExchangeCurrency",
                                        ECONOMY_SCHEMAS["L2C_ItemExchangeCurrency"].decode(row[0]),
-                                       pushes=self.pushes(player_id))
+                                       before_response=self.pushes(player_id))
             for item_id, count, _, _ in plan:
                 spent = self.store.db.execute("UPDATE inventory SET quantity=quantity-? "
                     "WHERE player_id=? AND item_id=? AND quantity>=?", (count, player_id, item_id, count))
@@ -1917,4 +1921,4 @@ class EconomyService:
             values = {"code": 10, "rewardData": self.reward_bytes(granted)}
             self.store.db.execute("INSERT INTO item_opt_receipts VALUES (?,?,?)",
                                   (key, player_id, ECONOMY_SCHEMAS["L2C_ItemExchangeCurrency"].encode(values)))
-        return OutboundMessage("L2C_ItemExchangeCurrency", values, pushes=self.pushes(player_id))
+        return OutboundMessage("L2C_ItemExchangeCurrency", values, before_response=self.pushes(player_id))

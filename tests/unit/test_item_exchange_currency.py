@@ -62,7 +62,7 @@ def test_only_type_12_chips_with_a_known_rate_are_served(env):
         # 1101014: has a Return column but is not a chip (ItemType 25).
         store.db.execute("INSERT INTO inventory VALUES (?,?,?)", (1, 1101014, 5))
     for pairs, request_id in ((None, 1), ([], 2), ([(1201000, 1)], 3), ([(1101014, 1)], 4),
-                              ([(999999, 1)], 5), ([(CHIP, 0)], 6), ([(CHIP, 1000)], 7)):
+                              ([(999999, 1)], 5), ([(CHIP, 0)], 6), ([(CHIP, -1)], 7)):
         request = packet({"items": []}, request_id=request_id, name="C2L_ItemExchangeCurrency") \
             if pairs is None else exchange(pairs, request_id=request_id)
         assert asyncio.run(economy.handle(ctx, request)).values["code"] == 13

@@ -1,0 +1,755 @@
+0x179b734 ShopInGameItem::internal void RefreshData(ShopItem item) { }
+179b734: stp d9, d8, [sp, #-0x60]!
+179b738: stp x26, x25, [sp, #0x10]
+179b73c: stp x24, x23, [sp, #0x20]
+179b740: stp x22, x21, [sp, #0x30]
+179b744: stp x20, x19, [sp, #0x40]
+179b748: stp x29, x30, [sp, #0x50]
+179b74c: add x29, sp, #0x50
+179b750: sub sp, sp, #0x20
+179b754: adrp x21, #0x5577000
+179b758: ldrb w8, [x21, #0x15c]
+179b75c: mov x20, x1
+179b760: mov x19, x0
+179b764: tbnz w8, #0, #0x179b780
+179b768: adrp x8, #0x52de000
+179b76c: ldr x8, [x8, #0xcf8]
+179b770: ldr w0, [x8]
+179b774: bl #0x3f2aed0 ;
+179b778: mov w8, #1
+179b77c: strb w8, [x21, #0x15c]
+179b780: cbnz x20, #0x179b788
+179b784: bl #0x3f564f0 ;
+179b788: ldr w22, [x20, #0x1c]
+179b78c: ldr x21, [x19, #0x30]
+179b790: cbnz x21, #0x179b798
+179b794: bl #0x3f564f0 ;
+179b798: cmp w22, #0x63
+179b79c: b.le #0x179b7b4
+179b7a0: mov w1, wzr
+179b7a4: mov x2, xzr
+179b7a8: mov x0, x21
+179b7ac: bl #0x2d2c6e4 ; GameObject::public void SetActive(bool value) { }
+179b7b0: b #0x179b888 ;
+179b7b4: mov x2, xzr
+179b7b8: mov w1, #1
+179b7bc: mov x0, x21
+179b7c0: bl #0x2d2c6e4 ; GameObject::public void SetActive(bool value) { }
+179b7c4: cbnz x20, #0x179b7cc
+179b7c8: bl #0x3f564f0 ;
+179b7cc: adrp x8, #0x528b000
+179b7d0: ldr x8, [x8, #0x2e0]
+179b7d4: ldr x21, [x19, #0x38]
+179b7d8: mov w10, #0x64
+179b7dc: ldr x0, [x8]
+179b7e0: ldr w8, [x20, #0x1c]
+179b7e4: ldrb w9, [x0, #0x10a]
+179b7e8: sub w23, w10, w8
+179b7ec: tbz w9, #0, #0x179b7fc
+179b7f0: ldr w8, [x0, #0xbc]
+179b7f4: cbnz w8, #0x179b7fc
+179b7f8: bl #0x3f3f378 ;
+179b7fc: mov w1, #0xc70000
+179b800: mov x0, xzr
+179b804: movk w1, #0xe51b
+179b808: mov x2, xzr
+179b80c: bl #0x151fae4 ; UISpecialLayer::public static string GetLanguageStr(int id) { }
+179b810: adrp x8, #0x52e8000
+179b814: ldr x8, [x8, #0xcc0]
+179b818: mov x22, x0
+179b81c: add x1, sp, #8
+179b820: str w23, [sp, #8]
+179b824: ldr x8, [x8]
+179b828: mov x0, x8
+179b82c: bl #0x3f6448c ;
+179b830: adrp x8, #0x5285000
+179b834: ldr x8, [x8, #0x500]
+179b838: mov x23, x0
+179b83c: ldr x8, [x8]
+179b840: ldrb w9, [x8, #0x10a]
+179b844: tbz w9, #0, #0x179b858
+179b848: ldr w9, [x8, #0xbc]
+179b84c: cbnz w9, #0x179b858
+179b850: mov x0, x8
+179b854: bl #0x3f3f378 ;
+179b858: mov x0, xzr
+179b85c: mov x3, xzr
+179b860: mov x1, x22
+179b864: mov x2, x23
+179b868: bl #0x2b7e118 ; String::public static string Format(string format, object arg0) { }
+179b86c: mov x22, x0
+179b870: cbnz x21, #0x179b878
+179b874: bl #0x3f564f0 ;
+179b878: mov x2, xzr
+179b87c: mov x0, x21
+179b880: mov x1, x22
+179b884: bl #0x1b8c2d0 ; TMP_Text::public void SetText(string text) { }
+179b888: cbnz x20, #0x179b890
+179b88c: bl #0x3f564f0 ;
+179b890: mov x21, x20
+179b894: ldr w23, [x21, #0x14]!
+179b898: ldr x22, [x19, #0x50]
+179b89c: cbnz x22, #0x179b8a4
+179b8a0: bl #0x3f564f0 ;
+179b8a4: cmp w23, #0
+179b8a8: b.le #0x179b8b8
+179b8ac: mov w1, wzr
+179b8b0: mov x2, xzr
+179b8b4: b #0x179b8c0 ;
+179b8b8: mov x2, xzr
+179b8bc: mov w1, #1
+179b8c0: mov x0, x22
+179b8c4: bl #0x2d2c6e4 ; GameObject::public void SetActive(bool value) { }
+179b8c8: adrp x8, #0x5211000
+179b8cc: ldr x8, [x8, #0x488]
+179b8d0: ldr x0, [x8]
+179b8d4: ldrb w8, [x0, #0x10a]
+179b8d8: tbz w8, #0, #0x179b8e8
+179b8dc: ldr w8, [x0, #0xbc]
+179b8e0: cbnz w8, #0x179b8e8
+179b8e4: bl #0x3f3f378 ;
+179b8e8: mov x0, xzr
+179b8ec: mov x1, xzr
+179b8f0: bl #0x1cac6bc ; CurrencyTypeManager::public static CurrencyTypeManager get_Instance() { }
+179b8f4: mov x22, x0
+179b8f8: cbnz x20, #0x179b900
+179b8fc: bl #0x3f564f0 ;
+179b900: ldr w23, [x20, #0x20]
+179b904: cbnz x22, #0x179b90c
+179b908: bl #0x3f564f0 ;
+179b90c: mov x2, xzr
+179b910: mov x0, x22
+179b914: mov w1, w23
+179b918: bl #0x1cac98c ; CurrencyTypeManager::public CurrencyType GetItem(int tpyeid) { }
+179b91c: mov x22, x0
+179b920: cbz x22, #0x179b9e4
+179b924: adrp x8, #0x528b000
+179b928: ldr x8, [x8, #0x2e0]
+179b92c: ldr x23, [x22, #0x28]
+179b930: ldr x0, [x8]
+179b934: ldrb w8, [x0, #0x10a]
+179b938: tbz w8, #0, #0x179b948
+179b93c: ldr w8, [x0, #0xbc]
+179b940: cbnz w8, #0x179b948
+179b944: bl #0x3f3f378 ;
+179b948: mov x0, xzr
+179b94c: mov x2, xzr
+179b950: mov x1, x23
+179b954: bl #0x151dccc ; UISpecialLayer::public static Sprite GetSpriteByAltas(string spriteName) { }
+179b958: adrp x8, #0x5201000
+179b95c: ldr x8, [x8, #0x1d8]
+179b960: mov x23, x0
+179b964: ldr x8, [x8]
+179b968: ldrb w9, [x8, #0x10a]
+179b96c: tbz w9, #0, #0x179b980
+179b970: ldr w9, [x8, #0xbc]
+179b974: cbnz w9, #0x179b980
+179b978: mov x0, x8
+179b97c: bl #0x3f3f378 ;
+179b980: mov x0, xzr
+179b984: mov x2, xzr
+179b988: mov x1, x23
+179b98c: mov x3, xzr
+179b990: bl #0x2b9b06c ; Object::public static bool op_Inequality(Object x, Object y) { }
+179b994: tbz w0, #0, #0x179bab4
+179b998: ldr x22, [x19, #0x58]
+179b99c: cbnz x22, #0x179b9a4
+179b9a0: bl #0x3f564f0 ;
+179b9a4: mov x2, xzr
+179b9a8: mov x0, x22
+179b9ac: mov x1, x23
+179b9b0: bl #0x2a55c68 ; Image::public void set_overrideSprite(Sprite value) { }
+179b9b4: ldr x22, [x19, #0x58]
+179b9b8: cbnz x22, #0x179b9c0
+179b9bc: bl #0x3f564f0 ;
+179b9c0: mov x1, xzr
+179b9c4: mov x0, x22
+179b9c8: bl #0x2d25ae4 ; Component::public GameObject get_gameObject() { }
+179b9cc: mov x22, x0
+179b9d0: cbnz x22, #0x179b9d8
+179b9d4: bl #0x3f564f0 ;
+179b9d8: mov x2, xzr
+179b9dc: mov w1, #1
+179b9e0: b #0x179bb88 ;
+179b9e4: adrp x8, #0x5228000
+179b9e8: ldr x8, [x8, #0x560]
+179b9ec: ldr x22, [x8]
+179b9f0: mov x0, x22
+179b9f4: bl #0x3f1f994 ;
+179b9f8: mov w1, #1
+179b9fc: mov x0, x22
+179ba00: bl #0x3f69a40 ;
+179ba04: mov x22, x0
+179ba08: cbnz x20, #0x179ba10
+179ba0c: bl #0x3f564f0 ;
+179ba10: adrp x9, #0x52e8000
+179ba14: ldr w8, [x20, #0x20]
+179ba18: ldr x9, [x9, #0xcc0]
+179ba1c: add x1, sp, #8
+179ba20: str w8, [sp, #8]
+179ba24: ldr x0, [x9]
+179ba28: bl #0x3f6448c ;
+179ba2c: mov x23, x0
+179ba30: cbnz x22, #0x179ba38
+179ba34: bl #0x3f564f0 ;
+179ba38: cbz x23, #0x179ba5c
+179ba3c: ldr x8, [x22]
+179ba40: mov x0, x23
+179ba44: ldr x1, [x8, #0x30]
+179ba48: bl #0x3f64744 ;
+179ba4c: cbnz x0, #0x179ba5c
+179ba50: bl #0x3f571fc ;
+179ba54: mov x1, xzr
+179ba58: bl #0x3f563d4 ;
+179ba5c: ldr w8, [x22, #0x18]
+179ba60: cbnz w8, #0x179ba70
+179ba64: bl #0x3f570dc ;
+179ba68: mov x1, xzr
+179ba6c: bl #0x3f563d4 ;
+179ba70: str x23, [x22, #0x20]
+179ba74: adrp x8, #0x5207000
+179ba78: ldr x8, [x8, #0x5a0]
+179ba7c: ldr x0, [x8]
+179ba80: ldrb w8, [x0, #0x10a]
+179ba84: tbz w8, #0, #0x179ba94
+179ba88: ldr w8, [x0, #0xbc]
+179ba8c: cbnz w8, #0x179ba94
+179ba90: bl #0x3f3f378 ;
+179ba94: adrp x8, #0x52b0000
+179ba98: ldr x8, [x8, #0x850] ; STRING unknown MoneyType in currencyBase of {0}
+179ba9c: mov x0, xzr
+179baa0: mov x3, xzr
+179baa4: mov x2, x22
+179baa8: ldr x1, [x8]
+179baac: bl #0x3e45d2c ; TimerManager.<>c__DisplayClass29_0::public static void LogErrorFormat(string format, object[] args) { }
+179bab0: b #0x179bb90 ;
+179bab4: adrp x8, #0x5228000
+179bab8: ldr x8, [x8, #0x560]
+179babc: ldr x23, [x8]
+179bac0: mov x0, x23
+179bac4: bl #0x3f1f994 ;
+179bac8: mov w1, #1
+179bacc: mov x0, x23
+179bad0: bl #0x3f69a40 ;
+179bad4: ldr x23, [x22, #0x28]
+179bad8: mov x22, x0
+179badc: cbnz x22, #0x179bae4
+179bae0: bl #0x3f564f0 ;
+179bae4: cbz x23, #0x179bb08
+179bae8: ldr x8, [x22]
+179baec: mov x0, x23
+179baf0: ldr x1, [x8, #0x30]
+179baf4: bl #0x3f64744 ;
+179baf8: cbnz x0, #0x179bb08
+179bafc: bl #0x3f571fc ;
+179bb00: mov x1, xzr
+179bb04: bl #0x3f563d4 ;
+179bb08: ldr w8, [x22, #0x18]
+179bb0c: cbnz w8, #0x179bb1c
+179bb10: bl #0x3f570dc ;
+179bb14: mov x1, xzr
+179bb18: bl #0x3f563d4 ;
+179bb1c: str x23, [x22, #0x20]
+179bb20: adrp x8, #0x5207000
+179bb24: ldr x8, [x8, #0x5a0]
+179bb28: ldr x0, [x8]
+179bb2c: ldrb w8, [x0, #0x10a]
+179bb30: tbz w8, #0, #0x179bb40
+179bb34: ldr w8, [x0, #0xbc]
+179bb38: cbnz w8, #0x179bb40
+179bb3c: bl #0x3f3f378 ;
+179bb40: adrp x8, #0x5201000
+179bb44: ldr x8, [x8, #0xbe8] ; STRING known icon in shoppingmall of {0}
+179bb48: mov x0, xzr
+179bb4c: mov x3, xzr
+179bb50: mov x2, x22
+179bb54: ldr x1, [x8]
+179bb58: bl #0x3e45d2c ; TimerManager.<>c__DisplayClass29_0::public static void LogErrorFormat(string format, object[] args) { }
+179bb5c: ldr x22, [x19, #0x58]
+179bb60: cbnz x22, #0x179bb68
+179bb64: bl #0x3f564f0 ;
+179bb68: mov x1, xzr
+179bb6c: mov x0, x22
+179bb70: bl #0x2d25ae4 ; Component::public GameObject get_gameObject() { }
+179bb74: mov x22, x0
+179bb78: cbnz x22, #0x179bb80
+179bb7c: bl #0x3f564f0 ;
+179bb80: mov w1, wzr
+179bb84: mov x2, xzr
+179bb88: mov x0, x22
+179bb8c: bl #0x2d2c6e4 ; GameObject::public void SetActive(bool value) { }
+179bb90: ldr x22, [x19, #0x60]
+179bb94: cbnz x20, #0x179bb9c
+179bb98: bl #0x3f564f0 ;
+179bb9c: add x0, x20, #0x18
+179bba0: mov x1, xzr
+179bba4: bl #0x2e3f3f8 ;
+179bba8: mov x23, x0
+179bbac: cbnz x22, #0x179bbb4
+179bbb0: bl #0x3f564f0 ;
+179bbb4: mov x2, xzr
+179bbb8: mov x0, x22
+179bbbc: mov x1, x23
+179bbc0: bl #0x1b67298 ; TMP_Text::public void set_text(string value) { }
+179bbc4: ldr w23, [x19, #0x10]
+179bbc8: ldr x22, [x19, #0x18]
+179bbcc: cbnz x22, #0x179bbd4
+179bbd0: bl #0x3f564f0 ;
+179bbd4: ldr w24, [x22, #0x28]
+179bbd8: ldr x22, [x19, #0x88]
+179bbdc: cbnz x22, #0x179bbe4
+179bbe0: bl #0x3f564f0 ;
+179bbe4: mov x1, xzr
+179bbe8: mov x0, x22
+179bbec: bl #0x2d25ae4 ; Component::public GameObject get_gameObject() { }
+179bbf0: mov x22, x0
+179bbf4: cbnz x22, #0x179bbfc
+179bbf8: bl #0x3f564f0 ;
+179bbfc: cmp w23, w24
+179bc00: b.ne #0x179bc44
+179bc04: mov x2, xzr
+179bc08: mov w1, #1
+179bc0c: mov x0, x22
+179bc10: bl #0x2d2c6e4 ; GameObject::public void SetActive(bool value) { }
+179bc14: adrp x22, #0x5242000
+179bc18: ldr x22, [x22, #0xfd0]
+179bc1c: ldr x0, [x22]
+179bc20: ldrb w8, [x0, #0x10a]
+179bc24: tbz w8, #0, #0x179bc38
+179bc28: ldr w8, [x0, #0xbc]
+179bc2c: cbnz w8, #0x179bc38
+179bc30: bl #0x3f3f378 ;
+179bc34: ldr x0, [x22]
+179bc38: ldr x8, [x0, #0xa0]
+179bc3c: str x19, [x8]
+179bc40: b #0x179bc54 ;
+179bc44: mov w1, wzr
+179bc48: mov x2, xzr
+179bc4c: mov x0, x22
+179bc50: bl #0x2d2c6e4 ; GameObject::public void SetActive(bool value) { }
+179bc54: adrp x8, #0x521a000
+179bc58: ldr x8, [x8, #0x240]
+179bc5c: ldr x0, [x8]
+179bc60: ldrb w8, [x0, #0x10a]
+179bc64: tbz w8, #0, #0x179bc74
+179bc68: ldr w8, [x0, #0xbc]
+179bc6c: cbnz w8, #0x179bc74
+179bc70: bl #0x3f3f378 ;
+179bc74: mov x0, xzr
+179bc78: mov x1, xzr
+179bc7c: bl #0x198275c ; ItemManager::public static ItemManager get_Instance() { }
+179bc80: mov x22, x0
+179bc84: cbnz x20, #0x179bc8c
+179bc88: bl #0x3f564f0 ;
+179bc8c: ldr w23, [x20, #0x10]
+179bc90: cbnz x22, #0x179bc98
+179bc94: bl #0x3f564f0 ;
+179bc98: mov x2, xzr
+179bc9c: mov x0, x22
+179bca0: mov w1, w23
+179bca4: bl #0x1982a2c ; ItemManager::public Item GetItem(int itemid) { }
+179bca8: mov x22, x0
+179bcac: cbz x22, #0x179bd08
+179bcb0: adrp x8, #0x528b000
+179bcb4: ldr x8, [x8, #0x2e0]
+179bcb8: ldr x23, [x19, #0x68]
+179bcbc: ldr x24, [x22, #0x98]
+179bcc0: ldr x0, [x8]
+179bcc4: ldrb w8, [x0, #0x10a]
+179bcc8: tbz w8, #0, #0x179bcd8
+179bccc: ldr w8, [x0, #0xbc]
+179bcd0: cbnz w8, #0x179bcd8
+179bcd4: bl #0x3f3f378 ;
+179bcd8: mov x0, xzr
+179bcdc: mov x2, xzr
+179bce0: mov x1, x24
+179bce4: bl #0x151dccc ; UISpecialLayer::public static Sprite GetSpriteByAltas(string spriteName) { }
+179bce8: mov x24, x0
+179bcec: cbnz x23, #0x179bcf4
+179bcf0: bl #0x3f564f0 ;
+179bcf4: mov x2, xzr
+179bcf8: mov x0, x23
+179bcfc: mov x1, x24
+179bd00: bl #0x2a55c68 ; Image::public void set_overrideSprite(Sprite value) { }
+179bd04: b #0x179bdd4 ;
+179bd08: adrp x8, #0x5228000
+179bd0c: ldr x8, [x8, #0x560]
+179bd10: ldr x23, [x8]
+179bd14: mov x0, x23
+179bd18: bl #0x3f1f994 ;
+179bd1c: mov w1, #1
+179bd20: mov x0, x23
+179bd24: bl #0x3f69a40 ;
+179bd28: mov x23, x0
+179bd2c: cbnz x20, #0x179bd34
+179bd30: bl #0x3f564f0 ;
+179bd34: adrp x9, #0x52e8000
+179bd38: ldr w8, [x20, #0x10]
+179bd3c: ldr x9, [x9, #0xcc0]
+179bd40: add x1, sp, #8
+179bd44: str w8, [sp, #8]
+179bd48: ldr x0, [x9]
+179bd4c: bl #0x3f6448c ;
+179bd50: mov x24, x0
+179bd54: cbnz x23, #0x179bd5c
+179bd58: bl #0x3f564f0 ;
+179bd5c: cbz x24, #0x179bd80
+179bd60: ldr x8, [x23]
+179bd64: mov x0, x24
+179bd68: ldr x1, [x8, #0x30]
+179bd6c: bl #0x3f64744 ;
+179bd70: cbnz x0, #0x179bd80
+179bd74: bl #0x3f571fc ;
+179bd78: mov x1, xzr
+179bd7c: bl #0x3f563d4 ;
+179bd80: ldr w8, [x23, #0x18]
+179bd84: cbnz w8, #0x179bd94
+179bd88: bl #0x3f570dc ;
+179bd8c: mov x1, xzr
+179bd90: bl #0x3f563d4 ;
+179bd94: str x24, [x23, #0x20]
+179bd98: adrp x8, #0x5207000
+179bd9c: ldr x8, [x8, #0x5a0]
+179bda0: ldr x0, [x8]
+179bda4: ldrb w8, [x0, #0x10a]
+179bda8: tbz w8, #0, #0x179bdb8
+179bdac: ldr w8, [x0, #0xbc]
+179bdb0: cbnz w8, #0x179bdb8
+179bdb4: bl #0x3f3f378 ;
+179bdb8: adrp x8, #0x5210000
+179bdbc: ldr x8, [x8, #0x170] ; STRING can not find item {0} in shop in game
+179bdc0: mov x0, xzr
+179bdc4: mov x3, xzr
+179bdc8: mov x2, x23
+179bdcc: ldr x1, [x8]
+179bdd0: bl #0x3e45d2c ; TimerManager.<>c__DisplayClass29_0::public static void LogErrorFormat(string format, object[] args) { }
+179bdd4: cbnz x22, #0x179bddc
+179bdd8: bl #0x3f564f0 ;
+179bddc: ldr w8, [x22, #0x24]
+179bde0: cmp w8, #0xa
+179bde4: b.ne #0x179bdf8
+179bde8: cbnz x20, #0x179bdf0
+179bdec: bl #0x3f564f0 ;
+179bdf0: add x8, x20, #0x28
+179bdf4: b #0x179bdfc ;
+179bdf8: add x8, x22, #0x28
+179bdfc: adrp x9, #0x5243000
+179be00: ldr x9, [x9, #0x7d0]
+179be04: ldr w23, [x8]
+179be08: ldr x24, [x19, #0x90]
+179be0c: ldr x0, [x9]
+179be10: ldrb w8, [x0, #0x10a]
+179be14: tbz w8, #0, #0x179be24
+179be18: ldr w8, [x0, #0xbc]
+179be1c: cbnz w8, #0x179be24
+179be20: bl #0x3f3f378 ;
+179be24: mov x0, xzr
+179be28: mov x3, xzr
+179be2c: mov w1, #5
+179be30: mov w2, w23
+179be34: bl #0x134b264 ; SingleBubbleType::public static string GetAllStarString(UIAPI.StarFontType type, int num) { }
+179be38: mov x25, x0
+179be3c: cbnz x24, #0x179be44
+179be40: bl #0x3f564f0 ;
+179be44: ldr x8, [x24]
+179be48: mov x0, x24
+179be4c: mov x1, x25
+179be50: ldr x9, [x8, #0x5a0]
+179be54: ldr x2, [x8, #0x5a8]
+179be58: blr x9
+179be5c: ldr x24, [x19, #0x90]
+179be60: cbnz x24, #0x179be68
+179be64: bl #0x3f564f0 ;
+179be68: mov x1, xzr
+179be6c: mov x0, x24
+179be70: bl #0x2d25ae4 ; Component::public GameObject get_gameObject() { }
+179be74: mov x1, x0
+179be78: cmp w23, #8
+179be7c: cset w2, ne
+179be80: mov x0, xzr
+179be84: mov x3, xzr
+179be88: bl #0x202f048 ; EventArgs<T1,::public static void SetActiveSafely(GameObject gameObject, bool flag) { }
+179be8c: mov x0, xzr
+179be90: mov x2, xzr
+179be94: mov w1, w23
+179be98: bl #0x1350e5c ; UICommonSpriteDef::public static string ShopInGameRelicLight(int quality) { }
+179be9c: adrp x26, #0x528b000
+179bea0: ldr x26, [x26, #0x2e0]
+179bea4: ldr x24, [x19, #0x70]
+179bea8: mov x25, x0
+179beac: ldr x8, [x26]
+179beb0: ldrb w9, [x8, #0x10a]
+179beb4: tbz w9, #0, #0x179bec8
+179beb8: ldr w9, [x8, #0xbc]
+179bebc: cbnz w9, #0x179bec8
+179bec0: mov x0, x8
+179bec4: bl #0x3f3f378 ;
+179bec8: mov x0, xzr
+179becc: mov x2, xzr
+179bed0: mov x1, x25
+179bed4: bl #0x151dccc ; UISpecialLayer::public static Sprite GetSpriteByAltas(string spriteName) { }
+179bed8: mov x25, x0
+179bedc: cbnz x24, #0x179bee4
+179bee0: bl #0x3f564f0 ;
+179bee4: mov x2, xzr
+179bee8: mov x0, x24
+179beec: mov x1, x25
+179bef0: bl #0x2a55c68 ; Image::public void set_overrideSprite(Sprite value) { }
+179bef4: cbnz x22, #0x179befc
+179bef8: bl #0x3f564f0 ;
+179befc: ldr w8, [x22, #0x24]
+179bf00: cmp w8, #4
+179bf04: b.ne #0x179c09c
+179bf08: mov x0, xzr
+179bf0c: mov x2, xzr
+179bf10: mov w1, w23
+179bf14: bl #0x1350edc ; UICommonSpriteDef::public static string ShopInGameRelicBG(int quality) { }
+179bf18: ldr x23, [x19, #0x78]
+179bf1c: mov x22, x0
+179bf20: cbnz x23, #0x179bf28
+179bf24: bl #0x3f564f0 ;
+179bf28: mov x1, xzr
+179bf2c: mov x0, x23
+179bf30: bl #0x2d25ae4 ; Component::public GameObject get_gameObject() { }
+179bf34: mov x23, x0
+179bf38: cbnz x23, #0x179bf40
+179bf3c: bl #0x3f564f0 ;
+179bf40: mov x2, xzr
+179bf44: mov w1, #1
+179bf48: mov x0, x23
+179bf4c: bl #0x2d2c6e4 ; GameObject::public void SetActive(bool value) { }
+179bf50: ldr x0, [x26]
+179bf54: ldr x23, [x19, #0x78]
+179bf58: ldrb w8, [x0, #0x10a]
+179bf5c: tbz w8, #0, #0x179bf6c
+179bf60: ldr w8, [x0, #0xbc]
+179bf64: cbnz w8, #0x179bf6c
+179bf68: bl #0x3f3f378 ;
+179bf6c: mov x0, xzr
+179bf70: mov x2, xzr
+179bf74: mov x1, x22
+179bf78: bl #0x151dccc ; UISpecialLayer::public static Sprite GetSpriteByAltas(string spriteName) { }
+179bf7c: mov x22, x0
+179bf80: cbnz x23, #0x179bf88
+179bf84: bl #0x3f564f0 ;
+179bf88: mov x2, xzr
+179bf8c: mov x0, x23
+179bf90: mov x1, x22
+179bf94: bl #0x2a55c68 ; Image::public void set_overrideSprite(Sprite value) { }
+179bf98: ldr x22, [x19, #0x68]
+179bf9c: cbnz x22, #0x179bfa4
+179bfa0: bl #0x3f564f0 ;
+179bfa4: mov x1, xzr
+179bfa8: mov x0, x22
+179bfac: bl #0x252bdec ; Graphic::public RectTransform get_rectTransform() { }
+179bfb0: adrp x8, #0x4189000
+179bfb4: ldr s0, [x8, #0x9c4]
+179bfb8: mov x22, x0
+179bfbc: mov x1, xzr
+179bfc0: add x0, sp, #0x18
+179bfc4: mov v1.16b, v0.16b
+179bfc8: str xzr, [sp, #0x18]
+179bfcc: bl #0x3ec8584 ;
+179bfd0: cbnz x22, #0x179bfd8
+179bfd4: bl #0x3f564f0 ;
+179bfd8: ldp s0, s1, [sp, #0x18]
+179bfdc: mov x1, xzr
+179bfe0: mov x0, x22
+179bfe4: bl #0x2ba03f4 ; RectTransform::public void set_sizeDelta(Vector2 value) { }
+179bfe8: ldr x22, [x19, #0x68]
+179bfec: cbnz x22, #0x179bff4
+179bff0: bl #0x3f564f0 ;
+179bff4: ldr x8, [x22]
+179bff8: mov x0, x22
+179bffc: ldr x9, [x8, #0x3e0]
+179c000: ldr x1, [x8, #0x3e8]
+179c004: blr x9
+179c008: ldr x22, [x19, #0x68]
+179c00c: cbnz x22, #0x179c014
+179c010: bl #0x3f564f0 ;
+179c014: mov x1, xzr
+179c018: mov x0, x22
+179c01c: bl #0x252bdec ; Graphic::public RectTransform get_rectTransform() { }
+179c020: ldr x23, [x19, #0x68]
+179c024: mov x22, x0
+179c028: cbnz x23, #0x179c030
+179c02c: bl #0x3f564f0 ;
+179c030: mov x1, xzr
+179c034: mov x0, x23
+179c038: bl #0x252bdec ; Graphic::public RectTransform get_rectTransform() { }
+179c03c: mov x23, x0
+179c040: cbnz x23, #0x179c048
+179c044: bl #0x3f564f0 ;
+179c048: mov x1, xzr
+179c04c: mov x0, x23
+179c050: bl #0x3ec5074 ; Transform::public Vector3 get_localPosition() { }
+179c054: ldr x23, [x19, #0x68]
+179c058: mov v8.16b, v0.16b
+179c05c: cbnz x23, #0x179c064
+179c060: bl #0x3f564f0 ;
+179c064: mov x1, xzr
+179c068: mov x0, x23
+179c06c: bl #0x252bdec ; Graphic::public RectTransform get_rectTransform() { }
+179c070: mov x23, x0
+179c074: cbnz x23, #0x179c07c
+179c078: bl #0x3f564f0 ;
+179c07c: mov x1, xzr
+179c080: mov x0, x23
+179c084: bl #0x3ec5074 ; Transform::public Vector3 get_localPosition() { }
+179c088: str wzr, [sp, #0x10]
+179c08c: str xzr, [sp, #8]
+179c090: mov x1, xzr
+179c094: fmov s1, #22.00000000
+179c098: b #0x179c1d0 ;
+179c09c: ldr x22, [x19, #0x78]
+179c0a0: cbnz x22, #0x179c0a8
+179c0a4: bl #0x3f564f0 ;
+179c0a8: mov x1, xzr
+179c0ac: mov x0, x22
+179c0b0: bl #0x2d25ae4 ; Component::public GameObject get_gameObject() { }
+179c0b4: mov x22, x0
+179c0b8: cbnz x22, #0x179c0c0
+179c0bc: bl #0x3f564f0 ;
+179c0c0: mov w1, wzr
+179c0c4: mov x2, xzr
+179c0c8: mov x0, x22
+179c0cc: bl #0x2d2c6e4 ; GameObject::public void SetActive(bool value) { }
+179c0d0: ldr x22, [x19, #0x68]
+179c0d4: cbnz x22, #0x179c0dc
+179c0d8: bl #0x3f564f0 ;
+179c0dc: mov x1, xzr
+179c0e0: mov x0, x22
+179c0e4: bl #0x252bdec ; Graphic::public RectTransform get_rectTransform() { }
+179c0e8: adrp x8, #0x4188000
+179c0ec: ldr s0, [x8, #0x24]
+179c0f0: mov x22, x0
+179c0f4: mov x1, xzr
+179c0f8: add x0, sp, #0x18
+179c0fc: mov v1.16b, v0.16b
+179c100: str xzr, [sp, #0x18]
+179c104: bl #0x3ec8584 ;
+179c108: cbnz x22, #0x179c110
+179c10c: bl #0x3f564f0 ;
+179c110: ldp s0, s1, [sp, #0x18]
+179c114: mov x1, xzr
+179c118: mov x0, x22
+179c11c: bl #0x2ba03f4 ; RectTransform::public void set_sizeDelta(Vector2 value) { }
+179c120: ldr x22, [x19, #0x68]
+179c124: cbnz x22, #0x179c12c
+179c128: bl #0x3f564f0 ;
+179c12c: ldr x8, [x22]
+179c130: mov x0, x22
+179c134: ldr x9, [x8, #0x3e0]
+179c138: ldr x1, [x8, #0x3e8]
+179c13c: blr x9
+179c140: ldr x22, [x19, #0x68]
+179c144: cbnz x22, #0x179c14c
+179c148: bl #0x3f564f0 ;
+179c14c: mov x1, xzr
+179c150: mov x0, x22
+179c154: bl #0x252bdec ; Graphic::public RectTransform get_rectTransform() { }
+179c158: ldr x23, [x19, #0x68]
+179c15c: mov x22, x0
+179c160: cbnz x23, #0x179c168
+179c164: bl #0x3f564f0 ;
+179c168: mov x1, xzr
+179c16c: mov x0, x23
+179c170: bl #0x252bdec ; Graphic::public RectTransform get_rectTransform() { }
+179c174: mov x23, x0
+179c178: cbnz x23, #0x179c180
+179c17c: bl #0x3f564f0 ;
+179c180: mov x1, xzr
+179c184: mov x0, x23
+179c188: bl #0x3ec5074 ; Transform::public Vector3 get_localPosition() { }
+179c18c: ldr x23, [x19, #0x68]
+179c190: mov v8.16b, v0.16b
+179c194: cbnz x23, #0x179c19c
+179c198: bl #0x3f564f0 ;
+179c19c: mov x1, xzr
+179c1a0: mov x0, x23
+179c1a4: bl #0x252bdec ; Graphic::public RectTransform get_rectTransform() { }
+179c1a8: mov x23, x0
+179c1ac: cbnz x23, #0x179c1b4
+179c1b0: bl #0x3f564f0 ;
+179c1b4: mov x1, xzr
+179c1b8: mov x0, x23
+179c1bc: bl #0x3ec5074 ; Transform::public Vector3 get_localPosition() { }
+179c1c0: str wzr, [sp, #0x10]
+179c1c4: str xzr, [sp, #8]
+179c1c8: mov x1, xzr
+179c1cc: fmov s1, #5.00000000
+179c1d0: add x0, sp, #8
+179c1d4: mov v0.16b, v8.16b
+179c1d8: bl #0x3ec6218 ;
+179c1dc: cbnz x22, #0x179c1e4
+179c1e0: bl #0x3f564f0 ;
+179c1e4: ldr s0, [sp, #8]
+179c1e8: ldr s1, [sp, #0xc]
+179c1ec: ldr s2, [sp, #0x10]
+179c1f0: mov x1, xzr
+179c1f4: mov x0, x22
+179c1f8: bl #0x3ec511c ; Transform::public void set_localPosition(Vector3 value) { }
+179c1fc: cbnz x20, #0x179c204
+179c200: bl #0x3f564f0 ;
+179c204: ldr w23, [x21]
+179c208: ldr x22, [x19, #0x98]
+179c20c: cbnz x22, #0x179c214
+179c210: bl #0x3f564f0 ;
+179c214: mov x1, xzr
+179c218: mov x0, x22
+179c21c: bl #0x2d25ae4 ; Component::public GameObject get_gameObject() { }
+179c220: mov x1, x0
+179c224: cmp w23, #2
+179c228: b.ge #0x179c26c
+179c22c: mov x0, xzr
+179c230: mov w2, wzr
+179c234: mov x3, xzr
+179c238: bl #0x202f048 ; EventArgs<T1,::public static void SetActiveSafely(GameObject gameObject, bool flag) { }
+179c23c: ldr x19, [x19, #0xa0]
+179c240: cbnz x19, #0x179c248
+179c244: bl #0x3f564f0 ;
+179c248: mov x1, xzr
+179c24c: mov x0, x19
+179c250: bl #0x2d25ae4 ; Component::public GameObject get_gameObject() { }
+179c254: mov x1, x0
+179c258: mov x0, xzr
+179c25c: mov w2, wzr
+179c260: mov x3, xzr
+179c264: bl #0x202f048 ; EventArgs<T1,::public static void SetActiveSafely(GameObject gameObject, bool flag) { }
+179c268: b #0x179c2dc ;
+179c26c: mov x0, xzr
+179c270: mov x3, xzr
+179c274: mov w2, #1
+179c278: bl #0x202f048 ; EventArgs<T1,::public static void SetActiveSafely(GameObject gameObject, bool flag) { }
+179c27c: ldr x22, [x19, #0xa0]
+179c280: cbnz x22, #0x179c288
+179c284: bl #0x3f564f0 ;
+179c288: mov x1, xzr
+179c28c: mov x0, x22
+179c290: bl #0x2d25ae4 ; Component::public GameObject get_gameObject() { }
+179c294: mov x1, x0
+179c298: mov x0, xzr
+179c29c: mov x3, xzr
+179c2a0: mov w2, #1
+179c2a4: bl #0x202f048 ; EventArgs<T1,::public static void SetActiveSafely(GameObject gameObject, bool flag) { }
+179c2a8: ldr x19, [x19, #0x98]
+179c2ac: cbnz x20, #0x179c2b4
+179c2b0: bl #0x3f564f0 ;
+179c2b4: mov x1, xzr
+179c2b8: mov x0, x21
+179c2bc: bl #0x2e3f3f8 ;
+179c2c0: mov x20, x0
+179c2c4: cbnz x19, #0x179c2cc
+179c2c8: bl #0x3f564f0 ;
+179c2cc: mov x2, xzr
+179c2d0: mov x0, x19
+179c2d4: mov x1, x20
+179c2d8: bl #0x1b8c2d0 ; TMP_Text::public void SetText(string text) { }
+179c2dc: sub sp, x29, #0x50
+179c2e0: ldp x29, x30, [sp, #0x50]
+179c2e4: ldp x20, x19, [sp, #0x40]
+179c2e8: ldp x22, x21, [sp, #0x30]
+179c2ec: ldp x24, x23, [sp, #0x20]
+179c2f0: ldp x26, x25, [sp, #0x10]
+179c2f4: ldp d9, d8, [sp], #0x60
+179c2f8: ret

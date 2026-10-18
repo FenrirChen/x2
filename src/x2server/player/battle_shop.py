@@ -323,7 +323,7 @@ class BattleShopService:
             LOGGER.info("in-battle purchase of an item this shop does not sell item=%s shop=%s level=%s player=%s",
                         item_id, shop_id, level, player_id)
             return refuse
-        if wallet and wallet < offer["price"]:
+        if type(wallet) is not int or wallet < offer["price"]:
             # The client already knows the price it displayed, so this only fires if
             # the two disagree; refusing keeps the client's own counter honest.
             LOGGER.info("in-battle purchase refused for price item=%s price=%s wallet=%s player=%s",

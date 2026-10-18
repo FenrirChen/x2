@@ -209,7 +209,7 @@ class ShopService:
     def _next_refresh(self, shop):
         local = datetime.fromtimestamp(int(self.economy.clock()), timezone(timedelta(hours=8)))
         tomorrow = (local + timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
-        if shop in (805,810):
+        if shop in (802,805,810):
             return int(tomorrow.timestamp())  # Daily goods refresh; ticket-shop quotas remain weekly.
         if shop in (803, 807):
             return int((tomorrow + timedelta(days=(7 - tomorrow.weekday()) % 7)).timestamp())
