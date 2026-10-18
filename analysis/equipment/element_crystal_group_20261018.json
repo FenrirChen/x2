@@ -1,0 +1,139 @@
+{
+  "source": "Official 2.4 Item table, full decoded row export (data/table_json/Item.json)",
+  "source_export_sha256": "32aacc2d5892889494bead936c581a1d25ad9272b4156ddf66a486c7e528aa3b",
+  "group": 28,
+  "budget": 3000,
+  "note": "AddADCGroup 28 is the highest group in the whole Item table and holds exactly these four element crystals. Every crystal is E_Maze (ItemUseScence unset=0) and uses ItemType E_Task (unset=0), so it exists only inside a battle and is never settled into the account bag. ItemValue 12 makes 3000 a ~250-crystal cap per run.",
+  "items": [
+    {
+      "ItemID": 1103006,
+      "ItemValue": 12,
+      "AddADCGroup": 28,
+      "PileCount": 999,
+      "ItemType": {
+        "value": 0,
+        "enum": "E_Task"
+      },
+      "ItemUseScence": {
+        "value": 0,
+        "enum": "E_Maze"
+      }
+    },
+    {
+      "ItemID": 1103007,
+      "ItemValue": 12,
+      "AddADCGroup": 28,
+      "PileCount": 999,
+      "ItemType": {
+        "value": 0,
+        "enum": "E_Task"
+      },
+      "ItemUseScence": {
+        "value": 0,
+        "enum": "E_Maze"
+      }
+    },
+    {
+      "ItemID": 1103008,
+      "ItemValue": 12,
+      "AddADCGroup": 28,
+      "PileCount": 999,
+      "ItemType": {
+        "value": 0,
+        "enum": "E_Task"
+      },
+      "ItemUseScence": {
+        "value": 0,
+        "enum": "E_Maze"
+      }
+    },
+    {
+      "ItemID": 1103009,
+      "ItemValue": 12,
+      "AddADCGroup": 28,
+      "PileCount": 999,
+      "ItemType": {
+        "value": 0,
+        "enum": "E_Task"
+      },
+      "ItemUseScence": {
+        "value": 0,
+        "enum": "E_Maze"
+      }
+    }
+  ],
+  "sections": [
+    {
+      "SectionID": 2110191,
+      "ChapterID": 2060201,
+      "Type": 7,
+      "DifficultyLevel": 1,
+      "DroopLimit": null,
+      "DroopLimit2": [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 22, 28],
+      "DroopLimit3": null
+    },
+    {
+      "SectionID": 2110192,
+      "ChapterID": 2060201,
+      "Type": 7,
+      "DifficultyLevel": 2,
+      "DroopLimit": null,
+      "DroopLimit2": [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 22, 28],
+      "DroopLimit3": null
+    },
+    {
+      "SectionID": 2110193,
+      "ChapterID": 2060201,
+      "Type": 7,
+      "DifficultyLevel": 3,
+      "DroopLimit": null,
+      "DroopLimit2": [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 22, 28],
+      "DroopLimit3": null
+    },
+    {
+      "SectionID": 2110194,
+      "ChapterID": 2060201,
+      "Type": 7,
+      "DifficultyLevel": 4,
+      "DroopLimit": null,
+      "DroopLimit2": [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 22, 28],
+      "DroopLimit3": null
+    },
+    {
+      "SectionID": 2110291,
+      "ChapterID": 2060101,
+      "Type": 7,
+      "DifficultyLevel": 1,
+      "DroopLimit": null,
+      "DroopLimit2": [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 22, 28],
+      "DroopLimit3": null
+    },
+    {
+      "SectionID": 2110292,
+      "ChapterID": 2060101,
+      "Type": 7,
+      "DifficultyLevel": 2,
+      "DroopLimit": null,
+      "DroopLimit2": [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 22, 28],
+      "DroopLimit3": null
+    },
+    {
+      "SectionID": 2110293,
+      "ChapterID": 2060101,
+      "Type": 7,
+      "DifficultyLevel": 3,
+      "DroopLimit": null,
+      "DroopLimit2": [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 22, 28],
+      "DroopLimit3": null
+    },
+    {
+      "SectionID": 2110294,
+      "ChapterID": 2060101,
+      "Type": 7,
+      "DifficultyLevel": 4,
+      "DroopLimit": null,
+      "DroopLimit2": [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 22, 28],
+      "DroopLimit3": null
+    }
+  ]
+}

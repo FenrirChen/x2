@@ -181,9 +181,9 @@ def test_budget_tiers_by_official_difficulty():
     assert policy.tier_for(2133101) == ("LOW", True)    # Difficulty1 (moon phase)
     assert policy.tier_for(2133110) == ("HIGH", True)   # Difficulty10 (7+ HIGH)
     assert policy.tier_for(2110801) == ("MID", False)   # no difficulty -> default MID
-    assert policy.budget_for(2130101) == [1000] * 27 + [3000]
-    assert policy.budget_for(2130203) == [3000] * 28    # Difficulty4? -> see tier map
-    expected = [5000] * 27 + [3000]
+    assert policy.budget_for(2130101) == [1000] * 27 + [3000, 3000]
+    assert policy.budget_for(2130203) == [3000] * 29   # Difficulty4? -> see tier map
+    expected = [5000] * 27 + [3000, 3000]
     expected[5] = 13200
     assert policy.budget_for(2133110) == expected
 
@@ -208,7 +208,7 @@ def test_budget_carriers_follow_policy(env):
     assert entered.values["result"] == 10
     from x2server.messages.battle import FIGHT_DATA, DROP_DATA
     expected = battle.drop_budget.budget_for(2110801)
-    assert expected == [3000] * 28  # default MID: no 1,000,000 anywhere anymore
+    assert expected == [3000] * 29  # default MID: no 1,000,000 anywhere anymore
     entry_data = FIGHT_DATA.decode(entered.values["data"])
     assert list(DROP_DATA.decode(entry_data["dropData"])["dropValues"]) == expected
     drops = asyncio.run(battle.drop_data(ctx, packet(
@@ -233,7 +233,7 @@ def test_first_chapter_moon_budget_carriers(env, level, budget):
     entered = asyncio.run(battle.enter(ctx, packet(values)))
     assert entered.values["result"] == 10
     data = FIGHT_DATA.decode(entered.values["data"])
-    expected = [budget] * 27 + [3000]
+    expected = [budget] * 27 + [3000, 3000]
     expected[5] = 30 * [100, 106, 113, 121, 131, 143, 158, 177, 200, 440][level - 1]
     assert DROP_DATA.decode(data["dropData"])["dropValues"] == expected
     drops = asyncio.run(battle.drop_data(ctx, packet(

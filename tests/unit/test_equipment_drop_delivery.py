@@ -311,7 +311,7 @@ def test_battle_entry_carries_dropvalues_budget(env):
     entered = asyncio.run(battle.enter(ctx, packet(values)))
     data = FIGHT_DATA.decode(entered.values["data"])
     drop_data = DROP_DATA.decode(data["dropData"])
-    assert len(drop_data["dropValues"]) == 28
+    assert len(drop_data["dropValues"]) == 29
     # 2110801 has no official DifficultyLevel -> default MID tier (REVIVAL_COMPAT)
     assert all(v == 3000 for v in drop_data["dropValues"])
     assert drop_data["missionId"] == SECTION["section"]
