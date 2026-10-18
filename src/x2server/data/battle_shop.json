@@ -6,7 +6,8 @@
   "slotMapping": "which GroupID sold which item is not in any client table; slots are paired positionally with 消耗品/义体药剂/圣遗物(中/紫中/大/特) id blocks",
   "prices": "NOT recovered - every price is declared Revival policy (SLOT_PRICES in tools/build_battle_shop.py); the original server priced these at runtime",
   "iconFilter": "items whose client table/Item Icon field is empty are excluded; they render as an empty shop card (seen in game for 1003001 物理元素结晶)",
-  "discount": 100
+  "discount": 100,
+  "weeklyShop": "the two 元素之章 (weekly 2060101/2060201) portal shops are 400202 (six slots) and 400203 (four slots) - client table/NpcEvent 60010/60011 are exactly these two, opened by a DynamicCommon/Img_ShangDian shop button. Their content is rebuilt from player recordings: four slots of 元素晶体·水/火/地/风 (table/Item 1103006-1103009) at 100 棱镜 each, in stacks of 2 or 6 with the whole stack at 8折/8.5折, plus the 加棱镜 圣遗物 1004030/1004631/1004932 (彩蛋/大彩蛋/特大彩蛋, effect text 棱镜+200/+500/+1000) in the remaining two slots. The variants live in slotSets and each slot rolls one, so the same shop differs between visits and the recordings are two of those rolls"
  },
  "currency": {
   "moneyType": 903,
@@ -2673,6 +2674,173 @@
    ]
   }
  ],
+ "slotSets": {
+  "weekly_crystals": [
+   {
+    "slot": 1,
+    "family": "element_crystal",
+    "price": 200,
+    "items": [
+     {
+      "itemId": 1103006,
+      "name": "元素晶体·水",
+      "quality": "无",
+      "star": 1,
+      "num": 2
+     },
+     {
+      "itemId": 1103006,
+      "name": "元素晶体·水",
+      "quality": "无",
+      "star": 1,
+      "num": 6,
+      "price": 480,
+      "discount": 80
+     },
+     {
+      "itemId": 1103006,
+      "name": "元素晶体·水",
+      "quality": "无",
+      "star": 1,
+      "num": 6,
+      "price": 510,
+      "discount": 85
+     }
+    ]
+   },
+   {
+    "slot": 2,
+    "family": "element_crystal",
+    "price": 200,
+    "items": [
+     {
+      "itemId": 1103007,
+      "name": "元素晶体·火",
+      "quality": "无",
+      "star": 1,
+      "num": 2
+     },
+     {
+      "itemId": 1103007,
+      "name": "元素晶体·火",
+      "quality": "无",
+      "star": 1,
+      "num": 6,
+      "price": 480,
+      "discount": 80
+     },
+     {
+      "itemId": 1103007,
+      "name": "元素晶体·火",
+      "quality": "无",
+      "star": 1,
+      "num": 6,
+      "price": 510,
+      "discount": 85
+     }
+    ]
+   },
+   {
+    "slot": 3,
+    "family": "element_crystal",
+    "price": 200,
+    "items": [
+     {
+      "itemId": 1103008,
+      "name": "元素晶体·地",
+      "quality": "无",
+      "star": 1,
+      "num": 2
+     },
+     {
+      "itemId": 1103008,
+      "name": "元素晶体·地",
+      "quality": "无",
+      "star": 1,
+      "num": 6,
+      "price": 480,
+      "discount": 80
+     },
+     {
+      "itemId": 1103008,
+      "name": "元素晶体·地",
+      "quality": "无",
+      "star": 1,
+      "num": 6,
+      "price": 510,
+      "discount": 85
+     }
+    ]
+   },
+   {
+    "slot": 4,
+    "family": "element_crystal",
+    "price": 200,
+    "items": [
+     {
+      "itemId": 1103009,
+      "name": "元素晶体·风",
+      "quality": "无",
+      "star": 1,
+      "num": 2
+     },
+     {
+      "itemId": 1103009,
+      "name": "元素晶体·风",
+      "quality": "无",
+      "star": 1,
+      "num": 6,
+      "price": 480,
+      "discount": 80
+     },
+     {
+      "itemId": 1103009,
+      "name": "元素晶体·风",
+      "quality": "无",
+      "star": 1,
+      "num": 6,
+      "price": 510,
+      "discount": 85
+     }
+    ]
+   }
+  ],
+  "weekly_relics": [
+   {
+    "slot": 5,
+    "family": "relic_prism",
+    "price": 100,
+    "items": [
+     {
+      "itemId": 1004030,
+      "name": "恭喜你！彩蛋",
+      "quality": "蓝",
+      "star": 3
+     }
+    ]
+   },
+   {
+    "slot": 6,
+    "family": "relic_prism",
+    "price": 180,
+    "items": [
+     {
+      "itemId": 1004631,
+      "name": "恭喜你！大彩蛋",
+      "quality": "紫",
+      "star": 4
+     },
+     {
+      "itemId": 1004932,
+      "name": "砸中特大彩蛋！",
+      "quality": "橙",
+      "star": 5,
+      "price": 260
+     }
+    ]
+   }
+  ]
+ },
  "shops": {
   "400101": {
    "floors": {
@@ -3895,6 +4063,10 @@
    }
   },
   "400202": {
+   "slotSets": [
+    "weekly_crystals",
+    "weekly_relics"
+   ],
    "floors": {
     "20": {
      "id": 109,
@@ -3910,6 +4082,9 @@
    }
   },
   "400203": {
+   "slotSets": [
+    "weekly_crystals"
+   ],
    "floors": {
     "20": {
      "id": 110,
