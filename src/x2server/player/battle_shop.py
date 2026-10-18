@@ -20,6 +20,16 @@ the original server and is gone. Slots are therefore paired positionally with th
 item families and priced by declared Revival policy; both are recorded in the
 catalog so a wrong guess stays visible.
 
+The two 元素之章 portal shops (400202/400203) are the exception the 2026-10-18 tester
+report is about: they were serving the generic consumables instead of what the stage is
+built around. client table/NpcEvent 60010/60011 are exactly those two shops (opened by
+a ``DynamicCommon/Img_ShangDian`` button), and player recordings show 元素晶体·水/
+火/地/风 at 100 棱镜 each in stacks of 2 or 6 with the whole stack at 8折/8.5折, plus
+the 加棱镜 圣遗物 1004030/1004631/1004932. Those two shops therefore name their own
+``slotSets`` in the catalog (``slots_for``) instead of using the six recovered slots,
+and a variant may carry ``num``/``price``/``discount`` so a stack and its 折扣 ride
+together.
+
 A tester reported the 黑暗金字塔 chapter's own relics (e.g. 1004635 溜了溜了溜了)
 never showed up in its shop. Two things were wrong:
 
@@ -70,6 +80,7 @@ class BattleShopService:
             files("x2server").joinpath("data/battle_shop.json").read_text(encoding="utf-8"))
         self.shops = catalog["shops"]
         self.slots = catalog["slots"]
+        self.slot_sets = catalog.get("slotSets", {})
         self.currency = catalog["currency"]
         self.discount = int(catalog["provenance"].get("discount", 100))
         relics = json.loads(
@@ -117,6 +128,20 @@ class BattleShopService:
         chosen = level if level in floors else max((f for f in floors if f <= level), default=min(floors))
         return chosen, list(floors[chosen]["groups"])
 
+    def slots_for(self, shop_id: int) -> list[dict]:
+        """The slot list this shop sells from.
+
+        A shop naming ``slotSets`` (the two 元素之章 portal shops) uses its own slots
+        instead of the six generic ones, in the order the sets are listed, so the
+        first declared set lines up with the floor row's first GroupID. Every other
+        shop keeps the six recovered slots untouched.
+        """
+        shop = self.shops.get(str(shop_id))
+        sets = shop.get("slotSets") if shop else None
+        if not sets:
+            return self.slots
+        return [slot for name in sets for slot in self.slot_sets.get(name, ())]
+
     def stock(self, shop_id: int, level: int, seed_key: str = "", chapter: int = 0) -> list[dict] | None:
         """Six offers, one per recovered shop slot, rolled per run.
 
@@ -127,6 +152,10 @@ class BattleShopService:
         ``chapter`` narrows each 圣遗物 slot to that chapter's recommended relics
         when it has any, so the stage's own relics are actually offered; a slot
         whose rarity tier is disjoint from the recommendation keeps its full pool.
+
+        A shop that names ``slotSets`` replaces the six slots with its own, because
+        元素之章 sells neither the generic consumables nor the relics those slots
+        hold - see the module docstring.
         """
         resolved = self.resolve_floor(shop_id, level)
         if resolved is None:
@@ -135,7 +164,7 @@ class BattleShopService:
         offers = []
         # MazeShop declares only the groups this floor really has: 400203 lists four
         # group ids, every other shop six. An offer past them would carry groupId 0.
-        for index, slot in enumerate(self.slots[:len(groups)]):
+        for index, slot in enumerate(self.slots_for(shop_id)[:len(groups)]):
             pool = slot["items"]
             if not pool:
                 continue
@@ -148,8 +177,15 @@ class BattleShopService:
             # shop in the same battle must show the same stock.
             pick = random.Random(f"{seed_key}:{shop_id}:{floor}:{slot['slot']}").choice(pool)
             offers.append({
-                "itemId": pick["itemId"], "num": 1, "price": slot["price"],
-                "discount": self.discount, "moneyType": self.currency["moneyType"],
+                "itemId": pick["itemId"],
+                # 元素之章 sells a crystal by the stack (x2, or x6 with the whole
+                # stack at 8折/8.5折), so a variant carries its own num/price/discount;
+                # a generic slot has none of them and falls back to one piece at the
+                # slot price with no discount.
+                "num": int(pick.get("num", 1)),
+                "price": int(pick.get("price", slot["price"])),
+                "discount": int(pick.get("discount", self.discount)),
+                "moneyType": self.currency["moneyType"],
                 "groupId": groups[index] if index < len(groups) else 0,
                 "star": pick["star"],
             })
