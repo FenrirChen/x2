@@ -6,8 +6,8 @@ import pytest
 from tests.unit.test_battle import packet
 from tests.unit.test_economy import env
 from x2server.messages.core import HERO_DATA
-from x2server.messages.favor import FAVOR, FAVOR_MAP_ENTRY, HERO_ARCHIVE
-from x2server.player.favor import FavorService
+from x2server.messages.favor import FAVOR, FAVOR_CHANGE_INFO, FAVOR_MAP_ENTRY, HERO_ARCHIVE
+from x2server.player.favor import FavorService, touch_gain
 from x2server.player.hero import encode_hero_data
 from x2server.player.login import LoginService
 from x2server.player.store import PlayerStore
@@ -115,17 +115,24 @@ def test_gift_charge_rolls_back_when_state_write_fails(env, monkeypatch):
     assert "favor" not in store.get(1)["snapshot"]["heroes"][0]
 
 
-def test_tap_interaction_completes_daily_interactive_task(env):
+def test_tap_interaction_grants_official_favor_and_applies_daily_limits(env):
     """The daily tap sends opt=1, heroId=0, optionId=InteractiveID (46001 -> 1003)."""
     store, economy, ctx = env
     service = FavorService(store, economy)
     from x2server.messages.economy import TASK
-    answer = asyncio.run(service.handle(ctx, packet(
-        {"opt": 1, "optionId": 46001, "heroId": 0, "num": 0}, name="C2L_AddFavor")))
+    gain = touch_gain()
+    assert gain == 3  # ExpressionAnimStatus.FavorableNum checked by every tap row.
+    tap = {"opt": 1, "optionId": 46001, "heroId": 0, "num": 0}
+    answer = asyncio.run(service.handle(ctx, packet(tap, name="C2L_AddFavor")))
     assert answer.values["code"] == 10
     assert answer.values["heroId"] == 1003
+    assert answer.values["newExp"] == gain and answer.values["newLevel"] == 1
+    assert store.get(1)["snapshot"]["heroes"][0]["favor"] == {"level": 1, "exp": gain}
     assert store.db.execute("SELECT count FROM favor_touch_log WHERE player_id=1 AND hero_id=1003"
                             ).fetchone()[0] == 1
+    change = next(push for push in answer.pushes if push.message_name == "L2C_FavorChangeInfo")
+    assert FAVOR_CHANGE_INFO.decode(change.values["data"][0])["type"] == 6  # AddFavorType.Anim
+    assert any(push.message_name == "L2C_HeroUpdate" for push in answer.pushes)
     task_row = next(TASK.decode(raw) for raw in economy.task_values(1, 1)["taskList"]
                     if TASK.decode(raw)["taskId"] == 630010)
     assert task_row["taskProgress"] == 1 and task_row["taskStatus"] == 3
@@ -133,12 +140,15 @@ def test_tap_interaction_completes_daily_interactive_task(env):
     fallback = asyncio.run(service.handle(ctx, packet(
         {"opt": 1, "optionId": 48707, "heroId": 0, "num": 0}, name="C2L_AddFavor")))
     assert fallback.values["code"] == 10 and fallback.values["heroId"] == 1003
-    # Three taps per day: the fourth is rejected and never advances the task.
-    assert asyncio.run(service.handle(ctx, packet(
-        {"opt": 1, "optionId": 46001, "heroId": 0, "num": 0}, name="C2L_AddFavor"))).values["code"] == 10
-    capped = asyncio.run(service.handle(ctx, packet(
-        {"opt": 1, "optionId": 46001, "heroId": 0, "num": 0}, name="C2L_AddFavor")))
-    assert capped.values["code"] == 13
+    # FavorabilityHeroDailyLimit=5: five taps for one god, the sixth returns
+    # E_LIMIT_DAILY_FAVOR and never advances the interactive task.
+    for _ in range(3):
+        assert asyncio.run(service.handle(ctx, packet(tap, name="C2L_AddFavor"))).values["code"] == 10
+    capped = asyncio.run(service.handle(ctx, packet(tap, name="C2L_AddFavor")))
+    assert capped.values["code"] == 72
+    assert store.db.execute("SELECT count FROM favor_touch_log WHERE player_id=1 AND hero_id=1003"
+                            ).fetchone()[0] == 5
+    assert store.get(1)["snapshot"]["heroes"][0]["favor"]["exp"] == gain * 5
     task_row = next(TASK.decode(raw) for raw in economy.task_values(1, 1)["taskList"]
                     if TASK.decode(raw)["taskId"] == 630010)
     assert task_row["taskProgress"] == 1  # capped tap must not over-count
