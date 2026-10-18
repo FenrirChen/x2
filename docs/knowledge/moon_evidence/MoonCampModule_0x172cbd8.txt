@@ -1,0 +1,399 @@
+0x172cbd8 MoonCampModule::public void OnMoonCampUnLock(object agrs) { }
+172cbd8: stp x28, x27, [sp, #-0x60]!
+172cbdc: stp x26, x25, [sp, #0x10]
+172cbe0: stp x24, x23, [sp, #0x20]
+172cbe4: stp x22, x21, [sp, #0x30]
+172cbe8: stp x20, x19, [sp, #0x40]
+172cbec: stp x29, x30, [sp, #0x50]
+172cbf0: add x29, sp, #0x50
+172cbf4: sub sp, sp, #0x10
+172cbf8: adrp x21, #0x5576000
+172cbfc: ldrb w8, [x21, #0xe5a]
+172cc00: mov x20, x1
+172cc04: mov x19, x0
+172cc08: tbnz w8, #0, #0x172cc24
+172cc0c: adrp x8, #0x524b000
+172cc10: ldr x8, [x8, #0x760]
+172cc14: ldr w0, [x8]
+172cc18: bl #0x3f2aed0 ;
+172cc1c: mov w8, #1
+172cc20: strb w8, [x21, #0xe5a]
+172cc24: cbz x20, #0x172cc48
+172cc28: adrp x8, #0x52ae000
+172cc2c: ldr x8, [x8, #0xd68]
+172cc30: ldr x9, [x20]
+172cc34: ldr x8, [x8]
+172cc38: ldrb w11, [x9, #0x104]
+172cc3c: ldrb w10, [x8, #0x104]
+172cc40: cmp w11, w10
+172cc44: b.hs #0x172cc50
+172cc48: mov x26, xzr
+172cc4c: b #0x172cc64 ;
+172cc50: ldr x9, [x9, #0xb0]
+172cc54: add x9, x9, x10, lsl #3
+172cc58: ldur x9, [x9, #-8]
+172cc5c: cmp x9, x8
+172cc60: csel x26, x20, xzr, eq
+172cc64: ldr x20, [x19, #0x18]
+172cc68: cbnz x20, #0x172cc70
+172cc6c: bl #0x3f564f0 ;
+172cc70: adrp x8, #0x525f000
+172cc74: ldr x8, [x8, #0x8c0]
+172cc78: mov x0, x20
+172cc7c: ldr x1, [x8]
+172cc80: bl #0x3d4fb64 ;
+172cc84: ldr x20, [x19, #0x20]
+172cc88: cbnz x20, #0x172cc90
+172cc8c: bl #0x3f564f0 ;
+172cc90: adrp x8, #0x526c000
+172cc94: ldr x8, [x8, #0xc10]
+172cc98: mov x0, x20
+172cc9c: ldr x1, [x8]
+172cca0: bl #0x3d4fb64 ;
+172cca4: cbnz x26, #0x172ccac
+172cca8: bl #0x3f564f0 ;
+172ccac: ldr w20, [x26, #0x10]
+172ccb0: cmp w20, #0xa
+172ccb4: b.ne #0x172cdb8
+172ccb8: ldr x0, [x26, #0x18]
+172ccbc: cbz x0, #0x172d1c4
+172ccc0: adrp x23, #0x52a9000
+172ccc4: ldr x23, [x23, #0xec8]
+172ccc8: ldr x1, [x23]
+172cccc: bl #0x3d51884 ;
+172ccd0: cmp w0, #1
+172ccd4: b.lt #0x172cdf0
+172ccd8: adrp x24, #0x52e7000
+172ccdc: adrp x25, #0x52c9000
+172cce0: adrp x27, #0x52a4000
+172cce4: ldr x24, [x24, #0x418]
+172cce8: ldr x25, [x25, #0x78]
+172ccec: ldr x27, [x27, #0x978]
+172ccf0: mov w20, wzr
+172ccf4: b #0x172ccfc ;
+172ccf8: add w20, w20, #1
+172ccfc: cbnz x26, #0x172cd04
+172cd00: bl #0x3f564f0 ;
+172cd04: ldr x21, [x26, #0x18]
+172cd08: cbnz x21, #0x172cd10
+172cd0c: bl #0x3f564f0 ;
+172cd10: ldr x1, [x23]
+172cd14: mov x0, x21
+172cd18: bl #0x3d51884 ;
+172cd1c: cmp w20, w0
+172cd20: b.ge #0x172cdf0
+172cd24: ldr x21, [x19, #0x18]
+172cd28: cbnz x26, #0x172cd30
+172cd2c: bl #0x3f564f0 ;
+172cd30: ldr x22, [x26, #0x18]
+172cd34: cbnz x22, #0x172cd3c
+172cd38: bl #0x3f564f0 ;
+172cd3c: ldr x2, [x24]
+172cd40: mov x0, x22
+172cd44: mov w1, w20
+172cd48: bl #0x3d5188c ;
+172cd4c: mov x22, x0
+172cd50: cbnz x21, #0x172cd58
+172cd54: bl #0x3f564f0 ;
+172cd58: ldr x2, [x25]
+172cd5c: mov x0, x21
+172cd60: mov x1, x22
+172cd64: bl #0x3d4fbb0 ;
+172cd68: and w8, w0, #1
+172cd6c: tbnz w8, #0, #0x172ccf8
+172cd70: ldr x21, [x19, #0x18]
+172cd74: cbnz x26, #0x172cd7c
+172cd78: bl #0x3f564f0 ;
+172cd7c: ldr x22, [x26, #0x18]
+172cd80: cbnz x22, #0x172cd88
+172cd84: bl #0x3f564f0 ;
+172cd88: ldr x2, [x24]
+172cd8c: mov x0, x22
+172cd90: mov w1, w20
+172cd94: bl #0x3d5188c ;
+172cd98: mov x22, x0
+172cd9c: cbnz x21, #0x172cda4
+172cda0: bl #0x3f564f0 ;
+172cda4: ldr x2, [x27]
+172cda8: mov x0, x21
+172cdac: mov x1, x22
+172cdb0: bl #0x3d4f3b4 ;
+172cdb4: b #0x172ccf8 ;
+172cdb8: adrp x8, #0x528b000
+172cdbc: ldr x8, [x8, #0x2e0]
+172cdc0: ldr x0, [x8]
+172cdc4: ldrb w8, [x0, #0x10a]
+172cdc8: tbz w8, #0, #0x172cdd8
+172cdcc: ldr w8, [x0, #0xbc]
+172cdd0: cbnz w8, #0x172cdd8
+172cdd4: bl #0x3f3f378 ;
+172cdd8: mov x0, xzr
+172cddc: mov x2, xzr
+172cde0: mov w1, w20
+172cde4: mov x3, xzr
+172cde8: bl #0x1529eb8 ; UISpecialLayer::public static void ShowErrorCodeBubble(GameLogicErrCode type, string tips) { }
+172cdec: b #0x172d1c4 ;
+172cdf0: cbnz x26, #0x172cdf8
+172cdf4: bl #0x3f564f0 ;
+172cdf8: ldr x0, [x26, #0x20]
+172cdfc: cbz x0, #0x172d0f8
+172ce00: adrp x27, #0x52dc000
+172ce04: ldr x27, [x27, #0xc68]
+172ce08: ldr x1, [x27]
+172ce0c: bl #0x3d51884 ;
+172ce10: cmp w0, #1
+172ce14: b.lt #0x172d0f8
+172ce18: add x8, x19, #0x34
+172ce1c: str x8, [sp, #8]
+172ce20: add x8, x19, #0x38
+172ce24: str x8, [sp]
+172ce28: adrp x28, #0x52a2000
+172ce2c: adrp x22, #0x5285000
+172ce30: adrp x23, #0x52e7000
+172ce34: ldr x28, [x28, #0x928]
+172ce38: ldr x22, [x22, #0x500]
+172ce3c: ldr x23, [x23, #0x5e8] ; STRING MoonFlowerGiveLimit
+172ce40: mov w20, wzr
+172ce44: add x21, x19, #0x30
+172ce48: b #0x172ce50 ;
+172ce4c: add w20, w20, #1
+172ce50: cbnz x26, #0x172ce58
+172ce54: bl #0x3f564f0 ;
+172ce58: ldr x24, [x26, #0x20]
+172ce5c: cbnz x24, #0x172ce64
+172ce60: bl #0x3f564f0 ;
+172ce64: ldr x1, [x27]
+172ce68: mov x0, x24
+172ce6c: bl #0x3d51884 ;
+172ce70: cmp w20, w0
+172ce74: b.ge #0x172d0c8
+172ce78: ldr x24, [x19, #0x20]
+172ce7c: cbnz x26, #0x172ce84
+172ce80: bl #0x3f564f0 ;
+172ce84: ldr x25, [x26, #0x20]
+172ce88: cbnz x25, #0x172ce90
+172ce8c: bl #0x3f564f0 ;
+172ce90: ldr x2, [x28]
+172ce94: mov x0, x25
+172ce98: mov w1, w20
+172ce9c: bl #0x3d5188c ;
+172cea0: mov x25, x0
+172cea4: cbnz x24, #0x172ceac
+172cea8: bl #0x3f564f0 ;
+172ceac: adrp x8, #0x5215000
+172ceb0: ldr x8, [x8, #0x8a0]
+172ceb4: mov x0, x24
+172ceb8: mov x1, x25
+172cebc: ldr x2, [x8]
+172cec0: bl #0x3d4fbb0 ;
+172cec4: and w8, w0, #1
+172cec8: tbnz w8, #0, #0x172cf18
+172cecc: ldr x24, [x19, #0x20]
+172ced0: cbnz x26, #0x172ced8
+172ced4: bl #0x3f564f0 ;
+172ced8: ldr x25, [x26, #0x20]
+172cedc: cbnz x25, #0x172cee4
+172cee0: bl #0x3f564f0 ;
+172cee4: ldr x2, [x28]
+172cee8: mov x0, x25
+172ceec: mov w1, w20
+172cef0: bl #0x3d5188c ;
+172cef4: mov x25, x0
+172cef8: cbnz x24, #0x172cf00
+172cefc: bl #0x3f564f0 ;
+172cf00: adrp x8, #0x51cc000
+172cf04: ldr x8, [x8, #0xcc8]
+172cf08: mov x0, x24
+172cf0c: mov x1, x25
+172cf10: ldr x2, [x8]
+172cf14: bl #0x3d4f3b4 ;
+172cf18: cbnz x26, #0x172cf20
+172cf1c: bl #0x3f564f0 ;
+172cf20: ldr x24, [x26, #0x20]
+172cf24: cbnz x24, #0x172cf2c
+172cf28: bl #0x3f564f0 ;
+172cf2c: ldr x2, [x28]
+172cf30: mov x0, x24
+172cf34: mov w1, w20
+172cf38: bl #0x3d5188c ;
+172cf3c: mov x24, x0
+172cf40: cbnz x24, #0x172cf48
+172cf44: bl #0x3f564f0 ;
+172cf48: ldr x0, [x22]
+172cf4c: ldr x24, [x24, #0x10]
+172cf50: ldrb w8, [x0, #0x10a]
+172cf54: tbz w8, #0, #0x172cf64
+172cf58: ldr w8, [x0, #0xbc]
+172cf5c: cbnz w8, #0x172cf64
+172cf60: bl #0x3f3f378 ;
+172cf64: ldr x2, [x23]
+172cf68: mov x0, xzr
+172cf6c: mov x3, xzr
+172cf70: mov x1, x24
+172cf74: bl #0x2b80c20 ; String::public static bool op_Equality(string a, string b) { }
+172cf78: and w8, w0, #1
+172cf7c: tbz w8, #0, #0x172cfc4
+172cf80: cbnz x26, #0x172cf88
+172cf84: bl #0x3f564f0 ;
+172cf88: ldr x24, [x26, #0x20]
+172cf8c: cbnz x24, #0x172cf94
+172cf90: bl #0x3f564f0 ;
+172cf94: ldr x2, [x28]
+172cf98: mov x0, x24
+172cf9c: mov w1, w20
+172cfa0: bl #0x3d5188c ;
+172cfa4: mov x24, x0
+172cfa8: cbnz x24, #0x172cfb0
+172cfac: bl #0x3f564f0 ;
+172cfb0: ldr x1, [x24, #0x18]
+172cfb4: mov x0, xzr
+172cfb8: mov x3, xzr
+172cfbc: mov x2, x21
+172cfc0: b #0x172d0c0 ;
+172cfc4: ldr x0, [x22]
+172cfc8: ldrb w8, [x0, #0x10a]
+172cfcc: tbz w8, #0, #0x172cfdc
+172cfd0: ldr w8, [x0, #0xbc]
+172cfd4: cbnz w8, #0x172cfdc
+172cfd8: bl #0x3f3f378 ;
+172cfdc: adrp x8, #0x52ba000
+172cfe0: ldr x8, [x8, #0x7e0] ; STRING MoonFlowerGetLimit
+172cfe4: mov x0, xzr
+172cfe8: mov x3, xzr
+172cfec: mov x1, x24
+172cff0: ldr x2, [x8]
+172cff4: bl #0x2b80c20 ; String::public static bool op_Equality(string a, string b) { }
+172cff8: and w8, w0, #1
+172cffc: tbz w8, #0, #0x172d044
+172d000: cbnz x26, #0x172d008
+172d004: bl #0x3f564f0 ;
+172d008: ldr x24, [x26, #0x20]
+172d00c: cbnz x24, #0x172d014
+172d010: bl #0x3f564f0 ;
+172d014: ldr x2, [x28]
+172d018: mov x0, x24
+172d01c: mov w1, w20
+172d020: bl #0x3d5188c ;
+172d024: mov x24, x0
+172d028: cbnz x24, #0x172d030
+172d02c: bl #0x3f564f0 ;
+172d030: ldr x1, [x24, #0x18]
+172d034: ldr x2, [sp, #8]
+172d038: mov x0, xzr
+172d03c: mov x3, xzr
+172d040: b #0x172d0c0 ;
+172d044: ldr x0, [x22]
+172d048: ldrb w8, [x0, #0x10a]
+172d04c: tbz w8, #0, #0x172d05c
+172d050: ldr w8, [x0, #0xbc]
+172d054: cbnz w8, #0x172d05c
+172d058: bl #0x3f3f378 ;
+172d05c: adrp x8, #0x52fa000
+172d060: ldr x8, [x8, #0xc08] ; STRING MoonEquipExpGetLimit
+172d064: mov x0, xzr
+172d068: mov x3, xzr
+172d06c: mov x1, x24
+172d070: ldr x2, [x8]
+172d074: bl #0x2b80c20 ; String::public static bool op_Equality(string a, string b) { }
+172d078: and w8, w0, #1
+172d07c: tbz w8, #0, #0x172ce4c
+172d080: cbnz x26, #0x172d088
+172d084: bl #0x3f564f0 ;
+172d088: ldr x24, [x26, #0x20]
+172d08c: cbnz x24, #0x172d094
+172d090: bl #0x3f564f0 ;
+172d094: ldr x2, [x28]
+172d098: mov x0, x24
+172d09c: mov w1, w20
+172d0a0: bl #0x3d5188c ;
+172d0a4: mov x24, x0
+172d0a8: cbnz x24, #0x172d0b0
+172d0ac: bl #0x3f564f0 ;
+172d0b0: ldr x1, [x24, #0x18]
+172d0b4: ldr x2, [sp]
+172d0b8: mov x0, xzr
+172d0bc: mov x3, xzr
+172d0c0: bl #0x2e3f358 ; Int32::public static bool TryParse(string s, out int result) { }
+172d0c4: b #0x172ce4c ;
+172d0c8: adrp x8, #0x5210000
+172d0cc: ldr x8, [x8, #0xf98]
+172d0d0: ldr x0, [x8]
+172d0d4: ldrb w8, [x0, #0x10a]
+172d0d8: tbz w8, #0, #0x172d0e8
+172d0dc: ldr w8, [x0, #0xbc]
+172d0e0: cbnz w8, #0x172d0e8
+172d0e4: bl #0x3f3f378 ;
+172d0e8: mov x0, xzr
+172d0ec: mov w1, #0x186
+172d0f0: mov x2, xzr
+172d0f4: bl #0x3e48998 ; SensitiveWordHelper.<>c__DisplayClass6_0::public static void FireEvent(int eventType) { }
+172d0f8: adrp x8, #0x51ed000
+172d0fc: ldr x8, [x8, #0xb60]
+172d100: ldr x0, [x8]
+172d104: ldrb w8, [x0, #0x10a]
+172d108: tbz w8, #0, #0x172d118
+172d10c: ldr w8, [x0, #0xbc]
+172d110: cbnz w8, #0x172d118
+172d114: bl #0x3f3f378 ;
+172d118: adrp x20, #0x51d9000
+172d11c: ldr x20, [x20, #0x618]
+172d120: mov x0, xzr
+172d124: ldr x1, [x20]
+172d128: bl #0x2feb968 ;
+172d12c: mov x19, x0
+172d130: cbnz x19, #0x172d138
+172d134: bl #0x3f564f0 ;
+172d138: adrp x21, #0x5270000
+172d13c: ldr x21, [x21, #0xb40]
+172d140: mov x0, x19
+172d144: ldr x1, [x21]
+172d148: bl #0x1ce72d4 ;
+172d14c: cbnz x0, #0x172d154
+172d150: bl #0x3f564f0 ;
+172d154: mov w1, wzr
+172d158: bl #0x173d800 ; MoonNPCFavorabilityModule::public void SendMoonNPCFavorability(int campId) { }
+172d15c: ldr x1, [x20]
+172d160: mov x0, xzr
+172d164: bl #0x2feb968 ;
+172d168: mov x19, x0
+172d16c: cbnz x19, #0x172d174
+172d170: bl #0x3f564f0 ;
+172d174: adrp x8, #0x526f000
+172d178: ldr x8, [x8, #0xaf0]
+172d17c: mov x0, x19
+172d180: ldr x1, [x8]
+172d184: bl #0x1ce72d4 ;
+172d188: cbnz x0, #0x172d190
+172d18c: bl #0x3f564f0 ;
+172d190: mov w1, wzr
+172d194: bl #0x172d218 ; MoonEquipModule::public void SendMoonEquip(int campId) { }
+172d198: ldr x1, [x20]
+172d19c: mov x0, xzr
+172d1a0: bl #0x2feb968 ;
+172d1a4: mov x19, x0
+172d1a8: cbnz x19, #0x172d1b0
+172d1ac: bl #0x3f564f0 ;
+172d1b0: ldr x1, [x21]
+172d1b4: mov x0, x19
+172d1b8: bl #0x1ce72d4 ;
+172d1bc: cbz x0, #0x172d1c4
+172d1c0: str wzr, [x0, #0x24]
+172d1c4: adrp x8, #0x5210000
+172d1c8: ldr x8, [x8, #0xf98]
+172d1cc: ldr x0, [x8]
+172d1d0: ldrb w8, [x0, #0x10a]
+172d1d4: tbz w8, #0, #0x172d1e4
+172d1d8: ldr w8, [x0, #0xbc]
+172d1dc: cbnz w8, #0x172d1e4
+172d1e0: bl #0x3f3f378 ;
+172d1e4: mov x0, xzr
+172d1e8: mov w1, #0x16d
+172d1ec: mov x2, xzr
+172d1f0: sub sp, x29, #0x50
+172d1f4: ldp x29, x30, [sp, #0x50]
+172d1f8: ldp x20, x19, [sp, #0x40]
+172d1fc: ldp x22, x21, [sp, #0x30]
+172d200: ldp x24, x23, [sp, #0x20]
+172d204: ldp x26, x25, [sp, #0x10]
+172d208: ldp x28, x27, [sp], #0x60
+172d20c: b #0x3e48998 ; SensitiveWordHelper.<>c__DisplayClass6_0::public static void FireEvent(int eventType) { }

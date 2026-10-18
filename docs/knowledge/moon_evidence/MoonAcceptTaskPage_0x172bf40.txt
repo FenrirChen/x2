@@ -1,0 +1,184 @@
+0x172bf40 MoonAcceptTaskPage::public void OnRefresh_BtnClick() { }
+172bf40: stp x26, x25, [sp, #-0x50]!
+172bf44: stp x24, x23, [sp, #0x10]
+172bf48: stp x22, x21, [sp, #0x20]
+172bf4c: stp x20, x19, [sp, #0x30]
+172bf50: stp x29, x30, [sp, #0x40]
+172bf54: add x29, sp, #0x40
+172bf58: sub sp, sp, #0x40
+172bf5c: adrp x20, #0x5576000
+172bf60: ldrb w8, [x20, #0xe4e]
+172bf64: mov x19, x0
+172bf68: tbnz w8, #0, #0x172bf84
+172bf6c: adrp x8, #0x525e000
+172bf70: ldr x8, [x8, #0xd10]
+172bf74: ldr w0, [x8]
+172bf78: bl #0x3f2aed0 ;
+172bf7c: mov w8, #1
+172bf80: strb w8, [x20, #0xe4e]
+172bf84: adrp x8, #0x51ed000
+172bf88: ldr x8, [x8, #0xb60]
+172bf8c: ldr x0, [x8]
+172bf90: stp xzr, xzr, [sp, #0x28]
+172bf94: str xzr, [sp, #0x20]
+172bf98: ldrb w8, [x0, #0x10a]
+172bf9c: tbz w8, #0, #0x172bfac
+172bfa0: ldr w8, [x0, #0xbc]
+172bfa4: cbnz w8, #0x172bfac
+172bfa8: bl #0x3f3f378 ;
+172bfac: adrp x8, #0x51d9000
+172bfb0: ldr x8, [x8, #0x618]
+172bfb4: mov x0, xzr
+172bfb8: ldr x1, [x8]
+172bfbc: bl #0x2feb968 ;
+172bfc0: mov x20, x0
+172bfc4: cbnz x20, #0x172bfcc
+172bfc8: bl #0x3f564f0 ;
+172bfcc: adrp x8, #0x52c5000
+172bfd0: ldr x8, [x8, #0xb48]
+172bfd4: mov x0, x20
+172bfd8: ldr x1, [x8]
+172bfdc: bl #0x1ce72d4 ;
+172bfe0: mov x20, x0
+172bfe4: cbnz x20, #0x172bfec
+172bfe8: bl #0x3f564f0 ;
+172bfec: ldr x20, [x20, #0x20]
+172bff0: cbnz x20, #0x172bff8
+172bff4: bl #0x3f564f0 ;
+172bff8: adrp x8, #0x5277000
+172bffc: ldr x8, [x8, #0x878]
+172c000: mov x0, x20
+172c004: ldr x1, [x8]
+172c008: add x8, sp, #8
+172c00c: bl #0x3d50690 ;
+172c010: ldr x8, [sp, #0x18]
+172c014: ldur q0, [sp, #8]
+172c018: adrp x23, #0x52f5000
+172c01c: adrp x24, #0x5227000
+172c020: adrp x22, #0x5285000
+172c024: adrp x25, #0x51f3000
+172c028: ldr x23, [x23, #0x538]
+172c02c: ldr x24, [x24, #0x230]
+172c030: ldr x22, [x22, #0x500]
+172c034: str x8, [sp, #0x30]
+172c038: str q0, [sp, #0x20]
+172c03c: ldr x25, [x25, #0xcd0] ; STRING MoonTaskRefreshLimit
+172c040: ldr x1, [x23]
+172c044: add x0, sp, #0x20
+172c048: bl #0x20a0078 ;
+172c04c: and w8, w0, #1
+172c050: tbz w8, #0, #0x172c0dc
+172c054: ldr x1, [x24]
+172c058: add x0, sp, #0x20
+172c05c: bl #0x20a0144 ;
+172c060: mov x20, x0
+172c064: cbnz x20, #0x172c06c
+172c068: bl #0x3f564f0 ;
+172c06c: ldr x0, [x22]
+172c070: ldr x21, [x20, #0x10]
+172c074: ldrb w8, [x0, #0x10a]
+172c078: tbz w8, #0, #0x172c088
+172c07c: ldr w8, [x0, #0xbc]
+172c080: cbnz w8, #0x172c088
+172c084: bl #0x3f3f378 ;
+172c088: ldr x2, [x25]
+172c08c: mov x0, xzr
+172c090: mov x3, xzr
+172c094: mov x1, x21
+172c098: bl #0x2b80c20 ; String::public static bool op_Equality(string a, string b) { }
+172c09c: tbz w0, #0, #0x172c040
+172c0a0: cbnz x20, #0x172c0a8
+172c0a4: bl #0x3f564f0 ;
+172c0a8: ldr x1, [x20, #0x18]
+172c0ac: mov x0, xzr
+172c0b0: mov x2, xzr
+172c0b4: bl #0x2e3f2d0 ; Int32::public static int Parse(string s) { }
+172c0b8: mov w20, w0
+172c0bc: mov x21, xzr
+172c0c0: b #0x172c0e4 ;
+172c0c4: bl #0x113fb30 ;
+172c0c8: ldr x21, [x0]
+172c0cc: bl #0x113f710 ;
+172c0d0: mov w23, wzr
+172c0d4: mov w20, wzr
+172c0d8: b #0x172c0e8 ;
+172c0dc: mov x21, xzr
+172c0e0: mov w20, wzr
+172c0e4: mov w23, #1
+172c0e8: adrp x8, #0x51da000
+172c0ec: ldr x8, [x8, #0x788]
+172c0f0: add x0, sp, #0x20
+172c0f4: ldr x1, [x8]
+172c0f8: bl #0x20a0060 ;
+172c0fc: tbnz w23, #0, #0x172c110
+172c100: cbz x21, #0x172c110
+172c104: mov x1, xzr
+172c108: mov x0, x21
+172c10c: bl #0x3f563d4 ;
+172c110: cmp w20, #5
+172c114: b.ge #0x172c138
+172c118: ldr x19, [x19, #0x50]
+172c11c: cbnz x19, #0x172c124
+172c120: bl #0x3f564f0 ;
+172c124: mov x2, xzr
+172c128: mov w1, #2
+172c12c: mov x0, x19
+172c130: bl #0x143e2b4 ; MoonAcceptTaskModule::public void SendMoonAcceptableRepeatTask(int refreshCount) { }
+172c134: b #0x172c1fc ;
+172c138: adrp x8, #0x528b000
+172c13c: ldr x8, [x8, #0x2e0]
+172c140: ldr x0, [x8]
+172c144: ldrb w8, [x0, #0x10a]
+172c148: tbz w8, #0, #0x172c158
+172c14c: ldr w8, [x0, #0xbc]
+172c150: cbnz w8, #0x172c158
+172c154: bl #0x3f3f378 ;
+172c158: mov w1, #0xc70000
+172c15c: mov x0, xzr
+172c160: movk w1, #0xedea
+172c164: mov x2, xzr
+172c168: bl #0x151fae4 ; UISpecialLayer::public static string GetLanguageStr(int id) { }
+172c16c: ldr x8, [x22]
+172c170: mov x19, x0
+172c174: ldrb w9, [x8, #0x10a]
+172c178: tbz w9, #0, #0x172c18c
+172c17c: ldr w9, [x8, #0xbc]
+172c180: cbnz w9, #0x172c18c
+172c184: mov x0, x8
+172c188: bl #0x3f3f378 ;
+172c18c: adrp x8, #0x5228000
+172c190: ldr x8, [x8, #0x560]
+172c194: ldr x20, [x8]
+172c198: mov x0, x20
+172c19c: bl #0x3f1f994 ;
+172c1a0: mov x1, xzr
+172c1a4: mov x0, x20
+172c1a8: bl #0x3f69a40 ;
+172c1ac: mov x2, x0
+172c1b0: mov x0, xzr
+172c1b4: mov x3, xzr
+172c1b8: mov x1, x19
+172c1bc: bl #0x2b8c328 ; String::public static string Format(string format, object[] args) { }
+172c1c0: adrp x8, #0x5243000
+172c1c4: ldr x8, [x8, #0x7d0]
+172c1c8: mov x19, x0
+172c1cc: ldr x8, [x8]
+172c1d0: ldrb w9, [x8, #0x10a]
+172c1d4: tbz w9, #0, #0x172c1e8
+172c1d8: ldr w9, [x8, #0xbc]
+172c1dc: cbnz w9, #0x172c1e8
+172c1e0: mov x0, x8
+172c1e4: bl #0x3f3f378 ;
+172c1e8: mov x0, xzr
+172c1ec: mov w2, wzr
+172c1f0: mov x1, x19
+172c1f4: mov x3, xzr
+172c1f8: bl #0x13477cc ; SingleBubbleType::public static void ShowSingleBubbleMsg(string content, MsgTipsEMsgType type = 0) { }
+172c1fc: sub sp, x29, #0x40
+172c200: ldp x29, x30, [sp, #0x40]
+172c204: ldp x20, x19, [sp, #0x30]
+172c208: ldp x22, x21, [sp, #0x20]
+172c20c: ldp x24, x23, [sp, #0x10]
+172c210: ldp x26, x25, [sp], #0x50
+172c214: ret
+172c218: b #0x172c0c4 ;

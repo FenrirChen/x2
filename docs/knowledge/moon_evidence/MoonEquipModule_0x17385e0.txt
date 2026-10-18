@@ -1,0 +1,127 @@
+0x17385e0 MoonEquipModule::public int GetLevelUpConsumeNum(int equipId) { }
+17385e0: stp x22, x21, [sp, #-0x30]!
+17385e4: stp x20, x19, [sp, #0x10]
+17385e8: stp x29, x30, [sp, #0x20]
+17385ec: add x29, sp, #0x20
+17385f0: sub sp, sp, #0x10
+17385f4: adrp x21, #0x5576000
+17385f8: ldrb w8, [x21, #0xea9]
+17385fc: mov w19, w1
+1738600: mov x20, x0
+1738604: tbnz w8, #0, #0x1738620
+1738608: adrp x8, #0x5264000
+173860c: ldr x8, [x8, #0xfe8]
+1738610: ldr w0, [x8]
+1738614: bl #0x3f2aed0 ;
+1738618: mov w8, #1
+173861c: strb w8, [x21, #0xea9]
+1738620: adrp x8, #0x51f7000
+1738624: ldr x8, [x8, #0x160]
+1738628: ldr x0, [x8]
+173862c: ldrb w8, [x0, #0x10a]
+1738630: tbz w8, #0, #0x1738640
+1738634: ldr w8, [x0, #0xbc]
+1738638: cbnz w8, #0x1738640
+173863c: bl #0x3f3f378 ;
+1738640: bl #0x1736ab0 ; MoonEquipManager::public static MoonEquipManager get_Instance() { }
+1738644: cbnz x0, #0x173864c
+1738648: bl #0x3f564f0 ;
+173864c: mov w1, w19
+1738650: bl #0x1736d80 ; MoonEquipManager::public MoonEquip GetItem(int equipid) { }
+1738654: mov x21, x0
+1738658: cbz x21, #0x17386fc
+173865c: ldr x0, [x21, #0x40]
+1738660: cbz x0, #0x17387c0
+1738664: adrp x8, #0x5300000
+1738668: ldr x8, [x8, #0xfa8]
+173866c: ldr x1, [x8]
+1738670: bl #0x3d473f8 ;
+1738674: cbz w0, #0x17387c0
+1738678: ldr x22, [x20, #0x30]
+173867c: cbnz x22, #0x1738684
+1738680: bl #0x3f564f0 ;
+1738684: adrp x8, #0x52b7000
+1738688: ldr x8, [x8, #0x4c0]
+173868c: mov x0, x22
+1738690: mov w1, w19
+1738694: ldr x2, [x8]
+1738698: bl #0x3608cf0 ;
+173869c: tbz w0, #0, #0x17387c0
+17386a0: ldr x21, [x21, #0x40]
+17386a4: ldr x20, [x20, #0x30]
+17386a8: cbnz x20, #0x17386b0
+17386ac: bl #0x3f564f0 ;
+17386b0: adrp x8, #0x51f4000
+17386b4: ldr x8, [x8, #0x370]
+17386b8: mov x0, x20
+17386bc: mov w1, w19
+17386c0: ldr x2, [x8]
+17386c4: bl #0x3607600 ;
+17386c8: mov w19, w0
+17386cc: cbnz x21, #0x17386d4
+17386d0: bl #0x3f564f0 ;
+17386d4: adrp x8, #0x52e6000
+17386d8: ldr x8, [x8, #0x7b0]
+17386dc: mov x0, x21
+17386e0: mov w1, w19
+17386e4: ldr x2, [x8]
+17386e8: sub sp, x29, #0x20
+17386ec: ldp x29, x30, [sp, #0x20]
+17386f0: ldp x20, x19, [sp, #0x10]
+17386f4: ldp x22, x21, [sp], #0x30
+17386f8: b #0x3d47400 ;
+17386fc: adrp x8, #0x5228000
+1738700: ldr x8, [x8, #0x560]
+1738704: ldr x20, [x8]
+1738708: mov x0, x20
+173870c: bl #0x3f1f994 ;
+1738710: mov w1, #1
+1738714: mov x0, x20
+1738718: bl #0x3f69a40 ;
+173871c: adrp x8, #0x52e8000
+1738720: ldr x8, [x8, #0xcc0]
+1738724: mov x20, x0
+1738728: add x1, sp, #0xc
+173872c: str w19, [sp, #0xc]
+1738730: ldr x8, [x8]
+1738734: mov x0, x8
+1738738: bl #0x3f6448c ;
+173873c: mov x19, x0
+1738740: cbnz x20, #0x1738748
+1738744: bl #0x3f564f0 ;
+1738748: cbz x19, #0x173876c
+173874c: ldr x8, [x20]
+1738750: mov x0, x19
+1738754: ldr x1, [x8, #0x30]
+1738758: bl #0x3f64744 ;
+173875c: cbnz x0, #0x173876c
+1738760: bl #0x3f571fc ;
+1738764: mov x1, xzr
+1738768: bl #0x3f563d4 ;
+173876c: ldr w8, [x20, #0x18]
+1738770: cbnz w8, #0x1738780
+1738774: bl #0x3f570dc ;
+1738778: mov x1, xzr
+173877c: bl #0x3f563d4 ;
+1738780: str x19, [x20, #0x20]
+1738784: adrp x8, #0x5207000
+1738788: ldr x8, [x8, #0x5a0]
+173878c: ldr x0, [x8]
+1738790: ldrb w8, [x0, #0x10a]
+1738794: tbz w8, #0, #0x17387a4
+1738798: ldr w8, [x0, #0xbc]
+173879c: cbnz w8, #0x17387a4
+17387a0: bl #0x3f3f378 ;
+17387a4: adrp x8, #0x520b000
+17387a8: ldr x8, [x8, #0x598] ; STRING MoonEquip表缺失Id{0},请检查
+17387ac: mov x0, xzr
+17387b0: mov x3, xzr
+17387b4: mov x2, x20
+17387b8: ldr x1, [x8]
+17387bc: bl #0x3e45bc4 ; TimerManager.<>c__DisplayClass29_0::public static void LogFormat(string format, object[] args) { }
+17387c0: mov w0, wzr
+17387c4: sub sp, x29, #0x20
+17387c8: ldp x29, x30, [sp, #0x20]
+17387cc: ldp x20, x19, [sp, #0x10]
+17387d0: ldp x22, x21, [sp], #0x30
+17387d4: ret

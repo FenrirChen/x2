@@ -108,7 +108,7 @@ LOBBY_IDS = (
     ("QueryActivityDrawInfo", 697, 699), ("QueryStarPrivilegeReward", 719, 720),
     ("QueryStarPrivilegeInfo", 723, 724), ("QueryIllustrationData", 862, 863),
     ("AccountBuffAutoStop", 885, 886), ("ReceiveGiftRew", 919, 920),
-    ("MoonEquip", 964, 965), ("QuerySimpleActivity", 986, 987),
+    ("QuerySimpleActivity", 986, 987),
     ("QuerySharedMessage", 653, 654), ("AccountBuffData", 865, 866),
     ("ButtonClick", 376, 377), ("Logout", 405, 406),
     ("CheckFightProfile", 447, 448), ("CommercialShopGoods", 523, 524),

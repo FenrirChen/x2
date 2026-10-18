@@ -1,0 +1,140 @@
+0x1739bf8 MoonEquipPage::public void OperationEquip() { }
+1739bf8: stp x22, x21, [sp, #-0x30]!
+1739bfc: stp x20, x19, [sp, #0x10]
+1739c00: stp x29, x30, [sp, #0x20]
+1739c04: add x29, sp, #0x20
+1739c08: adrp x19, #0x5576000
+1739c0c: ldrb w8, [x19, #0xeb9]
+1739c10: mov x20, x0
+1739c14: tbnz w8, #0, #0x1739c30
+1739c18: adrp x8, #0x5237000
+1739c1c: ldr x8, [x8, #0x7a8]
+1739c20: ldr w0, [x8]
+1739c24: bl #0x3f2aed0 ;
+1739c28: mov w8, #1
+1739c2c: strb w8, [x19, #0xeb9]
+1739c30: adrp x8, #0x51ed000
+1739c34: ldr x8, [x8, #0xb60]
+1739c38: ldr x0, [x8]
+1739c3c: ldrb w8, [x0, #0x10a]
+1739c40: tbz w8, #0, #0x1739c50
+1739c44: ldr w8, [x0, #0xbc]
+1739c48: cbnz w8, #0x1739c50
+1739c4c: bl #0x3f3f378 ;
+1739c50: adrp x8, #0x51d9000
+1739c54: ldr x8, [x8, #0x618]
+1739c58: mov x0, xzr
+1739c5c: ldr x1, [x8]
+1739c60: bl #0x2feb968 ;
+1739c64: mov x19, x0
+1739c68: cbnz x19, #0x1739c70
+1739c6c: bl #0x3f564f0 ;
+1739c70: adrp x8, #0x526f000
+1739c74: ldr x8, [x8, #0xaf0]
+1739c78: mov x0, x19
+1739c7c: ldr x1, [x8]
+1739c80: bl #0x1ce72d4 ;
+1739c84: adrp x8, #0x51f7000
+1739c88: ldr x8, [x8, #0x160]
+1739c8c: mov x19, x0
+1739c90: ldr x8, [x8]
+1739c94: ldrb w9, [x8, #0x10a]
+1739c98: tbz w9, #0, #0x1739cac
+1739c9c: ldr w9, [x8, #0xbc]
+1739ca0: cbnz w9, #0x1739cac
+1739ca4: mov x0, x8
+1739ca8: bl #0x3f3f378 ;
+1739cac: bl #0x1736ab0 ; MoonEquipManager::public static MoonEquipManager get_Instance() { }
+1739cb0: ldr w21, [x20, #0x140]
+1739cb4: cbnz x0, #0x1739cbc
+1739cb8: bl #0x3f564f0 ;
+1739cbc: mov w1, w21
+1739cc0: bl #0x1736d80 ; MoonEquipManager::public MoonEquip GetItem(int equipid) { }
+1739cc4: ldr w21, [x20, #0x140]
+1739cc8: mov x20, x0
+1739ccc: cbnz x19, #0x1739cd4
+1739cd0: bl #0x3f564f0 ;
+1739cd4: mov x0, x19
+1739cd8: mov w1, w21
+1739cdc: bl #0x17382a8 ; MoonEquipModule::public bool CheckInEquip(int equipId) { }
+1739ce0: mov w21, w0
+1739ce4: cbnz x20, #0x1739cec
+1739ce8: bl #0x3f564f0 ;
+1739cec: tbz w21, #0, #0x1739d20
+1739cf0: ldr w21, [x20, #0x10]
+1739cf4: mov w22, w21
+1739cf8: cbnz x20, #0x1739d04
+1739cfc: bl #0x3f564f0 ;
+1739d00: ldr w22, [x20, #0x10]
+1739d04: cbz x19, #0x1739d90
+1739d08: mov w2, wzr
+1739d0c: mov x0, x19
+1739d10: mov w1, w22
+1739d14: bl #0x1738c48 ; MoonEquipModule::public int GetEquipSlotIndex(int equipId = 0, bool isSpecial = False) { }
+1739d18: mov w19, w0
+1739d1c: b #0x1739dac ;
+1739d20: ldr w21, [x20, #0x18]
+1739d24: cbnz x19, #0x1739d2c
+1739d28: bl #0x3f564f0 ;
+1739d2c: cmp w21, #0
+1739d30: cset w1, eq
+1739d34: mov x0, x19
+1739d38: bl #0x173818c ; MoonEquipModule::public bool CheckHasPos(bool isSpecial) { }
+1739d3c: tbz w0, #0, #0x1739d4c
+1739d40: cbz x20, #0x1739db4
+1739d44: ldr w21, [x20, #0x10]
+1739d48: b #0x1739dc4 ;
+1739d4c: adrp x8, #0x5243000
+1739d50: ldr x8, [x8, #0x7d0]
+1739d54: ldr x0, [x8]
+1739d58: ldrb w8, [x0, #0x10a]
+1739d5c: tbz w8, #0, #0x1739d6c
+1739d60: ldr w8, [x0, #0xbc]
+1739d64: cbnz w8, #0x1739d6c
+1739d68: bl #0x3f3f378 ;
+1739d6c: ldp x29, x30, [sp, #0x20]
+1739d70: ldp x20, x19, [sp, #0x10]
+1739d74: mov w1, #0xc70000
+1739d78: mov x0, xzr
+1739d7c: movk w1, #0xede0
+1739d80: mov w2, wzr
+1739d84: mov x3, xzr
+1739d88: ldp x22, x21, [sp], #0x30
+1739d8c: b #0x134790c ; SingleBubbleType::public static void ShowSingleBubbleMsg(int languageID, MsgTipsEMsgType type = 0) { }
+1739d90: bl #0x3f564f0 ;
+1739d94: mov w2, wzr
+1739d98: mov x0, x19
+1739d9c: mov w1, w22
+1739da0: bl #0x1738c48 ; MoonEquipModule::public int GetEquipSlotIndex(int equipId = 0, bool isSpecial = False) { }
+1739da4: mov w19, w0
+1739da8: bl #0x3f564f0 ;
+1739dac: mov w1, #2
+1739db0: b #0x1739e0c ;
+1739db4: bl #0x3f564f0 ;
+1739db8: mov w8, #0x10
+1739dbc: ldr w21, [x8]
+1739dc0: bl #0x3f564f0 ;
+1739dc4: ldr w20, [x20, #0x18]
+1739dc8: cbz x19, #0x1739de8
+1739dcc: cmp w20, #0
+1739dd0: cset w2, eq
+1739dd4: mov w1, wzr
+1739dd8: mov x0, x19
+1739ddc: bl #0x1738c48 ; MoonEquipModule::public int GetEquipSlotIndex(int equipId = 0, bool isSpecial = False) { }
+1739de0: mov w19, w0
+1739de4: b #0x1739e08 ;
+1739de8: bl #0x3f564f0 ;
+1739dec: cmp w20, #0
+1739df0: cset w2, eq
+1739df4: mov w1, wzr
+1739df8: mov x0, x19
+1739dfc: bl #0x1738c48 ; MoonEquipModule::public int GetEquipSlotIndex(int equipId = 0, bool isSpecial = False) { }
+1739e00: mov w19, w0
+1739e04: bl #0x3f564f0 ;
+1739e08: mov w1, #1
+1739e0c: mov w3, w19
+1739e10: ldp x29, x30, [sp, #0x20]
+1739e14: ldp x20, x19, [sp, #0x10]
+1739e18: mov w2, w21
+1739e1c: ldp x22, x21, [sp], #0x30
+1739e20: b #0x1737ee8 ; MoonEquipModule::public void SendMoonEquipPutOnOrOff(int equipOperate, int equipId, int equipSlotIndex) { }

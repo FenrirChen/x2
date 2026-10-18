@@ -34,7 +34,7 @@ class EconomyService:
     # Item.EffData -> BaseInfoProto; only supported currency destinations.
     CURRENCIES = {1237901: "gold", 1237902: "crystal", 1237906: "equip_exp", 1237907: "hero_exp",
                   1237908: "exp", 1237910: "daily_activity", 1237911: "week_activity"}
-    STACKABLE_REWARD_TYPES = frozenset((5, 12, 13, 14, 17, 18, 20, 22, 23, 24, 25, 26, 33, 34, 40, 41, 42, 43))
+    STACKABLE_REWARD_TYPES = frozenset((5, 12, 13, 14, 17, 18, 20, 22, 23, 24, 25, 26, 33, 34, 36, 37, 38, 39, 40, 41, 42, 43))
     ACTIVITY_FIELDS = {1: "daily_activity", 2: "week_activity"}
     MAP_TYPE_CHALLENGE = 2  # 现世复刻: the difficulty stages of a chapter
     # TaskCondition CompleteType enums that server events can authoritatively fire.
@@ -277,6 +277,8 @@ class EconomyService:
         self.season = SeasonService(self)
         from .terminal_wish import TerminalWishService
         self.terminal_wish = TerminalWishService(self)
+        from .moon import MoonService
+        self.moon = MoonService(self)
         # 降临纪念 / 累计登录 (100004): 按创号时刻判天数门槛并真发货 (见 player/total_login.py)。
         from .total_login import TotalLoginService
         self.total_login = TotalLoginService(self)
@@ -477,6 +479,8 @@ class EconomyService:
             return {int(i): n for i, n in json.loads(existing[0]).items()}
         if self.auto_used_items and any(item in self.auto_used_items for item in rewards):
             rewards = self.expand_auto_used(rewards)
+        if getattr(self, "moon", None):
+            rewards = self.moon.accept_reward(player_id, source, rewards)
         if getattr(self, "season", None):
             rewards = self.season.accept_reward(player_id, source, rewards)
         if getattr(self,'endless',None):
@@ -1588,6 +1592,7 @@ class EconomyService:
         handlers.update(self.extra_activity.handlers())
         handlers.update(self.total_login.handlers())
         handlers.update(self.terminal_wish.handlers())
+        handlers.update(self.moon.handlers())
         return handlers
 
     async def fetch_mobility_power(self, context, packet):
@@ -1653,6 +1658,8 @@ class EconomyService:
             return self.unlock_story(player_id, request)
         if name in ("C2L_GameTask", "C2L_DailyAndWeekTask"):
             kind = request.get("type", 0)
+            if kind in self.moon.KINDS:
+                return OutboundMessage('L2C_GameTask', self.moon.task_values(player_id, kind))
             if kind == 6:
                 return self.terminal_wish.query(context, packet, request)
             if kind == 15:
@@ -1684,6 +1691,7 @@ class EconomyService:
             if len(requests) > 40:
                 raise ProtocolError("too many task claims")
             results = [FINISH_RESULT.encode(
+                self.moon.claim_task(player_id, r.get('taskId', 0), r.get('type', 0)) if r.get('type', 0) in self.moon.KINDS else
                 self.terminal_wish.claim(player_id, r.get('taskId', 0), favor_changes) if r.get('type', 0) == 6 and not r.get('activityId') else
                 self.activity.claim_task(player_id, r.get('taskId', 0), r.get('type', 0), r.get('activityId', 0)) if r.get('type', 0) in (9, 20) and getattr(self, 'activity', None) else
                 self.season.claim_task_response(player_id, r.get("taskId", 0), context.session.session_id + ":" + str(packet.header.request_id) + ":" + hashlib.sha256(packet.body).hexdigest() + ":" + str(r.get("taskId", 0))) if r.get("type", 0) == 15 else
@@ -1692,6 +1700,7 @@ class EconomyService:
                 self.claim(player_id, r.get("taskId", 0), r.get("type", 0))
                 if not r.get("activityId") else {"code": 13, "taskId": r.get("taskId", 0), "type": r.get("type", 0)}) for r in requests]
             return OutboundMessage(response_name, {"data": results if name == "C2L_FinishGameTask" else results[0]},
+                before_response=self.moon.claim_pushes(results),
                 pushes=((OutboundMessage('L2C_FavorChangeInfo', {'data': favor_changes}),) if favor_changes else ()) + self.pushes(player_id))
         if name == "C2L_ShopGoods":
             shop = request.get("shopId", 0)

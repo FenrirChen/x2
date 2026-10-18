@@ -5,6 +5,7 @@ schemas are required by a later milestone. This file defines no handlers.
 """
 
 from x2server.protocol.protobuf import FieldKind, ProtoField, ProtoSchema
+from x2server.messages.moon import MOON_SCHEMAS
 from x2server.messages.lobby import LOBBY_SCHEMAS
 from x2server.messages.club import CLUB_SCHEMAS
 from x2server.messages.social import SOCIAL_SCHEMAS
@@ -287,6 +288,7 @@ HERO_GOD_EQUIP = ProtoSchema("HeroGodEquip", (
 HERO_ALL = ProtoSchema("L2C_HeroAll", (ProtoField(1, "heros", FieldKind.MESSAGE, repeated=True),))
 STRING_PAIR = ProtoSchema("KeyValuePair_String_String", (
     ProtoField(1, "key", FieldKind.STRING), ProtoField(2, "val", FieldKind.STRING)))
+CORE_SCHEMAS.update({k: v for k, v in MOON_SCHEMAS.items() if k != 'TaskData'})
 CORE_SCHEMAS[PLAYER_DATA.name] = PLAYER_DATA
 CORE_SCHEMAS[HERO_ALL.name] = HERO_ALL
 CORE_SCHEMAS["C2L_HeroAll"] = ProtoSchema("C2L_HeroAll", ())

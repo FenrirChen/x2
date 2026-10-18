@@ -1,0 +1,61 @@
+0x17305c8 MoonCampPage::public override void OnOpen() { }
+17305c8: stp x22, x21, [sp, #-0x30]!
+17305cc: stp x20, x19, [sp, #0x10]
+17305d0: stp x29, x30, [sp, #0x20]
+17305d4: add x29, sp, #0x20
+17305d8: adrp x20, #0x5576000
+17305dc: ldrb w8, [x20, #0xe6a]
+17305e0: mov x19, x0
+17305e4: tbnz w8, #0, #0x1730600
+17305e8: adrp x8, #0x51c9000
+17305ec: ldr x8, [x8, #0x670]
+17305f0: ldr w0, [x8]
+17305f4: bl #0x3f2aed0 ;
+17305f8: mov w8, #1
+17305fc: strb w8, [x20, #0xe6a]
+1730600: mov x1, xzr
+1730604: mov x0, x19
+1730608: bl #0x144dbf8 ; UIBase::public virtual void OnOpen() { }
+173060c: adrp x8, #0x51ed000
+1730610: ldr x8, [x8, #0xb60]
+1730614: ldr x0, [x8]
+1730618: ldrb w8, [x0, #0x10a]
+173061c: tbz w8, #0, #0x173062c
+1730620: ldr w8, [x0, #0xbc]
+1730624: cbnz w8, #0x173062c
+1730628: bl #0x3f3f378 ;
+173062c: adrp x21, #0x51d9000
+1730630: ldr x21, [x21, #0x618]
+1730634: mov x0, xzr
+1730638: ldr x1, [x21]
+173063c: bl #0x2feb968 ;
+1730640: mov x20, x0
+1730644: cbnz x20, #0x173064c
+1730648: bl #0x3f564f0 ;
+173064c: adrp x8, #0x52c5000
+1730650: ldr x8, [x8, #0xb48]
+1730654: mov x0, x20
+1730658: ldr x1, [x8]
+173065c: bl #0x1ce72d4 ;
+1730660: cbnz x0, #0x1730668
+1730664: bl #0x3f564f0 ;
+1730668: bl #0x172d6a4 ; MoonCampModule::public void SendMoonCampUnlock() { }
+173066c: ldr x1, [x21]
+1730670: mov x0, xzr
+1730674: bl #0x2feb968 ;
+1730678: mov x20, x0
+173067c: cbnz x20, #0x1730684
+1730680: bl #0x3f564f0 ;
+1730684: adrp x8, #0x5261000
+1730688: ldr x8, [x8, #0xa70]
+173068c: mov x0, x20
+1730690: ldr x1, [x8]
+1730694: bl #0x1ce72d4 ;
+1730698: cbnz x0, #0x17306a0
+173069c: bl #0x3f564f0 ;
+17306a0: bl #0x17306b8 ; MoonCampPrestigeModule::public void SendMoonCampUnlock() { }
+17306a4: mov x0, x19
+17306a8: ldp x29, x30, [sp, #0x20]
+17306ac: ldp x20, x19, [sp, #0x10]
+17306b0: ldp x22, x21, [sp], #0x30
+17306b4: b #0x173076c ; MoonCampPage::private void UpdateEntrancesRedPoint() { }

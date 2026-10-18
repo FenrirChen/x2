@@ -1,0 +1,176 @@
+0x16c24d4 ChapterModule::private static FightData ConvertFightData(FightData fightData) { }
+16c24d4: stp x22, x21, [sp, #-0x30]!
+16c24d8: stp x20, x19, [sp, #0x10]
+16c24dc: stp x29, x30, [sp, #0x20]
+16c24e0: add x29, sp, #0x20
+16c24e4: adrp x19, #0x5576000
+16c24e8: ldrb w8, [x19, #0xb69]
+16c24ec: mov x20, x1
+16c24f0: tbnz w8, #0, #0x16c250c
+16c24f4: adrp x8, #0x526a000
+16c24f8: ldr x8, [x8, #0x268]
+16c24fc: ldr w0, [x8]
+16c2500: bl #0x3f2aed0 ;
+16c2504: mov w8, #1
+16c2508: strb w8, [x19, #0xb69]
+16c250c: adrp x8, #0x520c000
+16c2510: ldr x8, [x8, #0x348]
+16c2514: ldr x0, [x8]
+16c2518: bl #0x3f6452c ;
+16c251c: mov x1, xzr
+16c2520: mov x19, x0
+16c2524: bl #0x1c5b178 ; FightData::public void .ctor() { }
+16c2528: cbnz x20, #0x16c2530
+16c252c: bl #0x3f564f0 ;
+16c2530: ldr w21, [x20, #0x18]
+16c2534: cbz x19, #0x16c254c
+16c2538: str w21, [x19, #0x20]
+16c253c: ldrb w8, [x20, #0x28]
+16c2540: strb w8, [x19, #0x30]
+16c2544: ldrb w21, [x20, #0x29]
+16c2548: b #0x16c2570 ;
+16c254c: bl #0x3f564f0 ;
+16c2550: mov w8, #0x20
+16c2554: str w21, [x8]
+16c2558: ldrb w21, [x20, #0x28]
+16c255c: bl #0x3f564f0 ;
+16c2560: mov w8, #0x30
+16c2564: strb w21, [x8]
+16c2568: ldrb w21, [x20, #0x29]
+16c256c: bl #0x3f564f0 ;
+16c2570: strb w21, [x19, #0x31]
+16c2574: adrp x8, #0x52fb000
+16c2578: ldr x8, [x8, #0x730]
+16c257c: ldr x21, [x20, #0x10]
+16c2580: ldr x0, [x8]
+16c2584: ldrb w8, [x0, #0x10a]
+16c2588: tbz w8, #0, #0x16c2598
+16c258c: ldr w8, [x0, #0xbc]
+16c2590: cbnz w8, #0x16c2598
+16c2594: bl #0x3f3f378 ;
+16c2598: mov x1, x21
+16c259c: bl #0x16c2a24 ; ChapterModule::private static List<FightHero> ConvertFightHeroData(List<FightHero> fightHero) { }
+16c25a0: str x0, [x19, #0x18]
+16c25a4: adrp x8, #0x5256000
+16c25a8: ldr x8, [x8, #0x620]
+16c25ac: ldr w9, [x20, #0x2c]
+16c25b0: ldr x8, [x8]
+16c25b4: ldr x8, [x8, #0xa0]
+16c25b8: str w9, [x8]
+16c25bc: adrp x8, #0x52f4000
+16c25c0: ldr x8, [x8, #0x98]
+16c25c4: ldr x0, [x8]
+16c25c8: bl #0x3f6452c ;
+16c25cc: mov x1, xzr
+16c25d0: mov x21, x0
+16c25d4: bl #0x1c5b180 ; FightGroupSkillData::public void .ctor() { }
+16c25d8: str x21, [x19, #0x58]
+16c25dc: ldr x8, [x20, #0x40]
+16c25e0: cbz x8, #0x16c26ec
+16c25e4: ldr w22, [x8, #0x10]
+16c25e8: cbnz x21, #0x16c25f0
+16c25ec: bl #0x3f564f0 ;
+16c25f0: str w22, [x21, #0x14]
+16c25f4: ldr x21, [x19, #0x58]
+16c25f8: ldr x22, [x20, #0x40]
+16c25fc: cbnz x22, #0x16c2604
+16c2600: bl #0x3f564f0 ;
+16c2604: ldr w22, [x22, #0x14]
+16c2608: cbnz x21, #0x16c2610
+16c260c: bl #0x3f564f0 ;
+16c2610: str w22, [x21, #0x18]
+16c2614: cbnz x19, #0x16c261c
+16c2618: bl #0x3f564f0 ;
+16c261c: ldr x21, [x19, #0x58]
+16c2620: cbnz x20, #0x16c2628
+16c2624: bl #0x3f564f0 ;
+16c2628: ldr x22, [x20, #0x40]
+16c262c: cbnz x22, #0x16c2634
+16c2630: bl #0x3f564f0 ;
+16c2634: ldr w22, [x22, #0x18]
+16c2638: cbnz x21, #0x16c2640
+16c263c: bl #0x3f564f0 ;
+16c2640: str w22, [x21, #0x1c]
+16c2644: cbnz x19, #0x16c264c
+16c2648: bl #0x3f564f0 ;
+16c264c: adrp x8, #0x52ef000
+16c2650: ldr x22, [x19, #0x58]
+16c2654: ldr x8, [x8, #0x110]
+16c2658: ldr x0, [x8]
+16c265c: bl #0x3f6452c ;
+16c2660: adrp x8, #0x520c000
+16c2664: ldr x8, [x8, #0x2c0]
+16c2668: mov x21, x0
+16c266c: ldr x1, [x8]
+16c2670: bl #0x3d43ed8 ;
+16c2674: cbnz x22, #0x16c267c
+16c2678: bl #0x3f564f0 ;
+16c267c: str x21, [x22, #0x20]
+16c2680: cbnz x20, #0x16c2688
+16c2684: bl #0x3f564f0 ;
+16c2688: ldr x21, [x20, #0x40]
+16c268c: cbnz x21, #0x16c2694
+16c2690: bl #0x3f564f0 ;
+16c2694: ldr x8, [x21, #0x20]
+16c2698: cbz x8, #0x16c26ec
+16c269c: cbnz x19, #0x16c26a4
+16c26a0: bl #0x3f564f0 ;
+16c26a4: ldr x21, [x19, #0x58]
+16c26a8: cbnz x21, #0x16c26b0
+16c26ac: bl #0x3f564f0 ;
+16c26b0: ldr x21, [x21, #0x20]
+16c26b4: cbnz x20, #0x16c26bc
+16c26b8: bl #0x3f564f0 ;
+16c26bc: ldr x22, [x20, #0x40]
+16c26c0: cbnz x22, #0x16c26c8
+16c26c4: bl #0x3f564f0 ;
+16c26c8: ldr x22, [x22, #0x20]
+16c26cc: cbnz x21, #0x16c26d4
+16c26d0: bl #0x3f564f0 ;
+16c26d4: adrp x8, #0x51d4000
+16c26d8: ldr x8, [x8, #0xd00]
+16c26dc: mov x0, x21
+16c26e0: mov x1, x22
+16c26e4: ldr x2, [x8]
+16c26e8: bl #0x3d455bc ;
+16c26ec: adrp x8, #0x52ef000
+16c26f0: ldr x8, [x8, #0x110]
+16c26f4: ldr x0, [x8]
+16c26f8: bl #0x3f6452c ;
+16c26fc: adrp x8, #0x520c000
+16c2700: ldr x8, [x8, #0x2c0]
+16c2704: mov x21, x0
+16c2708: ldr x1, [x8]
+16c270c: bl #0x3d43ed8 ;
+16c2710: cbnz x19, #0x16c2718
+16c2714: bl #0x3f564f0 ;
+16c2718: str x21, [x19, #0x28]
+16c271c: cbnz x20, #0x16c2724
+16c2720: bl #0x3f564f0 ;
+16c2724: ldr x21, [x20, #0x20]
+16c2728: cbnz x21, #0x16c2730
+16c272c: bl #0x3f564f0 ;
+16c2730: ldr x8, [x21, #0x10]
+16c2734: cbz x8, #0x16c277c
+16c2738: cbnz x19, #0x16c2740
+16c273c: bl #0x3f564f0 ;
+16c2740: ldr x21, [x19, #0x28]
+16c2744: cbnz x20, #0x16c274c
+16c2748: bl #0x3f564f0 ;
+16c274c: ldr x20, [x20, #0x20]
+16c2750: cbnz x20, #0x16c2758
+16c2754: bl #0x3f564f0 ;
+16c2758: ldr x20, [x20, #0x10]
+16c275c: cbnz x21, #0x16c2764
+16c2760: bl #0x3f564f0 ;
+16c2764: adrp x8, #0x51d4000
+16c2768: ldr x8, [x8, #0xd00]
+16c276c: mov x0, x21
+16c2770: mov x1, x20
+16c2774: ldr x2, [x8]
+16c2778: bl #0x3d455bc ;
+16c277c: mov x0, x19
+16c2780: ldp x29, x30, [sp, #0x20]
+16c2784: ldp x20, x19, [sp, #0x10]
+16c2788: ldp x22, x21, [sp], #0x30
+16c278c: ret

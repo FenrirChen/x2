@@ -1,0 +1,31 @@
+{
+  "dump.cs": {
+    "sha256": "b5c7ad3d9a551565bf399258401a30fe26881773dde886fdd2e535f9a42a09a1",
+    "bytes": 28233019
+  },
+  "libil2cpp.so": {
+    "sha256": "37f092f117c11d7e0cdae1e9ac9f7123487c97b6d91c4e7ab699d380646a1dca",
+    "bytes": 88855552
+  },
+  "GlobalParamString.encrypted": {
+    "sha256": "2e9ea1c582c5afbaf4b90c867b04f5b3ff8637952a752a5ca19406ea35857617",
+    "bytes": 25657
+  },
+  "moon_parameters": {
+    "MoonChapterID": "2011000",
+    "MoonDefaultCamp": "700001",
+    "MoonEquipExpGetLimit": "300",
+    "MoonEquipExpItem": "1120001",
+    "MoonFavorItem": "1120002",
+    "MoonFlowerGetLimit": "6",
+    "MoonFlowerGiveLimit": "9999",
+    "MoonNormalEquipLimit": "4",
+    "MoonPrestigeReward1": "1120013",
+    "MoonPrestigeReward2": "1120014",
+    "MoonRewardRandomTime": "5",
+    "MoonSpecialEquipLimit": "1",
+    "MoonTaskReceiveLimit": "4",
+    "MoonTaskRefreshLimit": "6",
+    "MoonTaskRefreshNum": "3"
+  }
+}

@@ -107,7 +107,6 @@ class LobbyService:
             "C2L_QueryIllustrationData": {"code": 10},
             "C2L_AccountBuffAutoStop": {"code": 10},  # No active local buffs to stop.
             "C2L_ReceiveGiftRew": {"code": 13, "type": request.get("type", 0)},  # Unsupported grant: E_ERROR_OPT.
-            "C2L_MoonEquip": {"code": 10},
             "C2L_QuerySimpleActivity": {"code": 208},
             "C2L_QuerySharedMessage": {"code": 10},
             "C2L_AccountBuffData": {"code": 10, "buffId": request.get("buffId", [])},

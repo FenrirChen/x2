@@ -306,6 +306,8 @@ class LoginService:
         pairs += [STRING_PAIR.encode({'key': 'WishTaskList', 'val': '3'}),
                   STRING_PAIR.encode({'key': 'WishTaskCanTake', 'val': '3'}),
                   STRING_PAIR.encode({'key': 'HeroWishTaskLimit', 'val': '3'})]
+        from .moon import PARAMETERS as MOON_PARAMETERS
+        pairs += [STRING_PAIR.encode({'key': key, 'val': val}) for key, val in MOON_PARAMETERS.items()]
         from .social import PARAMETERS
         pairs += [STRING_PAIR.encode({'key': key, 'val': val}) for key,val in PARAMETERS.items()]
         LOGGER.info("server configuration response prepared with %s-second power recovery",

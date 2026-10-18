@@ -177,6 +177,9 @@ async def run(database: Path, seconds: float) -> None:
             update = economy.terminal_wish.expire_day(player_id)
             if update and player_id in tcp.authenticated_player_ids():
                 await tcp.push_to_player(player_id, update)
+        for player_id in tcp.authenticated_player_ids():
+            for update in economy.moon.expire_day(player_id):
+                await tcp.push_to_player(player_id, update)
         for (player_id,) in store.db.execute(
                 "SELECT DISTINCT player_id FROM gift_package_claims WHERE package_id=?",
                 (gift_packages.MONTHCARD_ID,)):

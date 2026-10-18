@@ -722,11 +722,14 @@ class BattleService:
         drop_values = self.drop_budget.budget_for(section)
         if entry_context.section_type == 5:
             drop_values = [0] * len(drop_values)
+        moon_skill = (self.economy.moon.battle_skill(player["id"])
+                      if self.economy and entry_context.section_type == 21 else b"")
         data = FIGHT_DATA.encode({"fightHeros": fight_heroes, "missionId": section,
                                   "expertMode": request.get("expertMode", False),
                                   "dropData": DROP_DATA.encode({"dropValues": drop_values,
                                                                 "missionId": section}),
-                                  "CRIDmg": 15000})
+                                  "CRIDmg": 15000,
+                                  **({"fightGroupSkillData": moon_skill} if moon_skill else {})})
         profile = FIGHT_PROFILE.encode({"missionId": section, "chapterId": chapter, "layer": 0,
             "relicList": selected_relics,
             "expertMode": request.get("expertMode", False),

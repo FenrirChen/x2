@@ -1,0 +1,85 @@
+0x174612c MoonTaskPage::public override void OnOpen() { }
+174612c: stp x22, x21, [sp, #-0x30]!
+1746130: stp x20, x19, [sp, #0x10]
+1746134: stp x29, x30, [sp, #0x20]
+1746138: add x29, sp, #0x20
+174613c: adrp x20, #0x5576000
+1746140: ldrb w8, [x20, #0xf11]
+1746144: mov x19, x0
+1746148: tbnz w8, #0, #0x1746164
+174614c: adrp x8, #0x52fa000
+1746150: ldr x8, [x8, #0xcf0]
+1746154: ldr w0, [x8]
+1746158: bl #0x3f2aed0 ;
+174615c: mov w8, #1
+1746160: strb w8, [x20, #0xf11]
+1746164: mov x1, xzr
+1746168: mov x0, x19
+174616c: bl #0x144dbf8 ; UIBase::public virtual void OnOpen() { }
+1746170: adrp x8, #0x51ed000
+1746174: ldr x8, [x8, #0xb60]
+1746178: ldr x0, [x8]
+174617c: ldrb w8, [x0, #0x10a]
+1746180: tbz w8, #0, #0x1746190
+1746184: ldr w8, [x0, #0xbc]
+1746188: cbnz w8, #0x1746190
+174618c: bl #0x3f3f378 ;
+1746190: adrp x8, #0x51d9000
+1746194: ldr x8, [x8, #0x618]
+1746198: mov x0, xzr
+174619c: ldr x1, [x8]
+17461a0: bl #0x2feb968 ;
+17461a4: mov x20, x0
+17461a8: cbnz x20, #0x17461b0
+17461ac: bl #0x3f564f0 ;
+17461b0: adrp x8, #0x51d6000
+17461b4: ldr x8, [x8, #0xdd0]
+17461b8: mov x0, x20
+17461bc: ldr x1, [x8]
+17461c0: bl #0x1ce72d4 ;
+17461c4: mov x20, x0
+17461c8: cbnz x20, #0x17461d0
+17461cc: bl #0x3f564f0 ;
+17461d0: mov x2, xzr
+17461d4: mov w1, #1
+17461d8: mov x0, x20
+17461dc: bl #0x143e2b4 ; MoonAcceptTaskModule::public void SendMoonAcceptableRepeatTask(int refreshCount) { }
+17461e0: ldr x20, [x19, #0x88]
+17461e4: cbnz x20, #0x17461ec
+17461e8: bl #0x3f564f0 ;
+17461ec: mov w1, wzr
+17461f0: mov x2, xzr
+17461f4: mov x0, x20
+17461f8: bl #0x1957f28 ; TabControl::public void DoTabClick(int tabIndex) { }
+17461fc: adrp x8, #0x51d9000
+1746200: adrp x9, #0x5232000
+1746204: ldr x8, [x8, #0x8b0]
+1746208: ldr x9, [x9, #0xcc8]
+174620c: ldr x21, [x8]
+1746210: ldr x0, [x9]
+1746214: bl #0x3f6452c ;
+1746218: adrp x8, #0x527d000
+174621c: ldr x8, [x8, #0x378]
+1746220: mov x1, x19
+1746224: mov x2, x21
+1746228: mov x20, x0
+174622c: ldr x3, [x8]
+1746230: bl #0x2621a1c ;
+1746234: adrp x8, #0x5210000
+1746238: ldr x8, [x8, #0xf98]
+174623c: ldr x0, [x8]
+1746240: ldrb w8, [x0, #0x10a]
+1746244: tbz w8, #0, #0x1746254
+1746248: ldr w8, [x0, #0xbc]
+174624c: cbnz w8, #0x1746254
+1746250: bl #0x3f3f378 ;
+1746254: adrp x8, #0x520d000
+1746258: ldr x8, [x8, #0x228]
+174625c: mov x2, x20
+1746260: mov x0, xzr
+1746264: mov w1, #0x179
+1746268: ldr x3, [x8]
+174626c: ldp x29, x30, [sp, #0x20]
+1746270: ldp x20, x19, [sp, #0x10]
+1746274: ldp x22, x21, [sp], #0x30
+1746278: b #0x221e7e8 ;
