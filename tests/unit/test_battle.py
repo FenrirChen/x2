@@ -82,7 +82,7 @@ def test_entry_replay_persistence_and_no_economy_changes(tmp_path):
     assert drops.values["result"] == 10
     drop_data = DROP_DATA.decode(drops.values["data"])
     assert drop_data["missionId"] == 2110801
-    assert len(drop_data["dropValues"]) == 28  # REVIVAL_COMPAT tier budget
+    assert len(drop_data["dropValues"]) == 29  # REVIVAL_COMPAT tier budget
     assert all(v == 3000 for v in drop_data["dropValues"])  # no DifficultyLevel -> MID
     assert asyncio.run(service.drop_data(context, drop_packet)).values == drops.values
     kill = packet({"sectionId": 2110801}, name="C2L_FightKillInfo")

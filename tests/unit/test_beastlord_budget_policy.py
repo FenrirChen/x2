@@ -19,14 +19,15 @@ def test_all_sections_preserve_other_groups_and_exceptions():
         difficulty = row.get('DifficultyLevel', 0)
         old = 1000 if 1 <= difficulty <= 3 else 5000 if difficulty >= 7 else 3000
         values = policy.budget_for(sid)
-        assert len(values) == 28
+        assert len(values) == 29
         assert values[27] == 3000
-        assert all(value == old for group, value in enumerate(values) if group not in (5, 27))
+        assert values[28] == 3000
+        assert all(value == old for group, value in enumerate(values) if group not in (5, 27, 28))
         if row['Type'] == 20:
-            assert values == [old] * 27 + [3000]
+            assert values == [old] * 27 + [3000, 3000]
             assert str(sid) not in config['sections']
         elif str(sid) not in config['sections']:
-            assert values == [old] * 27 + [3000]
+            assert values == [old] * 27 + [3000, 3000]
         else:
             entry = config['sections'][str(sid)]
             assert values[5] == 30 * entry['percent']
@@ -49,9 +50,9 @@ def test_official_chapter_variations_and_unknown_sections():
     assert policy.budget_for(2133109)[5] == 6000   # 200%
     assert policy.budget_for(2133209)[5] == 6420   # 214%
     assert policy.budget_for(2133110)[5] == 13200  # 440%
-    assert policy.budget_for(-1) == [3000] * 28
+    assert policy.budget_for(-1) == [3000] * 29
     assert -1 in policy.unknown_hits
-    assert DropBudgetCompatibilityPolicy({}).budget_for(2133110) == [3000] * 28
+    assert DropBudgetCompatibilityPolicy({}).budget_for(2133110) == [3000] * 29
 
 
 def test_compatibility_curve_is_only_used_for_exported_eligible_sections():
@@ -63,4 +64,4 @@ def test_compatibility_curve_is_only_used_for_exported_eligible_sections():
             assert entry['percent'] == curve[entry['difficulty'] - 1]
     # Having level 10 alone does not create an equipment drop profile.
     policy = DropBudgetCompatibilityPolicy({999999: 10})
-    assert policy.budget_for(999999) == [5000] * 27 + [3000]
+    assert policy.budget_for(999999) == [5000] * 27 + [3000, 3000]

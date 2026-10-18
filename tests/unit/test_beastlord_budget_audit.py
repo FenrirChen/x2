@@ -34,7 +34,7 @@ def test_hui_and_blood_moon_entry_and_refresh_budget_agree(tmp_path, section, di
         'chapterId': row['ChapterID']}, request_id=2, name='C2L_FightDropData')))
     assert refreshed.values['result'] == 10
     refresh_budget = DROP_DATA.decode(refreshed.values['data'])['dropValues']
-    expected = [5000] * 27 + [3000]
+    expected = [5000] * 27 + [3000, 3000]
     expected[5] = budget
     assert entry_budget == refresh_budget == expected
     assert entry_budget[5] == budget  # Beastlord value cap, not item count.
