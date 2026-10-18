@@ -99,25 +99,42 @@ def test_friend_shop_802_lists_client_goods_and_purchases(env):
     listing = asyncio.run(service.handle(ctx, packet({"shopId": 802}, name="C2L_ShopGoods")))
     assert listing.values["code"] == 10
     goods = {row["goodsId"]: row for row in map(GOODS.decode, listing.values["goods"])}
-    # Client ShopConfig(802) 友情商店 -> ShopGoodsGroup groups 31-36: nine slots, all
-    # priced in 917 friendship points, no Limited in the client table.
-    assert set(goods) == {1903101, 1903201, 1903301, 1903401, 1903402, 1903403,
-        1903404, 1903501, 1903601}
+    # Official 友情商店 screenshot: six slots, all priced in 917 friendship points.
+    # The client ShopConfig(802)/ShopGoodsGroup groups 31-36 only fix goodsId, group,
+    # currency and ItemPrice; the shelf itself (which of the duplicated acceleration
+    # tiers showed, and the strikethrough prices) comes from the screenshot.
+    assert set(goods) == {1903101, 1903201, 1903301, 1903403, 1903501, 1903601}
     assert {row["currencyType"] for row in goods.values()} == {917}
-    assert {row["limited"] for row in goods.values()} == {0}
+    # Quotas reset at the local midnight: 因果/金币 three times a day, the four
+    # discounted rows once.
+    assert {row["limited"] for row in goods.values()} == {3}
+    assert {gid: row["canBuyTimes"] for gid, row in goods.items()} == {
+        1903101: 3, 1903201: 3, 1903301: 1, 1903403: 1, 1903501: 1, 1903601: 1}
+    assert (goods[1903101]["itemId"], goods[1903101]["num"]) == (1237900, 20)
+    assert (goods[1903201]["itemId"], goods[1903201]["num"]) == (1237901, 5000)
+    assert (goods[1903301]["itemId"], goods[1903301]["price"],
+        goods[1903301]["originalPrice"]) == (1237840, 500, 1000)
+    assert (goods[1903403]["itemId"], goods[1903403]["price"],
+        goods[1903403]["originalPrice"]) == (1237834, 316, 400)
     gift = goods[1903601]
-    assert (gift["itemId"], gift["num"], gift["price"]) == (1286001, 1, 1200)
+    assert (gift["itemId"], gift["num"], gift["price"],
+        gift["originalPrice"]) == (1203002, 1, 708, 1200)
     with store.db:
         store.db.execute("INSERT INTO inventory VALUES (?,?,?)", (1, 1237917, 3000))
     purchase = packet({"shopId": 802, "goodsId": 1903601, "buyNum": 1},
                       request_id=50, name="C2L_BuyGoods")
     first = asyncio.run(service.handle(ctx, purchase))
     assert first.values["code"] == 10
-    assert rewards(first.values["rewardData"]) == {1286001: 1}
+    assert rewards(first.values["rewardData"]) == {1203002: 1}
     assert store.db.execute(
-        "SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1237917").fetchone()[0] == 1800
+        "SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1237917").fetchone()[0] == 2292
     assert store.db.execute(
-        "SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1286001").fetchone()[0] == 1
+        "SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1203002").fetchone()[0] == 1
+    second = asyncio.run(service.handle(ctx, packet({"shopId": 802, "goodsId": 1903601, "buyNum": 1},
+        request_id=51, name="C2L_BuyGoods")))
+    assert second.values["code"] == 13
+    assert store.db.execute(
+        "SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1237917").fetchone()[0] == 2292
 
 
 def test_divine_letter_shop_810_lists_daily_tracks(env):
