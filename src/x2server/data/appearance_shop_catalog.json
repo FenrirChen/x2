@@ -1,5 +1,5 @@
 {
-  "source": "client AppearanceShop table; 1980004/1980005 operator price override to 980 crystal; display name deduplicated, 静影糜株 removed",
+  "source": "client AppearanceShop table; 1980004/1980005 operator price override to 980 crystal; display name deduplicated, 静影糜株 restored",
   "goods": [
     {
       "goodsId": 1980001,
@@ -436,6 +436,23 @@
         919
       ],
       "name": "暗烛秘境"
+    },
+    {
+      "goodsId": 1980045,
+      "itemId": 1223003,
+      "currencyType": 923,
+      "price": 560,
+      "goodsType": 1,
+      "sort": 27,
+      "sourcePrice": [
+        560,
+        128
+      ],
+      "sourceCurrency": [
+        923,
+        919
+      ],
+      "name": "静影糜株"
     },
     {
       "goodsId": 1980047,
