@@ -52,6 +52,7 @@ def main() -> None:
     import struct
     assert struct.unpack_from("<H", data, 18)[0] == 183, "not AArch64"
     assert b"x2_open_save_manager" in data
+    assert b"x2_play_login_title_voice" in data
     assert b"libc.so" in data and b"libdl.so" in data
 
 
