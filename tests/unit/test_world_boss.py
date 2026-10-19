@@ -1,6 +1,7 @@
 """Native temporal-gate routes, persistence, and battle/receipt boundaries."""
 import asyncio
 import json
+from datetime import datetime, timedelta, timezone
 
 import pytest
 
@@ -17,6 +18,12 @@ from x2server.player.world_boss import account_state, snapshot_fields, day
 
 def call(service, ctx, name, values=None, number=1):
     return asyncio.run(service.handle(ctx, packet(values or {},name=name,request_id=number)))
+
+
+# 每日蚀兽按星期轮换 (周一 2040101 剑柄 ... 周日 2040107 圣杯, 见 daily_world_boss_id)。
+# 下面按等级断言 HP 的用例用的是 2040101 这一只的血量, 所以把时钟钉在周一, 免得随
+# 真实运行日期漂移到别的 Boss 上。
+MONDAY = int(datetime(2026, 9, 28, 12, tzinfo=timezone(timedelta(hours=8))).timestamp())
 
 
 def admit_fixture(economy, section):
@@ -279,11 +286,10 @@ def test_empty_header_native_socket_and_death_retry_keep_one_ticket(env):
     assert member['damage']==500
 
 
-def test_fixed_griffon_every_day_kill_and_restart_do_not_respawn(env):
-    from datetime import datetime, timezone, timedelta
+def test_daily_world_boss_rotates_by_weekday_kill_and_restart_do_not_respawn(env):
     store,economy,ctx=env
     w=economy.world_boss
-    monday=int(datetime(2026,9,28,12,tzinfo=timezone(timedelta(hours=8))).timestamp())
+    monday=MONDAY
     for weekday in range(7):
         now=monday+weekday*86400
         economy.clock=lambda:now
@@ -293,7 +299,8 @@ def test_fixed_griffon_every_day_kill_and_restart_do_not_respawn(env):
             w.create_boss(f'old-normal:{weekday}',w.bosses[2040201])
         result=call(w,ctx,'C2L_QueryWorldBossInfo',number=100+weekday)
         bosses=[INFO.decode(b) for b in result.values['bossInfos']]
-        assert len(bosses)==1 and bosses[0]['typeId']==2040101
+        # 每日一只, 按星期轮换: monday=2026-09-28 起 2040101..2040107 依次.
+        assert len(bosses)==1 and bosses[0]['typeId']==2040101+weekday
         boss=bosses[0]
         with economy.transaction():
             internal=w.internal_id(boss['bossId'])
@@ -454,7 +461,7 @@ def test_first_search_discovers_one_boss_and_preserves_other_slot_indices(env):
 def test_shared_save_upgrade_preserves_only_own_damage(env):
     store,economy,ctx=env
     w=economy.world_boss
-    static=w.bosses[w.policy['daily_boss_id']]
+    static=w.bosses[w.daily_world_boss_id(day(w.now()))]
     old=f'world:{day(w.now())}:{static["BossID"]}'
     with economy.transaction():
         w.create_boss(old,static)
@@ -477,6 +484,7 @@ def test_shared_save_upgrade_preserves_only_own_damage(env):
     (99,90,87675000), (100,100,121075000), (150,100,121075000)])
 def test_personal_level_hp_and_battle_entry(env, player_level, boss_level, hp):
     store,economy,ctx=env
+    economy.clock=lambda:MONDAY
     p=store.get(1)
     store.save_snapshot(1,dict(p['snapshot'],level=player_level),p['revision'])
     w=economy.world_boss
@@ -502,6 +510,7 @@ def test_personal_level_hp_and_battle_entry(env, player_level, boss_level, hp):
 
 def test_level_upgrade_keeps_damage_and_dead_boss(env):
     store,economy,ctx=env
+    economy.clock=lambda:MONDAY
     w=economy.world_boss
     with economy.transaction():
         bid=w.public_bosses(1)
