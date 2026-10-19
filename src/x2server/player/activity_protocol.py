@@ -10,10 +10,10 @@ from .economy import UnresolvedEconomy
 from .activity import enum
 
 GLOBAL_ROUTES = {'QueryActivity', 'EntryidStatus'}
+BUILDING_ROUTES = {'ActivityBuilding', 'ActivityBuildingUpgrade'}
 SHARED_ROUTES = {'SceneGlobalParam', 'ActivityPassRecord', 'ExtraDropData',
                  'AccountBuffData', 'AccountBuffAutoStop', 'ActivityReissueState'}
-UNSUPPORTED_ROUTES = {'ActivityBuilding', 'ActivityBuildingUpgrade',
-                      'ActivityTowerLevelUp', 'ActivityReissue'}
+UNSUPPORTED_ROUTES = {'ActivityTowerLevelUp', 'ActivityReissue'}
 REQUIRED_KINDS = {
     'QueryActivityTower': {50}, 'ActivityTowerPassive': {50},
     'QueryShuangHanActivity': {13}, 'PlayShuangHanPV': {13},
@@ -34,7 +34,7 @@ CAFE_ROUTES = {'CafeStoreInfo', 'CafeStoreUnLock', 'CafeStorePositionSet',
                'CafeStoreCooking', 'CafeStoreLevelUp', 'CafeStoreReceiveRevenue',
                'CafeStoreUpdate'}
 REQUIRED_KINDS.update({op: {27} for op in CAFE_ROUTES})
-ALL_ROUTES = GLOBAL_ROUTES | SHARED_ROUTES | UNSUPPORTED_ROUTES | REQUIRED_KINDS.keys() | ID_KINDS.keys()
+ALL_ROUTES = GLOBAL_ROUTES | BUILDING_ROUTES | SHARED_ROUTES | UNSUPPORTED_ROUTES | REQUIRED_KINDS.keys() | ID_KINDS.keys()
 
 
 def check_request(runtime, player, op, request):
@@ -43,6 +43,8 @@ def check_request(runtime, player, op, request):
     if op in GLOBAL_ROUTES or op == 'ExtraDropData' or (op == 'SceneGlobalParam' and runtime.e.season.active(player)):
         return
     period = runtime.a.period(player)
+    if op in BUILDING_ROUTES and not runtime.buildings.rows_for(period):
+        raise UnresolvedEconomy('building operation belongs to another theme')
     kinds = {enum(row['ActivityType']) for row in period.theme['activities']}
     required = REQUIRED_KINDS.get(op)
     if required and not kinds & required:
@@ -59,6 +61,9 @@ def check_progress(runtime, period, message):
     name, values = message.message_name, message.values
     if name in {'L2C_SceneGlobalParam', 'L2C_ActivityPassRecord'}:
         pass
+    elif name == 'L2C_ExtraDropData':
+        if not runtime.buildings.rows_for(period):
+            raise UnresolvedEconomy('building drop progress belongs to another theme')
     elif name == 'L2C_QueryActivityMissionRecord':
         if period.theme['group'] != 99:
             raise UnresolvedEconomy('YueXi progress cannot be dispatched to another theme')

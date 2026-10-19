@@ -13,6 +13,7 @@ from x2server.protocol.errors import ProtocolError
 from x2server.protocol.registry import CORE_MESSAGE_REGISTRY
 from .activity import enum
 from .activity_cafe import ActivityCafe
+from .activity_buildings import ActivityBuildings
 from .activity_exchange import ActivityExchange
 from .economy import UnresolvedEconomy
 
@@ -26,7 +27,7 @@ LIVE_QUERIES = frozenset({
     'LanternShowQueryData', 'ExtraDropData', 'AccountBuffData',
     'ActivityReissueState', 'QueryShuangHanActivity', 'ActivityPreNoticInfo',
     'ActivityDialogReciveInfo', 'QueryActivityTower', 'ActivityTowerPassive',
-    'ActivityShop',
+    'ActivityShop', 'ActivityBuilding',
 })
 
 
@@ -35,6 +36,7 @@ class ActivityRuntime:
         self.a, self.e, self.r, self.mail = activity, activity.economy, activity.rotation, mail
         activity.runtime = self
         self.cafe, self.exchange = ActivityCafe(activity), ActivityExchange(activity)
+        self.buildings = ActivityBuildings(activity)
         self.buff_rows = {r['AccountBuffID']: r for r in activity.tables['AccountBuff']}
 
     def handlers(self):
@@ -115,6 +117,7 @@ class ActivityRuntime:
         period = self.r.run_period(player, uuid)
         if period is None:
             return cost
+        self.r.put(player, period, 'run-buildings', uuid, sorted(self.buildings.effects(player, period)))
         rows = self.buffs(player, period, section)
         self.r.put(player, period, 'run-buffs', uuid, [r['AccountBuffID'] for r, _ in rows])
         for row, state in rows:
@@ -131,13 +134,23 @@ class ActivityRuntime:
         rewards = Counter()
         day = (int(self.e.clock()) + 8 * 3600) // 86400
         extra_ids = {i for a in period.theme['activities'] if enum(a['ActivityType']) == 23 for i in a['ActivityParam1']}
+        extra_ids.update(self.r.get(player, period, 'run-buildings', uuid,
+                                    sorted(self.buildings.effects(player, period))))
         for row in self.a.tables['ExtraDroop']:
-            if row['ID'] not in extra_ids or section not in row['SectionGroup'] or enum(row['DroopType']) != 1:
+            if row['ID'] not in extra_ids or section not in row['SectionGroup']:
                 continue
             namespace = f'extra:{day}' if row['RefreshCycle'] == 1 else 'extra'
             count = self.r.get(player, period, namespace, row['ID'], 0)
             if count < row['NumLimit']:
-                rewards.update(self.e.gifts(row['ExtraGiftID'], allow_daily_random=True))
+                if enum(row['DroopType']) == 1:
+                    rewards.update(self.e.gifts(row['ExtraGiftID'], allow_daily_random=True))
+                elif enum(row['DroopType']) == 2:
+                    # Client GetExtraDropRatio callers only render reward previews.
+                    # Apply its percentage once to the actual base reward here.
+                    for item in row.get('ExtraParam1', []):
+                        rewards[item] += base.get(item, 0) * row['DroopUPParam'][0] // 100
+                else:
+                    raise UnresolvedEconomy('unknown activity extra drop type')
                 self.r.put(player, period, namespace, row['ID'], count + 1)
         for bid in self.r.get(player, period, 'run-buffs', uuid, []):
             row = self.buff_rows[bid]
@@ -173,6 +186,8 @@ class ActivityRuntime:
             day = (int(self.e.clock()) + 28800) // 86400
             ids = {i for a in period.theme['activities'] if enum(a['ActivityType']) == 23
                    for i in a['ActivityParam1']} if period else set()
+            if period:
+                ids.update(self.buildings.effects(player, period))
             values = self.e.extra_drop.values(player)
             values += [encode('KeyValuePair_Int32_Int32', {'Key':row['ID'],
                 'Value':self.r.get(player, period, f'extra:{day}' if row['RefreshCycle']==1 else 'extra',row['ID'],0)})
@@ -181,6 +196,10 @@ class ActivityRuntime:
         if op == 'EntryidStatus':
             return {'code': 10, 'entryidStatus': [MISSION_PAIR.encode({'Key': 19, 'Value': 1})]}
         period = self.a.rotation.at() if op == 'SceneGlobalParam' else self.a.period(player)
+        if op == 'ActivityBuilding':
+            return self.buildings.values(player, period)
+        if op == 'ActivityBuildingUpgrade':
+            return self.buildings.upgrade(player, period, req.get('id'), token)
         if op == 'QueryShuangHanActivity':
             return self.a.frost_values(player)
         if op == 'PlayShuangHanPV':
@@ -379,7 +398,8 @@ class ActivityRuntime:
                 if name[4:] in LIVE_QUERIES:
                     live = self.operate(player, name[4:], req, token)
                     response_schema.encode(live)
-                    return OutboundMessage(response, live)
+                    return OutboundMessage(response, live,
+                        pushes=self.building_messages(player) if name == 'C2L_QueryActivity' else ())
                 cached = self.a.store.db.execute('SELECT period,message,response FROM activity_receipts WHERE player_id=? AND request_key=?', (player, token)).fetchone()
                 if cached:
                     current = self.r.at()
@@ -420,10 +440,14 @@ class ActivityRuntime:
                    'QueryFoodMissionReward', 'ActivityPreNoticInfo', 'ActivityReissueState',
                    'QueryActivityTower', 'ActivityTowerPassive',
                    'QueryShuangHanActivity', 'PlayShuangHanPV',
-                   'ActivityDialogReciveInfo', 'ActivityShop', 'AccountBuffData', 'AccountBuffAutoStop'}
+                   'ActivityDialogReciveInfo', 'ActivityShop', 'AccountBuffData', 'AccountBuffAutoStop',
+                   'ActivityBuilding'}
         queries.add('ActivityMissionSelBranch')  # Only branch state changes, no inventory/player snapshot.
-        return OutboundMessage(response, values,
-            before_response=self.e.pushes(player) if name[4:] not in queries else ())
+        before = self.e.pushes(player) if name[4:] not in queries else ()
+        if name == 'C2L_ActivityBuildingUpgrade':
+            before += (OutboundMessage('L2C_ExtraDropData',
+                self.operate(player, 'ExtraDropData', {}, token)),)
+        return OutboundMessage(response, values, before_response=before)
 
     def progress_messages(self, player):
         period = self.r.at()
@@ -433,6 +457,9 @@ class ActivityRuntime:
                     self.operate(player, 'SceneGlobalParam', {}, 'progress')),
                     OutboundMessage('L2C_ActivityPassRecord',
                     {'code': 10, 'missionPassCount': self.records(player, period)['missionPassCount']})]
+        if self.buildings.rows_for(period):
+            messages.append(OutboundMessage('L2C_ExtraDropData',
+                self.operate(player, 'ExtraDropData', {}, 'progress')))
         # YueXi's handler indexes its own POV configuration for every pass
         # pair. Other themes must not dispatch this event into YueXiModule.
         if period.theme['group'] == 99:
@@ -475,6 +502,15 @@ class ActivityRuntime:
                 mail_id = self.mail.send(player, template['title'], template['body'], self.e.gifts([template['gift']], allow_daily_random=True))
                 self.a.store.db.execute('UPDATE player_mail SET source_key=? WHERE id=?', (source, mail_id))
 
+    def building_messages(self, player):
+        period = self.r.at()
+        if (period is None or not self.buildings.rows_for(period)
+                or self.a.store.get(player)['snapshot']['level'] < 17):
+            return ()
+        return (OutboundMessage('L2C_ActivityBuilding', self.buildings.values(player, period)),
+                OutboundMessage('L2C_ExtraDropData',
+                    self.operate(player, 'ExtraDropData', {}, 'building-refresh')))
+
     async def watch(self, server):
         previous = None
         while True:
@@ -487,5 +523,7 @@ class ActivityRuntime:
                 self.deliver_daily_mail(player)
                 if previous != current:
                     await server.push_to_player(player, OutboundMessage('L2C_QueryActivity', self.a.query_activity(player)))
+                    for message in self.building_messages(player):
+                        await server.push_to_player(player, message)
             previous = current if server.authenticated_player_ids() else None
             await asyncio.sleep(5)

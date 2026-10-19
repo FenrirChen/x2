@@ -1,0 +1,1241 @@
+{
+  "source": "Original APK tables; existing repository ActivityBuilding and ExtraDroop rows retained without changing values.",
+  "buildings": [
+    {
+      "BuildingID": 1,
+      "BuildingLevel": 1,
+      "UnlockItem": 1290233,
+      "LevelUpNum": 2,
+      "BuildingEffect": [
+        1000011
+      ],
+      "ActivityID": 72035,
+      "BuildingName": 50020011,
+      "BuildingDes": 50020012,
+      "BuildingEffectDes": 50020013,
+      "BuildingClue": [
+        1104001,
+        1104002,
+        1104003,
+        1104004,
+        1104005,
+        1104006,
+        1104007
+      ],
+      "BuildingDisplay": "UIAltas/ActivityBuilding/ActivityBuilding_1"
+    },
+    {
+      "BuildingID": 2,
+      "BuildingLevel": 1,
+      "UnlockItem": 1290232,
+      "LevelUpNum": 2,
+      "BuildingEffect": [
+        1000015
+      ],
+      "ActivityID": 72035,
+      "BuildingName": 50020021,
+      "BuildingDes": 50020022,
+      "BuildingEffectDes": 50020023,
+      "BuildingClue": [
+        1104011,
+        1104012,
+        1104013,
+        1104014,
+        1104015,
+        1104016,
+        1104017
+      ],
+      "BuildingDisplay": "UIAltas/ActivityBuilding/ActivityBuilding_2"
+    },
+    {
+      "BuildingID": 3,
+      "BuildingLevel": 1,
+      "UnlockItem": 1290232,
+      "LevelUpNum": 2,
+      "BuildingEffect": [
+        1000019
+      ],
+      "ActivityID": 72035,
+      "BuildingName": 50020031,
+      "BuildingDes": 50020032,
+      "BuildingEffectDes": 50020033,
+      "BuildingClue": [
+        1104021,
+        1104022,
+        1104023,
+        1104024,
+        1104025
+      ],
+      "BuildingDisplay": "UIAltas/ActivityBuilding/ActivityBuilding_3"
+    },
+    {
+      "BuildingID": 4,
+      "BuildingLevel": 1,
+      "UnlockItem": 1290233,
+      "LevelUpNum": 2,
+      "BuildingEffect": [
+        1000023
+      ],
+      "ActivityID": 72035,
+      "BuildingName": 50020041,
+      "BuildingDes": 50020042,
+      "BuildingEffectDes": 50020043,
+      "BuildingClue": [
+        1104031,
+        1104032,
+        1104033,
+        1104034,
+        1104035,
+        1104036
+      ],
+      "BuildingDisplay": "UIAltas/ActivityBuilding/ActivityBuilding_4"
+    },
+    {
+      "BuildingID": 1,
+      "BuildingLevel": 2,
+      "UnlockItem": 1290233,
+      "LevelUpNum": 3,
+      "BuildingEffect": [
+        1000011,
+        1000012
+      ],
+      "ActivityID": 72035,
+      "BuildingName": 50020011,
+      "BuildingDes": 50020012,
+      "BuildingEffectDes": 50020014,
+      "BuildingClue": [
+        1104001,
+        1104002,
+        1104003,
+        1104004,
+        1104005,
+        1104006,
+        1104007
+      ],
+      "BuildingDisplay": "UIAltas/ActivityBuilding/ActivityBuilding_1"
+    },
+    {
+      "BuildingID": 2,
+      "BuildingLevel": 2,
+      "UnlockItem": 1290232,
+      "LevelUpNum": 2,
+      "BuildingEffect": [
+        1000015,
+        1000016
+      ],
+      "ActivityID": 72035,
+      "BuildingName": 50020021,
+      "BuildingDes": 50020022,
+      "BuildingEffectDes": 50020024,
+      "BuildingClue": [
+        1104011,
+        1104012,
+        1104013,
+        1104014,
+        1104015,
+        1104016,
+        1104017
+      ],
+      "BuildingDisplay": "UIAltas/ActivityBuilding/ActivityBuilding_2"
+    },
+    {
+      "BuildingID": 3,
+      "BuildingLevel": 2,
+      "UnlockItem": 1290232,
+      "LevelUpNum": 2,
+      "BuildingEffect": [
+        1000019,
+        1000020
+      ],
+      "ActivityID": 72035,
+      "BuildingName": 50020031,
+      "BuildingDes": 50020032,
+      "BuildingEffectDes": 50020034,
+      "BuildingClue": [
+        1104021,
+        1104022,
+        1104023,
+        1104024,
+        1104025
+      ],
+      "BuildingDisplay": "UIAltas/ActivityBuilding/ActivityBuilding_3"
+    },
+    {
+      "BuildingID": 4,
+      "BuildingLevel": 2,
+      "UnlockItem": 1290233,
+      "LevelUpNum": 3,
+      "BuildingEffect": [
+        1000023,
+        1000024
+      ],
+      "ActivityID": 72035,
+      "BuildingName": 50020041,
+      "BuildingDes": 50020042,
+      "BuildingEffectDes": 50020044,
+      "BuildingClue": [
+        1104031,
+        1104032,
+        1104033,
+        1104034,
+        1104035,
+        1104036
+      ],
+      "BuildingDisplay": "UIAltas/ActivityBuilding/ActivityBuilding_4"
+    },
+    {
+      "BuildingID": 1,
+      "BuildingLevel": 3,
+      "UnlockItem": 1290233,
+      "LevelUpNum": 4,
+      "BuildingEffect": [
+        1000011,
+        1000012,
+        1000013
+      ],
+      "ActivityID": 72035,
+      "BuildingName": 50020011,
+      "BuildingDes": 50020012,
+      "BuildingEffectDes": 50020015,
+      "BuildingClue": [
+        1104001,
+        1104002,
+        1104003,
+        1104004,
+        1104005,
+        1104006,
+        1104007
+      ],
+      "BuildingDisplay": "UIAltas/ActivityBuilding/ActivityBuilding_1"
+    },
+    {
+      "BuildingID": 2,
+      "BuildingLevel": 3,
+      "UnlockItem": 1290232,
+      "LevelUpNum": 4,
+      "BuildingEffect": [
+        1000015,
+        1000016,
+        1000017
+      ],
+      "ActivityID": 72035,
+      "BuildingName": 50020021,
+      "BuildingDes": 50020022,
+      "BuildingEffectDes": 50020025,
+      "BuildingClue": [
+        1104011,
+        1104012,
+        1104013,
+        1104014,
+        1104015,
+        1104016,
+        1104017
+      ],
+      "BuildingDisplay": "UIAltas/ActivityBuilding/ActivityBuilding_2"
+    },
+    {
+      "BuildingID": 3,
+      "BuildingLevel": 3,
+      "UnlockItem": 1290232,
+      "LevelUpNum": 4,
+      "BuildingEffect": [
+        1000019,
+        1000020,
+        1000021
+      ],
+      "ActivityID": 72035,
+      "BuildingName": 50020031,
+      "BuildingDes": 50020032,
+      "BuildingEffectDes": 50020035,
+      "BuildingClue": [
+        1104021,
+        1104022,
+        1104023,
+        1104024,
+        1104025
+      ],
+      "BuildingDisplay": "UIAltas/ActivityBuilding/ActivityBuilding_3"
+    },
+    {
+      "BuildingID": 4,
+      "BuildingLevel": 3,
+      "UnlockItem": 1290233,
+      "LevelUpNum": 4,
+      "BuildingEffect": [
+        1000023,
+        1000024,
+        1000025
+      ],
+      "ActivityID": 72035,
+      "BuildingName": 50020041,
+      "BuildingDes": 50020042,
+      "BuildingEffectDes": 50020045,
+      "BuildingClue": [
+        1104031,
+        1104032,
+        1104033,
+        1104034,
+        1104035,
+        1104036
+      ],
+      "BuildingDisplay": "UIAltas/ActivityBuilding/ActivityBuilding_4"
+    },
+    {
+      "BuildingID": 1,
+      "BuildingLevel": 4,
+      "UnlockItem": 1290233,
+      "LevelUpNum": 4,
+      "BuildingEffect": [
+        1000011,
+        1000012,
+        1000013,
+        1000014
+      ],
+      "ActivityID": 72035,
+      "BuildingName": 50020011,
+      "BuildingDes": 50020012,
+      "BuildingEffectDes": 50020016,
+      "BuildingClue": [
+        1104001,
+        1104002,
+        1104003,
+        1104004,
+        1104005,
+        1104006,
+        1104007
+      ],
+      "BuildingDisplay": "UIAltas/ActivityBuilding/ActivityBuilding_1"
+    },
+    {
+      "BuildingID": 2,
+      "BuildingLevel": 4,
+      "UnlockItem": 1290232,
+      "LevelUpNum": 4,
+      "BuildingEffect": [
+        1000015,
+        1000016,
+        1000017,
+        1000018
+      ],
+      "ActivityID": 72035,
+      "BuildingName": 50020021,
+      "BuildingDes": 50020022,
+      "BuildingEffectDes": 50020026,
+      "BuildingClue": [
+        1104011,
+        1104012,
+        1104013,
+        1104014,
+        1104015,
+        1104016,
+        1104017
+      ],
+      "BuildingDisplay": "UIAltas/ActivityBuilding/ActivityBuilding_2"
+    },
+    {
+      "BuildingID": 3,
+      "BuildingLevel": 4,
+      "UnlockItem": 1290232,
+      "LevelUpNum": 4,
+      "BuildingEffect": [
+        1000019,
+        1000020,
+        1000021,
+        1000022
+      ],
+      "ActivityID": 72035,
+      "BuildingName": 50020031,
+      "BuildingDes": 50020032,
+      "BuildingEffectDes": 50020036,
+      "BuildingClue": [
+        1104021,
+        1104022,
+        1104023,
+        1104024,
+        1104025
+      ],
+      "BuildingDisplay": "UIAltas/ActivityBuilding/ActivityBuilding_3"
+    },
+    {
+      "BuildingID": 4,
+      "BuildingLevel": 4,
+      "UnlockItem": 1290233,
+      "LevelUpNum": 4,
+      "BuildingEffect": [
+        1000023,
+        1000024,
+        1000025,
+        1000026
+      ],
+      "ActivityID": 72035,
+      "BuildingName": 50020041,
+      "BuildingDes": 50020042,
+      "BuildingEffectDes": 50020046,
+      "BuildingClue": [
+        1104031,
+        1104032,
+        1104033,
+        1104034,
+        1104035,
+        1104036
+      ],
+      "BuildingDisplay": "UIAltas/ActivityBuilding/ActivityBuilding_4"
+    }
+  ],
+  "effects": [
+    {
+      "ID": 1000011,
+      "DroopType": {
+        "value": 1,
+        "enum": "E_ExtraGift"
+      },
+      "SectionChoice": {
+        "value": 1,
+        "enum": "E_SectionID"
+      },
+      "SectionGroup": [
+        2161031,
+        2161035
+      ],
+      "ExtraGiftID": [
+        776617
+      ],
+      "ExtraDisplayID": [
+        1237901
+      ],
+      "NumLimit": 5,
+      "ExtraDisplayShow": [
+        1237901
+      ],
+      "RefreshCycle": 1,
+      "ResourceNum": 5
+    },
+    {
+      "ID": 1000012,
+      "DroopType": {
+        "value": 2,
+        "enum": "E_DroopUP"
+      },
+      "SectionChoice": {
+        "value": 1,
+        "enum": "E_SectionID"
+      },
+      "SectionGroup": [
+        2161031,
+        2161035
+      ],
+      "DroopUPParam": [
+        100
+      ],
+      "ExtraParam1": [
+        1237901
+      ],
+      "NumLimit": 5,
+      "RefreshCycle": 1,
+      "ResourceNum": 5
+    },
+    {
+      "ID": 1000013,
+      "DroopType": {
+        "value": 1,
+        "enum": "E_ExtraGift"
+      },
+      "SectionChoice": {
+        "value": 1,
+        "enum": "E_SectionID"
+      },
+      "SectionGroup": [
+        2161031,
+        2161035
+      ],
+      "ExtraGiftID": [
+        776626
+      ],
+      "ExtraDisplayID": [
+        1237978
+      ],
+      "NumLimit": 5,
+      "ExtraDisplayShow": [
+        1237978
+      ],
+      "RefreshCycle": 1,
+      "ResourceNum": 5
+    },
+    {
+      "ID": 1000014,
+      "DroopType": {
+        "value": 1,
+        "enum": "E_ExtraGift"
+      },
+      "SectionChoice": {
+        "value": 1,
+        "enum": "E_SectionID"
+      },
+      "SectionGroup": [
+        2161031,
+        2161035
+      ],
+      "ExtraGiftID": [
+        776618
+      ],
+      "ExtraDisplayID": [
+        1203042
+      ],
+      "NumLimit": 5,
+      "ExtraDisplayShow": [
+        1203042
+      ],
+      "RefreshCycle": 1,
+      "ResourceNum": 5
+    },
+    {
+      "ID": 1000015,
+      "DroopType": {
+        "value": 1,
+        "enum": "E_ExtraGift"
+      },
+      "SectionChoice": {
+        "value": 1,
+        "enum": "E_SectionID"
+      },
+      "SectionGroup": [
+        2161032,
+        2161036
+      ],
+      "ExtraGiftID": [
+        776619
+      ],
+      "ExtraDisplayID": [
+        1237906
+      ],
+      "NumLimit": 5,
+      "ExtraDisplayShow": [
+        1237906
+      ],
+      "RefreshCycle": 1,
+      "ResourceNum": 5
+    },
+    {
+      "ID": 1000016,
+      "DroopType": {
+        "value": 2,
+        "enum": "E_DroopUP"
+      },
+      "SectionChoice": {
+        "value": 1,
+        "enum": "E_SectionID"
+      },
+      "SectionGroup": [
+        2161032,
+        2161036
+      ],
+      "DroopUPParam": [
+        100
+      ],
+      "ExtraParam1": [
+        1237906
+      ],
+      "NumLimit": 5,
+      "RefreshCycle": 1,
+      "ResourceNum": 5
+    },
+    {
+      "ID": 1000017,
+      "DroopType": {
+        "value": 1,
+        "enum": "E_ExtraGift"
+      },
+      "SectionChoice": {
+        "value": 1,
+        "enum": "E_SectionID"
+      },
+      "SectionGroup": [
+        2161032,
+        2161036
+      ],
+      "ExtraGiftID": [
+        776627
+      ],
+      "ExtraDisplayID": [
+        1237978
+      ],
+      "NumLimit": 5,
+      "ExtraDisplayShow": [
+        1237978
+      ],
+      "RefreshCycle": 1,
+      "ResourceNum": 5
+    },
+    {
+      "ID": 1000018,
+      "DroopType": {
+        "value": 1,
+        "enum": "E_ExtraGift"
+      },
+      "SectionChoice": {
+        "value": 1,
+        "enum": "E_SectionID"
+      },
+      "SectionGroup": [
+        2161032,
+        2161036
+      ],
+      "ExtraGiftID": [
+        776620
+      ],
+      "ExtraDisplayID": [
+        1203042
+      ],
+      "NumLimit": 5,
+      "ExtraDisplayShow": [
+        1203042
+      ],
+      "RefreshCycle": 1,
+      "ResourceNum": 5
+    },
+    {
+      "ID": 1000019,
+      "DroopType": {
+        "value": 1,
+        "enum": "E_ExtraGift"
+      },
+      "SectionChoice": {
+        "value": 1,
+        "enum": "E_SectionID"
+      },
+      "SectionGroup": [
+        2161033,
+        2161037
+      ],
+      "ExtraGiftID": [
+        776621
+      ],
+      "ExtraDisplayID": [
+        1237912
+      ],
+      "NumLimit": 5,
+      "ExtraDisplayShow": [
+        1237912
+      ],
+      "RefreshCycle": 1,
+      "ResourceNum": 5
+    },
+    {
+      "ID": 1000020,
+      "DroopType": {
+        "value": 2,
+        "enum": "E_DroopUP"
+      },
+      "SectionChoice": {
+        "value": 1,
+        "enum": "E_SectionID"
+      },
+      "SectionGroup": [
+        2161033,
+        2161037
+      ],
+      "DroopUPParam": [
+        100
+      ],
+      "ExtraParam1": [
+        1237912
+      ],
+      "NumLimit": 5,
+      "RefreshCycle": 1,
+      "ResourceNum": 5
+    },
+    {
+      "ID": 1000021,
+      "DroopType": {
+        "value": 1,
+        "enum": "E_ExtraGift"
+      },
+      "SectionChoice": {
+        "value": 1,
+        "enum": "E_SectionID"
+      },
+      "SectionGroup": [
+        2161033,
+        2161037
+      ],
+      "ExtraGiftID": [
+        776628
+      ],
+      "ExtraDisplayID": [
+        1237978
+      ],
+      "NumLimit": 5,
+      "ExtraDisplayShow": [
+        1237978
+      ],
+      "RefreshCycle": 1,
+      "ResourceNum": 5
+    },
+    {
+      "ID": 1000022,
+      "DroopType": {
+        "value": 1,
+        "enum": "E_ExtraGift"
+      },
+      "SectionChoice": {
+        "value": 1,
+        "enum": "E_SectionID"
+      },
+      "SectionGroup": [
+        2161033,
+        2161037
+      ],
+      "ExtraGiftID": [
+        776622
+      ],
+      "ExtraDisplayID": [
+        1203042
+      ],
+      "NumLimit": 5,
+      "ExtraDisplayShow": [
+        1203042
+      ],
+      "RefreshCycle": 1,
+      "ResourceNum": 5
+    },
+    {
+      "ID": 1000023,
+      "DroopType": {
+        "value": 1,
+        "enum": "E_ExtraGift"
+      },
+      "SectionChoice": {
+        "value": 1,
+        "enum": "E_SectionID"
+      },
+      "SectionGroup": [
+        2161034,
+        2161038
+      ],
+      "ExtraGiftID": [
+        776623
+      ],
+      "ExtraDisplayID": [
+        1202004
+      ],
+      "NumLimit": 5,
+      "ExtraDisplayShow": [
+        1202004
+      ],
+      "RefreshCycle": 1,
+      "ResourceNum": 5
+    },
+    {
+      "ID": 1000024,
+      "DroopType": {
+        "value": 2,
+        "enum": "E_DroopUP"
+      },
+      "SectionChoice": {
+        "value": 1,
+        "enum": "E_SectionID"
+      },
+      "SectionGroup": [
+        2161034,
+        2161038
+      ],
+      "DroopUPParam": [
+        100
+      ],
+      "ExtraParam1": [
+        1202004
+      ],
+      "NumLimit": 5,
+      "RefreshCycle": 1,
+      "ResourceNum": 5
+    },
+    {
+      "ID": 1000025,
+      "DroopType": {
+        "value": 1,
+        "enum": "E_ExtraGift"
+      },
+      "SectionChoice": {
+        "value": 1,
+        "enum": "E_SectionID"
+      },
+      "SectionGroup": [
+        2161034,
+        2161038
+      ],
+      "ExtraGiftID": [
+        776629
+      ],
+      "ExtraDisplayID": [
+        1237978
+      ],
+      "NumLimit": 5,
+      "ExtraDisplayShow": [
+        1237978
+      ],
+      "RefreshCycle": 1,
+      "ResourceNum": 5
+    },
+    {
+      "ID": 1000026,
+      "DroopType": {
+        "value": 1,
+        "enum": "E_ExtraGift"
+      },
+      "SectionChoice": {
+        "value": 1,
+        "enum": "E_SectionID"
+      },
+      "SectionGroup": [
+        2161034,
+        2161038
+      ],
+      "ExtraGiftID": [
+        776624
+      ],
+      "ExtraDisplayID": [
+        1203042
+      ],
+      "NumLimit": 5,
+      "ExtraDisplayShow": [
+        1203042
+      ],
+      "RefreshCycle": 1,
+      "ResourceNum": 5
+    }
+  ],
+  "collection_drop_props": [
+    {
+      "DropClass": 1309187,
+      "Level": 1,
+      "Picks": 1,
+      "ItemList": [
+        1104018,
+        1104019,
+        1104020
+      ],
+      "Prob": [
+        75,
+        20,
+        5
+      ]
+    },
+    {
+      "DropClass": 1309188,
+      "Level": 1,
+      "Picks": 1,
+      "ItemList": [
+        1104018,
+        1104019,
+        1104020
+      ],
+      "Prob": [
+        20,
+        75,
+        5
+      ]
+    },
+    {
+      "DropClass": 1309189,
+      "Level": 1,
+      "Picks": 1,
+      "ItemList": [
+        1104019,
+        1104020
+      ],
+      "Prob": [
+        80,
+        20
+      ]
+    },
+    {
+      "DropClass": 1309190,
+      "Level": 1,
+      "Picks": 1,
+      "ItemList": [
+        1104008
+      ],
+      "Prob": [
+        1
+      ]
+    },
+    {
+      "DropClass": 1309191,
+      "Level": 1,
+      "Picks": 4,
+      "ItemList": [
+        1104008
+      ],
+      "Prob": [
+        1
+      ]
+    },
+    {
+      "DropClass": 1309192,
+      "Level": 1,
+      "Picks": 1,
+      "ItemList": [
+        1104009
+      ],
+      "Prob": [
+        1
+      ]
+    },
+    {
+      "DropClass": 1309193,
+      "Level": 1,
+      "Picks": 1,
+      "ItemList": [
+        1104010
+      ],
+      "Prob": [
+        1
+      ]
+    },
+    {
+      "DropClass": 1309194,
+      "Level": 1,
+      "Picks": 1,
+      "ItemList": [
+        1290233
+      ],
+      "Prob": [
+        2
+      ]
+    },
+    {
+      "DropClass": 1309195,
+      "Level": 1,
+      "Picks": 1,
+      "ItemList": [
+        1290232
+      ],
+      "Prob": [
+        2
+      ]
+    },
+    {
+      "DropClass": 1309196,
+      "Level": 1,
+      "Picks": 1,
+      "ItemList": [
+        1290232
+      ],
+      "Prob": [
+        2
+      ]
+    },
+    {
+      "DropClass": 1309197,
+      "Level": 1,
+      "Picks": 1,
+      "ItemList": [
+        1290233
+      ],
+      "Prob": [
+        2
+      ]
+    },
+    {
+      "DropClass": 1309198,
+      "Level": 1,
+      "Picks": 1,
+      "ItemList": [
+        1104027
+      ],
+      "Prob": [
+        1
+      ]
+    },
+    {
+      "DropClass": 1309212,
+      "Level": 1,
+      "Picks": 1,
+      "ItemList": [
+        1104001
+      ],
+      "Prob": [
+        1
+      ]
+    },
+    {
+      "DropClass": 1309213,
+      "Level": 1,
+      "Picks": 1,
+      "ItemList": [
+        1104002
+      ],
+      "Prob": [
+        1
+      ]
+    },
+    {
+      "DropClass": 1309214,
+      "Level": 1,
+      "Picks": 1,
+      "ItemList": [
+        1104003
+      ],
+      "Prob": [
+        1
+      ]
+    },
+    {
+      "DropClass": 1309215,
+      "Level": 1,
+      "Picks": 1,
+      "ItemList": [
+        1104004
+      ],
+      "Prob": [
+        1
+      ]
+    },
+    {
+      "DropClass": 1309216,
+      "Level": 1,
+      "Picks": 1,
+      "ItemList": [
+        1104005
+      ],
+      "Prob": [
+        1
+      ]
+    },
+    {
+      "DropClass": 1309217,
+      "Level": 1,
+      "Picks": 1,
+      "ItemList": [
+        1104006
+      ],
+      "Prob": [
+        1
+      ]
+    },
+    {
+      "DropClass": 1309218,
+      "Level": 1,
+      "Picks": 1,
+      "ItemList": [
+        1104007
+      ],
+      "Prob": [
+        1
+      ]
+    },
+    {
+      "DropClass": 1309219,
+      "Level": 1,
+      "Picks": 1,
+      "ItemList": [
+        1104011
+      ],
+      "Prob": [
+        1
+      ]
+    },
+    {
+      "DropClass": 1309220,
+      "Level": 1,
+      "Picks": 1,
+      "ItemList": [
+        1104012
+      ],
+      "Prob": [
+        1
+      ]
+    },
+    {
+      "DropClass": 1309221,
+      "Level": 1,
+      "Picks": 1,
+      "ItemList": [
+        1104013
+      ],
+      "Prob": [
+        1
+      ]
+    },
+    {
+      "DropClass": 1309222,
+      "Level": 1,
+      "Picks": 1,
+      "ItemList": [
+        1104014
+      ],
+      "Prob": [
+        1
+      ]
+    },
+    {
+      "DropClass": 1309223,
+      "Level": 1,
+      "Picks": 1,
+      "ItemList": [
+        1104015
+      ],
+      "Prob": [
+        1
+      ]
+    },
+    {
+      "DropClass": 1309224,
+      "Level": 1,
+      "Picks": 1,
+      "ItemList": [
+        1104016
+      ],
+      "Prob": [
+        1
+      ]
+    },
+    {
+      "DropClass": 1309225,
+      "Level": 1,
+      "Picks": 1,
+      "ItemList": [
+        1104017
+      ],
+      "Prob": [
+        1
+      ]
+    },
+    {
+      "DropClass": 1309226,
+      "Level": 1,
+      "Picks": 1,
+      "ItemList": [
+        1104021
+      ],
+      "Prob": [
+        1
+      ]
+    },
+    {
+      "DropClass": 1309227,
+      "Level": 1,
+      "Picks": 1,
+      "ItemList": [
+        1104022
+      ],
+      "Prob": [
+        1
+      ]
+    },
+    {
+      "DropClass": 1309228,
+      "Level": 1,
+      "Picks": 1,
+      "ItemList": [
+        1104023
+      ],
+      "Prob": [
+        1
+      ]
+    },
+    {
+      "DropClass": 1309229,
+      "Level": 1,
+      "Picks": 1,
+      "ItemList": [
+        1104024
+      ],
+      "Prob": [
+        1
+      ]
+    },
+    {
+      "DropClass": 1309230,
+      "Level": 1,
+      "Picks": 1,
+      "ItemList": [
+        1104025
+      ],
+      "Prob": [
+        1
+      ]
+    },
+    {
+      "DropClass": 1309231,
+      "Level": 1,
+      "Picks": 1,
+      "ItemList": [
+        1104031
+      ],
+      "Prob": [
+        1
+      ]
+    },
+    {
+      "DropClass": 1309232,
+      "Level": 1,
+      "Picks": 1,
+      "ItemList": [
+        1104032
+      ],
+      "Prob": [
+        1
+      ]
+    },
+    {
+      "DropClass": 1309233,
+      "Level": 1,
+      "Picks": 1,
+      "ItemList": [
+        1104033
+      ],
+      "Prob": [
+        1
+      ]
+    },
+    {
+      "DropClass": 1309234,
+      "Level": 1,
+      "Picks": 1,
+      "ItemList": [
+        1104034
+      ],
+      "Prob": [
+        1
+      ]
+    },
+    {
+      "DropClass": 1309235,
+      "Level": 1,
+      "Picks": 1,
+      "ItemList": [
+        1104035
+      ],
+      "Prob": [
+        1
+      ]
+    },
+    {
+      "DropClass": 1309236,
+      "Level": 1,
+      "Picks": 1,
+      "ItemList": [
+        1104036
+      ],
+      "Prob": [
+        1
+      ]
+    }
+  ],
+  "native": {
+    "upgrade_cost": "SakuraBuildingView.RefreshView 0x1551dfc: GetItem(id,current+1) at 0x1551ef4, UnlockItem at 0x1552600 and LevelUpNum at 0x1552610; possession >= cost.",
+    "effects": "ActivityNoticeModule.HandleActivityBuildingExtraDrop 0x133484c reads ActivityBuilding.BuildingEffect at +0x20 and adds it to ExtraDroopIdList.",
+    "ratio_callers": [
+      "CALLER 0x1340ff4 0x165a82c ChapterInfoView::private void ShowDropItem() { }",
+      "CALLER 0x1341374 0x165a858 ChapterInfoView::private void ShowDropItem() { }",
+      "CALLER 0x13416f4 0x165a884 ChapterInfoView::private void ShowDropItem() { }",
+      "CALLER 0x1340ff4 0x17d75b8 AnniversaryTowerSectionView::private void ShowDropItem() { }",
+      "CALLER 0x1341374 0x17d75e4 AnniversaryTowerSectionView::private void ShowDropItem() { }",
+      "CALLER 0x13416f4 0x17d7610 AnniversaryTowerSectionView::private void ShowDropItem() { }",
+      "CALLER 0x1340ff4 0x187c77c BattlePassTab::private void ShowDropItem() { }",
+      "CALLER 0x1341374 0x187c7a8 BattlePassTab::private void ShowDropItem() { }",
+      "CALLER 0x13416f4 0x187c7d4 BattlePassTab::private void ShowDropItem() { }"
+    ]
+  }
+}

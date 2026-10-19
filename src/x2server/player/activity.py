@@ -350,6 +350,10 @@ class ActivityService:
             self.rotation.put(player, period, 'clear', section, count + 1)
             self.event(player, f'clear:{uuid}', 3, section, 1, period=period)
         self.store.db.execute('UPDATE activity_runs SET settled=1 WHERE uuid=?', (uuid,))
+        # Entry-only building snapshots are no longer needed after the receipt commits.
+        self.store.db.execute("DELETE FROM activity_state WHERE player_id=? AND period=? "
+                              "AND namespace='run-buildings' AND state_key=?",
+                              (player, period.index, uuid))
 
     def gameplay_day_counts(self, player, period=None):
         period = period or self.rotation.at()
