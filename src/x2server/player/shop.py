@@ -454,6 +454,13 @@ class ShopService:
                         hero_reward = grant_bag_rewards(self.economy, player_id,
                             f"compat-shop:{key}", {item_id: item_count}, item_id)
                         granted = {}
+                    elif item_id in self.economy.auto_used_items:
+                        # FE7 自动开出凭据 (807 社团宝箱 1203022 / 6★随机兽主 1203023):
+                        # 凭据自身没有 Item.Used, 客户端永远点不开它, 入库一张凭据就是
+                        # 玩家看到的「买了没到账」。只能当场把凭据拆开, 见
+                        # EconomyService.grant_auto_used_receipt。
+                        granted, reward_equips = self.economy.grant_auto_used_receipt(
+                            player_id, f"compat-shop:{key}", {item_id: item_count}, row.get("star"))
                     else:
                         # Jewels (11) and 心意/special-effect gifts (44) are ordinary
                         # stacked bag items; 806, 802 and 807 sell them, so the shop

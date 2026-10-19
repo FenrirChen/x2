@@ -7,6 +7,8 @@ from tests.unit.test_battle import packet, request
 from tests.unit.test_restored_shops_favor import listing, buy, fund
 from x2server.messages.core import HERO_DATA, INT_PAIR
 from x2server.messages.battle import FIGHT_PROFILE
+from x2server.messages.economy import REWARD
+from x2server.messages.equipment import HERO_EQUIP
 from x2server.player.appearance import AppearanceService
 from x2server.player.hero import encode_hero_data
 from x2server.player.battle import BattleService
@@ -86,7 +88,17 @@ def test_club_native_prices_quota_revision_and_exact_debit(env):
         response = buy(service, ctx, 807, gid, quantity, gid)
         assert response.values['code'] == 10
         assert response.values['itemNum'] == quantity
-        assert store.db.execute('SELECT quantity FROM inventory WHERE player_id=1 AND item_id=?', (item,)).fetchone()[0] == quantity
+        if item == 1203023:
+            # 6★随机兽主 is an E_AutoUsed receipt (client Item: FunctionEff 7, no Used),
+            # so the purchase must open it on the spot: one 6★ instance per copy and no
+            # dead receipt left in the bag. Parking the receipt is the bug this fixes.
+            assert store.db.execute('SELECT quantity FROM inventory WHERE player_id=1 AND item_id=?',
+                                    (item,)).fetchone() is None
+            equips = REWARD.decode(response.values['rewardData'])['rewardEquip']
+            assert len(equips) == quantity
+            assert all(HERO_EQUIP.decode(raw)['star'] == 6 for raw in equips)
+        else:
+            assert store.db.execute('SELECT quantity FROM inventory WHERE player_id=1 AND item_id=?', (item,)).fetchone()[0] == quantity
         assert buy(service, ctx, 807, gid, quantity, gid).values == response.values
     assert store.db.execute('SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1237924').fetchone()[0] == 0
     assert buy(service, ctx, 807, 1915401, 1, 301).values['code'] == 13

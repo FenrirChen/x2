@@ -435,6 +435,98 @@
     10
    ]
   },
+  "702011": {
+   "awardType": 2,
+   "items": [
+    [
+     1204003,
+     1
+    ],
+    [
+     1204004,
+     1
+    ],
+    [
+     1204005,
+     1
+    ],
+    [
+     1204006,
+     1
+    ],
+    [
+     1204007,
+     1
+    ],
+    [
+     1204008,
+     1
+    ],
+    [
+     1204009,
+     1
+    ],
+    [
+     1204010,
+     1
+    ],
+    [
+     1204011,
+     1
+    ],
+    [
+     1204012,
+     1
+    ],
+    [
+     1204013,
+     1
+    ],
+    [
+     1204014,
+     1
+    ],
+    [
+     1204015,
+     1
+    ],
+    [
+     1204016,
+     1
+    ],
+    [
+     1204017,
+     1
+    ],
+    [
+     1204018,
+     1
+    ],
+    [
+     1204000,
+     0
+    ]
+   ],
+   "weights": [
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    720
+   ]
+  },
   "702012": {
    "awardType": 2,
    "items": [
@@ -12858,6 +12950,63 @@
    ]
   },
   "730683": {
+   "awardType": 2,
+   "items": [
+    [
+     1237914,
+     1
+    ],
+    [
+     1237925,
+     1
+    ],
+    [
+     1203003,
+     1
+    ],
+    [
+     1203002,
+     1
+    ],
+    [
+     1237840,
+     1
+    ],
+    [
+     1237904,
+     5
+    ],
+    [
+     1237906,
+     200
+    ],
+    [
+     1237912,
+     100
+    ],
+    [
+     1237907,
+     2000
+    ],
+    [
+     1237901,
+     10000
+    ]
+   ],
+   "weights": [
+    15,
+    15,
+    45,
+    100,
+    50,
+    100,
+    125,
+    100,
+    250,
+    200
+   ]
+  },
+  "730684": {
    "awardType": 2,
    "items": [
     [
@@ -188193,8 +188342,6 @@
    "5": 2
   },
   "damagedGroups": [
-   702011,
-   730684,
    750066,
    123,
    794101,
@@ -188202,9 +188349,9 @@
    938407
   ],
   "export": ".runtime\\tmp\\tables\\gift.bytes",
-  "groups": 10702,
+  "groups": 10704,
   "messageStart": 32800,
-  "note": "AwardType 1 grants every listed item; AwardType 2 is a per-mille weighted draw and grants exactly one. Other kinds are omitted so the server refuses those packages instead of guessing.",
+  "note": "AwardType 1 grants every listed item; AwardType 2 is a per-mille weighted draw and grants exactly one. Other kinds are omitted so the server refuses those packages instead of guessing. AwardType 1/2 的受损组已按官方 table/gift 还原(702011, 730684); AwardType 4/5 仍按设计拒绝。",
   "rows": 10923,
   "skippedGroups": [
    724000,
