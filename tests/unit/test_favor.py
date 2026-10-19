@@ -116,13 +116,13 @@ def test_gift_charge_rolls_back_when_state_write_fails(env, monkeypatch):
 
 
 def test_tap_interaction_grants_official_favor_and_applies_daily_limits(env):
-    """The daily tap sends opt=1, heroId=0, optionId=InteractiveID (46001 -> 1003)."""
+    """The daily tap sends opt=1, heroId=0, optionId=InteractiveID (46004 -> 1003)."""
     store, economy, ctx = env
     service = FavorService(store, economy)
     from x2server.messages.economy import TASK
     gain = touch_gain()
     assert gain == 3  # ExpressionAnimStatus.FavorableNum checked by every tap row.
-    tap = {"opt": 1, "optionId": 46001, "heroId": 0, "num": 0}
+    tap = {"opt": 1, "optionId": 46004, "heroId": 0, "num": 0}
     answer = asyncio.run(service.handle(ctx, packet(tap, name="C2L_AddFavor")))
     assert answer.values["code"] == 10
     assert answer.values["heroId"] == 1003
@@ -136,15 +136,15 @@ def test_tap_interaction_grants_official_favor_and_applies_daily_limits(env):
     task_row = next(TASK.decode(raw) for raw in economy.task_values(1, 1)["taskList"]
                     if TASK.decode(raw)["taskId"] == 630010)
     assert task_row["taskProgress"] == 1 and task_row["taskStatus"] == 3
-    # An interaction id whose god is not owned falls back to the showcase hero.
+    # An interaction belonging to an unowned god must not reward the showcase hero.
     fallback = asyncio.run(service.handle(ctx, packet(
         {"opt": 1, "optionId": 48707, "heroId": 0, "num": 0}, name="C2L_AddFavor")))
-    assert fallback.values["code"] == 10 and fallback.values["heroId"] == 1003
+    assert fallback.values["code"] == 13
     # FavorabilityHeroDailyLimit=5: five taps for one god, the sixth returns
     # E_LIMIT_DAILY_FAVOR and never advances the interactive task.
-    for _ in range(3):
-        assert asyncio.run(service.handle(ctx, packet(tap, name="C2L_AddFavor"))).values["code"] == 10
-    capped = asyncio.run(service.handle(ctx, packet(tap, name="C2L_AddFavor")))
+    for sequence in range(2, 6):
+        assert asyncio.run(service.handle(ctx, packet(tap, sequence, name="C2L_AddFavor"))).values["code"] == 10
+    capped = asyncio.run(service.handle(ctx, packet(tap, 6, name="C2L_AddFavor")))
     assert capped.values["code"] == 72
     assert store.db.execute("SELECT count FROM favor_touch_log WHERE player_id=1 AND hero_id=1003"
                             ).fetchone()[0] == 5

@@ -1,5 +1,6 @@
 """Owned appearance catalog and persistent equipped state."""
 from importlib.resources import files
+from functools import lru_cache
 import json
 import logging
 
@@ -37,12 +38,12 @@ def head_icon_info(snapshot, favors=None):
             for i, value in enumerate(icons)]})
 
 
-# 触碰语音 (Dubbing) 解锁条件: 条件编号即客户端文案 id, 逐条照搬官方
+# 触碰语音 (Dubbing): 条件编号来自客户端文案，分类参考离线兼容实现
 # (x2offline/src/offline/mission.cpp kDubbingCondRules / dubbing_unlock_ids):
 #   auto  离线/单服没有对应事件触发源(契约/连续登录/节日/生日/默认) -> 直接放行
-#   break 默契度第 N 次突破后解锁 (favor_breaks 条数 >= N)
+#   break 默契度第 N 次突破后解锁 (原表有效且去重的 favor_breaks >= N)
 #   level 默契度 N 级后点击解锁 (favor.level >= N)
-#   click 需玩家点击(点击解锁/收到喜欢的礼物) 由 C2L_SaveHeroDubbing 落库
+#   click 裸点击由 C2L_SaveHeroDubbing 落库；gift 需成功赠送喜欢礼物的存档证据
 DUBBING_COND_RULES = {
     1350101: ("click", 0),   # [点击解锁]
     1350102: ("break", 1),   # [默契度第1次突破后解锁]
@@ -54,7 +55,7 @@ DUBBING_COND_RULES = {
     1350108: ("auto", 0),    # [连续登录30天点击解锁]
     1350109: ("auto", 0),    # [累计登录50天点击解锁]
     1350110: ("auto", 0),    # [累计登录100天点击解锁]
-    1350111: ("click", 0),   # [收到喜欢的礼物解锁]
+    1350111: ("gift", 0),   # [收到喜欢的礼物解锁]
     1350112: ("auto", 0),    # [元旦解锁]
     1350113: ("auto", 0),    # [春节解锁]
     1350114: ("auto", 0),    # [情人节解锁]
@@ -76,20 +77,30 @@ def dubbing_condition_kind(condition):
     return rule[0] if rule else None
 
 
+@lru_cache(maxsize=1)
+def dubbing_break_levels():
+    from .favor import catalog
+    return frozenset(row['FavorLevel'] for row in catalog()['favorabilitylevel'] if row.get('IsBreak'))
+
+
 def dubbing_unlocked(condition, hero, saved_ids, dubbing_id):
-    """按官方规则判断一条语音是否解锁 (含玩家既往点击落库)。"""
-    if dubbing_id in saved_ids:
-        return True
+    """Client conditions plus explicit offline auto-unlock compatibility."""
     rule = DUBBING_COND_RULES.get(condition)
     if rule is None:
         return False
+    if dubbing_id in saved_ids:
+        return True
     kind, param = rule
     if kind == "auto":
         return True
     if kind == "break":
-        return len(hero.get("favor_breaks", [])) >= param
+        from .favor import catalog
+        valid = {row["FavorLevel"] for row in catalog()["favorabilitylevel"] if row.get("IsBreak")}
+        return len(set(hero.get("favor_breaks", [])) & valid) >= param
     if kind == "level":
         return hero.get("favor", {}).get("level", 1) >= param
+    if kind == "gift":
+        return bool(hero.get("favor_liked_gift"))
     return False  # click: 需玩家点击后 C2L_SaveHeroDubbing 落库
 
 
@@ -295,8 +306,9 @@ class AppearanceService:
             kind = dubbing_condition_kind(condition)
             saved = {r[0] for r in self.store.db.execute(
                 "SELECT dubbing_id FROM appearance_voice_unlock WHERE player_id=?", (player_id,))}
-            # [点击解锁]/[收到喜欢的礼物] 由客户端点击触发, 其余条件(默认/突破/等级)
-            # 只要已满足即可确认; 未知条件保持锁死 (官方 kDubbingCondRules 之外不放行)。
+            # 裸点击由客户端触发；喜欢的礼物需成功赠送证据，突破/等级按状态判定。
+            # 其余条件(默认/突破/等级)
+            # 只要已满足即可确认; 未知条件保持锁死 (条件表之外不放行)。
             allowed = kind == "click" or dubbing_unlocked(condition, hero, saved, req["dubbingId"])
             if kind == "click" and allowed and req["dubbingId"] not in saved:
                 with self.economy.transaction():

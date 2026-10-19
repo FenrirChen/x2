@@ -2,6 +2,7 @@
 from importlib.resources import files
 from datetime import datetime, timedelta, timezone
 import json
+import hashlib
 import logging
 import time
 from collections import Counter
@@ -40,8 +41,10 @@ def interaction_map():
     return interaction_data().get("by_interaction", {})
 
 
-def touch_gain():
+def touch_gain(interaction=None):
     """ExpressionAnimStatus FavorableNum: favour granted by a single tap."""
+    if interaction is not None:
+        return interaction_data().get("favorable_by_interaction", {}).get(str(interaction), 0)
     return interaction_data().get("favorable_num", 0)
 
 
@@ -110,7 +113,21 @@ class FavorService:
         hero_id = req.get("heroId", req.get("heroID", req.get("mainHeroId", 0)))
         hero = self._owned(player_id, hero_id)
         if name == "C2L_AddFavor":
-            return self._add(player_id, req, hero)
+            if req.get('opt') != 1:
+                return self._add(player_id, req, hero)
+            key = hashlib.sha256(f'{player_id}:{context.session.session_id}:{packet.header.request_id}:favor-touch:'.encode()
+                                 + packet.body).hexdigest()
+            with self.economy.transaction():
+                cached = self.store.db.execute('SELECT response FROM item_opt_receipts WHERE request_key=? AND player_id=?',
+                                               (key, player_id)).fetchone()
+                if cached:
+                    return OutboundMessage(reply, FAVOR_SCHEMAS[reply].decode(cached[0]),
+                                           pushes=self.economy.pushes(player_id))
+                result = self._add(player_id, req, hero)
+                if result.values.get('code') == 10:
+                    self.store.db.execute('INSERT INTO item_opt_receipts VALUES (?,?,?)',
+                                          (key, player_id, FAVOR_SCHEMAS[reply].encode(result.values)))
+                return result
         if name == "C2L_FavorBreak":
             return self._break(player_id, hero_id, hero)
         if name == "C2L_UpgradeFetters":
@@ -270,10 +287,13 @@ class FavorService:
             # InteractiveID -> HeroID (data/interaction_hero.json, 36 live
             # requests all carried heroId=0); without that lookup the touch is
             # booked against no god and the daily interactive task never moves.
-            target = (hero
-                      or self._interaction_target(player_id, item_id)
-                      or self._interaction_target(player_id, hero_id)
-                      or self._showcase_hero(player_id))
+            gain = touch_gain(item_id)
+            mapped = interaction_map().get(str(item_id))
+            target = self._interaction_target(player_id, item_id) if mapped else None
+            if (opt != 1 or gain <= 0 or target is None
+                    or hero_id and hero_id != target['id']):
+                return OutboundMessage('L2C_AddFavor', {'code': 13, 'opt': opt,
+                    'optionId': item_id, 'heroId': hero_id})
             target_id = target["id"] if target else 0
             LOGGER.info("hero interaction player=%s opt=%s optionId=%s heroId=%s num=%s target=%s",
                         player_id, opt, item_id, hero_id, num, target_id)
@@ -300,7 +320,8 @@ class FavorService:
                 target = next(h for h in snapshot["heroes"] if h["id"] == target_id and h["state"] == 2)
                 before = favor_state(target, self.heroes[target_id]["InitialLevel"]).copy()
                 state = before.copy()
-                state["exp"] += touch_gain()
+                maximum = self.levels[self.heroes[target_id]['LevelLimit']]['Exp']
+                state['exp'] += min(gain, max(0, maximum - state['exp']))
                 target["favor"] = self._advance(target_id, state, target.get("favor_breaks", []))
                 self.economy.save_snapshot(player_id, snapshot)
             change = FAVOR_CHANGE_INFO.encode({"beforeLevel": before["level"], "beforeExp": before["exp"],
@@ -342,6 +363,8 @@ class FavorService:
             previous = target.get("favor_gifts", {})
             count = (previous.get("count", 0) if previous.get("day") == day else 0) + num
             target["favor_gifts"] = {"day": day, "count": count}
+            if item_id in self.favorites.get(hero_id, ()):
+                target['favor_liked_gift'] = True
             self.economy.save_snapshot(player_id, snapshot)
             self.economy.achievements.record(player_id, f'gift:{hero_id}:{day}:{count}', 18, num)
             self.economy._event(player_id, f'gift:{hero_id}:{day}:{count}', 68, hero_id, num, item_id)

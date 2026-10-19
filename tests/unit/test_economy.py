@@ -81,7 +81,7 @@ def test_hero_interaction_daily_task_capped_tap_does_not_advance(env):
     day = datetime.fromtimestamp(now, timezone(timedelta(hours=8))).strftime("%Y-%m-%d")
     with store.db:
         store.db.execute("INSERT INTO favor_touch_log VALUES (1,1003,?,5)", (day,))
-    answer = asyncio.run(favor.handle(context, packet({"opt": 0, "optionId": 0,
+    answer = asyncio.run(favor.handle(context, packet({"opt": 1, "optionId": 46004,
         "heroId": 1003, "num": 0}, name="C2L_AddFavor")))
     assert answer.values["code"] == 72  # E_LIMIT_DAILY_FAVOR (FavorabilityHeroDailyLimit=5).
     # A tap rejected by the cap never counts towards the interactive task.
