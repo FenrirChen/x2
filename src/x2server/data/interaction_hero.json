@@ -1086,5 +1086,6 @@
   "49039": 2037,
   "49040": 2037
  },
- "provenance": "Client table ExpressionAnimStatus, columns InteractiveID -> HeroID (work/_tables/all_parsed/ExpressionAnimStatus.json, 1534 rows, 1085 with a HeroID; the rest are interactions not bound to one god and are omitted). C2L_AddFavor leaves heroId unset for these - every one of the 36 live requests in logs/packets.jsonl (2026-09-29) carried heroId=0 while optionId named a real row (47605->1019, 46504->1008, 48705->1028), so the god has to be resolved from optionId or the touch is booked against a god that does not exist."
+ "favorable_num": 3,
+ "provenance": "Client table ExpressionAnimStatus, columns InteractiveID -> HeroID (work/_tables/all_parsed/ExpressionAnimStatus.json, 1534 rows, 1085 with a HeroID; the rest are interactions not bound to one god and are omitted). C2L_AddFavor leaves heroId unset for these - every one of the 36 live requests in logs/packets.jsonl (2026-09-29) carried heroId=0 while optionId named a real row (47605->1019, 46504->1008, 48705->1028), so the god has to be resolved from optionId or the touch is booked against a god that does not exist. favorable_num is the same table's FavorableNum column, the per-tap favour value: 1242 of the 1534 rows define it and every one stores 3, while the client's FavorModule_AddAnimFavor (0x01ABD6A8) reads it at animStatus+0x54 and returns without sending the tap when it is below 1, so 3 is exactly what every tap the client sends grants."
 }

@@ -13,20 +13,36 @@ from x2server.protocol.registry import CORE_MESSAGE_REGISTRY
 
 LOGGER = logging.getLogger("x2.favor")
 
-_INTERACTION_MAP = None
+# GlobalParamString FavorabilityDailyLimit=15 / FavorabilityHeroDailyLimit=5:
+# the client caps the daily tap at 15 per account and 5 per god. The previous
+# three-a-day limit came from the external helper package, not an official rule.
+TOUCH_DAILY_LIMIT = 15
+TOUCH_HERO_DAILY_LIMIT = 5
+
+_INTERACTION_DATA = None
 
 
 def catalog():
     return json.loads(files("x2server").joinpath("data/favor_catalog.json").read_text(encoding="utf-8"))
 
 
+def interaction_data():
+    """ExpressionAnimStatus InteractiveID maps used by the daily tap."""
+    global _INTERACTION_DATA
+    if _INTERACTION_DATA is None:
+        _INTERACTION_DATA = json.loads(files("x2server").joinpath(
+            "data/interaction_hero.json").read_text(encoding="utf-8"))
+    return _INTERACTION_DATA
+
+
 def interaction_map():
     """ExpressionAnimStatus InteractiveID -> HeroID for the daily tap."""
-    global _INTERACTION_MAP
-    if _INTERACTION_MAP is None:
-        data = json.loads(files("x2server").joinpath("data/interaction_hero.json").read_text(encoding="utf-8"))
-        _INTERACTION_MAP = data.get("by_interaction", {})
-    return _INTERACTION_MAP
+    return interaction_data().get("by_interaction", {})
+
+
+def touch_gain():
+    """ExpressionAnimStatus FavorableNum: favour granted by a single tap."""
+    return interaction_data().get("favorable_num", 0)
 
 
 def favor_state(hero, initial_level=1):
@@ -268,18 +284,36 @@ class FavorService:
             row = self.store.db.execute("SELECT count FROM favor_touch_log WHERE player_id=? AND hero_id=? AND day=?",
                                         (player_id, target_id, day)).fetchone()
             used = row[0] if row else 0
-            if used >= 3:
-                # Still push state so an open task page re-renders, but never
-                # count a rejected tap towards the interactive task.
-                return OutboundMessage("L2C_AddFavor", {"code": 13, "opt": opt,
+            total = self.store.db.execute("SELECT COALESCE(SUM(count), 0) FROM favor_touch_log "
+                                          "WHERE player_id=? AND day=?", (player_id, day)).fetchone()[0]
+            if used >= TOUCH_HERO_DAILY_LIMIT or total >= TOUCH_DAILY_LIMIT:
+                # E_LIMIT_DAILY_FAVOR. Still push state so an open task page
+                # re-renders, but never count a rejected tap towards the task.
+                return OutboundMessage("L2C_AddFavor", {"code": 72, "opt": opt,
                     "optionId": item_id, "heroId": target_id}, pushes=self.economy.pushes(player_id))
             with self.economy.transaction():
                 self.store.db.execute("INSERT INTO favor_touch_log VALUES (?,?,?,1) "
                                       "ON CONFLICT(player_id,hero_id,day) DO UPDATE SET count=count+1",
                                       (player_id, target_id, day))
                 self.economy.record_event(player_id, f"touch:{target_id}:{day}:{used + 1}", 19, target_id)
-            return OutboundMessage("L2C_AddFavor", {"code": 10, "opt": opt,
-                "optionId": item_id, "heroId": target_id}, pushes=self.economy.pushes(player_id))
+                snapshot = self.store.get(player_id)["snapshot"]
+                target = next(h for h in snapshot["heroes"] if h["id"] == target_id and h["state"] == 2)
+                before = favor_state(target, self.heroes[target_id]["InitialLevel"]).copy()
+                state = before.copy()
+                state["exp"] += touch_gain()
+                target["favor"] = self._advance(target_id, state, target.get("favor_breaks", []))
+                self.economy.save_snapshot(player_id, snapshot)
+            change = FAVOR_CHANGE_INFO.encode({"beforeLevel": before["level"], "beforeExp": before["exp"],
+                "afterLevel": target["favor"]["level"], "afterExp": target["favor"]["exp"],
+                "heroID": target_id, "type": 6})
+            from .hero import encode_hero_data
+            return OutboundMessage("L2C_AddFavor", {"code": 10, "opt": opt, "optionId": item_id,
+                "heroId": target_id, "exp": before["exp"], "level": before["level"],
+                "newExp": target["favor"]["exp"], "newLevel": target["favor"]["level"]}, pushes=(
+                OutboundMessage("L2C_FavorChangeInfo", {"data": [change]}),
+                OutboundMessage("L2C_HeroUpdate", {"code": 10,
+                    "heros": [encode_hero_data(target, season=self.economy.season, player_id=player_id)]}),
+                *self.economy.pushes(player_id)))
         before = favor_state(hero, self.heroes[hero_id]["InitialLevel"]) if hero else {"level": 0, "exp": 0}
         values = {"code": 13, "opt": opt, "optionId": item_id, "heroId": hero_id,
             "exp": before["exp"], "level": before["level"],
