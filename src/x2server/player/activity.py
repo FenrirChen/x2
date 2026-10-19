@@ -14,8 +14,12 @@ def enum(value):
 
 
 class ActivityService:
-    def __init__(self, economy):
+    def __init__(self, economy, lobby=None):
         self.economy, self.store = economy, economy.store
+        # 可选注入的 LobbyService: 生产环境里 C2L_QueryActivity 由 ActivityRuntime
+        # 应答, 会盖掉 LobbyService 的空态分支, 因此扫荡入口行需要在重建目录时由
+        # 这里补回 (见 query_activity)。lobby 为 None 时行为不变。
+        self.lobby = lobby
         self.rotation = ActivityRotation(self.store, economy.clock)
         self.tables = self.rotation.catalog['tables']
         self.conditions = {r['TaskConditionID']: r for r in self.tables['TaskCondition']}
@@ -74,10 +78,14 @@ class ActivityService:
 
     def query_activity(self, player):
         period = self.rotation.at()
+        # 扫荡入口是活动中心自己的目录行, 必须排在最前; 因为本查询由 ActivityRuntime
+        # 应答, 这里显式补回, 不能再依赖 LobbyService 中被覆盖的 C2L_QueryActivity 分支。
+        sweep_row = self.lobby.sweep_activity_row(player) if self.lobby else None
+        head = [sweep_row] if sweep_row is not None else []
         season_rows = (self.economy.season.activity_values()
                        + self.economy.extra_drop.activity_values(player))
         if period is None:
-            return {"code": 10, "activityData": season_rows}
+            return {"code": 10, "activityData": head + season_rows}
         rows = []
         for row in period.theme['activities']:
             end = self.yuexi_preview_end(period) if period.theme['group'] == 99 and enum(row['ActivityType']) == 1 else period.end
@@ -97,7 +105,7 @@ class ActivityService:
                 values[f'param{index}'] = row.get(f'ActivityParam{index}', []) or [0]
             values['activityReward'] = row.get('ActivityReward', []) or [0]
             rows.append(encode('ActivityData', values))
-        return {'code': 10, 'activityData': rows + season_rows}
+        return {'code': 10, 'activityData': head + rows + season_rows}
 
     def task_catalog(self, period, kind, activity=0):
         catalog = self.food_tasks if kind == 20 else self.tasks if kind == 9 else {}

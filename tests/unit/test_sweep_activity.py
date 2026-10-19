@@ -6,6 +6,7 @@ import pytest
 from tests.unit.test_battle import packet
 from tests.unit.test_economy import env, rewards  # noqa: F401
 from x2server.messages.lobby import ACTIVITY_DATA, LOBBY_SCHEMAS, MISSION_PAIR
+from x2server.player.activity import ActivityService
 from x2server.player.battle import BattleService
 from x2server.player.lobby import LobbyService
 
@@ -82,6 +83,27 @@ def test_client_99_sweep_limit_and_stamina_validation(env):
     assert asyncio.run(battle.sweep(ctx, packet({'sectionId': 2130501, 'sweepCount': 99},
         request_id=500, name='C2L_SecSweep'))).values['code'] == 13
     assert '\n'.join(store.db.iterdump()) == before
+
+
+def test_activity_directory_keeps_recovered_sweep_tab_when_enabled(env):
+    # ActivityRuntime answers C2L_QueryActivity in production; the sweep entry
+    # must survive the rebuilt directory instead of only living in the lobby's
+    # overridden standalone branch.
+    store, economy, ctx = env
+    activity = ActivityService(economy, lobby=LobbyService(sweep_enabled=True))
+    reply = activity.query_activity(ctx.session.player_id)
+    values = LOBBY_SCHEMAS['L2C_QueryActivity'].decode(LOBBY_SCHEMAS['L2C_QueryActivity'].encode(reply))
+    assert values['activityData']
+    data = ACTIVITY_DATA.decode(values['activityData'][0])
+    assert (data['actId'], data['actType'], data['state']) == (73010, 71, 1)
+
+
+def test_activity_directory_omits_sweep_tab_by_default(env):
+    store, economy, ctx = env
+    activity = ActivityService(economy, lobby=LobbyService())
+    reply = activity.query_activity(ctx.session.player_id)
+    values = LOBBY_SCHEMAS['L2C_QueryActivity'].decode(LOBBY_SCHEMAS['L2C_QueryActivity'].encode(reply))
+    assert 73010 not in [ACTIVITY_DATA.decode(row)['actId'] for row in values['activityData']]
 
 
 def test_uncleared_stage_is_not_made_clear_by_opening_activity(env):
