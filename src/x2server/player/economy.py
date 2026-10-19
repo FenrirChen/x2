@@ -498,6 +498,8 @@ class EconomyService:
             return {int(i): n for i, n in json.loads(existing[0]).items()}
         if self.auto_used_items and any(item in self.auto_used_items for item in rewards):
             rewards = self.expand_auto_used(rewards)
+        from .daily_pickups import capped_pickups
+        rewards = capped_pickups(self, player_id, source, rewards)
         if getattr(self, "moon", None):
             rewards = self.moon.accept_reward(player_id, source, rewards)
         if getattr(self, "season", None):
