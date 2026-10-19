@@ -37,6 +37,62 @@ def head_icon_info(snapshot, favors=None):
             for i, value in enumerate(icons)]})
 
 
+# 触碰语音 (Dubbing) 解锁条件: 条件编号即客户端文案 id, 逐条照搬官方
+# (x2offline/src/offline/mission.cpp kDubbingCondRules / dubbing_unlock_ids):
+#   auto  离线/单服没有对应事件触发源(契约/连续登录/节日/生日/默认) -> 直接放行
+#   break 默契度第 N 次突破后解锁 (favor_breaks 条数 >= N)
+#   level 默契度 N 级后点击解锁 (favor.level >= N)
+#   click 需玩家点击(点击解锁/收到喜欢的礼物) 由 C2L_SaveHeroDubbing 落库
+DUBBING_COND_RULES = {
+    1350101: ("click", 0),   # [点击解锁]
+    1350102: ("break", 1),   # [默契度第1次突破后解锁]
+    1350103: ("break", 2),   # [默契度第2次突破后解锁]
+    1350104: ("break", 3),   # [默契度第3次突破后解锁]
+    1350105: ("auto", 0),    # [契约后解锁]
+    1350106: ("auto", 0),    # [连续登录3天点击解锁]
+    1350107: ("auto", 0),    # [连续登录7天点击解锁]
+    1350108: ("auto", 0),    # [连续登录30天点击解锁]
+    1350109: ("auto", 0),    # [累计登录50天点击解锁]
+    1350110: ("auto", 0),    # [累计登录100天点击解锁]
+    1350111: ("click", 0),   # [收到喜欢的礼物解锁]
+    1350112: ("auto", 0),    # [元旦解锁]
+    1350113: ("auto", 0),    # [春节解锁]
+    1350114: ("auto", 0),    # [情人节解锁]
+    1350115: ("auto", 0),    # [愚人节解锁]
+    1350116: ("auto", 0),    # [儿童节解锁]
+    1350117: ("auto", 0),    # [夏日祭解锁]
+    1350118: ("auto", 0),    # [返校季解锁]
+    1350119: ("auto", 0),    # [秋日祭解锁]
+    1350120: ("auto", 0),    # [冬日祭解锁]
+    1350121: ("auto", 0),    # [神格生日解锁]
+    1350122: ("auto", 0),    # [解神者生日解锁]
+    1350123: ("auto", 0),    # [默认解锁]
+    1350124: ("level", 5),   # [默契度5级后点击解锁]
+}
+
+
+def dubbing_condition_kind(condition):
+    rule = DUBBING_COND_RULES.get(condition)
+    return rule[0] if rule else None
+
+
+def dubbing_unlocked(condition, hero, saved_ids, dubbing_id):
+    """按官方规则判断一条语音是否解锁 (含玩家既往点击落库)。"""
+    if dubbing_id in saved_ids:
+        return True
+    rule = DUBBING_COND_RULES.get(condition)
+    if rule is None:
+        return False
+    kind, param = rule
+    if kind == "auto":
+        return True
+    if kind == "break":
+        return len(hero.get("favor_breaks", [])) >= param
+    if kind == "level":
+        return hero.get("favor", {}).get("level", 1) >= param
+    return False  # click: 需玩家点击后 C2L_SaveHeroDubbing 落库
+
+
 class AppearanceService:
     def __init__(self, store, economy):
         self.store, self.economy = store, economy
@@ -106,12 +162,13 @@ class AppearanceService:
             "sceneIconList": [SEASON_ICON_DATA.encode({"id": i, "rankId": 1}) for i in sorted(scenes)]}
 
     def _voice_values(self, player_id):
-        heroes = self._owned_heroes(player_id)
+        heroes = {h["id"]: h for h in self.store.get(player_id)["snapshot"].get("heroes", [])
+                  if h.get("state") == 2}
         saved = {r[0] for r in self.store.db.execute(
             "SELECT dubbing_id FROM appearance_voice_unlock WHERE player_id=?", (player_id,))}
         return {"code": 10, "heroDubbingDatas": [HERO_DUBBING_DATA.encode({
             "heroId": hero, "dubbingIds": sorted(i for i, r in self.voices.items()
-                if r["hero_id"] == hero and (r["unlock_condition"] == 1350123 or i in saved))})
+                if r["hero_id"] == hero and dubbing_unlocked(r["unlock_condition"], heroes[hero], saved, i))})
             for hero in sorted(heroes)]}
 
     async def handle(self, context, packet):
@@ -229,16 +286,19 @@ class AppearanceService:
         if name == "C2L_QueryHeroDubbing":
             return OutboundMessage("L2C_QueryHeroDubbing", self._voice_values(player_id))
         if name == "C2L_SaveHeroDubbing":
-            # Official condition 1350101 is a bare click. Condition 1350124
-            # additionally requires favor level 5. All other conditions need
-            # their own event or break proof before they can be accepted.
             voice = self.voices.get(req.get("dubbingId"))
             hero = next((h for h in self.store.get(player_id)["snapshot"].get("heroes", [])
                 if h["id"] == req.get("heroId") and h.get("state") == 2), None)
-            allowed = bool(voice and hero and voice["hero_id"] == hero["id"] and (
-                voice["unlock_condition"] in (1350123, 1350101) or
-                voice["unlock_condition"] == 1350124 and hero.get("favor", {}).get("level", 1) >= 5))
-            if allowed and voice["unlock_condition"] != 1350123:
+            if not voice or not hero or voice["hero_id"] != hero["id"]:
+                return OutboundMessage("L2C_SaveHeroDubbing", {"code": 13, "heroDubbingDatas": []})
+            condition = voice["unlock_condition"]
+            kind = dubbing_condition_kind(condition)
+            saved = {r[0] for r in self.store.db.execute(
+                "SELECT dubbing_id FROM appearance_voice_unlock WHERE player_id=?", (player_id,))}
+            # [点击解锁]/[收到喜欢的礼物] 由客户端点击触发, 其余条件(默认/突破/等级)
+            # 只要已满足即可确认; 未知条件保持锁死 (官方 kDubbingCondRules 之外不放行)。
+            allowed = kind == "click" or dubbing_unlocked(condition, hero, saved, req["dubbingId"])
+            if kind == "click" and allowed and req["dubbingId"] not in saved:
                 with self.economy.transaction():
                     self.store.db.execute("INSERT OR IGNORE INTO appearance_voice_unlock VALUES (?,?)",
                                           (player_id, req["dubbingId"]))

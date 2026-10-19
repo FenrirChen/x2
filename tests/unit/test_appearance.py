@@ -63,14 +63,23 @@ def test_avatar_inventory_and_voice_conditions(env):
     assert invoke(service, context, "Account", {"opt": 2,
         "values": [1270300, 0]}).values["result"] == 10
     voices = HERO_DUBBING_DATA.decode(service._voice_values(1)["heroDubbingDatas"][0])["dubbingIds"]
-    assert 1350301 in voices  # Official default-unlock condition.
-    assert 1350306 not in voices
+    assert 1350301 in voices  # Official default-unlock condition (1350123, Auto).
+    assert 1350305 in voices  # Contract condition (1350105, Auto - no trigger source offline).
+    assert 1350302 not in voices  # Break count 1 not reached.
+    assert 1350306 not in voices  # Bare click-unlock condition, not clicked yet.
     assert invoke(service, context, "SaveHeroDubbing", {"heroId": 1003,
         "dubbingId": 1350302}).values["code"] == 13  # Favor breakthrough needed.
     assert invoke(service, context, "SaveHeroDubbing", {"heroId": 1003,
         "dubbingId": 1350306}).values["code"] == 10  # Bare click-unlock condition.
     assert 1350306 in HERO_DUBBING_DATA.decode(
         AppearanceService(store, economy)._voice_values(1)["heroDubbingDatas"][0])["dubbingIds"]
+    player = store.get(1)
+    player["snapshot"]["heroes"][0].setdefault("favor_breaks", []).append(4)
+    store.save_snapshot(1, player["snapshot"], player["revision"])
+    assert 1350302 in HERO_DUBBING_DATA.decode(
+        AppearanceService(store, economy)._voice_values(1)["heroDubbingDatas"][0])["dubbingIds"]
+    assert invoke(service, context, "SaveHeroDubbing", {"heroId": 1003,
+        "dubbingId": 1350302}).values["code"] == 10
 
 
 def test_scene_background_wear_and_cancel(env):
