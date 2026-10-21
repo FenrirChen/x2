@@ -277,6 +277,10 @@ class EconomyService:
                 item_id INTEGER NOT NULL, quantity INTEGER NOT NULL, quality INTEGER NOT NULL,
                 e_num INTEGER NOT NULL, reason TEXT NOT NULL,
                 PRIMARY KEY(run_id,ordinal))""")
+            # Server-owned quota survives archive import; one row per account.
+            store.db.execute("""CREATE TABLE IF NOT EXISTS server_sweep_limits (
+                player_id INTEGER PRIMARY KEY, day INTEGER NOT NULL,
+                used INTEGER NOT NULL CHECK(used>=0 AND used<=15))""")
             store.db.execute("""CREATE TABLE IF NOT EXISTS sweep_receipts (
                 request_key TEXT PRIMARY KEY, player_id INTEGER NOT NULL,
                 section_id INTEGER NOT NULL, response BLOB NOT NULL)""")
@@ -1439,6 +1443,19 @@ class EconomyService:
         cost = config.get("ManualValue")
         if type(cost) is not int or cost < 0:
             raise UnresolvedEconomy("sweep cost unknown")
+        # Atomic with stamina, reward delivery and the transport receipt.
+        today = (int(self.clock()) + 8 * 3600) // 86400
+        charged = self.store.db.execute("""INSERT INTO server_sweep_limits
+            (player_id,day,used) SELECT ?,?,? WHERE ?<=15
+            ON CONFLICT(player_id) DO UPDATE SET
+              day=excluded.day,
+              used=CASE WHEN server_sweep_limits.day=excluded.day
+                        THEN server_sweep_limits.used+excluded.used ELSE excluded.used END
+            WHERE server_sweep_limits.day!=excluded.day
+               OR server_sweep_limits.used+excluded.used<=15""",
+            (player_id, today, count, count))
+        if not charged.rowcount:
+            raise UnresolvedEconomy('daily shared sweep limit 15 exceeded')
         self.refresh_stamina(player_id)
         snapshot = self.store.get(player_id)["snapshot"]
         if snapshot.get("mobility", {}).get("power", 0) < cost * count:

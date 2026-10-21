@@ -59,7 +59,7 @@ def test_client_sweep_material_chapters_grant_reward_and_replay_once(env, sectio
         assert reader.execute('SELECT COUNT(*) FROM pending_rewards').fetchone()[0] == 0
 
 
-def test_client_99_sweep_limit_and_stamina_validation(env):
+def test_shared_15_sweep_limit_and_stamina_validation(env):
     store, economy, ctx = env
     battle = BattleService(store, economy)
     with store.db:
@@ -69,10 +69,10 @@ def test_client_99_sweep_limit_and_stamina_validation(env):
     cost = economy.reward_sections[2130501]['ManualValue']
     power = cost * 100
     store.save_snapshot(1, dict(p['snapshot'], mobility={**p['snapshot']['mobility'], 'power': power}), p['revision'])
-    req = packet({'sectionId': 2130501, 'sweepCount': 99}, name='C2L_SecSweep')
+    req = packet({'sectionId': 2130501, 'sweepCount': 15}, name='C2L_SecSweep')
     reply = asyncio.run(battle.sweep(ctx, req))
-    assert reply.values['code'] == 10 and reply.values['sweepCount'] == 99
-    assert store.get(1)['snapshot']['mobility']['power'] == cost
+    assert reply.values['code'] == 10 and reply.values['sweepCount'] == 15
+    assert store.get(1)['snapshot']['mobility']['power'] == cost * 85
     for count in (0, -1, 100):
         before = '\n'.join(store.db.iterdump())
         rejected = asyncio.run(battle.sweep(ctx, packet({'sectionId': 2130501, 'sweepCount': count},
@@ -137,3 +137,46 @@ def test_production_default_sweep_survives_runtime_dispatch_and_calendar(env):
         assert len(sweep)==1 and sweep[0]['actId']==73010 and sweep[0]['state']==1
     status=asyncio.run(handlers['C2L_EntryidStatus'](ctx,packet({},810,'C2L_EntryidStatus')))
     assert {'Key':19,'Value':1} in [MISSION_PAIR.decode(raw) for raw in status.values['entryidStatus']]
+
+
+def test_sweep_quota_is_shared_rolls_at_midnight_and_retries_are_free(env):
+    store,e,ctx=env
+    battle=BattleService(store,e)
+    now=[1792598399]  # 2026-10-21 23:59:59 Beijing
+    e.clock=lambda:now[0]
+    with store.db:
+        for sid in (2130501,2130601):
+            store.db.execute("INSERT INTO economy_clears VALUES (1,?,'clear')",(sid,))
+    e.refresh_stamina(1)
+    p=store.get(1)
+    store.save_snapshot(1,dict(p['snapshot'],mobility={**p['snapshot']['mobility'],'power':10000}),p['revision'])
+    def sweep(sid,n,rid):
+        return asyncio.run(battle.sweep(ctx,packet({'sectionId':sid,'sweepCount':n},rid,'C2L_SecSweep')))
+    first=sweep(2130501,10,900)
+    assert first.values['code']==10
+    assert sweep(2130501,10,900).values==first.values
+    assert store.db.execute('SELECT used FROM server_sweep_limits WHERE player_id=1').fetchone()[0]==10
+    assert sweep(2130601,6,901).values['code']==13
+    assert sweep(2130601,5,902).values['code']==10
+    before=store.get(1)
+    assert sweep(2130501,1,903).values['code']==13
+    assert store.get(1)==before
+    now[0]+=1
+    assert sweep(2130601,15,904).values['code']==10
+    # A previous day's receipt cannot charge the fresh day's quota.
+    assert sweep(2130501,10,900).values==first.values
+    assert store.db.execute('SELECT used FROM server_sweep_limits WHERE player_id=1').fetchone()[0]==15
+
+
+def test_failed_sweep_rolls_back_quota_and_rewards(env,monkeypatch):
+    from x2server.player.economy import UnresolvedEconomy
+    store,e,ctx=env
+    battle=BattleService(store,e)
+    with store.db:
+        store.db.execute("INSERT INTO economy_clears VALUES (1,2130501,'clear')")
+    before='\n'.join(store.db.iterdump())
+    def fail(*args,**kwargs):
+        raise UnresolvedEconomy('test delivery failure')
+    monkeypatch.setattr(e,'_grant',fail)
+    assert asyncio.run(battle.sweep(ctx,packet({'sectionId':2130501,'sweepCount':1},950,'C2L_SecSweep'))).values['code']==13
+    assert '\n'.join(store.db.iterdump())==before

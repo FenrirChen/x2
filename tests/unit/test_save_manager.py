@@ -673,3 +673,22 @@ def test_repeated_and_concurrent_imports_keep_one_backup(env):
         manager.import_save(alpha, b'bad archive')
     assert files[0].read_bytes() == before
     manager.parse_save(before)
+
+
+def test_sweep_daily_quota_is_server_owned_across_import(tmp_path):
+    store,accounts,manager=make_env(tmp_path)
+    build_full_schema(store)
+    try:
+        assert accounts.create('sweep-quota','password',100)=='created'
+        pid=accounts.get_by_name('sweep-quota')['player_id']
+        with store.db:
+            store.db.execute('INSERT INTO server_sweep_limits VALUES (?,?,?)',(pid,20747,2))
+        archive=manager.export_save(pid)
+        assert 'server_sweep_limits' not in manager.parse_save(archive).rows
+        with store.db:
+            store.db.execute('UPDATE server_sweep_limits SET used=15 WHERE player_id=?',(pid,))
+        manager.import_save(pid,archive)
+        assert tuple(store.db.execute('SELECT day,used FROM server_sweep_limits WHERE player_id=?',(pid,)).fetchone())==(20747,15)
+    finally:
+        manager.close()
+        store.close()
