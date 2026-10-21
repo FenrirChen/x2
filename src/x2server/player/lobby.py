@@ -39,6 +39,27 @@ class LobbyService:
         return {"C2L_" + name: self.query for name, _, _ in LOBBY_IDS
                 if name not in self.DELEGATED}
 
+    def sweep_activity_row(self, player=None):
+        # 活动中心扫荡入口 (actType 71 E_ActivityMop) 的唯一一行。生产环境里
+        # C2L_QueryActivity 由 ActivityRuntime 应答, 本文件的空态分支会被覆盖,
+        # 所以这行必须能被 ActivityService 复用并拼进目录 (见 player/activity.
+        # query_activity), 否则扫荡页入口会凭空消失。sweep_enabled=False 时返回
+        # None, 保持 USER_DECISION 2026-10-01 的关闭状态。
+        if not self.sweep_enabled:
+            return None
+        row = json.loads(files("x2server").joinpath("data/sweep_activity.json").read_text(encoding="utf-8"))
+        # Revive only the client's sweep tab; the original event dates expired.
+        values = {"actId": row["ActivityID"], "state": 1,
+            "activityParentType": row["ActivityParentType"]["value"],
+            "actType": row["ActivityType"]["value"], "startTime": 1, "endTime": 2147483647,
+            "openLever": row["OpenLever"], "activityShow": row["ActivityShow"],
+            "activityGroup": row["ActivityGroup"], "activityName": row["ActivityName"],
+            "param1": row["ActivityParam1"], "activityTaps": row["ActivityTaps"],
+            "activityDescription": row["ActivityDescription"]}
+        logging.getLogger("x2.lobby").info("sweep activity advertised player=%s activity=%s type=%s",
+            player, values["actId"], values["actType"])
+        return ACTIVITY_DATA.encode(values)
+
     async def query(self, context: DispatchContext, packet: DecodedPacket) -> OutboundMessage:
         if context.session.player_id is None:
             raise ProtocolError("lobby query requested before login")
@@ -65,21 +86,10 @@ class LobbyService:
                 "code": 10,
                 "unlockExploreRuin": rows or [UNLOCK_EXPLORE_RUIN.encode({})]})
         if name == "C2L_QueryActivity":
-            if not self.sweep_enabled:
+            entry = self.sweep_activity_row(context.session.player_id)
+            if entry is None:
                 return OutboundMessage('L2C_QueryActivity', {'code': 10})
-            row = json.loads(files("x2server").joinpath("data/sweep_activity.json").read_text(encoding="utf-8"))
-            # Revive only the client's sweep tab; the original event dates expired.
-            values = {"actId": row["ActivityID"], "state": 1,
-                "activityParentType": row["ActivityParentType"]["value"],
-                "actType": row["ActivityType"]["value"], "startTime": 1, "endTime": 2147483647,
-                "openLever": row["OpenLever"], "activityShow": row["ActivityShow"],
-                "activityGroup": row["ActivityGroup"], "activityName": row["ActivityName"],
-                "param1": row["ActivityParam1"], "activityTaps": row["ActivityTaps"],
-                "activityDescription": row["ActivityDescription"]}
-            logging.getLogger("x2.lobby").info("sweep activity advertised player=%s activity=%s type=%s",
-                context.session.player_id, values["actId"], values["actType"])
-            return OutboundMessage("L2C_QueryActivity", {"code": 10,
-                "activityData": [ACTIVITY_DATA.encode(values)]})
+            return OutboundMessage("L2C_QueryActivity", {"code": 10, "activityData": [entry]})
         if name == "C2L_QueryWorldBossOpenTime":
             # USER_DECISION 2026-10-01: temporal gate stays open all day.
             return OutboundMessage("L2C_QueryWorldBossOpenTime", {"code": 10})

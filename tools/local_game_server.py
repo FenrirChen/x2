@@ -149,7 +149,10 @@ async def run(database: Path, seconds: float) -> None:
     appearance = AppearanceService(store, economy)
     appearance_shop = AppearanceShopService(store, economy, appearance)
     mail = MailService(store, economy, clock=clock.now)
-    activity = ActivityService(economy)
+    lobby = LobbyService(clock, college)
+    # ActivityRuntime answers C2L_QueryActivity, so hand the lobby in: otherwise
+    # the recovered sweep entry disappears from the rebuilt roster directory.
+    activity = ActivityService(economy, lobby=lobby)
     economy.activity = activity
     activity_runtime = ActivityRuntime(activity, mail)
     terminal = TerminalService(store, economy, clock=clock.now)
@@ -157,7 +160,7 @@ async def run(database: Path, seconds: float) -> None:
                          mail=mail, gift_packages=gift_packages, college=college)
     http = BootstrapHTTPServer(endpoints.bind_host, endpoints.http_port, identity)
     tcp = X2TCPServer(Settings(tcp_host=endpoints.bind_host, tcp_port=endpoints.game_port, read_timeout=120),
-        Dispatcher({**star_chart.handlers(), **LobbyService(clock, college).handlers(), **college_flows.handlers(), **TutorialService(store).handlers(), **BirthdayService(store).handlers(), **economy.handlers(), **divination.handlers(), **shop.handlers(), **gift_packages.handlers(), **collection.handlers(), **favor.handlers(), **appearance.handlers(), **appearance_shop.handlers(), **mail.handlers(), **terminal.handlers(), **equipment.handlers(), **equip_plans.handlers(), **wish.handlers(), **ProgressionService(store, economy, appearance).handlers(), **BattleService(store, economy).handlers(), **BattleShopService(store, economy).handlers(), "C2L_HeroAll": HeroService(store, economy).query_all,
+        Dispatcher({**star_chart.handlers(), **lobby.handlers(), **college_flows.handlers(), **TutorialService(store).handlers(), **BirthdayService(store).handlers(), **economy.handlers(), **divination.handlers(), **shop.handlers(), **gift_packages.handlers(), **collection.handlers(), **favor.handlers(), **appearance.handlers(), **appearance_shop.handlers(), **mail.handlers(), **terminal.handlers(), **equipment.handlers(), **equip_plans.handlers(), **wish.handlers(), **ProgressionService(store, economy, appearance).handlers(), **BattleService(store, economy).handlers(), **BattleShopService(store, economy).handlers(), "C2L_HeroAll": HeroService(store, economy).query_all,
                     **activity_runtime.handlers(), **social.handlers(), "C2L_Login": login.login, "C2L_ReConnect": login.reconnect,
                     "C2L_ServerTableConfig": login.server_config}, wait_for_database=store.wait_for_import))
     chat = X2TCPServer(Settings(tcp_host=endpoints.bind_host, tcp_port=endpoints.chat_port, read_timeout=120),
