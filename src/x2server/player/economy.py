@@ -1258,6 +1258,12 @@ class EconomyService:
                              if OUTSIDE_ITEM.decode(raw).get('id') not in chest_ids]
         grants, pending_instances, blocked, equipment_specs = self.runtime_drops.resolve(
             run=run, profile=profile, outside_items=outside_items, success=success)
+        if success and section_type == 7:
+            # 周常「乌洛波罗斯」的元素合成产物: 客户端把它们放进 FightItemBag 时
+            # source=COMPOSE, 而 SetCheckout_BattleItem 只上报 source==FIGHT, 因此
+            # outsideItems 里永远没有它们。按本局合成记录补发 (useScene==1 的产物,
+            # 光能代理折成账号光能), 否则玩家局内合成的东西结算后就丢了。
+            grants.extend(self.element_compose.settle_grants(player_id, run_uuid, section))
         if chest:
             grants.append(RewardGrant('NORMAL_CLEAR_FIXED', section, run_uuid, chest[0], 1,
                                       reason=f'SectionTable.{chest[2]}'))
