@@ -529,6 +529,11 @@ class EconomyService:
         itself states - without that evidence the purchase refuses instead of handing the
         player a dead receipt. Returns (granted rewards, rewardEquip bytes).
         """
+        # Shop retries use their persisted response before reaching this helper.
+        # Never reroll random equipment under an already committed grant source.
+        if self.store.db.execute('SELECT 1 FROM economy_grants WHERE player_id=? AND source=?',
+                                 (player_id, source)).fetchone():
+            raise UnresolvedEconomy('automatic receipt source already delivered')
         deferred, contents = Counter(), Counter()
         for item, count in rewards.items():
             # One draw per copy: each receipt is opened on its own, so two copies of a

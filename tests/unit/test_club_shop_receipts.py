@@ -89,3 +89,16 @@ def test_parked_receipt_is_kept_when_its_contents_cannot_be_delivered(env):
     assert _held(store, 1203023) == 1
     assert store.db.execute("SELECT 1 FROM economy_grants WHERE player_id=1 "
                             "AND source='receipt-repair:1:1203023'").fetchone() is None
+
+
+def test_auto_receipt_source_cannot_reroll_equipment(env):
+    import pytest
+    from x2server.player.economy import UnresolvedEconomy
+    store,e,_=env
+    with e.transaction():
+        e.grant_auto_used_receipt(1,'test-receipt-once',{1203023:1},6)
+    before=store.db.execute('SELECT COUNT(*) FROM equipment_instances').fetchone()[0]
+    with pytest.raises(UnresolvedEconomy,match='already delivered'):
+        with e.transaction():
+            e.grant_auto_used_receipt(1,'test-receipt-once',{1203023:1},6)
+    assert store.db.execute('SELECT COUNT(*) FROM equipment_instances').fetchone()[0]==before

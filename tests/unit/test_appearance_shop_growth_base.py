@@ -16,9 +16,9 @@ def test_all_appearance_goods_are_listed_and_purchasable(env):
     appearance = AppearanceService(store, economy)
     service = AppearanceShopService(store, economy, appearance)
     listing = [COMMERCIAL_GOODS.decode(x) for x in service.listing(1)]
-    assert len(listing) == 28
-    assert len({x["itemId"] for x in listing}) == 28
-    assert 1223003 in {x["itemId"] for x in listing}
+    assert len(listing) == 27
+    assert len({x["itemId"] for x in listing}) == 27
+    assert 1223003 not in {x["itemId"] for x in listing}
     assert all(x["rechargeID"] == 0 and x["price"] > 0 for x in listing)
     assert [(x["currencyType"], x["price"]) for x in listing
             if x["goodsId"] in (1980004, 1980005)] == [(902, 980), (902, 980)]
@@ -62,3 +62,10 @@ def test_white_night_planet_has_buildings_and_query_reply(env):
     assert alchemy.message_name == "L2C_AlchemyMainData" and alchemy.values["code"] == 10
     assert len(alchemy.values["recipeIdExp"]) == 6 and len(alchemy.values["customeres"]) == 5
     assert len(alchemy.values["elements"]) == 6 and len(alchemy.values["productionBars"]) == 1
+
+
+def test_izanagi_skin_requires_patched_clients(env, monkeypatch):
+    store, economy, _ = env
+    monkeypatch.setenv('X2_IZANAGI_SKIN_PATCHED', '1')
+    service = AppearanceShopService(store, economy, AppearanceService(store, economy))
+    assert service.goods[1980045]['itemId'] == 1223003

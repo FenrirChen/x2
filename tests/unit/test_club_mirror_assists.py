@@ -143,3 +143,21 @@ def test_health_catalog_matches_native_curve(social):
                   else r['baseHP']*r['hpBonus'])+r['hpCOR']
         assert r['maxHP']==expected>0
     assert 1 not in s.mirror_sections
+
+
+def test_pending_mirror_runs_cannot_overspend_attempts(social):
+    s,ctx,_ = social
+    setup_mirror(s,ctx,members=0)
+    with s.economy.transaction():
+        state=s.state(1)
+        state['mirror']['count']=1
+        s.save(1,state)
+        s.bind_run(1,2170001,'first')
+        s.bind_run(1,2170001,'second')
+        s.completed(1,2170001,False,1,'first')
+    before=copy.deepcopy(s.state(1))
+    with pytest.raises(UnresolvedEconomy,match='exhausted'):
+        with s.economy.transaction():
+            s.completed(1,2170001,False,1,'second')
+    assert s.state(1)==before
+    assert s.completed(1,2170001,False,1,'first')['done']

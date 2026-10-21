@@ -524,3 +524,13 @@ def test_level_upgrade_keeps_damage_and_dead_boss(env):
         store.db.execute('UPDATE world_boss_runs SET hp=0,state=3 WHERE boss_id=?',(bid,))
         w.public_bosses(1)
         assert w.get_boss(bid)['hp']==0
+
+
+def test_daily_boss_rotation_all_week_and_beijing_midnight(env):
+    _,e,_=env
+    w=e.world_boss
+    for offset in range(7):
+        assert w.daily_world_boss_id(day(MONDAY)+offset)==2040101+offset
+    midnight=MONDAY-12*3600+86400
+    assert w.daily_world_boss_id(day(midnight-1))==2040101
+    assert w.daily_world_boss_id(day(midnight))==2040102

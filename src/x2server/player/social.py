@@ -867,6 +867,8 @@ class SocialService:
             return attempt
         if not state['club'] or state['club']['time']!=attempt['club_time']:
             raise UnresolvedEconomy('mirror club changed during battle')
+        if mirror['count'] <= 0:
+            raise UnresolvedEconomy('mirror attempts exhausted at settlement')
         if damage is not None and (type(damage) is not int or not 0<=damage<=2**63-1):
             raise UnresolvedEconomy('invalid mirror damage')
         current=self.mirror_current(state)

@@ -399,6 +399,8 @@ class ActivityRuntime:
                     live = self.operate(player, name[4:], req, token)
                     response_schema.encode(live)
                     return OutboundMessage(response, live,
+                        before_response=(self.e.pushes(player) if name == 'C2L_QueryActivity'
+                            and self.a.shop_unlock_override(self.r.at()) else ()),
                         pushes=self.building_messages(player) if name == 'C2L_QueryActivity' else ())
                 cached = self.a.store.db.execute('SELECT period,message,response FROM activity_receipts WHERE player_id=? AND request_key=?', (player, token)).fetchone()
                 if cached:
@@ -522,7 +524,11 @@ class ActivityRuntime:
                 await self.e.store.wait_for_import()
                 self.deliver_daily_mail(player)
                 if previous != current:
-                    await server.push_to_player(player, OutboundMessage('L2C_QueryActivity', self.a.query_activity(player)))
+                    activity_values = self.a.query_activity(player)
+                    if self.a.shop_unlock_override(period):
+                        for message in self.e.pushes(player):
+                            await server.push_to_player(player, message)
+                    await server.push_to_player(player, OutboundMessage('L2C_QueryActivity', activity_values))
                     for message in self.building_messages(player):
                         await server.push_to_player(player, message)
             previous = current if server.authenticated_player_ids() else None

@@ -155,7 +155,7 @@ def test_insufficient_currency_and_failure_leave_no_purchase(activity, monkeypat
 def test_locked_wrong_theme_and_mismatched_goods_rejected(activity):
     _, economy, service, now = activity
     exchange = ActivityExchange(service)
-    now[0] = activity_start(1)
+    now[0] = next_activity_cycle(activity_start(1))
     with pytest.raises(UnresolvedEconomy, match='locked'):
         exchange.listing(1, 872)
     with pytest.raises(UnresolvedEconomy, match='closed'):
@@ -175,3 +175,24 @@ def test_winter_fallback_cost_and_moon_typo_use_unit_price(activity):
     assert mini['price'] == 60 and mini['canBuyTimes'] == 10
     refresh = next(g for g in exchange.shops[862]['goods'] if g['itemId'] == 1202085)
     assert refresh['price'] == 50
+
+
+def test_current_sakura_shops_unlock_once_and_later_periods_stay_gated(activity):
+    store,e,a,now=activity
+    now[0]=a.rotation.FIRST_END
+    period=a.period(1)
+    assert period.index==1_000_001
+    a.query_activity(1)
+    x=ActivityExchange(a)
+    assert all(x.unlocked(1,period,s) for s in x.shops.values() if s['group']==33)
+    clues=(1104011,1104021,1104031)
+    def held():
+        return [store.db.execute('SELECT quantity FROM inventory WHERE player_id=1 AND item_id=?',(i,)).fetchone()[0] for i in clues]
+    assert held()==[1,1,1]
+    a.query_activity(1)
+    assert held()==[1,1,1]
+    now[0]=next_activity_cycle(now[0])
+    later=a.period(1)
+    assert later.theme['group']==33
+    assert not a.shop_unlock_override(later)
+    assert not x.unlocked(1,later,x.shops[872])

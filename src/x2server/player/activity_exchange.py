@@ -31,6 +31,8 @@ class ActivityExchange:
     def unlocked(self, player, period, shop):
         if shop['group'] != period.theme['group']:
             return False
+        if self.activity.shop_unlock_override(period):
+            return True
         rule = shop['unlock']
         if rule['kind'] == 'none':
             return True

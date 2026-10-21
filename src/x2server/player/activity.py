@@ -76,8 +76,28 @@ class ActivityService:
         return min(period.end, ((period.start + 8 * 3600) // 86400
                    + len(row['ActivityParam1'])) * 86400 - 8 * 3600) if row else period.end
 
+    def shop_unlock_override(self, period):
+        # Only the first weekly Sakura period; later reruns retain their gates.
+        return bool(period and period.index == 1_000_001 and period.theme['group'] == 33)
+
+    def ensure_shop_unlocks(self, player, period):
+        if not self.shop_unlock_override(period):
+            return
+        source = self.source(period, 'shop-unlock', 'all')
+        with self.economy.transaction():
+            if self.rotation.get(player, period, 'shop-unlock', 'all', False):
+                return
+            clues = {1104011: 1, 1104021: 1, 1104031: 1}
+            held = dict(self.store.db.execute(
+                'SELECT item_id,quantity FROM inventory WHERE player_id=?', (player,)))
+            missing = {item: 1 for item in clues if held.get(item, 0) < 1}
+            self.economy._grant(player, source, missing)
+            self.obtained(player, period, clues, source)
+            self.rotation.put(player, period, 'shop-unlock', 'all', True)
+
     def query_activity(self, player):
         period = self.rotation.at()
+        self.ensure_shop_unlocks(player, period)
         # 扫荡入口是活动中心自己的目录行, 必须排在最前; 因为本查询由 ActivityRuntime
         # 应答, 这里显式补回, 不能再依赖 LobbyService 中被覆盖的 C2L_QueryActivity 分支。
         sweep_row = self.lobby.sweep_activity_row(player) if self.lobby else None

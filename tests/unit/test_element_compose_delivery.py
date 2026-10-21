@@ -48,6 +48,9 @@ def test_composed_products_are_delivered_on_clear(env):
     assert after.get(1202013, 0) - before.get(1202013, 0) == 1
     assert after.get(1237913, 0) - before.get(1237913, 0) >= 30
     assert after.get(1002018, 0) == before.get(1002018, 0)
+    replay = checkout(battle, ctx, True, 13)
+    assert replay.values == result.values
+    assert inventory(store) == after
 
 
 def test_composed_products_are_not_delivered_on_failure(env):
