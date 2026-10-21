@@ -325,11 +325,29 @@ class WorldBossService:
         maps=self.economy.entry_catalog.sections[static['StageID']]['Maps']
         return self.map_levels[str(maps[0])]
 
+    def daily_world_boss_id(self, today):
+        """今天该出哪一只蚀兽。
+
+        WorldBossInfo 里 2040101..2040107 是 7 只 BossType=0 的世界 Boss, 每只在
+        OpenTime (7 位星期开关, 下标 0 = 周日, 与客户端 DateTime.DayOfWeek 的
+        Sunday=0 一致) 里各占一天 —— 官方就是每天换一只: 周一/周四剑柄
+        (2040101/2040104)、周二/周五权杖 (2040102/2040105)、周三/周六星币
+        (2040103/2040106)、周日圣杯 (2040107)。旧版本写死 policy['daily_boss_id'],
+        于是永远只出 2040101。
+        """
+        weekday=(int(today)+4)%7        # 1970-01-01 是周四 -> 周日为 0
+        for row in self.bosses.values():
+            flags=row.get('OpenTime') or []
+            if (row.get('BossType',{}).get('value',0)==0 and len(flags)==7
+                    and flags[weekday]):
+                return row['BossID']
+        return self.policy['daily_boss_id']
+
     def public_bosses(self, player):
         today=day(self.now())
         selected=self.store.db.execute('SELECT * FROM world_boss_player_days WHERE player_id=? AND day=?',(player,today)).fetchone()
         if not selected:
-            static=self.bosses[self.policy['daily_boss_id']]
+            static=self.bosses[self.daily_world_boss_id(today)]
             if static.get('BossType',{}).get('value',0)!=0:
                 raise ValueError('daily Boss must use a world Boss configuration')
             boss_id=f'world:{today}:player:{player}:{static["BossID"]}'
