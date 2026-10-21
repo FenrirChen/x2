@@ -157,6 +157,49 @@ class ElementComposeService:
                     player_id, run_uuid, formula_id, count, formula["itemId"])
         return OutboundMessage('L2C_ElementCompose', values, pushes=(self.progress_push(player_id),))
 
+    def settle_grants(self, player_id: int, run_uuid: str, section: int):
+        """本局合成的可带出产物, 按 RewardGrant 交给结算入账.
+
+        客户端把合成产物放进 FightItemBag 时 source 是 COMPOSE(3), 而
+        SetCheckout_BattleItem 只上报 source==FIGHT(1) 的条目, 所以
+        887.outsideItems 里永远看不到合成产物 —— 玩家局内明明拿到了, 结算后
+        背包里却没有。这里按 C2L_ElementCompose 自己记下的本局记录补齐: 只发
+        useScene==1 (E_Outside) 的产物, E_ReportCurrency 代理 (10/30/60点光能)
+        按换算表折成账号光能, 与 outsideItems 同一口径。
+        """
+        from .economy import EconomyService
+        from .reward_system import RewardGrant
+
+        grants = []
+        rows = self.store.db.execute(
+            "SELECT formula_id, count FROM battle_element_compose WHERE player_id=? AND run_uuid=?",
+            (player_id, run_uuid)).fetchall()
+        for row in rows:
+            formula = self.formulas.get(row['formula_id'])
+            count = row['count']
+            if formula is None or not 0 < count <= MAX_WIRE_INT:
+                continue
+            item_id = formula['itemId']
+            item = self.economy.items.get(item_id)
+            if item is None or item.get('ItemUseScence', {}).get('value') != 1:
+                continue
+            kind = item.get('ItemType', {}).get('value')
+            proxy = (self.economy.report_currency.lookup(item_id)
+                     if self.economy.report_currency and kind == 14 else None)
+            reason = f'element compose {formula["id"]} x{count}'
+            if proxy is not None:
+                account_item_id, per_unit = proxy
+                grants.append(RewardGrant('REPORT_CURRENCY', section, run_uuid,
+                                          account_item_id, per_unit * count, 0, 0, reason=reason))
+            elif (item_id in EconomyService.CURRENCIES or item_id == 1237900
+                  or kind in EconomyService.STACKABLE_REWARD_TYPES):
+                grants.append(RewardGrant('RUNTIME_BATTLE_DROP', section, run_uuid,
+                                          item_id, count, 0, 0, reason=reason))
+            else:
+                LOGGER.info("element compose product %s x%s has no delivery destination",
+                            item_id, count)
+        return grants
+
     def profile_fields(self, player_id: int, run_uuid: str) -> dict:
         """FightDataProfile fields for this run's element compositions."""
         rows = self.store.db.execute(
