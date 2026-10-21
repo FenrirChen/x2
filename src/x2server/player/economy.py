@@ -176,9 +176,11 @@ class EconomyService:
         # reward_items omits FunctionEff/EffData, so restore the links from their
         # own catalog, mirroring item_used_catalog above.
         auto_path = files("x2server").joinpath("data/item_auto_used_catalog.json")
-        self.auto_used_items = ({int(k): list(v) for k, v in
-            json.loads(auto_path.read_text(encoding="utf-8"))["items"].items()}
-            if auto_path.is_file() else {})
+        auto_used = json.loads(auto_path.read_text(encoding="utf-8")) if auto_path.is_file() else {}
+        self.auto_used_items = {int(k): list(v) for k, v in auto_used.get("items", {}).items()}
+        # 凭据自己写明的星级: 6★随机兽主 (1203023) 的客户端描述就写死「必定获得一件6★兽主」,
+        # 而它的 Gift 组只给部位 type_id, 星级只能作为数据记下来, 由 receipt 自己决定。
+        self.receipt_stars = {int(k): int(v) for k, v in auto_used.get("stars", {}).items()}
         self.sections = {r["SectionID"]: r for r in self.catalog["sections"]}
         self.daily_sections = {r["SectionID"]: r for r in self.catalog.get("daily_sections", [])}
         self.reward_sections = {**self.sections, **self.daily_sections}
@@ -353,6 +355,10 @@ class EconomyService:
     def login_event(self, player_id):
         from .bag_items import recover_hero_boxes
         recover_hero_boxes(self, player_id)
+        # 老版本把 FE7 凭据原样入库 (807 社团宝箱/6★随机兽主), 玩家手里那张凭据点不开;
+        # 登录时按凭据自己的礼包内容补开一次 (幂等)。equipAll/itemAll 都在本调用之后
+        # 取值, 所以补出来的实例和道具会照常出现在本次登录响应里。
+        self.repair_parked_receipts(player_id)
         self.achievements.login(player_id)
         self.refresh_stamina(player_id)
         self.ensure_periods(player_id)
@@ -489,6 +495,86 @@ class EconomyService:
             for produced, amount in self.expand_auto_used(contents).items():
                 resolved[produced] += amount * count
         return resolved
+
+    def grant_auto_used_receipt(self, player_id, source, rewards, star=None):
+        """Open an E_AutoUsed receipt on the spot and deliver what its Gift names.
+
+        A receipt carries no Item.Used, so the client can never open it: parking one in
+        the bag is exactly the "paid, nothing arrived" report (club shop 807's 社团宝箱
+        1203022 and 6★随机兽主 1203023). Call inside the owner's transaction. Stacked and
+        currency destinations go through ``_grant`` as usual; an equipment destination
+        (ItemType 10) needs an instance, so it is materialized at the star the receipt
+        itself states - without that evidence the purchase refuses instead of handing the
+        player a dead receipt. Returns (granted rewards, rewardEquip bytes).
+        """
+        deferred, contents = Counter(), Counter()
+        for item, count in rewards.items():
+            # One draw per copy: each receipt is opened on its own, so two copies of a
+            # blind box are two outcomes, not one outcome paid twice.
+            for _ in range(count):
+                for produced, amount in self.gifts(self.auto_used_items[item],
+                        deferred=deferred, allow_daily_random=True).items():
+                    contents[produced] += amount
+        specs = []
+        for item, amount in deferred.items():
+            if not self.equipment_factory.is_drop_equipment(item):
+                # No EquibBase row: hand it back to _grant, which rejects a destination
+                # with nowhere to go rather than guessing one here.
+                contents[item] += amount
+                continue
+            if type(star) is not int:
+                raise UnresolvedEconomy(f"receipt equipment {item} lacks star evidence")
+            while amount:
+                chunk = min(amount, 99)
+                specs.append({"item_id": item, "star": star, "quantity": chunk})
+                amount -= chunk
+        granted = self._grant(player_id, source, contents)
+        equips = self.materialize_equipment(player_id, source, specs)
+        logging.getLogger("x2.economy").info(
+            "auto-used receipt opened player=%s source=%s rewards=%s equips=%s",
+            player_id, source, dict(granted), len(equips))
+        return granted, tuple(equips)
+
+    def repair_parked_receipts(self, player_id):
+        """Open the E_AutoUsed receipts a pre-fix purchase parked in the bag (idempotent).
+
+        Before the club-shop fix, buying 807's 社团宝箱/6★随机兽主 stored the receipt
+        itself, so an affected player still holds one dead receipt they can never open.
+        Open it once at login, using the receipt's own star evidence. A receipt whose
+        contents cannot be fully delivered is left exactly as it is - a repair must never
+        make an already-delivered reward smaller.
+        """
+        rows = self.store.db.execute(
+            "SELECT item_id,quantity FROM inventory WHERE player_id=? AND quantity>0",
+            (player_id,)).fetchall()
+        for item_id, quantity in rows:
+            if item_id not in self.auto_used_items:
+                continue
+            source = f"receipt-repair:{player_id}:{item_id}"
+            if self.store.db.execute("SELECT 1 FROM economy_grants WHERE player_id=? AND source=?",
+                                     (player_id, source)).fetchone():
+                # 该账号这一项已经补过一次: 再出现的凭据按原样保留, 不猜、不重复发。
+                logging.getLogger("x2.economy").info(
+                    "parked receipt kept player=%s item=%s reason=already repaired",
+                    player_id, item_id)
+                continue
+            try:
+                with self.transaction():
+                    opened, equips = self.grant_auto_used_receipt(player_id, source,
+                        {item_id: quantity}, self.receipt_stars.get(item_id))
+                    removed = self.store.db.execute("UPDATE inventory SET quantity=quantity-? "
+                        "WHERE player_id=? AND item_id=? AND quantity>=?",
+                        (quantity, player_id, item_id, quantity))
+                    if not removed.rowcount:
+                        # 计数在读取与扣减之间变了: 整笔回滚, 下次登录再看。
+                        raise UnresolvedEconomy("parked receipt count changed mid-repair")
+            except UnresolvedEconomy as exc:
+                logging.getLogger("x2.economy").info(
+                    "parked receipt kept player=%s item=%s reason=%s", player_id, item_id, exc)
+                continue
+            logging.getLogger("x2.economy").info(
+                "parked receipt repaired player=%s item=%s x%s rewards=%s equips=%s",
+                player_id, item_id, quantity, dict(opened), len(equips))
 
     def _grant(self, player_id, source, rewards, *, stackable_types=()):
         """Called inside the owner's transaction; never commits independently."""

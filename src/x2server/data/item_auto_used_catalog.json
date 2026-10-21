@@ -1,6 +1,12 @@
 {
- "provenance": "Item.FunctionEff == E_AutoUsed(7): Item.EffData names the Gift group the row converts into the moment it is acquired (the client opens it automatically). These are the receipts the red packet (Item 1203021 -> Gift 776193) can draw, restored as data because reward_items.json omits FunctionEff/EffData.",
+ "provenance": "Item.FunctionEff == E_AutoUsed(7): Item.EffData names the Gift group the row converts into the moment it is acquired (the client opens it automatically). These are the receipts the red packet (Item 1203021 -> Gift 776193) can draw, restored as data because reward_items.json omits FunctionEff/EffData. 2026-10-20: added the club shop's (807) two E_AutoUsed receipts, 社团宝箱 1203022 -> 776053 and 6★随机兽主 1203023 -> 776054 (client Item: FunctionEff 7, EffData, no Used). The client can never open either one, so storing the receipt is what made a completed club purchase look like it delivered nothing.",
  "items": {
+  "1203022": [
+   776053
+  ],
+  "1203023": [
+   776054
+  ],
   "1290177": [
    776226
   ],
@@ -10,5 +16,9 @@
   "1290179": [
    776228
   ]
- }
+ },
+ "stars": {
+  "1203023": 6
+ },
+ "starsProvenance": "The star a receipt's own text promises, for receipts whose Gift only names part-level equib type_ids. 6★随机兽主 1203023: the client Item row reads that opening it surely grants a 6-star 兽主, and 807's shelf price row for it is the 6★ slot; Gift 776054 lists 48 part type_ids and carries no star of its own, so the instance star has to come from the receipt."
 }
