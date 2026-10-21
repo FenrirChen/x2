@@ -36,6 +36,14 @@ class EconomyService:
     # than guessed. 927 = E_FragmentMoney -> 1237927 神笺 (login.py serves it as
     # BaseInfo field 66, FragmentMoney).
     RETURN_CURRENCY_ITEMS = {927: 1237927}
+    # 背包-分解「分解」的兑出货币: Item.Recover[0] is likewise a table/CurrencyType
+    # TpyeId and that row's ItemID is the item that lands in the bag. Only the two
+    # fragment currencies this route really pays are listed (the gems and 宝石姬 it
+    # decomposes, both ItemType 11); an unknown type is refused rather than guessed.
+    # 904 = E_BaoShi -> 1237904 宝石碎片, 905 = E_BaoShiJi -> 1237905 宝石姬碎片.
+    # Equipment (ItemType 10) carries Recover [906, 1] as well, but equips are
+    # reclaimed through C2L_EquipReclaim / BagModule_RecycleEquips, not this op.
+    RECOVER_CURRENCY_ITEMS = {904: 1237904, 905: 1237905}
     POWER_RECOVER_SECONDS = 225  # Client ServerData default 300s; user policy: 25% faster.
     # Item.EffData -> BaseInfoProto; only supported currency destinations.
     CURRENCIES = {1237901: "gold", 1237902: "crystal", 1237906: "equip_exp", 1237907: "hero_exp",
@@ -169,6 +177,20 @@ class EconomyService:
                 entry = returned.get(str(row["ItemID"]))
                 if entry and not row.get("Return"):
                     row["Return"] = entry
+        # Item.Recover is the 背包-分解 rate: [currencyType, amount] per item, paid as
+        # `amount` copies of the currency whose CurrencyType TpyeId == currencyType.
+        # The client draws the page's preview straight from this column, so the server
+        # has to settle from it too (BagDecomposePage_RefreshCurrency 0x19A6354 reads
+        # Item+0x78, takes [0] as the type and [1] as the per-item amount, and
+        # multiplies by the entered count). The gems and 宝石姬 the page decomposes are
+        # not in the curated economy_catalog at all (only 1250011 is, and the bag list
+        # never needs them: inventory_values serves the ids the client's own table
+        # renders), so the rate is keyed off its own export instead of a column on
+        # self.items.
+        recover_path = files("x2server").joinpath("data/item_recover_catalog.json")
+        self.recover_items = ({int(k): list(v) for k, v in
+            json.loads(recover_path.read_text(encoding="utf-8"))["items"].items()}
+            if recover_path.is_file() else {})
         # Item.FunctionEff == E_AutoUsed(7): the row is a receipt for its
         # Item.EffData Gift group and opens the moment it is acquired. It carries
         # no Item.Used, so the client can never open it and _grant would otherwise
@@ -1750,6 +1772,12 @@ class EconomyService:
             logging.getLogger("x2.economy").info(
                 "item opt player=%s item=%s opt=%s count=%s", player_id,
                 item_id, request.get("opt", 0), request.get("count", 0))
+            # opt 1 is 背包-分解 and only that: BagModule_RecycleItem (0x19AA26C) sends
+            # it as a constant, and the page's own reply handler
+            # BagDecomposePage_OnItemOptMsg (0x19A6E64) refreshes on `cmp w1, #1`
+            # alone. opt 0 keeps the 使用 routes below.
+            if request.get("opt", 0) == 1:
+                return self.recycle_bag_item(context, packet, request)
             if item_id in (self.season.EXP_ITEM, self.season.POINT_ITEM) and self.season.active(player_id):
                 return self.season.use_item(context, packet, request)
             if item_id in self.CAUSALITY_CARDS:
@@ -1911,6 +1939,51 @@ class EconomyService:
             return rejected
         from .bag_items import bag_pushes
         return OutboundMessage("L2C_ItemOpt", values, before_response=bag_pushes(self, player_id))
+
+    def recycle_bag_item(self, context, packet, request):
+        """背包-分解: spend item(s) for the fragments named by Item.Recover.
+
+        The page's numbers come from that same column: BagDecomposePage_RefreshCurrency
+        (0x19A6354) reads Item+0x78, takes [0] as the currency type and [1] as the
+        per-item amount, and multiplies by the count the player entered. Its 分解
+        button (BagDecomposePage_OnBottomSellBtnClick 0x19A9D00 -> BagModule_RecycleItem
+        0x19AA26C) then sends C2L_ItemOpt with opt 1, so the rate has to be settled
+        here from the identical column or the page and the bag disagree. A row with no
+        Recover, or one whose type is not a known fragment currency, is refused rather
+        than paid at an invented rate.
+        """
+        player_id = context.session.player_id
+        item_id, count = request.get("id", 0), request.get("count", 0)
+        rejected = OutboundMessage("L2C_ItemOpt", {"code": 13, "opt": request.get("opt", 0), "itemId": item_id})
+        recovered = self.recover_items.get(item_id)
+        if (request.get("opt", 0) != 1 or type(count) is not int or not 1 <= count <= 999
+                or not recovered or len(recovered) != 2 or type(recovered[1]) is not int
+                or recovered[1] <= 0 or recovered[0] not in self.RECOVER_CURRENCY_ITEMS):
+            return rejected
+        payout = self.RECOVER_CURRENCY_ITEMS[recovered[0]]
+        key = hashlib.sha256(f"{player_id}:{context.session.session_id}:{packet.header.request_id}:item-opt".encode()
+                             + packet.body).hexdigest()
+        try:
+            return self._recycle_bag_item(player_id, item_id, count, recovered[1] * count, payout, key, rejected)
+        except UnresolvedEconomy:
+            return rejected
+
+    def _recycle_bag_item(self, player_id, item_id, count, amount, payout, key, rejected):
+        with self.transaction():
+            row = self.store.db.execute("SELECT response FROM item_opt_receipts WHERE request_key=? AND player_id=?",
+                                        (key, player_id)).fetchone()
+            if row:
+                return OutboundMessage("L2C_ItemOpt", ECONOMY_SCHEMAS["L2C_ItemOpt"].decode(row[0]),
+                                       before_response=self.pushes(player_id))
+            charged = self.store.db.execute("UPDATE inventory SET quantity=quantity-? "
+                "WHERE player_id=? AND item_id=? AND quantity>=?", (count, player_id, item_id, count))
+            if not charged.rowcount:
+                return rejected
+            granted = self._grant(player_id, f"item-recycle:{key}", {payout: amount})
+            values = {"code": 10, "opt": 1, "itemId": item_id, "rewardData": self.reward_bytes(granted)}
+            self.store.db.execute("INSERT INTO item_opt_receipts VALUES (?,?,?)",
+                                  (key, player_id, ECONOMY_SCHEMAS["L2C_ItemOpt"].encode(values)))
+        return OutboundMessage("L2C_ItemOpt", values, before_response=self.pushes(player_id))
 
     def use_causality_card(self, context, packet, request):
         player_id = context.session.player_id

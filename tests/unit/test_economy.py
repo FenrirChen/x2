@@ -491,6 +491,63 @@ def test_currency_cards_consume_grant_and_replay(env, item_id, currency, amount)
                             (item_id,)).fetchone()[0] == 1
 
 
+@pytest.mark.parametrize("item_id,shard,amount", [
+    (1250011, 1237904, 32),   # 宝石 -> 宝石碎片
+    (1251004, 1237905, 132),  # 宝石姬 -> 宝石姬碎片
+])
+def test_bag_decompose_pays_item_recover_fragments_and_replays(env, item_id, shard, amount):
+    """背包-分解 settles the page's own Item.Recover rate.
+
+    BagDecomposePage_RefreshCurrency (0x19A6354) previews the payout from Item+0x78,
+    its 分解 button reaches BagModule_RecycleItem (0x19AA26C) which sends C2L_ItemOpt
+    with opt 1, and BagDecomposePage_OnItemOptMsg (0x19A6E64) refreshes on that opt
+    alone. Answering opt 0 only leaves the page failing right after it drew numbers
+    from its own table.
+    """
+    store, economy, context = env
+    from tests.unit.test_battle import packet as pkt
+    with store.db:
+        store.db.execute("INSERT INTO inventory VALUES (1, ?, 10)", (item_id,))
+    request = pkt({"id": item_id, "opt": 1, "count": 3}, name="C2L_ItemOpt")
+    first = asyncio.run(economy.handle(context, request))
+    assert first.values["code"] == 10
+    assert first.values["opt"] == 1
+    assert rewards(first.values["rewardData"]) == {shard: amount * 3}
+    assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=?",
+                            (item_id,)).fetchone()[0] == 7
+    assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=?",
+                            (shard,)).fetchone()[0] == amount * 3
+    replay = asyncio.run(economy.handle(context, request))
+    assert replay.values["code"] == 10  # receipt replays the same reply
+    assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=?",
+                            (item_id,)).fetchone()[0] == 7  # no double consumption
+    assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=?",
+                            (shard,)).fetchone()[0] == amount * 3
+
+
+def test_bag_decompose_refuses_unrated_items_and_keeps_use_path(env):
+    """opt 0 stays the 使用 route; unrated or unlisted destinations are refused."""
+    store, economy, context = env
+    from tests.unit.test_battle import packet as pkt
+    with store.db:
+        store.db.execute("INSERT INTO inventory VALUES (1, ?, 4)", (1250011,))
+        store.db.execute("INSERT INTO inventory VALUES (1, ?, 2)", (1240001,))
+    # A gem has no Gift group, so the 使用 path refuses it rather than decomposing it.
+    assert asyncio.run(economy.handle(context, pkt({"id": 1250011, "opt": 0, "count": 1},
+                                                   name="C2L_ItemOpt"))).values["code"] == 13
+    # Equipment carries Recover [906, 1] but is reclaimed through C2L_EquipReclaim.
+    assert asyncio.run(economy.handle(context, pkt({"id": 1240001, "opt": 1, "count": 1},
+                                                   name="C2L_ItemOpt"))).values["code"] == 13
+    # Zero, more than the bag holds, and an item with no rate at all.
+    for item_id, count in ((1250011, 0), (1250011, 5), (1237901, 1)):
+        assert asyncio.run(economy.handle(context, pkt({"id": item_id, "opt": 1, "count": count},
+                                                       name="C2L_ItemOpt"))).values["code"] == 13
+    assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1250011"
+                            ).fetchone()[0] == 4
+    assert store.db.execute("SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1237904"
+                            ).fetchone() is None
+
+
 def test_story_review_unlock_pays_skill_point_and_stays_unlocked(env):
     """星图 -> 剧情回顾 -> 主线: L2C_QueryMission.story plus C2L_UnlockStory(667)."""
     store, economy, context = env
