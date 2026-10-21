@@ -108,6 +108,33 @@ def test_native_hp_field_28_and_real_checkout_are_atomic_and_idempotent(social):
     assert reward['code']==10
 
 
+def test_interrupted_mirror_battle_spends_no_attempt(social):
+    """A server update stops the client before CHECKOUT: no attempt, no damage."""
+    s,ctx,_=social
+    setup_mirror(s,ctx)
+    battle=BattleService(s.store,s.economy)
+    def enter(section,request_id):
+        row=battle.catalog.sections[section]
+        values=request()
+        values.update(missionId=section,chapter=row['ChapterID'],sceneId=row['Maps'][0])
+        return asyncio.run(battle.enter(ctx,packet(values,request_id)))
+    assert enter(2170001,101).values['result']==10
+    assert s.state(1)['mirror']['count']==3
+    assert 'damage' not in s.state(1)['mirror']
+    # The reconnect is cut off as well; neither run may cost an attempt.
+    assert enter(2170001,102).values['result']==10
+    assert s.state(1)['mirror']['count']==3
+    row=battle.catalog.sections[2170001]
+    raw=CHECKOUT.encode(dict(chapterId=row['ChapterID'],sectionId=2170001,
+                             success=False,fightTime=90,hp=40))
+    checkout=packet({'checkout':raw},103,'C2L_CheckoutMainMissionSign')
+    assert asyncio.run(battle.checkout(ctx,checkout)).values['result']==10
+    assert s.state(1)['mirror']['count']==2
+    assert s.state(1)['mirror']['damage']=={'2070001':100,'2070002':18}
+    # The abandoned runs stay in the state without blocking the advanced layer.
+    assert enter(2170002,104).values['result']==10
+
+
 def test_health_catalog_matches_native_curve(social):
     s,_,_=social
     assert len(s.mirror_health)==52

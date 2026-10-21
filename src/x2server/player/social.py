@@ -836,11 +836,17 @@ class SocialService:
         return next((r for r in self.mirror_health if r['bossId'] not in state['mirror']['clears']), None)
 
     def bind_run(self,pid,section,run):
+        """Admission only: a settled battle spends the attempt, not the entry.
+
+        A server update or a client crash kills the bound battle before its
+        CHECKOUT arrives, so charging here would spend an attempt for a fight
+        that never reported a result (an untouched boss and a lost try).
+        completed() spends the attempt instead.
+        """
         state=self.state(pid)
         if run in state['mirror'].get('runs', {}):
             return
         self.admission(pid,section)
-        state['mirror']['count']-=1
         state['mirror'].setdefault('runs', {})[run] = {
             'section':section, 'club_time':state['club']['time'], 'done':False}
         self.save(pid,state)
@@ -896,6 +902,8 @@ class SocialService:
             hit(uid,player_damage*9//(10*(2**crossed)))
         if section not in mirror.setdefault('sections',[]):
             mirror['sections'].append(section)
+        # bind_run charged nothing on entry, so settling spends the attempt here.
+        mirror['count']=max(0,mirror['count']-1)
         attempt.update(done=True,player_damage=player_damage,npc_damage=npc_damage,turns=turns,score_day=state['day'])
         state['today_score']=min(self.catalog['mirrorDaily']['target'],state['today_score']+sum(t['applied'] for t in turns))
         self.save(pid,state)

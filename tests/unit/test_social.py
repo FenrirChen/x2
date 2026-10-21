@@ -208,16 +208,31 @@ def test_account_isolation_and_migrated_owner_derived(social):
 def test_mirror_attempts_and_reward_eligibility(social):
     s,ctx,stamp=social
     create(s,ctx)
+    # Entering spends nothing; only a settled battle spends an attempt, so a
+    # server update that kills the client before CHECKOUT cannot cost one.
     for i in range(3):
         with s.economy.transaction():
             s.bind_run(1,2170001,str(i))
-    with pytest.raises(UnresolvedEconomy):
-        s.admission(1,2170001)
+    assert s.state(1)['mirror']['count']==3
     assert act(s,ctx,'ClubReceiveReward',{'opt':0,'param':2070001},3).values['code']==13
     with s.economy.transaction():
         s.completed(1,2170001,True,run='2')
+    assert s.state(1)['mirror']['count']==2
     assert act(s,ctx,'ClubReceiveReward',{'opt':0,'param':2070001},4).values['code']==10
     assert act(s,ctx,'ClubReceiveReward',{'opt':0,'param':2070001},5).values['code']==13
+    # Two further settled battles spend the rest of today's attempts.
+    for i in range(2):
+        current=s.mirror_current(s.state(1))
+        section=next(k for k,v in s.mirror_sections.items() if v['bossId']==current['bossId'])
+        with s.economy.transaction():
+            s.bind_run(1,section,f'settled-{i}')
+            s.completed(1,section,True,run=f'settled-{i}')
+    assert s.state(1)['mirror']['count']==0
+    # The current layer is still open, so only the spent attempts block entry.
+    layer=s.mirror_current(s.state(1))
+    section=next(k for k,v in s.mirror_sections.items() if v['bossId']==layer['bossId'])
+    with pytest.raises(UnresolvedEconomy):
+        s.admission(1,section)
     stamp[0]+=86400
     assert s.state(1)['mirror']['count']==3
 
