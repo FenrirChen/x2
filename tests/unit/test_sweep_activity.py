@@ -29,10 +29,10 @@ def test_activity_directory_contains_native_sweep_tab_without_other_events(env):
     assert '\n'.join(store.db.iterdump()) == before
 
 
-def test_activity_entry_disabled_by_user_decision(env):
+def test_activity_entry_can_be_explicitly_disabled(env):
     store, _, ctx = env
     before = '\n'.join(store.db.iterdump())
-    lobby = LobbyService()
+    lobby = LobbyService(sweep_enabled=False)
     assert asyncio.run(lobby.query(ctx, packet({}, name='C2L_QueryActivity'))).values == {'code': 10}
     status = asyncio.run(lobby.query(ctx, packet({}, name='C2L_EntryidStatus'))).values
     assert [MISSION_PAIR.decode(v) for v in status['entryidStatus']] == [{'Key': 19, 'Value': 2}]
@@ -85,12 +85,12 @@ def test_client_99_sweep_limit_and_stamina_validation(env):
     assert '\n'.join(store.db.iterdump()) == before
 
 
-def test_activity_directory_keeps_recovered_sweep_tab_when_enabled(env):
+def test_activity_directory_keeps_recovered_sweep_tab_by_default(env):
     # ActivityRuntime answers C2L_QueryActivity in production; the sweep entry
     # must survive the rebuilt directory instead of only living in the lobby's
     # overridden standalone branch.
     store, economy, ctx = env
-    activity = ActivityService(economy, lobby=LobbyService(sweep_enabled=True))
+    activity = ActivityService(economy, lobby=LobbyService())
     reply = activity.query_activity(ctx.session.player_id)
     values = LOBBY_SCHEMAS['L2C_QueryActivity'].decode(LOBBY_SCHEMAS['L2C_QueryActivity'].encode(reply))
     assert values['activityData']
@@ -98,9 +98,9 @@ def test_activity_directory_keeps_recovered_sweep_tab_when_enabled(env):
     assert (data['actId'], data['actType'], data['state']) == (73010, 71, 1)
 
 
-def test_activity_directory_omits_sweep_tab_by_default(env):
+def test_activity_directory_omits_sweep_tab_when_explicitly_disabled(env):
     store, economy, ctx = env
-    activity = ActivityService(economy, lobby=LobbyService())
+    activity = ActivityService(economy, lobby=LobbyService(sweep_enabled=False))
     reply = activity.query_activity(ctx.session.player_id)
     values = LOBBY_SCHEMAS['L2C_QueryActivity'].decode(LOBBY_SCHEMAS['L2C_QueryActivity'].encode(reply))
     assert 73010 not in [ACTIVITY_DATA.decode(row)['actId'] for row in values['activityData']]
@@ -114,3 +114,26 @@ def test_uncleared_stage_is_not_made_clear_by_opening_activity(env):
     reply = asyncio.run(battle.sweep(ctx, packet({'sectionId': 2130501, 'sweepCount': 1}, name='C2L_SecSweep')))
     assert reply.values['code'] == 13
     assert '\n'.join(store.db.iterdump()) == before
+
+
+def test_production_default_sweep_survives_runtime_dispatch_and_calendar(env):
+    from x2server.player.activity_runtime import ActivityRuntime
+    from x2server.player.activity_rotation import ActivityRotation
+    from x2server.player.mail import MailService
+    from x2server.messages.activity import ACTIVITY_SCHEMAS
+    _, economy, ctx = env
+    now=[ActivityRotation.ANCHOR+1]
+    economy.clock=lambda:now[0]
+    lobby=LobbyService()
+    activity=ActivityService(economy,lobby=lobby)
+    runtime=ActivityRuntime(activity,MailService(economy.store,economy,economy.clock))
+    handlers={**lobby.handlers(),**runtime.handlers()}
+    for index,timestamp in enumerate((ActivityRotation.ANCHOR+1,ActivityRotation.FIRST_END+1,ActivityRotation.ANCHOR-1)):
+        now[0]=timestamp
+        reply=asyncio.run(handlers['C2L_QueryActivity'](ctx,packet({},800+index,'C2L_QueryActivity')))
+        data=ACTIVITY_SCHEMAS['L2C_QueryActivity'].decode(ACTIVITY_SCHEMAS['L2C_QueryActivity'].encode(reply.values))
+        rows=[ACTIVITY_DATA.decode(raw) for raw in data['activityData']]
+        sweep=[r for r in rows if r['actType']==71]
+        assert len(sweep)==1 and sweep[0]['actId']==73010 and sweep[0]['state']==1
+    status=asyncio.run(handlers['C2L_EntryidStatus'](ctx,packet({},810,'C2L_EntryidStatus')))
+    assert {'Key':19,'Value':1} in [MISSION_PAIR.decode(raw) for raw in status.values['entryidStatus']]

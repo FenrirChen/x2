@@ -28,11 +28,11 @@ class LobbyService:
         "QueryFirstReCharge", "ReciveFirstReCharge",
     ))
 
-    def __init__(self, clock=None, college=None, *, sweep_enabled=False):
+    def __init__(self, clock=None, college=None, *, sweep_enabled=True):
         self.clock = clock or ServerClock()
         self.college = college
-        # USER_DECISION 2026-10-01: disable the activity entry for now, retain
-        # the recovered sweep implementation for a future explicit reopening.
+        # USER_DECISION 2026-10-21: reopen the recovered sweep activity.
+        # Defaults must match the production startup, not only opt-in tests.
         self.sweep_enabled = sweep_enabled
 
     def handlers(self):
@@ -44,7 +44,7 @@ class LobbyService:
         # C2L_QueryActivity 由 ActivityRuntime 应答, 本文件的空态分支会被覆盖,
         # 所以这行必须能被 ActivityService 复用并拼进目录 (见 player/activity.
         # query_activity), 否则扫荡页入口会凭空消失。sweep_enabled=False 时返回
-        # None, 保持 USER_DECISION 2026-10-01 的关闭状态。
+        # None，仅供显式关闭入口的配置使用。
         if not self.sweep_enabled:
             return None
         row = json.loads(files("x2server").joinpath("data/sweep_activity.json").read_text(encoding="utf-8"))
