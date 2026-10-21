@@ -72,8 +72,27 @@ def test_team_power_is_sum_of_owned_heroes_and_cost_charged_once(game, monkeypat
     state = repo.load(1)
     assert state['explore'][0]['fightCapacity'] == 50
     assert state['star_energy'] == 200 - service.jobs.explores[34001]['PowerConsume']
-    assert send(game, 'StartExplore', seq=302, exploreId=0, ruinId=34001, heroIds=[hid, 1004]).values['code'] == 13
+    assert send(game, 'StartExplore', seq=302, exploreId=0, ruinId=34001, heroIds=[hid, 1004]).values['code'] == 63
     assert repo.load(1)['star_energy'] == state['star_energy']
+
+
+def test_stale_explore_id_starts_in_a_free_queue_row(game, monkeypatch):
+    """客户端沿用已占用的行号时必须另开空队列, 而不是回 13「操作失败」。
+
+    客户端探险页保存着上次选中的行号; 原生 college_start_explore 按
+    (explore_id > 0 && 未占用) ? explore_id : ++college_explore_seq 分配,
+    只有队列满 3 条才回 kCollegeBusy。旧实现把占用当成非法请求, 于是神力足够
+    时仍然弹「操作失败」。
+    """
+    hid = funded(game)
+    store, _, repo, service, _ = game
+    monkeypatch.setattr('x2server.player.college_power.hero_power', lambda *args: 60)
+    assert send(game, 'StartExplore', seq=601, exploreId=0, ruinId=34001, heroIds=[hid]).values['code'] == 10
+    snapshot = store.get(1)['snapshot']
+    snapshot['heroes'].append({'id': 1004, 'level': 1, 'star': 1, 'state': 2})
+    service.jobs.economy.save_snapshot(1, snapshot)
+    assert send(game, 'StartExplore', seq=602, exploreId=0, ruinId=34001, heroIds=[1004]).values['code'] == 10
+    assert sorted(j['exploreId'] for j in repo.load(1)['explore']) == [0, 1]
 
 
 def test_rejected_gate_still_checks_ownership_and_unlocked_difficulty(game, monkeypatch):
@@ -81,6 +100,7 @@ def test_rejected_gate_still_checks_ownership_and_unlocked_difficulty(game, monk
     monkeypatch.setattr('x2server.player.college_power.hero_power', lambda *args: 999999)
     assert send(game, 'StartExplore', seq=401, exploreId=0, ruinId=34001, heroIds=[9999]).values['code'] == 13
     assert send(game, 'StartExplore', seq=402, exploreId=0, ruinId=34001, heroIds=[hid, hid]).values['code'] == 13
+    # 普通难度要遗迹经验点亮 ExploreEffect 类型 2 的第二档; 经验 0 时只开简单。
     assert send(game, 'StartExplore', seq=403, exploreId=0, ruinId=34001, heroIds=[hid], diffdifficulty=1).values['code'] == 13
     assert not game[2].load(1)['explore']
 

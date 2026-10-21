@@ -60,6 +60,13 @@ POWER_CONVERSION_PERMILLE = (500, 600, 600, 700, 700, 800)
 EXPLORE_MAX_NUM = 6
 TRAIN_MAX_NUM = 6
 
+# 派遣队列上限: 离线端 college.hpp kExploreQueueMax = 3。college_unlock_ruin 对
+# CollegeExplore 全表的每个遗迹都回 queueCount=3, college_start_explore 也只在队列
+# 已有 3 条时才拒绝 (kCollegeBusy)。它与时空之门 705 的星级**无关** —— 旧实现按
+# 星级只开放 1 个槽位, 客户端却按 3 条队列渲染, 选第 2/3 个槽派遣时服务端回
+# 13「操作失败」。
+EXPLORE_QUEUE_MAX = 3
+
 
 def _row(state: dict, building_id: int) -> dict | None:
     """The owned building/wonder row for ``building_id``, or None."""
@@ -226,8 +233,7 @@ class CollegeStateRepository:
         training = kind == 'training'
         schema = TRAINING_DATA if training else EXPLORE_DATA
         id_field = 'trainingId' if training else 'exploreId'
-        capacity = self.catalog.effect(state, 704 if training else 705,
-                                       6 if training else 1, star=True)[0]
+        capacity = self.catalog.effect(state, 704, 6, star=True)[0] if training else EXPLORE_QUEUE_MAX
         rows = {r[id_field]: r for r in state.get(kind, []) if isinstance(r, dict)}
         fields = {f.name for f in schema.fields}
         result = []
