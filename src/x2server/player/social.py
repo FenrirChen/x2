@@ -806,9 +806,13 @@ class SocialService:
         state=self.state(pid)
         if not state['club'] or section not in self.mirror_sections or state['mirror']['count']<=0:
             raise UnresolvedEconomy('mirror locked or attempts exhausted')
-        current = self.mirror_current(state)
-        if current is None or current['bossId'] != self.mirror_sections[section]['bossId']:
-            raise UnresolvedEconomy('mirror boss is not the current layer')
+        if self.mirror_sections[section]['bossId'] in state['mirror']['clears']:
+            raise UnresolvedEconomy('mirror boss already cleared')
+        # 轮回境域 (2170037~2170052) 是按 GlobalParamString.NewGuildInstanceTime 轮换的
+        # 额外层: 客户端当前给出的 boss 不一定是服务端“第一个未通关层”。原来的
+        # current-boss 门禁会让轮换后的层在客户端能进、服务端却拒 (用户反馈“换成猫后
+        # 打不了”)。这里只校验关卡合法、未通关与次数, 实际伤害由 completed() 按本次
+        # section 结算。
 
     def assist(self,pid,raw,config):
         from x2server.messages.social import ASSIST_DATA
@@ -857,6 +861,9 @@ class SocialService:
         CHECKOUT.hp is GetTotalHurtToBoss, not remaining HP (native 0x14424F8).
         Each turn stops at the death of its target; only the next member can
         attack the next boss. A battle receipt and this run marker are atomic.
+        Damage is applied to the boss of the reported section, not to the first
+        uncleared layer: the rotating extra layers (2170037+) may be offered by
+        the client out of sequential order.
         """
         state=self.state(pid)
         mirror=state['mirror']
@@ -871,37 +878,43 @@ class SocialService:
             raise UnresolvedEconomy('mirror attempts exhausted at settlement')
         if damage is not None and (type(damage) is not int or not 0<=damage<=2**63-1):
             raise UnresolvedEconomy('invalid mirror damage')
-        current=self.mirror_current(state)
-        if current is None or current['bossId']!=self.mirror_sections[section]['bossId']:
-            raise UnresolvedEconomy('mirror run targets a stale boss')
+        if self.mirror_sections[section]['bossId'] in mirror['clears']:
+            raise UnresolvedEconomy('mirror boss already cleared')
+        boss=next((r for r in self.mirror_health
+                   if r['bossId']==self.mirror_sections[section]['bossId']),None)
+        if boss is None:
+            raise UnresolvedEconomy('mirror section has no boss health')
         damage_map=mirror.setdefault('damage', {})
-        remaining=current['maxHP']-damage_map.get(str(current['bossId']),0)
+        remaining=boss['maxHP']-damage_map.get(str(boss['bossId']),0)
         # Older clients can omit hp. A confirmed kill proves the remaining HP;
         # an unsuccessful battle without a damage counter proves no damage.
         player_damage=damage if damage is not None else remaining if success else 0
         turns=[]
-        def hit(uid, amount):
-            target=self.mirror_current(state)
+        def hit(uid, amount, target):
             if target is None or amount<=0:
                 return
             key=str(target['bossId'])
             left=target['maxHP']-damage_map.get(key,0)
             applied=min(amount,left)
+            if applied<=0:
+                return
             damage_map[key]=damage_map.get(key,0)+applied
             turns.append({'member':str(uid),'boss':target['bossId'],
                           'requested':amount,'applied':applied})
             if applied==left:
                 mirror['clears'].append(target['bossId'])
-        hit(pid,player_damage)
+        # The player's damage belongs to the section they actually entered.
+        hit(pid,player_damage,boss)
         npc_damage=player_damage*9//10
-        start_index=next(i for i,r in enumerate(self.mirror_health) if r['bossId']==current['bossId'])
+        start_index=next(i for i,r in enumerate(self.mirror_health) if r['bossId']==boss['bossId'])
         for uid in sorted(state['club']['members'],key=int):
-            target=self.mirror_current(state)
+            target=next((r for r in self.mirror_health[start_index:]
+                         if r['bossId'] not in mirror['clears']),None)
             if target is None:
                 break
             target_index=next(i for i,r in enumerate(self.mirror_health) if r['bossId']==target['bossId'])
             crossed=target_index-start_index
-            hit(uid,player_damage*9//(10*(2**crossed)))
+            hit(uid,player_damage*9//(10*(2**crossed)),target)
         if section not in mirror.setdefault('sections',[]):
             mirror['sections'].append(section)
         # bind_run charged nothing on entry, so settling spends the attempt here.
