@@ -132,6 +132,28 @@ def test_single_random_member_donates_only_once(social):
     assert act(s,ctx,'ClubWishingReceive',{'donateId':target,'time':w['time']},5).values['code']==13
 
 
+def test_club_wish_owned_hero_without_fragments(social):
+    # 刚抽到角色、碎片为 0 的玩家要能祈愿 (碎片号恒为 1200000+神格ID)
+    s,ctx,_=social
+    create(s,ctx)
+    fund(s,1237901,100000)
+    player=s.store.get(1)
+    s.store.save_snapshot(1,dict(player['snapshot'],
+        heroes=[dict(id=1003,state=2,level=1,star=1)]),player['revision'])
+    assert s.quantity(1,1201003)==0
+    result=act(s,ctx,'ClubWishing',{'itemId':1201003},3)
+    assert result.values['code']==10
+    assert s.state(1)['wishes'][0]['item']==1201003
+
+
+def test_club_wish_rejects_unowned_hero_fragment(social):
+    s,ctx,_=social
+    create(s,ctx)
+    fund(s,1237901,100000)
+    assert act(s,ctx,'ClubWishing',{'itemId':1201004},3).values['code']==13
+    assert not s.state(1)['wishes']
+
+
 def test_wish_atomic_insufficient_and_no_members(social):
     s,ctx,_=social
     assert act(s,ctx,'CreateClub',{'name':'solo'}).values['code']==10
