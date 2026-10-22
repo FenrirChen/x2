@@ -3,8 +3,8 @@ import json
 
 import pytest
 
-from x2server.player.social import SocialService,roster,day,PERIOD,NAMESPACE,snapshot_value,npc_id
-from x2server.player.college import CollegeStateRepository
+from x2server.player.social import SocialService,roster,day,PERIOD,NAMESPACE,snapshot_value,npc_id,TO_2018
+from x2server.player.college import CollegeStateRepository,CollegeService
 from x2server.player.server_clock import ServerClock
 from x2server.player.economy import UnresolvedEconomy
 from x2server.messages.social import FRIEND_DATA,INT_LONG
@@ -189,6 +189,65 @@ def test_help_validates_members_and_does_not_repeat(social):
     assert act(s,ctx,'HelpPowerSpeed',req,4).values['code']==13
     req['helpPowerSpeedParam']=[HELP_POWER_SPEED_PARAM.encode(dict(playerIded=roster()[1]['id'],buildingId=701,buildingLevel=1))]
     assert act(s,ctx,'HelpPowerSpeed',req,5).values['code']==13
+
+
+def test_club_help_kv_self_request_and_recorder(social):
+    # The upgrade page's 社团助力 button needs the player's own request row in
+    # AllBuildHelpInfo and the recorder page needs club_speed_*_record.
+    s,ctx,_=social
+    target=create(s,ctx)
+    npc=npc_id(1,target)
+    base=s.college.load(1)
+    row=next(r for r in base['buildings'] if r['buildingId']==701)
+    base['build_queue']=dict(buildingId=701,upgradeStartTime=s.clock(),
+        upgradeEndTime=s.clock()+3600,target_level=row['buildingLevel']+1)
+    with s.economy.transaction():
+        s.college.save(1,base)
+    data=s.http('/KVStoreService.GetValuesV2',{'users':['1',str(npc)],
+        'keys':['club_speed_1_1',f'club_speed_{npc}_1',f'club_speed_{npc}_1_record']},1)
+    rows={r['userid']:r['pairs'] for r in data['Pairs']}
+    own=json.loads(rows['1'][0]['val'])
+    assert own==dict(buildId=701,upgradeEndTime=s.clock()+3600,
+        buildLevel=row['buildingLevel']+1)
+    assert json.loads(rows[str(npc)][0]['val'])['buildId']==701
+    assert not [p for p in rows[str(npc)] if p['key'].endswith('_record')]
+    req=dict(helpPower=1,helpPowerSpeedParam=[HELP_POWER_SPEED_PARAM.encode(
+        dict(playerIded=target,buildingId=701,buildingLevel=1))])
+    assert act(s,ctx,'HelpPowerSpeed',req,3).values['code']==10
+    data=s.http('/KVStoreService.GetValuesV2',{'users':['1',str(npc)],
+        'keys':['club_speed_1_1_record',f'club_speed_{npc}_1_record']},1)
+    rows={r['userid']:r['pairs'] for r in data['Pairs']}
+    point=s.clock()-TO_2018
+    assert json.loads(rows['1'][0]['val'])==[dict(playerId=npc,HelpPowerTime=60,
+        HelpPowerTimePoint=point,TimeValid=0)]
+    assert json.loads(rows[str(npc)][0]['val'])==[dict(playerId=1,HelpPowerTime=60,
+        HelpPowerTimePoint=point,TimeValid=0)]
+
+
+def test_club_help_valid_auto_assists_once_per_build(social):
+    # Clicking 社团助力 sends 881 (HelpPowerSpeedValid); club members answer at
+    # once in single-player, each cutting 60s and leaving a recorder row.
+    s,ctx,_=social
+    target=create(s,ctx)
+    base=s.college.load(1)
+    row=next(r for r in base['buildings'] if r['buildingId']==701)
+    base['build_queue']=dict(buildingId=701,upgradeStartTime=s.clock(),
+        upgradeEndTime=s.clock()+3600,target_level=row['buildingLevel']+1)
+    with s.economy.transaction():
+        s.college.save(1,base)
+    flows=CollegeService(s.college,economy=s.economy)
+    reply=asyncio.run(flows.dispatch(ctx,packet({'type':1},1,'C2L_HelpPowerSpeedValid')))
+    assert reply.values['code']==10
+    # One NPC member in the club -> one 60s cut and one recorder row.
+    assert s.college.load(1)['build_queue']['upgradeEndTime']==s.clock()+3540
+    data=s.http('/KVStoreService.GetValuesV2',{'users':['1'],
+        'keys':['club_speed_1_1_record']},1)
+    assert json.loads(data['Pairs'][0]['pairs'][0]['val'])==[
+        dict(playerId=npc_id(1,target),HelpPowerTime=60,
+             HelpPowerTimePoint=s.clock()-TO_2018,TimeValid=0)]
+    # The same member cannot stack a second help on the same build.
+    asyncio.run(flows.dispatch(ctx,packet({'type':1},2,'C2L_HelpPowerSpeedValid')))
+    assert s.college.load(1)['build_queue']['upgradeEndTime']==s.clock()+3540
 
 
 def test_account_isolation_and_migrated_owner_derived(social):
