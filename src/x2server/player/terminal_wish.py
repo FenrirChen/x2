@@ -20,7 +20,9 @@ LOGGER = logging.getLogger('x2.terminal.wish')
 class TerminalWishService:
     KIND = 6
     LIMIT = 3
-    CANDIDATES = 3
+    # 选择页展示 8 条候选，确认时仍只接 3 条。以前两者共用一个数字，候选被压成
+    # 3 条，玩家没得挑；8 条与本地已验收规则一致，接取名额仍由 LIMIT 控制。
+    CANDIDATES = 8
 
     def __init__(self, economy):
         self.e, self.store, self.db = economy, economy.store, economy.store.db
@@ -165,10 +167,12 @@ class TerminalWishService:
                 if old and (old[0] != digest or old[1] != state['day']):
                     return OutboundMessage('L2C_GameTask', self.values(state, 173))
                 pool = self.eligible(pid)
-                if len(pool) < self.CANDIDATES:
+                # 至少要有 3 条，玩家才能按选择页的「选择 3 个心愿」选满确认；
+                # 候选不足 8 条时展示实际条数，不为了凑数重复或虚构任务。
+                if len(pool) < self.LIMIT:
                     LOGGER.info('wish analysis unavailable player=%s eligible=%s', pid, len(pool))
                     return OutboundMessage('L2C_GameTask', self.values(state, 173))
-                state['candidates'] = self.rng.sample(pool, self.CANDIDATES)
+                state['candidates'] = self.rng.sample(pool, min(self.CANDIDATES, len(pool)))
                 self.save(pid, state)
                 self.db.execute('INSERT OR IGNORE INTO favor_wish_receipts VALUES (?,?,?,?,?)', (pid, key, digest, state['day'], '{}'))
                 LOGGER.info('wish candidates player=%s day=%s tasks=%s', pid, state['day'], state['candidates'])
@@ -195,8 +199,10 @@ class TerminalWishService:
             if old:
                 code = 10 if old[0] == digest and old[1] == state['day'] else 13
             elif (req.get('type') != 6 or self.store.get(pid)['snapshot']['level'] < 20
-                  or len(ids) != self.CANDIDATES or len(set(ids)) != len(ids)
-                  or set(ids) != set(state['candidates']) or state['accepted'] + len(ids) > self.LIMIT
+                  # 确认页只选 3 条，但这 3 条必须来自本次分析出的 8 条候选；
+                  # 候选跨日不会残留，旧包在 load() 翻页后也匹配不上。
+                  or len(ids) != self.LIMIT or len(set(ids)) != len(ids)
+                  or not set(ids).issubset(state['candidates']) or state['accepted'] + len(ids) > self.LIMIT
                   or state['tasks']):
                 code = 13
             else:

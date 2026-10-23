@@ -40,15 +40,18 @@ def accept(wishes,ids,seq=2,kind=6):
     return wire(asyncio.run(wishes[6].accept(wishes[4],packet({'type':kind,'taskIds':ids},seq,'C2L_AcceptFavorTask'))))
 
 
-def choose(wishes,monkeypatch,ids=(635030,635031,635033)):
+EIGHT_TASKS = (635030, 635031, 635033, 635042, 635105, 635044, 635048, 635100)
+
+
+def choose(wishes,monkeypatch,ids=EIGHT_TASKS):
     def sample(pool,count):
-        assert count == 3 and set(ids) <= set(pool)
+        assert count == 8 and set(ids) <= set(pool)
         return list(ids)
     monkeypatch.setattr(wishes[6].rng,'sample',sample)
     result = query(wishes)
     assert result.values['code'] == 10
     assert [r['taskId'] for r in map(TASK.decode,result.values['taskList'])] == list(ids)
-    assert accept(wishes,ids).values['code'] == 10
+    assert accept(wishes,ids[:3]).values['code'] == 10
     return list(ids)
 
 
@@ -60,23 +63,27 @@ def claim(wishes,tid,seq=3,async_mode=False):
     return FINISH_RESULT.decode(raw),response
 
 
-def test_analysis_three_candidates_stable_relogin_and_acceptance_limit(wishes):
+def test_analysis_eight_candidates_stable_relogin_and_acceptance_limit(wishes):
     before = query(wishes,analyse=False)
     assert before.values['taskList'] == []
     result = query(wishes,seq=2)
     ids = [r['taskId'] for r in map(TASK.decode,result.values['taskList'])]
-    assert len(ids) == len(set(ids)) == 3
+    assert len(ids) == len(set(ids)) == 8
     assert all(wishes[6].tasks[tid]['HeroID'] in (1003,1004,1010) for tid in ids)
     assert query(wishes,seq=3).values == result.values
     assert query(wishes,seq=4,analyse=False).values == result.values
+    # 选择页仍只接 3 条: 少于/多于/重复/整批 8 条都不收
     assert accept(wishes,[ids[0]],seq=5).values['code'] == 13
-    assert accept(wishes,[ids[0]]*3,seq=6).values['code'] == 13
-    assert accept(wishes,ids,seq=7,kind=5).values['code'] == 13
-    assert accept(wishes,ids,seq=8).values['code'] == 10
-    assert accept(wishes,ids,seq=8).values['code'] == 10
+    assert accept(wishes,ids[:4],seq=6).values['code'] == 13
+    assert accept(wishes,[ids[0],ids[0],ids[1]],seq=7).values['code'] == 13
+    assert accept(wishes,[ids[0]]*3,seq=8).values['code'] == 13
     assert accept(wishes,ids,seq=9).values['code'] == 13
+    assert accept(wishes,ids[:3],seq=10,kind=5).values['code'] == 13
+    assert accept(wishes,ids[:3],seq=11).values['code'] == 10
+    assert accept(wishes,ids[:3],seq=11).values['code'] == 10
+    assert accept(wishes,ids[3:6],seq=12).values['code'] == 13
     assert wishes[6].load(1)['accepted'] == 3
-    assert {r['taskStatus'] for r in map(TASK.decode,query(wishes,seq=10).values['taskList'])} == {2}
+    assert {r['taskStatus'] for r in map(TASK.decode,query(wishes,seq=13).values['taskList'])} == {2}
     from x2server.player.terminal_wish import TerminalWishService
     restored = TerminalWishService(wishes[5])
     assert restored.load(1) == wishes[6].load(1)
@@ -146,14 +153,14 @@ def test_real_training_completion_counts_without_cancellation_or_retry_duplicate
 
 
 def test_event_matching_covers_all_official_kinds_and_hero_item_ruin_difficulty(wishes,monkeypatch):
-    ids = choose(wishes,monkeypatch,(635042,635105,635033))
+    ids = choose(wishes,monkeypatch,(635042,635105,635033,635030,635031,635044,635048,635100))
     for kind,hero,value2 in [(67,1003,34001),(67,1004,999),(25,1010,1),(68,1003,1204003)]:
         wishes[5].record_event(1,f'wrong:{kind}:{hero}:{value2}',kind,hero,3,value2)
     assert all(r['progress']==0 for r in wishes[6].load(1)['tasks'].values())
     wishes[5].record_event(1,'explore:job',67,1004,1,34001)
     wishes[5].record_event(1,'challenge:run',25,1010,1,2)
     wishes[5].record_event(1,'gift:new',68,1003,3,1204002)
-    assert [wishes[6].load(1)['tasks'][str(tid)]['progress'] for tid in ids] == [1,1,3]
+    assert [wishes[6].load(1)['tasks'][str(tid)]['progress'] for tid in ids[:3]] == [1,1,3]
 
 
 def test_midnight_clears_candidates_tasks_accept_count_and_old_packet_cannot_accept(wishes,monkeypatch):
@@ -166,7 +173,7 @@ def test_midnight_clears_candidates_tasks_accept_count_and_old_packet_cannot_acc
     assert accept(wishes,ids,seq=2).values['code'] == 13
     assert query(wishes,seq=1).values['code'] == 173
     assert query(wishes,seq=9).values['code'] == 10
-    assert accept(wishes,ids,seq=10).values['code'] == 10
+    assert accept(wishes,ids[:3],seq=10).values['code'] == 10
 
 
 def test_insufficient_pool_and_locked_entry_return_native_denials(wishes,monkeypatch):
@@ -193,7 +200,7 @@ def test_claim_failure_rolls_back_items_favor_state_and_history(wishes,monkeypat
 
 
 def test_real_exploration_claim_counts_the_actual_heroes_and_ruin(wishes,monkeypatch):
-    choose(wishes,monkeypatch,(635042,635105,635033))
+    choose(wishes,monkeypatch,(635042,635105,635033,635030,635031,635044,635048,635100))
     # Supply a team with sufficient real battle power for the first ruin.
     p = wishes[0].get(1)
     heroes = [dict(h,level=50,star=15) for h in p['snapshot']['heroes']]
@@ -278,7 +285,7 @@ def test_accept_write_failure_returns_denial_and_does_not_consume_quota(wishes,m
     def failed_save(*args):
         raise sqlite3.OperationalError('disk write failure')
     monkeypatch.setattr(wishes[6],'save',failed_save)
-    assert accept(wishes,ids).values['code'] == 13
+    assert accept(wishes,ids[:3]).values['code'] == 13
     assert wishes[6].load(1) == before
 
 
@@ -291,6 +298,6 @@ def test_actual_dispatcher_routes_analysis_accept_and_claim_to_wish_service(wish
     result = asyncio.run(router.dispatch(wishes[4],packet({'type':6,'extraType':1},1,'C2L_GameTask')))
     assert result.status == DispatchStatus.HANDLED
     ids = [r['taskId'] for r in map(TASK.decode,result.response.values['taskList'])]
-    result = asyncio.run(router.dispatch(wishes[4],packet({'type':6,'taskIds':ids},2,'C2L_AcceptFavorTask')))
+    result = asyncio.run(router.dispatch(wishes[4],packet({'type':6,'taskIds':ids[:3]},2,'C2L_AcceptFavorTask')))
     assert result.status == DispatchStatus.HANDLED
     assert wire(result.response).values['code'] == 10
