@@ -299,8 +299,12 @@ class LoginService:
         pairs = [STRING_PAIR.encode({"key": "PowerBuyNum", "val": "120"}),
                  STRING_PAIR.encode({"key": "PowerRecover", "val": str(recovery_seconds)}),
                  # Native battle admission defaults to 25*32=800, while the
-                 # bag counter displays 1280. Supply the matching capacity.
-                 STRING_PAIR.encode({"key": "EquipPageLimit", "val": "40"}),
+                 # bag counter displays 1280. Supply 200*32=6400 so the
+                 # equipment warehouse stops being the bottleneck once a player
+                 # keeps more than 1280 beast-master gears; the counter's 1280 is
+                 # a client-side immediate (BagMainPage_RefreshPage) and has to
+                 # be patched in the APK separately.
+                 STRING_PAIR.encode({"key": "EquipPageLimit", "val": "200"}),
                  STRING_PAIR.encode({"key": "EquipCellLimit", "val": "32"}),
                  STRING_PAIR.encode({"key": "Energy", "val": "600"})]
         pairs += [STRING_PAIR.encode({'key': 'WishTaskList', 'val': '3'}),

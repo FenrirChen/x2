@@ -94,5 +94,8 @@ def test_client_recovery_config_matches_server(env):
     pairs = {r["key"]: r["val"] for r in map(STRING_PAIR.decode, response.values["keyVal"])}
     assert pairs["PowerRecover"] == str(EconomyService.POWER_RECOVER_SECONDS) == "225"
     capacity = int(pairs['EquipPageLimit']) * int(pairs['EquipCellLimit'])
-    assert capacity == 1280
+    # 服务端把兽主仓库放到 200*32=6400。客户端背包页的分母仍是硬编码的 1280
+    # (BagMainPage_RefreshPage 里的 mov w9, #0x500), 需要另外给 APK 打补丁才会
+    # 显示成 N/6400; 这里断言的是服务端下发的实际容量。
+    assert capacity == 6400
     assert 805 < capacity
