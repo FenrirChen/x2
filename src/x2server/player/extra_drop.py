@@ -26,6 +26,7 @@ class ExtraDropService:
         self.store, self.clock = economy.store, economy.clock
         self.enabled = bool(enabled)
         self.config = config()
+        self.limit = int(self.config.get('limit', 10))
         self.by_section = {}
         self.rows = {}
         data = json.loads(files('x2server').joinpath('data/activity_rotation_catalog.json').read_text('utf8'))
@@ -78,7 +79,7 @@ class ExtraDropService:
         if row is None or not self.active(player):
             return {}
         used = self.used(player, row['ID'])
-        if used >= min(10, row['NumLimit']):
+        if used >= self.limit:
             return {}
         # Only the official ExtraParam1 resources receive a bonus. First-clear
         # hero rewards, currencies and unrelated drops must not also be doubled.
