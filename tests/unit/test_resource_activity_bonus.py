@@ -84,3 +84,27 @@ def test_quota_rolls_back_and_belongs_to_complete_save(env):
         store.db.execute('DELETE FROM activity_state WHERE period=?',(e.extra_drop.PERIOD,))
     manager.import_save(1,data)
     assert e.extra_drop.used(1,100002)==1
+
+
+@pytest.mark.parametrize('limit',[0,1,3])
+def test_resource_bonus_limit_is_configurable_without_changing_base_drops(env,monkeypatch,limit):
+    _,e,_=env
+    from x2server.player import extra_drop
+    original=extra_drop.config
+    monkeypatch.setattr(extra_drop,'config',lambda:dict(original(),limit=limit))
+    enable(e)
+    assert e.extra_drop.limit==limit
+    for n in range(limit+1):
+        with e.transaction():
+            assert e.extra_drop.rewards(1,2130101,{1237901:5})==({1237901:5} if n<limit else {})
+    assert e.extra_drop.used(1,100002)==limit
+
+
+@pytest.mark.parametrize('limit',[-1,True,'200',1.5,2147483648])
+def test_resource_bonus_rejects_invalid_config(env,monkeypatch,limit):
+    _,e,_=env
+    from x2server.player import extra_drop
+    original=extra_drop.config
+    monkeypatch.setattr(extra_drop,'config',lambda:dict(original(),limit=limit))
+    with pytest.raises(ValueError,match='limit'):
+        ExtraDropService(e,enabled=True)

@@ -301,3 +301,23 @@ def test_actual_dispatcher_routes_analysis_accept_and_claim_to_wish_service(wish
     result = asyncio.run(router.dispatch(wishes[4],packet({'type':6,'taskIds':ids[:3]},2,'C2L_AcceptFavorTask')))
     assert result.status == DispatchStatus.HANDLED
     assert wire(result.response).values['code'] == 10
+
+
+@pytest.mark.parametrize('count',[3,5,7])
+def test_small_eligible_pool_still_accepts_exactly_three(wishes,monkeypatch,count):
+    pool=list(EIGHT_TASKS[:count])
+    monkeypatch.setattr(wishes[6],'eligible',lambda pid:pool)
+    result=query(wishes)
+    ids=[r['taskId'] for r in map(TASK.decode,result.values['taskList'])]
+    assert len(ids)==count and set(ids)==set(pool)
+    assert accept(wishes,ids[:3]).values['code']==10
+    assert wishes[6].load(1)['accepted']==3
+
+
+def test_legacy_three_candidate_batch_remains_acceptable(wishes):
+    state=wishes[6].load(1)
+    state['candidates']=list(EIGHT_TASKS[:3])
+    with wishes[5].transaction():
+        wishes[6].save(1,state)
+    assert accept(wishes,list(EIGHT_TASKS[:3])).values['code']==10
+    assert wishes[6].load(1)['accepted']==3

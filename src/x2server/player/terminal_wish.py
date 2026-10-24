@@ -20,8 +20,7 @@ LOGGER = logging.getLogger('x2.terminal.wish')
 class TerminalWishService:
     KIND = 6
     LIMIT = 3
-    # 选择页展示 8 条候选，确认时仍只接 3 条。以前两者共用一个数字，候选被压成
-    # 3 条，玩家没得挑；8 条与本地已验收规则一致，接取名额仍由 LIMIT 控制。
+    # User approved eight equally weighted candidates on 2026-10-24; accept three.
     CANDIDATES = 8
 
     def __init__(self, economy):
