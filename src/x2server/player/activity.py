@@ -206,7 +206,7 @@ class ActivityService:
                 'taskList': tasks, 'boxList': boxes}
 
     def repair_tasks(self, player, period):
-        """Recover provable missed currency/kill/survival progress in this period."""
+        """Recover provable missed currency/kill/survival/clear progress in this period."""
         from x2server.messages.battle import BATTLE_SCHEMAS, CHECKOUT, PROFILE_HERO
         from x2server.messages.core import INT_PAIR
         from .endless import KILLS
@@ -222,7 +222,9 @@ class ActivityService:
                     rewards = {int(i): n for i, n in json.loads(raw).items()
                                if n > 0 and enum(self.economy.items.get(int(i), {}).get('ItemType')) == 16}
                     self.obtained(player, period, rewards, f'bag-use:{key}')
-            if not self.rotation.once(player, period, 'task-repair-v1'):
+            # v2: clear-class recovery needs a fresh marker because players who
+            # already ran v1 this period would otherwise never get it.
+            if not self.rotation.once(player, period, 'task-repair-v2'):
                 return
             currencies = Counter()
             for row in self.tables['Item']:
@@ -269,6 +271,22 @@ class ActivityService:
                             alive = {h.get('heroId') for h in map(PROFILE_HERO.decode, request.get('heros', []))
                                      if h.get('state', 0) == 0} & set(json.loads(team))
                             self.event(player, f'three-hero:{run}', 63, section, 1, len(alive), period)
+            # CompleteType 3 tasks only advance from complete()'s clear event.
+            # An activity data bug could record the clear but skip the event, so
+            # replay the durable clear ledger; one-time hidden stages then stay
+            # unreachable while their tasks are stuck at zero.
+            cleared = {int(row['state_key']): json.loads(row['value']) for row in self.store.db.execute(
+                "SELECT state_key,value FROM activity_state WHERE player_id=? AND period=? "
+                "AND namespace='clear'", (player, period.index)).fetchall()}
+            for tid, task in self.task_catalog(period, 9).items():
+                condition = self.conditions[task['TaskConditionID']]
+                if enum(condition['CompleteType']) != 3:
+                    continue
+                value = sum(cleared.get(sid, 0) for sid in set(condition.get('CompleteValue1', [])))
+                namespace = self.task_namespace(task)
+                state = self.rotation.get(player, period, namespace, tid, {'progress': 0, 'claimed': False})
+                state['progress'] = max(state['progress'], min(value, condition['CompleteNum']))
+                self.rotation.put(player, period, namespace, tid, state)
 
     def claim_task(self, player, task_id, kind, activity=0):
         period = self.period(player)
