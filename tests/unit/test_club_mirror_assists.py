@@ -161,3 +161,28 @@ def test_pending_mirror_runs_cannot_overspend_attempts(social):
             s.completed(1,2170001,False,1,'second')
     assert s.state(1)==before
     assert s.completed(1,2170001,False,1,'first')['done']
+
+
+def test_rotating_extra_layer_admits_and_damages_its_own_boss(social):
+    """轮回境域 (2170037+) 按时间轮换: 客户端给的层可以不是首个未通关层。"""
+    s,ctx,_=social
+    create(s,ctx)
+    with s.economy.transaction():
+        state=s.state(1)
+        state['club']['members']={}
+        s.save(1,state)
+    s.admission(1,2170041)  # 37~40 都没通关, 仍然允许打轮换出来的 41。
+    with s.economy.transaction():
+        s.bind_run(1,2170041,'cat')
+        result=s.completed(1,2170041,True,10,'cat')
+    assert result['turns'][0]['boss']==2070041
+    mirror=s.state(1)['mirror']
+    assert mirror['damage']=={'2070041':10}
+    assert 2070037 not in mirror['clears']
+    # 已通关的层仍不允许重复入场 (老行为)。
+    with s.economy.transaction():
+        state=s.state(1)
+        state['mirror']['clears'].append(2070041)
+        s.save(1,state)
+    with pytest.raises(UnresolvedEconomy):
+        s.admission(1,2170041)
