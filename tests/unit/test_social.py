@@ -528,3 +528,28 @@ def test_legacy_daily_claim_migration_preserves_today_but_resets_yesterday(socia
     with s.economy.transaction():
         s.save(1,state)
     assert not s.state(1)['received'] and not s.state(1)['sent']
+
+
+@pytest.mark.parametrize('remaining',[30,3600])
+def test_help_completion_and_reciprocal_help_share_deduplication(social,remaining):
+    s,ctx,_=social
+    target=create(s,ctx)
+    base=s.college.load(1)
+    row=next(r for r in base['buildings'] if r['buildingId']==701)
+    base['build_queue']=dict(buildingId=701,upgradeStartTime=s.clock(),
+        upgradeEndTime=s.clock()+remaining,target_level=row['buildingLevel']+1)
+    s.college.save(1,base)
+    flows=CollegeService(s.college,economy=s.economy)
+    result=asyncio.run(flows.dispatch(ctx,packet({'type':1},21,'C2L_HelpPowerSpeedValid')))
+    assert result.values['code']==10
+    record=s.state(1)['help_records']['1:1']
+    assert len(record)==1 and record[0]['HelpPowerTime']==min(60,remaining)
+    if remaining<=60:
+        assert not s.college.load(1)['build_queue']
+        assert any(p.message_name=='L2C_QueryGrowthBase' for p in result.before_response)
+    else:
+        request=dict(helpPower=1,helpPowerSpeedParam=[HELP_POWER_SPEED_PARAM.encode(
+            dict(playerIded=target,buildingId=701,buildingLevel=1))])
+        assert act(s,ctx,'HelpPowerSpeed',request,22).values['code']==10
+        assert s.college.load(1)['build_queue']['upgradeEndTime']==s.clock()+remaining-60
+        assert len(s.state(1)['help_records']['1:1'])==1

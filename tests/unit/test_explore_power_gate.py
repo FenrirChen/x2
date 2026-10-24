@@ -72,20 +72,17 @@ def test_team_power_is_sum_of_owned_heroes_and_cost_charged_once(game, monkeypat
     state = repo.load(1)
     assert state['explore'][0]['fightCapacity'] == 50
     assert state['star_energy'] == 200 - service.jobs.explores[34001]['PowerConsume']
-    assert send(game, 'StartExplore', seq=302, exploreId=0, ruinId=34001, heroIds=[hid, 1004]).values['code'] == 63
+    assert send(game, 'StartExplore', seq=302, exploreId=0, ruinId=34001, heroIds=[hid, 1004]).values['code'] == 55
     assert repo.load(1)['star_energy'] == state['star_energy']
 
 
 def test_stale_explore_id_starts_in_a_free_queue_row(game, monkeypatch):
-    """客户端沿用已占用的行号时必须另开空队列, 而不是回 13「操作失败」。
-
-    客户端探险页保存着上次选中的行号; 原生 college_start_explore 按
-    (explore_id > 0 && 未占用) ? explore_id : ++college_explore_seq 分配,
-    只有队列满 3 条才回 kCollegeBusy。旧实现把占用当成非法请求, 于是神力足够
-    时仍然弹「操作失败」。
-    """
+    """Stale row selection uses an idle row without unlocking extra queues."""
     hid = funded(game)
     store, _, repo, service, _ = game
+    state=repo.load(1)
+    next(r for r in state['buildings'] if r['buildingId']==705)['buildingStar']=2
+    repo.save(1,state)
     monkeypatch.setattr('x2server.player.college_power.hero_power', lambda *args: 60)
     assert send(game, 'StartExplore', seq=601, exploreId=0, ruinId=34001, heroIds=[hid]).values['code'] == 10
     snapshot = store.get(1)['snapshot']
@@ -127,3 +124,15 @@ def test_gate_odd_threshold_rounds_up_and_atomic_start_failure(game, monkeypatch
     assert repo.load(1) == before
     assert store.get(1) == snapshot
     assert store.db.execute('SELECT count(*) FROM college_job_receipts').fetchone()[0] == 0
+
+
+def test_explore_visible_slots_follow_official_building_star_effects(game):
+    funded(game)
+    _,_,repo,service,_=game
+    state=repo.load(1)
+    gate=next(r for r in state['buildings'] if r['buildingId']==705)
+    for star in range(1,len(repo.catalog.buildings[705]['StarID'])+1):
+        gate['buildingStar']=star
+        slots=list(map(EXPLORE_DATA.decode,repo.jobs_wire(state,'explore')))
+        capacity=repo.catalog.effect(state,705,1,star=True)[0]
+        assert [s['exploreStatus'] for s in slots]==[1]*capacity+[0]*(6-capacity)

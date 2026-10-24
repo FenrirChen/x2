@@ -186,3 +186,11 @@ def test_rotating_extra_layer_admits_and_damages_its_own_boss(social):
         s.save(1,state)
     with pytest.raises(UnresolvedEconomy):
         s.admission(1,2170041)
+
+
+def test_normal_mirror_still_requires_current_boss(social):
+    s,ctx,_=social
+    setup_mirror(s,ctx,members=0)
+    with pytest.raises(UnresolvedEconomy,match='current layer'):
+        s.admission(1,2170002)
+    assert s.state(1)['mirror']['count']==3

@@ -6,7 +6,6 @@ import uuid
 
 from x2server.network.dispatcher import OutboundMessage
 from x2server.messages.lobby import UNLOCK_EXPLORE_RUIN
-from .college import EXPLORE_QUEUE_MAX
 from .college_upgrade import _catalog
 from .progression import catalog as progression_catalog
 from .hero import encode_hero_data
@@ -167,25 +166,23 @@ class CollegeJobsService:
         pos, difficulty = request.get('exploreId', 0), request.get('diffdifficulty', 0)
         rid, ids = request.get('ruinId', 0), list(request.get('heroIds', []))
         result = {'code': 13}
-        # Native queue capacity is the fixed kExploreQueueMax (3), independent of the
-        # 705 (时空之门) star level; ruins themselves stay progressively unlocked.
+        # Preserve the official CollegeStarLevel slot-unlock chain.
+        capacity = self.repo.catalog.effect(state, 705, 1, star=True)[0]
         row = self.explores.get(rid)
         ruin = next((r for r in state['ruins'] if r['ruinId'] == rid), None)
         busy = {r['exploreId'] for r in state['explore']}
-        if len(busy) >= EXPLORE_QUEUE_MAX:
-            # college_start_explore: size() >= kExploreQueueMax -> kCollegeBusy.
+        if capacity <= 0 or len(busy) >= capacity:
+            # All officially unlocked queue rows are occupied.
             LOGGER.warning('StartExplore refused: player=%s queue full slots=%s', player_id, sorted(busy))
             return {'code': 55}
-        # The client's exploreId is advisory, not a reservation: native allocates
-        # (explore_id > 0 && 未占用) ? explore_id : ++college_explore_seq. Refusing an
-        # occupied id with E_ERROR_OPT produced the client's 「操作失败」 even though a
-        # free queue row existed (the page keeps the previously selected row index).
-        if not 0 <= pos < EXPLORE_QUEUE_MAX or pos in busy:
-            pos = next(i for i in range(EXPLORE_QUEUE_MAX) if i not in busy)
+        # A stale selected row may already be occupied. Reuse an unlocked idle
+        # row, while keeping capacity from the official building-star effects.
+        if not 0 <= pos < capacity or pos in busy:
+            pos = next(i for i in range(capacity) if i not in busy)
         if not row or not ruin or not 1 <= len(ids) <= 3 or difficulty not in range(3):
             LOGGER.warning('StartExplore refused: player=%s exploreId=%s queueMax=%s ruinId=%s inRuinTable=%s '
                            'inState=%s heroIds=%s busySlots=%s difficulty=%s',
-                           player_id, pos, EXPLORE_QUEUE_MAX, rid, bool(row), bool(ruin), ids,
+                           player_id, pos, capacity, rid, bool(row), bool(ruin), ids,
                            sorted(busy), difficulty)
             return result
         max_difficulty = max([1, *self.effects(row, ruin['exp'], 2)]) - 1

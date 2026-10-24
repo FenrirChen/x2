@@ -858,12 +858,13 @@ class SocialService:
             end=int(queue.get('upgradeEndTime',0))
             if not queue or end<=now:
                 return 0
-            build=f'{int(queue.get("buildingId",0))}:{int(queue.get("upgradeStartTime",0))}'
+            build=f'{int(queue.get("buildingId",0))}:{int(queue.get("upgradeStartTime",0))}:{int(queue.get("target_level",0))}'
             marks=state['auto_help']
             entry=marks.get(str(slot))
             if not isinstance(entry,dict) or entry.get('build')!=build:
                 entry={'build':build,'helpers':[]}
                 marks[str(slot)]=entry
+                state['help_records'].pop(f'{pid}:{slot}',None)
             helped={int(n) for n in entry['helpers']}
             used=0
             for member in state['club']['members']:
@@ -871,12 +872,14 @@ class SocialService:
                     uid=int(member)
                 except (TypeError,ValueError):
                     continue
-                if uid==pid or uid in helped or end<=now:
+                legacy=f'own:{key}:{queue["buildingId"]}:{queue.get("upgradeStartTime",0)}:{queue.get("target_level",0)}:{uid}'
+                if uid==pid or uid in helped or legacy in state['helped'] or end<=now:
                     continue
                 entry['helpers'].append(uid)
                 helped.add(uid)
-                end=max(now,end-HELP_SECONDS)
-                self.record_help(state,pid,slot,npc_id(pid,uid),HELP_SECONDS,now)
+                seconds=min(HELP_SECONDS,end-now)
+                end-=seconds
+                self.record_help(state,pid,slot,npc_id(pid,uid),seconds,now)
                 used+=1
             if not used:
                 return 0
@@ -914,13 +917,20 @@ class SocialService:
             q=base.get(key)
             if not q or q.get('upgradeEndTime',0)<=now:
                 continue
-            identity=f'own:{key}:{q["buildingId"]}:{q.get("upgradeStartTime",0)}:{q.get("target_level",0)}:{donor}'
-            if identity in state['helped']:
+            slot=1 if key=='build_queue' else 2
+            build=f'{int(q["buildingId"])}:{int(q.get("upgradeStartTime",0))}:{int(q.get("target_level",0))}'
+            entry=state['auto_help'].get(str(slot))
+            if not isinstance(entry,dict) or entry.get('build')!=build:
+                entry={'build':build,'helpers':[]}
+                state['auto_help'][str(slot)]=entry
+                state['help_records'].pop(f'{pid}:{slot}',None)
+            legacy=f'own:{key}:{q["buildingId"]}:{q.get("upgradeStartTime",0)}:{q.get("target_level",0)}:{donor}'
+            if donor in entry['helpers'] or legacy in state['helped']:
                 continue
-            state['helped'][identity]=1
-            q['upgradeEndTime']=max(now,q['upgradeEndTime']-HELP_SECONDS)
-            self.record_help(state,pid,1 if key=='build_queue' else 2,
-                             npc_id(pid,donor),HELP_SECONDS,now)
+            entry['helpers'].append(donor)
+            seconds=min(HELP_SECONDS,q['upgradeEndTime']-now)
+            q['upgradeEndTime']-=seconds
+            self.record_help(state,pid,slot,npc_id(pid,donor),seconds,now)
         completed=self.college.settle(base)
         self.college.save(pid,base)
         # The native help-all callback requires nonempty rewardData. GuildWish 778000 is the help reward.
@@ -935,6 +945,10 @@ class SocialService:
             raise UnresolvedEconomy('mirror locked or attempts exhausted')
         if self.mirror_sections[section]['bossId'] in state['mirror']['clears']:
             raise UnresolvedEconomy('mirror boss already cleared')
+        if section < 2170037:
+            current=self.mirror_current(state)
+            if current is None or current['bossId']!=self.mirror_sections[section]['bossId']:
+                raise UnresolvedEconomy('mirror boss is not the current layer')
         # 轮回境域 (2170037~2170052) 是按 GlobalParamString.NewGuildInstanceTime 轮换的
         # 额外层: 客户端当前给出的 boss 不一定是服务端“第一个未通关层”。原来的
         # current-boss 门禁会让轮换后的层在客户端能进、服务端却拒 (用户反馈“换成猫后

@@ -31,7 +31,26 @@ def test_repair_credits_clear_class_hidden_tasks_from_clear_ledger(activity):
     assert condition['CompleteValue1'] == [2161011]
     with economy.transaction():
         service.rotation.put(1, period, 'clear', 2161011, 1)
+        service.rotation.once(1, period, 'task-repair-v1')
     state = next(r for r in map(TASK.decode, service.task_values(1, 9)['taskList'])
                  if r['taskId'] == 5000277)
     assert state['taskProgress'] == 1 and state['taskStatus'] == 3
     assert service.claim_task(1, 5000277, 9, 72035)['code'] == 10
+
+
+def test_clear_repair_preserves_claim_and_does_not_leak_into_next_period(activity):
+    _, economy, service, now=activity
+    now[0]=service.rotation.bounds(1)[0]
+    period=service.period(1)
+    with economy.transaction():
+        service.rotation.put(1,period,'clear',2161011,1)
+        service.rotation.put(1,period,'tasks',5000277,{'progress':1,'claimed':True})
+        # A previous deployment already ran the older repair.
+        service.rotation.once(1,period,'task-repair-v1')
+    service.repair_tasks(1,period)
+    assert service.rotation.get(1,period,'tasks',5000277)['claimed']
+    assert service.claim_task(1,5000277,9,72035)['code']==13
+    now[0]=service.rotation.bounds(8)[0]
+    next_period=service.period(1)
+    service.repair_tasks(1,next_period)
+    assert service.rotation.get(1,next_period,'tasks',5000277,{}).get('progress',0)==0

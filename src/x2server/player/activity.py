@@ -280,9 +280,10 @@ class ActivityService:
                 "AND namespace='clear'", (player, period.index)).fetchall()}
             for tid, task in self.task_catalog(period, 9).items():
                 condition = self.conditions[task['TaskConditionID']]
-                if enum(condition['CompleteType']) != 3:
+                if enum(condition['CompleteType']) != 3 or enum(task.get('TaskType')) == 2:
                     continue
-                value = sum(cleared.get(sid, 0) for sid in set(condition.get('CompleteValue1', [])))
+                sections = set(condition.get('CompleteValue1', []))
+                value = sum(cleared.values()) if not sections or sections == {0} else sum(cleared.get(sid, 0) for sid in sections)
                 namespace = self.task_namespace(task)
                 state = self.rotation.get(player, period, namespace, tid, {'progress': 0, 'claimed': False})
                 state['progress'] = max(state['progress'], min(value, condition['CompleteNum']))
