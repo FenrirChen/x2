@@ -335,6 +335,16 @@ class SocialService:
         row=self.store.db.execute('SELECT quantity FROM inventory WHERE player_id=? AND item_id=?',(pid,item)).fetchone()
         return row[0] if row else 0
 
+    def owns_chip(self,pid,item):
+        # 神格碎片可祈愿 = 已拥有该神格(碎片号恒为 1200000+神格ID, 如 1201040=微风莉莉丝)
+        # 或背包里已有该碎片。刚抽到角色、碎片为 0 的玩家正是靠祈愿墙攒碎片,
+        # 只查背包会把这类玩家全部挡掉。
+        hero=int(item)-1200000
+        if hero>0 and any(int(h.get('id',0))==hero and int(h.get('state',0))==2
+                          for h in self.store.get(pid)['snapshot'].get('heroes',())):
+            return True
+        return self.quantity(pid,item)>0
+
     def charge(self,pid,costs):
         if any(q<=0 or self.quantity(pid,n)<q for n,q in costs.items()):
             raise UnresolvedEconomy('social materials insufficient')
@@ -675,7 +685,8 @@ class SocialService:
             row=self.wish_rows.get(item)
             if not row or self.store.get(pid)['snapshot']['level']<row['unlockLevel'] or not club['members']:
                 raise ValueError('wish locked or no NPC donor')
-            if self.economy.items.get(item,{}).get('ItemType',{}).get('value')==12 and self.quantity(pid,item)<=0:
+            chip=self.economy.items.get(item,{}).get('ItemType',{}).get('value')==12
+            if chip and not self.owns_chip(pid,item):
                 raise ValueError('wish for unowned character fragment')
             if sum(state['wish_counts'].values())>0:
                 raise ValueError('one club wish per day')
