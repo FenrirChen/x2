@@ -250,3 +250,132 @@ int x2_open_save_manager(void* login_page, void* il2cpp) {
     diagnostic("bridge: dialog dispatched");
     return 1;
 }
+
+/* ---------------------------------------------------------------------------
+ * Login title voice
+ * ---------------------------------------------------------------------------
+ * Called by the MainAniEnter trampoline (patch_title_voice.py) at the moment
+ * the player taps 开始跃迁: replays the board hero's 「标题」 dubbing line.
+ *
+ * Why the retail client keeps it silent: every hero owns a 标题 row in the
+ * Dubbing table (DubbingName = 1350035, SoundID = heroId * 100 + 8) and the
+ * audio bank ships in the package (e.g. Vo_JP_H1010_Logo.bank for ECLIPSE),
+ * but none of the ten GameAPI.PlayVoice call sites covers "entered the main
+ * hall", so the row stays locked in the voice archive.
+ *
+ * Everything is resolved by name - no RVA, no field offset - so this stays
+ * valid across client builds:
+ *   AccountInfoModule.get_CurHero()  -> board hero id (int32)
+ *   DubbingManager.GetAllItem()      -> DubbingArray wrapper class
+ *       -> .Items  (List<Dubbing>; .Keys sits at the same layout position!)
+ *          -> _items[] rows, matched on (HeroId, DubbingName)
+ *   GameAPI.PlayVoice(DubbingId)     -> FMOD; the bank is loaded inside
+ *
+ * These bodies never read `this` (the client itself calls them with x0 = 0),
+ * so the methodPointer is called directly with a null receiver and a null
+ * MethodInfo, exactly like the call sites in the game. Do not switch to
+ * runtime_invoke here: it boxes the int32 return value, so get_CurHero would
+ * hand back an Il2CppObject header instead of a hero id.
+ *
+ * Once per process: MainAniEnter runs on every return to the hall, only the
+ * login one should speak.
+ */
+
+#define TITLE_DUBBING_NAME 1350035   /* Language row id of 标题 */
+
+static int title_voice_played = 0;
+
+/* MethodInfo::methodPointer is its first member: the native entry point. */
+static void* method_entry(struct Api* api, void* cls, const char* name, int argc) {
+    void* info = cls ? api->method_from_name(cls, name, argc) : 0;
+    return info ? *(void**)info : 0;
+}
+
+static void* object_field(struct Api* api, void* obj, const char* field_name) {
+    void* value = 0;
+    if (!obj) return 0;
+    void* field = api->field_from_name(api->object_class(obj), field_name);
+    if (!field) return 0;
+    api->field_get_value(obj, field, &value);
+    return value;
+}
+
+static int int_field(struct Api* api, void* obj, const char* field_name, int* out) {
+    void* field = obj ? api->field_from_name(api->object_class(obj), field_name) : 0;
+    if (!field) return 0;
+    api->field_get_value(obj, field, out);
+    return 1;
+}
+
+/* (heroId, 标题) -> DubbingId, or 0 when the row is missing. */
+static int find_title_dubbing(struct Api* api, int hero) {
+    void* entry = method_entry(api, find_class(api, "", "DubbingManager"), "GetAllItem", 0);
+    if (!entry) return 0;
+
+    /* GetAllItem returns the wrapper class, whose .Items is the row list. */
+    void* wrapper = ((void* (*)(void*, void*))entry)(0, 0);
+    void* list = object_field(api, wrapper, "Items");
+    if (!list) return 0;
+
+    int size = 0;
+    if (!int_field(api, list, "_size", &size) || size <= 0) return 0;
+    struct Il2CppArrayHead* rows = (struct Il2CppArrayHead*)object_field(api, list, "_items");
+    if (!rows || (int)rows->max_length < size) return 0;
+
+    for (int i = 0; i < size; ++i) {
+        void* row = rows->vector[i];
+        int row_hero = 0;
+        int row_name = 0;
+        int row_id = 0;
+        if (!row) continue;
+        if (!int_field(api, row, "HeroId", &row_hero) || row_hero != hero) continue;
+        if (!int_field(api, row, "DubbingName", &row_name) || row_name != TITLE_DUBBING_NAME) continue;
+        if (!int_field(api, row, "DubbingId", &row_id)) continue;
+        return row_id;
+    }
+    return 0;
+}
+
+int x2_play_login_title_voice(void* main_hall_fsm, void* il2cpp);
+
+int x2_play_login_title_voice(void* main_hall_fsm, void* il2cpp) {
+    struct Api api;
+    (void)main_hall_fsm;
+    il2cpp = il2cpp ? il2cpp : dlopen("libil2cpp.so", 1);   /* the trampoline passes its own handle */
+    if (!load_api(il2cpp, &api)) {
+        diagnostic("title voice: il2cpp API unavailable");
+        return 0;
+    }
+
+    void* domain = api.domain_get();
+    if (!domain) return 0;
+    api.thread_attach(domain);
+    if (title_voice_played) return 0;
+
+    void* entry = method_entry(&api, find_class(&api, "", "AccountInfoModule"), "get_CurHero", 0);
+    if (!entry) {
+        diagnostic("title voice: get_CurHero unavailable");
+        return 0;
+    }
+    int hero = ((int (*)(void*, void*))entry)(0, 0);
+    if (hero <= 0) {
+        diagnostic("title voice: no board hero");
+        return 0;
+    }
+
+    int dubbing = find_title_dubbing(&api, hero);
+    if (dubbing <= 0) {
+        diagnostic("title voice: 标题 row not found");
+        return 0;
+    }
+
+    entry = method_entry(&api, find_class(&api, "", "GameAPI"), "PlayVoice", 1);
+    if (!entry) {
+        diagnostic("title voice: PlayVoice unavailable");
+        return 0;
+    }
+    title_voice_played = 1;   /* before the call: MainAniEnter may re-enter */
+    ((void (*)(void*, int, void*))entry)(0, dubbing, 0);
+    diagnostic("title voice: played");
+    return 1;
+}
