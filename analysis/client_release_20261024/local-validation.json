@@ -1,0 +1,27 @@
+{
+  "apk": "D:/demo/x2/逆向/打包/X2-Revival-ClientFix20261024-Local-signed.apk",
+  "bytes": 2147362643,
+  "sha256": "9473d1c5e3f030c4885d66157c3f9b34f6f57d5dfbe119becd0de6859a0e3cf2",
+  "changed_entries": [
+    "lib/arm64-v8a/libil2cpp.so",
+    "assets/bin/Data/9304d53c5454c1f47a6b96089eae2240",
+    "assets/bin/Data/b8de9fa15f3d3174bb4f99bb17c786e5",
+    "assets/bin/Data/c12334e156ae52249ba13c0ea2ff2f4b",
+    "assets/bin/Data/5c6e2b3d805f03d4c95c64eccfb97a7d",
+    "assets/bin/Data/5c993e6912a40e541be49a4f5ed7abd7",
+    "assets/bin/Data/8cb5a774973043543812ca7b58de6beb",
+    "assets/bin/Data/2c6eecbf62e755847898fdb41e07d857",
+    "assets/bin/Data/2af4a6e8414c516489bc96b264245878",
+    "assets/bin/Data/35da29fb822c44c428ffdfd78d8cc5ee",
+    "assets/bin/Data/aba6dc317858aef4bbb54771424d88a8",
+    "assets/bin/Data/0fd70f6b429a5a74ea80861669487c80",
+    "assets/bin/Data/9c7fdb35ebf462c42a28c35799e1d9da",
+    "assets/bin/Data/globalgamemanagers",
+    "assets/bin/Data/a5a8dddd9451d0a4d8547a165ea974da",
+    "lib/arm64-v8a/libx2save.so"
+  ],
+  "config_preserved": true,
+  "save_manager_and_allocator_preserved": true,
+  "full_zip_crc": "passed",
+  "stored_entry_alignment": 4
+}

@@ -1,0 +1,82 @@
+{
+  "assets/bin/Data/9c7fdb35ebf462c42a28c35799e1d9da": {
+    "texture": 1000,
+    "sprites": [
+      1001,
+      1002
+    ],
+    "card_box": [
+      700,
+      675,
+      1160,
+      1720
+    ],
+    "image": [
+      1361,
+      1408
+    ]
+  },
+  "assets/bin/Data/2af4a6e8414c516489bc96b264245878": {
+    "texture": 100,
+    "sprite": 101,
+    "image": [
+      150,
+      150
+    ],
+    "tail": 21300070
+  },
+  "assets/bin/Data/globalgamemanagers": {
+    "inserted": [
+      {
+        "key": "uialtas/altas/skinhead01",
+        "index": 6358,
+        "path_ids": [
+          101
+        ],
+        "file_id": 4170
+      },
+      {
+        "key": "uialtas/heroicon_h/hero_icon_103003_h",
+        "index": 9139,
+        "path_ids": [
+          1000,
+          1002
+        ],
+        "file_id": 5219
+      },
+      {
+        "key": "uialtas/skindrawing/skindrawing_1223003",
+        "index": 9770,
+        "path_ids": [
+          1000,
+          1001
+        ],
+        "file_id": 5219
+      }
+    ],
+    "entries": 10054,
+    "atlas_group": 36
+  },
+  "assets/bin/Data/2c6eecbf62e755847898fdb41e07d857": {
+    "spine_show": "cleared",
+    "main_painting_scale": [
+      110,
+      80
+    ],
+    "encrypted_bytes": [
+      57615,
+      57595
+    ]
+  },
+  "assets/bin/Data/5c993e6912a40e541be49a4f5ed7abd7": {
+    "appearance_list": [
+      1223001,
+      1223002,
+      1223003
+    ],
+    "encrypted_bytes": [
+      288509,
+      288514
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "quality_branch_cases": 150,
+  "probability_denominators": 51199,
+  "title_abi_paths": [
+    "success",
+    "dlopen failure",
+    "dlsym failure"
+  ],
+  "result": "passed"
+}

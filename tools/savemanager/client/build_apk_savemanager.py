@@ -146,7 +146,11 @@ def main() -> None:
     assert len(patched_lib) == lfh[
         next(e['lho'] for e in entries if e['name'] == LIB_ENTRY)]['usize'] if False else True
 
+    payload_cache = {}
+
     def patched_payload(name: bytes, le) -> bytes:
+        if name in payload_cache:
+            return payload_cache[name]
         if name in EXTRA_PATCHES:
             payload = EXTRA_PATCHES[name]
         elif name == LIB_ENTRY:
@@ -158,8 +162,15 @@ def main() -> None:
             else:
                 payload = raw
             payload = apply_text_patches(name.decode(), payload)
-        blob = deflate_best(payload)
-        return zlib.crc32(payload) & 0xffffffff, blob, len(payload)
+        crc = zlib.crc32(payload) & 0xffffffff
+        old_blob = data[le['data_start']:le['data_start'] + le['csize']]
+        if le['method'] == 8 and crc == le['crc'] and len(payload) == le['usize'] and zlib.decompress(old_blob, -15) == payload:
+            blob = old_blob
+        else:
+            blob = deflate_best(payload)
+        result = crc, blob, len(payload)
+        payload_cache[name] = result
+        return result
 
     patched_names = {LIB_ENTRY, *TEXT_PATCHES.keys(), *EXTRA_PATCHES.keys()}
     assert set(EXTRA_PATCHES) <= {e['name'] for e in entries}, "patch entry absent from baseline"

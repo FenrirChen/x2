@@ -16,9 +16,9 @@ def test_all_appearance_goods_are_listed_and_purchasable(env):
     appearance = AppearanceService(store, economy)
     service = AppearanceShopService(store, economy, appearance)
     listing = [COMMERCIAL_GOODS.decode(x) for x in service.listing(1)]
-    assert len(listing) == 27
-    assert len({x["itemId"] for x in listing}) == 27
-    assert 1223003 not in {x["itemId"] for x in listing}
+    assert len(listing) == 28
+    assert len({x["itemId"] for x in listing}) == 28
+    assert 1223003 in {x["itemId"] for x in listing}
     assert all(x["rechargeID"] == 0 and x["price"] > 0 for x in listing)
     assert [(x["currencyType"], x["price"]) for x in listing
             if x["goodsId"] in (1980004, 1980005)] == [(902, 980), (902, 980)]
@@ -69,3 +69,27 @@ def test_izanagi_skin_requires_patched_clients(env, monkeypatch):
     monkeypatch.setenv('X2_IZANAGI_SKIN_PATCHED', '1')
     service = AppearanceShopService(store, economy, AppearanceService(store, economy))
     assert service.goods[1980045]['itemId'] == 1223003
+
+
+def test_izanagi_skin_can_be_hidden_for_unpatched_clients(env,monkeypatch):
+    store,economy,_=env
+    monkeypatch.setenv('X2_IZANAGI_SKIN_PATCHED','0')
+    service=AppearanceShopService(store,economy,AppearanceService(store,economy))
+    assert 1980045 not in service.goods
+
+
+def test_izanagi_static_skin_purchase_delivers_once(env):
+    store,economy,ctx=env
+    appearance=AppearanceService(store,economy)
+    service=AppearanceShopService(store,economy,appearance)
+    row=service.goods[1980045]
+    currency=service.CURRENCIES[row['currencyType']]
+    with economy.transaction():
+        economy._grant(1,'static-skin-funds',{currency:row['price']})
+    request=packet({'goodsId':1980045,'shopType':1,'currencyType':row['currencyType']},1411,'C2L_BuyCommercialGoods')
+    result=asyncio.run(service.buy(ctx,request))
+    assert result.values['code']==10
+    assert store.db.execute('SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1223003').fetchone()[0]==1
+    assert any(p.message_name=='L2C_HeroSkinAll' for p in result.pushes)
+    assert asyncio.run(service.buy(ctx,request)).values==result.values
+    assert store.db.execute('SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1223003').fetchone()[0]==1

@@ -26,9 +26,9 @@ class AppearanceShopService:
         if len(self.goods) != 28 or len({row["itemId"] for row in self.goods.values()}) != len(self.goods) or any(
                 row["itemId"] not in economy.items for row in self.goods.values()):
             raise ValueError("appearance shop catalog changed")
-        # Stock APKs contain an incomplete spine asset for this appearance.
-        # Enable only after the matching resource patch is distributed.
-        if os.environ.get('X2_IZANAGI_SKIN_PATCHED') != '1':
+        # 2026-10-24 release restores this appearance with the user's chosen
+        # static illustration. Operators can keep it hidden for stock clients.
+        if os.environ.get('X2_IZANAGI_SKIN_PATCHED', '1') != '1':
             self.goods.pop(1980045, None)
         with store.db:
             store.db.execute("""CREATE TABLE IF NOT EXISTS appearance_shop_purchases (

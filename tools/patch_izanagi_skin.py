@@ -315,7 +315,7 @@ def container_file_id(serialized, key: str, expected: str) -> int:
 
 
 # ---------------------------------------------------------------- A. 载体立绘
-def patch_carrier(apk: Path, drawing) -> tuple[bytes, dict]:
+def patch_carrier(apk: Path, drawing, card_box=None) -> tuple[bytes, dict]:
     serialized = load_serialized(read_entry(apk, CARRIER))
     existing = objects(serialized)
     texture_template = next(o.read_typetree() for o in existing if o.class_id == TEXTURE_CLASS)
@@ -330,7 +330,7 @@ def patch_carrier(apk: Path, drawing) -> tuple[bytes, dict]:
 
     width, height = drawing.size
     whole = (0, 0, width, height)
-    card = texture_rect(CARD_BOX, height)
+    card = texture_rect(card_box or CARD_BOX, height)
     add_object(serialized, CARRIER_TEXTURE_PID, TEXTURE_CLASS,
                texture_tree(texture_template, DRAWING, drawing))
     add_object(serialized, CARRIER_DRAWING_PID, SPRITE_CLASS,
@@ -529,7 +529,7 @@ def reencrypt(encrypted: bytes, plain: bytes, prefix: bytes) -> bytes:
     return patched
 
 
-def patch_appearance(encrypted: bytes) -> tuple[bytes, dict]:
+def patch_appearance(encrypted: bytes, painting_scale=MAIN_PAINTING_SCALE_NEW) -> tuple[bytes, dict]:
     table = parse_table_container(encrypted)
     if table["kind"] != "array":
         raise PatchError("Appearance is not a key/row array")
@@ -547,7 +547,7 @@ def patch_appearance(encrypted: bytes) -> tuple[bytes, dict]:
     start, end, value = field_span(row, 29, 0)
     if value != MAIN_PAINTING_SCALE_OLD:
         raise PatchError(f"Appearance 1223003 MainPaintingScale is {value!r}")
-    row = row[:start] + varint(29 << 3) + varint(MAIN_PAINTING_SCALE_NEW) + row[end:]
+    row = row[:start] + varint(29 << 3) + varint(painting_scale) + row[end:]
     rows[index] = row
 
     repaired = build_array(plain, keys_end, rows)
@@ -556,10 +556,10 @@ def patch_appearance(encrypted: bytes) -> tuple[bytes, dict]:
     row = decoded["items"][decoded["keys"].index(APPEARANCE_ID)]
     if field_span(row, 15, 2)[2] not in (b"", None):
         raise PatchError("SpineShow was not cleared")
-    if field_span(row, 29, 0)[2] != MAIN_PAINTING_SCALE_NEW:
+    if field_span(row, 29, 0)[2] != painting_scale:
         raise PatchError("MainPaintingScale was not rewritten")
     return patched, {"spine_show": "cleared",
-                     "main_painting_scale": [MAIN_PAINTING_SCALE_OLD, MAIN_PAINTING_SCALE_NEW]}
+                     "main_painting_scale": [MAIN_PAINTING_SCALE_OLD, painting_scale]}
 
 
 def patch_unit_base(encrypted: bytes) -> tuple[bytes, dict]:
@@ -628,7 +628,7 @@ def rebuild_table(apk: Path, entry: str, table: str, repair) -> tuple[bytes, dic
 
 
 # ---------------------------------------------------------------- 主流程
-def patch(apk: Path, skin: Path, output: Path) -> dict[str, str]:
+def patch(apk: Path, skin: Path, output: Path, *, max_dimension=None) -> dict[str, str]:
     from PIL import Image
 
     output.mkdir(parents=True, exist_ok=True)
@@ -636,13 +636,21 @@ def patch(apk: Path, skin: Path, output: Path) -> dict[str, str]:
     if drawing.size != (1980, 2048):
         raise PatchError(f"expected a 1980x2048 drawing, got {drawing.size}")
     head_icon = drawing.crop(HEAD_BOX).resize((HEAD_ICON_SIZE, HEAD_ICON_SIZE), Image.LANCZOS)
+    card_box, painting_scale = CARD_BOX, MAIN_PAINTING_SCALE_NEW
+    if max_dimension is not None:
+        if type(max_dimension) is not int or not 512 <= max_dimension <= 2048:
+            raise PatchError("invalid maximum drawing dimension")
+        ratio = min(1.0, max_dimension / max(drawing.size))
+        drawing = drawing.resize(tuple(round(v * ratio) for v in drawing.size), Image.LANCZOS)
+        card_box = tuple(round(v * ratio) for v in CARD_BOX)
+        painting_scale = round(MAIN_PAINTING_SCALE_NEW / ratio)
 
     steps = (
-        (CARRIER, lambda: patch_carrier(apk, drawing)),
+        (CARRIER, lambda: patch_carrier(apk, drawing, card_box)),
         (ATLAS, lambda: patch_atlas(apk, head_icon)),
         (GLOBAL, lambda: patch_container(apk)),
         (APPEARANCE_TABLE, lambda: rebuild_table(apk, APPEARANCE_TABLE, "Appearance",
-                                                 patch_appearance)),
+                                                 lambda blob: patch_appearance(blob, painting_scale))),
         (UNIT_BASE_TABLE, lambda: rebuild_table(apk, UNIT_BASE_TABLE, "UnitBase",
                                                 patch_unit_base)),
     )

@@ -1,0 +1,699 @@
+{
+  "source": "D:\\demo\\x2\\逆向\\打包\\X2-Revival-ActivityUI-Local-signed.apk",
+  "backgrounds": [
+    {
+      "page": "ui_newyear2_main",
+      "image": 790,
+      "sprite": "chunjiebg2",
+      "dimensions_before": {
+        "x": 1688.0,
+        "y": 0.0
+      },
+      "dimensions_after": {
+        "x": 1688.0,
+        "y": 752.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_newyear2_main",
+      "image": 964,
+      "sprite": "chunjiebg2",
+      "dimensions_before": {
+        "x": 350.442626953125,
+        "y": 264.86749267578125
+      },
+      "dimensions_after": {
+        "x": 350.442626953125,
+        "y": 264.86749267578125
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_newyear2_section",
+      "image": 1684,
+      "sprite": "chunjiebg2",
+      "dimensions_before": {
+        "x": 1688.0,
+        "y": 0.0
+      },
+      "dimensions_after": {
+        "x": 1688.0,
+        "y": 752.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_newyear2_section",
+      "image": 1972,
+      "sprite": "chunjiebg2",
+      "dimensions_before": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "dimensions_after": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_newyear2_shop",
+      "image": 808,
+      "sprite": "chunjiebg2",
+      "dimensions_before": {
+        "x": 1688.0,
+        "y": 708.0
+      },
+      "dimensions_after": {
+        "x": 1688.0,
+        "y": 708.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_newyear2_shop",
+      "image": 817,
+      "sprite": "chunjiebg2",
+      "dimensions_before": {
+        "x": 1688.0,
+        "y": 312.0
+      },
+      "dimensions_after": {
+        "x": 1688.0,
+        "y": 312.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_newyear2_task",
+      "image": 719,
+      "sprite": "chunjiebg2",
+      "dimensions_before": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "dimensions_after": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_newyear2_lantern_main",
+      "image": 760,
+      "sprite": "chunjiebg2",
+      "dimensions_before": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "dimensions_after": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_newyear2_lantern_drawlots",
+      "image": 80,
+      "sprite": "chunjiebg2",
+      "dimensions_before": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "dimensions_after": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_newyear2_lantern_yearlabel",
+      "image": 97,
+      "sprite": "chunjiebg2",
+      "dimensions_before": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "dimensions_after": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_newyear2_lantern_question",
+      "image": 109,
+      "sprite": "chunjiebg2",
+      "dimensions_before": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "dimensions_after": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_newyear_main",
+      "image": 491,
+      "sprite": "chunjiebg2",
+      "dimensions_before": {
+        "x": 1668.0,
+        "y": 0.0
+      },
+      "dimensions_after": {
+        "x": 1668.0,
+        "y": 752.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_newyear_section",
+      "image": 382,
+      "sprite": "chunjiebg2",
+      "dimensions_before": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "dimensions_after": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_newyear_section",
+      "image": 457,
+      "sprite": "chunjiebg2",
+      "dimensions_before": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "dimensions_after": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_newyear_shop",
+      "image": 663,
+      "sprite": "chunjiebg2",
+      "dimensions_before": {
+        "x": 1688.0,
+        "y": 584.0
+      },
+      "dimensions_after": {
+        "x": 1688.0,
+        "y": 584.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_newyear_shop",
+      "image": 670,
+      "sprite": "chunjiebg2",
+      "dimensions_before": {
+        "x": 1688.0,
+        "y": 424.0
+      },
+      "dimensions_after": {
+        "x": 1688.0,
+        "y": 424.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_newyearchieftask",
+      "image": 553,
+      "sprite": "chunjiebg2",
+      "dimensions_before": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "dimensions_after": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_newyear_lantern_main",
+      "image": 685,
+      "sprite": "chunjiebg2",
+      "dimensions_before": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "dimensions_after": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_newyear_lantern_drawlots",
+      "image": 61,
+      "sprite": "chunjiebg2",
+      "dimensions_before": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "dimensions_after": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_newyear_lantern_yearlabel",
+      "image": 93,
+      "sprite": "chunjiebg2",
+      "dimensions_before": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "dimensions_after": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_newyear_pov",
+      "image": 1061,
+      "sprite": "chunjiebg2",
+      "dimensions_before": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "dimensions_after": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_newyear2_foodfight_main",
+      "image": 1886,
+      "sprite": "chunjiebg3",
+      "dimensions_before": {
+        "x": 2576.0,
+        "y": 1002.0
+      },
+      "dimensions_after": {
+        "x": 2576.0,
+        "y": 1002.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_newyear2_foodfight_store",
+      "image": 348,
+      "sprite": "chunjiebg3",
+      "dimensions_before": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "dimensions_after": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_newyear_foodfight_main",
+      "image": 1843,
+      "sprite": "chunjiebg3",
+      "dimensions_before": {
+        "x": 2576.0,
+        "y": 1002.0
+      },
+      "dimensions_after": {
+        "x": 2576.0,
+        "y": 1002.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_newyear_foodfight_store",
+      "image": 348,
+      "sprite": "chunjiebg3",
+      "dimensions_before": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "dimensions_after": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_sakura_main",
+      "image": 306,
+      "sprite": "yinghu",
+      "dimensions_before": {
+        "x": 0.0,
+        "y": 746.7889404296875
+      },
+      "dimensions_after": {
+        "x": 1336.0,
+        "y": 746.7889404296875
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_sakura_main",
+      "image": 313,
+      "sprite": "yinghu",
+      "dimensions_before": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "dimensions_after": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_zhenxun_main",
+      "image": 345,
+      "sprite": "zhenxun1",
+      "dimensions_before": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "dimensions_after": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_zhenxun_section",
+      "image": 906,
+      "sprite": "zhenxun1",
+      "dimensions_before": {
+        "x": 0.0,
+        "y": 752.0
+      },
+      "dimensions_after": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_zhenxun_section",
+      "image": 909,
+      "sprite": "zhenxun1",
+      "dimensions_before": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "dimensions_after": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_zhenxun_shop",
+      "image": 703,
+      "sprite": "zhenxun1",
+      "dimensions_before": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "dimensions_after": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_zhenxun_task",
+      "image": 755,
+      "sprite": "zhenxun1",
+      "dimensions_before": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "dimensions_after": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_osiris_main",
+      "image": 374,
+      "sprite": "OsirisBG",
+      "dimensions_before": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "dimensions_after": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_osiris_main",
+      "image": 449,
+      "sprite": "OsirisBG",
+      "dimensions_before": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "dimensions_after": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_osiris_section",
+      "image": 977,
+      "sprite": "OsirisBG",
+      "dimensions_before": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "dimensions_after": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_osiris_section",
+      "image": 1012,
+      "sprite": "OsirisBG",
+      "dimensions_before": {
+        "x": 0.0,
+        "y": 752.0
+      },
+      "dimensions_after": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_osiris_shop",
+      "image": 322,
+      "sprite": "OsirisBG",
+      "dimensions_before": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "dimensions_after": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_osiris_task",
+      "image": 692,
+      "sprite": "OsirisBG",
+      "dimensions_before": {
+        "x": 0.0,
+        "y": 4.0
+      },
+      "dimensions_after": {
+        "x": 0.0,
+        "y": 4.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_osiris_task",
+      "image": 771,
+      "sprite": "OsirisBG",
+      "dimensions_before": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "dimensions_after": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_osiris_towerdata",
+      "image": 418,
+      "sprite": "OsirisBG",
+      "dimensions_before": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "dimensions_after": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_osiris_towerdata",
+      "image": 448,
+      "sprite": "OsirisBG",
+      "dimensions_before": {
+        "x": 1688.0,
+        "y": 752.0
+      },
+      "dimensions_after": {
+        "x": 1688.0,
+        "y": 752.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_gonggong_main",
+      "image": 260,
+      "sprite": "gonggong_scene",
+      "dimensions_before": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "dimensions_after": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_gonggong_section",
+      "image": 637,
+      "sprite": "gonggong_scene",
+      "dimensions_before": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "dimensions_after": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_gonggong_shop",
+      "image": 379,
+      "sprite": "gonggong_scene",
+      "dimensions_before": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "dimensions_after": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_gonggong_task",
+      "image": 675,
+      "sprite": "gonggong_scene",
+      "dimensions_before": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "dimensions_after": {
+        "x": 1336.0,
+        "y": 752.0
+      },
+      "binding_preserved": true
+    },
+    {
+      "page": "ui_gonggong_task",
+      "image": 851,
+      "sprite": "gonggong_scene",
+      "dimensions_before": {
+        "x": 0.0,
+        "y": 2.0
+      },
+      "dimensions_after": {
+        "x": 0.0,
+        "y": 2.0
+      },
+      "binding_preserved": true
+    }
+  ],
+  "season": [
+    {
+      "hall_entries": [
+        572,
+        610,
+        715,
+        797
+      ],
+      "sprite": "SaiJi_RuKou (origin)"
+    },
+    {
+      "farm": "origin official logo + blue city compatibility background",
+      "new_objects": [
+        434,
+        435,
+        436,
+        437
+      ],
+      "main_prefab": "UI_BattlePass_Main retained"
+    }
+  ],
+  "native": {
+    "title_cave": 69843056,
+    "star_cave": 69843436,
+    "star_hook": 31758296,
+    "probability": "min(3*p6,1); six-star E_Equip pass only; one original RNG call",
+    "disassembly": [
+      "429b9ec: cmp w26, #0",
+      "429b9f0: b.ne #0x429ba08",
+      "429b9f4: ldr w8, [x19, #0x24]",
+      "429b9f8: cmp w8, #0xa",
+      "429b9fc: b.ne #0x429ba08",
+      "429ba00: cmp w0, #0x181",
+      "429ba04: b #0x1e497dc",
+      "429ba08: cmp w0, #0x81",
+      "429ba0c: b #0x1e497dc"
+    ]
+  },
+  "daily": {
+    "always_open": [
+      2030500,
+      2030600,
+      2030700,
+      2031200
+    ],
+    "encrypted_bytes": [
+      4091,
+      4091
+    ]
+  }
+}

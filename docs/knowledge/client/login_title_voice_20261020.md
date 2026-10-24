@@ -80,3 +80,8 @@ python tools/savemanager/client/patch_title_voice.py \
   的 RVA 重新生成，并核对方法首字节与已有补丁（存档管理 cave 在 0x42B02C0），两份 APK 各自核对。
 - 打包顺序：`build_bridge.py`（libx2save.so，含本函数）→ `patch_title_voice.py`（libil2cpp.so）
   → 原有签核流程。
+
+
+## 2026-10-24 当前发布包补修
+
+本次2.4基线的真实MainAniEnter为0x13BDA24，前三条原指令为f44fbea9 fd7b01a9 fd430091；不能套用上文其他构建的0x13BE1D4。新跳板保留x0–x30、q0–q31及NZCV/FPCR/FPSR，桥内处理libx2save句柄无法解析il2cpp API时的回退。当前PLT为dlopen=0x113E820、dlsym=0x113FA80，由ELF导入表定位。实际字节在ARM64仿真中验证成功和两种失败路径，C契约测试通过；尚未进行当前签名包的实机音频验收。详见docs/savemanager/CLIENT_RELEASE_20261024.md。

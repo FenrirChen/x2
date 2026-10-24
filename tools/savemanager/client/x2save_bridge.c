@@ -341,8 +341,10 @@ int x2_play_login_title_voice(void* main_hall_fsm, void* il2cpp);
 int x2_play_login_title_voice(void* main_hall_fsm, void* il2cpp) {
     struct Api api;
     (void)main_hall_fsm;
-    il2cpp = il2cpp ? il2cpp : dlopen("libil2cpp.so", 1);   /* the trampoline passes its own handle */
-    if (!load_api(il2cpp, &api)) {
+    /* The trampoline resolves this symbol through libx2save, whose handle need
+       not expose il2cpp symbols. Resolve the real engine library on fallback. */
+    if (!il2cpp || !load_api(il2cpp, &api)) il2cpp = dlopen("libil2cpp.so", 1);
+    if (!il2cpp || !load_api(il2cpp, &api)) {
         diagnostic("title voice: il2cpp API unavailable");
         return 0;
     }

@@ -25,10 +25,10 @@ from capstone import Cs, CS_ARCH_ARM64, CS_MODE_LITTLE_ENDIAN
 
 LIB_NAME = "libx2save.so"
 SYMBOL = "x2_play_login_title_voice"
-CAVE_SIZE = 512
-STR_LIB = 0x100                     # string offsets inside the cave blob
-STR_SYM = 0x120
-STACK_FRAME = 0xA0                  # x0..x15 plus one scratch slot for the handle
+CAVE_SIZE = 1024
+STR_LIB = 0x300                     # string offsets inside the cave blob
+STR_SYM = 0x320
+STACK_FRAME = 0x320                 # GPRs, flags, FP state, handle, q0..q31
 
 # ranges already used by other trampolines of this toolchain; the auto-located
 # cave must not overlap them (save-manager's login-button cave).
@@ -235,28 +235,40 @@ def build_cave(cave: int, words, resume: int, plt_dlopen: int, plt_dlsym: int) -
         return cave + offset
 
     plan = [(lambda pc: sub_imm(31, 31, STACK_FRAME), "sub sp, sp, frame")]
-    for i in range(8):                       # keep the caller's x0..x15
+    for i in range(16):                      # x0..x30 (last partner is xzr)
         plan.append((lambda pc, i=i: stp_off(2 * i, 2 * i + 1, 31, i * 0x10),
                      f"stp x{2 * i}, x{2 * i + 1}, [sp, #{i * 0x10:#x}]"))
+    # Preserve incoming condition flags and all SIMD registers as well. The
+    # injected bridge runs before the original method's register prologue.
+    for opcode, off in ((0xD53B4210,0x100),(0xD53B4410,0x108),(0xD53B4430,0x110)):
+        plan.extend([(lambda pc,w=opcode:w,"mrs x16, state"),
+                     (lambda pc,o=off:str_imm(16,31,o),"save state")])
+    for i in range(16):
+        plan.append((lambda pc,i=i:0xAD000000|(((0x120+i*0x20)//16)<<15)|((2*i+1)<<10)|(31<<5)|(2*i),"save q pair"))
     plan += [
         (lambda pc: adrp(0, pc, at(STR_LIB)), "adrp x0, lib"),
         (lambda pc: add_imm(0, 0, at(STR_LIB) & 0xFFF), "add x0, lib"),
         (lambda pc: 0x52800021, "mov w1, #1"),           # RTLD_LAZY
         (lambda pc: bl(pc, plt_dlopen), "bl dlopen"),
         (lambda pc: 0xDEAD0001, "cbz x0 -> restore"),     # patched below
-        (lambda pc: str_imm(0, 31, 0x80), "str x0, [sp, #0x80] keep handle"),
+        (lambda pc: str_imm(0, 31, 0x118), "str x0, [sp, #0x118] keep handle"),
         (lambda pc: adrp(1, pc, at(STR_SYM)), "adrp x1, sym"),
         (lambda pc: add_imm(1, 1, at(STR_SYM) & 0xFFF), "add x1, sym"),
-        (lambda pc: ldr_imm(0, 31, 0x80), "ldr x0, [sp, #0x80]"),
+        (lambda pc: ldr_imm(0, 31, 0x118), "ldr x0, [sp, #0x118]"),
         (lambda pc: bl(pc, plt_dlsym), "bl dlsym"),
         (lambda pc: 0xDEAD0002, "cbz x0 -> restore"),     # patched below
         (lambda pc: mov_reg(11, 0), "mov x11, x0 entry"),
         (lambda pc: ldr_imm(0, 31, 0x00), "ldr x0, [sp] this"),
-        (lambda pc: ldr_imm(1, 31, 0x80), "ldr x1, [sp, #0x80] handle"),
+        (lambda pc: ldr_imm(1, 31, 0x118), "ldr x1, [sp, #0x118] handle"),
         (lambda pc: blr(11), "blr x11"),
     ]
     restore_index = len(plan)
-    for i in range(7, -1, -1):               # restore in reverse order
+    for i in range(15,-1,-1):
+        plan.append((lambda pc,i=i:0xAD400000|(((0x120+i*0x20)//16)<<15)|((2*i+1)<<10)|(31<<5)|(2*i),"restore q pair"))
+    for opcode, off in ((0xD51B4210,0x100),(0xD51B4410,0x108),(0xD51B4430,0x110)):
+        plan.extend([(lambda pc,o=off:ldr_imm(16,31,o),"load state"),
+                     (lambda pc,w=opcode:w,"msr state, x16")])
+    for i in range(15, -1, -1):              # restore x0..x30 and LR
         plan.append((lambda pc, i=i: ldp_off(2 * i, 2 * i + 1, 31, i * 0x10),
                      f"restore ldp x{2 * i}, x{2 * i + 1}"))
     plan.append((lambda pc: add_imm(31, 31, STACK_FRAME), "add sp, sp, frame"))
@@ -299,7 +311,7 @@ def verify(patched: bytes, rva: int, cave: int, code_len: int, resume: int,
     assert any(ins.mnemonic == "bl" and jumps_to(ins, plt_dlsym) for ins in cave_ins), "no dlsym call"
     assert any(ins.mnemonic == "ldr" and ins.op_str == "x0, [sp]" for ins in cave_ins), \
         "the saved `this` is not passed to the bridge"
-    assert any(ins.mnemonic == "ldr" and ins.op_str == "x1, [sp, #0x80]" for ins in cave_ins), \
+    assert any(ins.mnemonic == "ldr" and ins.op_str == "x1, [sp, #0x118]" for ins in cave_ins), \
         "the dlopen handle is not passed to the bridge"
     assert not any(ins.mnemonic == "ret" for ins in cave_ins), "cave must not return"
     tail = cave_ins[-1]
