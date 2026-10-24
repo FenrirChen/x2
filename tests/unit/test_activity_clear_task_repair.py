@@ -54,3 +54,15 @@ def test_clear_repair_preserves_claim_and_does_not_leak_into_next_period(activit
     next_period=service.period(1)
     service.repair_tasks(1,next_period)
     assert service.rotation.get(1,next_period,'tasks',5000277,{}).get('progress',0)==0
+
+
+def test_clear_counts_do_not_prove_additional_conditions(activity,monkeypatch):
+    _,economy,service,now=activity
+    now[0]=service.rotation.bounds(1)[0]
+    period=service.period(1)
+    cid=service.tasks[5000277]['TaskConditionID']
+    monkeypatch.setitem(service.conditions,cid,dict(service.conditions[cid],CompleteValue2=[2]))
+    with economy.transaction():
+        service.rotation.put(1,period,'clear',2161011,1)
+    service.repair_tasks(1,period)
+    assert service.rotation.get(1,period,'tasks',5000277,{}).get('progress',0)==0

@@ -282,6 +282,9 @@ class ActivityService:
                 condition = self.conditions[task['TaskConditionID']]
                 if enum(condition['CompleteType']) != 3 or enum(task.get('TaskType')) == 2:
                     continue
+                # Clear counts alone cannot prove additional conditions.
+                if condition.get('CompleteValue2') and 0 not in condition['CompleteValue2']:
+                    continue
                 sections = set(condition.get('CompleteValue1', []))
                 value = sum(cleared.values()) if not sections or sections == {0} else sum(cleared.get(sid, 0) for sid in sections)
                 namespace = self.task_namespace(task)
