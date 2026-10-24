@@ -33,6 +33,10 @@ PARAMETERS = {'BasicFriendNum':'200','GiveFriendCoinLimit':'10','ReceiveFriendCo
     'GuildApplyLevel':'17','GuildHelpFreshenTime':'30','GuildHelpTime':'60',
     'GuildHelpCount':'50','GuildHelpSummonCount':'50','GuildWishGiveLimit':'10','GuildWishHelpLimit':'3',
     'GuildChallengeNumLimit':'5'}
+# Club help recorder timestamps use the client's 2018 epoch (DateTimeHelper_
+# GetTempDateTimeFrom2018), not Unix time. GuildHelpTime is the per-help cut.
+TO_2018 = 1514736000
+HELP_SECONDS = 60
 
 
 @lru_cache(maxsize=1)
@@ -86,6 +90,12 @@ def load_state(store, pid, now):
                            (pid,PERIOD,NAMESPACE,'state')).fetchone()
     state = json.loads(row[0]) if row else {'version':1,'removed':[],'black':[],'notes':{},'club':None,
         'wishes':[],'wish_counts':{},'history':[],'helped':{},'serial':0,'mirror':{'count':3,'clears':[],'claimed':[]}}
+    # Club help records are keyed '<uid>:<slot>' (1 = building, 2 = wonder). Older
+    # saves predate the field; the recorder KV route reads it on every club page open.
+    state.setdefault('help_records',{})
+    # Which members already auto-assisted the current build ('<slot>' ->
+    # {'build': '<id>:<start>', 'helpers': [canonical ids]}). A new build resets it.
+    state.setdefault('auto_help',{})
     old_day=state.get('day')
     if state.get('day') != day(now):
         elapsed = max(0,day(now)-state.get('day',day(now)))
@@ -401,13 +411,28 @@ class SocialService:
             if args.get(key) and int(args[key])!=pid:
                 args[key]=canonical_id(pid,args[key])
         if path=='/KVStoreService.GetValuesV2':
-            args['keys']=[str(k).replace(str(npc_id(pid,n)),str(n)) for k in args.get('keys',[]) for n in self.characters
-                if str(npc_id(pid,n)) in str(k)]
+            # Rewrite every NPC identity back to its canonical id. Keys that hold no
+            # NPC id (the player's own club_speed_<pid>_<slot>) must survive too: the
+            # upgrade page's 社团助力 button looks for the player's own row in the
+            # AllBuildHelpInfo list built from this reply.
+            converted=[]
+            for k in args.get('keys',[]):
+                text=str(k)
+                for n in self.characters:
+                    text=text.replace(str(npc_id(pid,n)),str(n))
+                converted.append(text)
+            args['keys']=converted
         result=self.client_data(pid,self._http(path,args,pid))
         if path=='/KVStoreService.GetValuesV2':
             for row in result['Pairs']:
+                # Self rows (player uid) are not NPC identities; only their stored
+                # keys need the canonical -> NPC rewrite.
+                try:
+                    canonical=canonical_id(pid,row['userid'])
+                except (ValueError,TypeError):
+                    continue
                 for pair in row['pairs']:
-                    pair['key']=pair['key'].replace(str(canonical_id(pid,row['userid'])),row['userid'])
+                    pair['key']=pair['key'].replace(str(canonical),row['userid'])
         return result
 
     def _http(self,path,args,pid):
@@ -478,13 +503,45 @@ class SocialService:
                 return {'Total':len(state['history']),'Items':[{**h,'Userid':str(pid) if h['Userid']=='self' else h['Userid']} for h in state['history']]}
             if path=='/KVStoreService.GetValuesV2':
                 pairs=[]
+                now=int(self.clock())
+                def bucket(uid):
+                    item=next((p for p in pairs if p['userid']==str(uid)),None)
+                    if item is None:
+                        item={'userid':str(uid),'pairs':[]}
+                        pairs.append(item)
+                    return item
                 for key in args.get('keys',[]):
+                    # club_speed_<uid>_<slot>          active construction request
+                    # club_speed_<uid>_<slot>_record   help history for that request
                     try:
-                        _,_,uid,slot=key.split('_')
+                        _,_,uid,slot,*tail=str(key).split('_')
                         uid,slot=int(uid),int(slot)
                     except (ValueError,AttributeError):
                         continue
-                    if not state['club'] or str(uid) not in state['club']['members'] or slot not in (1,2):
+                    if slot not in (1,2) or tail not in ([],['record']):
+                        continue
+                    if not state['club']:
+                        continue
+                    if tail:
+                        rows=state['help_records'].get(f'{uid}:{slot}')
+                        if rows:
+                            bucket(uid)['pairs'].append(
+                                {'key':key,'val':json.dumps(rows,separators=(',',':'))})
+                        continue
+                    # The upgrade page's club-help button only works when the list
+                    # holds the player's own request; synthesize it from the live queue.
+                    if uid==pid:
+                        queue=(self.college.load(pid) or {}).get(
+                            'build_queue' if slot==1 else 'wonder_queue') or {}
+                        end=int(queue.get('upgradeEndTime',0))
+                        if not queue or end<=now:
+                            continue
+                        val=json.dumps(dict(buildId=int(queue.get('buildingId',0)),
+                            upgradeEndTime=end,buildLevel=int(queue.get('target_level',0)) or 1),
+                            separators=(',',':'))
+                        bucket(uid)['pairs'].append({'key':key,'val':val})
+                        continue
+                    if str(uid) not in state['club']['members']:
                         continue
                     # NPC construction requests last until midnight and are assisted once/day.
                     bid=701 if slot==1 else 721
@@ -492,11 +549,7 @@ class SocialService:
                     if f'npc:{state["day"]}:{uid}:{bid}' in state['helped']:
                         continue
                     val=json.dumps(dict(buildId=bid,upgradeEndTime=end,buildLevel=1),separators=(',',':'))
-                    existing=next((p for p in pairs if p['userid']==str(uid)),None)
-                    if existing is None:
-                        existing={'userid':str(uid),'pairs':[]}
-                        pairs.append(existing)
-                    existing['pairs'].append({'key':key,'val':val})
+                    bucket(uid)['pairs'].append({'key':key,'val':val})
                 return {'Pairs':pairs}
             if path=='/RankingService.QueryRank':
                 return {'Total':0,'TotalPage':0,'Members':[],'MemberRank':0,'MemberScore':0,'MemberMetadata':''}
@@ -777,10 +830,67 @@ class SocialService:
             raise ValueError('unsupported club operation')
         return result
 
+    def record_help(self,state,owner,slot,helper,seconds,now):
+        """Append one help record shown by the upgrade page's recorder list."""
+        rows=state['help_records'].setdefault(f'{int(owner)}:{int(slot)}',[])
+        rows.append(dict(playerId=int(helper),HelpPowerTime=int(seconds),
+            HelpPowerTimePoint=int(now)-TO_2018,TimeValid=0))
+        del rows[:-50]
+
+    def auto_help(self,pid,kind):
+        """Club members answer a 社团助力 click immediately.
+
+        The upgrade page sends 881 (type 1 = building, 2 = wonder) when the player
+        opens club help; real members would answer later, so the single-player
+        roster answers at once. Each member cuts HELP_SECONDS once per build, and
+        the build identity (buildingId + upgradeStartTime) resets the helper list
+        on the next construction. Returns the number of members that helped.
+        """
+        now=int(self.clock())
+        key='build_queue' if kind==1 else 'wonder_queue'
+        slot=1 if kind==1 else 2
+        with self.economy.transaction():
+            state=self.state(pid)
+            if not state.get('club'):
+                return 0
+            base=self.college.load(pid)
+            queue=base.get(key) or {}
+            end=int(queue.get('upgradeEndTime',0))
+            if not queue or end<=now:
+                return 0
+            build=f'{int(queue.get("buildingId",0))}:{int(queue.get("upgradeStartTime",0))}'
+            marks=state['auto_help']
+            entry=marks.get(str(slot))
+            if not isinstance(entry,dict) or entry.get('build')!=build:
+                entry={'build':build,'helpers':[]}
+                marks[str(slot)]=entry
+            helped={int(n) for n in entry['helpers']}
+            used=0
+            for member in state['club']['members']:
+                try:
+                    uid=int(member)
+                except (TypeError,ValueError):
+                    continue
+                if uid==pid or uid in helped or end<=now:
+                    continue
+                entry['helpers'].append(uid)
+                helped.add(uid)
+                end=max(now,end-HELP_SECONDS)
+                self.record_help(state,pid,slot,npc_id(pid,uid),HELP_SECONDS,now)
+                used+=1
+            if not used:
+                return 0
+            queue['upgradeEndTime']=end
+            self.college.settle(base)
+            self.college.save(pid,base)
+            self.save(pid,state)
+            return used
+
     def help(self,pid,state,req):
         params=[HELP_POWER_SPEED_PARAM.decode(p) for p in req.get('helpPowerSpeedParam') or []]
         if req.get('helpPower') not in (1,2) or not params or len(params)>98:
             raise ValueError('invalid help request')
+        now=int(self.clock())
         valid=[]
         for p in params:
             if state['help_count']+len(valid)>=50:
@@ -794,17 +904,23 @@ class SocialService:
             raise ValueError('already assisted or foreign NPC')
         state['help_count']+=len(valid)
         donor=int(self.choose(list(state['club']['members'])))
+        # Recorder rows are fetched with club_speed_<uid>_<slot>_record: the recipient
+        # sees who helped, and the helper sees the member they assisted.
+        for p in valid:
+            slot=1 if p['buildingId']==701 else 2
+            self.record_help(state,p['playerIded'],slot,pid,HELP_SECONDS,now)
         base=self.college.load(pid)
-        completed=[]
         for key in ('build_queue','wonder_queue'):
             q=base.get(key)
-            if not q or q.get('upgradeEndTime',0)<=self.clock():
+            if not q or q.get('upgradeEndTime',0)<=now:
                 continue
             identity=f'own:{key}:{q["buildingId"]}:{q.get("upgradeStartTime",0)}:{q.get("target_level",0)}:{donor}'
             if identity in state['helped']:
                 continue
             state['helped'][identity]=1
-            q['upgradeEndTime']=max(int(self.clock()),q['upgradeEndTime']-60)
+            q['upgradeEndTime']=max(now,q['upgradeEndTime']-HELP_SECONDS)
+            self.record_help(state,pid,1 if key=='build_queue' else 2,
+                             npc_id(pid,donor),HELP_SECONDS,now)
         completed=self.college.settle(base)
         self.college.save(pid,base)
         # The native help-all callback requires nonempty rewardData. GuildWish 778000 is the help reward.

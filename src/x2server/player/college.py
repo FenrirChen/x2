@@ -388,13 +388,21 @@ class CollegeService:
         if flow == "HelpPowerSpeedValid":
             # This is also the LOCAL acceleration-window gate. Reply type 1/2
             # invokes the callback which opens it (OnGetHelpPowerSpeedVaild).
+            # Club members answer here (real members would answer over time):
+            # the help page queries club_speed_*_record right after this reply,
+            # so the cuts and their records must already be stored.
             kind = request.get('type', 0)
             if kind in (1, 2) and self.college:
-                self.college.growth_base(context.session.player_id)
-                state = self.college.load(context.session.player_id)
+                pid = context.session.player_id
+                social = getattr(self.economy, 'social', None)
+                helped = social.auto_help(pid, kind) if social is not None else 0
+                growth = self.college.growth_base(pid)
+                state = self.college.load(pid)
                 queue = state.get('build_queue' if kind == 1 else 'wonder_queue')
+                extra = (OutboundMessage('L2C_QueryGrowthBase', growth),) if helped else ()
                 return OutboundMessage('L2C_HelpPowerSpeedValid',
-                    {'code': 10 if queue else E_ERROR_OPT, 'type': kind})
+                    {'code': 10 if queue else E_ERROR_OPT, 'type': kind},
+                    before_response=extra)
             return OutboundMessage("L2C_HelpPowerSpeedValid",
                 {"code": 10, "type": self.ASSIST_UNAVAILABLE})
         if flow == "HelpPowerSpeed":
