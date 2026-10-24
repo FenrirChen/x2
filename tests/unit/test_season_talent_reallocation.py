@@ -64,3 +64,53 @@ def test_undone_pending_points_do_not_block_other_talent(env):
     assert allocate(s, [(tid, 0), (other, 1)], 2).values['code'] == 10
     assert s.state(1)['talents'][str(tid)] == 2
     assert s.state(1)['points'] == 1
+
+
+def test_reset_new_request_id_is_idempotent_and_refreshes_full_cache(env):
+    store,e,s=env
+    tid=min(s.talents)
+    with e.transaction():
+        e._grant(1,'reset-retry-points',{1291002:3})
+    assert allocate(s,[(tid,2)],101).values['code']==10
+    first=call(s,'BattlePassTalentReset',{'id':tid},102)
+    assert first.values['code']==10
+    balance=store.get(1)['snapshot']['crystal']
+    state=s.state(1)
+    second=call(s,'BattlePassTalentReset',{'id':tid},103)
+    assert second.values==first.values
+    assert s.state(1)==state
+    assert store.get(1)['snapshot']['crystal']==balance
+    info=next(p for p in second.before_response if p.message_name=='L2C_BattlePassTalentInfo')
+    assert info.values['leftPoint']==3
+    assert next(r for r in map(SEASON_SCHEMAS['TalentInfo'].decode,info.values['info']) if r['id']==tid)['level']==0
+    assert allocate(s,[(tid,3)],104).values['code']==10
+
+
+def test_reset_exact_price_and_insufficient_crystal_returns_native_error(env):
+    store,e,s=env
+    tid=min(s.talents)
+    cost=2*next(r for r in s.activities if r['ActivityID']==s.ACTIVITY)['ActivityParam3'][0]
+    with e.transaction():
+        e._grant(1,'reset-afford-points',{1291002:2})
+    assert allocate(s,[(tid,2)],111).values['code']==10
+    snapshot=store.get(1)['snapshot']
+    e.save_snapshot(1,dict(snapshot,crystal=cost-1))
+    state=s.state(1)
+    result=call(s,'BattlePassTalentReset',{'id':tid},112)
+    assert result.values['code']==36
+    assert s.state(1)==state
+    assert store.get(1)['snapshot']['crystal']==cost-1
+    assert any(p.message_name=='PlayerDataProto' for p in result.before_response)
+    e.save_snapshot(1,dict(snapshot,crystal=cost))
+    assert call(s,'BattlePassTalentReset',{'id':tid},113).values['code']==10
+    assert store.get(1)['snapshot']['crystal']==0
+    assert s.state(1)['points']==2
+
+
+def test_invalid_talent_reset_never_refunds_or_charges(env):
+    store,e,s=env
+    state=s.state(1)
+    balance=store.get(1)['snapshot']['crystal']
+    assert call(s,'BattlePassTalentReset',{'id':0},121).values['code']==13
+    assert s.state(1)==state
+    assert store.get(1)['snapshot']['crystal']==balance

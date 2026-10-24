@@ -27,6 +27,12 @@ def catalog():
     return json.loads(files('x2server').joinpath('data/season_catalog.json').read_text('utf8'))
 
 
+class SeasonRejected(UnresolvedEconomy):
+    def __init__(self, code, reason):
+        super().__init__(reason)
+        self.code = code
+
+
 class SeasonService:
     ACTIVITY = 74001
     CONFIG = 10000
@@ -774,13 +780,20 @@ class SeasonService:
             elif op == 'BattlePassTalentReset':
                 tid = req.get('id')
                 level = state['talents'].get(str(tid), 0)
-                if tid not in self.talents or not level:
-                    raise UnresolvedEconomy('talent not allocated')
-                self.spend(player, 1237902, level * self.activities[0]['ActivityParam3'][0])
-                state['points'] += level
-                state['talents'][str(tid)] = 0
-                state['stats']['talent_reset'] = state['stats'].get('talent_reset', 0) + 1
-                self.write(player, state)
+                if tid not in self.talents:
+                    raise UnresolvedEconomy('unknown talent')
+                # A stale page or a retry with a new request id can reset an
+                # already-cleared talent. Return its authoritative zero level;
+                # never charge or refund a second time.
+                cost = level * next(r for r in self.activities if r['ActivityID'] == self.ACTIVITY)['ActivityParam3'][0]
+                if self.store.get(player)['snapshot'].get('crystal', 0) < cost:
+                    raise SeasonRejected(36, f'talent reset crystal insufficient talent={tid} level={level} cost={cost}')
+                if level:
+                    self.spend(player, 1237902, cost)
+                    state['points'] += level
+                    state['talents'][str(tid)] = 0
+                    state['stats']['talent_reset'] = state['stats'].get('talent_reset', 0) + 1
+                    self.write(player, state)
                 return {'code': 10, 'leftPoint': state['points'], 'update': encode('TalentInfo', {'id': tid, 'level': 0})}
             return self.talent_values(player)
         if op == 'BattlepassArtifactOpt':
@@ -928,9 +941,16 @@ class SeasonService:
                         self.store.db.execute('INSERT INTO season_receipts VALUES (?,?,?,?,?)',
                                              (player, self.instance, token, response, encoded))
         except (UnresolvedEconomy, ValueError, KeyError, TypeError, IndexError) as exc:
-            logging.getLogger('x2.season').info('season rejected player=%s operation=%s reason=%s', player, name, exc)
-            values = SEASON_SCHEMAS[response].decode(encode(response, {'code': 13,
+            logging.getLogger('x2.season').info('season rejected player=%s operation=%s request=%s reason=%s', player, name, req, exc)
+            values = SEASON_SCHEMAS[response].decode(encode(response, {'code': getattr(exc, 'code', 13),
                 **{k: v for k, v in req.items() if k in {f.name for f in SEASON_SCHEMAS[response].fields}}}))
+        if name in ('C2L_BattlePassTalentReset', 'C2L_BattlePassTalentLevel'):
+            # TalentUpdate carries only leftPoint and cannot repair stale cached
+            # talent levels. Refresh complete levels and currency before the
+            # operation callback, including a rejected change on a stale page.
+            before = (*self.e.pushes(player), OutboundMessage(
+                'L2C_BattlePassTalentInfo', self.talent_values(player))) if self.active(player) else ()
+            return OutboundMessage(response, values, before_response=before)
         if name == 'C2L_BattlepassArtifactOpt' and values.get('code') == 10:
             return OutboundMessage(response, values, before_response=(
                 *self.e.pushes(player), self.artifact.hero_message(player), *self.pushes(player)))
