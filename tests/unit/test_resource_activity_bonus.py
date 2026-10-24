@@ -25,13 +25,13 @@ def test_activity_controls_bonus_group_quota_midnight_and_query(env):
     rows = [ACTIVITY_SCHEMAS['ActivityData'].decode(r) for r in e.activity.query_activity(1)['activityData']]
     row = next(r for r in rows if r['actId']==71004)
     assert row['state']==1 and row['param1']==[100002,100003,100004,100005]
-    for i in range(201):
+    for i in range(11):
         with e.transaction():
             bonus = e.extra_drop.rewards(1,2130101 if i%2 else 2130105,{1237901:100,1237914:1})
-        assert bonus==({1237901:100} if i<200 else {})
+        assert bonus==({1237901:100} if i<10 else {})
     data=runtime.operate(1,'ExtraDropData',{},'query')['data']
     counts={r['Key']:r['Value'] for r in map(ACTIVITY_SCHEMAS['KeyValuePair_Int32_Int32'].decode,data)}
-    assert counts[100002]==200
+    assert counts[100002]==10
     # Material dungeons use their own official row, difficulty shares its quota.
     with e.transaction():
         assert e.extra_drop.rewards(1,2130201,{1238100:2})=={1238100:2}
@@ -60,10 +60,10 @@ def test_real_battle_and_sweep_share_quota_and_replay(env):
     req=packet({'sectionId':2130101,'sweepCount':10},911,'C2L_SecSweep')
     result=asyncio.run(s.sweep(context,req))
     assert result.values['code']==10
-    assert rewards(result.values['rewardData'])[1237901]==2078*20
-    assert e.extra_drop.used(1,100002)==11
+    assert rewards(result.values['rewardData'])[1237901]==2078*19
+    assert e.extra_drop.used(1,100002)==10
     assert asyncio.run(s.sweep(context,req)).values==result.values
-    assert e.extra_drop.used(1,100002)==11
+    assert e.extra_drop.used(1,100002)==10
 
 
 def test_quota_rolls_back_and_belongs_to_complete_save(env):

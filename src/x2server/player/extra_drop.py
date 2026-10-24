@@ -26,7 +26,7 @@ class ExtraDropService:
         self.store, self.clock = economy.store, economy.clock
         self.enabled = bool(enabled)
         self.config = config()
-        self.limit = self.config.get('limit', 200)
+        self.limit = self.config.get('limit', 10)
         if type(self.limit) is not int or not 0 <= self.limit <= 2147483647:
             raise ValueError('resource activity limit must be a nonnegative int32')
         self.by_section = {}
