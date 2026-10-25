@@ -83,6 +83,12 @@ def dubbing_break_levels():
     return frozenset(row['FavorLevel'] for row in catalog()['favorabilitylevel'] if row.get('IsBreak'))
 
 
+@lru_cache(maxsize=1)
+def dubbing_level_limits():
+    from .favor import catalog
+    return {row['HeroID']: int(row['LevelLimit']) for row in catalog()['favorabilityhero']}
+
+
 def dubbing_unlocked(condition, hero, saved_ids, dubbing_id):
     """Client conditions plus explicit offline auto-unlock compatibility."""
     rule = DUBBING_COND_RULES.get(condition)
@@ -100,7 +106,14 @@ def dubbing_unlocked(condition, hero, saved_ids, dubbing_id):
     if kind == "level":
         return hero.get("favor", {}).get("level", 1) >= param
     if kind == "gift":
-        return bool(hero.get("favor_liked_gift"))
+        if hero.get("favor_liked_gift"):
+            return True
+        # 客户端 FavorSendGift_CheckAttchLevelMax 把「FavorLevel < LevelLimit」直接
+        # 写进按钮可交互性：默契度到顶后送礼入口被置灰，官方只在送礼气泡播放时才
+        # 发 C2L_SaveHeroDubbing，1350111 就再没有触发机会。满级玩家按「已送过偏好
+        # 礼物」补解锁；只看当前等级，不写存档，等回落时自动恢复锁定。
+        limit = dubbing_level_limits().get(hero.get("id"), 0)
+        return bool(limit) and hero.get("favor", {}).get("level", 1) >= limit
     return False  # click: 需玩家点击后 C2L_SaveHeroDubbing 落库
 
 

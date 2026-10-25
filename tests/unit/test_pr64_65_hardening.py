@@ -3,7 +3,7 @@ from copy import deepcopy
 import pytest
 from tests.unit.test_economy import env
 from tests.unit.test_battle import packet
-from x2server.player.favor import FavorService, interaction_data, touch_gain
+from x2server.player.favor import FavorService, catalog, interaction_data, touch_gain
 from x2server.player.appearance import AppearanceService, dubbing_unlocked
 from x2server.messages.appearance import HERO_DUBBING_DATA
 
@@ -86,3 +86,31 @@ def test_voice_gift_requires_success_and_breaks_are_unique(env):
     assert gift_voice in HERO_DUBBING_DATA.decode(raw)['dubbingIds']
     assert not dubbing_unlocked(1350104, {'favor_breaks': [4, 4, 4]}, set(), 1)
     assert not dubbing_unlocked(99999, {}, {1}, 1)
+
+
+def test_gift_voice_backfilled_at_level_limit(env):
+    store, e, ctx = env
+    voices = AppearanceService(store, e)
+    gift_voice = next(i for i, r in voices.voices.items()
+                      if r['hero_id'] == 1003 and r['unlock_condition'] == 1350111)
+    limit = next(r['LevelLimit'] for r in catalog()['favorabilityhero'] if r['HeroID'] == 1003)
+
+    def set_level(level):
+        player = store.get(1)
+        player['snapshot']['heroes'][0]['favor'] = {'level': level, 'exp': 0}
+        store.save_snapshot(1, player['snapshot'], player['revision'])
+
+    def gift_ids():
+        raw = AppearanceService(store, e)._voice_values(1)['heroDubbingDatas'][0]
+        return HERO_DUBBING_DATA.decode(raw)['dubbingIds']
+
+    set_level(limit - 1)
+    assert gift_voice not in gift_ids()
+    set_level(limit)
+    # 满级后客户端把送礼按钮置灰，官方链路不会再发 688；这里按已送过偏好礼物补解锁。
+    assert gift_voice in gift_ids()
+    assert asyncio.run(voices.handle(ctx, packet({'heroId': 1003, 'dubbingId': gift_voice},
+                                                 name='C2L_SaveHeroDubbing'))).values['code'] == 10
+    # 补解锁是显示层的推导，不落存档。
+    assert store.db.execute('SELECT count(*) FROM appearance_voice_unlock WHERE player_id=1 '
+                            'AND dubbing_id=?', (gift_voice,)).fetchone()[0] == 0
