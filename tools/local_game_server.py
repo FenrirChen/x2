@@ -156,7 +156,7 @@ async def run(database: Path, seconds: float) -> None:
     # the recovered sweep entry disappears from the rebuilt roster directory.
     activity = ActivityService(economy, lobby=lobby)
     economy.activity = activity
-    activity_runtime = ActivityRuntime(activity, mail)
+    activity_runtime = ActivityRuntime(activity, mail, appearance)
     terminal = TerminalService(store, economy, clock=clock.now)
     login = LoginService(identity, store, economy, equipment, wish, clock=clock, appearance=appearance,
                          mail=mail, gift_packages=gift_packages, college=college)

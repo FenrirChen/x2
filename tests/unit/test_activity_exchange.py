@@ -9,7 +9,10 @@ from tests.unit.test_economy import env, rewards
 from tests.unit.test_activity_rotation import activity
 from x2server.player.activity_exchange import ActivityExchange
 from x2server.player.activity_rotation import ActivityRotation
+from x2server.player.appearance import AppearanceService
 from x2server.player.economy import UnresolvedEconomy
+from x2server.network.dispatcher import DispatchContext
+from x2server.network.session import SessionState
 from x2server.messages.activity import ACTIVITY_SCHEMAS
 from x2server.messages.economy import ECONOMY_SCHEMAS
 from tests.unit.test_battle import packet
@@ -260,3 +263,32 @@ def test_yuexi_complete_pov_chapters_unlock_successive_shop_stages(activity):
                          [True,True,True,False],[True,True,True,True]][index]
         with economy.transaction():
             assert service.pov_chapter_rewards(1, chapter['StageID'][-1]) == {}
+
+
+def test_skin_good_delivers_and_pushes_hero_appearance(activity):
+    """买下皮肤类货品后必须回 L2C_HeroSkinAll / L2C_HeroSkinUpdate。
+
+    客户端的外观页只按这两条推送重读某神格的已拥有形象, 只回 L2C_BuyGoods 时货
+    已经进了背包, 但外观页会一直显示「未获得」 (同 appearance_shop 售出后的推送)。
+    """
+    store, economy, service, now = activity
+    snapshot = store.get(1)['snapshot']
+    snapshot['heroes'].append({'id': 1010, 'state': 2, 'level': 1, 'star': 1})
+    store.save_snapshot(1, snapshot, store.get(1)['revision'])
+    exchange = ActivityExchange(service, AppearanceService(store, economy))
+    index = next(i for i, theme in enumerate(service.rotation.themes) if theme['group'] == 99)
+    now[0] = activity_start(index) + 3600
+    period = service.period(1)
+    shop = exchange.shops[889]
+    open_shop(service, economy, shop, period)
+    offer = next(g for g in shop['goods'] if g['itemId'] == 1221003)
+    with economy.transaction():
+        economy._grant(1, 'test:skin-push', {offer['currencyItemId']: 100000})
+    request = {'shopId': 889, 'goodsId': offer['goodsId'], 'buyNum': 1}
+    ctx = DispatchContext('test', 'local', SessionState('test', 'skin-push', player_id=1))
+    response = asyncio.run(exchange.handle(ctx, packet(request, 993, 'C2L_BuyGoods'),
+                           'C2L_BuyGoods', request))
+    assert response.values['code'] == 10
+    assert store.db.execute('SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1221003').fetchone()[0] == 1
+    pushed = [p.message_name for p in response.pushes]
+    assert 'L2C_HeroSkinAll' in pushed and 'L2C_HeroSkinUpdate' in pushed
