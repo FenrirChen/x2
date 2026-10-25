@@ -32,10 +32,10 @@ LIVE_QUERIES = frozenset({
 
 
 class ActivityRuntime:
-    def __init__(self, activity, mail):
+    def __init__(self, activity, mail, appearance=None):
         self.a, self.e, self.r, self.mail = activity, activity.economy, activity.rotation, mail
         activity.runtime = self
-        self.cafe, self.exchange = ActivityCafe(activity), ActivityExchange(activity)
+        self.cafe, self.exchange = ActivityCafe(activity), ActivityExchange(activity, appearance)
         self.buildings = ActivityBuildings(activity)
         self.buff_rows = {r['AccountBuffID']: r for r in activity.tables['AccountBuff']}
 
