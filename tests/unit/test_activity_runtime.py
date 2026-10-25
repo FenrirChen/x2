@@ -129,7 +129,7 @@ def test_yuexi_skipped_intro_claim_persists_and_cannot_pay_twice(runtime):
     assert next(r for r in rows if r['actId'] == 70010)['state'] == 1
     acknowledged = asyncio.run(rt.handle(ctx, packet({}, 977, 'C2L_ActivityDialogue')))
     assert acknowledged.values['code'] == 10 and not acknowledged.values.get('rewardData')
-    now[0] += 48 * 86400
+    now[0] = next_activity_cycle(now[0])
     assert rt.operate(1, 'ActivityDialogReciveInfo', {}, 'next-period')['lastReciveTimeSec'] == 0
 
 

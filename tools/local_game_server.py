@@ -125,6 +125,8 @@ async def run(database: Path, seconds: float) -> None:
         "revival supply mail backfill minted=%s failed=%s", supply_minted, supply_failed)
     extra_minted, extra_failed = deliver_player_gift(store, clock.now(), "causality_oct13")
     logging.getLogger("x2.system_mail").info("October causality gift minted=%s failed=%s", extra_minted, extra_failed)
+    oct25_minted, oct25_failed = deliver_player_gift(store, clock.now(), "oct25_supply_80_200")
+    logging.getLogger("x2.system_mail").info("October 25 supply backfill minted=%s failed=%s", oct25_minted, oct25_failed)
     journey_minted, journey_failed = deliver_player_gift(store, clock.now(), "journey_supply_120_100")
     logging.getLogger("x2.system_mail").info("journey supply mail backfill minted=%s failed=%s", journey_minted, journey_failed)
     from x2server.player.extra_drop import resource_drop_enabled

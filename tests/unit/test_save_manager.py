@@ -46,7 +46,7 @@ def test_import_does_not_reissue_once_mail_across_accounts_or_old_archives(tmp_p
         count = store.db.execute('SELECT count(*) FROM player_mail WHERE player_id=?', (new,)).fetchone()[0]
         for ensure in (accounts.ensure_welcome_mail, accounts.ensure_hero_choice_mail,
                        accounts.ensure_ultimate_causality_mail, accounts.ensure_revival_supply_mail, accounts.ensure_causality_oct13_mail,
-                       accounts.ensure_journey_supply_mail):
+                       accounts.ensure_journey_supply_mail, accounts.ensure_oct25_supply_mail):
             assert ensure(new, 200) is False
         assert store.db.execute('SELECT count(*) FROM player_mail WHERE player_id=?', (new,)).fetchone()[0] == count
         # Even an archive lacking the once-mail rows cannot erase server history.
@@ -58,6 +58,7 @@ def test_import_does_not_reissue_once_mail_across_accounts_or_old_archives(tmp_p
         assert not accounts.ensure_ultimate_causality_mail(new, 201)
         assert not accounts.ensure_causality_oct13_mail(new, 201)
         assert not accounts.ensure_journey_supply_mail(new, 201)
+        assert not accounts.ensure_oct25_supply_mail(new, 201)
         assert store.db.execute('SELECT count(*) FROM system_mail_issues WHERE player_id=?', (new,)).fetchone()[0] == len(ONCE_MAIL_PREFIXES)
     finally:
         manager.close()

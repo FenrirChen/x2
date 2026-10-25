@@ -1,3 +1,4 @@
+from tests.activity_calendar_helpers import activity_start
 """Event calendar and reward state must be isolated across all seven periods."""
 import pytest
 
@@ -28,8 +29,8 @@ def test_calendar_exact_boundaries_and_full_cycle(activity):
     for index in range(17):
         start, end = rotation.bounds(index)
         period = rotation.at(start)
-        assert period.index == (1_000_000 if index else 0) + (index // 7) * 8 + [0, 1, 2, 4, 5, 6, 7][index % 7]
-        assert period.theme['title'] == ORDER[index % 7]
+        assert period.index == (1_000_000 if index else 0) + (index // 7) * 8 + [0, 1, 2, 4, 5, 6, 7][rotation.theme_slot(index)]
+        assert period.theme['title'] == ORDER[rotation.theme_slot(index)]
         assert period.start == start and period.end == end
         assert rotation.at(period.end - 1) == period
         assert rotation.at(period.end).start == period.end
@@ -176,7 +177,7 @@ def test_pool_cost_stock_and_failed_delivery_rollback(activity, monkeypatch):
 @pytest.mark.parametrize('theme_index', [0, 2, 5])
 def test_pool_wire_opens_stages_in_order_and_resets_each_period(activity, theme_index):
     store, economy, service, now = activity
-    now[0] = service.rotation.bounds(theme_index)[0]
+    now[0] = activity_start(theme_index)
     period = service.period(1)
     row = service.rotation.of_type(26)
     ids = row['ActivityParam1']
@@ -213,7 +214,7 @@ def test_pool_wire_opens_stages_in_order_and_resets_each_period(activity, theme_
 
 def test_pool_draw_response_unlocks_next_stage_without_reopening(activity, monkeypatch):
     _, economy, service, now = activity
-    now[0] = service.rotation.bounds(2)[0]
+    now[0] = activity_start(2)
     period = service.period(1)
     row = service.rotation.of_type(26)
     first, second = row['ActivityParam1'][:2]
@@ -240,7 +241,7 @@ def test_pool_draw_response_unlocks_next_stage_without_reopening(activity, monke
 
 def test_pool_cannot_skip_locked_ancestors(activity):
     _, economy, service, now = activity
-    now[0] = service.rotation.bounds(2)[0]
+    now[0] = activity_start(2)
     period = service.period(1)
     row = service.rotation.of_type(26)
     predecessor = service.boxes[row['ActivityParam1'][-2]]
@@ -278,3 +279,25 @@ def test_preview_calendar_move_restores_completion_without_paying_again(activity
     assert reply['code'] == 10 and not reply.get('rewardData')
     assert first['rewardData']
     assert store.db.execute('SELECT count(*) FROM economy_grants').fetchone()[0] == grants
+
+
+def test_oct26_yuexi_swap_keeps_current_and_future_periods_and_run_bounds(activity):
+    from datetime import datetime, timezone, timedelta
+    store, economy, service, now = activity
+    rotation = service.rotation
+    def ts(y,m,d):
+        return int(datetime(y,m,d,tzinfo=timezone(timedelta(hours=8))).timestamp())
+    assert rotation.at(ts(2026,10,25)).theme['group'] == 33
+    assert rotation.at(ts(2026,10,26)-1).theme['group'] == 33
+    for start,group in [(ts(2026,10,26),99),(ts(2026,11,2),13),
+                        (ts(2026,11,23),15),(ts(2026,12,7),33)]:
+        period=rotation.at(start)
+        assert period.theme['group']==group
+        assert period.start==start and period.end==start+7*86400
+        sid=period.theme['section_ids'][0]
+        now[0]=start+10
+        rotation.bind_run(1,sid,f'calendar-{start}')
+        assert rotation.run_period(1,f'calendar-{start}')==period
+    # The two swapped first-cycle periods retain separate theme state keys.
+    assert rotation.at(ts(2026,10,26)).index==1_000_007
+    assert rotation.at(ts(2026,11,23)).index==1_000_002

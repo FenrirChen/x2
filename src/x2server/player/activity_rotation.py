@@ -24,6 +24,14 @@ class ActivityRotation:
 
     FIRST_END = int(datetime(2026,10,19,tzinfo=timezone(timedelta(hours=8))).timestamp())
 
+    # User-approved one-time swap: 2026-10-26 YueXi, 2026-11-23 ZhenXun.
+    FIRST_CYCLE_SWAP = {2: 6, 6: 2}
+
+    def theme_slot(self, calendar_index):
+        if self.anchor == self.ANCHOR:
+            return self.FIRST_CYCLE_SWAP.get(calendar_index, calendar_index) % len(self.themes)
+        return calendar_index % len(self.themes)
+
     def __init__(self, store, clock):
         self.store, self.clock = store, clock
         # Local acceptance can advance the event calendar without changing the
@@ -66,7 +74,8 @@ class ActivityRotation:
         if now < self.anchor:
             return None
         calendar_index = 0 if now < self.first_end else 1 + (now - self.first_end) // self.SECONDS
-        cycle, slot = divmod(calendar_index, len(self.themes))
+        cycle = calendar_index // len(self.themes)
+        slot = self.theme_slot(calendar_index)
         theme = self.themes[slot]
         index = cycle * self.state_cycle_size + theme.get('state_slot', slot)
         if calendar_index > 0:
@@ -125,5 +134,8 @@ class ActivityRotation:
         if state_slot not in self.state_slots:
             raise ValueError('activity is closed')
         slot = self.state_slots[state_slot]
-        start, end = self.bounds(cycle * len(self.themes) + slot)
+        calendar_index = cycle * len(self.themes) + slot
+        if self.anchor == self.ANCHOR:
+            calendar_index = self.FIRST_CYCLE_SWAP.get(calendar_index, calendar_index)
+        start, end = self.bounds(calendar_index)
         return ActivityPeriod(row['period'], start, end, self.themes[slot])
