@@ -11,9 +11,11 @@ from .economy import UnresolvedEconomy
 
 
 class ActivityExchange:
-    def __init__(self, activity):
+    def __init__(self, activity, appearance=None):
         self.activity = activity
         self.economy, self.store, self.rotation = activity.economy, activity.store, activity.rotation
+        # 皮肤/外观货品买下后要向客户端补一次形象推送, 见 handle() 里的说明。
+        self.appearance = appearance
         data = json.loads(files('x2server').joinpath('data/activity_exchange_catalog.json').read_text(encoding='utf8'))
         # One effective price feeds listing, popup, receipt and actual spending.
         for shop in data['shops']:
@@ -171,6 +173,21 @@ class ActivityExchange:
             # its selected popup item, rather than only the visible shop cell.
             period = self.activity.period(player)
             family = 2 if period.theme['group'] == 7 else 1 if period.theme['group'] == 99 else 3
-            pushes = (OutboundMessage('L2C_ActivityShop', self.activity_listing(player, family)),)
+            pushes = [OutboundMessage('L2C_ActivityShop', self.activity_listing(player, family))]
+            # 皮肤/外观货品: 客户端的外观页只按 L2C_HeroSkinAll / L2C_HeroSkinUpdate
+            # 重读已拥有的形象 (见 player/appearance_shop.py 售出后的推送, 以及离线端
+            # router.cpp 买皮肤后两条都推)。只回 L2C_BuyGoods 的话, 货确实进了背包,
+            # 但外观页会一直显示「未获得」, 直到重新登录。
+            pushed_item = result.get('itemId') if isinstance(result, dict) else None
+            if self.appearance is not None and pushed_item in self.appearance.skins:
+                from x2server.messages.appearance import HERO_SKIN
+                hero = self.appearance.skins[pushed_item]['hero_id']
+                skin_list = self.appearance.skin_values(player)['skinList']
+                pushes.append(OutboundMessage('L2C_HeroSkinAll', {'skinList': skin_list}))
+                entry = next((value for value in skin_list
+                              if HERO_SKIN.decode(value)['heroId'] == hero), None)
+                if entry is not None:
+                    pushes.append(OutboundMessage('L2C_HeroSkinUpdate', {'skin': entry}))
+            pushes = tuple(pushes)
         return OutboundMessage(response, result, pushes=pushes,
                                before_response=self.economy.pushes(player) if name == 'C2L_BuyGoods' else ())
