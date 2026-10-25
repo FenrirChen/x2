@@ -1,0 +1,9 @@
+{
+  "tests": 8,
+  "scope": "all seven themes all sections first clear, replay, period clear counts, explicit YueXi query; YueXi frontier reset",
+  "result": "passed",
+  "native_handler": "YueXiModule.OnHandleQueryActivityRecord @0x22ABA34",
+  "navigation_call": "enterSection @+0xFC checked at0x22ABDFC; OpenSectionView @0x22ABE04",
+  "apk_change": false,
+  "post_fix_manual_battle": "pending"
+}

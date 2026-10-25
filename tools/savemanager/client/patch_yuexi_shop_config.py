@@ -40,7 +40,7 @@ def patch(apk, output):
         for stage, key in enumerate(range(887, 891), 1):
             fields, _ = parse_message(extra[key])
             assert any(f.field == 5 for f in fields)
-            records[key] = b''.join(varint(5 << 3) + varint(stage * 6)
+            records[key] = b''.join(varint(5 << 3) + varint((0, 1, 2, 4)[stage - 1])
                 if f.field == 5 else extra[key][f.start:f.end] for f in fields)
         plain = struct.pack('<I', len(records)) + b''.join(
             varint(1 << 3) + varint(key) for key in records) + b''.join(
@@ -51,7 +51,7 @@ def patch(apk, output):
         assert all(checked[k] == v for k, v in zip(base['keys'], base['items']))
         for stage, key in enumerate(range(887, 891), 1):
             fields, _ = parse_message(checked[key])
-            assert [f.value for f in fields if f.field == 5] == [stage * 6]
+            assert [f.value for f in fields if f.field == 5] == [(0, 1, 2, 4)[stage - 1]]
         tree['m_Script'] = plain.decode('utf-8', 'surrogateescape')
         obj.save_typetree(tree)
         target = output / BASE
@@ -82,7 +82,7 @@ def patch(apk, output):
         (output / 'manifest.json').write_text(json.dumps(
             {'assets/bin/Data/' + BASE: str(target.resolve())}, indent=2), encoding='utf-8')
         (output / 'audit.json').write_text(json.dumps({'source': RECOVERED,
-            'restored_shops': list(range(887, 891)), 'thresholds': [6, 12, 18, 24],
+            'restored_shops': list(range(887, 891)), 'thresholds': [0, 1, 2, 4],
             'preserved_original_records': base['keys'], 'hook': HOOK, 'cave': CAVE,
             'loader_prefix': plain[:16].hex()}, indent=2), encoding='utf-8')
     print('Validated 29 shops, 25 untouched original records, four restored stages.')

@@ -3223,8 +3223,14 @@
       "shopId": 887,
       "stage": 1,
       "unlock": {
-        "kind": "memory_count",
-        "count": 6
+        "kind": "item_count",
+        "items": [
+          1290189,
+          1290190,
+          1290191,
+          1290192
+        ],
+        "count": 0
       },
       "goods": [
         {
@@ -3415,8 +3421,14 @@
       "shopId": 888,
       "stage": 2,
       "unlock": {
-        "kind": "memory_count",
-        "count": 12
+        "kind": "item_count",
+        "items": [
+          1290189,
+          1290190,
+          1290191,
+          1290192
+        ],
+        "count": 1
       },
       "goods": [
         {
@@ -3643,8 +3655,14 @@
       "shopId": 889,
       "stage": 3,
       "unlock": {
-        "kind": "memory_count",
-        "count": 18
+        "kind": "item_count",
+        "items": [
+          1290189,
+          1290190,
+          1290191,
+          1290192
+        ],
+        "count": 2
       },
       "goods": [
         {
@@ -3979,8 +3997,14 @@
       "shopId": 890,
       "stage": 4,
       "unlock": {
-        "kind": "memory_count",
-        "count": 24
+        "kind": "item_count",
+        "items": [
+          1290189,
+          1290190,
+          1290191,
+          1290192
+        ],
+        "count": 4
       },
       "goods": [
         {

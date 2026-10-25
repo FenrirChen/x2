@@ -406,7 +406,7 @@ class BattleService:
         if (activity and section in activity.rotation.section_groups
                 and period and activity.rotation.section_groups[section] == period.theme['group']):
             try:
-                return activity.runtime.progress_messages(player)
+                return activity.runtime.progress_messages(player, allow_navigation=False)
             except (ValueError, KeyError, TypeError, IndexError):
                 logging.getLogger('x2.activity').exception(
                     'checkout progress unavailable player=%s section=%s', player, section)

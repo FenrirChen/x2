@@ -2,6 +2,8 @@ from tests.activity_calendar_helpers import activity_start, next_activity_cycle
 """All supplied exchange rows must deliver, charge and cap atomically."""
 import pytest
 import asyncio
+import json
+from importlib.resources import files
 
 from tests.unit.test_economy import env, rewards
 from tests.unit.test_activity_rotation import activity
@@ -18,6 +20,9 @@ def open_shop(service, economy, shop, period):
     with economy.transaction():
         if rule['kind'] == 'period_item':
             service.obtained(1, period, {i: 1 for i in rule['items']}, f'test:unlock:{shop["shopId"]}')
+        elif rule['kind'] == 'item_count':
+            economy._grant(1, f'test:souls:{shop["shopId"]}',
+                           {i: 1 for i in rule['items'][:rule['count']]})
         elif rule['kind'] == 'memory_count':
             service.obtained(1, period, {1290100 + i: 1 for i in range(1, rule['count'] + 1)}, f'test:unlock:{shop["shopId"]}')
         elif rule['kind'] == 'chapter_pass':
@@ -33,11 +38,11 @@ def test_yuexi_client_shop_rows_match_purchase_unlock_rules(activity):
     catalog = json.loads((Path(__file__).resolve().parents[2] /
         'src/x2server/data/activity_rotation_catalog.json').read_text(encoding='utf-8'))
     rows = {r['ShopID']: r for r in catalog['tables']['ShopConfig']}
-    for shop_id, count in zip(range(887, 891), (6, 12, 18, 24)):
+    for shop_id, count in zip(range(887, 891), (0, 1, 2, 4)):
         assert rows[shop_id]['ShopParam1'] == 70011
         assert rows[shop_id]['ShopParam2'] == [count]
         assert rows[shop_id]['ShopIcon']
-        assert exchange.shops[shop_id]['unlock'] == {'kind': 'memory_count', 'count': count}
+        assert exchange.shops[shop_id]['unlock'] == {'kind': 'item_count', 'items': list(range(1290189, 1290193)), 'count': count}
 
 
 @pytest.mark.parametrize('group', [7, 33, 13, 99])
@@ -119,6 +124,8 @@ def test_every_supplied_offer_delivers_and_period_stock_resets(activity, shop_id
 def test_sakura_derived_stages_match_osiris_amount_and_stock(activity):
     _, _, service, _ = activity
     exchange = ActivityExchange(service)
+    raw = json.loads(files('x2server').joinpath('data/activity_exchange_catalog.json').read_text(encoding='utf8'))
+    original = {g['goodsId']: g['price'] for shop in raw['shops'] for g in shop['goods']}
     for stage in range(2, 5):
         sakura = exchange.shops[870 + stage]['goods']
         osiris = exchange.shops[875 + stage]['goods']
@@ -126,7 +133,8 @@ def test_sakura_derived_stages_match_osiris_amount_and_stock(activity):
         for actual, reference in zip(sakura, osiris):
             assert actual['num'] == reference['num']
             assert actual['canBuyTimes'] == reference['canBuyTimes']
-            assert actual['price'] == max(1, reference['price'] * 5 // 9)
+            # Derivation uses original prices, before either shop is discounted.
+            assert actual['price'] == max(1, original[reference['goodsId']] * 5 // 9) // 2
             assert actual['itemId'] == (1251170 if reference['itemId'] == 1251140 else reference['itemId'])
 
 
@@ -170,11 +178,11 @@ def test_winter_fallback_cost_and_moon_typo_use_unit_price(activity):
     exchange = ActivityExchange(service)
     for sid in (860, 861, 862):
         row = exchange.shops[sid]['goods'][-1]
-        assert (row['itemId'], row['num'], row['price'], row['currencyItemId']) == (1237901, 1000, 10, 1237985)
+        assert (row['itemId'], row['num'], row['price'], row['currencyItemId']) == (1237901, 1000, 5, 1237985)
     mini = next(g for g in exchange.shops[890]['goods'] if g['itemId'] == 1203001)
-    assert mini['price'] == 60 and mini['canBuyTimes'] == 10
+    assert mini['price'] == 30 and mini['canBuyTimes'] == 10
     refresh = next(g for g in exchange.shops[862]['goods'] if g['itemId'] == 1202085)
-    assert refresh['price'] == 50
+    assert refresh['price'] == 25
 
 
 def test_current_sakura_shops_unlock_once_and_later_periods_stay_gated(activity):
@@ -196,3 +204,59 @@ def test_current_sakura_shops_unlock_once_and_later_periods_stay_gated(activity)
     assert later.theme['group']==33
     assert not a.shop_unlock_override(later)
     assert not x.unlocked(1,later,x.shops[872])
+
+
+def test_all_activity_prices_halved_once_with_floor(activity):
+    _, _, service, _ = activity
+    original = json.loads(files('x2server').joinpath('data/activity_exchange_catalog.json').read_text(encoding='utf8'))
+    raw = {g['goodsId']: g for shop in original['shops'] for g in shop['goods']}
+    for exchange in (ActivityExchange(service), ActivityExchange(service)):
+        for gid, (_, offer) in exchange.goods.items():
+            assert offer['price'] == raw[gid]['price'] // 2
+            assert offer['num'] == raw[gid]['num']
+            assert offer['canBuyTimes'] == raw[gid]['canBuyTimes']
+    assert any(g['price'] % 2 for g in raw.values())
+    for box in service.tables['ActivityBox']:
+        assert service.boxes[box['BoxID']]['CostNum'] == box['CostNum'] // 2
+
+
+def test_yuexi_soul_gates_count_owned_kinds_not_copies_or_fragments(activity):
+    store, economy, service, now = activity
+    now[0] = activity_start(6)
+    exchange = ActivityExchange(service)
+    period = service.period(1)
+    def gates():
+        return [exchange.unlocked(1, service.period(1), exchange.shops[sid]) for sid in range(887,891)]
+    assert gates() == [True, False, False, False]
+    with economy.transaction():
+        economy._grant(1, 'test:all-old-fragments', {i:1 for i in range(1290101,1290125)})
+        for i in range(1290101,1290125):
+            service.rotation.put(1, period, 'obtained-item', i, 1)
+    assert gates() == [True, False, False, False]
+    for index, item in enumerate(range(1290189,1290193)):
+        with economy.transaction():
+            economy._grant(1, f'test:soul:{item}', {item:3})
+        assert gates() == [[True,True,False,False],[True,True,True,False],
+                           [True,True,True,False],[True,True,True,True]][index]
+    now[0] = next_activity_cycle(now[0])
+    assert gates() == [True, True, True, True]  # Inventory survives rotations.
+
+
+def test_yuexi_complete_pov_chapters_unlock_successive_shop_stages(activity):
+    _, economy, service, now = activity
+    now[0] = activity_start(6)
+    exchange = ActivityExchange(service)
+    chapters = {c['ChapterID']: c for c in service.tables['POVChapterInfo']}
+    for index, cid in enumerate((2021511,2022811,2021023,2022711)):
+        chapter = chapters[cid]
+        for stage, sid in enumerate(chapter['StageID']):
+            with economy.transaction():
+                granted = service.pov_chapter_rewards(1, sid)
+                economy._grant(1, f'test:pov:{sid}', granted)
+            assert bool(granted) == (stage == len(chapter['StageID'])-1)
+        period = service.period(1)
+        gates = [exchange.unlocked(1, period, exchange.shops[sid]) for sid in range(887,891)]
+        assert gates == [[True,True,False,False],[True,True,True,False],
+                         [True,True,True,False],[True,True,True,True]][index]
+        with economy.transaction():
+            assert service.pov_chapter_rewards(1, chapter['StageID'][-1]) == {}

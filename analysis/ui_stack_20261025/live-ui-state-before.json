@@ -1,0 +1,98 @@
+[
+  {
+    "name": "MainPage",
+    "ptr": "0x75d56541e540",
+    "open": 1,
+    "hide": 0,
+    "open_animation": "0x0",
+    "options": 1290,
+    "layer": 1,
+    "after_animation": 0,
+    "tween_list": "0x75d563a2dba0",
+    "tween_count": 0
+  },
+  {
+    "name": "UI_BattlePass_Main",
+    "ptr": "0x75d555f31300",
+    "open": 0,
+    "hide": 0,
+    "open_animation": "0x0",
+    "options": 2570,
+    "layer": 1,
+    "after_animation": 1,
+    "tween_list": "0x75d555ef4120",
+    "tween_count": 0
+  },
+  {
+    "name": "UI_CollegeMainEntry",
+    "ptr": "0x75d555cc64d0",
+    "open": 0,
+    "hide": 0,
+    "open_animation": "0x0",
+    "options": 74,
+    "layer": 1,
+    "after_animation": 1,
+    "tween_list": "0x75d555fd4f30",
+    "tween_count": 0
+  },
+  {
+    "name": "UI_CollegeShopMain",
+    "ptr": "0x75d55653cc60",
+    "open": 0,
+    "hide": 0,
+    "open_animation": "0x0",
+    "options": 2634,
+    "layer": 1,
+    "after_animation": 1,
+    "tween_list": "0x75d556372420",
+    "tween_count": 0
+  },
+  {
+    "name": "UI_Activity_7D",
+    "ptr": "0x75d5579bea50",
+    "open": 0,
+    "hide": 0,
+    "open_animation": "0x0",
+    "options": 74,
+    "layer": 1,
+    "after_animation": 1,
+    "tween_list": "0x75d558e98090",
+    "tween_count": 0
+  },
+  {
+    "name": "UI_DailyTask",
+    "ptr": "0x75d56525c900",
+    "open": 0,
+    "hide": 0,
+    "open_animation": "0x0",
+    "options": 74,
+    "layer": 1,
+    "after_animation": 1,
+    "tween_list": "0x75d54e109b70",
+    "tween_count": 0
+  },
+  {
+    "name": "UI_ZhenXun_Main",
+    "ptr": "0x75d54d9881e0",
+    "open": 0,
+    "hide": 0,
+    "open_animation": "0x0",
+    "options": 2634,
+    "layer": 1,
+    "after_animation": 1,
+    "tween_list": "0x75d54d9fbf00",
+    "tween_count": 0
+  },
+  {
+    "name": "UI_ZhenXun_Shop",
+    "ptr": "0x75d5590ec420",
+    "open": 0,
+    "hide": 0,
+    "open_animation": "0x0",
+    "options": 2634,
+    "layer": 1,
+    "after_animation": 1,
+    "tween_list": "0x75d54de25750",
+    "tween_count": 0
+  }
+]

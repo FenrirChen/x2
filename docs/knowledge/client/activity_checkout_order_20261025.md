@@ -1,0 +1,11 @@
+# 日月盈仄战斗结束先回选关再弹结算
+
+本地2026-10-25 21:40:55与21:42:04，关卡2160113/2160114均正常结算成功；后者服务端21:42:04.158先发送L2C_QueryActivityMissionRecord，随后21:42:04.159才发送L2C_CheckoutMainMission。客户端日志没有对应Unity空引用，不能归因于奖励结算失败。
+
+反汇编YueXiModule.OnHandleQueryActivityRecord(0x22ABA34)：写入记录与通关缓存后，CheckDungeonData成功会FireEvent(276)，并在0x22ABDFC检查enterSection(+0xFC)，为真时0x22ABE04调用OpenSectionView。CheckSectionProgress(bool enter)(0x22A9244)每次先设置该标记，再发送主动查询；标记可保留到战斗。把此查询应答当无副作用进度推送，便会在结算前导航到选关。
+
+修复：ActivityRuntime.progress_messages增加allow_navigation参数；战斗结算与结算重放共用的_activity_progress_sync设为False，仅去除会导航的YueXi专用查询应答，保留SceneGlobalParam、ActivityPassRecord及各活动MissionData。客户端按原链CheckSectionProgress主动请求时仍返回完整已提交的关卡进度，避免解锁回退。本次不修改APK、不调整结算奖励、不重复补发。
+
+8项回归通过，包含七活动所有关卡首次结算/重放、清关计数不重复、日月显式查询及下一周期重置；不是只有8个关卡。证据见analysis/activity_checkout_order20261025。实机完整战斗复验留给用户；尚未推送或部署远程。
+
+日志同时存在战斗中620记录请求在通关前被拒绝（record without a completed activity run），与上述成功结算分开记录，本次未改变它的业务判定。

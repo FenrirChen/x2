@@ -25,7 +25,9 @@ class ActivityService:
         self.conditions = {r['TaskConditionID']: r for r in self.tables['TaskCondition']}
         self.tasks = {r['ChallengeTaskID']: r for r in self.tables['ActivityTask']}
         self.food_tasks = {r['ChallengeTaskID']: r for r in self.tables['NewYearFoodTask']}
-        self.boxes = {r['BoxID']: r for r in self.tables['ActivityBox']}
+        # Keep recovered source prices intact; apply the event discount once.
+        self.boxes = {r['BoxID']: {**r, 'CostNum': r['CostNum'] // 2}
+                      for r in self.tables['ActivityBox']}
         self.box_goods = {r['GoodsGroupID']: r for r in self.tables['ActivityBoxGoods']}
         self.chapters = {r['ID']: r for r in self.tables['ActivityDungeon'] + self.tables['DailyDungeon']}
         self.sections = {r['SectionID']: r for r in self.tables['SectionTable']}

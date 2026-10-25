@@ -1,0 +1,16 @@
+{
+  "purchase_stage_count": 15,
+  "offer_count": 340,
+  "purchase_rounding": "original unit price // 2; total = discounted unit price * count",
+  "server_tests_passed": 67,
+  "native_half_price_cases": 45,
+  "existing_native_regressions": {
+    "quality_cases": 150,
+    "voice_paths": 3,
+    "task_events": 29
+  },
+  "local_activity": "日月盈仄",
+  "local_anchor": 1789228800,
+  "production_calendar_changed": false,
+  "remote_deployed": false
+}

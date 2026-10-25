@@ -1,0 +1,19 @@
+{
+  "hooks": [
+    29611472,
+    29612816,
+    29614220
+  ],
+  "cave": 69844080,
+  "emulated_cases": 45,
+  "rounding": "floor unit price before multiplying draw count",
+  "source_sha256": "dc43a826b8eba22f9df31f2eac8dd0fa84ab130530fced18d69c092fa416b4d9",
+  "native_sha256": "e240ad778e7f60519418af76d76fec5e4c11ca28e8af4469e3d9c4c442335a46",
+  "disassembly": [
+    "429bcb0 stp x8, x9, [sp, #-0x10]!",
+    "429bcb4 lsr w8, w21, #1",
+    "429bcb8 str w8, [x19, #0x28]",
+    "429bcbc ldp x8, x9, [sp], #0x10",
+    "429bcc0 b #0x1c3e090"
+  ]
+}

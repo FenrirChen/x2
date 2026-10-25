@@ -124,7 +124,8 @@ def main():
                     'goodsTag': 3, 'limited': 5,
                     'provenance': 'USER_DECISION: Osiris * 5/9 floor; Horus -> Kushan' if derived else 'USER_SUPPLIED 2026-10-10'})
             if group == 99:
-                unlock = {'kind': 'memory_count', 'count': stage * 6}
+                unlock = {'kind': 'item_count', 'items': list(range(1290189, 1290193)),
+                          'count': (0, 1, 2, 4)[stage - 1]}
             elif stage == 1:
                 unlock = {'kind': 'none'}
             elif group == 33:

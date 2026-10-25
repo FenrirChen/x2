@@ -1,0 +1,9 @@
+{
+  "device": "127.0.0.1:7555",
+  "package": "com.siva.project.x2",
+  "apk": "X2-Revival-ClientFix20261025-JP-Local-signed.apk",
+  "installed_at": "2026-10-25 20:05:20 +08:00",
+  "result": "ADB streamed install Success",
+  "data_preserved": true,
+  "local_server_restarted_at": "2026-10-25 20:06:12 +08:00"
+}

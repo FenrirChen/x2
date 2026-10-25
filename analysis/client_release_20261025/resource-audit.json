@@ -1,0 +1,32 @@
+{
+  "page": "UI_MapChoose/BattlePass",
+  "source": "D:\\demo\\x2\\逆向\\打包\\X2-Revival-ClientFix20261024-Local-signed.apk",
+  "changed_objects": [
+    737,
+    941,
+    2427,
+    3270,
+    3392,
+    3396,
+    3611,
+    3691,
+    3849,
+    3898,
+    3917,
+    4004
+  ],
+  "object_count_unchanged": 4014,
+  "title": "SaiJi_Main_ZhuTi3 (Origin Paradox)",
+  "unrelated_objects_unchanged": true,
+  "static_background": true,
+  "dynamic_cg": "Video/battlepassMain.mp4 is absent; static fallback is Season0BG when enabled",
+  "background_objects": {
+    "UI_BattlePass_Main": [
+      387,
+      326
+    ],
+    "UI_MapChoose": [
+      3450
+    ]
+  }
+}

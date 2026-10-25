@@ -50,6 +50,15 @@ class X2TCPServer:
         except RuntimeError:
             return set()
 
+    def authenticated_connection_keys(self) -> dict[int, tuple[str, ...]]:
+        """Identify fresh logins/reconnects even when the event period is unchanged."""
+        players: dict[int, list[str]] = {}
+        for key, connection in tuple(self._connections.items()):
+            player = connection.session.player_id
+            if not connection.closed and player is not None:
+                players.setdefault(player, []).append(key)
+        return {player: tuple(sorted(keys)) for player, keys in players.items()}
+
     async def push_to_player(self, player_id: int, message: OutboundMessage) -> int:
         """Deliver a server event to the authenticated player's live connections."""
         connections = [connection for connection in self._connections.values()

@@ -1,0 +1,25 @@
+{
+  "server_unique_tests": 98,
+  "thresholds": [
+    0,
+    1,
+    2,
+    4
+  ],
+  "item_ids": [
+    1290189,
+    1290190,
+    1290191,
+    1290192
+  ],
+  "count_rule": "distinct IDs with positive inventory quantity; duplicates count once; existing inventory persists across rotations",
+  "native_sources": [
+    "YueXiModule.GetHaveChipNum 0x22AD724",
+    "YueXiModule.CheckHaveChip 0x22AD024 -> BagModule.GetItemNum 0x19C02DC",
+    "FestReprintShopView.ShopItem.IsLock 0x18D2614"
+  ],
+  "official_table": "8c8abe333ea043a418a9e14cc63c7c71 ShopConfig887-890, field5",
+  "apk_changes": "four field5 values only; native unchanged",
+  "manual_acceptance": "pending",
+  "remote_deployed": false
+}

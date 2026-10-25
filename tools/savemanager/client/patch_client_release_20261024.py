@@ -141,6 +141,12 @@ def patch(apk,output):
     # Static drawing is the user's explicit choice; the original incomplete
     # Spine stays bypassed, not replaced by a fabricated official animation.
     sm=skin.patch(apk,ROOT/'tools/assets/izanagi_skin_1223003.png',output/'skin',max_dimension=1408);manifest.update(sm)
+    # WanFa opens ChapterContent/UI_MapChoose, not the standalone Farm view.
+    from tools.savemanager.client.patch_origin_chapter_tab import patch as patch_origin_tab
+    tab_output=output/'origin-tab'
+    patch_origin_tab(apk,tab_output,static_background=True)
+    manifest.update(json.loads((tab_output/'manifest.json').read_text(encoding='utf8')))
+    audit['origin_tab']=json.loads((tab_output/'audit.json').read_text(encoding='utf8'))
     bridge=ROOT/'tools/savemanager/client/libx2save.so';manifest['lib/arm64-v8a/libx2save.so']=str(bridge.resolve())
     (output/'manifest.json').write_text(json.dumps(manifest,indent=2),encoding='utf8')
     (output/'audit.json').write_text(json.dumps(audit,ensure_ascii=False,indent=2),encoding='utf8')

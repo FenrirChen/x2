@@ -1,0 +1,37 @@
+{
+  "baseline": "D:\\demo\\x2\\\u9006\u5411\\\u6253\u5305\\X2-Revival-ActivityHalfPrice20261025-JP-Local-signed.apk",
+  "shops": [
+    {
+      "shop_id": 887,
+      "old": [
+        6
+      ],
+      "soul_threshold": 0
+    },
+    {
+      "shop_id": 888,
+      "old": [
+        12
+      ],
+      "soul_threshold": 1
+    },
+    {
+      "shop_id": 889,
+      "old": [
+        18
+      ],
+      "soul_threshold": 2
+    },
+    {
+      "shop_id": 890,
+      "old": [
+        24
+      ],
+      "soul_threshold": 4
+    }
+  ],
+  "unchanged_rows": 25,
+  "native_unchanged": true,
+  "loader_prefix_unchanged": true,
+  "asset_sha256": "d66850722f6ae8f82e638d3a0d6016bd4d56e265943e003cf8782180d43ace21"
+}

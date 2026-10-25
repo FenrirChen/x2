@@ -401,7 +401,8 @@ class ActivityRuntime:
                     return OutboundMessage(response, live,
                         before_response=(self.e.pushes(player) if name == 'C2L_QueryActivity'
                             and self.a.shop_unlock_override(self.r.at()) else ()),
-                        pushes=self.building_messages(player) if name == 'C2L_QueryActivity' else ())
+                        pushes=self.catalog_messages(player) if name == 'C2L_QueryActivity' else (),
+                        dispatch_gap=0.05 if name == 'C2L_QueryActivity' else 0.0)
                 cached = self.a.store.db.execute('SELECT period,message,response FROM activity_receipts WHERE player_id=? AND request_key=?', (player, token)).fetchone()
                 if cached:
                     current = self.r.at()
@@ -451,7 +452,7 @@ class ActivityRuntime:
                 self.operate(player, 'ExtraDropData', {}, token)),)
         return OutboundMessage(response, values, before_response=before)
 
-    def progress_messages(self, player):
+    def progress_messages(self, player, *, allow_navigation=True):
         period = self.r.at()
         if period is None:
             return ()
@@ -464,7 +465,11 @@ class ActivityRuntime:
                 self.operate(player, 'ExtraDropData', {}, 'progress')))
         # YueXi's handler indexes its own POV configuration for every pass
         # pair. Other themes must not dispatch this event into YueXiModule.
-        if period.theme['group'] == 99:
+        # This is also an enter-section response: YueXi's handler calls
+        # OpenSectionView when its enterSection latch is still set. Never
+        # inject it during checkout; an explicit CheckSectionProgress query
+        # reloads the committed frontier when the player returns to selection.
+        if period.theme['group'] == 99 and allow_navigation:
             messages.insert(1, OutboundMessage('L2C_QueryActivityMissionRecord', self.records(player, period)))
         for row in period.theme['activities']:
             if enum(row['ActivityType']) == 13:
@@ -504,6 +509,24 @@ class ActivityRuntime:
                 mail_id = self.mail.send(player, template['title'], template['body'], self.e.gifts([template['gift']], allow_daily_random=True))
                 self.a.store.db.execute('UPDATE player_mail SET source_key=? WHERE id=?', (source, mail_id))
 
+    def catalog_messages(self, player):
+        """Seed caches read synchronously before an activity window can query.
+
+        AncientBoxView.OnOpen calls GetDefalutSelectId before sending its pool
+        query. An empty unlocked-ID cache indexes -1, leaving an active prefab
+        whose UIBase.IsOpen is still false; returning home cannot close it.
+        Send the current period's real unlocked pools after the activity list,
+        including on rotation, rather than relying on that circular query.
+        """
+        messages = self.building_messages(player)
+        period = self.r.at()
+        row = self.r.of_type(26, period) if period else None
+        if (row is not None and self.a.store.get(player)['snapshot']['level']
+                >= max(17, row.get('OpenLever', 17))):
+            messages += (OutboundMessage('L2C_ActivityRewardPoolInfo',
+                self.a.pool_values(player, row['ActivityID']), dispatch_gap=0.05),)
+        return messages
+
     def building_messages(self, player):
         period = self.r.at()
         if (period is None or not self.buildings.rows_for(period)
@@ -514,22 +537,28 @@ class ActivityRuntime:
                     self.operate(player, 'ExtraDropData', {}, 'building-refresh')))
 
     async def watch(self, server):
-        previous = None
+        synchronized = {}
         while True:
             await self.e.store.wait_for_import()
             period = self.r.at()
             current = (period.index, self.a.yuexi_preview_end(period) > int(self.e.clock())) if period else None
             current = (current, self.e.season.instance, self.e.season.active())
-            for player in server.authenticated_player_ids():
+            connection_keys = (server.authenticated_connection_keys()
+                if hasattr(server, 'authenticated_connection_keys') else
+                {player: () for player in server.authenticated_player_ids()})
+            for player, keys in connection_keys.items():
                 await self.e.store.wait_for_import()
                 self.deliver_daily_mail(player)
-                if previous != current:
+                sync_key = (current, keys)
+                if synchronized.get(player) != sync_key:
                     activity_values = self.a.query_activity(player)
                     if self.a.shop_unlock_override(period):
                         for message in self.e.pushes(player):
                             await server.push_to_player(player, message)
-                    await server.push_to_player(player, OutboundMessage('L2C_QueryActivity', activity_values))
-                    for message in self.building_messages(player):
+                    await server.push_to_player(player, OutboundMessage('L2C_QueryActivity', activity_values, dispatch_gap=0.05))
+                    for message in self.catalog_messages(player):
                         await server.push_to_player(player, message)
-            previous = current if server.authenticated_player_ids() else None
+                    synchronized[player] = sync_key
+            synchronized = {player: key for player, key in synchronized.items()
+                            if player in connection_keys}
             await asyncio.sleep(5)

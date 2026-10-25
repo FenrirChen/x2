@@ -1,0 +1,282 @@
+{
+  "baseline": "D:\\demo\\x2\\逆向\\打包\\X2-Revival-ClientFix20261025-Local-signed.apk",
+  "source": "C:\\Users\\18207\\Downloads\\反和谐\\jp_bin",
+  "assets": [
+    {
+      "entry": "assets/bin/Data/b4d88bbd9b1bc7a408d49fe869866e4b",
+      "source": "C:\\Users\\18207\\Downloads\\反和谐\\jp_bin\\artwork\\Hero_F_drawing_1019\\b4d88bbd9b1bc7a408d49fe869866e4b",
+      "bytes": 251508,
+      "source_sha256": "4d710cbd18f9030ec9c11f21c011d0d0ae412de4cd202a453c8bd3d3166b0c61",
+      "previous_sha256": "a86a2fcfd64afa2cf5150463b42bcbe5854555d0d15652c122d5eac4a49ce1bc",
+      "changed": true,
+      "textures": [
+        {
+          "pid": 1,
+          "name": "Hero_F_drawing_1019",
+          "dimensions": [
+            420,
+            580
+          ],
+          "format": 47
+        }
+      ],
+      "sprites": [
+        {
+          "pid": 2,
+          "name": "Hero_F_drawing_1019",
+          "texture_pid": 1
+        }
+      ],
+      "unity_version": "2017.4.39f1",
+      "object_ids_preserved": true
+    },
+    {
+      "entry": "assets/bin/Data/14d3bbe6f4997854a9245f79de005e77",
+      "source": "C:\\Users\\18207\\Downloads\\反和谐\\jp_bin\\Data\\14d3bbe6f4997854a9245f79de005e77",
+      "bytes": 131376,
+      "source_sha256": "47cb933ce5557fc20ead23a817aec57b9e3ba45b94903a3f2393dd0ccee97d59",
+      "previous_sha256": "cd71d5b073a51c25a18de48cfc895a465f5f54b428ccc4a2553e2203ee751f15",
+      "changed": true,
+      "textures": [
+        {
+          "pid": 1,
+          "name": "Hero_Icon_101902_H",
+          "dimensions": [
+            236,
+            536
+          ],
+          "format": 47
+        }
+      ],
+      "sprites": [
+        {
+          "pid": 2,
+          "name": "Hero_Icon_101902_H",
+          "texture_pid": 1
+        }
+      ],
+      "unity_version": "2017.4.39f1",
+      "object_ids_preserved": true
+    },
+    {
+      "entry": "assets/bin/Data/2a2bf2d710c78ec44bf1c56b7aa2ed8a",
+      "source": "C:\\Users\\18207\\Downloads\\反和谐\\jp_bin\\Data\\2a2bf2d710c78ec44bf1c56b7aa2ed8a",
+      "bytes": 132840,
+      "source_sha256": "5e26363d0551bc2317c1aa81187d5d6f0dca2bef938756182568c8dbcf088422",
+      "previous_sha256": "2e00ab3d1e502b966153838fcf899011b0e28c5a30869f7e85f3e89f19a72d35",
+      "changed": true,
+      "textures": [
+        {
+          "pid": 1,
+          "name": "Hero_Icon_101102_H",
+          "dimensions": [
+            236,
+            536
+          ],
+          "format": 47
+        }
+      ],
+      "sprites": [
+        {
+          "pid": 2,
+          "name": "Hero_Icon_101102_H",
+          "texture_pid": 1
+        }
+      ],
+      "unity_version": "2017.4.39f1",
+      "object_ids_preserved": true
+    },
+    {
+      "entry": "assets/bin/Data/4cb60ec108600fe4b9506aedf0c56482",
+      "source": "C:\\Users\\18207\\Downloads\\反和谐\\jp_bin\\Data\\4cb60ec108600fe4b9506aedf0c56482",
+      "bytes": 4092840,
+      "source_sha256": "6ea1448c6cd3a835ae87d3c3507b8e8e7137698ff7982e3936c23af258e31ca0",
+      "previous_sha256": "a8b6b1217bb7229bf7c17c39bc5dc36c493dd67e1740f744cf830bf4affeb680",
+      "changed": true,
+      "textures": [
+        {
+          "pid": 1,
+          "name": "SkinDrawing_1221005",
+          "dimensions": [
+            1944,
+            2048
+          ],
+          "format": 47
+        }
+      ],
+      "sprites": [
+        {
+          "pid": 2,
+          "name": "SkinDrawing_1221005",
+          "texture_pid": 1
+        }
+      ],
+      "unity_version": "2017.4.39f1",
+      "object_ids_preserved": true
+    },
+    {
+      "entry": "assets/bin/Data/8b177abb9a187e84688e4fb56da38328",
+      "source": "C:\\Users\\18207\\Downloads\\反和谐\\jp_bin\\Data\\8b177abb9a187e84688e4fb56da38328",
+      "bytes": 131692,
+      "source_sha256": "dcc61ee305cb58976aac5de5a7a30822742e98266acc027b3ddf0d4e625096c6",
+      "previous_sha256": "d3091e7a81207ca63edac84345ce36c3c9f8266c1bcccccdd2f714bfff419963",
+      "changed": true,
+      "textures": [
+        {
+          "pid": 1,
+          "name": "Hero_Icon_102702_H",
+          "dimensions": [
+            236,
+            536
+          ],
+          "format": 47
+        }
+      ],
+      "sprites": [
+        {
+          "pid": 2,
+          "name": "Hero_Icon_102702_H",
+          "texture_pid": 1
+        }
+      ],
+      "unity_version": "2017.4.39f1",
+      "object_ids_preserved": true
+    },
+    {
+      "entry": "assets/bin/Data/9e5d2981cf9a7f645b19715bfa835427",
+      "source": "C:\\Users\\18207\\Downloads\\反和谐\\jp_bin\\Data\\9e5d2981cf9a7f645b19715bfa835427",
+      "bytes": 3643584,
+      "source_sha256": "d263de23fda0ae240e4fcf1920cd2d45b7bb4178d807809ca9c34e974172e485",
+      "previous_sha256": "e42dfef97c50fe2a45402a00f7a18b961c475f67738d28b675fb7f3d4f20ee57",
+      "changed": true,
+      "textures": [
+        {
+          "pid": 1,
+          "name": "StarDrawing_1221902",
+          "dimensions": [
+            1780,
+            2016
+          ],
+          "format": 47
+        }
+      ],
+      "sprites": [
+        {
+          "pid": 2,
+          "name": "StarDrawing_1221902",
+          "texture_pid": 1
+        }
+      ],
+      "unity_version": "2017.4.39f1",
+      "object_ids_preserved": true
+    },
+    {
+      "entry": "assets/bin/Data/a9d81e0816f3ca341bbbddeb47ea4050",
+      "source": "C:\\Users\\18207\\Downloads\\反和谐\\jp_bin\\Data\\a9d81e0816f3ca341bbbddeb47ea4050",
+      "bytes": 4198508,
+      "source_sha256": "63a24feb3976d71561dd7f84bfea1bacbbe363f8afe0118b3c7ff38561668ef2",
+      "previous_sha256": "63a24feb3976d71561dd7f84bfea1bacbbe363f8afe0118b3c7ff38561668ef2",
+      "changed": false,
+      "textures": [
+        {
+          "pid": 1,
+          "name": "texture_101001_1",
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "format": 47
+        }
+      ],
+      "sprites": [],
+      "unity_version": "2017.4.39f1",
+      "object_ids_preserved": true
+    },
+    {
+      "entry": "assets/bin/Data/da6ee3f83a58919428f24ce126d18dfb",
+      "source": "C:\\Users\\18207\\Downloads\\反和谐\\jp_bin\\Data\\da6ee3f83a58919428f24ce126d18dfb",
+      "bytes": 2922788,
+      "source_sha256": "a9db1c5ea9180c7702bea734c18950fc1012e3723a17994e1f4d23f7e03fa357",
+      "previous_sha256": "b539afac95abc8f32d94d685442bcf2ef2185796ebe82b2606ad01357909185e",
+      "changed": true,
+      "textures": [
+        {
+          "pid": 1,
+          "name": "StarDrawing_1221102",
+          "dimensions": [
+            2036,
+            1416
+          ],
+          "format": 47
+        }
+      ],
+      "sprites": [
+        {
+          "pid": 2,
+          "name": "StarDrawing_1221102",
+          "texture_pid": 1
+        }
+      ],
+      "unity_version": "2017.4.39f1",
+      "object_ids_preserved": true
+    },
+    {
+      "entry": "assets/bin/Data/e45dbfe0613e8054788520d976329f9e",
+      "source": "C:\\Users\\18207\\Downloads\\反和谐\\jp_bin\\Data\\e45dbfe0613e8054788520d976329f9e",
+      "bytes": 3529696,
+      "source_sha256": "0457a24d57a85164db11a3e1d4ceb0b2f868f37e5751e13f7cbf00336f2d500f",
+      "previous_sha256": "fb91ba3de29f0b7c067c3e2d7b615e1188fbe1d08a23a516dbefaafe2ee4a37a",
+      "changed": true,
+      "textures": [
+        {
+          "pid": 1,
+          "name": "StarDrawing_1222702",
+          "dimensions": [
+            2024,
+            1720
+          ],
+          "format": 47
+        }
+      ],
+      "sprites": [
+        {
+          "pid": 2,
+          "name": "StarDrawing_1222702",
+          "texture_pid": 1
+        }
+      ],
+      "unity_version": "2017.4.39f1",
+      "object_ids_preserved": true
+    },
+    {
+      "entry": "assets/bin/Data/f4856a1daedb0d74d862fa79b5f1b26b",
+      "source": "C:\\Users\\18207\\Downloads\\反和谐\\jp_bin\\Data\\f4856a1daedb0d74d862fa79b5f1b26b",
+      "bytes": 67896,
+      "source_sha256": "f11caddef30d2ef0fd8b7b8ac0f2b3d914d41be50498a9afe82cc442fe959295",
+      "previous_sha256": "f11caddef30d2ef0fd8b7b8ac0f2b3d914d41be50498a9afe82cc442fe959295",
+      "changed": false,
+      "textures": [
+        {
+          "pid": 1,
+          "name": "Hero_Icon_101005_H",
+          "dimensions": [
+            236,
+            536
+          ],
+          "format": 45
+        }
+      ],
+      "sprites": [
+        {
+          "pid": 2,
+          "name": "Hero_Icon_101005_H",
+          "texture_pid": 1
+        }
+      ],
+      "unity_version": "2017.4.39f1",
+      "object_ids_preserved": true
+    }
+  ],
+  "changed": 8,
+  "already_present": 2
+}

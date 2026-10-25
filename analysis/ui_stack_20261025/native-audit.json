@@ -1,0 +1,29 @@
+{
+  "hook": 21795468,
+  "cave": 69809572,
+  "resume": 21795472,
+  "guard": "GameTaskType.BATTLEPASS == 15 only; ordinary daily/weekly events ignored",
+  "source_sha256": "fce24f7aac61ffb249eda5246d6cf41c30fbd90fe6a493736099815e72b18c24",
+  "output_sha256": "dc43a826b8eba22f9df31f2eac8dd0fa84ab130530fced18d69c092fa416b4d9",
+  "reserved_ranges": [
+    [
+      69927616,
+      69928640
+    ],
+    [
+      69843056,
+      69844080
+    ],
+    [
+      69843436,
+      69843500
+    ]
+  ],
+  "disassembly": [
+    "42935a4: cmp w1, #0xf",
+    "42935a8: b.eq #0x42935b0",
+    "42935ac: ret ",
+    "42935b0: stp d9, d8, [sp, #-0x60]!",
+    "42935b4: b #0x14c9290"
+  ]
+}

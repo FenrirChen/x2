@@ -1,0 +1,12 @@
+{
+  "apk": "D:\\demo\\x2\\逆向\\打包\\X2-Revival-UIStackFix20261025-JP-Remote-signed.apk",
+  "bytes": 2147166035,
+  "sha256": "5866dd202538385fbbeb5e2dbf4069760d6ae9fddd15cee69ad204296cbe962d",
+  "changed_entries": [
+    "lib/arm64-v8a/libil2cpp.so"
+  ],
+  "config_preserved": true,
+  "save_manager_and_allocator_preserved": true,
+  "full_zip_crc": "passed",
+  "stored_entry_alignment": 4
+}

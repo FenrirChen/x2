@@ -1,0 +1,18 @@
+{
+  "device": "127.0.0.1:7555",
+  "process_id": 7425,
+  "date": "2026-10-25",
+  "checks": {
+    "activity_pool_shop_items_and_stock": true,
+    "direct_home_return_without_stack": true,
+    "daily_tasks_display": true,
+    "season_tasks_display_and_repeated_switch": true,
+    "unity_null_reference_after_login": false
+  },
+  "limitations": [
+    "Shop decorative background remains white/missing; separate asset issue.",
+    "Activity poster first click was ineffective until another panel was opened; existing entrance issue not resolved by this patch.",
+    "Remote server not deployed."
+  ],
+  "notes": "Only navigation performed; no purchases or reward claims. Android startup SDK JSON/device-ID warnings remain, unrelated to Unity task refresh."
+}

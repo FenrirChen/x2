@@ -1,0 +1,19 @@
+{
+  "apk": "D:\\demo\\x2\\逆向\\打包\\X2-Revival-ClientFix20261025-JP-Local-signed.apk",
+  "bytes": 2147166035,
+  "sha256": "e50d1865f49c60fe5cd87f9be41cc995f74dd1a47a52eca900611be6d5d3aecc",
+  "changed_entries": [
+    "assets/bin/Data/2a2bf2d710c78ec44bf1c56b7aa2ed8a",
+    "assets/bin/Data/14d3bbe6f4997854a9245f79de005e77",
+    "assets/bin/Data/9e5d2981cf9a7f645b19715bfa835427",
+    "assets/bin/Data/8b177abb9a187e84688e4fb56da38328",
+    "assets/bin/Data/da6ee3f83a58919428f24ce126d18dfb",
+    "assets/bin/Data/e45dbfe0613e8054788520d976329f9e",
+    "assets/bin/Data/4cb60ec108600fe4b9506aedf0c56482",
+    "assets/bin/Data/b4d88bbd9b1bc7a408d49fe869866e4b"
+  ],
+  "config_preserved": true,
+  "save_manager_and_allocator_preserved": true,
+  "full_zip_crc": "passed",
+  "stored_entry_alignment": 4
+}

@@ -1,0 +1,17 @@
+{
+  "device": "127.0.0.1:7555",
+  "installed_at": "2026-10-25 12:11:32",
+  "season_static_background": "visible",
+  "chapter_origin_title": "visible after entrance animation",
+  "moon_decorations": "disabled",
+  "screenshots": {
+    "android_v3_season.png": {
+      "local_evidence_path": "C:\\Users\\18207\\.codex\\.chatgpt-projects\\g-p-6aba74ecb32c8191b4521feb11ef4a87\\android_v3_season.png",
+      "sha256": "63a778b130cc971608a3aa8b5d166f7b7f611eac4bba7fe75d57186bd30283a9"
+    },
+    "android_v3_farm_after.png": {
+      "local_evidence_path": "C:\\Users\\18207\\.codex\\.chatgpt-projects\\g-p-6aba74ecb32c8191b4521feb11ef4a87\\android_v3_farm_after.png",
+      "sha256": "2f2f018d24f556e88acf2bcb6d9728bcfef3dff8e8482ef6481fad7ea15de0ae"
+    }
+  }
+}

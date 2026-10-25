@@ -619,7 +619,8 @@ def test_all_activity_sections_enter_and_settle_in_their_period(runtime, theme_i
             result = asyncio.run(battle.checkout(ctx, checkout))
             assert result.values['result'] == 10, (period.theme['title'], sid, result.values)
             updates = {p.message_name: p for p in result.before_response}
-            assert ('L2C_QueryActivityMissionRecord' in updates) == (period.theme['group'] == 99)
+            # QueryActivityMissionRecord is a navigation response in YueXi.
+            assert 'L2C_QueryActivityMissionRecord' not in updates
             assert 'L2C_SceneGlobalParam' in updates
             assert 'L2C_ActivityPassRecord' in updates
             pairs = [ACTIVITY_SCHEMAS['KeyValuePair_Int32_Int32'].decode(raw)
@@ -631,8 +632,15 @@ def test_all_activity_sections_enter_and_settle_in_their_period(runtime, theme_i
                 if push.message_name in ACTIVITY_SCHEMAS:
                     ACTIVITY_SCHEMAS[push.message_name].encode(push.values)
             assert rt.r.get(1, period, 'clear', sid) == 1
-            assert asyncio.run(battle.checkout(ctx, checkout)).values == result.values
+            replay = asyncio.run(battle.checkout(ctx, checkout))
+            assert replay.values == result.values
+            assert 'L2C_QueryActivityMissionRecord' not in {p.message_name for p in replay.before_response + replay.pushes}
             assert rt.r.get(1, period, 'clear', sid) == 1
+            if period.theme['group'] == 99:
+                # Re-entering selection explicitly still obtains current progress.
+                record = rt.operate(1, 'QueryActivityMissionRecord', {}, 'return-to-selection')
+                assert record == rt.records(1, period)
+                assert record['code'] == 10
             pending.remove(sid)
             count += 1
             progressed = True

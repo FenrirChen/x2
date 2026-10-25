@@ -35,7 +35,7 @@ def restore_yuexi_shops(tables):
     for raw in parse_table_container(bytes(blob))['items']:
         row = decode_record(raw, fields, enums, classes)[0]
         if row['ShopID'] in range(887, 891):
-            row['ShopParam2'] = [(row['ShopID'] - 886) * 6]
+            row['ShopParam2'] = [(0, 1, 2, 4)[row['ShopID'] - 887]]
             recovered[row['ShopID']] = row
     if len(recovered) != 4:
         raise ValueError('Missing retained YueXi shop configuration')

@@ -15,6 +15,10 @@ class ActivityExchange:
         self.activity = activity
         self.economy, self.store, self.rotation = activity.economy, activity.store, activity.rotation
         data = json.loads(files('x2server').joinpath('data/activity_exchange_catalog.json').read_text(encoding='utf8'))
+        # One effective price feeds listing, popup, receipt and actual spending.
+        for shop in data['shops']:
+            for offer in shop['goods']:
+                offer['price'] //= 2
         self.shops = {s['shopId']: s for s in data['shops']}
         self.goods = {g['goodsId']: (s, g) for s in data['shops'] for g in s['goods']}
         if len(self.goods) != sum(len(s['goods']) for s in data['shops']):
@@ -41,6 +45,13 @@ class ActivityExchange:
         if rule['kind'] == 'chapter_pass':
             sections = self.activity.chapters[rule['chapter']].get('SectionID', [])
             return bool(sections) and all(self.rotation.get(player, period, 'clear', s, 0) > 0 for s in sections)
+        if rule['kind'] == 'item_count':
+            # Native YueXiModule.GetHaveChipNum counts distinct owned IDs;
+            # duplicates and period receipt counters are not extra souls.
+            items = set(rule['items'])
+            owned = self.store.db.execute(
+                'SELECT item_id,quantity FROM inventory WHERE player_id=?', (player,))
+            return sum(item in items and quantity > 0 for item, quantity in owned) >= rule['count']
         if rule['kind'] == 'memory_count':
             # Fragments do not cease being collected when their story item is used.
             return sum(bool(self.rotation.get(player, period, 'obtained-item', 1290100 + n, 0))

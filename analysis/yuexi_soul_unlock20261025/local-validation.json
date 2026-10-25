@@ -1,0 +1,12 @@
+{
+  "apk": "D:\\demo\\x2\\逆向\\打包\\X2-Revival-YueXiSoulUnlock20261025-JP-Local-signed.apk",
+  "bytes": 2147166035,
+  "sha256": "362c9e329c23e0b9ca7f60736adb4a6214ab56b3b2882c16b912f2e5dae2ef3c",
+  "changed_entries": [
+    "assets/bin/Data/0a5189b8d93663c4aa152623435068da"
+  ],
+  "config_preserved": true,
+  "save_manager_and_allocator_preserved": true,
+  "full_zip_crc": "passed",
+  "stored_entry_alignment": 4
+}

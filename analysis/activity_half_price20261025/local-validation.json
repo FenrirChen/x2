@@ -1,0 +1,12 @@
+{
+  "apk": "D:\\demo\\x2\\逆向\\打包\\X2-Revival-ActivityHalfPrice20261025-JP-Local-signed.apk",
+  "bytes": 2147166035,
+  "sha256": "2a883589f7573b9423ac13acae2205a31d69c2e7a7c1c5e3e2be70009bcbbfb6",
+  "changed_entries": [
+    "lib/arm64-v8a/libil2cpp.so"
+  ],
+  "config_preserved": true,
+  "save_manager_and_allocator_preserved": true,
+  "full_zip_crc": "passed",
+  "stored_entry_alignment": 4
+}
