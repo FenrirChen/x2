@@ -40,6 +40,8 @@ def test_relic_slots_prefer_the_chapters_own_relics(env):
     service = BattleShopService(store, economy)
     recommended = service.relic_chapters[2010500]
     big_slot = {1004601, 1004631, 1004634, 1004635, 1004639, 1004640, 1004641}
+    special_slot = {item["itemId"] for item in
+                    next(slot for slot in service.slots if slot["slot"] == 6)["items"]}
     seen = set()
     for run in range(200):
         offers = service.stock(SHOP, FLOOR, f"1:{run}", 2010500)
@@ -47,9 +49,14 @@ def test_relic_slots_prefer_the_chapters_own_relics(env):
         # offers[3] = relic_mid_plus: disjoint from this chapter -> full pool kept.
         assert offers[3]["itemId"] not in recommended
         assert offers[4]["itemId"] in big_slot
-        assert offers[5]["itemId"] in recommended
+        # offers[5] = relic_special: not chapter-narrowed, so the 召唤/精灵 line is
+        # rollable again (tester report 2026-10-25, 1004801 临时雇员).
+        assert offers[5]["itemId"] in special_slot
         seen.add(offers[4]["itemId"])
     assert 1004635 in seen  # 溜了溜了溜了 is now reachable
+    special_seen = {service.stock(SHOP, FLOOR, f"special:{run}", 2010500)[5]["itemId"]
+                    for run in range(2000)}
+    assert 1004801 in special_seen  # 临时雇员
 
 
 def test_chapter_for_section_resolves_the_dark_pyramid(env):

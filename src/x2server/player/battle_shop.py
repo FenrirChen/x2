@@ -42,6 +42,11 @@ never showed up in its shop. Two things were wrong:
   are therefore narrowed first to the current chapter's recommended relics
   (``data/relic_recommend.json``, built from client table/RelicRecommend) when that
   intersection is non-empty, which is what makes the stage's own relics appear.
+* the 260-棱镜 special slot (``relic_special``, 1004800-1004969) is excluded from
+  that narrowing (tester report 2026-10-25): RelicRecommend names only 8 of its 164
+  entries for 黑暗金字塔, so narrowing it hid 1004801 临时雇员 and the whole 召唤/
+  精灵 line, which the original shop rolled from the full block. Chapter bias stays
+  on the three cheaper relic slots.
 
 Money handling: the in-stage currency is earned and spent *inside* the battle, and
 the client never reports the amount to the server (there is no message for it in
@@ -168,7 +173,14 @@ class BattleShopService:
             pool = slot["items"]
             if not pool:
                 continue
-            recommended = self.relic_chapters.get(chapter) if str(slot.get("family", "")).startswith("relic") else None
+            # relic_special (1004800-1004969) is not chapter-exclusive: RelicRecommend
+            # names only 8 of its 164 entries for 2010500, so narrowing it made
+            # 1004801 临时雇员 unreachable (tester report 2026-10-25). Only the three
+            # cheaper relic tiers take the chapter bias.
+            family = str(slot.get("family", ""))
+            recommended = (self.relic_chapters.get(chapter)
+                           if family.startswith("relic") and family != "relic_special"
+                           else None)
             if recommended:
                 narrowed = [item for item in pool if item["itemId"] in recommended]
                 if narrowed:
