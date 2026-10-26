@@ -29,6 +29,9 @@ from __future__ import annotations
 import argparse
 import hashlib
 import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[4] / ".phase3_deps"))
 
 from capstone import CS_ARCH_ARM64, CS_MODE_LITTLE_ENDIAN, Cs
 

@@ -156,16 +156,16 @@ def test_sweep_quota_is_shared_rolls_at_midnight_and_retries_are_free(env):
     assert first.values['code']==10
     assert sweep(2130501,10,900).values==first.values
     assert store.db.execute('SELECT used FROM server_sweep_limits WHERE player_id=1').fetchone()[0]==10
-    assert sweep(2130601,6,901).values['code']==13
-    assert sweep(2130601,5,902).values['code']==10
+    assert sweep(2130601,21,901).values['code']==13
+    assert sweep(2130601,20,902).values['code']==10
     before=store.get(1)
     assert sweep(2130501,1,903).values['code']==13
     assert store.get(1)==before
     now[0]+=1
-    assert sweep(2130601,15,904).values['code']==10
+    assert sweep(2130601,30,904).values['code']==10
     # A previous day's receipt cannot charge the fresh day's quota.
     assert sweep(2130501,10,900).values==first.values
-    assert store.db.execute('SELECT used FROM server_sweep_limits WHERE player_id=1').fetchone()[0]==15
+    assert store.db.execute('SELECT used FROM server_sweep_limits WHERE player_id=1').fetchone()[0]==30
 
 
 def test_failed_sweep_rolls_back_quota_and_rewards(env,monkeypatch):
@@ -180,3 +180,37 @@ def test_failed_sweep_rolls_back_quota_and_rewards(env,monkeypatch):
     monkeypatch.setattr(e,'_grant',fail)
     assert asyncio.run(battle.sweep(ctx,packet({'sectionId':2130501,'sweepCount':1},950,'C2L_SecSweep'))).values['code']==13
     assert '\n'.join(store.db.iterdump())==before
+
+
+def test_old_sweep_quota_schema_migrates_without_reset(env):
+    from x2server.player.economy import EconomyService
+    store, e, ctx = env
+    with store.db:
+        store.db.execute('DROP TABLE server_sweep_limits')
+        store.db.execute('CREATE TABLE server_sweep_limits (player_id INTEGER PRIMARY KEY, day INTEGER NOT NULL, used INTEGER NOT NULL CHECK(used>=0 AND used<=15))')
+        store.db.execute('INSERT INTO server_sweep_limits VALUES (1,123,15)')
+    EconomyService(store)
+    assert tuple(store.db.execute('SELECT * FROM server_sweep_limits').fetchone()) == (1,123,15)
+    with store.db:
+        store.db.execute('UPDATE server_sweep_limits SET used=30 WHERE player_id=1')
+    EconomyService(store)
+    assert store.db.execute('SELECT used FROM server_sweep_limits').fetchone()[0] == 30
+
+
+def test_sweep_migration_failure_leaves_original_quota_and_can_retry(env):
+    import sqlite3
+    from x2server.player.economy import EconomyService
+    store,e,ctx=env
+    with store.db:
+        store.db.execute('DROP TABLE server_sweep_limits')
+        store.db.execute('CREATE TABLE server_sweep_limits (player_id INTEGER PRIMARY KEY,day INTEGER NOT NULL,used INTEGER NOT NULL CHECK(used>=0 AND used<=15))')
+        store.db.execute('INSERT INTO server_sweep_limits VALUES (1,123,14)')
+    store.db.set_authorizer(lambda action,arg1,arg2,*rest: sqlite3.SQLITE_DENY
+        if action==sqlite3.SQLITE_ALTER_TABLE and arg2=='server_sweep_limits_v30' else sqlite3.SQLITE_OK)
+    try:
+        with pytest.raises(sqlite3.DatabaseError):EconomyService(store)
+    finally:store.db.set_authorizer(None)
+    assert tuple(store.db.execute('SELECT * FROM server_sweep_limits').fetchone())==(1,123,14)
+    assert not store.db.execute("SELECT 1 FROM sqlite_master WHERE name='server_sweep_limits_v30'").fetchone()
+    EconomyService(store)
+    assert tuple(store.db.execute('SELECT * FROM server_sweep_limits').fetchone())==(1,123,14)

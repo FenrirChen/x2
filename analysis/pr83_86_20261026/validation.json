@@ -1,0 +1,20 @@
+{
+  "server_unique_tests": 107,
+  "favor_gate_emulated_cases": 64,
+  "old_native_regressions": {
+    "quality_cases": 150,
+    "voice_paths": 3,
+    "task_refresh_cases": 29
+  },
+  "server_restarted": "2026-10-26 21:31:53 Asia/Shanghai",
+  "live_sweep_check": 30,
+  "emulator_install": "not installed: device offline, adb connect refused",
+  "remote_push": false,
+  "github_prs_merged": false,
+  "local_integrated_prs": [
+    83,
+    85,
+    86
+  ],
+  "pr84": "Not applied: max level is not evidence of a liked gift; actual max-level gifting tested instead."
+}

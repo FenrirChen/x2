@@ -49,6 +49,11 @@ class ActivityRotation:
             raise ValueError('activity sections belong to multiple themes')
         self.section_groups.update({sid: -1 for sid in self.catalog.get('closed_section_ids', [])})
         with store.db:
+            store.db.execute('''CREATE TABLE IF NOT EXISTS server_activity_limits (
+                player_id INTEGER NOT NULL, period INTEGER NOT NULL,
+                day INTEGER NOT NULL, section_id INTEGER NOT NULL,
+                used INTEGER NOT NULL CHECK(used>=0),
+                PRIMARY KEY(player_id,period,day,section_id))''')
             store.db.execute('''CREATE TABLE IF NOT EXISTS activity_state (
                 player_id INTEGER NOT NULL, period INTEGER NOT NULL,
                 namespace TEXT NOT NULL, state_key TEXT NOT NULL, value TEXT NOT NULL,

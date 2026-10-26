@@ -31,6 +31,12 @@ class ActivityService:
         self.box_goods = {r['GoodsGroupID']: r for r in self.tables['ActivityBoxGoods']}
         self.chapters = {r['ID']: r for r in self.tables['ActivityDungeon'] + self.tables['DailyDungeon']}
         self.sections = {r['SectionID']: r for r in self.tables['SectionTable']}
+        self.daily_limits = {sid: c['Limit'] for c in self.chapters.values()
+                             if c.get('Limit', -1) > 0
+                             for sid in set(c.get('SectionID', []) + c.get('ChallengeLevel', [])) if sid}
+        # USER_DECISION: YueXi's master tier (not story chapter ordinal 5).
+        self.daily_limits[2160115] = 1
+
 
     def period(self, player):
         period = self.rotation.at()
@@ -344,12 +350,36 @@ class ActivityService:
             self.rotation.put(player, period, 'task-box', key, True)
             return rewards
 
+    def daily_uses(self, player, period, section, *, exclude_uuid=""):
+        day = (int(self.economy.clock()) + 28800) // 86400
+        row = self.store.db.execute('SELECT used FROM server_activity_limits WHERE '
+            'player_id=? AND period=? AND day=? AND section_id=?',
+            (player, period.index, day, section)).fetchone()
+        if row is not None:
+            return row[0]
+        # Upgrade backfill: successful settlements today already consume the
+        # quota. Read only this player's matching runs, never reset on import.
+        from x2server.messages.battle import CHECKOUT
+        has_wire = self.store.db.execute("SELECT 1 FROM sqlite_master WHERE name='battle_checkout_wire'").fetchone()
+        used = 0
+        if has_wire:
+            rows = self.store.db.execute('''SELECT w.checkout FROM activity_runs r
+                JOIN battle_checkout_wire w ON w.uuid=r.uuid
+                JOIN reward_settlement_audit a ON a.run_id=r.uuid
+                WHERE r.player_id=? AND r.period=? AND r.section_id=? AND r.settled=1
+                  AND a.created_at>=? AND a.created_at<? AND r.uuid!=?''',
+                (player, period.index, section, day*86400-28800, (day+1)*86400-28800, exclude_uuid))
+            used = sum(bool(CHECKOUT.decode(r[0]).get('success')) for r in rows)
+        return used
+
     def admission(self, player, section):
         if section not in self.rotation.section_groups:
             return None
         period = self.period(player)
         if self.rotation.section_groups[section] != period.theme['group']:
             raise UnresolvedEconomy('activity is not open')
+        if section in self.daily_limits and self.daily_uses(player, period, section) >= self.daily_limits[section]:
+            raise UnresolvedEconomy('activity daily challenge limit reached')
         row = self.sections[section]
         chapter = self.chapters.get(row.get('ChapterID'), {})
         previous = self.chapters.get(chapter.get('PreChapter'))
@@ -398,6 +428,14 @@ class ActivityService:
         if row['section_id'] != section or row['settled']:
             raise UnresolvedEconomy('activity run mismatch or replay')
         if success:
+            if section in self.daily_limits:
+                used = self.daily_uses(player, period, section, exclude_uuid=uuid)
+                if used >= self.daily_limits[section]:
+                    raise UnresolvedEconomy('activity daily challenge limit reached')
+                day = (int(self.economy.clock()) + 28800) // 86400
+                self.store.db.execute('INSERT INTO server_activity_limits VALUES (?,?,?,?,?) '
+                    'ON CONFLICT(player_id,period,day,section_id) DO UPDATE SET used=excluded.used',
+                    (player, period.index, day, section, used + 1))
             count = self.rotation.get(player, period, 'clear', section, 0)
             self.rotation.put(player, period, 'clear', section, count + 1)
             self.event(player, f'clear:{uuid}', 3, section, 1, period=period)

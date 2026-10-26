@@ -280,7 +280,24 @@ class EconomyService:
             # Server-owned quota survives archive import; one row per account.
             store.db.execute("""CREATE TABLE IF NOT EXISTS server_sweep_limits (
                 player_id INTEGER PRIMARY KEY, day INTEGER NOT NULL,
-                used INTEGER NOT NULL CHECK(used>=0 AND used<=15))""")
+                used INTEGER NOT NULL CHECK(used>=0 AND used<=30))""")
+            sweep_schema = store.db.execute("SELECT sql FROM sqlite_master WHERE name='server_sweep_limits'").fetchone()[0]
+            if 'used<=15' in sweep_schema.replace(' ', '').replace('\n', ''):
+                # Atomic migration: preserve today's usage, never reset quota.
+                store.db.execute('SAVEPOINT sweep_quota_upgrade')
+                try:
+                    store.db.execute("""CREATE TABLE server_sweep_limits_v30 (
+                        player_id INTEGER PRIMARY KEY, day INTEGER NOT NULL,
+                        used INTEGER NOT NULL CHECK(used>=0 AND used<=30))""")
+                    store.db.execute('INSERT INTO server_sweep_limits_v30 SELECT * FROM server_sweep_limits')
+                    store.db.execute('DROP TABLE server_sweep_limits')
+                    store.db.execute('ALTER TABLE server_sweep_limits_v30 RENAME TO server_sweep_limits')
+                except BaseException:
+                    store.db.execute('ROLLBACK TO sweep_quota_upgrade')
+                    store.db.execute('RELEASE sweep_quota_upgrade')
+                    raise
+                else:
+                    store.db.execute('RELEASE sweep_quota_upgrade')
             store.db.execute("""CREATE TABLE IF NOT EXISTS sweep_receipts (
                 request_key TEXT PRIMARY KEY, player_id INTEGER NOT NULL,
                 section_id INTEGER NOT NULL, response BLOB NOT NULL)""")
@@ -1446,16 +1463,16 @@ class EconomyService:
         # Atomic with stamina, reward delivery and the transport receipt.
         today = (int(self.clock()) + 8 * 3600) // 86400
         charged = self.store.db.execute("""INSERT INTO server_sweep_limits
-            (player_id,day,used) SELECT ?,?,? WHERE ?<=15
+            (player_id,day,used) SELECT ?,?,? WHERE ?<=30
             ON CONFLICT(player_id) DO UPDATE SET
               day=excluded.day,
               used=CASE WHEN server_sweep_limits.day=excluded.day
                         THEN server_sweep_limits.used+excluded.used ELSE excluded.used END
             WHERE server_sweep_limits.day!=excluded.day
-               OR server_sweep_limits.used+excluded.used<=15""",
+               OR server_sweep_limits.used+excluded.used<=30""",
             (player_id, today, count, count))
         if not charged.rowcount:
-            raise UnresolvedEconomy('daily shared sweep limit 15 exceeded')
+            raise UnresolvedEconomy('daily shared sweep limit 30 exceeded')
         self.refresh_stamina(player_id)
         snapshot = self.store.get(player_id)["snapshot"]
         if snapshot.get("mobility", {}).get("power", 0) < cost * count:

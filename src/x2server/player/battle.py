@@ -549,7 +549,9 @@ class BattleService:
         if activity and section in activity.rotation.section_groups:
             try:
                 activity.admission(player['id'], section)
-            except UnresolvedEconomy:
+            except UnresolvedEconomy as exc:
+                logging.getLogger('x2.activity').info('activity entry denied player=%s section=%s reason=%s',
+                                                       player['id'], section, exc)
                 return reject
         if self.economy and self.catalog.sections.get(section,{}).get('Type')==7:
             self.economy.endless.ensure_period(player['id'])

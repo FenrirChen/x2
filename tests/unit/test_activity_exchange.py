@@ -292,3 +292,10 @@ def test_skin_good_delivers_and_pushes_hero_appearance(activity):
     assert store.db.execute('SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1221003').fetchone()[0] == 1
     pushed = [p.message_name for p in response.pushes]
     assert 'L2C_HeroSkinAll' in pushed and 'L2C_HeroSkinUpdate' in pushed
+
+    from x2server.messages.appearance import HERO_SKIN
+    skin_push=next(p for p in response.pushes if p.message_name=='L2C_HeroSkinUpdate')
+    assert 1221003 in HERO_SKIN.decode(skin_push.values['skin'])['skinIds']
+    replay=asyncio.run(exchange.handle(ctx,packet(request,993,'C2L_BuyGoods'),'C2L_BuyGoods',request))
+    assert replay.values==response.values
+    assert store.db.execute('SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1221003').fetchone()[0]==1

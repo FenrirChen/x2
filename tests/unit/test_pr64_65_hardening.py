@@ -86,3 +86,22 @@ def test_voice_gift_requires_success_and_breaks_are_unique(env):
     assert gift_voice in HERO_DUBBING_DATA.decode(raw)['dubbingIds']
     assert not dubbing_unlocked(1350104, {'favor_breaks': [4, 4, 4]}, set(), 1)
     assert not dubbing_unlocked(99999, {}, {1}, 1)
+
+
+def test_max_favor_liked_gift_is_real_and_can_unlock_voice(env):
+    store,e,ctx=env
+    favor=FavorService(store,e)
+    player=store.get(1)
+    hero=player['snapshot']['heroes'][0]
+    hero['favor']={'level':favor.heroes[1003]['LevelLimit'],'exp':0}
+    hero.pop('favor_liked_gift',None)
+    store.save_snapshot(1,player['snapshot'],player['revision'])
+    assert not dubbing_unlocked(1350111,hero,set(),1)
+    favorite=next(iter(favor.favorites[1003]))
+    with e.transaction():e._grant(1,'max-favor-gift',{favorite:1})
+    reply=asyncio.run(favor.handle(ctx,packet({'opt':2,'heroId':1003,
+        'optionId':favorite,'num':1},name='C2L_AddFavor')))
+    assert reply.values['code']==10
+    current=store.get(1)['snapshot']['heroes'][0]
+    assert current['favor']['level']==favor.heroes[1003]['LevelLimit']
+    assert dubbing_unlocked(1350111,current,set(),1)

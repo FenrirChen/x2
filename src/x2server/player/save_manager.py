@@ -99,7 +99,7 @@ TABLES_WITH_OWNER_COLUMN.extend(sorted(RELEASE_ADDED_TABLES))
 PLAYER_TABLES = sorted(TABLES_WITH_OWNER_COLUMN) + sorted(JOIN_OWNERS)
 LEGACY_PLAYER_TABLES = set(PLAYER_TABLES) - RELEASE_ADDED_TABLES
 # These are server-wide encounters/calendars, not a single player's save.
-GLOBAL_TABLES = {"accounts", "players", "repair_history", "world_boss_runs", "world_boss_days", "system_mail_issues", "season_calendar", "server_settings", "server_sweep_limits"}
+GLOBAL_TABLES = {"accounts", "players", "repair_history", "world_boss_runs", "world_boss_days", "system_mail_issues", "season_calendar", "server_settings", "server_sweep_limits", "server_activity_limits"}
 
 # Global AUTOINCREMENT integer keys that may need remapping on import, with the
 # referencing tables/columns. player_mail ids are always re-allocated (no DB

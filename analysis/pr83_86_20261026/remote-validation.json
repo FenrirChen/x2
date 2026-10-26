@@ -1,0 +1,12 @@
+{
+  "apk": "D:\\demo\\x2\\逆向\\打包\\X2-Revival-FavorGift20261026-JP-Remote-signed.apk",
+  "bytes": 2147166035,
+  "sha256": "5d3c82cf7e4635bdec7514261e096b84270c713e4c383d4063911e63f9a9deef",
+  "changed_entries": [
+    "lib/arm64-v8a/libil2cpp.so"
+  ],
+  "config_preserved": true,
+  "save_manager_and_allocator_preserved": true,
+  "full_zip_crc": "passed",
+  "stored_entry_alignment": 4
+}

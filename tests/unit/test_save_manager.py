@@ -693,3 +693,21 @@ def test_sweep_daily_quota_is_server_owned_across_import(tmp_path):
     finally:
         manager.close()
         store.close()
+
+
+def test_import_does_not_reset_master_activity_daily_quota(tmp_path):
+    store,accounts,manager=make_env(tmp_path)
+    try:
+        build_full_schema(store)
+        assert accounts.create('quota-player','pw',100)=='created'
+        player=accounts.get_by_name('quota-player')['player_id']
+        archive=manager.export_save(player)
+        with store.db:
+            store.db.execute('INSERT INTO server_activity_limits VALUES (?,?,?,?,?)',
+                             (player,1000007,12345,2160115,1))
+        assert 'server_activity_limits' not in manager.parse_save(archive).rows
+        manager.import_save(player,archive)
+        assert tuple(store.db.execute('SELECT * FROM server_activity_limits WHERE player_id=?',
+                                     (player,)).fetchone())==(player,1000007,12345,2160115,1)
+    finally:
+        manager.close();accounts.close();store.close()
