@@ -139,13 +139,15 @@ class WishService:
         if now < self.ANCHOR:
             return result
         # USER_DECISION 2026-10-10: UP rotates every 2 days, limited every 3.
-        for kind, days, batch in (("up", 2, 3), ("limited", 3, 1), ("jewel", 5, 2)):
+        for kind, days, batch in (("up", 2, 3), ("limited", 3, 1), ("jewel", 2, 3)):
             ids = self.groups[kind]
             span = days * 86400
             round_index = (now - self.ANCHOR) // span
             start = self.ANCHOR + round_index * span
             offset = (round_index * batch) % len(ids)
-            for pool_id in ids[offset:offset + batch]:
+            # Jewel has ten pools: a batch of three must wrap at the tail.
+            for index in range(batch):
+                pool_id = ids[(offset + index) % len(ids)]
                 result[pool_id] = (start, start + span)
         return result
 

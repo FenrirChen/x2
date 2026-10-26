@@ -120,7 +120,7 @@ def test_rotation_at_beijing_midnight_and_wraparound(env):
     active = wish.active_periods()
     assert [i for i in active if i in wish.groups["up"]] == wish.groups["up"][:3]
     assert [i for i in active if i in wish.groups["limited"]] == wish.groups["limited"][:1]
-    assert [i for i in active if i in wish.groups["jewel"]] == wish.groups["jewel"][:2]
+    assert [i for i in active if i in wish.groups["jewel"]] == wish.groups["jewel"][:3]
     assert active[22202] == (WishService.ANCHOR, WishService.ANCHOR + 2 * 86400)
     pools = [CARD_POOL.decode(raw) for raw in wish.values(1)["cardPoolList"]]
     first_up = next(p for p in pools if p["poolId"] == 22202)
@@ -132,7 +132,7 @@ def test_rotation_at_beijing_midnight_and_wraparound(env):
     active = wish.active_periods()
     assert [i for i in active if i in wish.groups["up"]] == wish.groups["up"][3:6]
     assert [i for i in active if i in wish.groups["limited"]] == wish.groups["limited"][:1]
-    assert [i for i in active if i in wish.groups["jewel"]] == wish.groups["jewel"][:2]
+    assert [i for i in active if i in wish.groups["jewel"]] == wish.groups["jewel"][3:6]
     now[0] = WishService.ANCHOR + 3 * 86400 - 1
     assert 22204 in wish.active_periods()
     now[0] += 1
@@ -140,7 +140,7 @@ def test_rotation_at_beijing_midnight_and_wraparound(env):
     now[0] = WishService.ANCHOR + 20 * 86400
     assert [i for i in wish.active_periods() if i in wish.groups["up"]] == wish.groups["up"][:3]
     now[0] = WishService.ANCHOR + 25 * 86400
-    assert [i for i in wish.active_periods() if i in wish.groups["jewel"]] == wish.groups["jewel"][:2]
+    assert [i for i in wish.active_periods() if i in wish.groups["jewel"]] == wish.groups["jewel"][6:9]
     now[0] = WishService.ANCHOR + 9 * 86400
     assert [i for i in wish.active_periods() if i in wish.groups["limited"]] == wish.groups["limited"][:1]
 
@@ -258,3 +258,33 @@ def test_ten_draw_preserves_order_after_hero_and_duplicate_transforms(env, monke
     assert len(items) == 10
     assert items[5]["transform"] is False
     assert items[7]["transform"] is True
+
+
+def test_jewel_two_day_three_pool_rotation_wraps_without_losing_pity(env):
+    store,economy,_=env
+    now=[WishService.ANCHOR]
+    wish=WishService(store,economy,clock=ServerClock(lambda:now[0]))
+    ids=wish.groups['jewel']
+    with store.db:
+        store.db.execute("INSERT OR REPLACE INTO wish_pity (player_id,category,since_hero,since_top) VALUES (1,'jewel',7,17)")
+    baseline=wish.state(1,ids[0])
+    seen=set()
+    for phase in range(20):
+        start=WishService.ANCHOR+phase*2*86400
+        expected=[ids[(phase*3+i)%len(ids)] for i in range(3)]
+        for instant in (start,start+2*86400-1):
+            now[0]=instant
+            active=wish.active_periods()
+            opened=[pid for pid in active if pid in ids]
+            assert opened==expected and len(set(opened))==3
+            assert all(active[pid]==(start,start+2*86400) for pid in opened)
+            displayed=[CARD_POOL.decode(raw) for raw in wish.values(1)['cardPoolList']]
+            jewels=[p for p in displayed if p['poolId'] in ids]
+            assert [p['poolId'] for p in jewels]==expected
+            assert all(p['endTime']-p['startTime']==2*86400 for p in jewels)
+            assert wish.state(1,ids[0])==baseline
+            seen.update(opened)
+    assert seen==set(ids)
+    # Ten banners advance three positions each time; complete cycle is 20 days.
+    now[0]=WishService.ANCHOR+20*86400
+    assert [pid for pid in wish.active_periods() if pid in ids]==ids[:3]
