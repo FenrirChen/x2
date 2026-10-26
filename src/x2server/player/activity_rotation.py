@@ -43,6 +43,16 @@ class ActivityRotation:
         self.themes = self.catalog['themes']
         # Preserve historical state IDs when a theme is retired from the calendar.
         self.state_cycle_size = self.catalog.get('state_cycle_size', len(self.themes))
+        # The generated catalog only keeps rows an activity can open, so the 17
+        # permanent PointOfView chapters (no UnlockActiviyID) are absent there and
+        # their whole-chapter ClearReward could never be paid. Hand-adding themes
+        # must not break the historical state slots either, so both live in the
+        # supplement next to the generated file.
+        extra = self._supplement()
+        if extra:
+            self.themes = self.themes + list(extra.get('themes', []))
+            self.catalog['tables'].update(extra.get('tables', {}))
+            self.state_cycle_size = extra.get('state_cycle_size', self.state_cycle_size)
         self.state_slots = {t.get('state_slot', i): i for i, t in enumerate(self.themes)}
         self.section_groups = {sid: t['group'] for t in self.themes for sid in t['section_ids']}
         if len(self.section_groups) != sum(len(t['section_ids']) for t in self.themes):
@@ -69,6 +79,21 @@ class ActivityRotation:
                 player_id INTEGER NOT NULL, request_key TEXT NOT NULL, period INTEGER NOT NULL,
                 message TEXT NOT NULL, response BLOB NOT NULL,
                 PRIMARY KEY(player_id,request_key))''')
+
+    @staticmethod
+    def _supplement():
+        """Load the hand-maintained supplement (extra tables, extra themes).
+
+        Kept next to the generated catalog so a regeneration never loses it.
+        Missing file = no supplement, which is what a fresh checkout of an older
+        revision has.
+        """
+        try:
+            raw = files('x2server').joinpath(
+                'data/activity_rotation_extra.json').read_text(encoding='utf-8')
+        except (FileNotFoundError, ModuleNotFoundError):
+            return None
+        return json.loads(raw)
 
     @property
     def first_end(self):
