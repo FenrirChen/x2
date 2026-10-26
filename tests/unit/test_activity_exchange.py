@@ -118,6 +118,11 @@ def test_every_supplied_offer_delivers_and_period_stock_resets(activity, shop_id
         assert store.db.execute('SELECT quantity FROM inventory WHERE player_id=1 AND item_id=?', (currency,)).fetchone()[0] == before - offer['price']
         assert exchange.buy(1, shop_id, gid, 1, f'test:{gid}') == result
         assert exchange.count(1, period, gid) == 1
+        if item in ActivityExchange.UNLIMITED_ITEM_IDS:
+            # 不限购的货品没有上限, 买过原 canBuyTimes 之后仍然成交。
+            assert exchange.buy(1, shop_id, gid, offer['canBuyTimes'], f'unlimited:{gid}')['code'] == 10
+            assert exchange.count(1, period, gid) == 1 + offer['canBuyTimes']
+            continue
         with pytest.raises(UnresolvedEconomy, match='stock exhausted'):
             exchange.buy(1, shop_id, gid, offer['canBuyTimes'], f'over:{gid}')
     now[0] = next_activity_cycle(now[0])
@@ -299,3 +304,29 @@ def test_skin_good_delivers_and_pushes_hero_appearance(activity):
     replay=asyncio.run(exchange.handle(ctx,packet(request,993,'C2L_BuyGoods'),'C2L_BuyGoods',request))
     assert replay.values==response.values
     assert store.db.execute('SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1221003').fetchone()[0]==1
+
+
+def test_unlimited_gift_reports_large_stock_and_keeps_cumulative_count(activity):
+    """影域礼包 (1203010) 不限购: 下发大库存, 但购买次数照常累加, 其它货品不变。
+
+    客户端的 CommonShopView_GoodsItem_SetData 用 canBuyTimes 当总库存、剩余 =
+    canBuyTimes - hasBuyTimes; 剩余 <= 0 就画售罄, 所以这里必须是大正数而不是 0。
+    """
+    store, economy, service, now = activity
+    exchange = ActivityExchange(service)
+    shop = exchange.shops[890]
+    index = next(i for i, t in enumerate(service.rotation.themes) if t['group'] == shop['group'])
+    now[0] = activity_start(index)
+    period = service.period(1)
+    open_shop(service, economy, shop, period)
+    offer = next(g for g in shop['goods'] if g['itemId'] == 1203010)
+    assert offer['canBuyTimes'] == 999
+    assert exchange.stock(offer) == ActivityExchange.UNLIMITED_STOCK
+    assert exchange.goods_values(1, period, offer)['canBuyTimes'] == ActivityExchange.UNLIMITED_STOCK
+    with economy.transaction():
+        economy._grant(1, 'test:unlimited', {offer['currencyItemId']: offer['price'] * 2500})
+    assert exchange.buy(1, 890, offer['goodsId'], 999, 'unlimited:1')['code'] == 10
+    assert exchange.buy(1, 890, offer['goodsId'], 999, 'unlimited:2')['code'] == 10
+    assert exchange.count(1, period, offer['goodsId']) == 1998   # 超过原来的 999 上限
+    other = next(g for g in shop['goods'] if g['itemId'] != 1203010)
+    assert exchange.stock(other) == other['canBuyTimes']
