@@ -726,11 +726,19 @@ class BattleService:
             drop_values = [0] * len(drop_values)
         moon_skill = (self.economy.moon.battle_skill(player["id"])
                       if self.economy and entry_context.section_type == 21 else b"")
+        # Deliberately no FightData.CRIDmg. The client writes it unconditionally into
+        # FightHero.baseCritDmg (a static field, so every hero in the battle shares the
+        # same number), CreatePlayerByInfo copies it to Player.BaseCritDmg and
+        # Player_OnInitProperty *adds* it to attribute 113 (CriticalDamage). That
+        # attribute is capped by AttribType[113].ValueMax=8000 (=800.0%) inside
+        # ValueCombinerSmartLong.GetValue, so the old 15000 pinned the battle attribute
+        # panel at 800.0% for every hero, on top of the client's own CRI_Dmg base
+        # (1500 = 150.0%). The official backend leaves the field at 0; omitting it here
+        # shows 150.0% plus beast-lord / jewel / suit sources again.
         data = FIGHT_DATA.encode({"fightHeros": fight_heroes, "missionId": section,
                                   "expertMode": request.get("expertMode", False),
                                   "dropData": DROP_DATA.encode({"dropValues": drop_values,
                                                                 "missionId": section}),
-                                  "CRIDmg": 15000,
                                   **({"fightGroupSkillData": moon_skill} if moon_skill else {})})
         profile = FIGHT_PROFILE.encode({"missionId": section, "chapterId": chapter, "layer": 0,
             "relicList": selected_relics,
