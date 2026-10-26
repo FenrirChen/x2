@@ -1,0 +1,21 @@
+{
+  "tests_passed": 189,
+  "task_ids": {
+    "retired": [
+      630025,
+      630026
+    ],
+    "live_yuexi": [
+      630040,
+      630041
+    ]
+  },
+  "success_sources": [
+    "activity_runs + reward_settlement_audit + battle_checkout_wire",
+    "activity_receipts + economy_grants"
+  ],
+  "recovery": "daily per player and activity period; MAX existing and proven count; claims unchanged",
+  "apk_changed": false,
+  "server_restarted": "2026-10-26 21:50:31 Asia/Shanghai",
+  "remote_push": false
+}

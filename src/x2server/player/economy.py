@@ -15,6 +15,7 @@ from x2server.network.dispatcher import OutboundMessage
 from x2server.protocol.errors import ProtocolError
 from x2server.protocol.registry import CORE_MESSAGE_REGISTRY
 from .task_calendar import task_period
+from .activity_daily_tasks import task_open as activity_daily_open, repair as repair_activity_daily
 from .transactions import transaction
 from .battle_entry import BattleEntryCatalog
 from .equipment_factory import EquipmentInstanceFactory, materialize_instances
@@ -25,6 +26,7 @@ from x2server.messages.equipment import EQUIP_PARAM, HERO_EQUIP
 
 class UnresolvedEconomy(ValueError):
     """The entire operation must be withheld, never partially granted."""
+
 
 
 class EconomyService:
@@ -1077,10 +1079,13 @@ class EconomyService:
     def task_values(self, player_id, kind):
         self.refresh_online_tasks(player_id)
         self.ensure_periods(player_id)
+        if kind == 1:
+            repair_activity_daily(self, player_id)
         level = self.store.get(player_id)["snapshot"]["level"]
         result = []
         for task_id, task in self.tasks.items():
-            if task["RefreshCycle"]["value"] != kind or task["AcceptLevel"] > level:
+            if (task["RefreshCycle"]["value"] != kind or task["AcceptLevel"] > level
+                    or not activity_daily_open(self, task_id)):
                 continue
             row = self.store.db.execute("SELECT progress,claimed FROM economy_tasks WHERE player_id=? AND task_id=?",
                                         (player_id, task_id)).fetchone()
@@ -1173,7 +1178,8 @@ class EconomyService:
         level = self.store.get(player_id)["snapshot"]["level"]
         for task_id, task in self.tasks.items():
             condition = self.catalog["task_conditions"][str(task_id)]
-            if (task["RefreshCycle"]["value"] not in active_kinds or task["AcceptLevel"] > level or condition["CompleteType"]["value"] != condition_type
+            if (task["RefreshCycle"]["value"] not in active_kinds or task["AcceptLevel"] > level
+                    or not activity_daily_open(self, task_id) or condition["CompleteType"]["value"] != condition_type
                     or condition.get("CompleteValue1", [0]) not in ([0], []) and value not in condition["CompleteValue1"]
                     or condition_type != 6 and condition.get("CompleteValue2", [0]) not in ([0], [])
                     and value2 not in condition["CompleteValue2"]):
@@ -1201,9 +1207,13 @@ class EconomyService:
     def claim(self, player_id, task_id, kind):
         self.ensure_periods(player_id)
         self.refresh_online_tasks(player_id)
+        if kind == 1:
+            repair_activity_daily(self, player_id)
         task = self.tasks.get(task_id)
         result = {"code": 13, "taskId": task_id, "type": kind, "rewardData": b""}
-        if not task or task["RefreshCycle"]["value"] != kind or task["AcceptLevel"] > self.store.get(player_id)["snapshot"]["level"]:
+        if (not task or task["RefreshCycle"]["value"] != kind
+                or task["AcceptLevel"] > self.store.get(player_id)["snapshot"]["level"]
+                or not activity_daily_open(self, task_id)):
             return result
         try:
             group = self.season.daily_gift(player_id, task_id, task["GiftGroup"])

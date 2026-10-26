@@ -37,7 +37,7 @@ def rewards(raw):
 
 def test_task_catalog_gates_and_login_claim_survives_restart(env):
     store, economy, ctx = env
-    assert len(economy.task_values(1, 1)["taskList"]) == 26
+    assert len(economy.task_values(1, 1)["taskList"]) == 22
     assert len(economy.task_values(1, 2)["taskList"]) == 14
     assert economy.claim(1, 630019, 1)["code"] == 13
     economy.record_event(1, "login:initial", 5)
@@ -95,7 +95,8 @@ def test_every_eligible_daily_and_weekly_task_reward_can_be_claimed(env):
     store, economy, _ = env
     economy.ensure_periods(1)
     for task_id, task in sorted(economy.tasks.items()):
-        if task["AcceptLevel"] > store.get(1)["snapshot"]["level"]:
+        from x2server.player.activity_daily_tasks import task_open
+        if task["AcceptLevel"] > store.get(1)["snapshot"]["level"] or not task_open(economy, task_id):
             continue
         target = economy.catalog["task_conditions"][str(task_id)]["CompleteNum"]
         store.db.execute("UPDATE economy_tasks SET progress=? WHERE player_id=1 AND task_id=?",

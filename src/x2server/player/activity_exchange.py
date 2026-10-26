@@ -128,8 +128,12 @@ class ActivityExchange:
                 stackable_types=(11,) if kind == 11 else ())
             self.activity.obtained(player, period, rewards, f'shop:{request_key}')
             self.rotation.put(player, period, 'shop-count', goods_id, bought + count)
-            self.activity.event(player, f'shop-buy:{request_key}', 24, goods_id, count,
-                                shop_id, period=period)
+            # Broadcast authoritative purchases to all task systems.
+            # This prefix excludes supply-shop-only achievement counters.
+            event_key = f'activity-shop-buy:{request_key}'
+            if getattr(self.economy, 'activity', None) is not self.activity:
+                self.activity.event(player, event_key, 24, goods_id, count, shop_id, period=period)
+            self.economy._event(player, event_key, 24, goods_id, count, shop_id)
             result = {'code': 10, 'shopId': shop_id, 'goodsId': goods_id,
                 'itemId': offer['itemId'], 'itemNum': offer['num'] * count, 'buyNum': count,
                 'price': offer['price'], 'originalPrice': offer['price'], 'hasBuyTimes': bought + count,

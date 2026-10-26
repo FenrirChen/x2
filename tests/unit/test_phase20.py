@@ -46,7 +46,7 @@ def test_period_reset_independence_and_clock_rollback(env):
     economy.login_event(1)
     assert store.get(1)["snapshot"]["week_activity"] == 0
     assert store.get(1)["snapshot"]["daily_activity"] == 10
-    assert len(economy.task_values(1,1)["taskList"]) == 26
+    assert len(economy.task_values(1,1)["taskList"]) == 22
     assert len(economy.task_values(1,2)["taskList"]) == 14
     now[0] -= 86400
     economy.login_event(1)
