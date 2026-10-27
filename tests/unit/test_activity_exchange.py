@@ -330,3 +330,33 @@ def test_unlimited_gift_reports_large_stock_and_keeps_cumulative_count(activity)
     assert exchange.count(1, period, offer['goodsId']) == 1998   # 超过原来的 999 上限
     other = next(g for g in shop['goods'] if g['itemId'] != 1203010)
     assert exchange.stock(other) == other['canBuyTimes']
+
+
+def test_unlimited_gift_has_no_cumulative_ceiling_and_replay_is_free(activity):
+    store, economy, service, now = activity
+    exchange = ActivityExchange(service)
+    shop = exchange.shops[890]
+    now[0] = activity_start(next(i for i,t in enumerate(service.rotation.themes)
+                                 if t['group'] == shop['group']))
+    period = service.period(1)
+    open_shop(service, economy, shop, period)
+    offer = next(g for g in shop['goods'] if g['itemId'] == 1203010)
+    gid = offer['goodsId']
+    old = exchange.UNLIMITED_STOCK
+    with economy.transaction():
+        service.rotation.put(1, period, 'shop-count', gid, old)
+        economy._grant(1, 'unlimited-boundary-funds', {offer['currencyItemId']: offer['price'] * 2})
+    before = store.db.execute('SELECT quantity FROM inventory WHERE player_id=1 AND item_id=?',
+                              (offer['currencyItemId'],)).fetchone()[0]
+    values = exchange.goods_values(1, period, offer)
+    assert values['canBuyTimes'] - values['hasBuyTimes'] == old
+    result = exchange.buy(1, 890, gid, 2, 'unlimited-boundary')
+    assert result['code'] == 10 and result['hasBuyTimes'] == old + 2
+    assert exchange.buy(1, 890, gid, 2, 'unlimited-boundary') == result
+    after = store.db.execute('SELECT quantity FROM inventory WHERE player_id=1 AND item_id=?',
+                             (offer['currencyItemId'],)).fetchone()[0]
+    assert before - after == offer['price'] * 2
+    assert exchange.goods_values(1, period, offer)['canBuyTimes'] > old + 2
+    with pytest.raises(UnresolvedEconomy):
+        exchange.buy(1, 890, gid, 1, 'unfunded-unlimited')
+    assert exchange.count(1, period, gid) == old + 2

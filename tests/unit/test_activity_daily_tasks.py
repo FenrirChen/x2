@@ -69,6 +69,9 @@ def test_exchange_updates_daily_task_once_and_old_progress_recovers(runtime):
     assert tasks(e)[630041]['taskProgress']==1
     # Model yesterday's server bug: paid receipt exists, daily progress was lost.
     with e.transaction():
+        # Grant audit uses wall time; align this synthetic receipt to the fixture day.
+        store.db.execute("UPDATE economy_grants SET created_at=? WHERE player_id=1 AND source=?",
+                         (now[0], f'activity:{rt.r.at().index}:shop:purchase'))
         store.db.execute('UPDATE economy_tasks SET progress=0 WHERE player_id=1 AND task_id=630041')
         store.db.execute("DELETE FROM economy_events WHERE player_id=1 AND event_key LIKE 'activity-daily-repair-v1:%'")
     assert tasks(e)[630041]['taskProgress']==1

@@ -1,0 +1,29 @@
+{
+  "native": "D:\\demo\\x2\\apk\\lib\\arm64-v8a\\libil2cpp.so",
+  "sha256": "37f092f117c11d7e0cdae1e9ac9f7123487c97b6d91c4e7ab699d380646a1dca",
+  "methods": {
+    "ConvertFightData": "0x16C24D4",
+    "CreatePlayerByInfo": "0x1C4D6B0",
+    "OnInitProperty": "0x1C1755C",
+    "ValueCombinerSmartLong.GetValue": "0x33FEA98"
+  },
+  "attribute113": {
+    "AttribId": 113,
+    "NameId": 1131,
+    "OrderIndex": 8,
+    "NameEnu": {
+      "value": 13,
+      "enum": "E_CRI_Dmg"
+    },
+    "DataType": {
+      "value": 1,
+      "enum": "E_Percent"
+    },
+    "ShowIdex": 17,
+    "AbilityRate": 1000,
+    "ValueMax": 8000,
+    "IfNoticeMain": 1
+  },
+  "CRI_Dmg": "1500",
+  "official_server_packets_available": false
+}

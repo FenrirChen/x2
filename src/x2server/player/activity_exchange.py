@@ -11,12 +11,13 @@ from .economy import UnresolvedEconomy
 
 
 class ActivityExchange:
-    # USER_DECISION 2026-10-27: 影域交易所的「影域礼包」(1203010) 不再限购。
+    # Compatibility policy (PR #87): 影域交易所的「影域礼包」(1203010) 不再限购。
     # 客户端的 CommonShopView_GoodsItem_SetData 把 canBuyTimes 当总库存、
     # 剩余 = canBuyTimes - hasBuyTimes，剩余 <= 0 就地画成售罄；所以「无上限」
     # 必须下发一个大正数而不是 0。背包与回执仍按真实购买次数记账。
     UNLIMITED_ITEM_IDS = frozenset({1203010})
-    UNLIMITED_STOCK = 999999999
+    # Rolling display allowance also respects the server single-request maximum.
+    UNLIMITED_STOCK = 9999
 
     def __init__(self, activity, appearance=None):
         self.activity = activity
@@ -70,16 +71,17 @@ class ActivityExchange:
     def count(self, player, period, goods):
         return self.rotation.get(player, period, 'shop-count', goods, 0)
 
-    def stock(self, offer):
+    def stock(self, offer, bought=0):
         """单件商品的库存上限; 不限购的商品返回大正数 (见 UNLIMITED_ITEM_IDS)。"""
         if offer['itemId'] in self.UNLIMITED_ITEM_IDS:
-            return self.UNLIMITED_STOCK
+            return min(2147483647, bought + self.UNLIMITED_STOCK)
         return offer['canBuyTimes']
 
     def goods_values(self, player, period, row):
+        bought = self.count(player, period, row['goodsId'])
         return {'goodsId': row['goodsId'], 'itemId': row['itemId'], 'num': row['num'],
                 'price': row['price'], 'originalPrice': row['price'], 'currencyType': row['currencyType'],
-                'canBuyTimes': self.stock(row), 'hasBuyTimes': self.count(player, period, row['goodsId']),
+                'canBuyTimes': self.stock(row, bought), 'hasBuyTimes': bought,
                 'startTime': period.start, 'endTime': period.end, 'goodsTag': row['goodsTag'], 'limited': row['limited']}
 
     def listing(self, player, shop_id, *, preview=False):
@@ -125,7 +127,7 @@ class ActivityExchange:
         _, offer = match
         with self.economy.transaction():
             bought = self.count(player, period, goods_id)
-            if bought + count > self.stock(offer):
+            if offer['itemId'] not in self.UNLIMITED_ITEM_IDS and bought + count > self.stock(offer):
                 raise UnresolvedEconomy('activity stock exhausted')
             self.activity.spend(player, period, offer['currencyItemId'], offer['price'] * count,
                                 f'shop-spend:{request_key}')

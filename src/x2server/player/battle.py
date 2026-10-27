@@ -733,8 +733,9 @@ class BattleService:
         # attribute is capped by AttribType[113].ValueMax=8000 (=800.0%) inside
         # ValueCombinerSmartLong.GetValue, so the old 15000 pinned the battle attribute
         # panel at 800.0% for every hero, on top of the client's own CRI_Dmg base
-        # (1500 = 150.0%). The official backend leaves the field at 0; omitting it here
-        # shows 150.0% plus beast-lord / jewel / suit sources again.
+        # (1500 = 150.0%). Omit this extra override so the native base and
+        # beast-lord / jewel / suit sources determine the final value. The old
+        # official backend's actual packet value is not available for comparison.
         data = FIGHT_DATA.encode({"fightHeros": fight_heroes, "missionId": section,
                                   "expertMode": request.get("expertMode", False),
                                   "dropData": DROP_DATA.encode({"dropValues": drop_values,

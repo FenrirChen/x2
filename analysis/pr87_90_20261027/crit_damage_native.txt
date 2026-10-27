@@ -1,0 +1,1494 @@
+LogicX2.Player$$OnInitProperty
+1c1755c stp x22, x21, [sp, #-0x30]!
+1c17560 stp x20, x19, [sp, #0x10]
+1c17564 stp x29, x30, [sp, #0x20]
+1c17568 add x29, sp, #0x20
+1c1756c sub sp, sp, #0x40
+1c17570 adrp x20, #0x5578000
+1c17574 ldrb w8, [x20, #0xf43]
+1c17578 mov x19, x0
+1c1757c tbnz w8, #0, #0x1c17598
+1c17580 adrp x8, #0x5305000
+1c17584 ldr x8, [x8, #0x598]
+1c17588 ldr w0, [x8]
+1c1758c bl #0x3f2aed0
+1c17590 mov w8, #1
+1c17594 strb w8, [x20, #0xf43]
+1c17598 ldr x20, [x19, #0x3a8]
+1c1759c ldr x21, [x19, #0x6d0]
+1c175a0 ldr x22, [x19, #0x6f0]
+1c175a4 cbnz x20, #0x1c175ac
+1c175a8 bl #0x3f564f0
+1c175ac mov x0, x20
+1c175b0 mov x1, x21
+1c175b4 mov x2, x22
+1c175b8 bl #0x1c17668 LogicX2.Property$$AddEqtsAttributes
+1c175bc ldr x20, [x19, #0x3a8]
+1c175c0 ldr x21, [x19, #0x6e0]
+1c175c4 cbnz x20, #0x1c175cc
+1c175c8 bl #0x3f564f0
+1c175cc mov x0, x20
+1c175d0 mov x1, x21
+1c175d4 bl #0x1c17bc4 LogicX2.Property$$AddHeroGodEquipAttributes
+1c175d8 ldr x20, [x19, #0x3a8]
+1c175dc ldr x21, [x19, #0x6e8]
+1c175e0 cbnz x20, #0x1c175e8
+1c175e4 bl #0x3f564f0
+1c175e8 mov x0, x20
+1c175ec mov x1, x21
+1c175f0 bl #0x1c18030 LogicX2.Property$$AddOtherAttributes
+1c175f4 ldr x8, [x19, #0x580]
+1c175f8 cbz x8, #0x1c17640
+1c175fc ldr x8, [x19, #0x6c0]
+1c17600 ldr x20, [x19, #0x3a8]
+1c17604 str x8, [sp, #0x30]
+1c17608 ldr q0, [x19, #0x6b0]
+1c1760c str q0, [sp, #0x20]
+1c17610 cbnz x20, #0x1c17618
+1c17614 bl #0x3f564f0
+1c17618 adrp x8, #0x5280000
+1c1761c ldr x8, [x8, #0x860]
+1c17620 ldr x9, [sp, #0x30]
+1c17624 ldr q0, [sp, #0x20]
+1c17628 mov x2, sp
+1c1762c ldr x1, [x8]
+1c17630 mov x0, x20
+1c17634 str x9, [sp, #0x10]
+1c17638 str q0, [sp]
+1c1763c bl #0x1c1819c LogicX2.Property$$AddWrapper
+1c17640 mov x1, xzr
+1c17644 mov x0, x19
+1c17648 bl #0x1cd077c LogicX2.Unit$$RefreshSkillCD
+1c1764c mov x1, xzr
+1c17650 mov x0, x19
+1c17654 sub sp, x29, #0x20
+1c17658 ldp x29, x30, [sp, #0x20]
+1c1765c ldp x20, x19, [sp, #0x10]
+1c17660 ldp x22, x21, [sp], #0x30
+1c17664 b #0x1cd0768 LogicX2.Unit$$RefreshSkillChargeNum
+LogicX2.UnitManager$$CreatePlayerByInfo
+1c4d6b0 stp x26, x25, [sp, #-0x50]!
+1c4d6b4 stp x24, x23, [sp, #0x10]
+1c4d6b8 stp x22, x21, [sp, #0x20]
+1c4d6bc stp x20, x19, [sp, #0x30]
+1c4d6c0 stp x29, x30, [sp, #0x40]
+1c4d6c4 add x29, sp, #0x40
+1c4d6c8 sub sp, sp, #0x80
+1c4d6cc adrp x20, #0x5579000
+1c4d6d0 ldrb w8, [x20, #0x95]
+1c4d6d4 mov w23, w5
+1c4d6d8 mov w21, w4
+1c4d6dc mov w25, w3
+1c4d6e0 mov x19, x2
+1c4d6e4 mov w26, w1
+1c4d6e8 mov x22, x0
+1c4d6ec tbnz w8, #0, #0x1c4d708
+1c4d6f0 adrp x8, #0x52f4000
+1c4d6f4 ldr x8, [x8, #0x7b8]
+1c4d6f8 ldr w0, [x8]
+1c4d6fc bl #0x3f2aed0
+1c4d700 mov w8, #1
+1c4d704 strb w8, [x20, #0x95]
+1c4d708 adrp x8, #0x51cd000
+1c4d70c ldr x8, [x8, #0x3d0]
+1c4d710 ldr x0, [x8]
+1c4d714 ldrb w8, [x0, #0x10a]
+1c4d718 tbz w8, #0, #0x1c4d728
+1c4d71c ldr w8, [x0, #0xbc]
+1c4d720 cbnz w8, #0x1c4d728
+1c4d724 bl #0x3f3f378
+1c4d728 mov x0, xzr
+1c4d72c mov x1, xzr
+1c4d730 bl #0x33fd204 UnitBaseManager$$get_Instance
+1c4d734 mov x20, x0
+1c4d738 cbnz x19, #0x1c4d740
+1c4d73c bl #0x3f564f0
+1c4d740 ldr w24, [x19, #0x14]
+1c4d744 cbnz x20, #0x1c4d74c
+1c4d748 bl #0x3f564f0
+1c4d74c mov x2, xzr
+1c4d750 mov x0, x20
+1c4d754 mov w1, w24
+1c4d758 bl #0x33fd4d4 UnitBaseManager$$GetItem
+1c4d75c mov x24, x0
+1c4d760 cbz x24, #0x1c4d7e0
+1c4d764 ldr x20, [x22, #0x70]
+1c4d768 cbnz x20, #0x1c4d770
+1c4d76c bl #0x3f564f0
+1c4d770 adrp x8, #0x523b000
+1c4d774 ldr x8, [x8, #0xd28]
+1c4d778 mov x0, x20
+1c4d77c ldr x1, [x8]
+1c4d780 bl #0x2f47f54 CommonX2.ObjectPool<MarsNet.Request>$$Get
+1c4d784 mov x20, x0
+1c4d788 cbnz x20, #0x1c4d790
+1c4d78c bl #0x3f564f0
+1c4d790 str w26, [x20, #0x610]
+1c4d794 cbnz x19, #0x1c4d79c
+1c4d798 bl #0x3f564f0
+1c4d79c ldr w8, [x19, #0x14]
+1c4d7a0 mov w9, #1
+1c4d7a4 str w9, [x20, #0x504]
+1c4d7a8 str w25, [x20, #0x4dc]
+1c4d7ac str w8, [x20, #0x4e4]
+1c4d7b0 cbz x19, #0x1c4d8c8
+1c4d7b4 ldr x8, [x19, #0x30]
+1c4d7b8 str x8, [x20, #0x6d0]
+1c4d7bc ldr x8, [x19, #0x28]
+1c4d7c0 str x8, [x20, #0x6e0]
+1c4d7c4 ldr x8, [x19, #0x40]
+1c4d7c8 str x8, [x20, #0x6d8]
+1c4d7cc ldr x8, [x19, #0x48]
+1c4d7d0 str x8, [x20, #0x6e8]
+1c4d7d4 ldr x8, [x19, #0x50]
+1c4d7d8 str x8, [x20, #0x6f0]
+1c4d7dc b #0x1c4d91c
+1c4d7e0 adrp x20, #0x52b9000
+1c4d7e4 ldr x20, [x20, #0x898]
+1c4d7e8 ldr x0, [x20]
+1c4d7ec ldrb w8, [x0, #0x10a]
+1c4d7f0 tbz w8, #0, #0x1c4d804
+1c4d7f4 ldr w8, [x0, #0xbc]
+1c4d7f8 cbnz w8, #0x1c4d804
+1c4d7fc bl #0x3f3f378
+1c4d800 ldr x0, [x20]
+1c4d804 adrp x9, #0x5228000
+1c4d808 ldr x8, [x0, #0xa0]
+1c4d80c ldr x9, [x9, #0x560]
+1c4d810 ldr x20, [x8, #0x30]
+1c4d814 ldr x21, [x9]
+1c4d818 mov x0, x21
+1c4d81c bl #0x3f1f994
+1c4d820 mov w1, #1
+1c4d824 mov x0, x21
+1c4d828 bl #0x3f69a40
+1c4d82c mov x21, x0
+1c4d830 cbnz x19, #0x1c4d838
+1c4d834 bl #0x3f564f0
+1c4d838 adrp x9, #0x52e8000
+1c4d83c ldr w8, [x19, #0x14]
+1c4d840 ldr x9, [x9, #0xcc0]
+1c4d844 sub x1, x29, #0x58
+1c4d848 stur w8, [x29, #-0x58]
+1c4d84c ldr x0, [x9]
+1c4d850 bl #0x3f6448c
+1c4d854 mov x19, x0
+1c4d858 cbnz x21, #0x1c4d860
+1c4d85c bl #0x3f564f0
+1c4d860 cbz x19, #0x1c4d884
+1c4d864 ldr x8, [x21]
+1c4d868 mov x0, x19
+1c4d86c ldr x1, [x8, #0x30]
+1c4d870 bl #0x3f64744
+1c4d874 cbnz x0, #0x1c4d884
+1c4d878 bl #0x3f571fc
+1c4d87c mov x1, xzr
+1c4d880 bl #0x3f563d4
+1c4d884 ldr w8, [x21, #0x18]
+1c4d888 cbnz w8, #0x1c4d898
+1c4d88c bl #0x3f570dc
+1c4d890 mov x1, xzr
+1c4d894 bl #0x3f563d4
+1c4d898 str x19, [x21, #0x20]
+1c4d89c cbnz x20, #0x1c4d8a4
+1c4d8a0 bl #0x3f564f0
+1c4d8a4 adrp x8, #0x5280000
+1c4d8a8 ldr x8, [x8, #0x350]
+1c4d8ac mov x3, xzr
+1c4d8b0 mov x0, x20
+1c4d8b4 mov x2, x21
+1c4d8b8 ldr x1, [x8]
+1c4d8bc bl #0x1e41f9c LogicX2.Debug.DelegateWithParamskeyword$$Invoke
+1c4d8c0 mov x20, xzr
+1c4d8c4 b #0x1c4db58
+1c4d8c8 bl #0x3f564f0
+1c4d8cc mov w8, #0x30
+1c4d8d0 ldr x8, [x8]
+1c4d8d4 str x8, [x20, #0x6d0]
+1c4d8d8 bl #0x3f564f0
+1c4d8dc mov w8, #0x28
+1c4d8e0 ldr x8, [x8]
+1c4d8e4 str x8, [x20, #0x6e0]
+1c4d8e8 bl #0x3f564f0
+1c4d8ec mov w8, #0x40
+1c4d8f0 ldr x8, [x8]
+1c4d8f4 str x8, [x20, #0x6d8]
+1c4d8f8 bl #0x3f564f0
+1c4d8fc mov w8, #0x48
+1c4d900 ldr x8, [x8]
+1c4d904 str x8, [x20, #0x6e8]
+1c4d908 bl #0x3f564f0
+1c4d90c mov w8, #0x50
+1c4d910 ldr x8, [x8]
+1c4d914 str x8, [x20, #0x6f0]
+1c4d918 bl #0x3f564f0
+1c4d91c adrp x8, #0x52f4000
+1c4d920 ldr x8, [x8, #0xca0]
+1c4d924 ldr x25, [x19, #0x58]
+1c4d928 ldr x0, [x8]
+1c4d92c ldrb w8, [x0, #0x10a]
+1c4d930 tbz w8, #0, #0x1c4d940
+1c4d934 ldr w8, [x0, #0xbc]
+1c4d938 cbnz w8, #0x1c4d940
+1c4d93c bl #0x3f3f378
+1c4d940 mov x0, xzr
+1c4d944 mov x2, xzr
+1c4d948 sub x8, x29, #0x58
+1c4d94c mov x1, x25
+1c4d950 bl #0x3efeb04 LogicX2.SmartLong$$op_Implicit
+1c4d954 ldur q0, [x29, #-0x58]
+1c4d958 ldur x8, [x29, #-0x48]
+1c4d95c mov x0, xzr
+1c4d960 mov x2, xzr
+1c4d964 str q0, [x20, #0x650]
+1c4d968 str x8, [x20, #0x660]
+1c4d96c ldr x1, [x19, #0x60]
+1c4d970 add x8, sp, #0x50
+1c4d974 bl #0x3efeb04 LogicX2.SmartLong$$op_Implicit
+1c4d978 ldr x8, [sp, #0x60]
+1c4d97c ldr q0, [sp, #0x50]
+1c4d980 add x9, x20, #0x668
+1c4d984 mov x0, xzr
+1c4d988 str x8, [x20, #0x678]
+1c4d98c str q0, [x9]
+1c4d990 ldr x1, [x19, #0x68]
+1c4d994 mov x2, xzr
+1c4d998 add x8, sp, #0x38
+1c4d99c bl #0x3efeb04 LogicX2.SmartLong$$op_Implicit
+1c4d9a0 ldur q0, [sp, #0x38]
+1c4d9a4 ldr x8, [sp, #0x48]
+1c4d9a8 mov x0, xzr
+1c4d9ac mov x2, xzr
+1c4d9b0 str q0, [x20, #0x620]
+1c4d9b4 str x8, [x20, #0x630]
+1c4d9b8 ldr x1, [x19, #0x70]
+1c4d9bc add x8, sp, #0x20
+1c4d9c0 bl #0x3efeb04 LogicX2.SmartLong$$op_Implicit
+1c4d9c4 ldr x8, [sp, #0x30]
+1c4d9c8 ldr q0, [sp, #0x20]
+1c4d9cc add x9, x20, #0x638
+1c4d9d0 mov x0, xzr
+1c4d9d4 str x8, [x20, #0x648]
+1c4d9d8 str q0, [x9]
+1c4d9dc adrp x8, #0x5256000
+1c4d9e0 ldr x8, [x8, #0x620]
+1c4d9e4 mov x2, xzr
+1c4d9e8 ldr x8, [x8]
+1c4d9ec ldr x8, [x8, #0xa0]
+1c4d9f0 ldrsw x1, [x8]
+1c4d9f4 add x8, sp, #8
+1c4d9f8 bl #0x3efeb04 LogicX2.SmartLong$$op_Implicit
+1c4d9fc ldur q0, [sp, #8]
+1c4da00 ldr x8, [sp, #0x18]
+1c4da04 str q0, [x20, #0x6b0]
+1c4da08 str x8, [x20, #0x6c0]
+1c4da0c ldr x8, [x19, #0x80]
+1c4da10 str x8, [x20, #0x6f8]
+1c4da14 ldr x8, [x19, #0x88]
+1c4da18 str x8, [x20, #0x700]
+1c4da1c adrp x8, #0x5272000
+1c4da20 ldr x8, [x8, #0x298]
+1c4da24 ldr w25, [x19, #0x1c]
+1c4da28 ldr x0, [x8]
+1c4da2c ldrb w8, [x0, #0x10a]
+1c4da30 tbz w8, #0, #0x1c4da40
+1c4da34 ldr w8, [x0, #0xbc]
+1c4da38 cbnz w8, #0x1c4da40
+1c4da3c bl #0x3f3f378
+1c4da40 mov x0, xzr
+1c4da44 mov x2, xzr
+1c4da48 mov w1, w25
+1c4da4c bl #0x3efde7c LogicX2.SmartInt$$op_Implicit
+1c4da50 mov x4, x0
+1c4da54 and x2, x1, #0xffffffff
+1c4da58 mov x3, xzr
+1c4da5c mov x0, x20
+1c4da60 mov x1, x4
+1c4da64 bl #0x1cc809c LogicX2.Unit$$set_Level
+1c4da68 ldr w8, [x19, #0x20]
+1c4da6c str w8, [x20, #0x6cc]
+1c4da70 cbnz w23, #0x1c4da78
+1c4da74 ldr w23, [x19, #0x78]
+1c4da78 str w23, [x20, #0x53c]
+1c4da7c ldr w8, [x19, #0x7c]
+1c4da80 mov w1, wzr
+1c4da84 mov x2, xzr
+1c4da88 mov x0, x20
+1c4da8c str w8, [x20, #0x540]
+1c4da90 bl #0x1ccc4c4 LogicX2.Unit$$Init
+1c4da94 mov w5, wzr
+1c4da98 and w2, w21, #1
+1c4da9c mov w3, #1
+1c4daa0 mov w4, #-1
+1c4daa4 mov x0, x22
+1c4daa8 mov x1, x20
+1c4daac bl #0x1c4bd64 LogicX2.UnitManager$$Add
+1c4dab0 mov x1, xzr
+1c4dab4 mov x0, x20
+1c4dab8 bl #0x1cd7a1c LogicX2.Unit$$LateInit
+1c4dabc mov x1, xzr
+1c4dac0 mov x0, x20
+1c4dac4 bl #0x1c13d68 LogicX2.Player$$CheckBaseAttribute
+1c4dac8 adrp x8, #0x5285000
+1c4dacc ldr x8, [x8, #0x500]
+1c4dad0 ldr x19, [x24, #0x138]
+1c4dad4 ldr x0, [x8]
+1c4dad8 ldrb w8, [x0, #0x10a]
+1c4dadc tbz w8, #0, #0x1c4daec
+1c4dae0 ldr w8, [x0, #0xbc]
+1c4dae4 cbnz w8, #0x1c4daec
+1c4dae8 bl #0x3f3f378
+1c4daec mov x0, xzr
+1c4daf0 mov x2, xzr
+1c4daf4 mov x1, x19
+1c4daf8 bl #0x2b8a530 System.String$$IsNullOrEmpty
+1c4dafc and w8, w0, #1
+1c4db00 tbnz w8, #0, #0x1c4db58
+1c4db04 ldr x19, [x24, #0x138]
+1c4db08 mov x0, xzr
+1c4db0c mov x1, xzr
+1c4db10 bl #0x18d3144 LogicX2.LogicBattle$$get_Current
+1c4db14 mov x21, x0
+1c4db18 cbnz x21, #0x1c4db20
+1c4db1c bl #0x3f564f0
+1c4db20 mov x1, xzr
+1c4db24 mov x0, x21
+1c4db28 bl #0x18e1ac8 LogicX2.LogicBattle$$get_TriggerManager
+1c4db2c mov x21, x0
+1c4db30 cbnz x20, #0x1c4db38
+1c4db34 bl #0x3f564f0
+1c4db38 ldr w22, [x20, #0x4d4]
+1c4db3c cbnz x21, #0x1c4db44
+1c4db40 bl #0x3f564f0
+1c4db44 mov x3, xzr
+1c4db48 mov x0, x21
+1c4db4c mov w1, w22
+1c4db50 mov x2, x19
+1c4db54 bl #0x1cc52c8 LogicX2.TriggerManager$$CreateUnitTrigger
+1c4db58 mov x0, x20
+1c4db5c sub sp, x29, #0x40
+1c4db60 ldp x29, x30, [sp, #0x40]
+1c4db64 ldp x20, x19, [sp, #0x30]
+1c4db68 ldp x22, x21, [sp, #0x20]
+1c4db6c ldp x24, x23, [sp, #0x10]
+1c4db70 ldp x26, x25, [sp], #0x50
+1c4db74 ret
+ValueCombinerSmartLong$$GetValue
+33fea98 stp x28, x27, [sp, #-0x60]!
+33fea9c stp x26, x25, [sp, #0x10]
+33feaa0 stp x24, x23, [sp, #0x20]
+33feaa4 stp x22, x21, [sp, #0x30]
+33feaa8 stp x20, x19, [sp, #0x40]
+33feaac stp x29, x30, [sp, #0x50]
+33feab0 add x29, sp, #0x50
+33feab4 sub sp, sp, #0x120
+33feab8 adrp x21, #0x5586000
+33feabc ldrb w9, [x21, #0xcfb]
+33feac0 mov x20, x0
+33feac4 mov x19, x8
+33feac8 tbnz w9, #0, #0x33feae4
+33feacc adrp x8, #0x51d0000
+33fead0 ldr x8, [x8, #0xd30]
+33fead4 ldr w0, [x8]
+33fead8 bl #0x3f2aed0
+33feadc mov w8, #1
+33feae0 strb w8, [x21, #0xcfb]
+33feae4 adrp x8, #0x5235000
+33feae8 ldr x8, [x8, #0x368]
+33feaec mov x0, x20
+33feaf0 ldr x1, [x8]
+33feaf4 sub x8, x29, #0x90
+33feaf8 stp xzr, xzr, [x29, #-0x68]
+33feafc stur xzr, [x29, #-0x70]
+33feb00 bl #0x2cdbb4c ValueCombiner<object, SmartLong>$$get_value
+33feb04 ldur x8, [x29, #-0x80]
+33feb08 ldur q0, [x29, #-0x90]
+33feb0c stur x8, [x29, #-0x60]
+33feb10 stur q0, [x29, #-0x70]
+33feb14 ldr x22, [x20, #0x68]
+33feb18 cbz x22, #0x33fec1c
+33feb1c adrp x24, #0x5256000
+33feb20 adrp x25, #0x52f4000
+33feb24 adrp x26, #0x51f3000
+33feb28 ldr x24, [x24, #0x3d8]
+33feb2c ldr x25, [x25, #0xca0]
+33feb30 ldr x26, [x26, #0xc18]
+33feb34 mov w21, wzr
+33feb38 b #0x33feb88
+33feb3c ldr x8, [x23, #0x28]
+33feb40 ldur q0, [x23, #0x18]
+33feb44 mov x0, xzr
+33feb48 add x1, sp, #0xa0
+33feb4c mov x2, xzr
+33feb50 str x8, [sp, #0xb0]
+33feb54 str q0, [sp, #0xa0]
+33feb58 bl #0x3efe9dc LogicX2.SmartLong$$op_Implicit
+33feb5c add x1, x0, x22
+33feb60 mov x0, xzr
+33feb64 mov x2, xzr
+33feb68 add x8, sp, #0x80
+33feb6c bl #0x3efeb04 LogicX2.SmartLong$$op_Implicit
+33feb70 ldr x8, [sp, #0x90]
+33feb74 ldr q0, [sp, #0x80]
+33feb78 add w21, w21, #1
+33feb7c stur x8, [x29, #-0x60]
+33feb80 stur q0, [x29, #-0x70]
+33feb84 ldr x22, [x20, #0x68]
+33feb88 cbnz x22, #0x33feb90
+33feb8c bl #0x3f564f0
+33feb90 ldr x1, [x24]
+33feb94 mov x0, x22
+33feb98 bl #0x3d51884 System.Collections.Generic.List<IEventSystemHandler>$$get_Count
+33feb9c cmp w21, w0
+33feba0 b.ge #0x33fec1c
+33feba4 ldur x8, [x29, #-0x60]
+33feba8 ldur q0, [x29, #-0x70]
+33febac ldr x0, [x25]
+33febb0 stur x8, [x29, #-0x80]
+33febb4 stur q0, [x29, #-0x90]
+33febb8 ldrb w8, [x0, #0x10a]
+33febbc tbz w8, #0, #0x33febcc
+33febc0 ldr w8, [x0, #0xbc]
+33febc4 cbnz w8, #0x33febcc
+33febc8 bl #0x3f3f378
+33febcc ldur x8, [x29, #-0x80]
+33febd0 ldur q0, [x29, #-0x90]
+33febd4 mov x0, xzr
+33febd8 sub x1, x29, #0xb0
+33febdc mov x2, xzr
+33febe0 stur x8, [x29, #-0xa0]
+33febe4 stur q0, [x29, #-0xb0]
+33febe8 bl #0x3efe9dc LogicX2.SmartLong$$op_Implicit
+33febec ldr x23, [x20, #0x68]
+33febf0 mov x22, x0
+33febf4 cbnz x23, #0x33febfc
+33febf8 bl #0x3f564f0
+33febfc ldr x2, [x26]
+33fec00 mov x0, x23
+33fec04 mov w1, w21
+33fec08 bl #0x3d5188c System.Collections.Generic.List<IEventSystemHandler>$$get_Item
+33fec0c mov x23, x0
+33fec10 cbnz x23, #0x33feb3c
+33fec14 bl #0x3f564f0
+33fec18 b #0x33feb3c
+33fec1c ldrb w8, [x20, #0x88]
+33fec20 cbz w8, #0x33feca4
+33fec24 ldr x8, [x20, #0x80]
+33fec28 ldur x9, [x29, #-0x60]
+33fec2c ldur q0, [x29, #-0x70]
+33fec30 stur x8, [x29, #-0x80]
+33fec34 adrp x8, #0x52f4000
+33fec38 ldr q1, [x20, #0x70]
+33fec3c ldr x8, [x8, #0xca0]
+33fec40 str x9, [sp, #0x90]
+33fec44 stur q1, [x29, #-0x90]
+33fec48 ldr x0, [x8]
+33fec4c str q0, [sp, #0x80]
+33fec50 ldrb w8, [x0, #0x10a]
+33fec54 tbz w8, #0, #0x33fec64
+33fec58 ldr w8, [x0, #0xbc]
+33fec5c cbnz w8, #0x33fec64
+33fec60 bl #0x3f3f378
+33fec64 ldur x8, [x29, #-0x80]
+33fec68 ldur q0, [x29, #-0x90]
+33fec6c ldr x9, [sp, #0x90]
+33fec70 ldr q1, [sp, #0x80]
+33fec74 mov x0, xzr
+33fec78 add x1, sp, #0x60
+33fec7c add x2, sp, #0x40
+33fec80 mov x3, xzr
+33fec84 str x8, [sp, #0x70]
+33fec88 str q0, [sp, #0x60]
+33fec8c str x9, [sp, #0x50]
+33fec90 str q1, [sp, #0x40]
+33fec94 bl #0x3efee38 LogicX2.SmartLong$$op_LessThan
+33fec98 tbz w0, #0, #0x33feca4
+33fec9c add x8, x20, #0x70
+33feca0 b #0x33fed28
+33feca4 ldrb w8, [x20, #0xa8]
+33feca8 cbz w8, #0x33fed38
+33fecac ldr x8, [x20, #0xa0]
+33fecb0 ldur x9, [x29, #-0x60]
+33fecb4 ldur q0, [x29, #-0x70]
+33fecb8 stur x8, [x29, #-0x80]
+33fecbc adrp x8, #0x52f4000
+33fecc0 ldr q1, [x20, #0x90]
+33fecc4 ldr x8, [x8, #0xca0]
+33fecc8 str x9, [sp, #0x90]
+33feccc stur q1, [x29, #-0x90]
+33fecd0 ldr x0, [x8]
+33fecd4 str q0, [sp, #0x80]
+33fecd8 ldrb w8, [x0, #0x10a]
+33fecdc tbz w8, #0, #0x33fecec
+33fece0 ldr w8, [x0, #0xbc]
+33fece4 cbnz w8, #0x33fecec
+33fece8 bl #0x3f3f378
+33fecec ldur x8, [x29, #-0x80]
+33fecf0 ldur q0, [x29, #-0x90]
+33fecf4 ldr x9, [sp, #0x90]
+33fecf8 ldr q1, [sp, #0x80]
+33fecfc mov x0, xzr
+33fed00 add x1, sp, #0x20
+33fed04 mov x2, sp
+33fed08 mov x3, xzr
+33fed0c str x8, [sp, #0x30]
+33fed10 str q0, [sp, #0x20]
+33fed14 str x9, [sp, #0x10]
+33fed18 str q1, [sp]
+33fed1c bl #0x3efed78 LogicX2.SmartLong$$op_GreaterThan
+33fed20 tbz w0, #0, #0x33fed38
+33fed24 add x8, x20, #0x90
+33fed28 ldr x9, [x8, #0x10]
+33fed2c str x9, [x19, #0x10]
+33fed30 ldr q0, [x8]
+33fed34 b #0x33fed44
+33fed38 ldur x8, [x29, #-0x60]
+33fed3c ldur q0, [x29, #-0x70]
+33fed40 str x8, [x19, #0x10]
+33fed44 str q0, [x19]
+33fed48 sub sp, x29, #0x50
+33fed4c ldp x29, x30, [sp, #0x50]
+33fed50 ldp x20, x19, [sp, #0x40]
+33fed54 ldp x22, x21, [sp, #0x30]
+33fed58 ldp x24, x23, [sp, #0x20]
+33fed5c ldp x26, x25, [sp, #0x10]
+33fed60 ldp x28, x27, [sp], #0x60
+33fed64 ret
+ChapterModule$$Convert_L2CFightData_To_LogicFightData
+16c0d3c stp x28, x27, [sp, #-0x60]!
+16c0d40 stp x26, x25, [sp, #0x10]
+16c0d44 stp x24, x23, [sp, #0x20]
+16c0d48 stp x22, x21, [sp, #0x30]
+16c0d4c stp x20, x19, [sp, #0x40]
+16c0d50 stp x29, x30, [sp, #0x50]
+16c0d54 add x29, sp, #0x50
+16c0d58 sub sp, sp, #0x10
+16c0d5c adrp x20, #0x5576000
+16c0d60 ldrb w8, [x20, #0xb68]
+16c0d64 mov x19, x1
+16c0d68 tbnz w8, #0, #0x16c0d84
+16c0d6c adrp x8, #0x52f3000
+16c0d70 ldr x8, [x8, #0x180]
+16c0d74 ldr w0, [x8]
+16c0d78 bl #0x3f2aed0
+16c0d7c mov w8, #1
+16c0d80 strb w8, [x20, #0xb68]
+16c0d84 cbnz x19, #0x16c0d8c
+16c0d88 bl #0x3f564f0
+16c0d8c adrp x8, #0x52b6000
+16c0d90 ldr x20, [x19, #0x28]
+16c0d94 ldr x8, [x8, #0xb88]
+16c0d98 ldr x0, [x8]
+16c0d9c bl #0x3f6452c
+16c0da0 mov x2, xzr
+16c0da4 mov x1, x20
+16c0da8 mov x21, x0
+16c0dac bl #0x2e503f8 System.IO.MemoryStream$$.ctor
+16c0db0 adrp x8, #0x527b000
+16c0db4 ldr x8, [x8, #0x9f0]
+16c0db8 ldr x0, [x8]
+16c0dbc bl #0x3f6452c
+16c0dc0 mov x20, x0
+16c0dc4 mov x1, xzr
+16c0dc8 mov x0, x20
+16c0dcc bl #0x350ee04 CommandX2.FightData$$.ctor
+16c0dd0 cbnz x20, #0x16c0dd8
+16c0dd4 bl #0x3f564f0
+16c0dd8 mov x2, xzr
+16c0ddc mov x0, x20
+16c0de0 mov x1, x21
+16c0de4 bl #0x350e91c CommandX2.FightData$$Deserialize
+16c0de8 mov x0, xzr
+16c0dec mov x1, xzr
+16c0df0 bl #0x2d1d914 UnityEngine.Application$$get_platform
+16c0df4 cmp w0, #7
+16c0df8 b.ne #0x16c0ed4
+16c0dfc adrp x8, #0x5284000
+16c0e00 ldr x8, [x8, #0xb30]
+16c0e04 ldr x0, [x8]
+16c0e08 ldrb w8, [x0, #0x10a]
+16c0e0c tbz w8, #0, #0x16c0e1c
+16c0e10 ldr w8, [x0, #0xbc]
+16c0e14 cbnz w8, #0x16c0e1c
+16c0e18 bl #0x3f3f378
+16c0e1c mov x0, xzr
+16c0e20 mov x2, xzr
+16c0e24 mov x1, x20
+16c0e28 bl #0x1fc8f98 LitJson.JsonMapper$$ToJson
+16c0e2c mov x23, x0
+16c0e30 adrp x8, #0x5228000
+16c0e34 ldr x8, [x8, #0x560]
+16c0e38 ldr x22, [x8]
+16c0e3c mov x0, x22
+16c0e40 bl #0x3f1f994
+16c0e44 mov w1, #1
+16c0e48 mov x0, x22
+16c0e4c bl #0x3f69a40
+16c0e50 mov x22, x0
+16c0e54 cbnz x22, #0x16c0e5c
+16c0e58 bl #0x3f564f0
+16c0e5c cbz x23, #0x16c0e80
+16c0e60 ldr x8, [x22]
+16c0e64 ldr x1, [x8, #0x30]
+16c0e68 mov x0, x23
+16c0e6c bl #0x3f64744
+16c0e70 cbnz x0, #0x16c0e80
+16c0e74 bl #0x3f571fc
+16c0e78 mov x1, xzr
+16c0e7c bl #0x3f563d4
+16c0e80 ldr w8, [x22, #0x18]
+16c0e84 cbnz w8, #0x16c0e94
+16c0e88 bl #0x3f570dc
+16c0e8c mov x1, xzr
+16c0e90 bl #0x3f563d4
+16c0e94 str x23, [x22, #0x20]
+16c0e98 adrp x8, #0x5207000
+16c0e9c ldr x8, [x8, #0x5a0]
+16c0ea0 ldr x0, [x8]
+16c0ea4 ldrb w8, [x0, #0x10a]
+16c0ea8 tbz w8, #0, #0x16c0eb8
+16c0eac ldr w8, [x0, #0xbc]
+16c0eb0 cbnz w8, #0x16c0eb8
+16c0eb4 bl #0x3f3f378
+16c0eb8 adrp x8, #0x5202000
+16c0ebc ldr x8, [x8, #0x408]
+16c0ec0 ldr x1, [x8]
+16c0ec4 mov x0, xzr
+16c0ec8 mov x3, xzr
+16c0ecc mov x2, x22
+16c0ed0 bl #0x3e45bc4 CommonX2.Debug$$LogFormat
+16c0ed4 adrp x8, #0x52fb000
+16c0ed8 ldr x8, [x8, #0x730]
+16c0edc ldr x0, [x8]
+16c0ee0 ldrb w8, [x0, #0x10a]
+16c0ee4 tbz w8, #0, #0x16c0ef4
+16c0ee8 ldr w8, [x0, #0xbc]
+16c0eec cbnz w8, #0x16c0ef4
+16c0ef0 bl #0x3f3f378
+16c0ef4 mov x1, x20
+16c0ef8 bl #0x16c24d4 ChapterModule$$ConvertFightData
+16c0efc mov x20, x0
+16c0f00 mov x22, xzr
+16c0f04 mov w23, #0x51
+16c0f08 cbz x21, #0x16c0f74
+16c0f0c adrp x9, #0x51e8000
+16c0f10 ldr x8, [x21]
+16c0f14 ldr x9, [x9, #0x578]
+16c0f18 ldr x1, [x9]
+16c0f1c ldrh w9, [x8, #0x102]
+16c0f20 cbz x9, #0x16c0f4c
+16c0f24 ldr x10, [x8, #0x98]
+16c0f28 mov x11, xzr
+16c0f2c add x10, x10, #8
+16c0f30 ldur x12, [x10, #-8]
+16c0f34 cmp x12, x1
+16c0f38 b.eq #0x16c0f5c
+16c0f3c add x11, x11, #1
+16c0f40 add x10, x10, #0x10
+16c0f44 cmp x11, x9
+16c0f48 b.lo #0x16c0f30
+16c0f4c mov w2, wzr
+16c0f50 mov x0, x21
+16c0f54 bl #0x3f22020
+16c0f58 b #0x16c0f68
+16c0f5c ldr w9, [x10]
+16c0f60 add x8, x8, x9, lsl #4
+16c0f64 add x0, x8, #0x110
+16c0f68 ldp x8, x1, [x0]
+16c0f6c mov x0, x21
+16c0f70 blr x8
+16c0f74 cmp w23, #0x51
+16c0f78 b.eq #0x16c0f8c
+16c0f7c cbz x22, #0x16c0f8c
+16c0f80 mov x1, xzr
+16c0f84 mov x0, x22
+16c0f88 bl #0x3f563d4
+16c0f8c cbz x20, #0x16c1884
+16c0f90 cbnz x19, #0x16c0f98
+16c0f94 bl #0x3f564f0
+16c0f98 ldr x21, [x19, #0x38]
+16c0f9c cbz x21, #0x16c0fd4
+16c0fa0 adrp x8, #0x52fb000
+16c0fa4 ldr x8, [x8, #0x730]
+16c0fa8 ldr x0, [x8]
+16c0fac ldrb w8, [x0, #0x10a]
+16c0fb0 tbz w8, #0, #0x16c0fc0
+16c0fb4 ldr w8, [x0, #0xbc]
+16c0fb8 cbnz w8, #0x16c0fc0
+16c0fbc bl #0x3f3f378
+16c0fc0 mov x1, x21
+16c0fc4 bl #0x16c2790 ChapterModule$$ConvertSingleAssistData
+16c0fc8 str x0, [x20, #0x38]
+16c0fcc ldr w8, [x19, #0x40]
+16c0fd0 str w8, [x20, #0x40]
+16c0fd4 ldrb w8, [x19, #0x44]
+16c0fd8 adrp x22, #0x52fb000
+16c0fdc strb w8, [x20, #0x44]
+16c0fe0 ldr x8, [x19, #0x48]
+16c0fe4 str x8, [x20, #0x48]
+16c0fe8 ldr x22, [x22, #0x730]
+16c0fec ldr x21, [x19, #0x58]
+16c0ff0 ldr x0, [x22]
+16c0ff4 ldrb w8, [x0, #0x10a]
+16c0ff8 tbz w8, #0, #0x16c1008
+16c0ffc ldr w8, [x0, #0xbc]
+16c1000 cbnz w8, #0x16c1008
+16c1004 bl #0x3f3f378
+16c1008 mov x1, x21
+16c100c bl #0x16c28fc ChapterModule$$ConvertSectionlParam
+16c1010 str x0, [x20, #0x50]
+16c1014 ldr x8, [x19, #0x60]
+16c1018 str x8, [x20, #0x60]
+16c101c ldr x8, [x19, #0x68]
+16c1020 str x8, [x20, #0x68]
+16c1024 ldr x9, [x19, #0x70]
+16c1028 str x9, [x20, #0x70]
+16c102c ldr x8, [x19, #0x78]
+16c1030 str x8, [x20, #0x78]
+16c1034 ldr w10, [x19, #0x80]
+16c1038 str w10, [x20, #0x88]
+16c103c ldr x10, [x19, #0x90]
+16c1040 str x10, [x20, #0xa0]
+16c1044 cbnz x9, #0x16c109c
+16c1048 ldr x0, [x22]
+16c104c ldrb w8, [x0, #0x10a]
+16c1050 tbz w8, #0, #0x16c1064
+16c1054 ldr w8, [x0, #0xbc]
+16c1058 cbnz w8, #0x16c1064
+16c105c bl #0x3f3f378
+16c1060 ldr x0, [x22]
+16c1064 ldr x8, [x0, #0xa0]
+16c1068 ldr x21, [x8, #0x10]
+16c106c cbnz x21, #0x16c1074
+16c1070 bl #0x3f564f0
+16c1074 adrp x8, #0x52b0000
+16c1078 ldr x8, [x8, #0xfe8]
+16c107c mov x0, x21
+16c1080 ldr x1, [x8]
+16c1084 bl #0x3d456dc System.Collections.Generic.List<int>$$Clear
+16c1088 ldr x8, [x22]
+16c108c ldr x8, [x8, #0xa0]
+16c1090 ldr x9, [x8, #0x10]
+16c1094 ldr x8, [x20, #0x78]
+16c1098 str x9, [x20, #0x70]
+16c109c cbnz x8, #0x16c10f0
+16c10a0 ldr x0, [x22]
+16c10a4 ldrb w8, [x0, #0x10a]
+16c10a8 tbz w8, #0, #0x16c10bc
+16c10ac ldr w8, [x0, #0xbc]
+16c10b0 cbnz w8, #0x16c10bc
+16c10b4 bl #0x3f3f378
+16c10b8 ldr x0, [x22]
+16c10bc ldr x8, [x0, #0xa0]
+16c10c0 ldr x21, [x8, #0x18]
+16c10c4 cbnz x21, #0x16c10cc
+16c10c8 bl #0x3f564f0
+16c10cc adrp x8, #0x52b0000
+16c10d0 ldr x8, [x8, #0xfe8]
+16c10d4 mov x0, x21
+16c10d8 ldr x1, [x8]
+16c10dc bl #0x3d456dc System.Collections.Generic.List<int>$$Clear
+16c10e0 ldr x8, [x22]
+16c10e4 ldr x8, [x8, #0xa0]
+16c10e8 ldr x8, [x8, #0x18]
+16c10ec str x8, [x20, #0x78]
+16c10f0 ldr x0, [x22]
+16c10f4 ldrb w8, [x0, #0x10a]
+16c10f8 tbz w8, #0, #0x16c110c
+16c10fc ldr w8, [x0, #0xbc]
+16c1100 cbnz w8, #0x16c110c
+16c1104 bl #0x3f3f378
+16c1108 ldr x0, [x22]
+16c110c ldr x8, [x0, #0xa0]
+16c1110 ldr x21, [x8, #0x20]
+16c1114 cbnz x21, #0x16c111c
+16c1118 bl #0x3f564f0
+16c111c adrp x8, #0x52b0000
+16c1120 ldr x8, [x8, #0xfe8]
+16c1124 mov x0, x21
+16c1128 ldr x1, [x8]
+16c112c bl #0x3d456dc System.Collections.Generic.List<int>$$Clear
+16c1130 ldr x8, [x22]
+16c1134 ldr x8, [x8, #0xa0]
+16c1138 ldr x8, [x8, #0x20]
+16c113c str x8, [x20, #0x80]
+16c1140 ldr x8, [x22]
+16c1144 ldr x8, [x8, #0xa0]
+16c1148 ldr x21, [x8, #0x28]
+16c114c cbnz x21, #0x16c1154
+16c1150 bl #0x3f564f0
+16c1154 adrp x8, #0x52e8000
+16c1158 ldr x8, [x8, #0xa50]
+16c115c mov x0, x21
+16c1160 ldr x1, [x8]
+16c1164 bl #0x3610be8 System.Collections.Generic.Dictionary<int, object>$$Clear
+16c1168 ldr x8, [x22]
+16c116c ldr x8, [x8, #0xa0]
+16c1170 ldr x8, [x8, #0x28]
+16c1174 str x8, [x20, #0x90]
+16c1178 adrp x8, #0x525d000
+16c117c ldr x8, [x8, #0xb38]
+16c1180 ldr x0, [x8]
+16c1184 ldrb w8, [x0, #0x10a]
+16c1188 tbz w8, #0, #0x16c1198
+16c118c ldr w8, [x0, #0xbc]
+16c1190 cbnz w8, #0x16c1198
+16c1194 bl #0x3f3f378
+16c1198 mov x0, xzr
+16c119c mov x1, xzr
+16c11a0 bl #0x17b6608 ActivityRealManager$$get_Instance
+16c11a4 mov x21, x0
+16c11a8 cbnz x21, #0x16c11b0
+16c11ac bl #0x3f564f0
+16c11b0 mov x2, xzr
+16c11b4 mov w1, #0x52
+16c11b8 mov x0, x21
+16c11bc bl #0x17b68d8 ActivityRealManager$$GetItem
+16c11c0 adrp x8, #0x5270000
+16c11c4 ldr x8, [x8, #0xb00]
+16c11c8 mov x23, x0
+16c11cc ldr x8, [x8]
+16c11d0 ldrb w9, [x8, #0x10a]
+16c11d4 tbz w9, #0, #0x16c11e8
+16c11d8 ldr w9, [x8, #0xbc]
+16c11dc cbnz w9, #0x16c11e8
+16c11e0 mov x0, x8
+16c11e4 bl #0x3f3f378
+16c11e8 mov x0, xzr
+16c11ec mov x1, xzr
+16c11f0 bl #0x1bdf28c SectionTableManager$$get_Instance
+16c11f4 ldr w21, [x20, #0x20]
+16c11f8 mov x22, x0
+16c11fc cbnz x22, #0x16c1204
+16c1200 bl #0x3f564f0
+16c1204 mov x2, xzr
+16c1208 mov x0, x22
+16c120c mov w1, w21
+16c1210 bl #0x1bdf55c SectionTableManager$$GetItem
+16c1214 ldr x22, [x20, #0x60]
+16c1218 mov x21, x0
+16c121c cbz x22, #0x16c13d0
+16c1220 adrp x26, #0x5300000
+16c1224 ldr x26, [x26, #0xfa8]
+16c1228 mov x0, x22
+16c122c ldr x1, [x26]
+16c1230 bl #0x3d473f8 System.Collections.Generic.List<int>$$get_Count
+16c1234 cmp w0, #1
+16c1238 b.lt #0x16c13d0
+16c123c cbnz x21, #0x16c1244
+16c1240 bl #0x3f564f0
+16c1244 ldr w8, [x21, #0x3c]
+16c1248 cmp w8, #0x12
+16c124c b.ne #0x16c13d0
+16c1250 ldr x1, [x26]
+16c1254 mov x0, x22
+16c1258 bl #0x3d473f8 System.Collections.Generic.List<int>$$get_Count
+16c125c cmp w0, #1
+16c1260 b.lt #0x16c1560
+16c1264 adrp x27, #0x52e6000
+16c1268 adrp x28, #0x51e1000
+16c126c ldr x27, [x27, #0x7b0]
+16c1270 ldr x28, [x28, #0x640]
+16c1274 mov w23, wzr
+16c1278 ldr x2, [x27]
+16c127c mov x0, x22
+16c1280 mov w1, w23
+16c1284 bl #0x3d47400 System.Collections.Generic.List<int>$$get_Item
+16c1288 ldr x8, [x28]
+16c128c mov w24, w0
+16c1290 ldrb w9, [x8, #0x10a]
+16c1294 tbz w9, #0, #0x16c12a8
+16c1298 ldr w9, [x8, #0xbc]
+16c129c cbnz w9, #0x16c12a8
+16c12a0 mov x0, x8
+16c12a4 bl #0x3f3f378
+16c12a8 mov x0, xzr
+16c12ac mov x1, xzr
+16c12b0 bl #0x14da2ac BloodMoonModuleManager$$get_Instance
+16c12b4 mov x25, x0
+16c12b8 cbnz x25, #0x16c12c0
+16c12bc bl #0x3f564f0
+16c12c0 mov x2, xzr
+16c12c4 mov x0, x25
+16c12c8 mov w1, w24
+16c12cc bl #0x14da57c BloodMoonModuleManager$$GetItem
+16c12d0 cbz x0, #0x16c1310
+16c12d4 ldr w8, [x0, #0x20]
+16c12d8 cbnz w8, #0x16c13b4
+16c12dc ldp w24, w8, [x0, #0x24]
+16c12e0 sub w9, w8, #1
+16c12e4 add w8, w8, #0x2b
+16c12e8 cmp w9, #3
+16c12ec csel w8, w8, wzr, lo
+16c12f0 cmp w8, #0x2c
+16c12f4 b.gt #0x16c1374
+16c12f8 cbz w8, #0x16c13b4
+16c12fc cmp w8, #0x2c
+16c1300 b.ne #0x16c18e0
+16c1304 ldr x25, [x20, #0x70]
+16c1308 cbnz x25, #0x16c139c
+16c130c b #0x16c1398
+16c1310 adrp x8, #0x5207000
+16c1314 ldr x8, [x8, #0x5a0]
+16c1318 ldr x0, [x8]
+16c131c ldrb w8, [x0, #0x10a]
+16c1320 tbz w8, #0, #0x16c1330
+16c1324 ldr w8, [x0, #0xbc]
+16c1328 cbnz w8, #0x16c1330
+16c132c bl #0x3f3f378
+16c1330 adrp x8, #0x525d000
+16c1334 ldr x8, [x8, #0x298]
+16c1338 ldr x24, [x8]
+16c133c adrp x8, #0x5228000
+16c1340 ldr x8, [x8, #0x560]
+16c1344 ldr x25, [x8]
+16c1348 mov x0, x25
+16c134c bl #0x3f1f994
+16c1350 mov x1, xzr
+16c1354 mov x0, x25
+16c1358 bl #0x3f69a40
+16c135c mov x2, x0
+16c1360 mov x0, xzr
+16c1364 mov x3, xzr
+16c1368 mov x1, x24
+16c136c bl #0x3e45d2c CommonX2.Debug$$LogErrorFormat
+16c1370 b #0x16c13b4
+16c1374 cmp w8, #0x2d
+16c1378 b.eq #0x16c1390
+16c137c cmp w8, #0x2e
+16c1380 b.ne #0x16c18e0
+16c1384 ldr x25, [x20, #0x80]
+16c1388 cbnz x25, #0x16c139c
+16c138c b #0x16c1398
+16c1390 ldr x25, [x20, #0x78]
+16c1394 cbnz x25, #0x16c139c
+16c1398 bl #0x3f564f0
+16c139c adrp x8, #0x52e8000
+16c13a0 ldr x8, [x8, #0x88]
+16c13a4 mov x0, x25
+16c13a8 mov w1, w24
+16c13ac ldr x2, [x8]
+16c13b0 bl #0x3d44f2c System.Collections.Generic.List<int>$$Add
+16c13b4 ldr x1, [x26]
+16c13b8 mov x0, x22
+16c13bc add w23, w23, #1
+16c13c0 bl #0x3d473f8 System.Collections.Generic.List<int>$$get_Count
+16c13c4 cmp w23, w0
+16c13c8 b.lt #0x16c1278
+16c13cc b #0x16c1560
+16c13d0 cbz x23, #0x16c1560
+16c13d4 ldr x23, [x23, #0x40]
+16c13d8 ldr w24, [x20, #0x20]
+16c13dc cbnz x23, #0x16c13e4
+16c13e0 bl #0x3f564f0
+16c13e4 adrp x26, #0x528a000
+16c13e8 ldr x26, [x26, #0x930]
+16c13ec mov x0, x23
+16c13f0 mov w1, w24
+16c13f4 ldr x2, [x26]
+16c13f8 bl #0x3d45728 System.Collections.Generic.List<int>$$Contains
+16c13fc tbz w0, #0, #0x16c1560
+16c1400 cbnz x21, #0x16c1408
+16c1404 bl #0x3f564f0
+16c1408 ldr x0, [x21, #0x1d8]
+16c140c cbz x0, #0x16c1564
+16c1410 adrp x27, #0x5300000
+16c1414 ldr x27, [x27, #0xfa8]
+16c1418 ldr x1, [x27]
+16c141c bl #0x3d473f8 System.Collections.Generic.List<int>$$get_Count
+16c1420 cmp w0, #0
+16c1424 b.le #0x16c1564
+16c1428 adrp x28, #0x52e6000
+16c142c ldr x28, [x28, #0x7b0]
+16c1430 mov w23, wzr
+16c1434 b #0x16c143c
+16c1438 add w23, w23, #1
+16c143c cbnz x21, #0x16c1444
+16c1440 bl #0x3f564f0
+16c1444 ldr x24, [x21, #0x1d8]
+16c1448 cbnz x24, #0x16c1450
+16c144c bl #0x3f564f0
+16c1450 ldr x1, [x27]
+16c1454 mov x0, x24
+16c1458 bl #0x3d473f8 System.Collections.Generic.List<int>$$get_Count
+16c145c cmp w23, w0
+16c1460 b.ge #0x16c1560
+16c1464 cbz x22, #0x16c14a4
+16c1468 cbnz x21, #0x16c1470
+16c146c bl #0x3f564f0
+16c1470 ldr x24, [x21, #0x1d8]
+16c1474 cbnz x24, #0x16c147c
+16c1478 bl #0x3f564f0
+16c147c ldr x2, [x28]
+16c1480 mov x0, x24
+16c1484 mov w1, w23
+16c1488 bl #0x3d47400 System.Collections.Generic.List<int>$$get_Item
+16c148c ldr x2, [x26]
+16c1490 mov w1, w0
+16c1494 mov x0, x22
+16c1498 bl #0x3d45728 System.Collections.Generic.List<int>$$Contains
+16c149c and w8, w0, #1
+16c14a0 tbnz w8, #0, #0x16c1438
+16c14a4 adrp x8, #0x529a000
+16c14a8 ldr x8, [x8, #0x1b8]
+16c14ac ldr x0, [x8]
+16c14b0 ldrb w8, [x0, #0x10a]
+16c14b4 tbz w8, #0, #0x16c14c4
+16c14b8 ldr w8, [x0, #0xbc]
+16c14bc cbnz w8, #0x16c14c4
+16c14c0 bl #0x3f3f378
+16c14c4 mov x0, xzr
+16c14c8 mov x1, xzr
+16c14cc bl #0x1422e98 MemoryBuffManager$$get_Instance
+16c14d0 mov x24, x0
+16c14d4 cbnz x21, #0x16c14dc
+16c14d8 bl #0x3f564f0
+16c14dc ldr x25, [x21, #0x1d8]
+16c14e0 cbnz x25, #0x16c14e8
+16c14e4 bl #0x3f564f0
+16c14e8 ldr x2, [x28]
+16c14ec mov x0, x25
+16c14f0 mov w1, w23
+16c14f4 bl #0x3d47400 System.Collections.Generic.List<int>$$get_Item
+16c14f8 mov w25, w0
+16c14fc cbnz x24, #0x16c1504
+16c1500 bl #0x3f564f0
+16c1504 mov x2, xzr
+16c1508 mov x0, x24
+16c150c mov w1, w25
+16c1510 bl #0x1423168 MemoryBuffManager$$GetItem
+16c1514 cbz x0, #0x16c1438
+16c1518 ldr w8, [x0, #0x28]
+16c151c cmp w8, #2
+16c1520 b.eq #0x16c1534
+16c1524 cmp w8, #1
+16c1528 b.ne #0x16c1438
+16c152c ldr x24, [x20, #0x70]
+16c1530 b #0x16c1538
+16c1534 ldr x24, [x20, #0x78]
+16c1538 ldr x25, [x0, #0x20]
+16c153c cbnz x24, #0x16c1544
+16c1540 bl #0x3f564f0
+16c1544 adrp x8, #0x51d4000
+16c1548 ldr x8, [x8, #0xd00]
+16c154c mov x0, x24
+16c1550 mov x1, x25
+16c1554 ldr x2, [x8]
+16c1558 bl #0x3d455bc System.Collections.Generic.List<int>$$AddRange
+16c155c b #0x16c1438
+16c1560 cbz x21, #0x16c1884
+16c1564 ldr w8, [x21, #0x3c]
+16c1568 cmp w8, #0x15
+16c156c b.ne #0x16c1624
+16c1570 adrp x8, #0x51ed000
+16c1574 ldr x8, [x8, #0xb60]
+16c1578 ldr x0, [x8]
+16c157c ldrb w8, [x0, #0x10a]
+16c1580 tbz w8, #0, #0x16c1590
+16c1584 ldr w8, [x0, #0xbc]
+16c1588 cbnz w8, #0x16c1590
+16c158c bl #0x3f3f378
+16c1590 adrp x8, #0x51d9000
+16c1594 ldr x8, [x8, #0x618]
+16c1598 mov x0, xzr
+16c159c ldr x1, [x8]
+16c15a0 bl #0x2feb968 Foundation.Module.ServiceModule<ModuleManager>$$get_Instance
+16c15a4 mov x22, x0
+16c15a8 cbnz x22, #0x16c15b0
+16c15ac bl #0x3f564f0
+16c15b0 adrp x8, #0x51d6000
+16c15b4 ldr x8, [x8, #0xdd0]
+16c15b8 mov x0, x22
+16c15bc ldr x1, [x8]
+16c15c0 bl #0x1ce72d4 Foundation.Module.ModuleManager$$GetModule<RelicBarModule>
+16c15c4 mov x22, x0
+16c15c8 cbz x22, #0x16c1624
+16c15cc ldr x23, [x20, #0x70]
+16c15d0 ldr x24, [x20, #0x90]
+16c15d4 cbz x19, #0x16c15e4
+16c15d8 mov x26, x19
+16c15dc ldr x25, [x26, #0xa0]!
+16c15e0 b #0x16c15f4
+16c15e4 bl #0x3f564f0
+16c15e8 mov w26, #0xa0
+16c15ec ldr x25, [x26]
+16c15f0 bl #0x3f564f0
+16c15f4 ldr w4, [x19, #0xa8]
+16c15f8 mov x5, xzr
+16c15fc mov x0, x22
+16c1600 mov x1, x23
+16c1604 mov x2, x24
+16c1608 mov x3, x25
+16c160c bl #0x143eb9c MoonAcceptTaskModule$$GetPassives
+16c1610 ldr x1, [x26]
+16c1614 mov x2, xzr
+16c1618 mov x0, x22
+16c161c bl #0x143f228 MoonAcceptTaskModule$$GetMonsterLevelAdjust
+16c1620 str x0, [x20, #0x98]
+16c1624 ldr x22, [x21, #0x30]
+16c1628 cbnz x22, #0x16c1630
+16c162c bl #0x3f564f0
+16c1630 adrp x8, #0x5300000
+16c1634 ldr x8, [x8, #0xfa8]
+16c1638 mov x0, x22
+16c163c ldr x1, [x8]
+16c1640 bl #0x3d473f8 System.Collections.Generic.List<int>$$get_Count
+16c1644 cmp w0, #1
+16c1648 b.lt #0x16c1884
+16c164c ldr x21, [x21, #0x30]
+16c1650 cbnz x21, #0x16c1658
+16c1654 bl #0x3f564f0
+16c1658 adrp x8, #0x52e6000
+16c165c ldr x8, [x8, #0x7b0]
+16c1660 mov w1, wzr
+16c1664 mov x0, x21
+16c1668 ldr x2, [x8]
+16c166c bl #0x3d47400 System.Collections.Generic.List<int>$$get_Item
+16c1670 adrp x8, #0x527f000
+16c1674 ldr x8, [x8, #0x838]
+16c1678 mov w22, w0
+16c167c ldr x8, [x8]
+16c1680 ldrb w9, [x8, #0x10a]
+16c1684 tbz w9, #0, #0x16c1698
+16c1688 ldr w9, [x8, #0xbc]
+16c168c cbnz w9, #0x16c1698
+16c1690 mov x0, x8
+16c1694 bl #0x3f3f378
+16c1698 mov x0, xzr
+16c169c mov x1, xzr
+16c16a0 bl #0x1c5bb84 MapInfoManager$$get_Instance
+16c16a4 mov x21, x0
+16c16a8 cbnz x21, #0x16c16b0
+16c16ac bl #0x3f564f0
+16c16b0 mov x2, xzr
+16c16b4 mov x0, x21
+16c16b8 mov w1, w22
+16c16bc bl #0x1c5be54 MapInfoManager$$GetItem
+16c16c0 cbz x0, #0x16c17c0
+16c16c4 ldr w21, [x0, #0x14]
+16c16c8 cbnz x19, #0x16c16d0
+16c16cc bl #0x3f564f0
+16c16d0 ldr w8, [x19, #0x98]
+16c16d4 sub w24, w21, w8
+16c16d8 cmp w24, #1
+16c16dc b.lt #0x16c1884
+16c16e0 adrp x8, #0x52f6000
+16c16e4 ldr x8, [x8, #0x9a8]
+16c16e8 ldr x0, [x8]
+16c16ec ldrb w8, [x0, #0x10a]
+16c16f0 tbz w8, #0, #0x16c1700
+16c16f4 ldr w8, [x0, #0xbc]
+16c16f8 cbnz w8, #0x16c1700
+16c16fc bl #0x3f3f378
+16c1700 mov x0, xzr
+16c1704 mov x1, xzr
+16c1708 bl #0x14b505c DynamicGradeSuppressionManager$$get_Instance
+16c170c mov x21, x0
+16c1710 cbnz x21, #0x16c1718
+16c1714 bl #0x3f564f0
+16c1718 mov x1, xzr
+16c171c mov x0, x21
+16c1720 bl #0x14b5434 DynamicGradeSuppressionManager$$GetAllItem
+16c1724 mov x21, x0
+16c1728 cbnz x21, #0x16c1730
+16c172c bl #0x3f564f0
+16c1730 ldr x21, [x21, #0x18]
+16c1734 cbnz x21, #0x16c173c
+16c1738 bl #0x3f564f0
+16c173c adrp x8, #0x52d2000
+16c1740 ldr x8, [x8, #0xb18]
+16c1744 mov x0, x21
+16c1748 ldr x1, [x8]
+16c174c bl #0x3d51884 System.Collections.Generic.List<IEventSystemHandler>$$get_Count
+16c1750 adrp x25, #0x529e000
+16c1754 ldr x25, [x25, #0x198]
+16c1758 sub w22, w0, #1
+16c175c tbnz w22, #0x1f, #0x16c1884
+16c1760 cbnz x21, #0x16c1768
+16c1764 bl #0x3f564f0
+16c1768 ldr x2, [x25]
+16c176c mov x0, x21
+16c1770 mov w1, w22
+16c1774 bl #0x3d5188c System.Collections.Generic.List<IEventSystemHandler>$$get_Item
+16c1778 mov x23, x0
+16c177c cbnz x23, #0x16c1784
+16c1780 bl #0x3f564f0
+16c1784 ldr w8, [x23, #0x10]
+16c1788 sub w22, w22, #1
+16c178c cmp w8, w24
+16c1790 b.gt #0x16c175c
+16c1794 ldr x21, [x20, #0x70]
+16c1798 ldr x22, [x23, #0x18]
+16c179c cbnz x21, #0x16c17a4
+16c17a0 bl #0x3f564f0
+16c17a4 adrp x8, #0x51d4000
+16c17a8 ldr x8, [x8, #0xd00]
+16c17ac mov x0, x21
+16c17b0 mov x1, x22
+16c17b4 ldr x2, [x8]
+16c17b8 bl #0x3d455bc System.Collections.Generic.List<int>$$AddRange
+16c17bc b #0x16c1884
+16c17c0 adrp x8, #0x5228000
+16c17c4 ldr x8, [x8, #0x560]
+16c17c8 ldr x21, [x8]
+16c17cc mov x0, x21
+16c17d0 bl #0x3f1f994
+16c17d4 mov w1, #1
+16c17d8 mov x0, x21
+16c17dc bl #0x3f69a40
+16c17e0 adrp x8, #0x52e8000
+16c17e4 ldr x8, [x8, #0xcc0]
+16c17e8 mov x21, x0
+16c17ec add x1, sp, #0xc
+16c17f0 str w22, [sp, #0xc]
+16c17f4 ldr x8, [x8]
+16c17f8 mov x0, x8
+16c17fc bl #0x3f6448c
+16c1800 mov x22, x0
+16c1804 cbnz x21, #0x16c180c
+16c1808 bl #0x3f564f0
+16c180c cbz x22, #0x16c1830
+16c1810 ldr x8, [x21]
+16c1814 mov x0, x22
+16c1818 ldr x1, [x8, #0x30]
+16c181c bl #0x3f64744
+16c1820 cbnz x0, #0x16c1830
+16c1824 bl #0x3f571fc
+16c1828 mov x1, xzr
+16c182c bl #0x3f563d4
+16c1830 ldr w8, [x21, #0x18]
+16c1834 cbnz w8, #0x16c1844
+16c1838 bl #0x3f570dc
+16c183c mov x1, xzr
+16c1840 bl #0x3f563d4
+16c1844 str x22, [x21, #0x20]
+16c1848 adrp x8, #0x5207000
+16c184c ldr x8, [x8, #0x5a0]
+16c1850 ldr x0, [x8]
+16c1854 ldrb w8, [x0, #0x10a]
+16c1858 tbz w8, #0, #0x16c1868
+16c185c ldr w8, [x0, #0xbc]
+16c1860 cbnz w8, #0x16c1868
+16c1864 bl #0x3f3f378
+16c1868 adrp x8, #0x52bf000
+16c186c ldr x8, [x8, #0x50]
+16c1870 mov x0, xzr
+16c1874 mov x3, xzr
+16c1878 mov x2, x21
+16c187c ldr x1, [x8]
+16c1880 bl #0x3e45d2c CommonX2.Debug$$LogErrorFormat
+16c1884 adrp x8, #0x5254000
+16c1888 ldr x8, [x8, #0xc78]
+16c188c ldr x0, [x8]
+16c1890 ldrb w8, [x0, #0x10a]
+16c1894 tbz w8, #0, #0x16c18a4
+16c1898 ldr w8, [x0, #0xbc]
+16c189c cbnz w8, #0x16c18a4
+16c18a0 bl #0x3f3f378
+16c18a4 adrp x8, #0x528f000
+16c18a8 ldr x8, [x8, #0x3b8]
+16c18ac mov x0, xzr
+16c18b0 ldr x1, [x8]
+16c18b4 bl #0x2febba8 Foundation.Singleton<MissionManager>$$get_Instance
+16c18b8 mov x21, x0
+16c18bc cbnz x19, #0x16c18c4
+16c18c0 bl #0x3f564f0
+16c18c4 ldr x19, [x19, #0x88]
+16c18c8 cbnz x21, #0x16c18d0
+16c18cc bl #0x3f564f0
+16c18d0 mov x2, xzr
+16c18d4 mov x0, x21
+16c18d8 mov x1, x19
+16c18dc bl #0x15d7658 QuestSystem.MissionManager$$SetMissionFgithData
+16c18e0 mov x0, x20
+16c18e4 sub sp, x29, #0x50
+16c18e8 ldp x29, x30, [sp, #0x50]
+16c18ec ldp x20, x19, [sp, #0x40]
+16c18f0 ldp x22, x21, [sp, #0x30]
+16c18f4 ldp x24, x23, [sp, #0x20]
+16c18f8 ldp x26, x25, [sp, #0x10]
+16c18fc ldp x28, x27, [sp], #0x60
+16c1900 ret
+16c1904 bl #0x113fb30
+16c1908 ldr x22, [x0]
+16c190c bl #0x113f710
+16c1910 mov w23, wzr
+16c1914 mov x20, xzr
+16c1918 b #0x16c0f08
+
+ChapterModule$$ConvertFightData
+16c24d4 stp x22, x21, [sp, #-0x30]!
+16c24d8 stp x20, x19, [sp, #0x10]
+16c24dc stp x29, x30, [sp, #0x20]
+16c24e0 add x29, sp, #0x20
+16c24e4 adrp x19, #0x5576000
+16c24e8 ldrb w8, [x19, #0xb69]
+16c24ec mov x20, x1
+16c24f0 tbnz w8, #0, #0x16c250c
+16c24f4 adrp x8, #0x526a000
+16c24f8 ldr x8, [x8, #0x268]
+16c24fc ldr w0, [x8]
+16c2500 bl #0x3f2aed0
+16c2504 mov w8, #1
+16c2508 strb w8, [x19, #0xb69]
+16c250c adrp x8, #0x520c000
+16c2510 ldr x8, [x8, #0x348]
+16c2514 ldr x0, [x8]
+16c2518 bl #0x3f6452c
+16c251c mov x1, xzr
+16c2520 mov x19, x0
+16c2524 bl #0x1c5b178 LogicX2Command.FightData$$.ctor
+16c2528 cbnz x20, #0x16c2530
+16c252c bl #0x3f564f0
+16c2530 ldr w21, [x20, #0x18]
+16c2534 cbz x19, #0x16c254c
+16c2538 str w21, [x19, #0x20]
+16c253c ldrb w8, [x20, #0x28]
+16c2540 strb w8, [x19, #0x30]
+16c2544 ldrb w21, [x20, #0x29]
+16c2548 b #0x16c2570
+16c254c bl #0x3f564f0
+16c2550 mov w8, #0x20
+16c2554 str w21, [x8]
+16c2558 ldrb w21, [x20, #0x28]
+16c255c bl #0x3f564f0
+16c2560 mov w8, #0x30
+16c2564 strb w21, [x8]
+16c2568 ldrb w21, [x20, #0x29]
+16c256c bl #0x3f564f0
+16c2570 strb w21, [x19, #0x31]
+16c2574 adrp x8, #0x52fb000
+16c2578 ldr x8, [x8, #0x730]
+16c257c ldr x21, [x20, #0x10]
+16c2580 ldr x0, [x8]
+16c2584 ldrb w8, [x0, #0x10a]
+16c2588 tbz w8, #0, #0x16c2598
+16c258c ldr w8, [x0, #0xbc]
+16c2590 cbnz w8, #0x16c2598
+16c2594 bl #0x3f3f378
+16c2598 mov x1, x21
+16c259c bl #0x16c2a24 ChapterModule$$ConvertFightHeroData
+16c25a0 str x0, [x19, #0x18]
+16c25a4 adrp x8, #0x5256000
+16c25a8 ldr x8, [x8, #0x620]
+16c25ac ldr w9, [x20, #0x2c]
+16c25b0 ldr x8, [x8]
+16c25b4 ldr x8, [x8, #0xa0]
+16c25b8 str w9, [x8]
+16c25bc adrp x8, #0x52f4000
+16c25c0 ldr x8, [x8, #0x98]
+16c25c4 ldr x0, [x8]
+16c25c8 bl #0x3f6452c
+16c25cc mov x1, xzr
+16c25d0 mov x21, x0
+16c25d4 bl #0x1c5b180 LogicX2Command.FightGroupSkillData$$.ctor
+16c25d8 str x21, [x19, #0x58]
+16c25dc ldr x8, [x20, #0x40]
+16c25e0 cbz x8, #0x16c26ec
+16c25e4 ldr w22, [x8, #0x10]
+16c25e8 cbnz x21, #0x16c25f0
+16c25ec bl #0x3f564f0
+16c25f0 str w22, [x21, #0x14]
+16c25f4 ldr x21, [x19, #0x58]
+16c25f8 ldr x22, [x20, #0x40]
+16c25fc cbnz x22, #0x16c2604
+16c2600 bl #0x3f564f0
+16c2604 ldr w22, [x22, #0x14]
+16c2608 cbnz x21, #0x16c2610
+16c260c bl #0x3f564f0
+16c2610 str w22, [x21, #0x18]
+16c2614 cbnz x19, #0x16c261c
+16c2618 bl #0x3f564f0
+16c261c ldr x21, [x19, #0x58]
+16c2620 cbnz x20, #0x16c2628
+16c2624 bl #0x3f564f0
+16c2628 ldr x22, [x20, #0x40]
+16c262c cbnz x22, #0x16c2634
+16c2630 bl #0x3f564f0
+16c2634 ldr w22, [x22, #0x18]
+16c2638 cbnz x21, #0x16c2640
+16c263c bl #0x3f564f0
+16c2640 str w22, [x21, #0x1c]
+16c2644 cbnz x19, #0x16c264c
+16c2648 bl #0x3f564f0
+16c264c adrp x8, #0x52ef000
+16c2650 ldr x22, [x19, #0x58]
+16c2654 ldr x8, [x8, #0x110]
+16c2658 ldr x0, [x8]
+16c265c bl #0x3f6452c
+16c2660 adrp x8, #0x520c000
+16c2664 ldr x8, [x8, #0x2c0]
+16c2668 mov x21, x0
+16c266c ldr x1, [x8]
+16c2670 bl #0x3d43ed8 System.Collections.Generic.List<int>$$.ctor
+16c2674 cbnz x22, #0x16c267c
+16c2678 bl #0x3f564f0
+16c267c str x21, [x22, #0x20]
+16c2680 cbnz x20, #0x16c2688
+16c2684 bl #0x3f564f0
+16c2688 ldr x21, [x20, #0x40]
+16c268c cbnz x21, #0x16c2694
+16c2690 bl #0x3f564f0
+16c2694 ldr x8, [x21, #0x20]
+16c2698 cbz x8, #0x16c26ec
+16c269c cbnz x19, #0x16c26a4
+16c26a0 bl #0x3f564f0
+16c26a4 ldr x21, [x19, #0x58]
+16c26a8 cbnz x21, #0x16c26b0
+16c26ac bl #0x3f564f0
+16c26b0 ldr x21, [x21, #0x20]
+16c26b4 cbnz x20, #0x16c26bc
+16c26b8 bl #0x3f564f0
+16c26bc ldr x22, [x20, #0x40]
+16c26c0 cbnz x22, #0x16c26c8
+16c26c4 bl #0x3f564f0
+16c26c8 ldr x22, [x22, #0x20]
+16c26cc cbnz x21, #0x16c26d4
+16c26d0 bl #0x3f564f0
+16c26d4 adrp x8, #0x51d4000
+16c26d8 ldr x8, [x8, #0xd00]
+16c26dc mov x0, x21
+16c26e0 mov x1, x22
+16c26e4 ldr x2, [x8]
+16c26e8 bl #0x3d455bc System.Collections.Generic.List<int>$$AddRange
+16c26ec adrp x8, #0x52ef000
+16c26f0 ldr x8, [x8, #0x110]
+16c26f4 ldr x0, [x8]
+16c26f8 bl #0x3f6452c
+16c26fc adrp x8, #0x520c000
+16c2700 ldr x8, [x8, #0x2c0]
+16c2704 mov x21, x0
+16c2708 ldr x1, [x8]
+16c270c bl #0x3d43ed8 System.Collections.Generic.List<int>$$.ctor
+16c2710 cbnz x19, #0x16c2718
+16c2714 bl #0x3f564f0
+16c2718 str x21, [x19, #0x28]
+16c271c cbnz x20, #0x16c2724
+16c2720 bl #0x3f564f0
+16c2724 ldr x21, [x20, #0x20]
+16c2728 cbnz x21, #0x16c2730
+16c272c bl #0x3f564f0
+16c2730 ldr x8, [x21, #0x10]
+16c2734 cbz x8, #0x16c277c
+16c2738 cbnz x19, #0x16c2740
+16c273c bl #0x3f564f0
+16c2740 ldr x21, [x19, #0x28]
+16c2744 cbnz x20, #0x16c274c
+16c2748 bl #0x3f564f0
+16c274c ldr x20, [x20, #0x20]
+16c2750 cbnz x20, #0x16c2758
+16c2754 bl #0x3f564f0
+16c2758 ldr x20, [x20, #0x10]
+16c275c cbnz x21, #0x16c2764
+16c2760 bl #0x3f564f0
+16c2764 adrp x8, #0x51d4000
+16c2768 ldr x8, [x8, #0xd00]
+16c276c mov x0, x21
+16c2770 mov x1, x20
+16c2774 ldr x2, [x8]
+16c2778 bl #0x3d455bc System.Collections.Generic.List<int>$$AddRange
+16c277c mov x0, x19
+16c2780 ldp x29, x30, [sp, #0x20]
+16c2784 ldp x20, x19, [sp, #0x10]
+16c2788 ldp x22, x21, [sp], #0x30
+16c278c ret
