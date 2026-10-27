@@ -334,3 +334,34 @@ time.sleep(20)
         with pytest.raises(RuntimeError):runner.run('export',alpha)
     finally:
         runner.close();worker.join(5)
+
+
+def test_no_cooldown_allows_consecutive_full_exports_and_imports(env, monkeypatch):
+    store, accounts, manager, alpha, beta = env
+    # Older environment settings and persisted cooldowns must not reactivate
+    # restrictions in the production API's default (limits=None) configuration.
+    monkeypatch.setenv('X2_SAVE_IMPORT_COOLDOWN_SECONDS','600')
+    monkeypatch.setenv('X2_SAVE_GLOBAL_IMPORT_COOLDOWN_SECONDS','60')
+    monkeypatch.setenv('X2_SAVE_EXPORT_COOLDOWN_SECONDS','60')
+    keys = (f'save-limit:import:{alpha}','save-limit:import:global',f'save-limit:export:{alpha}')
+    for key in keys:
+        manager.db.execute('INSERT OR REPLACE INTO server_settings VALUES (?,?)', (key,str(time.time()+86400)))
+    before_limits = {r[0]:r[1] for r in manager.db.execute("SELECT key,value FROM server_settings WHERE key LIKE 'save-limit:%'")}
+    before = manager.canonical_state(alpha)
+    api = SaveManagerAPI(manager,accounts,lambda:set(),isolated_jobs=True)
+    assert api.limits is None
+    try:
+        token = auth(api)
+        archives = [api.respond('POST','/save-manager/export',b'',token) for _ in range(2)]
+        assert all(r[0]==200 and r[2].startswith(b'PK') for r in archives)
+        for response in archives:
+            assert manager.parse_save(response[2]).source_player_id == alpha
+        for _ in range(2):
+            result = api.respond('POST','/save-manager/import',archives[0][2],auth(api))
+            assert result[0]==200 and json.loads(result[2])['code']=='ok'
+            assert manager.canonical_state(alpha)==before
+        assert len(list((manager.backup_root/f'player_{alpha}').glob('*.x2save')))==1
+        assert {r[0]:r[1] for r in manager.db.execute("SELECT key,value FROM server_settings WHERE key LIKE 'save-limit:%'")} == before_limits
+        assert api.respond('POST','/save-manager/import',b'broken archive',auth(api))[0]==400
+    finally:
+        api.close()

@@ -1,0 +1,13 @@
+{
+  "cooldowns_enabled": false,
+  "related_tests_passed": 35,
+  "old_limits_ignored": true,
+  "ports": [
+    18080,
+    29000,
+    29001
+  ],
+  "heavy_job_concurrency_limit": 1,
+  "local_backup": "runtime/before_activity_next_20261027_225826/player.sqlite3",
+  "local_restart_log": "runtime/activity_next_20261027_225827.err.log"
+}

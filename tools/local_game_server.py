@@ -9,7 +9,6 @@ from pathlib import Path
 from x2server.bootstrap.http_server import BootstrapHTTPServer
 from x2server.bootstrap.local_identity import LocalIdentityService
 from x2server.bootstrap.save_manager_api import SaveManagerAPI
-from x2server.player.save_limits import SaveLimits
 from x2server.bootstrap.models import RecoveredBootstrapContract, RecoveredWebGameConfig, RecoveredServerAddressConfig, ServerAddressEntry
 from x2server.config.logging import configure_logging
 from x2server.config.settings import Settings
@@ -108,7 +107,7 @@ async def run(database: Path, seconds: float) -> None:
     logging.getLogger("x2.local").info("import backup retention removed=%s keep_per_player=1", removed_backups)
     save_api = SaveManagerAPI(save_manager, accounts,
         online_player_ids=lambda: _online_player_ids(main_loop, tcp),
-        isolated_jobs=True, limits=SaveLimits.from_env())
+        isolated_jobs=True)  # No time cooldown; concurrent heavy jobs are still bounded.
     identity = LocalIdentityService(contract, account=os.environ.get("X2_LOCAL_ACCOUNT"),
         password=os.environ.get("X2_LOCAL_PASSWORD"), accounts=accounts, players=store,
         chat_entry=f"{endpoints.public_host}:{endpoints.chat_port}",
