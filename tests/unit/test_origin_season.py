@@ -202,3 +202,14 @@ def test_all_season_requests_have_encoded_error_or_live_response(env):
         assert answer.message_name == 'L2C_'+name
         wire = SEASON_SCHEMAS[answer.message_name].encode(answer.values)
         assert SEASON_SCHEMAS[answer.message_name].decode(wire)['code'] in (10,13,97)
+
+
+def test_reading_unchanged_season_state_and_tasks_does_not_rewrite_json(env):
+    store, e, season = env
+    season.task_values(1)
+    before = store.db.total_changes
+    for _ in range(3):
+        season.state(1)
+        season.task_values(1)
+    assert store.db.total_changes == before
+    assert not store.db.in_transaction

@@ -1,5 +1,7 @@
 # SAVE_DATA_AUDIT.md — 存档数据边界审计（Account → Save Ownership Graph）
 
+2026-10-27 本地并发优化补充：持久化所有权范围与存档格式不变。导入/导出冷却复用全局`server_settings`的`save-limit:`键，不随存档迁移、回滚；后台存档子进程的临时文件会清理，正式覆盖前备份仍每账号仅保留一份。checkpoint改用后台独立连接，维持WAL和FULL同步。详见[并发优化记录](../knowledge/database_optimization_20261027.md)。
+
 任务：存档管理（导出/导入）第一阶段审计产物。
 状态：**COMPLETE — 完整回答"一个账号的完整游戏状态由哪些数据组成"**。
 2026-10-11 发布复审：实际数据库共 98 张业务表，存档包括 93 张玩家表及 players.snapshot。已补入后来新增的 10 张表；下方 63/60 表数为首次审计历史基线，当前完整字段清单以 save_boundary.json 为准。`validate_boundary.py` 已对当前活体库通过。
@@ -13,7 +15,7 @@
 | 数据库类型 | SQLite 3（单文件） |
 | 活体文件 | `runtime/phase14/player.sqlite3`（服务器启动参数 `--database`/`X2_DB_PATH` 指定，`tools/local_game_server.py` → `PlayerStore`） |
 | schema 来源 | 代码内建 DDL（`PlayerStore.__init__` + 各 player 模块 `CREATE TABLE IF NOT EXISTS`/`_add_column`），`PRAGMA user_version=2` |
-| journal 模式 | `delete`（rollback journal；导出用单只读事务取一致快照，导入用 `BEGIN IMMEDIATE` 写事务） |
+| journal 模式 | 当前为 `WAL`、`synchronous=FULL`；导出用一致读快照，导入用 `BEGIN IMMEDIATE` 原子写事务 |
 | ORM | 无 ORM；`sqlite3.Row` + 参数化 SQL 直读直写 |
 | migrations | `user_version` 门（0/1/2）+ 各模块 `_add_column` 幂等补列；无独立迁移框架 |
 | 表总数 | 63（含 `accounts`/`players` 两个身份表；其余 60 张为玩家游戏状态/账本/凭据表） |

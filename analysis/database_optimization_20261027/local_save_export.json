@@ -1,0 +1,10 @@
+{
+  "player": 1,
+  "archive_bytes": 620655,
+  "sha256": "1b39bf4efe1914732b04a899ff092c88eb92a23b5b50037dd36f47756aea34a7",
+  "player_tables": 102,
+  "rows": 9069,
+  "blob_entries": 1929,
+  "references_valid": true,
+  "database_modified_by_import": false
+}

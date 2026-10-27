@@ -364,6 +364,19 @@ class EconomyService:
 
     def ensure_periods(self, player_id):
         """Lazy rollover at login or the first online operation after a boundary."""
+        db = self.store.db
+        starts = tuple(task_period(k, int(self.clock()))[0] for k in (1, 2))
+        cache = getattr(self, '_task_period_checks', None)
+        if cache is None:
+            self._task_period_checks = cache = {}
+        # Cache only a completed consistency check, not task progress. SQLite's
+        # data_version invalidates external imports/admin writes; total_changes
+        # invalidates local writes. Never reuse/store a check inside a transaction
+        # that could still roll back. Clock boundaries are part of the key.
+        def version():
+            return (db.total_changes, db.execute('PRAGMA data_version').fetchone()[0], starts)
+        if not db.in_transaction and cache.get(player_id) == version():
+            return
         with self.transaction():
             snapshot = self.store.get(player_id)["snapshot"]
             changed = False
@@ -371,13 +384,29 @@ class EconomyService:
                 start, end = task_period(kind, int(self.clock()))
                 previous = self.store.db.execute("SELECT start,end FROM task_periods WHERE player_id=? AND kind=?", (player_id, kind)).fetchone()
                 if previous and previous[0] >= start:
+                    # Read live state once; never cache player progress across
+                    # imports/rollovers, and never rewrite unchanged rows.
+                    current = {r[0]: (r[1], r[2]) for r in self.store.db.execute(
+                        'SELECT task_id,progress,claimed FROM economy_tasks WHERE player_id=?', (player_id,))}
+                    prefix = f'task:{kind}:{previous[0]}:'
+                    grants = {r[0] for r in self.store.db.execute(
+                        'SELECT source FROM economy_grants WHERE player_id=? AND source>=? AND source<?',
+                        (player_id, prefix, prefix + '\uffff'))}
+                    missing, updates = [], []
                     for task_id, task in self.tasks.items():
-                        if task["RefreshCycle"]["value"] == kind and task["AcceptLevel"] <= snapshot["level"]:
-                            self.store.db.execute("INSERT OR IGNORE INTO economy_tasks(player_id,task_id) VALUES (?,?)", (player_id, task_id))
-                            if self.store.db.execute("SELECT 1 FROM economy_grants WHERE player_id=? AND source=?", (player_id, f"task:{kind}:{previous[0]}:{task_id}")).fetchone():
-                                self.store.db.execute("UPDATE economy_tasks SET claimed=1 WHERE player_id=? AND task_id=?", (player_id, task_id))
-                            self.store.db.execute("UPDATE economy_tasks SET progress=MAX(progress,CASE WHEN claimed<>0 THEN ? ELSE 0 END),claimed=CASE WHEN claimed<>0 THEN 1 ELSE 0 END WHERE player_id=? AND task_id=?",
-                                                  (self.catalog["task_conditions"][str(task_id)]["CompleteNum"], player_id, task_id))
+                        if task['RefreshCycle']['value'] != kind or task['AcceptLevel'] > snapshot['level']:
+                            continue
+                        row = current.get(task_id)
+                        if row is None:
+                            missing.append((player_id, task_id))
+                        progress, claimed = row or (0, 0)
+                        claimed_new = int(bool(claimed) or prefix + str(task_id) in grants)
+                        target = self.catalog['task_conditions'][str(task_id)]['CompleteNum']
+                        progress_new = max(progress, target if claimed_new else 0)
+                        if (progress_new, claimed_new) != (progress, claimed):
+                            updates.append((progress_new, claimed_new, player_id, task_id))
+                    self.store.db.executemany('INSERT OR IGNORE INTO economy_tasks(player_id,task_id) VALUES (?,?)', missing)
+                    self.store.db.executemany('UPDATE economy_tasks SET progress=?,claimed=? WHERE player_id=? AND task_id=?', updates)
                     continue  # Clock rollback must not mint a second period.
                 ids = [i for i, t in self.tasks.items() if t["RefreshCycle"]["value"] == kind]
                 if previous:
@@ -396,6 +425,11 @@ class EconomyService:
                 self.store.db.execute("INSERT OR REPLACE INTO task_periods VALUES (?,?,?,?)", (player_id, kind, start, end))
             if changed:
                 self.store.db.execute("UPDATE players SET snapshot=?,revision=revision+1 WHERE id=?", (json.dumps(snapshot, ensure_ascii=False, sort_keys=True), player_id))
+
+        if not db.in_transaction:
+            if len(cache) >= 256 and player_id not in cache:
+                cache.pop(next(iter(cache)))
+            cache[player_id] = version()
 
     def login_event(self, player_id):
         from .bag_items import recover_hero_boxes
@@ -797,6 +831,7 @@ class EconomyService:
         with self.transaction():
             clears = {row[0] for row in self.store.db.execute(
                 "SELECT section_id FROM economy_clears WHERE player_id=?", (player_id,))}
+            current = dict(self.store.db.execute('SELECT task_id,progress FROM economy_tasks WHERE player_id=?', (player_id,)))
             for task_id, entry in self.challenge_tasks.items():
                 target = entry["completeNum"]
                 if entry["track"] == "served":
@@ -808,8 +843,7 @@ class EconomyService:
                     floor = min(sum(1 for section in entry["value1"] if section in clears), target)
                 else:
                     floor = self.challenge_derived(player_id, entry)
-                row = self.store.db.execute("SELECT progress FROM economy_tasks WHERE player_id=? AND task_id=?",
-                                            (player_id, task_id)).fetchone()
+                row = (current[task_id],) if task_id in current else None
                 if row is None:
                     self.store.db.execute("INSERT INTO economy_tasks(player_id,task_id,progress) VALUES (?,?,?)",
                                           (player_id, task_id, floor))
@@ -830,11 +864,15 @@ class EconomyService:
     def challenge_values(self, player_id):
         """L2C_GameTask payload for type 3: all 60 tasks plus the 10 group boxes."""
         self.repair_challenge(player_id)
+        current = {r[0]: (r[1],r[2]) for r in self.store.db.execute(
+            'SELECT task_id,progress,claimed FROM economy_tasks WHERE player_id=?', (player_id,))}
+        groups = {}
+        for tid, entry in self.challenge_tasks.items():
+            groups.setdefault(entry['group'], []).append(tid)
+        done_groups = {g for g, ids in groups.items() if ids and all(current.get(tid,(0,0))[1] == 1 for tid in ids)}
         tasks = []
         for task_id, entry in sorted(self.challenge_tasks.items()):
-            row = self.store.db.execute("SELECT progress,claimed FROM economy_tasks WHERE player_id=? AND task_id=?",
-                                        (player_id, task_id)).fetchone()
-            progress, claimed = tuple(row) if row else (0, 0)
+            progress, claimed = current.get(task_id, (0, 0))
             target = entry["completeNum"]
             tasks.append(TASK.encode({"taskId": task_id,
                 "taskStatus": 4 if claimed else 3 if progress >= target else 2,
@@ -843,7 +881,7 @@ class EconomyService:
         picked = {r[0] for r in self.store.db.execute(
             "SELECT box_id FROM task_boxes WHERE player_id=? AND kind=?", (player_id, self.CHALLENGE_KIND))}
         boxes = [TREASURE_BOX.encode({"boxId": group, "activityId": 0,
-            "pickStatus": 2 if group in picked else 1 if self._challenge_group_done(player_id, group) else 0})
+            "pickStatus": 2 if group in picked else 1 if group in done_groups else 0})
             for group in sorted(self.challenge_boxes)]
         return {"code": 10, "type": self.CHALLENGE_KIND, "taskList": tasks, "boxList": boxes}
 
@@ -1082,17 +1120,20 @@ class EconomyService:
         if kind == 1:
             repair_activity_daily(self, player_id)
         level = self.store.get(player_id)["snapshot"]["level"]
+        current = {r[0]: (r[1],r[2]) for r in self.store.db.execute(
+            'SELECT task_id,progress,claimed FROM economy_tasks WHERE player_id=?', (player_id,))}
+        period = self.store.db.execute('SELECT end FROM task_periods WHERE player_id=? AND kind=?',
+                                       (player_id, kind)).fetchone()
         result = []
         for task_id, task in self.tasks.items():
             if (task["RefreshCycle"]["value"] != kind or task["AcceptLevel"] > level
                     or not activity_daily_open(self, task_id)):
                 continue
-            row = self.store.db.execute("SELECT progress,claimed FROM economy_tasks WHERE player_id=? AND task_id=?",
-                                        (player_id, task_id)).fetchone()
-            if not row:
-                continue  # Eligibility is captured when this period is created.
-            progress, claimed = tuple(row)
-            period_end = self.store.db.execute("SELECT end FROM task_periods WHERE player_id=? AND kind=?", (player_id, kind)).fetchone()[0]
+            row = current.get(task_id)
+            if row is None:
+                continue
+            progress, claimed = row
+            period_end = period[0]
             target = self.catalog["task_conditions"][str(task_id)]["CompleteNum"]
             result.append(TASK.encode({"taskId": task_id, "taskStatus": 4 if claimed else 3 if progress >= target else 2,
                 "taskProgress": min(progress, target), "taskRefreshTime": period_end, "finishTimes": int(bool(claimed)), "stage": 0}))

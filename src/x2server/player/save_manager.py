@@ -209,6 +209,7 @@ class SaveManager:
                             else Path(store.path).parent / "server_backups" / "save_import")
         self._lock = threading.RLock()
         self.db = _connect(store)
+        self.db.execute("CREATE TABLE IF NOT EXISTS server_settings (key TEXT PRIMARY KEY, value TEXT NOT NULL)")
         self._columns: dict[str, dict[str, dict[str, Any]]] = {}
         self._missing: set[str] = set()
         live = {r[0] for r in self.db.execute(
@@ -597,13 +598,15 @@ class SaveManager:
 
     # -- import --------------------------------------------------------------
 
-    def import_save(self, player_id: int, data: bytes, *, actor: str = "save-manager", offline_check=None) -> dict[str, Any]:
+    def import_save(self, player_id: int, data: bytes, *, actor: str = "save-manager", offline_check=None, limits=None) -> dict[str, Any]:
         """Validate, back up the current archive, then land the new state in a
         single transaction. Any failure rolls the database back completely."""
         started = time.monotonic()
         log = logging.getLogger('x2.save_manager')
         log.info('import start player=%s bytes=%s', player_id, len(data))
         with self._lock:
+            if limits is not None:
+                limits.check(self.db, 'import', player_id, time.time())
             try:
                 plan = self.parse_save(data)
             except zipfile.BadZipFile as exc:
@@ -623,6 +626,8 @@ class SaveManager:
                 log.info('import write start player=%s', player_id)
                 db.execute("BEGIN IMMEDIATE")
                 try:
+                    if limits is not None:
+                        limits.check(db, 'import', player_id, time.time())
                     from .system_mail import remember_once_mail_history
                     remember_once_mail_history(db, player_id)
                     self._delete_target_state(db, player_id, plan.preserve_tables)
@@ -647,6 +652,8 @@ class SaveManager:
                                            sort_keys=True), player_id))
                     self._bump_sequences(db)
                     counts = {t: len(plan.rows[t]) for t in PLAYER_TABLES}
+                    if limits is not None:
+                        limits.record(db, 'import', player_id, time.time())
                     db.execute("COMMIT")
                 except BaseException:
                     db.execute("ROLLBACK")
@@ -919,42 +926,62 @@ class SaveManager:
                      boss_map: dict[str, str] | None = None) -> None:
         uuid_map = uuid_map or {}
         key_maps = key_maps or {}
-        for row in rows:
-            values = dict(row)
-            if table in BOSS_ID_COLUMNS and values.get("boss_id") in (boss_map or {}):
-                values["boss_id"] = boss_map[values["boss_id"]]
-            if table == "world_boss_runs" and values.get("finder") == plan.source_player_id:
-                values["finder"] = player_id
-            if "player_id" in self.columns(table):
-                values["player_id"] = player_id
-            if table in UUID_FAMILY_COLUMNS:
-                column = UUID_FAMILY_COLUMNS[table]
-                if isinstance(values.get(column), str) and values[column] in uuid_map:
-                    values[column] = uuid_map[values[column]]
-            if table in GLOBAL_KEY_COLUMNS:
-                column = GLOBAL_KEY_COLUMNS[table]
-                if isinstance(values.get(column), str) and values[column] in key_maps.get(table, {}):
-                    values[column] = key_maps[table][values[column]]
-            if table in ("equipment_enhancements", "equipment_main_growth", "college_washing_pending", "college_washing_receipts") \
-                    and values.get("equip_id") in equip_map:
-                values["equip_id"] = equip_map[values["equip_id"]]
-            if table in ("fight_drop_items", "fight_drop_claims") \
-                    and values.get("report_id") in drop_map:
-                values["report_id"] = drop_map[values["report_id"]]
-            if table == "player_mail":
-                values.pop("id", None)  # always allocate a fresh global id
-            self._insert(db, table, values, plan)
+        def prepared():
+            for row in rows:
+                values = dict(row)
+                if table in BOSS_ID_COLUMNS and values.get("boss_id") in (boss_map or {}):
+                    values["boss_id"] = boss_map[values["boss_id"]]
+                if table == "world_boss_runs" and values.get("finder") == plan.source_player_id:
+                    values["finder"] = player_id
+                if "player_id" in self.columns(table):
+                    values["player_id"] = player_id
+                if table in UUID_FAMILY_COLUMNS:
+                    column = UUID_FAMILY_COLUMNS[table]
+                    if isinstance(values.get(column), str) and values[column] in uuid_map:
+                        values[column] = uuid_map[values[column]]
+                if table in GLOBAL_KEY_COLUMNS:
+                    column = GLOBAL_KEY_COLUMNS[table]
+                    if isinstance(values.get(column), str) and values[column] in key_maps.get(table, {}):
+                        values[column] = key_maps[table][values[column]]
+                if table in ("equipment_enhancements", "equipment_main_growth", "college_washing_pending", "college_washing_receipts") \
+                        and values.get("equip_id") in equip_map:
+                    values["equip_id"] = equip_map[values["equip_id"]]
+                if table in ("fight_drop_items", "fight_drop_claims") \
+                        and values.get("report_id") in drop_map:
+                    values["report_id"] = drop_map[values["report_id"]]
+                if table == "player_mail":
+                    values.pop("id", None)  # always allocate a fresh global id
+                yield values
+        self._insert_many(db, table, prepared(), plan)
 
-    def _insert(self, db: sqlite3.Connection, table: str, values: dict[str, Any],
-                plan: ImportPlan) -> None:
+    def _insert_many(self, db, table, rows, plan):
+        # Keep row order (including autoincrement allocation) and support old
+        # archives with different optional columns. Only one small batch is live.
+        from itertools import islice, groupby
+        rows = iter(rows)
+        while batch := list(islice(rows, 256)):
+            if len(batch) < 32:
+                for values in batch:
+                    self._insert(db, table, values, plan)
+                continue
+            resolved = [self._resolve_values(values, plan) for values in batch]
+            for names, group in groupby(resolved, key=lambda values: tuple(values)):
+                marks = ','.join('?' for _ in names)
+                db.executemany(f"INSERT INTO {table} ({','.join(names)}) VALUES ({marks})",
+                               (tuple(values[c] for c in names) for values in group))
+
+    @staticmethod
+    def _resolve_values(values, plan):
         resolved = {}
         for name, value in values.items():
             if not COLUMN_NAME_RE.fullmatch(name):
-                raise ValueError(f"{table} 列名非法 {name!r}")
-            if isinstance(value, dict) and set(value) == {"$blob"}:
-                resolved[name] = plan.blobs[value["$blob"]]
-            else:
-                resolved[name] = value
+                raise ValueError(f"invalid save column {name!r}")
+            resolved[name] = plan.blobs[value['$blob']] if isinstance(value, dict) and set(value) == {'$blob'} else value
+        return resolved
+
+    def _insert(self, db: sqlite3.Connection, table: str, values: dict[str, Any],
+                plan: ImportPlan) -> None:
+        resolved = self._resolve_values(values, plan)
         names = ",".join(resolved)
         marks = ",".join("?" * len(resolved))
         db.execute(f"INSERT INTO {table} ({names}) VALUES ({marks})",

@@ -556,6 +556,7 @@ class ActivityRuntime:
                         for message in self.e.pushes(player):
                             await server.push_to_player(player, message)
                     await server.push_to_player(player, OutboundMessage('L2C_QueryActivity', activity_values, dispatch_gap=0.05))
+                    await self.e.store.wait_for_import()
                     for message in self.catalog_messages(player):
                         await server.push_to_player(player, message)
                     synchronized[player] = sync_key

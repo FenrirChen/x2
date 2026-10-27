@@ -22,6 +22,9 @@ from urllib.parse import parse_qs
 
 from ..player.save_manager import MAX_UPLOAD_BYTES, SaveManager, SaveBoundaryError, AccountOnlineError
 
+from ..player.save_limits import SaveCooldownError
+from ..player.save_jobs import SaveJobError
+
 LOGGER = logging.getLogger("x2.bootstrap.save_manager")
 
 TOKEN_TTL = 600.0
@@ -34,7 +37,7 @@ class SaveManagerAPI:
 
     def __init__(self, save_manager: SaveManager, accounts,
                  online_player_ids: Callable[[], set[int]],
-                 clock: Callable[[], float] = time.time) -> None:
+                 clock: Callable[[], float] = time.time, *, isolated_jobs=False, limits=None) -> None:
         self.save_manager = save_manager
         self.accounts = accounts
         self.online_player_ids = online_player_ids
@@ -42,6 +45,17 @@ class SaveManagerAPI:
         self._tokens: dict[str, _SaveToken] = {}
         self._lock = threading.Lock()
         self._jobs = threading.BoundedSemaphore(1)
+        self._closed = threading.Event()
+        self.limits = limits
+        from ..player.save_jobs import SaveJobRunner
+        self.runner = SaveJobRunner(save_manager.store, save_manager.backup_root) if isolated_jobs else None
+
+    def close(self):
+        self._closed.set()
+        if self.runner:
+            self.runner.close()
+        with self._lock:
+            self._tokens.clear()
 
     @property
     def max_body_bytes(self) -> int:
@@ -50,11 +64,16 @@ class SaveManagerAPI:
     def respond(self, method: str, path: str, body: bytes,
                 authorization: str) -> tuple[int, str, bytes]:
         """Return (status, content_type, payload) for a /save-manager/ route."""
+        if self._closed.is_set():
+            return self._json(503, {'error': 'server_stopping'})
         job = path.rsplit('/', 1)[-1] in ('export', 'import')
         if job and not self._jobs.acquire(blocking=False):
             return self._json(503, {'error': 'save_manager_busy'})
         try:
             return self._respond(method, path, body, authorization)
+        except SaveCooldownError as exc:
+            return self._json(429, {'error': 'save_cooldown', 'retry_after': exc.retry_after,
+                                   'message': '存档操作过于频繁，请在%s秒后重试。' % exc.retry_after})
         except AccountOnlineError:
             return self._json(409, {'error': 'account_online',
                                    'message': '账号当前在线，请先退出游戏后再导入存档。'})
@@ -70,6 +89,9 @@ class SaveManagerAPI:
         except SaveBoundaryError:
             LOGGER.exception("save-manager export boundary incomplete")
             return self._json(503, {"error": "save_schema_incomplete"})
+        except SaveJobError:
+            LOGGER.exception('save-manager isolated job failed')
+            return self._json(503, {'error': 'save_operation_failed'})
         except RuntimeError:
             LOGGER.exception("save-manager online status unavailable")
             return self._json(503, {"error": "online_status_unavailable"})
@@ -147,7 +169,14 @@ class SaveManagerAPI:
                                 "online": token.player_id in online})
 
     def _export(self, token: _SaveToken) -> tuple[int, str, bytes]:
-        payload = self.save_manager.export_save(token.player_id)
+        if self.limits is not None:
+            with self.save_manager._lock:
+                self.limits.check(self.save_manager.db, 'export', token.player_id, self._clock())
+        payload = (self.runner.run('export', token.player_id) if self.runner
+                   else self.save_manager.export_save(token.player_id))
+        if self.limits is not None:
+            with self.save_manager._lock, self.save_manager.store.checkpoint_guard:
+                self.limits.record(self.save_manager.db, 'export', token.player_id, self._clock())
         LOGGER.info("save-manager export account_id=%s bytes=%d",
                     token.account_id, len(payload))
         return (200, "application/octet-stream", payload)
@@ -155,14 +184,21 @@ class SaveManagerAPI:
     def _import(self, token: _SaveToken, body: bytes) -> tuple[int, str, bytes]:
         if not body:
             return self._json(400, {"error": "empty_body"})
+        if self.limits is not None:
+            with self.save_manager._lock:
+                self.limits.check(self.save_manager.db, 'import', token.player_id, self._clock())
         online = self._safe_online_ids()
         if token.player_id in online:
             LOGGER.info("save-manager import rejected (online) account_id=%s", token.account_id)
             return self._json(409, {"error": "account_online",
                                     "message": "账号当前在线，请先退出游戏后再导入存档。"})
-        result = self.save_manager.import_save(token.player_id, body,
-                                               actor=f"save-manager:{token.username}",
-                                               offline_check=lambda: token.player_id not in self._safe_online_ids())
+        options = {'actor': f'save-manager:{token.username}',
+                   'offline_check': lambda: token.player_id not in self._safe_online_ids(),
+                   'limits': self.limits}
+        if self.runner:
+            result = self.runner.run('import', token.player_id, body, **options)
+        else:
+            result = self.save_manager.import_save(token.player_id, body, **options)
         LOGGER.info("save-manager import ok account_id=%s", token.account_id)
         with self._lock:
             for stale in [t for t, v in self._tokens.items() if v.account_id == token.account_id]:

@@ -93,32 +93,59 @@ class PlayerStore:
 
     @contextmanager
     def import_write(self):
-        self.importing.set()
-        try:
-            with self.checkpoint_guard:
+        # Waiting for a background checkpoint must not pause the game loop.
+        with self.checkpoint_guard:
+            self.importing.set()
+            try:
                 yield
+            finally:
+                self.importing.clear()
+
+    @staticmethod
+    def _run_checkpoint(db):
+        return tuple(db.execute('PRAGMA wal_checkpoint(PASSIVE)').fetchone())
+
+    def _checkpoint_once(self):
+        # This connection belongs exclusively to this background invocation.
+        # Never transfer the game thread's connection into a worker thread.
+        if self.importing.is_set() or not self.checkpoint_guard.acquire(blocking=False):
+            return
+        started = time.monotonic()
+        try:
+            if self.importing.is_set():
+                return
+            with closing(sqlite3.connect(self.path, timeout=.05)) as db:
+                db.execute('PRAGMA wal_autocheckpoint=0')
+                db.execute('PRAGMA cache_size=-2048')
+                result = self._run_checkpoint(db)
+            elapsed = time.monotonic() - started
+            if elapsed > .5:
+                logging.getLogger('x2.database').warning(
+                    'background checkpoint slow elapsed=%.3fs result=%s', elapsed, result)
+        except sqlite3.OperationalError as exc:
+            if not is_database_busy(exc):
+                logging.getLogger('x2.database').exception('background checkpoint failed')
         finally:
-            self.importing.clear()
+            self.checkpoint_guard.release()
 
     async def checkpoint_watch(self, interval=5):
-        # Single checkpoint owner. Disable auto-checkpoint on every app writer;
-        # in particular never race a checkpoint against an HTTP writer/reset.
+        # A slow disk operation cannot stop game-loop heartbeats. Cancellation
+        # drains the owner before shutdown closes its interprocess guard.
         while True:
             await asyncio.sleep(interval)
-            if self.importing.is_set() or not self.checkpoint_guard.acquire(blocking=False):
+            if self.db.in_transaction or self.importing.is_set():
                 continue
+            future = asyncio.get_running_loop().run_in_executor(None, self._checkpoint_once)
             try:
-                if not self.db.in_transaction:
-                    started = time.monotonic()
+                await asyncio.shield(future)
+            except asyncio.CancelledError:
+                while not future.done():
                     try:
-                        result = self.db.execute('PRAGMA wal_checkpoint(PASSIVE)').fetchone()
-                        if time.monotonic() - started > .5:
-                            logging.getLogger('x2.database').warning('checkpoint slow elapsed=%.3fs result=%s', time.monotonic() - started, tuple(result))
-                    except sqlite3.OperationalError as exc:
-                        if not is_database_busy(exc):
-                            logging.getLogger('x2.database').exception('checkpoint failed')
-            finally:
-                self.checkpoint_guard.release()
+                        await asyncio.shield(future)
+                    except asyncio.CancelledError:
+                        continue
+                future.result()
+                raise
 
     def login(self, account: str, player_id: int, now: int) -> dict[str, Any]:
         """Create once and increment atomically; never replace an existing snapshot."""

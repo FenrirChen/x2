@@ -9,6 +9,7 @@ from pathlib import Path
 from x2server.bootstrap.http_server import BootstrapHTTPServer
 from x2server.bootstrap.local_identity import LocalIdentityService
 from x2server.bootstrap.save_manager_api import SaveManagerAPI
+from x2server.player.save_limits import SaveLimits
 from x2server.bootstrap.models import RecoveredBootstrapContract, RecoveredWebGameConfig, RecoveredServerAddressConfig, ServerAddressEntry
 from x2server.config.logging import configure_logging
 from x2server.config.settings import Settings
@@ -105,12 +106,13 @@ async def run(database: Path, seconds: float) -> None:
     save_manager = SaveManager(store)
     removed_backups = save_manager.prune_import_backups()
     logging.getLogger("x2.local").info("import backup retention removed=%s keep_per_player=1", removed_backups)
+    save_api = SaveManagerAPI(save_manager, accounts,
+        online_player_ids=lambda: _online_player_ids(main_loop, tcp),
+        isolated_jobs=True, limits=SaveLimits.from_env())
     identity = LocalIdentityService(contract, account=os.environ.get("X2_LOCAL_ACCOUNT"),
         password=os.environ.get("X2_LOCAL_PASSWORD"), accounts=accounts, players=store,
         chat_entry=f"{endpoints.public_host}:{endpoints.chat_port}",
-        save_manager_api=SaveManagerAPI(
-            save_manager, accounts,
-            online_player_ids=lambda: _online_player_ids(main_loop, tcp)))
+        save_manager_api=save_api)
     main_loop = asyncio.get_running_loop()
     clock = ServerClock()
     choice_minted, choice_failed = deliver_hero_choice(store, clock.now())
@@ -179,15 +181,18 @@ async def run(database: Path, seconds: float) -> None:
     async def settle_monthcards(day_start):
         """Settle month cards and expire terminal wishes at server midnight."""
         for (player_id,) in store.db.execute('SELECT player_id FROM favor_wish_state WHERE day<>?', (day_start,)).fetchall():
+            await store.wait_for_import()
             update = economy.terminal_wish.expire_day(player_id)
             if update and player_id in tcp.authenticated_player_ids():
                 await tcp.push_to_player(player_id, update)
         for player_id in tcp.authenticated_player_ids():
+            await store.wait_for_import()
             for update in economy.moon.expire_day(player_id):
                 await tcp.push_to_player(player_id, update)
         for (player_id,) in store.db.execute(
                 "SELECT DISTINCT player_id FROM gift_package_claims WHERE package_id=?",
-                (gift_packages.MONTHCARD_ID,)):
+                (gift_packages.MONTHCARD_ID,)).fetchall():
+            await store.wait_for_import()
             if gift_packages.settle_daily(player_id) and player_id in tcp.authenticated_player_ids():
                 await tcp.push_to_player(player_id, OutboundMessage("L2C_ItemUpdate",
                     {"code": 10, **economy.inventory_values(player_id)}))
@@ -222,6 +227,7 @@ async def run(database: Path, seconds: float) -> None:
         await chat.stop()
         await tcp.stop()
         await http.stop()
+        await asyncio.to_thread(save_api.close)
         accounts.close()
         save_manager.close()
         store.close()

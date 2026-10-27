@@ -1,0 +1,36 @@
+         1732412 function calls (1713617 primitive calls) in 1.810 seconds
+
+   Ordered by: cumulative time
+   List reduced from 767 to 30 due to restriction <30>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    1.821    1.821 C:\Program Files\Python312\Lib\asyncio\runners.py:160(run)
+        1    0.000    0.000    1.819    1.819 C:\Program Files\Python312\Lib\asyncio\runners.py:86(run)
+        3    0.000    0.000    1.819    0.606 C:\Program Files\Python312\Lib\asyncio\base_events.py:628(run_until_complete)
+        3    0.000    0.000    1.819    0.606 C:\Program Files\Python312\Lib\asyncio\windows_events.py:317(run_forever)
+        3    0.000    0.000    1.819    0.606 C:\Program Files\Python312\Lib\asyncio\base_events.py:604(run_forever)
+        6    0.000    0.000    1.819    0.303 C:\Program Files\Python312\Lib\asyncio\base_events.py:1874(_run_once)
+       11    0.000    0.000    1.819    0.165 C:\Program Files\Python312\Lib\asyncio\events.py:82(_run)
+       11    0.000    0.000    1.819    0.165 {method 'run' of '_contextvars.Context' objects}
+        1    0.002    0.002    1.819    1.819 <stdin>:16(run)
+       60    0.004    0.000    1.390    0.023 D:\demo\x2\x2_revive_workspace\src\x2server\player\economy.py:1716(pushes)
+       30    0.004    0.000    0.974    0.032 D:\demo\x2\x2_revive_workspace\src\x2server\player\battle.py:534(enter)
+       30    0.004    0.000    0.830    0.028 D:\demo\x2\x2_revive_workspace\src\x2server\player\battle.py:192(checkout)
+    47770    0.147    0.000    0.491    0.000 D:\demo\x2\x2_revive_workspace\src\x2server\protocol\protobuf.py:146(encode)
+      180    0.001    0.000    0.419    0.002 D:\demo\x2\x2_revive_workspace\src\x2server\player\economy.py:1734(<genexpr>)
+       60    0.012    0.000    0.418    0.007 D:\demo\x2\x2_revive_workspace\src\x2server\player\achievements.py:233(update)
+      120    0.016    0.000    0.418    0.003 D:\demo\x2\x2_revive_workspace\src\x2server\player\economy.py:1095(task_values)
+     1090    0.247    0.000    0.363    0.000 D:\demo\x2\x2_revive_workspace\src\x2server\player\economy.py:365(ensure_periods)
+   187440    0.121    0.000    0.335    0.000 D:\demo\x2\x2_revive_workspace\src\x2server\protocol\protobuf.py:73(_encode_scalar)
+    28570    0.315    0.000    0.315    0.000 {method 'execute' of 'sqlite3.Connection' objects}
+      120    0.003    0.000    0.269    0.002 D:\demo\x2\x2_revive_workspace\src\x2server\player\economy.py:431(refresh_online_tasks)
+       60    0.007    0.000    0.249    0.004 D:\demo\x2\x2_revive_workspace\src\x2server\player\login.py:140(snapshot_push)
+      240    0.002    0.000    0.223    0.001 D:\demo\x2\x2_revive_workspace\src\x2server\player\economy.py:1172(record_event)
+     3830    0.003    0.000    0.206    0.000 {built-in method builtins.next}
+     3620    0.006    0.000    0.203    0.000 D:\demo\x2\x2_revive_workspace\src\x2server\player\transactions.py:11(transaction)
+       60    0.018    0.000    0.187    0.003 D:\demo\x2\x2_revive_workspace\src\x2server\player\achievements.py:153(states)
+      430    0.014    0.000    0.180    0.000 D:\demo\x2\x2_revive_workspace\src\x2server\player\economy.py:1180(_event)
+     1810    0.002    0.000    0.174    0.000 C:\Program Files\Python312\Lib\contextlib.py:141(__exit__)
+       60    0.041    0.001    0.168    0.003 D:\demo\x2\x2_revive_workspace\src\x2server\player\achievements.py:74(refresh)
+      120    0.167    0.001    0.167    0.001 {method '__exit__' of 'sqlite3.Connection' objects}
+   187440    0.125    0.000    0.165    0.000 D:\demo\x2\x2_revive_workspace\src\x2server\protocol\protobuf.py:44(encode_varint)

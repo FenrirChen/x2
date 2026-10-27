@@ -215,7 +215,7 @@ def test_heavy_save_requests_are_rejected_without_queuing_more_big_archives(env,
     assert api.respond('POST', '/save-manager/status', b'', auth)[0] == 200
 
 
-def test_only_coordinated_checkpoint_runs_and_loop_does_not_block(env):
+def test_only_coordinated_checkpoint_runs_and_loop_does_not_block(env, monkeypatch):
     store, accounts, manager, alpha, beta = env
     for db in (store.db, accounts.db, manager.db):
         assert db.execute('PRAGMA wal_autocheckpoint').fetchone()[0] == 0
@@ -227,7 +227,11 @@ def test_only_coordinated_checkpoint_runs_and_loop_does_not_block(env):
             assert release.wait(3)
     worker = threading.Thread(target=hold_writer_guard)
     calls = []
-    store.db.set_trace_callback(lambda sql: calls.append(sql) if 'wal_checkpoint' in sql else None)
+    original_checkpoint = store._run_checkpoint
+    def observe(db):
+        calls.append(threading.get_ident())
+        return original_checkpoint(db)
+    monkeypatch.setattr(store, '_run_checkpoint', observe)
     async def scenario():
         watcher = asyncio.create_task(store.checkpoint_watch(interval=.01))
         try:
@@ -248,7 +252,7 @@ def test_only_coordinated_checkpoint_runs_and_loop_does_not_block(env):
             except asyncio.CancelledError:
                 pass
     asyncio.run(scenario())
-    store.db.set_trace_callback(None)
+    assert all(t != threading.get_ident() for t in calls)
 
 
 def test_export_limits_and_backup_validation_are_preserved(env, monkeypatch):
@@ -266,16 +270,17 @@ def test_export_limits_and_backup_validation_are_preserved(env, monkeypatch):
 
 
 def test_checkpoint_guard_excludes_external_admin_process(tmp_path):
-    import subprocess, sys
+    import subprocess, sys, os
     from x2server.player.db_guard import CheckpointGuard
     guard = CheckpointGuard(tmp_path / 'shared.sqlite3')
+    process_env = dict(os.environ, PYTHONPATH=str(__import__('pathlib').Path(__file__).resolve().parents[2] / 'src'))
     code = 'from x2server.player.db_guard import CheckpointGuard; import sys; g=CheckpointGuard(sys.argv[1]); print(g.acquire(blocking=False))'
     try:
         with guard:
-            result = subprocess.run([sys.executable, '-B', '-c', code, str(tmp_path / 'shared.sqlite3')], capture_output=True, text=True, timeout=5)
+            result = subprocess.run([sys.executable, '-B', '-c', code, str(tmp_path / 'shared.sqlite3')], capture_output=True, text=True, timeout=5, env=process_env)
             assert result.returncode == 0, result.stderr
             assert result.stdout.strip() == 'False'
-        result = subprocess.run([sys.executable, '-B', '-c', code, str(tmp_path / 'shared.sqlite3')], capture_output=True, text=True, timeout=5)
+        result = subprocess.run([sys.executable, '-B', '-c', code, str(tmp_path / 'shared.sqlite3')], capture_output=True, text=True, timeout=5, env=process_env)
         assert result.returncode == 0 and result.stdout.strip() == 'True', result.stderr
     finally:
         guard.close()

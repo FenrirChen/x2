@@ -72,6 +72,7 @@ class MailService:
             if rows:
                 last_id = rows[-1][0]
                 for player_id in {row[1] for row in rows}:
+                    await self.store.wait_for_import()
                     await server.push_to_player(player_id, self.list_message(player_id))
 
     def _row(self, player_id, mail_id):

@@ -1,5 +1,6 @@
 """Official-table favor state; uncertain interactions fail without consuming items."""
 from importlib.resources import files
+from functools import lru_cache
 from datetime import datetime, timedelta, timezone
 import json
 import hashlib
@@ -23,6 +24,7 @@ TOUCH_HERO_DAILY_LIMIT = 5
 _INTERACTION_DATA = None
 
 
+@lru_cache(maxsize=1)
 def catalog():
     return json.loads(files("x2server").joinpath("data/favor_catalog.json").read_text(encoding="utf-8"))
 

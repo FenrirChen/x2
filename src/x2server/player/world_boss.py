@@ -683,10 +683,12 @@ class WorldBossService:
             if bid!=boss_id or connection==excluded:
                 continue
             try:
+                await self.store.wait_for_import()
                 with self.economy.transaction():
                     values=self.info(self.get_boss(boss_id),player,combat=True)
                 await send(OutboundMessage('WorldBossInfo',values),0)
                 if actor is not None and action in (1,2):
+                    await self.store.wait_for_import()
                     own=self.info(self.get_boss(boss_id),actor)['selfPlayer']
                     await send(OutboundMessage('W2C_WorldBossPlayerAct',
                         {'player':own,'bossid':values['bossId'],'act':action,'clubId':0,'clubMemberNum':0}),0)

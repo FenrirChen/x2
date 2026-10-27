@@ -190,6 +190,7 @@ async def daily_welfare_watch(store, clock, poll=WELFARE_POLL_SECONDS, on_new_da
                     await on_new_day(day_start)
                 except Exception:  # rollover callbacks must not kill the sweep
                     logging.getLogger("x2.system_mail").exception("daily rollover callback failed")
+            await store.wait_for_import()
             minted, failed = deliver_daily_welfare(store, now)
             logging.getLogger("x2.system_mail").info("daily welfare sweep minted=%s failed=%s", minted, failed)
             if not failed:

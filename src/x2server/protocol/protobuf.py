@@ -38,21 +38,18 @@ class ProtoField:
 
     @property
     def wire_type(self) -> int:
-        if self.kind in {
-            FieldKind.INT32,
-            FieldKind.UINT32,
-            FieldKind.INT64,
-            FieldKind.BOOL,
-            FieldKind.ENUM,
-        }:
-            return 0
-        return 2
+        return 2 if self.kind is FieldKind.STRING or self.kind is FieldKind.BYTES or self.kind is FieldKind.MESSAGE else 0
+
+
+_SMALL_VARINTS = tuple(bytes((i,)) for i in range(128))
 
 
 def encode_varint(value: int) -> bytes:
     """Encode an unsigned protobuf varint."""
     if value < 0 or value > 0xFFFFFFFFFFFFFFFF:
         raise ValueError(f"protobuf varint outside uint64 range: {value}")
+    if value < 128:
+        return _SMALL_VARINTS[value]
     output = bytearray()
     while value >= 0x80:
         output.append((value & 0x7F) | 0x80)
@@ -144,6 +141,8 @@ class ProtoSchema:
     def __init__(self, name: str, fields: tuple[ProtoField, ...]) -> None:
         self.name = name
         self.fields = fields
+        self._ordered = tuple(sorted(fields, key=lambda item: item.number))
+        self._tags = {field.number: encode_varint((field.number << 3) | field.wire_type) for field in fields}
         self._by_number = {field.number: field for field in fields}
         self._by_name = {field.name: field for field in fields}
         if len(self._by_number) != len(fields) or len(self._by_name) != len(fields):
@@ -155,14 +154,14 @@ class ProtoSchema:
         if unknown:
             raise KeyError(f"unknown {self.name} fields: {sorted(unknown)}")
         output = bytearray()
-        for field in sorted(self.fields, key=lambda item: item.number):
+        for field in self._ordered:
             if field.name not in values or values[field.name] is None:
                 continue
             raw_values = values[field.name] if field.repeated else (values[field.name],)
             if field.repeated and isinstance(raw_values, (str, bytes, bytearray)):
                 raise TypeError(f"repeated field {field.name} requires an iterable of values")
             for value in raw_values:
-                output += encode_varint((field.number << 3) | field.wire_type)
+                output += self._tags[field.number]
                 output += _encode_scalar(field, value)
         return bytes(output)
 

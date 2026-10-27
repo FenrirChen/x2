@@ -206,6 +206,7 @@ class SocialService:
         push=self.refresh_friends(pid,force=True)
         if not await tcp.push_to_player(pid,push):
             return False
+        await self.store.wait_for_import()
         state=self.state(pid)
         if state['club']:
             message=OutboundMessage('L2C_ClubWishingCount',{
@@ -227,6 +228,7 @@ class SocialService:
                 await self.store.wait_for_import()
                 try:
                     await self.refresh_online_daily(pid,tcp)
+                    await self.store.wait_for_import()
                     weekly=self.economy.endless.refresh_week(pid)
                     if weekly:
                         await tcp.push_to_player(pid,weekly)

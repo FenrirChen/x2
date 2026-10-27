@@ -179,12 +179,14 @@ class SeasonService:
             state['weekly_active_period'] = week
             state['weekly_box_claimed'] = []
         self.repair_selected_tasks(player, state)
-        self.write(player, state)
+        if row is None or row[0] != json.dumps(state, separators=(',', ':')):
+            self.write(player, state)
         return state
 
     def write(self, player, state):
         self.store.db.execute('INSERT INTO season_state VALUES (?,?,?) ON CONFLICT(player_id,instance_id) '
-            'DO UPDATE SET state_json=excluded.state_json', (player, self.instance, json.dumps(state, separators=(',', ':'))))
+            'DO UPDATE SET state_json=excluded.state_json WHERE season_state.state_json<>excluded.state_json',
+            (player, self.instance, json.dumps(state, separators=(',', ':'))))
 
     def once(self, player, key):
         return bool(self.store.db.execute('INSERT OR IGNORE INTO season_events VALUES (?,?,?)',

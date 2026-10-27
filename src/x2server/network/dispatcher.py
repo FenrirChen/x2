@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import asyncio
+
 import logging
 from collections.abc import Awaitable, Callable, Mapping
 from dataclasses import dataclass
@@ -70,6 +72,10 @@ class Dispatcher:
         wait_for_database: Callable[[], Awaitable[None]] | None = None,
     ) -> None:
         self._wait_for_database = wait_for_database
+        # Only gate the turn BEFORE invoking a handler. Never hold this lock
+        # across handler/network awaits. Under a burst of synchronous SQLite
+        # handlers this gives timers and socket tasks a turn between requests.
+        self._dispatch_turn = asyncio.Lock()
         self._handlers = dict(handlers or {})
         self._registry = registry
 
@@ -108,8 +114,13 @@ class Dispatcher:
             LOGGER.info("known message has no implemented handler; no response body_bytes=%s decode=%s",
                         len(packet.body), decoded, extra=extra)
             return DispatchOutcome(DispatchStatus.UNIMPLEMENTED, entry.name)
-        if self._wait_for_database is not None:
-            await self._wait_for_database()
+        async with self._dispatch_turn:
+            await asyncio.sleep(0)
+            # Check AFTER the scheduling yield, and release queued import waiters
+            # one turn at a time. Otherwise 50 wakeups immediately form another
+            # synchronous burst after the writer finishes.
+            if self._wait_for_database is not None:
+                await self._wait_for_database()
         try:
             response = await handler(context, packet)
         except Exception as exc:

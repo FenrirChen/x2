@@ -1,0 +1,45 @@
+{
+  "pre_optimization_pushed_commit": "76a1a52",
+  "optimization_pushed": false,
+  "distinct_related_pytest_passed": 448,
+  "pre_existing_environment_failures": [
+    {
+      "test": "tests/unit/test_favor_seed.py::test_seed_official_favor_gifts_is_idempotent",
+      "cause": "missing external D:/demo/x2/analysis/drop_archaeology/full_tables/language.json",
+      "reproduced_from_baseline_script": "76a1a52"
+    }
+  ],
+  "main_regression": {
+    "passed": 328,
+    "failed_external": 1
+  },
+  "supplementary_regression": {
+    "passed": 119
+  },
+  "final_lifecycle_regression": {
+    "passed": 34,
+    "new_distinct_tests": 1
+  },
+  "wire_equivalence": {
+    "baseline": "76a1a52",
+    "registered_schemas": 589,
+    "wire_comparison_cases": 5301,
+    "byte_identical": true,
+    "decoded_values_identical": true
+  },
+  "load_reports": {
+    "normal": "load_50_normal_cadence.json",
+    "unpaced": "load_50_full_roster_final.json"
+  },
+  "local_export": "local_save_export.json",
+  "save_boundary_player_tables": 102,
+  "local_restart": {
+    "log": "runtime/activity_next_20261027_224321.err.log",
+    "backup": "runtime/before_activity_next_20261027_224321/player.sqlite3",
+    "ports": [
+      18080,
+      29000,
+      29001
+    ]
+  }
+}

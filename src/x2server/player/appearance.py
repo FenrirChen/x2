@@ -22,13 +22,19 @@ def head_icon_catalog():
     return _HEAD_ICON_CATALOG
 
 
+@lru_cache(maxsize=1)
+def _granted_head_icons():
+    return tuple(json.loads(files("x2server").joinpath("data/appearance_catalog.json").read_text(encoding="utf-8"))["head_icons"])
+
+
 def granted_head_icons(snapshot, favors=None):
-    return json.loads(files("x2server").joinpath("data/appearance_catalog.json").read_text(encoding="utf-8"))["head_icons"]
+    return list(_granted_head_icons())
 
 
+@lru_cache(maxsize=1)
 def avatar_frames():
-    return {r["ItemID"] for r in json.loads(files("x2server").joinpath("data/reward_items.json").read_text(encoding="utf-8"))
-            if r.get("ItemType", {}).get("value") == 20}
+    return frozenset(r["ItemID"] for r in json.loads(files("x2server").joinpath("data/reward_items.json").read_text(encoding="utf-8"))
+            if r.get("ItemType", {}).get("value") == 20)
 
 
 def head_icon_info(snapshot, favors=None):

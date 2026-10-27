@@ -1,5 +1,6 @@
 """Persistent native achievements backed by authoritative state and receipts."""
 from collections import Counter
+from functools import lru_cache
 import hashlib
 from importlib.resources import files
 import json
@@ -9,6 +10,12 @@ from x2server.messages.achievements import ACHIEVEMENT_SCHEMAS, ACHV, OVERVIEW
 from x2server.network.dispatcher import OutboundMessage
 from x2server.protocol.errors import ProtocolError
 from x2server.protocol.registry import CORE_MESSAGE_REGISTRY
+
+
+@lru_cache(maxsize=4096)
+def _update_wire(achv_id, stage, progress, status):
+    # Cache immutable serialization only, never any player's mutable progress.
+    return ACHV.encode({'achvId':achv_id, 'stage':stage, 'achvProgress':progress, 'status':status})
 
 
 class AchievementService:
@@ -118,6 +125,8 @@ class AchievementService:
         def favor(h):
             return h.get('favor', {}).get('level', self.initial_favor.get(h['id'], 1))
         with self.economy.transaction():
+            current = dict(self.store.db.execute('SELECT achv_id,progress FROM achievements WHERE player_id=?', (player_id,)))
+            inserts, updates = [], []
             for achv_id, row in self.rows.items():
                 rule = row['rule']; kind = rule['kind']; minimum = rule.get('minimum', 0)
                 progress = 0
@@ -140,10 +149,13 @@ class AchievementService:
                     parts = [rule['parts'][str(r[2])] for r in equipment if r[1] == 6 and str(r[2]) in rule['parts']]
                     # Six copies of one slot are not a full set.
                     progress = int(len(set(parts)) == 6) if kind == 'equipment_set' else len(parts)
-                self.store.db.execute('INSERT OR IGNORE INTO achievements(player_id,achv_id) VALUES (?,?)', (player_id, achv_id))
-                # Reaching a condition remains achieved after consuming an item.
-                self.store.db.execute('UPDATE achievements SET progress=MAX(progress,?) WHERE player_id=? AND achv_id=?',
-                    (min(progress, row['targets'][-1]), player_id, achv_id))
+                if achv_id not in current:
+                    inserts.append((player_id,achv_id))
+                new_progress = min(progress, row['targets'][-1])
+                if new_progress > current.get(achv_id,0):
+                    updates.append((new_progress,player_id,achv_id))
+            self.store.db.executemany('INSERT OR IGNORE INTO achievements(player_id,achv_id) VALUES (?,?)', inserts)
+            self.store.db.executemany('UPDATE achievements SET progress=MAX(progress,?) WHERE player_id=? AND achv_id=?', updates)
 
     def states(self, player_id):
         self.refresh(player_id)
@@ -225,7 +237,12 @@ class AchievementService:
             return OutboundMessage(reply, values)
         return OutboundMessage(reply, values, before_response=self.economy.pushes(player_id))
 
+    def _wire_fields(self, achv_id, state):
+        values = self.value(achv_id, state)
+        return {'achv_id':values['achvId'], 'stage':values['stage'],
+                'progress':values['achvProgress'], 'status':values['status']}
+
     def update(self, player_id):
         states = self.states(player_id)
-        return OutboundMessage('L2C_AchvUpdate', {'achvDataList': [ACHV.encode(self.value(i, s)) for i, s in states.items()],
+        return OutboundMessage('L2C_AchvUpdate', {'achvDataList': [_update_wire(**self._wire_fields(i, s)) for i, s in states.items()],
                                                'achvPoint': self.points(states)})

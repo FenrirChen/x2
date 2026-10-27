@@ -22,6 +22,8 @@ MAX_SAVE_MANAGER_BODY = 96 * 1024 * 1024 + 64 * 1024
 def _handler_for(
     service: BootstrapService | RecoveredBootstrapService,
 ) -> type[BaseHTTPRequestHandler]:
+    save_upload_slot = threading.BoundedSemaphore(1)
+
     class Handler(BaseHTTPRequestHandler):
         server_version = "X2Bootstrap/0.1"
         sys_version = ""
@@ -36,7 +38,7 @@ def _handler_for(
             self.end_headers()
             self.wfile.write(response.body)
 
-        def _consume_request_body(self) -> HTTPResponse | None:
+        def _consume_request_body(self, *, discard=False) -> HTTPResponse | None:
             """Drain a small POST body without parsing or logging its contents.
 
             Leaving inbound bytes unread can make Windows close the socket with a reset,
@@ -60,14 +62,42 @@ def _handler_for(
                 return HTTPResponse(
                     413, "application/json; charset=utf-8", b'{"error":"request_too_large"}\n'
                 )
-            self.request_body = self.rfile.read(length) if length else b""
-            if len(self.request_body) != length:
+            if discard:
+                remaining = length
+                while remaining:
+                    chunk = self.rfile.read(min(65536, remaining))
+                    if not chunk:
+                        break
+                    remaining -= len(chunk)
+                self.request_body = b''
+                complete = remaining == 0
+            else:
+                self.request_body = self.rfile.read(length) if length else b""
+                complete = len(self.request_body) == length
+            if not complete:
                 return HTTPResponse(
                     400, "application/json; charset=utf-8", b'{"error":"truncated_request"}\n'
                 )
             return None
 
         def do_POST(self) -> None:  # noqa: N802 - BaseHTTPRequestHandler API
+            heavy = self.path.split('?', 1)[0] in ('/save-manager/import', '/save-manager/export')
+            if heavy:
+                self.connection.settimeout(30)  # Idle upload clients cannot retain the admission slot forever.
+            if heavy and not save_upload_slot.acquire(blocking=False):
+                # Drain without retaining another 96MB archive. Reading the body
+                # preserves the busy response on clients sensitive to TCP resets.
+                error = self._consume_request_body(discard=True)
+                self._send(error or HTTPResponse(503, 'application/json; charset=utf-8',
+                    b'{"error":"save_manager_busy"}', (('Retry-After', '1'),)))
+                return
+            try:
+                self._do_POST()
+            finally:
+                if heavy:
+                    save_upload_slot.release()
+
+        def _do_POST(self):
             if error := self._consume_request_body():
                 self._send(error)
                 return

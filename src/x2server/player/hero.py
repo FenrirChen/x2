@@ -12,6 +12,15 @@ from .store import PlayerStore
 from x2server.messages.season import encode as season_encode
 
 
+@lru_cache(maxsize=128)
+def _favor_rows(hero_id):
+    data = favor_catalog()
+    initial = next((r['InitialLevel'] for r in data['favorabilityhero'] if r['HeroID']==hero_id),1)
+    archives = tuple(r for r in data['favorabilityfiles'] if r['HeroID']==hero_id)
+    fetters = tuple(r for r in data['favorabilityfetters'] if r['HeroID']==hero_id and r.get('IsOpen')==1)
+    return initial, archives, fetters
+
+
 def encode_hero_data(hero: dict, *, season=None, player_id=None) -> bytes:
     if season is not None and player_id is not None:
         hero = season.artifact.view(player_id, hero)
@@ -31,16 +40,15 @@ def encode_hero_data(hero: dict, *, season=None, player_id=None) -> bytes:
                             for slot in sorted(artifact.get("god_slot_lock", []))],
         "jewel": [INT_PAIR.encode({"Key": int(slot), "Value": int(item)})
                   for slot, item in sorted(artifact.get("jewels", {}).items(), key=lambda pair: int(pair[0]))]}) if artifact else b""
-    data = favor_catalog()
-    level = favor_state(hero, next((r["InitialLevel"] for r in data["favorabilityhero"]
-                                    if r["HeroID"] == hero["id"]), 1))["level"]
+    initial, archive_rows, fetter_rows = _favor_rows(hero['id'])
+    level = favor_state(hero, initial)['level']
     archives = [HERO_ARCHIVE.encode({"fileId": row["FilesID"],
         "status": (2 if row["FilesID"] in hero.get("favor_archives", []) or
                    row["TriggerType"]["value"] == 1 and level >= row["TypeNumber"] else 0)})
-        for row in data["favorabilityfiles"] if row["HeroID"] == hero["id"]]
+        for row in archive_rows]
     fetters = [HERO_FETTER.encode({"posId": row["FettersID"],
         "level": hero.get("favor_fetters", {}).get(str(row["FettersID"]), 0)})
-        for row in data["favorabilityfetters"] if row["HeroID"] == hero["id"] and row.get("IsOpen") == 1]
+        for row in fetter_rows]
     return HERO_DATA.encode({**values, "Status": hero.get('college_status', 0), "godEquip": god_equip,
         # HeroData.Enjoy 是「喜爱的神格」标记 (C2L_Account opt 5/6)，不是好感等级：
         # 列表项的置顶标记与列表排序都读它，必须随快照下发，缺省 0 = 未设置。
