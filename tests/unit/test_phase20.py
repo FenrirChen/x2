@@ -138,6 +138,10 @@ def test_hero_level_star_skill_costs_retries_and_battle_attributes(env):
     assert (raw[162],raw[163],raw[164],raw[165]) == (60,40,600,3000)
     assert (raw[170],raw[171],raw[172]) == (12,4,120)
     assert raw[105] == 50
+    # 113 keeps GlobalParamString.CRI_Dmg's 150.0% baseline inside attrAdd: the
+    # converted list is always non-null, so the client never runs
+    # Property_AddBaseProperty for a Player and the table baseline never applies.
+    assert raw[113] == 1500
     assert len(raw) == 19
 
 

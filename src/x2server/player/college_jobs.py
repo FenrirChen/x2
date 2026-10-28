@@ -194,7 +194,8 @@ class CollegeJobsService:
         if code != 10:
             LOGGER.warning('StartExplore refused: player=%s heroIds=%s hero check code=%s', player_id, ids, code)
             return dict(result, code=code)
-        power = sum(hero_power(self.store, player_id, h, self.repo.clock) for h in heroes)
+        season = self.economy.season if self.economy else None
+        power = sum(hero_power(self.store, player_id, h, self.repo.clock, season) for h in heroes)
         # CollegeExplorePage ctor 0x1BBDA64 sets MINUAS_POINT=.5 for the
         # Chinese client (1 for Japanese). OnExploreButtonClick 0x1BBD35C
         # accepts TotalFightPoint / Conditon[difficulty] >= MINUAS_POINT,

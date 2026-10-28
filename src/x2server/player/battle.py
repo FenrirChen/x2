@@ -16,6 +16,10 @@ from x2server.protocol.protobuf import decode_varint, _skip_unknown
 from .economy import UnresolvedEconomy
 from .battle_entry import BattleEntryCatalog, EntryDenied
 
+# GlobalParamString.CRI_Dmg = 1500 in 0.1% units, i.e. the 150.0% critical-damage
+# baseline every hero owns before bonuses. See the attrAdd comment in enter().
+CRITICAL_DAMAGE_BASE = 1500
+
 
 class BattleService:
     def __init__(self, store, economy=None):
@@ -682,6 +686,18 @@ class BattleService:
             base_values = battle_hero_base()[str(stat_hero["id"])]
             raw_attributes = {r["attrId"]: base_values[r["name"]]
                               for r in catalog()["battle_base_1003"]["attributes"]}
+            # 暴击伤害基数 150.0% (attrId 113) 必须跟着裸属性一起下发: 客户端
+            # Unit_InitProperty 在「unit 是 Player 且 OtherAttributes(=attrAdd,
+            # Player+0x6E8) 非空」时直接跳过 Property_AddBaseProperty
+            # (0x1CF2E24 ldr x8,[x19,#0x6E8]; cbnz x8 → 0x1CF2E4C), 于是表里
+            # GlobalParamString.CRI_Dmg=1500 的 150.0% 基数在战斗内不会生效, 而
+            # UnitBase 的 CriticalDamage 本身是 0 —— 不补这条, 战斗内爆伤只剩
+            # 加成来源 (神格/兽主/套装/神迹/赛季)。官方后端同样把 E_CRI_Dmg 当
+            # 裸属性放进 HeroAttrAdd。也不要用 FightData.CRIDmg 顶: 它是 FightHero
+            # 的全局静态字段 (ChapterModule_ConvertFightData 0x16C2D5C-0x16C2D68
+            # 写静态 +0xA0), 一局里所有神格同值, 且 AttribType[113].ValueMax=8000
+            # 会把 15000 钳成面板上的 800.0%。
+            raw_attributes[113] = raw_attributes.get(113, 0) + CRITICAL_DAMAGE_BASE
             if self.economy:
                 # Account season talents and saved erosion also affect ordinary
                 # combat, as confirmed by the user; expire with the season.
@@ -732,10 +748,11 @@ class BattleService:
         # Player_OnInitProperty *adds* it to attribute 113 (CriticalDamage). That
         # attribute is capped by AttribType[113].ValueMax=8000 (=800.0%) inside
         # ValueCombinerSmartLong.GetValue, so the old 15000 pinned the battle attribute
-        # panel at 800.0% for every hero, on top of the client's own CRI_Dmg base
-        # (1500 = 150.0%). Omit this extra override so the native base and
-        # beast-lord / jewel / suit sources determine the final value. The old
-        # official backend's actual packet value is not available for comparison.
+        # panel at 800.0% for every hero. Dropping the override does not bring back the
+        # client's own CRI_Dmg base (1500 = 150.0%) either: Unit_InitProperty skips
+        # Property_AddBaseProperty whenever OtherAttributes (= attrAdd) is non-null, so
+        # the baseline travels as attrId 113 inside every FightHero.attrAdd instead
+        # (see CRITICAL_DAMAGE_BASE above).
         data = FIGHT_DATA.encode({"fightHeros": fight_heroes, "missionId": section,
                                   "expertMode": request.get("expertMode", False),
                                   "dropData": DROP_DATA.encode({"dropValues": drop_values,

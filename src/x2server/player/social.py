@@ -973,9 +973,14 @@ class SocialService:
         # Authoritative NPC loadout; ignore client supplied stats, star, level and skills.
         hero=dict(id=entry['hero'],state=2,level=min(60,self.store.get(pid)['snapshot']['level']),star=self.npc_star(entry['hero']),exp=0)
         base=battle_hero_base()[str(hero['id'])]
+        # 助战单位的裸属性同样要带 150.0% 暴击伤害基数 (attrId 113): 客户端对
+        # attrAdd 非空的 Player 会跳过 Property_AddBaseProperty, 见 battle.py 注释。
+        from .battle import CRITICAL_DAMAGE_BASE
         data=FIGHT_HERO.encode({**hero,'heroAttrCount':HERO_ATTR.encode(hero_attributes(hero)),
             'heroSkill':[HERO_SKILL.encode(r) for r in hero_skills(hero)],
-            'attrAdd':[HERO_ATTR_ADD.encode({'attrId':r['attrId'],'attrValue':base[r['name']]}) for r in catalog()['battle_base_1003']['attributes']]})
+            'attrAdd':[HERO_ATTR_ADD.encode({'attrId':r['attrId'],
+                'attrValue':base[r['name']]+(CRITICAL_DAMAGE_BASE if r['attrId']==113 else 0)})
+                for r in catalog()['battle_base_1003']['attributes']]})
         return ASSIST_DATA.encode(dict(assistPlayerID=npc_id(pid,uid),friendShipLevel=1,playerName=entry['name'],
             heroID=hero['id'],heroSkinID=0,heroStar=hero['star'],heroPower=0,assistTimes=1,heroLevel=hero['level'],battleData=data,md5=''))
 
