@@ -5,8 +5,15 @@ import secrets
 
 from x2server.messages.activity import encode
 from x2server.messages.economy import TASK, TREASURE_BOX
-from .activity_rotation import ActivityRotation
+from .activity_rotation import ActivityPeriod, ActivityRotation
 from .economy import UnresolvedEconomy
+
+
+# 永久 POV 章节 (没有 UnlockActiviyID, 共 17 个) 不属于任何主题档期。它们的通关
+# 进度放进这个固定哨兵 period, 否则每周轮换 period.index 一变, 已经真打过的章节
+# 会变回未通关、整章奖励也能重复领。rotation.get/put/once 只用 period.index,
+# 所以哨兵 period 的其余字段留空即可。
+STATE_PERIOD = -1
 
 
 def enum(value):
@@ -496,21 +503,43 @@ class ActivityService:
                 self.rotation.put(player, period, f'gameplay-day:{day}', item, previous + quantity)
         return rewards
 
+    def pov_namespace(self, chapter, period=None):
+        """POV 章节进度所在的命名空间 period。
+
+        活动章节 (UnlockActiviyID != 0) 只在对应主题档期内开放, 进度跟着当期走;
+        对应活动不在当前档期时返回 None, 由调用方跳过。永久章节 (17 个, 没有
+        UnlockActiviyID) 不属于任何档期, 进度放进固定哨兵 period (STATE_PERIOD)。
+        ``rotation.get/put/once`` 只用 period.index, 所以哨兵 period 的其余字段
+        留空即可。
+        """
+        if not enum(chapter.get('UnlockActiviyID')):
+            return ActivityPeriod(STATE_PERIOD, 0, 0, {})
+        period = period or self.rotation.at()
+        return period if self.rotation.activity(enum(chapter['UnlockActiviyID']), period) else None
+
     def pov_chapter_rewards(self, player, section):
-        """Called only by successful, validated battle settlement in its transaction."""
+        """Called only by successful, validated battle settlement in its transaction.
+
+        Whole-chapter ClearReward. 只认本命名空间里的 ``pov-clear`` (真实通关),
+        不看 economy_clears: 开发解锁工具把 212xxxx 整批预置成 first_uuid='unlock',
+        那些行只代表「已解锁」, 不能替玩家把 ClearReward 领掉。
+        """
         period = self.rotation.at()
-        if period is None:
-            return {}
         for chapter in self.tables.get('POVChapterInfo', []):
-            if (section not in chapter['StageID']
-                    or self.rotation.activity(chapter['UnlockActiviyID'], period) is None):
+            if section not in (chapter.get('StageID') or []):
                 continue
-            self.rotation.put(player, period, 'pov-clear', section, True)
-            if (all(self.rotation.get(player, period, 'pov-clear', sid, False)
-                    for sid in chapter['StageID'])
-                    and self.rotation.once(player, period, f"pov-chapter:{chapter['ChapterID']}")):
+            chapter_period = self.pov_namespace(chapter, period)
+            if chapter_period is None:
+                # 活动章节在当前档期没有开放; 永久章节的哨兵 period 永远不是 None。
+                continue
+            self.rotation.put(player, chapter_period, 'pov-clear', section, True)
+            if (all(self.rotation.get(player, chapter_period, 'pov-clear', sid, False)
+                    for sid in chapter.get('StageID') or [])
+                    and self.rotation.once(player, chapter_period,
+                                           f"pov-chapter:{chapter['ChapterID']}")):
                 rewards = self.economy.gifts([chapter['ClearReward']], allow_daily_random=True)
-                self.obtained(player, period, rewards, f"pov-chapter:{chapter['ChapterID']}")
+                self.obtained(player, chapter_period, rewards,
+                              f"pov-chapter:{chapter['ChapterID']}")
                 return rewards
         return {}
 
