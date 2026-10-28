@@ -288,3 +288,50 @@ def test_repeat_reward_through_generic_claim_pushes_equipment(moon):
     assert result.before_response[0].message_name == 'L2C_EquipUpdate'
     for message in (*result.before_response, result, *result.pushes):
         CORE_SCHEMAS[message.message_name].encode(message.values)
+
+
+@pytest.mark.parametrize('mid', [5010001, 5010002, 5010003, 5010004, 5010005])
+def test_story_children_resume_without_replaying_completed_dialogue(moon, mid):
+    """Native children 2=active, 3=done; reconnect must preserve each step."""
+    from x2server.player.moon import MoonService
+    service = moon[3]
+    seq = 1000
+    children = service.missions[mid]['QuestID']
+    for index, qid in enumerate(children):
+        group = S['MoonMissionGroup'].encode({'missionGroupId': mid,
+            'moonChildrenMission': [S['ChildrenMission'].encode({
+                'childrenMissionId': qid, 'childrenMissionStatus': 3})]})
+        assert send(moon, 'MoonMissionGroupSync', seq, moonMissionGroup=[group]).values['code'] == 10
+        # A fresh session/service reads committed progress, not cached defaults.
+        restored = MoonService(moon[2])
+        task = restored.load(1)['tasks'][str(mid)]
+        assert [task['children'][str(i)] for i in children] == [
+            3 if n <= index else 2 for n, i in enumerate(children)]
+        assert task['status'] == (4 if index == len(children)-1 else 2)
+        seq += 1
+    before = list(moon[0].db.execute('SELECT item_id,quantity FROM inventory WHERE player_id=1 ORDER BY item_id'))
+    # A delayed new request after the completion receipt must be idempotent too.
+    reply = send(moon, 'MoonMissionGroupAcceptedSync', seq,
+                 moonMissionGroup=S['MoonMissionGroup'].encode({'missionGroupId': mid}))
+    assert reply.values['code'] == 10
+    saved = S['MoonMissionGroup'].decode(reply.values['moonMissionGroup'])
+    assert all(S['ChildrenMission'].decode(raw)['childrenMissionStatus'] == 3
+               for raw in saved['moonChildrenMission'])
+    moon[1].value += 86400
+    rows = service.task_values(1, 19)['taskList']
+    wire = next(S['TaskData'].decode(raw) for raw in rows
+                if S['TaskData'].decode(raw)['taskId'] == mid)
+    assert wire['taskStatus'] == 4
+    assert list(moon[0].db.execute('SELECT item_id,quantity FROM inventory WHERE player_id=1 ORDER BY item_id')) == before
+
+
+def test_finished_commission_cannot_be_reaccepted_to_bypass_daily_limit(moon):
+    complete(moon)
+    offer = S['TaskData'].decode(send(moon, 'MoonAcceptableRepeatTask', 1100, opt=1).values['repeatTaskData'][0])
+    mid = offer['taskId']
+    group = S['MoonMissionGroup'].encode({'missionGroupId': mid})
+    assert send(moon, 'MoonMissionGroupAcceptedSync', 1101, moonMissionGroup=group).values['code'] == 10
+    assert complete(moon, mid, 1102).values['code'] == 10
+    assert moon[3].claim_task(1, mid, 18)['code'] == 10
+    assert send(moon, 'MoonMissionGroupAcceptedSync', 1103, moonMissionGroup=group).values['code'] == 13
+    assert moon[3].load(1)['accepted'] == 1

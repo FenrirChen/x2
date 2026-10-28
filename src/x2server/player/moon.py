@@ -374,7 +374,12 @@ class MoonService:
             if mid not in self.missions or not self.available(pid, state, self.missions[mid]):
                 raise ValueError('Moon mission prerequisite not met')
             old = state['tasks'].get(str(mid))
-            if old and old['status'] in (2, 3):
+            if old and (old['status'] in (2, 3) or
+                        (old['status'] == 4 and self.kind(mid) != 18)):
+                # A reconnect or delayed NPC interaction may resend acceptance
+                # after a permanent story has completed. Return saved children;
+                # never reopen the story or grant its rewards again. Completed
+                # daily commissions still require the next day's offer.
                 task = old
             else:
                 repeat = self.kind(mid) == 18
