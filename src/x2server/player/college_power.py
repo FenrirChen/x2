@@ -19,11 +19,16 @@ def rules():
             {r['ID']: r for r in data['heroes']}, data['params'])
 
 
-def hero_power(store, player_id, hero, clock=None):
+def hero_power(store, player_id, hero, clock=None, season=None):
     """Use server-owned stats/equipment; requests never supply their own power."""
     attributes, prototypes, params = rules()
     prototype = prototypes[hero['id']]
     bonus = Counter(other_attributes(store, player_id, hero, clock))
+    if season:
+        # 赛季天赋与魂器蚀化对普通战斗同样生效 (见 player/battle.py enter), 探索
+        # 战力必须用同一口径, 否则沿用旧战力会低估、把够门槛的探索挡在外面。
+        bonus.update(season.attributes(player_id))
+        bonus.update(season.artifact.attributes(player_id, hero))
     artifact = GOD_EQUIP_ATTR.decode(artifact_attributes(hero))
     for raw in artifact.get('godAttr', []):
         pair = LONG_PAIR.decode(raw)
@@ -67,7 +72,10 @@ def hero_power(store, player_id, hero, clock=None):
                     * f32(prototype['SkillAbility'] * f32(.001))) * skill_factor))
     survival = int(f32(f32(hp * rate(176)) + f32(defense * rate(175))))
     critical = min(1, f32(value(112, prototype.get('Critical', int(params['CRI']))) * f32(.001)))
-    critical_damage = f32(value(113, prototype.get('CriticalDamage') or int(params['CRI_Dmg'])) * f32(.001))
+    # 113 是加算: 行内 CriticalDamage 叠在 GlobalParamString.CRI_Dmg 的 150% 基数上
+    # (Property_AddBaseProperty 用 add 合成同一个 CriticalDamage 属性), 不是替换。
+    critical_damage = f32(value(113, int(params['CRI_Dmg'])
+                                + (prototype.get('CriticalDamage') or 0)) * f32(.001))
     # GetBaseAbilty 0x1495aec literal is -0.001; positive DR raises survival.
     reduction = f32(value(119) * f32(.001))
     critical_factor = f32(f32(1 - critical) + f32(f32(critical * critical_damage) * rate(113)))
