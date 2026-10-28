@@ -11,7 +11,7 @@ from .progression import catalog as progression_catalog
 from .hero import encode_hero_data
 
 # 派遣/培训被拒时把判定用的实际数值打进日志: 客户端只回一个 GameLogicErrCode
-# (13/14/38/62~64/186/205/22), 没有上下文时无法区分「星能不够」和「参数/槽位不对」。
+# (13/14/38/62~64/205/22), 没有上下文时无法区分「星能不够」和「参数/槽位不对」。
 LOGGER = logging.getLogger("x2.college")
 
 
@@ -197,14 +197,20 @@ class CollegeJobsService:
         power = sum(hero_power(self.store, player_id, h, self.repo.clock) for h in heroes)
         # CollegeExplorePage ctor 0x1BBDA64 sets MINUAS_POINT=.5 for the
         # Chinese client (1 for Japanese). OnExploreButtonClick 0x1BBD35C
-        # accepts TotalFightPoint / Conditon[difficulty] >= MINUAS_POINT.
-        # Keep the configured full target separate from the admission minimum.
+        # accepts TotalFightPoint / Conditon[difficulty] >= MINUAS_POINT,
+        # where TotalFightPoint is ClientProperty 0xCB (E_Hero_Ability)
+        # summed over the selected team. That property folds player-level
+        # wrappers (PlayerAttribManager, artifacts, wonders) which this
+        # estimate only partly reproduces, so it runs well below the number
+        # the client shows and refused teams the client already displays at
+        # 99%/100% (2026-10-28). The client enforces the 50% line itself
+        # with the authoritative value, so only log the mismatch here.
         target_power = row['Conditon'][difficulty]
         required_power = (target_power + 1) // 2
         if power < required_power:
-            LOGGER.warning('StartExplore refused: player=%s ruinId=%s difficulty=%s power=%s < minimum=%s target=%s',
-                           player_id, rid, difficulty, power, required_power, target_power)
-            return dict(result, code=186)
+            LOGGER.info('StartExplore below native half power but allowed: player=%s ruinId=%s '
+                        'difficulty=%s power=%s minimum=%s target=%s',
+                        player_id, rid, difficulty, power, required_power, target_power)
         if state['star_energy'] < row['PowerConsume']:
             LOGGER.warning('StartExplore refused: player=%s ruinId=%s starEnergy=%s < cost=%s',
                            player_id, rid, state['star_energy'], row['PowerConsume'])
