@@ -1,4 +1,4 @@
-"""Chinese native exploration gate uses 50% of CollegeExplore.Conditon."""
+"""Native exploration admission: the client owns the 50% line, not the server."""
 from copy import deepcopy
 
 from tests.unit.test_college_upgrade import game
@@ -7,7 +7,7 @@ from tests.unit.test_college_alchemy import send
 from x2server.messages.lobby import EXPLORE_DATA
 
 
-def test_every_ruin_and_difficulty_native_half_power_boundary(game, monkeypatch):
+def test_every_ruin_and_difficulty_starts_below_native_half_power(game, monkeypatch):
     hid = funded(game)
     store, _, repo, service, _ = game
     state = repo.load(1)
@@ -20,25 +20,25 @@ def test_every_ruin_and_difficulty_native_half_power_boundary(game, monkeypatch)
     seq = 10000
     for rid, row in service.jobs.explores.items():
         for difficulty, target in enumerate(row['Conditon']):
-            minimum = (target + 1) // 2
             req = dict(exploreId=0, ruinId=rid, heroIds=[hid], diffdifficulty=difficulty)
             before = repo.load(1)
-            power[0] = minimum - 1
-            refused = send(game, 'StartExplore', seq=seq, **req)
-            assert refused.values['code'] == 186, (rid, difficulty, refused.values)
-            assert repo.load(1)['star_energy'] == before['star_energy']
-            assert not repo.load(1)['explore']
-            assert next(h for h in store.get(1)['snapshot']['heroes'] if h['id'] == hid).get('college_status', 0) == 0
-            power[0] = minimum
-            accepted = send(game, 'StartExplore', seq=seq+1, **req)
+            # 门槛由客户端按属性203自算, 服务端估算偏低时也必须放行,
+            # 否则界面已经 99%/100% 的队伍仍会被回 186 弹「神力不足50%」。
+            power[0] = 0
+            accepted = send(game, 'StartExplore', seq=seq, **req)
             assert accepted.values['code'] == 10, (rid, difficulty, accepted.values)
             job = repo.load(1)['explore'][0]
-            assert job['fightCapacity'] == minimum and job['difficulty'] == difficulty
+            assert job['fightCapacity'] == 0 and job['difficulty'] == difficulty
             assert repo.load(1)['star_energy'] == before['star_energy'] - row['PowerConsume']
-            assert send(game, 'StartExplore', seq=seq+1, **req).values == accepted.values
+            assert send(game, 'StartExplore', seq=seq, **req).values == accepted.values
             assert repo.load(1)['star_energy'] == before['star_energy'] - row['PowerConsume']
-            assert send(game, 'CancelExplore', seq=seq+2, exploreId=0).values['code'] == 10
-            seq += 3
+            assert send(game, 'CancelExplore', seq=seq+1, exploreId=0).values['code'] == 10
+            # 达到或超过 50% 线的队伍行为不变。
+            power[0] = (target + 1) // 2
+            assert send(game, 'StartExplore', seq=seq+2, **req).values['code'] == 10
+            assert send(game, 'CancelExplore', seq=seq+3, exploreId=0).values['code'] == 10
+            assert repo.load(1)['star_energy'] == before['star_energy']
+            seq += 4
 
 
 def test_real_computed_hero_in_half_to_full_band_can_start(game):
@@ -92,7 +92,7 @@ def test_stale_explore_id_starts_in_a_free_queue_row(game, monkeypatch):
     assert sorted(j['exploreId'] for j in repo.load(1)['explore']) == [0, 1]
 
 
-def test_rejected_gate_still_checks_ownership_and_unlocked_difficulty(game, monkeypatch):
+def test_start_still_checks_ownership_and_unlocked_difficulty(game, monkeypatch):
     hid = funded(game)
     monkeypatch.setattr('x2server.player.college_power.hero_power', lambda *args: 999999)
     assert send(game, 'StartExplore', seq=401, exploreId=0, ruinId=34001, heroIds=[9999]).values['code'] == 13
@@ -102,7 +102,7 @@ def test_rejected_gate_still_checks_ownership_and_unlocked_difficulty(game, monk
     assert not game[2].load(1)['explore']
 
 
-def test_gate_odd_threshold_rounds_up_and_atomic_start_failure(game, monkeypatch):
+def test_low_power_estimate_never_blocks_and_atomic_start_failure(game, monkeypatch):
     hid = funded(game)
     store, _, repo, service, _ = game
     row = deepcopy(service.jobs.explores[34001])
@@ -111,19 +111,24 @@ def test_gate_odd_threshold_rounds_up_and_atomic_start_failure(game, monkeypatch
     power = [50]
     monkeypatch.setattr('x2server.player.college_power.hero_power', lambda *args: power[0])
     req = dict(exploreId=0, ruinId=34001, heroIds=[hid])
-    assert send(game, 'StartExplore', seq=501, **req).values['code'] == 186
+    # 50 < ceil(101/2) 只是估算偏低, 不能挡住出发。
+    assert send(game, 'StartExplore', seq=501, **req).values['code'] == 10
+    assert repo.load(1)['explore'][0]['fightCapacity'] == 50
+    assert send(game, 'CancelExplore', seq=502, exploreId=0).values['code'] == 10
     before = repo.load(1)
     snapshot = store.get(1)
-    power[0] = 51
+    def receipts():
+        return store.db.execute('SELECT count(*) FROM college_job_receipts').fetchone()[0]
+    already = receipts()
     def fail(*args):
         raise RuntimeError('injected queue persistence failure')
     monkeypatch.setattr(repo, 'save', fail)
     import pytest
     with pytest.raises(RuntimeError, match='injected queue'):
-        send(game, 'StartExplore', seq=502, **req)
+        send(game, 'StartExplore', seq=503, **req)
     assert repo.load(1) == before
     assert store.get(1) == snapshot
-    assert store.db.execute('SELECT count(*) FROM college_job_receipts').fetchone()[0] == 0
+    assert receipts() == already
 
 
 def test_explore_visible_slots_follow_official_building_star_effects(game):
