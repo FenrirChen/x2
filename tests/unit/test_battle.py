@@ -40,7 +40,7 @@ def test_moon_phase_entries_preserve_selected_scene_and_expert_mode(tmp_path):
         wire = BATTLE_SCHEMAS["L2C_FightData"].encode(result.values)
         assert BATTLE_SCHEMAS["L2C_FightData"].decode(wire)["monsterInitLevel"] == level
         fight = FIGHT_DATA.decode(result.values["data"])
-        assert fight.get("CRIDmg", 0) == 0  # Native base/gear own CriticalDamage.
+        assert fight["CRIDmg"] == 15000  # Restore the pre-PR90 battle contract.
         profile = FIGHT_PROFILE.decode(result.values["fightDataProfile"])
         assert fight["missionId"] == profile["missionId"] == section
         assert profile["sceneId"] == static["Maps"][0]
@@ -68,7 +68,7 @@ def test_entry_replay_persistence_and_no_economy_changes(tmp_path):
     assert first.values["result"] == 10
     data = FIGHT_DATA.decode(first.values["data"])
     assert data["missionId"] == 2110801
-    assert data.get("CRIDmg", 0) == 0
+    assert data["CRIDmg"] == 15000
     hero = FIGHT_HERO.decode(data["fightHeros"][0])
     assert hero["id"] == 1003 and hero["heroGodEquip"] == b""
     assert HERO_ATTR.decode(hero["heroAttrCount"])["hp"] == 720
