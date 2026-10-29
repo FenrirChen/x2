@@ -3,7 +3,7 @@ import json
 
 import pytest
 
-from x2server.messages.battle import FIGHT_DATA, FIGHT_HERO, HERO_ATTR, EQUIP_SUIT_ATTR
+from x2server.messages.battle import FIGHT_DATA, FIGHT_HERO, HERO_ATTR, EQUIP_SUIT_ATTR, PROFILE_HERO
 from x2server.messages.equipment import HERO_EQUIP, EQUIP_PARAM
 from x2server.network.dispatcher import DispatchContext
 from x2server.network.session import SessionState
@@ -85,3 +85,41 @@ def test_bad_wearing_state_rejected_without_borrowing_other_player_equipment(equ
     wrong = dict(hero['equips'][0], position=5)
     with pytest.raises(ValueError):
         battle_equipment(store, 1, dict(hero, equips=[wrong]))
+
+
+def test_critical_damage_stays_per_hero_and_changes_only_on_new_entry(equipment_env):
+    """Real entry packets keep crit affixes without a shared capped override."""
+    store, hero = equipment_env
+    with store.db:
+        store.db.execute('UPDATE equipment_instances SET param=? WHERE player_id=1',
+                         (json.dumps({'at1': 113, 'av1': 500}),))
+    player = store.get(1)
+    bare = {'id': 1004, 'level': 1, 'star': 1, 'state': 2}
+    store.save_snapshot(1, dict(player['snapshot'], level=60, heroes=[hero, bare]), player['revision'])
+    ctx = DispatchContext('test', 'local', SessionState('test', 'crit-equipment', player_id=1))
+    service = BattleService(store)
+    values = request()
+    values['heros'] = [PROFILE_HERO.encode({'heroId': h, 'leader': int(h == 1003)})
+                       for h in (1003, 1004)]
+    first = asyncio.run(service.enter(ctx, packet(values, 500)))
+    assert first.values['result'] == 10
+    data = FIGHT_DATA.decode(first.values['data'])
+    assert data.get('CRIDmg', 0) == 0
+    heroes = {h['id']: h for h in map(FIGHT_HERO.decode, data['fightHeros'])}
+    def crit_affixes(wire):
+        params = [EQUIP_PARAM.decode(HERO_EQUIP.decode(raw)['param'])
+                  for raw in wire.get('heroEquip', [])]
+        return [row['av1'] for row in params if row.get('at1') == 113]
+    assert crit_affixes(heroes[1003]) == [500] * 6
+    assert not crit_affixes(heroes[1004])
+    # Neither the shared field nor the other hero receives those 3000 points.
+    with store.db:
+        store.db.execute('UPDATE equipment_instances SET param=? WHERE player_id=1',
+                         (json.dumps({'at1': 113, 'av1': 100}),))
+    assert asyncio.run(service.enter(ctx, packet(values, 500))).values == first.values
+    next_entry = asyncio.run(service.enter(ctx, packet(values, 501)))
+    data = FIGHT_DATA.decode(next_entry.values['data'])
+    assert data.get('CRIDmg', 0) == 0
+    heroes = {h['id']: h for h in map(FIGHT_HERO.decode, data['fightHeros'])}
+    assert crit_affixes(heroes[1003]) == [100] * 6
+    assert not crit_affixes(heroes[1004])

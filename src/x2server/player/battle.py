@@ -726,11 +726,16 @@ class BattleService:
             drop_values = [0] * len(drop_values)
         moon_skill = (self.economy.moon.battle_skill(player["id"])
                       if self.economy and entry_context.section_type == 21 else b"")
+        # CRIDmg is an extra battle-wide bonus, not the hero's base multiplier.
+        # Leave it at protobuf default 0: the client adds its native CRI_Dmg
+        # base (1500) and each hero's equipment/passive sources, then applies
+        # the attribute-113 cap (8000). Sending 1500 would double the base;
+        # the legacy 15000 forced every hero to the cap. See native evidence
+        # in analysis/pr87_90_20261027/crit_damage_native.txt.
         data = FIGHT_DATA.encode({"fightHeros": fight_heroes, "missionId": section,
                                   "expertMode": request.get("expertMode", False),
                                   "dropData": DROP_DATA.encode({"dropValues": drop_values,
                                                                 "missionId": section}),
-                                  "CRIDmg": 15000,
                                   **({"fightGroupSkillData": moon_skill} if moon_skill else {})})
         profile = FIGHT_PROFILE.encode({"missionId": section, "chapterId": chapter, "layer": 0,
             "relicList": selected_relics,
