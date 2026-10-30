@@ -163,29 +163,35 @@ def test_pending_mirror_runs_cannot_overspend_attempts(social):
     assert s.completed(1,2170001,False,1,'first')['done']
 
 
-def test_rotating_extra_layer_admits_and_damages_its_own_boss(social):
-    """轮回境域 (2170037+) 按时间轮换: 客户端给的层可以不是首个未通关层。"""
-    s,ctx,_=social
+@pytest.mark.parametrize('block',[0,1,2,3])
+def test_rotating_extra_layer_admits_and_damages_its_own_boss(social,block):
+    """Skip inactive groups after base completion, but never another active boss."""
+    from x2server.player.social import mirror_block_start
+    s,ctx,stamp=social
+    stamp[0]=18000+(400+block-1)*604800
     create(s,ctx)
+    start=mirror_block_start(s.clock())
+    assert start==37+4*block
+    section,boss=2170000+start,2070000+start
     with s.economy.transaction():
         state=s.state(1)
         state['club']['members']={}
+        state['mirror']['clears']=[r['bossId'] for r in s.mirror_health[:36]]
         s.save(1,state)
-    s.admission(1,2170041)  # 37~40 都没通关, 仍然允许打轮换出来的 41。
+    s.admission(1,section)
     with s.economy.transaction():
-        s.bind_run(1,2170041,'cat')
-        result=s.completed(1,2170041,True,10,'cat')
-    assert result['turns'][0]['boss']==2070041
+        s.bind_run(1,section,'cat')
+        result=s.completed(1,section,True,10,'cat')
+    assert result['turns'][0]['boss']==boss
     mirror=s.state(1)['mirror']
-    assert mirror['damage']=={'2070041':10}
-    assert 2070037 not in mirror['clears']
-    # 已通关的层仍不允许重复入场 (老行为)。
+    assert mirror['damage']=={str(boss):10}
+    assert not any(b>=2070037 for b in mirror['clears'])
     with s.economy.transaction():
         state=s.state(1)
-        state['mirror']['clears'].append(2070041)
+        state['mirror']['clears'].append(boss)
         s.save(1,state)
     with pytest.raises(UnresolvedEconomy):
-        s.admission(1,2170041)
+        s.admission(1,section)
 
 
 def test_normal_mirror_still_requires_current_boss(social):

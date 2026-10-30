@@ -1,0 +1,149 @@
+ClubModule$$Get5AMWeekIndex
+1585284: stp x20, x19, [sp, #-0x20]!
+1585288: stp x29, x30, [sp, #0x10]
+158528c: add x29, sp, #0x10
+1585290: sub sp, sp, #0x10
+1585294: adrp x20, #0x5576000
+1585298: ldrb w8, [x20, #0x314]
+158529c: mov x19, x0
+15852a0: tbnz w8, #0, #0x15852bc
+15852a4: adrp x8, #0x5225000
+15852a8: ldr x8, [x8, #0xe48]
+15852ac: ldr w0, [x8]
+15852b0: bl #0x3f2aed0
+15852b4: mov w8, #1
+15852b8: strb w8, [x20, #0x314]
+15852bc: mov x1, xzr
+15852c0: mov x0, x19
+15852c4: str xzr, [sp, #8]
+15852c8: bl #0x14533e4 Foundation.Module.BusinessModule$$get_isInit
+15852cc: and w8, w0, #1
+15852d0: tbnz w8, #0, #0x158530c
+15852d4: adrp x8, #0x5207000
+15852d8: ldr x8, [x8, #0x5a0]
+15852dc: ldr x0, [x8]
+15852e0: ldrb w8, [x0, #0x10a]
+15852e4: tbz w8, #0, #0x15852f4
+15852e8: ldr w8, [x0, #0xbc]
+15852ec: cbnz w8, #0x15852f4
+15852f0: bl #0x3f3f378
+15852f4: adrp x8, #0x5287000
+15852f8: ldr x8, [x8, #0x750]
+15852fc: mov x0, xzr
+1585300: mov x2, xzr
+1585304: ldr x1, [x8]
+1585308: bl #0x3e45c84 CommonX2.Debug$$LogError
+158530c: adrp x8, #0x51ed000
+1585310: ldr x8, [x8, #0xb60]
+1585314: ldr x0, [x8]
+1585318: ldrb w8, [x0, #0x10a]
+158531c: tbz w8, #0, #0x158532c
+1585320: ldr w8, [x0, #0xbc]
+1585324: cbnz w8, #0x158532c
+1585328: bl #0x3f3f378
+158532c: adrp x8, #0x51d9000
+1585330: ldr x8, [x8, #0x618]
+1585334: mov x0, xzr
+1585338: ldr x1, [x8]
+158533c: bl #0x2feb968 Foundation.Module.ServiceModule<ModuleManager>$$get_Instance
+1585340: mov x19, x0
+1585344: cbnz x19, #0x158534c
+1585348: bl #0x3f564f0
+158534c: adrp x8, #0x5262000
+1585350: ldr x8, [x8, #0xdb8]
+1585354: mov x0, x19
+1585358: ldr x1, [x8]
+158535c: bl #0x1ce72d4 Foundation.Module.ModuleManager$$GetModule<RelicBarModule>
+1585360: mov x19, x0
+1585364: cbnz x19, #0x158536c
+1585368: bl #0x3f564f0
+158536c: mov x1, xzr
+1585370: mov x0, x19
+1585374: bl #0x17884c8 ServerTimeModule$$get_ServerTime
+1585378: mov x19, x0
+158537c: cbnz x19, #0x1585384
+1585380: bl #0x3f564f0
+1585384: mov x1, xzr
+1585388: mov x0, x19
+158538c: bl #0x3e5112c ServerTime$$GetServerTime
+1585390: adrp x8, #0x52b4000
+1585394: ldr x8, [x8, #0x278]
+1585398: mov w19, w0
+158539c: ldr x8, [x8]
+15853a0: ldrb w9, [x8, #0x10a]
+15853a4: tbz w9, #0, #0x15853b8
+15853a8: ldr w9, [x8, #0xbc]
+15853ac: cbnz w9, #0x15853b8
+15853b0: mov x0, x8
+15853b4: bl #0x3f3f378
+15853b8: scvtf d0, w19
+15853bc: mov x0, xzr
+15853c0: mov x1, xzr
+15853c4: bl #0x2d6afbc System.TimeSpan$$FromSeconds
+15853c8: str x0, [sp, #8]
+15853cc: add x0, sp, #8
+15853d0: mov x1, xzr
+15853d4: bl #0x2d6a67c
+15853d8: fcvtzs w8, d0
+15853dc: mov w9, #-0x4650
+15853e0: mov w10, #0x6ef50000
+15853e4: add w8, w8, w9
+15853e8: movk w10, #0xde4d
+15853ec: sxtw x8, w8
+15853f0: mul x8, x8, x10
+15853f4: lsr x9, x8, #0x3f
+15853f8: asr x8, x8, #0x32
+15853fc: add w8, w8, w9
+1585400: add w0, w8, #1
+1585404: sub sp, x29, #0x10
+1585408: ldp x29, x30, [sp, #0x10]
+158540c: ldp x20, x19, [sp], #0x20
+1585410: ret
+ClubModule$$GetClubActivityCurExtraLayerStart
+15644e8: stp x20, x19, [sp, #-0x20]!
+15644ec: stp x29, x30, [sp, #0x10]
+15644f0: add x29, sp, #0x10
+15644f4: adrp x20, #0x5576000
+15644f8: ldrb w8, [x20, #0x312]
+15644fc: mov x19, x0
+1564500: tbnz w8, #0, #0x156451c
+1564504: adrp x8, #0x51ee000
+1564508: ldr x8, [x8, #0x8a0]
+156450c: ldr w0, [x8]
+1564510: bl #0x3f2aed0
+1564514: mov w8, #1
+1564518: strb w8, [x20, #0x312]
+156451c: ldr x0, [x19, #0x18]
+1564520: cbz x0, #0x1564594
+1564524: mov x1, xzr
+1564528: bl #0x1d7eb08 pbs.ClubData$$get_Meta
+156452c: cbz x0, #0x1564594
+1564530: mov x0, x19
+1564534: bl #0x1585284 ClubModule$$Get5AMWeekIndex
+1564538: adrp x19, #0x521d000
+156453c: ldr x19, [x19, #0xb70]
+1564540: mov w8, w0
+1564544: add w9, w8, #3
+1564548: cmp w8, #0
+156454c: ldr x0, [x19]
+1564550: csel w9, w9, w8, lt
+1564554: and w9, w9, #0xfffffffc
+1564558: sub w20, w8, w9
+156455c: ldrb w10, [x0, #0x10a]
+1564560: tbz w10, #0, #0x1564574
+1564564: ldr w8, [x0, #0xbc]
+1564568: cbnz w8, #0x1564574
+156456c: bl #0x3f3f378
+1564570: ldr x0, [x19]
+1564574: ldr x8, [x0, #0xa0]
+1564578: ldr w9, [x8, #8]
+156457c: add w9, w9, w20, lsl #2
+1564580: str w9, [x8, #0xc]
+1564584: ldr x8, [x19]
+1564588: ldr x8, [x8, #0xa0]
+156458c: ldr w0, [x8, #0xc]
+1564590: b #0x1564598
+1564594: mov w0, wzr
+1564598: ldp x29, x30, [sp, #0x10]
+156459c: ldp x20, x19, [sp], #0x20
+15645a0: ret

@@ -40,10 +40,10 @@ HELP_SECONDS = 60
 
 # ---- 镜域「周目」轮换 (额外层 2170037~2170052) -------------------------------
 # 客户端是 4 周一轮的额外层, 反汇编确认:
-# * ClubModule_Get5AMWeekIndex (0x01585A34) = floor((ServerTime - 18000) / 604800) + 1,
+# * ClubModule_Get5AMWeekIndex (0x01585284) = floor((ServerTime - 18000) / 604800) + 1,
 #   ServerTime 就是本服下发的 Unix 秒 -> 每周切换点 = 周四 13:00 北京 (每天 13:00
 #   刷新的那个点再 +7 天)。
-# * ClubModule_GetClubActivityCurExtraLayerStart (0x01564C98) 里 start(0 基) =
+# * ClubModule_GetClubActivityCurExtraLayerStart (0x015644E8) 里 start(0 基) =
 #   N + 4 * (weekIndex % 4), N = GlobalParamString.NewGuildInstanceStartLayers - 1 = 36。
 # 所以四个周目的首层 (1 基) 依次是 37 / 41 / 45 / 49, 打完再回到第一周目。
 MIRROR_BASE_LAYERS = 36
@@ -202,8 +202,9 @@ class SocialService:
         领不到 (用户反馈的「四周目箱子领不到」)。常驻 1~36 的进度不受影响。
         """
         mirror=state['mirror']
-        week=mirror_week_index(self.clock())
-        start=mirror_block_start(self.clock())
+        now=int(self.clock())
+        week=mirror_week_index(now)
+        start=mirror_block_start(now)
         old=mirror.get('round')
         if old is not None:
             try:
@@ -217,10 +218,14 @@ class SocialService:
         keep=base|block
         keep_sections={r['section'] for r in self.mirror_health if r['bossId'] in keep}
         base_sections={r['section'] for r in self.mirror_health if r['bossId'] in base}
-        # 常驻层的宝箱领一次就永远领过; 额外层每组 4 层每个周目都能再领一次。所以
-        # 领取标记只保留常驻层; 老存档里额外层的领取记录属于哪个周目已无从考证,
-        # 也一并作废, 否则同一组转回来时箱子永远不亮。
-        mirror['claimed']=[v for v in id_list(mirror.get('claimed')) if v in base or v in base_sections]
+        # An unversioned save cannot prove which occurrence a claim belongs to.
+        # Keep current-block claims with its retained clears; dropping just the
+        # claim would make an already awarded chest immediately claimable again.
+        # Explicitly versioned rotation still resets every extra-layer claim.
+        claim_bosses=keep if old is None else base
+        claim_sections=keep_sections if old is None else base_sections
+        mirror['claimed']=[v for v in id_list(mirror.get('claimed'))
+                           if v in claim_bosses or v in claim_sections]
         # 升级到周目版 (old is None) 时把当周已通关的额外层留着, 否则玩家刚打的进度
         # 会被清掉; 真正的换周目 (old != week) 则把上一组的额外层全部作废。注意 4 周
         # 一轮会转回同一组, 所以不能只比首层号 —— 同一组的下一个周期必须重新打。
@@ -1117,7 +1122,8 @@ class SocialService:
             return
         self.admission(pid,section)
         state['mirror'].setdefault('runs', {})[run] = {
-            'section':section, 'club_time':state['club']['time'], 'done':False}
+            'section':section, 'club_time':state['club']['time'],
+            'round':state['mirror']['round'], 'done':False}
         self.save(pid,state)
 
     def completed(self,pid,section,success,damage=None,run=None):
@@ -1127,8 +1133,8 @@ class SocialService:
         Each turn stops at the death of its target; only the next member can
         attack the next boss. A battle receipt and this run marker are atomic.
         Damage is applied to the boss of the reported section, not to the first
-        uncleared layer: the rotating extra layers (2170037+) may be offered by
-        the client out of sequential order.
+        uncleared layer. Extra layers are restricted to the current rotation
+        and the run must belong to that exact occurrence.
         """
         state=self.state(pid)
         mirror=state['mirror']
@@ -1157,6 +1163,18 @@ class SocialService:
         start_index=next((i for i,r in enumerate(rows) if r['bossId']==boss['bossId']),None)
         if start_index is None:
             raise UnresolvedEconomy('mirror layer left the current rotation')
+        if start_index >= MIRROR_BASE_LAYERS:
+            attempt_round=attempt.get('round')
+            if attempt_round is None:
+                # Legacy pending runs need same-owner entry-time evidence. Do
+                # not guess today's round for a month-old imported battle.
+                entry=(self.store.db.execute(
+                    'SELECT created_at FROM battle_entries WHERE player_id=? AND uuid=?',
+                    (pid,run)).fetchone() if self.store.db.execute(
+                    "SELECT 1 FROM sqlite_master WHERE name='battle_entries'").fetchone() else None)
+                attempt_round=mirror_week_index(entry[0]) if entry and entry[0]>0 else None
+            if attempt_round != mirror['round']:
+                raise UnresolvedEconomy('mirror run belongs to a different rotation')
         damage_map=mirror.setdefault('damage', {})
         remaining=boss['maxHP']-damage_map.get(str(boss['bossId']),0)
         # Older clients can omit hp. A confirmed kill proves the remaining HP;
