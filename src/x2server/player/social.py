@@ -38,6 +38,39 @@ PARAMETERS = {'BasicFriendNum':'200','GiveFriendCoinLimit':'10','ReceiveFriendCo
 TO_2018 = 1514736000
 HELP_SECONDS = 60
 
+# ---- 镜域「周目」轮换 (额外层 2170037~2170052) -------------------------------
+# 客户端是 4 周一轮的额外层, 反汇编确认:
+# * ClubModule_Get5AMWeekIndex (0x01585A34) = floor((ServerTime - 18000) / 604800) + 1,
+#   ServerTime 就是本服下发的 Unix 秒 -> 每周切换点 = 周四 13:00 北京 (每天 13:00
+#   刷新的那个点再 +7 天)。
+# * ClubModule_GetClubActivityCurExtraLayerStart (0x01564C98) 里 start(0 基) =
+#   N + 4 * (weekIndex % 4), N = GlobalParamString.NewGuildInstanceStartLayers - 1 = 36。
+# 所以四个周目的首层 (1 基) 依次是 37 / 41 / 45 / 49, 打完再回到第一周目。
+MIRROR_BASE_LAYERS = 36
+MIRROR_ROUND_LAYERS = 4
+MIRROR_WEEK_SECONDS = 604800
+MIRROR_WEEK_SHIFT = 18000
+
+
+def mirror_week_index(now):
+    return (int(now) - MIRROR_WEEK_SHIFT) // MIRROR_WEEK_SECONDS + 1
+
+
+def mirror_block_start(now):
+    """Current four-week block's first extra layer, 1-based (37/41/45/49)."""
+    return MIRROR_BASE_LAYERS + 1 + MIRROR_ROUND_LAYERS * (mirror_week_index(now) % 4)
+
+
+def id_list(values):
+    """Tolerant int read of a saved id list (JSON may have stored them as strings)."""
+    out = []
+    for v in values or []:
+        try:
+            out.append(int(v))
+        except (TypeError, ValueError):
+            continue
+    return out
+
 
 @lru_cache(maxsize=1)
 def roster():
@@ -155,7 +188,79 @@ class SocialService:
     def state(self,pid):
         state=load_state(self.store,pid,self.clock())
         self.repair_mirror_daily_score(pid,state)
+        # 只在内存里迁移周目: 读接口 (GetClub/GetFriendList) 不写库是既有契约, 迁移
+        # 结果由下一次真正写状态的请求 (打镜域/领宝箱/handle 的 save) 一起落盘。
+        self.mirror_sync_round(pid,state)
         return state
+
+    def mirror_sync_round(self,pid,state):
+        """Re-scope the mirror progress to the current four-week block.
+
+        客户端只下发当周这 4 层额外层, 并且要靠 clubLayer_ 前缀连续才会亮宝箱
+        (ClubModule_GetClubActivityLayer)。所以每换一个周目, 上一组的额外层通关、
+        血池、参战与领取都必须清掉: 不清的话第 4 周目开始 boss 进不去、箱子也永远
+        领不到 (用户反馈的「四周目箱子领不到」)。常驻 1~36 的进度不受影响。
+        """
+        mirror=state['mirror']
+        week=mirror_week_index(self.clock())
+        start=mirror_block_start(self.clock())
+        old=mirror.get('round')
+        if old is not None:
+            try:
+                old=int(old)
+            except (TypeError,ValueError):
+                old=None
+        if old==week:
+            return False
+        base={r['bossId'] for r in self.mirror_health[:MIRROR_BASE_LAYERS]}
+        block={r['bossId'] for r in self.mirror_health[start-1:start-1+MIRROR_ROUND_LAYERS]}
+        keep=base|block
+        keep_sections={r['section'] for r in self.mirror_health if r['bossId'] in keep}
+        base_sections={r['section'] for r in self.mirror_health if r['bossId'] in base}
+        # 常驻层的宝箱领一次就永远领过; 额外层每组 4 层每个周目都能再领一次。所以
+        # 领取标记只保留常驻层; 老存档里额外层的领取记录属于哪个周目已无从考证,
+        # 也一并作废, 否则同一组转回来时箱子永远不亮。
+        mirror['claimed']=[v for v in id_list(mirror.get('claimed')) if v in base or v in base_sections]
+        # 升级到周目版 (old is None) 时把当周已通关的额外层留着, 否则玩家刚打的进度
+        # 会被清掉; 真正的换周目 (old != week) 则把上一组的额外层全部作废。注意 4 周
+        # 一轮会转回同一组, 所以不能只比首层号 —— 同一组的下一个周期必须重新打。
+        keep_clears=keep if old is None else base
+        keep_damage=keep if old is None else base
+        filter_sections=keep_sections if old is None else base_sections
+        mirror['clears']=[b for b in id_list(mirror.get('clears')) if b in keep_clears]
+        mirror['sections']=[s for s in id_list(mirror.get('sections')) if s in filter_sections]
+        if mirror.get('damage'):
+            damage={}
+            for key,number in mirror['damage'].items():
+                try:
+                    boss=int(key)
+                except (TypeError,ValueError):
+                    continue
+                if boss in keep_damage:
+                    damage[key]=number
+            mirror['damage']=damage
+        mirror['round']=week
+        return True
+
+    def mirror_round_start(self,state):
+        """当周额外层首层 (1 基: 37/41/45/49)。
+
+        存档里存的是周目序号 (Get5AMWeekIndex), 不是首层号: 只存首层号的话,
+        玩家隔 4 周回来正好撞上同一组, 进度永远等不到重置。
+        """
+        week=state['mirror'].get('round')
+        try:
+            week=int(week) if week is not None else mirror_week_index(self.clock())
+        except (TypeError,ValueError):
+            week=mirror_week_index(self.clock())
+        return MIRROR_BASE_LAYERS + 1 + MIRROR_ROUND_LAYERS * (week % 4)
+
+    def mirror_round_rows(self,state):
+        """常驻 1~36 + 当周这 4 层, 按客户端列表顺序连成一条链。"""
+        start=self.mirror_round_start(state)
+        rows=(list(self.mirror_health[:MIRROR_BASE_LAYERS])
+              +list(self.mirror_health[start-1:start-1+MIRROR_ROUND_LAYERS]))
+        return start,rows
 
     def repair_mirror_daily_score(self,pid,state):
         """Backfill only recorded, receipt-confirmed damage from today's runs."""
@@ -254,7 +359,12 @@ class SocialService:
         meta = [value('clubGroupChatUUID',self.club_id(pid)),value('clubLevel',1),
                 value('clubMemLimit',50),value('clubIconId',club['icon']),value('clubTodayScore',state['today_score'])]
         mirror = state['mirror']
+        start=self.mirror_round_start(state)
         for index, row in enumerate(self.mirror_health, 1):
+            # 客户端只认常驻 1~36 和当周这 4 层; 其它周目的 clubLayer_ 会被它
+            # 过滤掉, 多发没有意义, 还会让「已清层」看起来永不清零。
+            if index > MIRROR_BASE_LAYERS and not start <= index < start + MIRROR_ROUND_LAYERS:
+                continue
             damage = mirror.get('damage', {}).get(str(row['bossId']), 0)
             if row['bossId'] in mirror['clears']:
                 meta.append(value(f'clubLayer_{index}', 1))
@@ -943,19 +1053,24 @@ class SocialService:
 
     def admission(self,pid,section):
         state=self.state(pid)
-        if not state['club'] or section not in self.mirror_sections or state['mirror']['count']<=0:
+        mirror=state['mirror']
+        if not state['club'] or section not in self.mirror_sections or mirror['count']<=0:
             raise UnresolvedEconomy('mirror locked or attempts exhausted')
-        if self.mirror_sections[section]['bossId'] in state['mirror']['clears']:
+        boss=self.mirror_sections[section]['bossId']
+        if boss in mirror['clears']:
             raise UnresolvedEconomy('mirror boss already cleared')
-        if section < 2170037:
-            current=self.mirror_current(state)
-            if current is None or current['bossId']!=self.mirror_sections[section]['bossId']:
-                raise UnresolvedEconomy('mirror boss is not the current layer')
-        # 轮回境域 (2170037~2170052) 是按 GlobalParamString.NewGuildInstanceTime 轮换的
-        # 额外层: 客户端当前给出的 boss 不一定是服务端“第一个未通关层”。原来的
-        # current-boss 门禁会让轮换后的层在客户端能进、服务端却拒 (用户反馈“换成猫后
-        # 打不了”)。这里只校验关卡合法、未通关与次数, 实际伤害由 completed() 按本次
-        # section 结算。
+        start,_=self.mirror_round_rows(state)
+        layer=next(i for i,r in enumerate(self.mirror_health,1) if r['bossId']==boss)
+        if layer>MIRROR_BASE_LAYERS and not start<=layer<start+MIRROR_ROUND_LAYERS:
+            raise UnresolvedEconomy('mirror layer is not in the current rotation')
+        # 轮回境域 (2170037~2170052) 是 4 周一轮的额外层, 客户端只给当周那 4 层;
+        # 之前 PR #77 为了修「换成猫后打不了」把 37 以上的顺序门禁整个放开了, 结果
+        # 可以越过常驻缺口/提前打后面周目的层, 客户端 cur 与服务端记录错位, 宝箱
+        # 反而永远不亮。周目感知之后这里的 current 就是客户端算出来的 cur, 顺序
+        # 门禁可以恢复 (但仍然只在这个周目组内生效, 不会锁死未来周目)。
+        current=self.mirror_current(state)
+        if current is None or current['bossId']!=boss:
+            raise UnresolvedEconomy('mirror boss is not the current layer')
 
     def assist(self,pid,raw,config):
         from x2server.messages.social import ASSIST_DATA
@@ -980,7 +1095,14 @@ class SocialService:
             heroID=hero['id'],heroSkinID=0,heroStar=hero['star'],heroPower=0,assistTimes=1,heroLevel=hero['level'],battleData=data,md5=''))
 
     def mirror_current(self, state):
-        return next((r for r in self.mirror_health if r['bossId'] not in state['mirror']['clears']), None)
+        """先按顺序打完常驻 1~36, 全清后才轮到当周这 4 层额外层。
+
+        这和客户端 ClubModule_GetClubActivityLayer 算出来的 cur 完全一致: 常驻层
+        有缺口时 cur 停在缺口上, 额外层都还进不去; 常驻全清后 cur 直接跳到当周
+        首层 (37/41/45/49)。
+        """
+        _,rows=self.mirror_round_rows(state)
+        return next((r for r in rows if r['bossId'] not in state['mirror']['clears']), None)
 
     def bind_run(self,pid,section,run):
         """Admission only: a settled battle spends the attempt, not the entry.
@@ -1027,6 +1149,14 @@ class SocialService:
                    if r['bossId']==self.mirror_sections[section]['bossId']),None)
         if boss is None:
             raise UnresolvedEconomy('mirror section has no boss health')
+        # 只有「常驻 1~36 + 当周这 4 层」里的 boss 还有血池: 上一组的额外层在换
+        # 周目时已经作废, 跨周目边界迟到的结算要拒绝, 否则会往一条不再展示的血池
+        # 里写伤害并错误地记一次通关。NPC 跟打也只沿这条链往后走 (旧代码从全量
+        # 52 层往后扫, 会跨进下一个周目组, 把未来几周的 boss 提前打掉)。
+        _,rows=self.mirror_round_rows(state)
+        start_index=next((i for i,r in enumerate(rows) if r['bossId']==boss['bossId']),None)
+        if start_index is None:
+            raise UnresolvedEconomy('mirror layer left the current rotation')
         damage_map=mirror.setdefault('damage', {})
         remaining=boss['maxHP']-damage_map.get(str(boss['bossId']),0)
         # Older clients can omit hp. A confirmed kill proves the remaining HP;
@@ -1049,13 +1179,12 @@ class SocialService:
         # The player's damage belongs to the section they actually entered.
         hit(pid,player_damage,boss)
         npc_damage=player_damage*9//10
-        start_index=next(i for i,r in enumerate(self.mirror_health) if r['bossId']==boss['bossId'])
         for uid in sorted(state['club']['members'],key=int):
-            target=next((r for r in self.mirror_health[start_index:]
+            target=next((r for r in rows[start_index:]
                          if r['bossId'] not in mirror['clears']),None)
             if target is None:
                 break
-            target_index=next(i for i,r in enumerate(self.mirror_health) if r['bossId']==target['bossId'])
+            target_index=next(i for i,r in enumerate(rows) if r['bossId']==target['bossId'])
             crossed=target_index-start_index
             hit(uid,player_damage*9//(10*(2**crossed)),target)
         if section not in mirror.setdefault('sections',[]):
