@@ -176,6 +176,7 @@ async def run(database: Path, seconds: float) -> None:
     social_task = None
     checkpoint_task = None
     health_task = None
+    retention_task = None
 
     async def settle_monthcards(day_start):
         """Settle month cards and expire terminal wishes at server midnight."""
@@ -200,6 +201,8 @@ async def run(database: Path, seconds: float) -> None:
         save_manager.prepare_indexes()
         health_task = asyncio.create_task(loop_health_watch(), name="local-loop-health")
         checkpoint_task = asyncio.create_task(store.checkpoint_watch(), name="local-db-checkpoint")
+        from x2server.player.diagnostic_retention import DiagnosticRetention
+        retention_task = asyncio.create_task(DiagnosticRetention(store).watch(), name="local-diagnostic-retention")
         await http.start()
         await tcp.start()
         await chat.start()
@@ -219,7 +222,7 @@ async def run(database: Path, seconds: float) -> None:
         else:
             await asyncio.sleep(seconds)
     finally:
-        for task in (mail_task, welfare_task, world_boss_task, college_task, activity_task, social_task, checkpoint_task, health_task):
+        for task in (mail_task, welfare_task, world_boss_task, college_task, activity_task, social_task, retention_task, checkpoint_task, health_task):
             if task:
                 task.cancel()
                 await asyncio.gather(task, return_exceptions=True)

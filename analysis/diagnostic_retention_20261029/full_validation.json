@@ -1,0 +1,70 @@
+{
+  "collected": 1640,
+  "unique_tested": 1640,
+  "results": {
+    "passed": 1621,
+    "failure": 13,
+    "error": 6
+  },
+  "missing": [],
+  "extra": [],
+  "failures": [
+    "tests/integration/test_local_registration.py::test_bare_bearer_mail_over_http_after_authenticated_tcp_login",
+    "tests/integration/test_local_registration.py::test_http_mail_page_uses_game_token_and_isolates_accounts",
+    "tests/integration/test_local_registration.py::test_real_client_bare_bearer_mail_resolves_database_user",
+    "tests/integration/test_local_registration.py::test_reconnect_creates_and_pushes_daily_mail_once",
+    "tests/integration/test_local_registration.py::test_tcp_login_creates_daily_mail_once_after_registration",
+    "tests/unit/test_battle_entry_domain.py::test_all_extracted_sections_resolve_with_satisfied_static_prerequisites",
+    "tests/unit/test_battle_entry_domain.py::test_challenge_settlement_uses_only_static_gift_items_and_records_unpayable",
+    "tests/unit/test_battle_entry_domain.py::test_each_static_section_type_enters_and_settles_without_invented_reward",
+    "tests/unit/test_drop_probability_analysis.py::test_adc_nested_group_is_not_falsely_calculated",
+    "tests/unit/test_drop_probability_analysis.py::test_negative_picks_use_prob_as_deterministic_count",
+    "tests/unit/test_drop_probability_analysis.py::test_raw_prob_one_can_mean_certain_item",
+    "tests/unit/test_drop_probability_analysis.py::test_repeated_picks_are_with_replacement",
+    "tests/unit/test_drop_probability_analysis.py::test_single_pick_uses_nodrop_plus_prob_weight",
+    "tests/unit/test_drop_probability_analysis.py::test_sum_over_100_is_still_weighted_not_independent",
+    "tests/unit/test_favor_seed.py::test_seed_official_favor_gifts_is_idempotent",
+    "tests/unit/test_nian_rewards.py::test_nian_actual_840_prism_report_awards_packet_once[False-5]",
+    "tests/unit/test_nian_rewards.py::test_nian_actual_840_prism_report_awards_packet_once[True-5]",
+    "tests/unit/test_nian_rewards.py::test_nian_threshold_daily_cap_consumed_gift_and_next_cycle",
+    "tests/unit/test_pr19_24_integration.py::test_recurring_customer_trades_count_separately_but_retry_does_not"
+  ],
+  "baseline_reproduced": [
+    "tests/integration/test_local_registration.py::test_bare_bearer_mail_over_http_after_authenticated_tcp_login",
+    "tests/integration/test_local_registration.py::test_http_mail_page_uses_game_token_and_isolates_accounts",
+    "tests/integration/test_local_registration.py::test_real_client_bare_bearer_mail_resolves_database_user",
+    "tests/integration/test_local_registration.py::test_reconnect_creates_and_pushes_daily_mail_once",
+    "tests/integration/test_local_registration.py::test_tcp_login_creates_daily_mail_once_after_registration",
+    "tests/unit/test_battle_entry_domain.py::test_all_extracted_sections_resolve_with_satisfied_static_prerequisites",
+    "tests/unit/test_battle_entry_domain.py::test_challenge_settlement_uses_only_static_gift_items_and_records_unpayable",
+    "tests/unit/test_battle_entry_domain.py::test_each_static_section_type_enters_and_settles_without_invented_reward",
+    "tests/unit/test_drop_probability_analysis.py::test_adc_nested_group_is_not_falsely_calculated",
+    "tests/unit/test_drop_probability_analysis.py::test_negative_picks_use_prob_as_deterministic_count",
+    "tests/unit/test_drop_probability_analysis.py::test_raw_prob_one_can_mean_certain_item",
+    "tests/unit/test_drop_probability_analysis.py::test_repeated_picks_are_with_replacement",
+    "tests/unit/test_drop_probability_analysis.py::test_single_pick_uses_nodrop_plus_prob_weight",
+    "tests/unit/test_drop_probability_analysis.py::test_sum_over_100_is_still_weighted_not_independent",
+    "tests/unit/test_favor_seed.py::test_seed_official_favor_gifts_is_idempotent",
+    "tests/unit/test_nian_rewards.py::test_nian_actual_840_prism_report_awards_packet_once[False-5]",
+    "tests/unit/test_nian_rewards.py::test_nian_actual_840_prism_report_awards_packet_once[True-5]",
+    "tests/unit/test_nian_rewards.py::test_nian_threshold_daily_cap_consumed_gift_and_next_cycle",
+    "tests/unit/test_pr19_24_integration.py::test_recurring_customer_trades_count_separately_but_retry_does_not"
+  ],
+  "new_failures": [],
+  "final_save_regression": {
+    "passed": 73,
+    "seconds": 201.16
+  },
+  "final_store_dispatch_barriers": {
+    "passed": 20,
+    "seconds": 38.5
+  },
+  "xml_sources": [
+    "diagnostic_retention_group0_20261029.xml",
+    "diagnostic_retention_group1_20261029.xml",
+    "diagnostic_retention_group2_20261029.xml",
+    "diagnostic_retention_group3_20261029.xml",
+    "diagnostic_retention_final73.xml",
+    "diagnostic_retention_final_barriers.xml"
+  ]
+}

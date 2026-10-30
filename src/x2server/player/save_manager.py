@@ -290,11 +290,16 @@ class SaveManager:
         uncovered = live - set(PLAYER_TABLES) - GLOBAL_TABLES
         if uncovered:
             raise SaveBoundaryError(f"Uncovered persisted save tables: {sorted(uncovered)}")
+        # A manager can precede service schema construction. Use the complete
+        # current snapshot for cross-table retention predicates on first export.
+        self._missing = set(PLAYER_TABLES) - live
 
     def export_save(self, player_id: int) -> bytes:
         """Stream one consistent snapshot; never retain every table/JSON copy."""
         started = time.monotonic()
         log = logging.getLogger('x2.save_manager')
+        from .diagnostic_retention import KEEP_SECONDS
+        cutoff = int(time.time()) - KEEP_SECONDS
         log.info('export start player=%s', player_id)
         with self._lock, tempfile.TemporaryFile() as blob_file:
             db = self.db
@@ -328,7 +333,7 @@ class SaveManager:
                                 write(',')
                             write(encode(table) + ':{"rows":[')
                             blob_refs = set()
-                            for row_index, row in enumerate(self._iter_export_table(db, table, player_id, blobs)):
+                            for row_index, row in enumerate(self._iter_export_table(db, table, player_id, blobs, cutoff)):
                                 row = self._validate_row(table, row, player_id, blob_refs)
                                 if row_index:
                                     write(',')
@@ -366,17 +371,19 @@ class SaveManager:
         return result
 
     def _iter_export_table(self, db: sqlite3.Connection, table: str, player_id: int,
-                      blobs: _BlobSpool) -> Iterator[dict[str, Any]]:
+                      blobs: _BlobSpool, cutoff: int) -> Iterator[dict[str, Any]]:
         if not self.exists(table):
             return []  # boundary table absent from this deployment: no state to export
         colnames = list(self.columns(table))
+        from .diagnostic_retention import export_parts
+        projection, retain = export_parts(table, colnames, set(PLAYER_TABLES) - self._missing)
         if table in JOIN_OWNERS:
             parent, parent_col, child_col = JOIN_OWNERS[table]
-            query = (f"SELECT t.* FROM {table} t JOIN {parent} p ON p.{parent_col}=t.{child_col} "
-                     f"WHERE p.player_id=? ORDER BY t.rowid")
+            query = (f"SELECT {projection} FROM {table} t JOIN {parent} p ON p.{parent_col}=t.{child_col} "
+                     f"WHERE p.player_id=:player AND ({retain}) ORDER BY t.rowid")
         else:
-            query = f"SELECT * FROM {table} WHERE player_id=? ORDER BY rowid"
-        for row in db.execute(query, (player_id,)):
+            query = f"SELECT {projection} FROM {table} t WHERE t.player_id=:player AND ({retain}) ORDER BY t.rowid"
+        for row in db.execute(query, {"player": player_id, "cutoff": cutoff}):
             encoded: dict[str, Any] = {}
             for name in colnames:
                 value = row[name]
@@ -616,6 +623,9 @@ class SaveManager:
             if target is None:
                 raise KeyError(player_id)
             self._validate_references(plan)
+            from .diagnostic_retention import prune_plan, KEEP_SECONDS
+            trimmed = prune_plan(plan, int(time.time()) - KEEP_SECONDS)
+            log.info('import diagnostic plan retention player=%s rows=%s', player_id, trimmed)
             log.info('import validated player=%s elapsed=%.3fs', player_id, time.monotonic() - started)
             backup_path = self._write_backup(player_id, target["account"])
             db = self.db
@@ -639,7 +649,7 @@ class SaveManager:
                                 for index, row in enumerate(plan.rows["world_boss_runs"])
                                 if row["boss_id"] in existing_bosses}
                     equip_map = self._insert_equipment(db, player_id, plan)
-                    drop_map = self._insert_drop_observations(db, player_id, plan)
+                    drop_map = self._insert_drop_observations(db, player_id, plan, uuid_map)
                     snapshot = self._remap_snapshot(plan.snapshot, equip_map)
                     for table in PLAYER_TABLES:
                         if table in ("equipment_instances", "fight_drop_observations"):
@@ -650,6 +660,9 @@ class SaveManager:
                     db.execute("UPDATE players SET snapshot=?, revision=revision+1 WHERE id=?",
                                (json.dumps(snapshot, ensure_ascii=False, allow_nan=False,
                                            sort_keys=True), player_id))
+                    from .diagnostic_retention import prune_account, KEEP_SECONDS
+                    pruned = prune_account(db, player_id, int(time.time()) - KEEP_SECONDS)
+                    log.info('import diagnostic retention player=%s rows=%s', player_id, pruned)
                     self._bump_sequences(db)
                     counts = {t: len(plan.rows[t]) for t in PLAYER_TABLES}
                     if limits is not None:
@@ -880,7 +893,7 @@ class SaveManager:
         return equip_map
 
     def _insert_drop_observations(self, db: sqlite3.Connection, player_id: int,
-                                  plan: ImportPlan) -> dict[int, int]:
+                                  plan: ImportPlan, uuid_map=None) -> dict[int, int]:
         rows = plan.rows["fight_drop_observations"]
         if not rows:
             return {}
@@ -899,6 +912,8 @@ class SaveManager:
             values = dict(row)
             values["id"] = drop_map[values["id"]]
             values["player_id"] = player_id
+            if values.get("uuid") in (uuid_map or {}):
+                values["uuid"] = uuid_map[values["uuid"]]
             self._insert(db, "fight_drop_observations", values, plan)
         return drop_map
 

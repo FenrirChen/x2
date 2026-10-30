@@ -1,0 +1,74 @@
+{
+  "initial_database_bytes": 2386927616,
+  "initial_expired_diagnostic_reports": 1024,
+  "clients": 50,
+  "think_seconds": 1.0,
+  "owned_heroes_per_account": 20,
+  "selected_team_size": 3,
+  "rounds": 6,
+  "completed_player_battles": 300,
+  "archive_bytes": 25725268,
+  "workload_seconds": 37.281,
+  "timings": {
+    "C2L_Login": {
+      "count": 50,
+      "p50_ms": 1569.31,
+      "p95_ms": 2950.88,
+      "p99_ms": 3059.34,
+      "max_ms": 3059.34
+    },
+    "C2L_ShopGoods": {
+      "count": 300,
+      "p50_ms": 3.11,
+      "p95_ms": 19.42,
+      "p99_ms": 28.19,
+      "max_ms": 41.15
+    },
+    "C2L_GameTask": {
+      "count": 300,
+      "p50_ms": 3.44,
+      "p95_ms": 35.28,
+      "p99_ms": 230.82,
+      "max_ms": 267.92
+    },
+    "C2L_MailData": {
+      "count": 300,
+      "p50_ms": 1.43,
+      "p95_ms": 26.81,
+      "p99_ms": 45.78,
+      "max_ms": 47.04
+    },
+    "C2L_FightData": {
+      "count": 300,
+      "p50_ms": 44.19,
+      "p95_ms": 266.44,
+      "p99_ms": 308.0,
+      "max_ms": 316.52
+    },
+    "C2L_CheckoutMainMissionSign": {
+      "count": 600,
+      "p50_ms": 27.44,
+      "p95_ms": 100.42,
+      "p99_ms": 226.56,
+      "max_ms": 303.54
+    }
+  },
+  "save": {
+    "initial_export_seconds": 0.829,
+    "concurrent_import_seconds": 1.461
+  },
+  "settled_runs": 301,
+  "battle_receipts": 301,
+  "positive_gold_players": 50,
+  "quick_check": "ok",
+  "diagnostic_children_remaining": 0,
+  "diagnostic_json_rows_remaining": 0,
+  "loop_stalls_over_500ms": 0,
+  "max_reported_loop_stall_seconds": 0,
+  "sqlite_busy_errors": 0,
+  "connection_timeouts": 0,
+  "save_write_seconds": [
+    0.297
+  ],
+  "slo_pass": true
+}

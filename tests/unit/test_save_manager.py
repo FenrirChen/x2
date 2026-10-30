@@ -188,6 +188,11 @@ def populate_rich_state(db: sqlite3.Connection, player_id: int):
             row["run_id"] = f"run-{player_id}"
         elif table in ("equipment_enhancements", "equipment_main_growth", "college_washing_pending", "college_washing_receipts"):
             row["equip_id"] = 40  # references the instance inserted above
+        # Full-state roundtrips use recent diagnostics; expired copies have
+        # separate retention/legacy-import assertions.
+        if table in ('battle_shop_purchases', 'battle_shop_pickups'):
+            import time
+            row['created_at'] = int(time.time())
         db.execute(f"INSERT INTO {table} ({','.join(row)}) VALUES ({','.join('?' * len(row))})",
                    list(row.values()))
         # join-owned children for the two parent flows we created

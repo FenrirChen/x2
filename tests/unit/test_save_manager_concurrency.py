@@ -26,11 +26,11 @@ def test_export_snapshot_does_not_block_another_players_commit(env, monkeypatch)
     release = threading.Event()
     errors, results = [], []
     original = manager._iter_export_table
-    def paused(db, table, player_id, blobs):
+    def paused(db, table, player_id, blobs, cutoff):
         if table == 'inventory':
             reading.set()
             assert release.wait(3)
-        yield from original(db, table, player_id, blobs)
+        yield from original(db, table, player_id, blobs, cutoff)
     monkeypatch.setattr(manager, '_iter_export_table', paused)
     def export():
         try:

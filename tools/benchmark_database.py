@@ -59,7 +59,7 @@ def free_port():
         return sock.getsockname()[1]
 
 
-def seed(path, clients, history_blobs, database_mib, owned_heroes):
+def seed(path, clients, history_blobs, database_mib, owned_heroes, diagnostic_rows=0):
     from tests.unit.test_save_manager import build_full_schema
     from x2server.player.accounts import AccountStore
     from x2server.player.save_manager import SaveManager
@@ -90,6 +90,22 @@ def seed(path, clients, history_blobs, database_mib, owned_heroes):
             store.db.executemany("""INSERT INTO battle_entries
                 (player_id,request_key,uuid,created_at,response) VALUES (?,?,?,?,?)""",
                 ((ids[-1],f'padding-{i}',f'padding-{i}',0,filler) for i in range(count)))
+        if diagnostic_rows:
+            assert history_blobs > 0
+            from x2server.messages.battle import BATTLE_SCHEMAS
+            stamp = int(time.time()) - 48*3600 - 1
+            pid = ids[-2]
+            with store.db:
+                store.db.execute("INSERT INTO economy_runs(uuid,player_id,session_id,section_id,settled) VALUES ('history-0',?,'history',2110801,1)", (pid,))
+                reply = BATTLE_SCHEMAS['L2C_CheckoutMainMission'].encode({'result':10,'success':True})
+                store.db.execute("INSERT INTO battle_receipts VALUES ('history-0','history',?,?)", (stamp,reply))
+                raw = BATTLE_SCHEMAS['C2L_FightDropData'].encode({'missionId':2110801,'chapterId':2010100})
+                text = json.dumps({'padding':'x'*32768})
+                for i in range(diagnostic_rows):
+                    rid = store.db.execute('INSERT INTO fight_drop_observations VALUES (NULL,?,?,?,?,?,?,?,?,?)',
+                        (pid,'history-0','history',i,str(i),stamp,raw,text,text)).lastrowid
+                    store.db.execute('INSERT INTO fight_drop_items VALUES (?,0,1,1,0,0)', (rid,))
+                    store.db.execute('INSERT INTO fight_drop_claims VALUES (?,"currency",0,?)', (rid,'{}'))
         manager = SaveManager(store)
         try:
             manager.prepare_indexes()
@@ -229,6 +245,7 @@ def main():
     parser.add_argument('--team-size',type=int,default=1)
     parser.add_argument('--history-blobs',type=int,default=128)
     parser.add_argument('--database-mib',type=int,default=64)
+    parser.add_argument('--diagnostic-rows',type=int,default=0)
     parser.add_argument('--report',type=Path,required=True)
     args = parser.parse_args()
     assert 1 <= args.clients <= 100 and args.rounds > 1 and args.think_seconds >= 0
@@ -246,8 +263,9 @@ def main():
     env.update(TEMP=str(scratch), TMP=str(scratch))
     with tempfile.TemporaryDirectory(prefix='x2-load-',dir=scratch) as temporary:
         path = Path(temporary)/'isolated.sqlite3'
-        ids = seed(path,args.clients,args.history_blobs,args.database_mib,args.owned_heroes)
+        ids = seed(path,args.clients,args.history_blobs,args.database_mib,args.owned_heroes,args.diagnostic_rows)
         report['initial_database_bytes'] = path.stat().st_size
+        report['initial_expired_diagnostic_reports'] = args.diagnostic_rows
         log_path = args.report.with_suffix('.server.log')
         with log_path.open('w',encoding='utf-8') as log:
             options = {'creationflags':subprocess.CREATE_NO_WINDOW} if os.name=='nt' else {}
@@ -272,7 +290,13 @@ def main():
                     report['positive_gold_players'] = sum(json.loads(r[0]).get('gold',0)>0 for r in
                         db.execute('SELECT snapshot FROM players WHERE id<=?',(ids[args.clients-1],)))
                     report['quick_check'] = db.execute('PRAGMA quick_check').fetchone()[0]
-                assert report['settled_runs']==report['battle_receipts']==args.clients*args.rounds
+                    if args.diagnostic_rows:
+                        report['diagnostic_children_remaining'] = db.execute('SELECT count(*) FROM fight_drop_items').fetchone()[0]
+                        report['diagnostic_json_rows_remaining'] = db.execute("SELECT count(*) FROM fight_drop_observations WHERE decoded!='{}'").fetchone()[0]
+                        assert report['diagnostic_children_remaining'] == 0
+                        assert report['diagnostic_json_rows_remaining'] < args.diagnostic_rows
+
+                assert report['settled_runs']==report['battle_receipts']==args.clients*args.rounds+int(bool(args.diagnostic_rows))
                 assert report['positive_gold_players']==args.clients
                 assert report['quick_check']=='ok'
             except BaseException as exc:

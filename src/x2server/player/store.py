@@ -56,6 +56,7 @@ class PlayerStore:
         path.parent.mkdir(parents=True, exist_ok=True)
         self.path = path
         self.importing = threading.Event()
+        self.maintenance = threading.Event()
         self.checkpoint_guard = CheckpointGuard(path)
         self.db = sqlite3.connect(path, timeout=.05)
         self.db.row_factory = sqlite3.Row
@@ -88,7 +89,7 @@ class PlayerStore:
 
     async def wait_for_import(self):
         # Never synchronously wait for the HTTP import writer on the game loop.
-        while self.importing.is_set():
+        while self.importing.is_set() or self.maintenance.is_set():
             await asyncio.sleep(.01)
 
     @contextmanager

@@ -1,0 +1,34 @@
+{
+  "backup": "D:\\demo\\x2\\x2_revive_workspace\\runtime\\before_activity_next_20261030_213026\\player.sqlite3",
+  "database": "D:\\demo\\x2\\x2_revive_workspace\\runtime\\phase14\\player.sqlite3",
+  "quick_check": "ok",
+  "non_target_tables_checked": 105,
+  "non_target_tables_changed": [],
+  "raw_drop_reports_unchanged": true,
+  "diagnostic_counts": {
+    "battle_shop_pickups": {
+      "before": 0,
+      "after": 0
+    },
+    "battle_shop_purchases": {
+      "before": 6,
+      "after": 0
+    },
+    "economy_checkouts": {
+      "before": 147,
+      "after": 0
+    },
+    "fight_drop_claims": {
+      "before": 631,
+      "after": 64
+    },
+    "fight_drop_items": {
+      "before": 246,
+      "after": 2
+    },
+    "fight_drop_observations": {
+      "before": 90,
+      "after": 90
+    }
+  }
+}

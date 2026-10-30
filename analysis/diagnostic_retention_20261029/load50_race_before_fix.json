@@ -1,0 +1,5 @@
+{
+  "initial_database_bytes": 2386927616,
+  "initial_expired_diagnostic_reports": 1024,
+  "error": "RuntimeError(\"C2L_CheckoutMainMissionSign refused: {'result': 13}\")"
+}
