@@ -675,6 +675,8 @@ class SeasonService:
         state = self.state(player)
         bonus = Counter()
         for tid, level in state['talents'].items():
+            if not level:
+                continue  # A reset talent must leave no extra attribute carrier.
             row = self.talents[int(tid)]
             for attr in row['AttribId']:
                 if attr:
