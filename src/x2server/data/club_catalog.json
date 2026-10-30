@@ -7,7 +7,6 @@
    "difficulty": 0,
    "monsterId": 5801,
    "stageIds": [
-    2070001,
     2170001
    ],
    "winConsume": [
@@ -353,11 +352,11 @@
    "difficulty": 24,
    "monsterId": 5824,
    "stageIds": [
-    2170024,
-    1
+    2170024
    ],
    "winConsume": [
-    1283204
+    1283204,
+    1
    ],
    "winReward": 778124
   },
