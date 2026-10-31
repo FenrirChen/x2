@@ -1,0 +1,417 @@
+PowerModule$$GetPrice
+15c478c: stp x28, x27, [sp, #-0x60]!
+15c4790: stp x26, x25, [sp, #0x10]
+15c4794: stp x24, x23, [sp, #0x20]
+15c4798: stp x22, x21, [sp, #0x30]
+15c479c: stp x20, x19, [sp, #0x40]
+15c47a0: stp x29, x30, [sp, #0x50]
+15c47a4: add x29, sp, #0x50
+15c47a8: adrp x20, #0x5576000
+15c47ac: ldrb w8, [x20, #0x503]
+15c47b0: mov x19, x0
+15c47b4: tbnz w8, #0, #0x15c47d0
+15c47b8: adrp x8, #0x5252000
+15c47bc: ldr x8, [x8, #0x210]
+15c47c0: ldr w0, [x8]
+15c47c4: bl #0x3f2aed0
+15c47c8: mov w8, #1
+15c47cc: strb w8, [x20, #0x503]
+15c47d0: adrp x20, #0x530b000
+15c47d4: ldr x20, [x20, #0xcc0]
+15c47d8: ldr x0, [x20]
+15c47dc: ldrb w8, [x0, #0x10a]
+15c47e0: tbz w8, #0, #0x15c47f4
+15c47e4: ldr w8, [x0, #0xbc]
+15c47e8: cbnz w8, #0x15c47f4
+15c47ec: bl #0x3f3f378
+15c47f0: ldr x0, [x20]
+15c47f4: ldr x8, [x0, #0xa0]
+15c47f8: ldr x21, [x8, #0x48]
+15c47fc: mov x8, x21
+15c4800: cbnz x21, #0x15c4818
+15c4804: bl #0x3f564f0
+15c4808: ldr x8, [x20]
+15c480c: ldr x8, [x8, #0xa0]
+15c4810: ldr x8, [x8, #0x48]
+15c4814: cbz x8, #0x15c4a98
+15c4818: ldr x22, [x21, #0x30]
+15c481c: ldr x21, [x8, #0x18]
+15c4820: cbnz x21, #0x15c4828
+15c4824: bl #0x3f564f0
+15c4828: adrp x25, #0x5300000
+15c482c: ldr x25, [x25, #0xfa8]
+15c4830: mov x0, x21
+15c4834: ldr x1, [x25]
+15c4838: bl #0x3d473f8 System.Collections.Generic.List<int>$$get_Count
+15c483c: cmp w0, #1
+15c4840: b.lt #0x15c485c
+15c4844: cbz x21, #0x15c4864
+15c4848: ldr x1, [x25]
+15c484c: mov x0, x21
+15c4850: bl #0x3d473f8 System.Collections.Generic.List<int>$$get_Count
+15c4854: mov w20, w0
+15c4858: b #0x15c487c
+15c485c: mov w20, wzr
+15c4860: b #0x15c4898
+15c4864: bl #0x3f564f0
+15c4868: ldr x1, [x25]
+15c486c: mov x0, xzr
+15c4870: bl #0x3d473f8 System.Collections.Generic.List<int>$$get_Count
+15c4874: mov w20, w0
+15c4878: bl #0x3f564f0
+15c487c: adrp x8, #0x52e6000
+15c4880: ldr x8, [x8, #0x7b0]
+15c4884: sub w1, w20, #1
+15c4888: mov x0, x21
+15c488c: ldr x2, [x8]
+15c4890: bl #0x3d47400 System.Collections.Generic.List<int>$$get_Item
+15c4894: mov w20, w0
+15c4898: adrp x27, #0x528c000
+15c489c: adrp x26, #0x52e6000
+15c48a0: ldr x27, [x27, #0xe20]
+15c48a4: ldr x26, [x26, #0x7b0]
+15c48a8: mov w24, wzr
+15c48ac: mov w23, w24
+15c48b0: cbnz x22, #0x15c48b8
+15c48b4: bl #0x3f564f0
+15c48b8: ldr x1, [x25]
+15c48bc: mov x0, x22
+15c48c0: bl #0x3d473f8 System.Collections.Generic.List<int>$$get_Count
+15c48c4: sub w8, w0, #1
+15c48c8: cmp w23, w8
+15c48cc: b.gt #0x15c4974
+15c48d0: cbnz x22, #0x15c48d8
+15c48d4: bl #0x3f564f0
+15c48d8: ldr x1, [x25]
+15c48dc: mov x0, x22
+15c48e0: bl #0x3d473f8 System.Collections.Generic.List<int>$$get_Count
+15c48e4: sub w8, w0, #1
+15c48e8: cmp w23, w8
+15c48ec: b.eq #0x15c4958
+15c48f0: ldr x0, [x27]
+15c48f4: ldrb w8, [x0, #0x10a]
+15c48f8: tbz w8, #0, #0x15c4908
+15c48fc: ldr w8, [x0, #0xbc]
+15c4900: cbnz w8, #0x15c4908
+15c4904: bl #0x3f3f378
+15c4908: mov x0, xzr
+15c490c: mov x1, xzr
+15c4910: bl #0x1749268 NetSyncData$$get_PlayerData
+15c4914: mov x24, x0
+15c4918: cbnz x24, #0x15c4920
+15c491c: bl #0x3f564f0
+15c4920: ldr x24, [x24, #0x20]
+15c4924: cbnz x24, #0x15c492c
+15c4928: bl #0x3f564f0
+15c492c: ldr w28, [x24, #0x14]
+15c4930: cbnz x22, #0x15c4938
+15c4934: bl #0x3f564f0
+15c4938: ldr x2, [x26]
+15c493c: add w24, w23, #1
+15c4940: mov x0, x22
+15c4944: mov w1, w24
+15c4948: bl #0x3d47400 System.Collections.Generic.List<int>$$get_Item
+15c494c: add w8, w28, #1
+15c4950: cmp w8, w0
+15c4954: b.ge #0x15c48ac
+15c4958: cbnz x21, #0x15c4960
+15c495c: bl #0x3f564f0
+15c4960: ldr x2, [x26]
+15c4964: mov x0, x21
+15c4968: mov w1, w23
+15c496c: bl #0x3d47400 System.Collections.Generic.List<int>$$get_Item
+15c4970: mov w20, w0
+15c4974: ldr w8, [x19, #0x30]
+15c4978: cmp w8, #1
+15c497c: b.lt #0x15c4a78
+15c4980: adrp x8, #0x521a000
+15c4984: ldr x8, [x8, #0x240]
+15c4988: ldr x0, [x8]
+15c498c: ldrb w8, [x0, #0x10a]
+15c4990: tbz w8, #0, #0x15c49a0
+15c4994: ldr w8, [x0, #0xbc]
+15c4998: cbnz w8, #0x15c49a0
+15c499c: bl #0x3f3f378
+15c49a0: mov x0, xzr
+15c49a4: mov x1, xzr
+15c49a8: bl #0x198275c ItemManager$$get_Instance
+15c49ac: ldr w19, [x19, #0x30]
+15c49b0: mov x21, x0
+15c49b4: cbnz x21, #0x15c49bc
+15c49b8: bl #0x3f564f0
+15c49bc: mov x2, xzr
+15c49c0: mov x0, x21
+15c49c4: mov w1, w19
+15c49c8: bl #0x1982a2c ItemManager$$GetItem
+15c49cc: mov x19, x0
+15c49d0: cbz x19, #0x15c4a78
+15c49d4: ldr x21, [x19, #0x88]
+15c49d8: cbnz x21, #0x15c49e0
+15c49dc: bl #0x3f564f0
+15c49e0: ldr x1, [x25]
+15c49e4: mov x0, x21
+15c49e8: bl #0x3d473f8 System.Collections.Generic.List<int>$$get_Count
+15c49ec: cmp w0, #1
+15c49f0: b.lt #0x15c4a78
+15c49f4: ldr x19, [x19, #0x88]
+15c49f8: cbnz x19, #0x15c4a00
+15c49fc: bl #0x3f564f0
+15c4a00: ldr x2, [x26]
+15c4a04: mov w1, wzr
+15c4a08: mov x0, x19
+15c4a0c: bl #0x3d47400 System.Collections.Generic.List<int>$$get_Item
+15c4a10: adrp x8, #0x528b000
+15c4a14: ldr x8, [x8, #0x2e0]
+15c4a18: mov w19, w0
+15c4a1c: ldr x8, [x8]
+15c4a20: ldrb w9, [x8, #0x10a]
+15c4a24: tbz w9, #0, #0x15c4a38
+15c4a28: ldr w9, [x8, #0xbc]
+15c4a2c: cbnz w9, #0x15c4a38
+15c4a30: mov x0, x8
+15c4a34: bl #0x3f3f378
+15c4a38: adrp x8, #0x40af000
+15c4a3c: ldr s0, [x8, #0x9c]
+15c4a40: adrp x8, #0x4188000
+15c4a44: ldr s1, [x8, #0xd88]
+15c4a48: mul w8, w19, w20
+15c4a4c: ldp x29, x30, [sp, #0x50]
+15c4a50: ldp x20, x19, [sp, #0x40]
+15c4a54: ldp x22, x21, [sp, #0x30]
+15c4a58: ldp x24, x23, [sp, #0x20]
+15c4a5c: ldp x26, x25, [sp, #0x10]
+15c4a60: scvtf s2, w8
+15c4a64: mov x0, xzr
+15c4a68: mov x1, xzr
+15c4a6c: fmul s0, s2, s0
+15c4a70: ldp x28, x27, [sp], #0x60
+15c4a74: b #0x154d92c
+15c4a78: mov w0, w20
+15c4a7c: ldp x29, x30, [sp, #0x50]
+15c4a80: ldp x20, x19, [sp, #0x40]
+15c4a84: ldp x22, x21, [sp, #0x30]
+15c4a88: ldp x24, x23, [sp, #0x20]
+15c4a8c: ldp x26, x25, [sp, #0x10]
+15c4a90: ldp x28, x27, [sp], #0x60
+15c4a94: ret
+15c4a98: bl #0x3f564f0
+MainModule.ServerData$$.ctor
+13cd020: stp x24, x23, [sp, #-0x40]!
+13cd024: stp x22, x21, [sp, #0x10]
+13cd028: stp x20, x19, [sp, #0x20]
+13cd02c: stp x29, x30, [sp, #0x30]
+13cd030: add x29, sp, #0x30
+13cd034: adrp x20, #0x5575000
+13cd038: ldrb w8, [x20, #0x751]
+13cd03c: mov x19, x0
+13cd040: tbnz w8, #0, #0x13cd05c
+13cd044: adrp x8, #0x5235000
+13cd048: ldr x8, [x8, #0xcf8]
+13cd04c: ldr w0, [x8]
+13cd050: bl #0x3f2aed0
+13cd054: mov w8, #1
+13cd058: strb w8, [x20, #0x751]
+13cd05c: mov w8, #0x78
+13cd060: str w8, [x19, #0x10]
+13cd064: adrp x21, #0x52ef000
+13cd068: ldr x21, [x21, #0x110]
+13cd06c: ldr x0, [x21]
+13cd070: bl #0x3f6452c
+13cd074: adrp x22, #0x520c000
+13cd078: ldr x22, [x22, #0x2c0]
+13cd07c: mov x20, x0
+13cd080: ldr x1, [x22]
+13cd084: bl #0x3d43ed8 System.Collections.Generic.List<int>$$.ctor
+13cd088: cbz x20, #0x13cd0d8
+13cd08c: adrp x23, #0x52e8000
+13cd090: ldr x23, [x23, #0x88]
+13cd094: mov w1, #0x3c
+13cd098: mov x0, x20
+13cd09c: ldr x2, [x23]
+13cd0a0: bl #0x3d44f2c System.Collections.Generic.List<int>$$Add
+13cd0a4: ldr x2, [x23]
+13cd0a8: mov w1, #0x3c
+13cd0ac: mov x0, x20
+13cd0b0: bl #0x3d44f2c System.Collections.Generic.List<int>$$Add
+13cd0b4: ldr x2, [x23]
+13cd0b8: mov w1, #0x3c
+13cd0bc: mov x0, x20
+13cd0c0: bl #0x3d44f2c System.Collections.Generic.List<int>$$Add
+13cd0c4: ldr x2, [x23]
+13cd0c8: mov w1, #0x3c
+13cd0cc: mov x0, x20
+13cd0d0: bl #0x3d44f2c System.Collections.Generic.List<int>$$Add
+13cd0d4: b #0x13cd134
+13cd0d8: bl #0x3f564f0
+13cd0dc: adrp x23, #0x52e8000
+13cd0e0: ldr x23, [x23, #0x88]
+13cd0e4: mov w1, #0x3c
+13cd0e8: mov x0, x20
+13cd0ec: ldr x2, [x23]
+13cd0f0: bl #0x3d44f2c System.Collections.Generic.List<int>$$Add
+13cd0f4: bl #0x3f564f0
+13cd0f8: ldr x2, [x23]
+13cd0fc: mov w1, #0x3c
+13cd100: mov x0, x20
+13cd104: bl #0x3d44f2c System.Collections.Generic.List<int>$$Add
+13cd108: bl #0x3f564f0
+13cd10c: ldr x2, [x23]
+13cd110: mov w1, #0x3c
+13cd114: mov x0, x20
+13cd118: bl #0x3d44f2c System.Collections.Generic.List<int>$$Add
+13cd11c: bl #0x3f564f0
+13cd120: ldr x2, [x23]
+13cd124: mov w1, #0x3c
+13cd128: mov x0, x20
+13cd12c: bl #0x3d44f2c System.Collections.Generic.List<int>$$Add
+13cd130: bl #0x3f564f0
+13cd134: adrp x23, #0x52e8000
+13cd138: ldr x23, [x23, #0x88]
+13cd13c: mov w1, #0x3c
+13cd140: mov x0, x20
+13cd144: ldr x2, [x23]
+13cd148: bl #0x3d44f2c System.Collections.Generic.List<int>$$Add
+13cd14c: mov x8, #0x3c0000003c
+13cd150: movk x8, #0x3e8
+13cd154: mov w9, #0x12c
+13cd158: stp x20, x8, [x19, #0x18]
+13cd15c: str w9, [x19, #0x28]
+13cd160: ldr x0, [x21]
+13cd164: bl #0x3f6452c
+13cd168: ldr x1, [x22]
+13cd16c: mov x20, x0
+13cd170: bl #0x3d43ed8 System.Collections.Generic.List<int>$$.ctor
+13cd174: cbz x20, #0x13cd1bc
+13cd178: ldr x2, [x23]
+13cd17c: mov w1, #1
+13cd180: mov x0, x20
+13cd184: bl #0x3d44f2c System.Collections.Generic.List<int>$$Add
+13cd188: ldr x2, [x23]
+13cd18c: mov w1, #2
+13cd190: mov x0, x20
+13cd194: bl #0x3d44f2c System.Collections.Generic.List<int>$$Add
+13cd198: ldr x2, [x23]
+13cd19c: mov w1, #4
+13cd1a0: mov x0, x20
+13cd1a4: bl #0x3d44f2c System.Collections.Generic.List<int>$$Add
+13cd1a8: ldr x2, [x23]
+13cd1ac: mov w1, #6
+13cd1b0: mov x0, x20
+13cd1b4: bl #0x3d44f2c System.Collections.Generic.List<int>$$Add
+13cd1b8: b #0x13cd210
+13cd1bc: bl #0x3f564f0
+13cd1c0: ldr x2, [x23]
+13cd1c4: mov w1, #1
+13cd1c8: mov x0, x20
+13cd1cc: bl #0x3d44f2c System.Collections.Generic.List<int>$$Add
+13cd1d0: bl #0x3f564f0
+13cd1d4: ldr x2, [x23]
+13cd1d8: mov w1, #2
+13cd1dc: mov x0, x20
+13cd1e0: bl #0x3d44f2c System.Collections.Generic.List<int>$$Add
+13cd1e4: bl #0x3f564f0
+13cd1e8: ldr x2, [x23]
+13cd1ec: mov w1, #4
+13cd1f0: mov x0, x20
+13cd1f4: bl #0x3d44f2c System.Collections.Generic.List<int>$$Add
+13cd1f8: bl #0x3f564f0
+13cd1fc: ldr x2, [x23]
+13cd200: mov w1, #6
+13cd204: mov x0, x20
+13cd208: bl #0x3d44f2c System.Collections.Generic.List<int>$$Add
+13cd20c: bl #0x3f564f0
+13cd210: ldr x2, [x23]
+13cd214: mov w1, #0xa
+13cd218: mov x0, x20
+13cd21c: bl #0x3d44f2c System.Collections.Generic.List<int>$$Add
+13cd220: adrp x9, #0x4187000
+13cd224: adrp x8, #0x4187000
+13cd228: ldr q1, [x9, #0xaa0]
+13cd22c: ldr q0, [x8, #0xa90]
+13cd230: mov w8, #2
+13cd234: str x20, [x19, #0x30]
+13cd238: stur q1, [x19, #0x48]
+13cd23c: str w8, [x19, #0x58]
+13cd240: stur q0, [x19, #0x38]
+13cd244: ldr x0, [x21]
+13cd248: bl #0x3f6452c
+13cd24c: ldr x1, [x22]
+13cd250: mov x20, x0
+13cd254: bl #0x3d43ed8 System.Collections.Generic.List<int>$$.ctor
+13cd258: cbz x20, #0x13cd270
+13cd25c: ldr x2, [x23]
+13cd260: mov w1, #5
+13cd264: mov x0, x20
+13cd268: bl #0x3d44f2c System.Collections.Generic.List<int>$$Add
+13cd26c: b #0x13cd288
+13cd270: bl #0x3f564f0
+13cd274: ldr x2, [x23]
+13cd278: mov w1, #5
+13cd27c: mov x0, x20
+13cd280: bl #0x3d44f2c System.Collections.Generic.List<int>$$Add
+13cd284: bl #0x3f564f0
+13cd288: ldr x2, [x23]
+13cd28c: mov w1, #5
+13cd290: mov x0, x20
+13cd294: bl #0x3d44f2c System.Collections.Generic.List<int>$$Add
+13cd298: str x20, [x19, #0x60]
+13cd29c: ldr x0, [x21]
+13cd2a0: bl #0x3f6452c
+13cd2a4: ldr x1, [x22]
+13cd2a8: mov x20, x0
+13cd2ac: bl #0x3d43ed8 System.Collections.Generic.List<int>$$.ctor
+13cd2b0: cbz x20, #0x13cd2d8
+13cd2b4: ldr x2, [x23]
+13cd2b8: mov w1, #1
+13cd2bc: mov x0, x20
+13cd2c0: bl #0x3d44f2c System.Collections.Generic.List<int>$$Add
+13cd2c4: ldr x2, [x23]
+13cd2c8: mov w1, #3
+13cd2cc: mov x0, x20
+13cd2d0: bl #0x3d44f2c System.Collections.Generic.List<int>$$Add
+13cd2d4: b #0x13cd304
+13cd2d8: bl #0x3f564f0
+13cd2dc: ldr x2, [x23]
+13cd2e0: mov w1, #1
+13cd2e4: mov x0, x20
+13cd2e8: bl #0x3d44f2c System.Collections.Generic.List<int>$$Add
+13cd2ec: bl #0x3f564f0
+13cd2f0: ldr x2, [x23]
+13cd2f4: mov w1, #3
+13cd2f8: mov x0, x20
+13cd2fc: bl #0x3d44f2c System.Collections.Generic.List<int>$$Add
+13cd300: bl #0x3f564f0
+13cd304: ldr x2, [x23]
+13cd308: mov w1, #0xa
+13cd30c: mov x0, x20
+13cd310: bl #0x3d44f2c System.Collections.Generic.List<int>$$Add
+13cd314: str x20, [x19, #0x80]
+13cd318: ldr x0, [x21]
+13cd31c: bl #0x3f6452c
+13cd320: ldr x1, [x22]
+13cd324: mov x20, x0
+13cd328: bl #0x3d43ed8 System.Collections.Generic.List<int>$$.ctor
+13cd32c: cbz x20, #0x13cd344
+13cd330: ldr x2, [x23]
+13cd334: mov w1, #0x8982
+13cd338: mov x0, x20
+13cd33c: bl #0x3d44f2c System.Collections.Generic.List<int>$$Add
+13cd340: b #0x13cd35c
+13cd344: bl #0x3f564f0
+13cd348: ldr x2, [x23]
+13cd34c: mov w1, #0x8982
+13cd350: mov x0, x20
+13cd354: bl #0x3d44f2c System.Collections.Generic.List<int>$$Add
+13cd358: bl #0x3f564f0
+13cd35c: ldr x2, [x23]
+13cd360: mov w1, #0x8983
+13cd364: mov x0, x20
+13cd368: bl #0x3d44f2c System.Collections.Generic.List<int>$$Add
+13cd36c: str x20, [x19, #0x88]
+13cd370: mov x0, x19
+13cd374: ldp x29, x30, [sp, #0x30]
+13cd378: ldp x20, x19, [sp, #0x20]
+13cd37c: ldp x22, x21, [sp, #0x10]
+13cd380: mov x1, xzr
+13cd384: ldp x24, x23, [sp], #0x40
+13cd388: b #0x26b0d28

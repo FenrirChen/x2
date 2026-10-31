@@ -20,6 +20,7 @@ ULTIMATE_CAUSALITY_CARD = 1202014
 SENDER = "解神者 Revival"
 
 ONCE_MAIL_PREFIXES = {
+    'power_refund_20261031': ('power_refund_20261031:',),
     'welcome': ('welcome_mail:', 'account_welcome:'),
     'hero_choice': ('hero_choice_1290005:',),
     'ultimate_causality': ('ultimate_causality_50:',),

@@ -1,7 +1,7 @@
 """购买因果 (134/137): 页面显示价与实扣同源, 旧阶梯多扣的部分只退一次。
 
 证据链 (见 economy.POWER_BUY_PRICES 的注释): 页面显示价由客户端自己算
-(PowerModule_GetPrice 0x015C4F3C 读 ServerData.PowerPrice / PowerTimesInterval,
+(PowerModule_GetPrice 0x015C478C 读 ServerData.PowerPrice / PowerTimesInterval,
 出厂值 [60,60,60,60,60] / {1,2,4,6,10}); 服务端此前按 20 档阶梯 20/20/40/…/220/…/1000
 实扣, 于是第 5 次起「写着 60 扣得更多」。这里锁住三件事:
 
@@ -111,3 +111,76 @@ def test_login_helper_mints_then_stays_quiet(env):
     player["snapshot"]["power_buy"] = {"day": DAY_START, "count": 8}
     assert service._power_refund_mail(player, FIXED_NOW) is True
     assert service._power_refund_mail(player, FIXED_NOW + 60) is False
+
+
+def test_deleted_or_replaced_mail_does_not_reissue_refund(env):
+    store,_,_=env
+    snapshot={'power_buy':{'day':DAY_START,'count':10}}
+    with store.db:
+        assert power_refund.settle(store.db,1,snapshot,FIXED_NOW)==390
+        store.db.execute('DELETE FROM player_mail WHERE player_id=1')
+    with store.db:
+        assert power_refund.settle(store.db,1,snapshot,FIXED_NOW+1)==0
+    assert store.db.execute('SELECT count(*) FROM player_mail').fetchone()[0]==0
+
+
+def test_new_account_cannot_import_old_counter_to_claim_compensation(env):
+    store,_,_=env
+    store.login('new-after-price-fix',2,FIXED_NOW)
+    snapshot={'power_buy':{'day':DAY_START,'count':15}}
+    with store.db:
+        assert power_refund.settle(store.db,2,snapshot,FIXED_NOW)==0
+    assert store.db.execute('SELECT count(*) FROM player_mail WHERE player_id=2').fetchone()[0]==0
+    with store.db:power_refund.initialize(store.db)
+    assert not power_refund.eligible(store.db,2)
+
+
+def test_new_price_purchases_are_not_reconstructed_as_old_overcharges(env):
+    store,e,ctx=env
+    e.clock=lambda:FIXED_NOW
+    snapshot=store.get(1)['snapshot'];snapshot.update(crystal=10000,mobility={'power':0})
+    e.save_snapshot(1,snapshot)
+    for rid in range(1,16):
+        assert asyncio.run(e.fetch_mobility_power(ctx,packet({},rid,'C2L_FetchMobilityPower'))).values['result']==10
+    after=store.get(1)['snapshot']
+    assert after['power_buy']['price_version']==2
+    assert power_refund.refund_amount(store.db,1,after)==(0,{})
+    assert store.db.execute('SELECT count(*) FROM player_mail WHERE source_key LIKE "power_refund_%"').fetchone()[0]==0
+
+
+def test_first_new_purchase_preserves_old_counter_before_replacing_version(env):
+    store,e,ctx=env
+    e.clock=lambda:FIXED_NOW
+    snapshot=store.get(1)['snapshot']
+    snapshot.update(crystal=10000,mobility={'power':0},power_buy={'day':DAY_START,'count':10})
+    e.save_snapshot(1,snapshot)
+    result=asyncio.run(e.fetch_mobility_power(ctx,packet({},400,'C2L_FetchMobilityPower')))
+    assert result.values['result']==10
+    assert store.get(1)['snapshot']['crystal']==9940
+    mail=store.db.execute('SELECT attachments FROM player_mail WHERE source_key=?',(power_refund.SOURCE%1,)).fetchone()
+    assert json.loads(mail[0])=={'1237902':390}
+
+
+def test_refund_and_server_marker_roll_back_together(env):
+    import pytest
+    from x2server.player.transactions import transaction
+    store,_,_=env
+    snapshot={'power_buy':{'day':DAY_START,'count':10}}
+    with pytest.raises(RuntimeError):
+        with transaction(store.db):
+            assert power_refund.settle(store.db,1,snapshot,FIXED_NOW)==390
+            raise RuntimeError('injected failure')
+    with store.db:assert power_refund.settle(store.db,1,snapshot,FIXED_NOW)==390
+
+
+def test_large_ordinal_uses_constant_time_formula_and_rejects_unsafe_mail(env):
+    import pytest
+    from x2server.player.transactions import transaction
+    store,_,_=env
+    count=10**7
+    assert power_refund.overcharge_for(count)==sum(p-60 for p in power_refund.OLD_LADDER)+(count-20)*940
+    with pytest.raises(ValueError,match='integer limit'):
+        with transaction(store.db):
+            power_refund.settle(store.db,1,{'power_buy':{'day':DAY_START,'count':count}},FIXED_NOW)
+    exists=store.db.execute("SELECT 1 FROM sqlite_master WHERE name='system_mail_issues'").fetchone()
+    assert not exists or not store.db.execute('SELECT 1 FROM system_mail_issues WHERE player_id=1 AND kind=?',(power_refund.KIND,)).fetchone()

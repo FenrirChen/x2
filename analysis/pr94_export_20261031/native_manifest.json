@@ -1,0 +1,7 @@
+{
+  "sha256": "37f092f117c11d7e0cdae1e9ac9f7123487c97b6d91c4e7ab699d380646a1dca",
+  "methods": {
+    "PowerModule$$GetPrice": "0x15c478c",
+    "MainModule.ServerData$$.ctor": "0x13cd020"
+  }
+}

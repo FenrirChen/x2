@@ -297,13 +297,14 @@ class LoginService:
 
         134 此前按 20 档阶梯实扣 (…220/…/1000), 而购买页每档都显示 60;
         ``power_refund.settle`` 回放购买台账 (economy_events 的
-        ``power-buy:<日>:<第几次>``) 得出差额, 再用 ``player_mail.source_key`` 的
-        唯一索引保证每个角色一辈子只发一封 —— 登录与重连都可以安全地反复调用。
+        ``power-buy:<日>:<第几次>``) 得出差额, 再用服务器独立的 ``system_mail_issues`` 和邮件唯一键
+        保证每个角色只结算一次；存档替换不清除此标记 —— 登录与重连都可以安全地反复调用。
         失败只记日志, 绝不允许拦住登录。
         """
         from .power_refund import settle
         try:
-            with self.store.db:
+            from .transactions import transaction
+            with transaction(self.store.db):
                 amount = settle(self.store.db, player["id"], player["snapshot"], now)
         except Exception:  # noqa: BLE001 - a refund must never break login
             LOGGER.exception("power refund failed player=%s", player["id"])

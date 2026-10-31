@@ -6,6 +6,7 @@ import asyncio
 import json
 import logging
 import threading
+import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 from x2server.player.transactions import is_database_busy
@@ -13,6 +14,9 @@ from x2server.player.transactions import is_database_busy
 from .service import BootstrapService, HTTPResponse, RecoveredBootstrapService
 
 LOGGER = logging.getLogger("x2.bootstrap.http")
+SAVE_SEND_CHUNK_BYTES = 64 * 1024
+SAVE_SEND_IDLE_SECONDS = 30
+SAVE_SEND_TOTAL_SECONDS = 900
 MAX_REQUEST_BODY = 64 * 1024
 # /save-manager/import uploads whole .x2save containers; the cap matches the
 # save-manager validation limit instead of the bootstrap JSON body limit.
@@ -29,14 +33,43 @@ def _handler_for(
         sys_version = ""
 
         def _send(self, response: HTTPResponse) -> None:
-            self.send_response(response.status)
-            self.send_header("Content-Type", response.content_type)
-            self.send_header("Content-Length", str(len(response.body)))
-            self.send_header("Cache-Control", "no-store")
-            for name, value in response.headers:
-                self.send_header(name, value)
-            self.end_headers()
-            self.wfile.write(response.body)
+            route=self.path.split('?',1)[0]
+            large=route.startswith('/save-manager/') and len(response.body)>SAVE_SEND_CHUNK_BYTES
+            started=time.monotonic()
+            completed=0
+            try:
+                self.send_response(response.status)
+                self.send_header("Content-Type", response.content_type)
+                self.send_header("Content-Length", str(len(response.body)))
+                self.send_header("Cache-Control", "no-store")
+                for name, value in response.headers:
+                    self.send_header(name, value)
+                self.end_headers()
+                if not large:
+                    self.wfile.write(response.body)
+                    return
+                # socket.sendall's timeout covers that ENTIRE call, even while
+                # making progress. A 42MB archive over a slow link needs more
+                # than 30s; bounded chunks reset the idle allowance, not the
+                # total transfer deadline or the single-heavy-job admission.
+                body=memoryview(response.body)
+                for offset in range(0,len(body),SAVE_SEND_CHUNK_BYTES):
+                    remaining=SAVE_SEND_TOTAL_SECONDS-(time.monotonic()-started)
+                    if remaining<=0:
+                        raise TimeoutError('save response total transfer deadline')
+                    self.connection.settimeout(min(SAVE_SEND_IDLE_SECONDS,remaining))
+                    chunk=body[offset:offset+SAVE_SEND_CHUNK_BYTES]
+                    self.wfile.write(chunk)
+                    completed+=len(chunk)
+                LOGGER.info('save response sent route=%s status=%s bytes=%s elapsed=%.3fs',
+                            route,response.status,completed,time.monotonic()-started)
+            except OSError as exc:
+                self.close_connection=True
+                # Count only completed chunks: sendall may have transmitted a
+                # partial failing chunk. Never log payloads, queries or tokens.
+                LOGGER.warning('HTTP response interrupted route=%s status=%s completed_bytes=%s total_bytes=%s elapsed=%.3fs error=%s',
+                               route,response.status,completed,len(response.body),
+                               time.monotonic()-started,type(exc).__name__)
 
         def _consume_request_body(self, *, discard=False) -> HTTPResponse | None:
             """Drain a small POST body without parsing or logging its contents.

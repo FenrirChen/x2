@@ -121,9 +121,9 @@ class EconomyService:
     # 所以「领取」必须真发这一组 (原版奖励, 不做替换), 否则玩家看到列表却拿不到东西。
     FIRST_RECHARGE_GIFT = 783023
     # 购买因果 (134/137) 的成交价 —— 2026-10-31 修复: 必须与页面显示价同源。
-    # 显示价是客户端自己算的: PowerModule_GetPrice (0x015C4F3C) 读
+    # 显示价是客户端自己算的: PowerModule_GetPrice (0x015C478C) 读
     # MainModule_ServerData 的 PowerPrice / PowerTimesInterval (由
-    # L2C_ServerTableConfig 下发), 缺省值 (ServerData..ctor 0x13CD7D0) 是
+    # L2C_ServerTableConfig 下发), 缺省值 (ServerData..ctor 0x13CD020) 是
     # [60,60,60,60,60] 与 {1,2,4,6,10} → 每一档都显示 60。
     # 旧的 20 档阶梯 (20/20/40/60/80/…/220/…/1000) 与显示价不符: 第 5 次起就比
     # 显示价贵, 第 10 次 220、第 20 次 1000 —— 玩家看到的正是「写着 60 实际扣得
@@ -134,6 +134,9 @@ class EconomyService:
 
     def __init__(self, store, clock=time.time, *, resource_double_drop=False):
         self.store = store
+        from .power_refund import initialize
+        with store.db:
+            initialize(store.db)
         self.clock = clock
         # Eligibility, official resource targets and quotas are governed by
         # the same activity 71004 controller advertised in QueryActivity.
@@ -1846,16 +1849,18 @@ class EconomyService:
             price = self.POWER_BUY_PRICES[min(count, len(self.POWER_BUY_PRICES) - 1)]
             if snapshot.get("crystal", 0) < price:
                 return OutboundMessage("L2C_FetchMobilityPower", {"result": 13})
+            from .power_refund import settle
+            settle(self.store.db, player_id, snapshot, now)
             snapshot["crystal"] -= price
             mobility["power"] += self.POWER_BUY_AMOUNT
-            snapshot["power_buy"] = {"day": day_start, "count": count + 1}
+            snapshot["power_buy"] = {"day": day_start, "count": count + 1, "price_version": 2}
             self.save_snapshot(player_id, snapshot)
             # 台账: 旧阶梯没有价格日志, 补偿只能靠 economy_events 的序号回放
             # (见 player/power_refund.py); 这里补上价格, 以后核对不用再猜。
             logging.getLogger("x2.economy").info(
                 "power purchase player=%s tier=%s price=%s granted=%s power=%s",
                 player_id, count, price, self.POWER_BUY_AMOUNT, mobility["power"])
-            self._event(player_id, f"power-buy:{day_start}:{count + 1}", self.TASK_EVENT_BUY_POWER, 900, 1)
+            self._event(player_id, f"power-buy-v2:{day_start}:{count + 1}", self.TASK_EVENT_BUY_POWER, 900, 1)
         return OutboundMessage("L2C_FetchMobilityPower", {
             "result": 10,
             "rewardData": self.reward_bytes({self.POWER_BUY_ITEM: self.POWER_BUY_AMOUNT})},
