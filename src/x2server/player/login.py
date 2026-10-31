@@ -86,6 +86,7 @@ class LoginService:
             self.identity.ensure_causality_oct13_mail(player["id"], now)
             self.identity.ensure_journey_supply_mail(player["id"], now)
             self.identity.ensure_oct25_supply_mail(player["id"], now)
+            self._power_refund_mail(player, now)
         context.session.session_id = secrets.token_urlsafe(24)
         context.session.player_id = player["id"]
         result: dict[str, Any] = {"code": 10, "id": player["id"], "loginCount": player["login_count"],
@@ -278,6 +279,7 @@ class LoginService:
         extra_created = self.identity.ensure_causality_oct13_mail(player["id"], now) if self.mail else False
         journey_created = self.identity.ensure_journey_supply_mail(player["id"], now) if self.mail else False
         oct25_created = self.identity.ensure_oct25_supply_mail(player["id"], now) if self.mail else False
+        refund_created = self._power_refund_mail(player, now) if self.mail else False
         daily_granted = self.gift_packages.settle_daily(player["id"]) if self.gift_packages else False
         # Same-process reconnect keeps the authenticated transport session supplied
         # by the client; a fresh login is required after identity-service restart.
@@ -285,10 +287,30 @@ class LoginService:
             context.session.session_id = secrets.token_urlsafe(24)
         LOGGER.info("authenticated reconnect player=%s", player["id"])
         pushes = self.economy.pushes(player["id"]) if daily_granted and self.economy else ()
-        if welcome_created or daily_created or choice_created or causality_created or supply_created or extra_created or journey_created or oct25_created:
+        if welcome_created or daily_created or choice_created or causality_created or supply_created or extra_created or journey_created or oct25_created or refund_created:
             pushes += (self.mail.list_message(player["id"]),)
         return OutboundMessage("L2C_ReConnect", {"code": 10, "id": player["id"],
             "serverTime": now}, pushes=pushes)
+
+    def _power_refund_mail(self, player: dict[str, Any], now: int) -> bool:
+        """Mint the one-off 购买因果 overcharge refund (2026-10-31 修复的售后)。
+
+        134 此前按 20 档阶梯实扣 (…220/…/1000), 而购买页每档都显示 60;
+        ``power_refund.settle`` 回放购买台账 (economy_events 的
+        ``power-buy:<日>:<第几次>``) 得出差额, 再用 ``player_mail.source_key`` 的
+        唯一索引保证每个角色一辈子只发一封 —— 登录与重连都可以安全地反复调用。
+        失败只记日志, 绝不允许拦住登录。
+        """
+        from .power_refund import settle
+        try:
+            with self.store.db:
+                amount = settle(self.store.db, player["id"], player["snapshot"], now)
+        except Exception:  # noqa: BLE001 - a refund must never break login
+            LOGGER.exception("power refund failed player=%s", player["id"])
+            return False
+        if amount:
+            LOGGER.info("power refund created player=%s amount=%s", player["id"], amount)
+        return bool(amount)
 
     async def server_config(self, context: DispatchContext, packet: DecodedPacket) -> OutboundMessage:
         if context.session.player_id is None:
@@ -299,6 +321,15 @@ class LoginService:
         recovery_seconds = (self.economy.POWER_RECOVER_SECONDS if self.economy is not None
                             else EconomyService.POWER_RECOVER_SECONDS)
         pairs = [STRING_PAIR.encode({"key": "PowerBuyNum", "val": "120"}),
+                 # 购买因果页的显示价由客户端自己按这两张表算 (PowerModule_GetPrice
+                 # 0x015C4F3C; MainModule_InitServerTableData 用 String.Split(',') +
+                 # Int32.TryParse 解析)。此前一个键都没下发, 客户端就用构造缺省
+                 # [60,60,60,60,60] / {1,2,4,6,10} 显示 60, 而服务端按 20 档阶梯
+                 # 实扣 →「写着 60 实际扣得更多」。现在下发与成交价同一组数。
+                 STRING_PAIR.encode({"key": "PowerPrice",
+                                     "val": ",".join(str(p) for p in EconomyService.POWER_BUY_PRICES)}),
+                 STRING_PAIR.encode({"key": "PowerTimesInterval",
+                                     "val": ",".join(str(i) for i in EconomyService.POWER_BUY_INTERVALS)}),
                  STRING_PAIR.encode({"key": "PowerRecover", "val": str(recovery_seconds)}),
                  # Native battle admission defaults to 25*32=800, while the
                  # bag counter displays 1280. Supply the matching capacity.
