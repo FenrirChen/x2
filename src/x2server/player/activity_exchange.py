@@ -188,11 +188,18 @@ class ActivityExchange:
             return OutboundMessage(response, {'code': 13, **request})
         pushes = ()
         if name == 'C2L_BuyGoods':
-            # Refresh the owning activity module's entire stock cache, including
-            # its selected popup item, rather than only the visible shop cell.
-            period = self.activity.period(player)
-            family = 2 if period.theme['group'] == 7 else 1 if period.theme['group'] == 99 else 3
-            pushes = [OutboundMessage('L2C_ActivityShop', self.activity_listing(player, family))]
+            # 购买成功后不再补推整包 L2C_ActivityShop。客户端 ShopModule.ReceiveActivityShop
+            # (@0x17A7B10) 收完会把商品写进缓存并 FireEvent(0xb9)，CommonShopView 对 0xb9
+            # 注册的处理器是 RefreshShopData (@0x01844014)，它重建整个 LoopListView2 并
+            # MovePanelToItemIndex(GetCurrentShopIndex(), 0)，于是每买一次列表就被拉回
+            # 当前页顶部 (「每次兑换后位置重置」)。L2C_BuyGoods 回执本身已把 hasBuyTimes
+            # 写回活动商店缓存条目并触发 0x29，客户端只刷新被买的格子
+            # (CommonShopView.OnHandleBuyGoodsRes)，所以回执足够。
+            # 副作用: 活动阶段「解锁状态」不再随购买即时重绘, 要重进活动页才重算;
+            # 整包里锁着的阶段本来也照常下发 (listing(preview=True)), 解锁判定在客户端
+            # 本地按持有物计算, 因此通常无感。赛季商店与本仓库离线端 router.cpp 的
+            # C2L_BuyGoods 同样只回购买回执、不推活动商店列表。
+            pushes = []
             # 皮肤/外观货品: 客户端的外观页只按 L2C_HeroSkinAll / L2C_HeroSkinUpdate
             # 重读已拥有的形象 (见 player/appearance_shop.py 售出后的推送, 以及离线端
             # router.cpp 买皮肤后两条都推)。只回 L2C_BuyGoods 的话, 货确实进了背包,
