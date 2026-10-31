@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+- Fixed the 购买因果 (134/137) overcharge: the page prices purchases from the
+  client's own `ServerData.PowerPrice` / `PowerTimesInterval` (factory defaults
+  `[60,60,60,60,60]` and `{1,2,4,6,10}`), which this server never published, so
+  every tier displayed 60 while `POWER_BUY_PRICES` charged a 20-tier ladder
+  (20/20/40/…/220/…/1000). The price is now flat 60 and `server_config`
+  publishes the same two tables, so the displayed price equals the charge.
+- Added `player/power_refund.py`: on login/reconnect it replays the
+  `power-buy:<day>:<ordinal>` ledger entries against the old ladder and mints a
+  one-off 光辉 refund mail (`source_key = power_refund_20261031:<player_id>`),
+  so players already overcharged get the difference back exactly once.
+
 - Preserved the Phase 11 Revival client patch and controlInfo work as a Git baseline.
 - Added a hash-checked startup probe, cold-boot launcher and per-run local evidence.
 - Identified GLES version declaration as a graphics compatibility issue; enabling
