@@ -360,3 +360,32 @@ def test_unlimited_gift_has_no_cumulative_ceiling_and_replay_is_free(activity):
     with pytest.raises(UnresolvedEconomy):
         exchange.buy(1, 890, gid, 1, 'unfunded-unlimited')
     assert exchange.count(1, period, gid) == old + 2
+
+
+def test_buy_does_not_push_whole_activity_shop(activity):
+    """购买后不能再补推整包 L2C_ActivityShop, 否则商店列表会被滚回当前页顶部。
+
+    客户端 ShopModule.ReceiveActivityShop (@0x17A7B10) 收到整包后 FireEvent(0xb9);
+    CommonShopView 给 0xb9 注册的处理器是 RefreshShopData (@0x01844014), 它重建
+    LoopListView2 并 MovePanelToItemIndex(GetCurrentShopIndex(), 0), 表现为「每次
+    兑换后列表位置重置」。L2C_BuyGoods 回执已带回 hasBuyTimes 并触发 0x29 单格刷新,
+    所以回执足够; 只有皮肤类货品需要额外的 L2C_HeroSkinAll / L2C_HeroSkinUpdate。
+    """
+    store, economy, service, now = activity
+    exchange = ActivityExchange(service)
+    shop = exchange.shops[887]
+    now[0] = activity_start(next(i for i, t in enumerate(service.rotation.themes)
+                                 if t['group'] == shop['group'])) + 3600
+    period = service.period(1)
+    open_shop(service, economy, shop, period)
+    offer = next(g for g in shop['goods'] if g['itemId'] != 1203010)
+    with economy.transaction():
+        economy._grant(1, 'test:no-whole-push', {offer['currencyItemId']: 100000})
+    request = {'shopId': 887, 'goodsId': offer['goodsId'], 'buyNum': 1}
+    ctx = DispatchContext('test', 'local', SessionState('test', 'no-whole-push', player_id=1))
+    response = asyncio.run(exchange.handle(ctx, packet(request, 994, 'C2L_BuyGoods'),
+                                            'C2L_BuyGoods', request))
+    assert response.values['code'] == 10 and response.values['hasBuyTimes'] == 1
+    assert exchange.count(1, period, offer['goodsId']) == 1
+    pushed = [p.message_name for p in response.pushes]
+    assert 'L2C_ActivityShop' not in pushed, pushed
