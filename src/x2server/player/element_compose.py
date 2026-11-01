@@ -11,13 +11,16 @@ account bag never holds, and no client message reports how many were picked. So
 this service trusts the picked formula and count, records a per-run tally, and
 answers with the produced item. The tally is echoed back through
 FightDataProfile (elementExp + formulaCompose) when a mid-battle run is resumed,
-while Weekly carries cumulative counts and experience across runs and weeks.
+while Weekly carries the weekly per-formula tally and the lifetime element
+experience (see COMPOSE_LIMIT_NOTE for why the compose cap resets half-monthly
+with the approved Monday light-reward reset).
 """
 from __future__ import annotations
 
 import json
 import hashlib
 import logging
+import time
 from importlib.resources import files
 from functools import lru_cache
 
@@ -48,26 +51,45 @@ def endless_sections():
     return tuple(row['SectionID'] for row in data['sections'] if row['Type'] == 7)
 
 
-def cumulative_values(store, player_id):
-    """Lifetime confirmed compose history; the ledger is part of full saves.
+COMPOSE_LIMIT_NOTE = """Weekly limits follow the approved Beijing Monday reset.
+AnswerConfig 281048 has one-based RightAnswer=1: its first answer is week, not
+its second answer (15 days). It concerns light rewards, so it does not prove
+an official half-month recipe cap. Keep the existing Monday gameplay policy.
+Element experience and the raw per-run ledger remain lifetime."""
 
-    Include the current run exactly once. Native InitData reads allComposeTime
-    from Weekly and singleComposeTime separately from the current profile; it
-    does not add the profile count to the Weekly count again.
+
+def cumulative_values(store, player_id, now=None):
+    """Weekly recipe counts and lifetime element experience, without deleting rows.
+
+    Use a matching entry as dating evidence. EXISTS avoids multiplying the
+    tally when legacy/replayed entries share a UUID. The UUID lookup is kept
+    separate from owner checks to avoid scanning a player's large entry BLOBs.
     """
-    if not store.db.execute("SELECT 1 FROM sqlite_master WHERE name='battle_element_compose'").fetchone():
-        rows = []
-    else:
+    from .endless import week_start
+    now = int(time.time()) if now is None else int(now)
+    known = formulas()
+    lifetime_rows, period_rows = [], []
+    if store.db.execute("SELECT 1 FROM sqlite_master WHERE name='battle_element_compose'").fetchone():
         sections = endless_sections()
         slots = ','.join('?' for _ in sections)
-        rows = store.db.execute(f"""SELECT c.formula_id, SUM(c.count) FROM battle_element_compose c
+        lifetime_rows = store.db.execute(f"""SELECT c.formula_id, SUM(c.count) FROM battle_element_compose c
             JOIN economy_runs r ON r.uuid=c.run_uuid AND r.player_id=c.player_id
             WHERE c.player_id=? AND c.count BETWEEN 1 AND ? AND r.section_id IN ({slots})
             GROUP BY c.formula_id ORDER BY c.formula_id""", (player_id, MAX_WIRE_INT, *sections)).fetchall()
-    known = formulas()
-    counts = {fid: min(MAX_WIRE_INT, count) for fid, count in rows if fid in known}
-    return {'ElementExpAll': min(MAX_WIRE_INT, sum(known[fid]['exp'] * count for fid, count in counts.items())),
-            'FormulaComposeAll': [INT_PAIR.encode({'Key': fid, 'Value': count}) for fid, count in counts.items()]
+        if store.db.execute("SELECT 1 FROM sqlite_master WHERE name='battle_entries'").fetchone():
+            period_rows = store.db.execute(f"""SELECT c.formula_id, SUM(c.count)
+                FROM battle_element_compose c
+                JOIN economy_runs r ON r.uuid=c.run_uuid AND r.player_id=c.player_id
+                WHERE c.player_id=? AND c.count BETWEEN 1 AND ? AND r.section_id IN ({slots})
+                  AND EXISTS (SELECT 1 FROM (SELECT player_id,created_at
+                      FROM battle_entries WHERE uuid=c.run_uuid LIMIT -1) e
+                      WHERE e.player_id=c.player_id AND e.created_at>=? AND e.created_at<=?)
+                GROUP BY c.formula_id ORDER BY c.formula_id""",
+                (player_id, MAX_WIRE_INT, *sections, week_start(now), now)).fetchall()
+    lifetime = {fid: min(MAX_WIRE_INT, count) for fid, count in lifetime_rows if fid in known}
+    period = {fid: min(MAX_WIRE_INT, count) for fid, count in period_rows if fid in known}
+    return {'ElementExpAll': min(MAX_WIRE_INT, sum(known[fid]['exp'] * count for fid, count in lifetime.items())),
+            'FormulaComposeAll': [INT_PAIR.encode({'Key': fid, 'Value': count}) for fid, count in period.items()]
                 or [INT_PAIR.encode({'Key': 0, 'Value': 0})]}
 
 
@@ -134,15 +156,14 @@ class ElementComposeService:
             LOGGER.info("element compose without an active run formula=%s player=%s",
                         formula_id, player_id)
             return OutboundMessage("L2C_ElementCompose", {"code": REFUSED, "count": 0})
-        # Native MaxComposeNum uses numLimit - (allComposeTime - singleComposeTime).
-        # The current run is already included in Weekly, so subtract it exactly once.
+        # Native MaxComposeNum = numLimit - (allComposeTime - singleComposeTime),
+        # where allComposeTime already contains this run. A run may therefore grow
+        # until the weekly total reaches numLimit, never past it.
         if formula.get('numLimit'):
-            history = {p['Key']: p['Value'] for raw in cumulative_values(self.store, player_id)['FormulaComposeAll']
-                       if (p := INT_PAIR.decode(raw)).get('Key')}
-            current = self.store.db.execute('SELECT count FROM battle_element_compose WHERE player_id=? AND run_uuid=? AND formula_id=?',
-                                           (player_id, run_uuid, formula_id)).fetchone()
-            prior = max(0, history.get(formula_id, 0) - (current[0] if current else 0))
-            if count > max(0, formula['numLimit'] - prior):
+            used = {p['Key']: p['Value']
+                    for raw in cumulative_values(self.store, player_id, self.economy.clock())['FormulaComposeAll']
+                    if (p := INT_PAIR.decode(raw)).get('Key')}.get(formula_id, 0)
+            if used + count > formula['numLimit']:
                 return OutboundMessage('L2C_ElementCompose', {'code': REFUSED, 'count': 0})
         values = {'code': OK, 'count': count,
                   'composeItem': [INT_PAIR.encode({'Key': formula['itemId'], 'Value': count})]}

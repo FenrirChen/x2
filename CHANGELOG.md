@@ -13,6 +13,14 @@
   one-off 光辉 refund mail (`source_key = power_refund_20261031:<player_id>`),
   so players already overcharged get the difference back exactly once.
 
+
+- Element compose limits now refresh at Beijing Monday 00:00, preserving
+  lifetime element experience. PR97's half-month inference misread the native
+  one-based AnswerConfig.RightAnswer and is not used.
+- Compose limits include the current run once and reject the next unit after
+  the period cap, instead of allowing the cap to be bypassed within one run.
+- The native profile week number follows time instead of the constant 272;
+  actual reward and compose resets keep the approved Monday calendar.
 - Preserved the Phase 11 Revival client patch and controlInfo work as a Git baseline.
 - Added a hash-checked startup probe, cold-boot launcher and per-run local evidence.
 - Identified GLES version declaration as a graphics compatibility issue; enabling

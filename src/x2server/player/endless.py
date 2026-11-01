@@ -39,6 +39,23 @@ def week_start(now):
     return (days-(days+3)%7)*86400-8*3600
 
 
+# The client's own week phase (ChapterModule_OnConfirmSave, 0x16C5B10):
+#   +0xa8 = L2C_CheckFightProfile.currentWeek (proto field 7)
+#   +0xc0 = currentWeek*604800 + 18000, used by EndlessInfo_RefreshPage as the
+#           "this week ends" instant, compared against ServerTime (Unix seconds).
+# 18000 is the fixed 05:00 offset in ServerTime_GetRefreshTime, and the Unix
+# epoch is a Thursday, so the only week boundary the client can express is
+# Thursday 05:00 UTC (= Beijing Thursday 13:00). A hard-coded 272 put +0xc0 in
+# 1975, which clamped the page countdown to 0 forever and never rolled over.
+CLIENT_WEEK_SECONDS = 604800
+CLIENT_WEEK_SHIFT = 18000
+
+
+def week_number(now):
+    """currentWeek for L2C_CheckFightProfile (same phase as club.mirror_week_index)."""
+    return (int(now) - CLIENT_WEEK_SHIFT) // CLIENT_WEEK_SECONDS + 1
+
+
 def ensure_week(store,player,now):
     start=week_start(now)
     # Existing activity state is already inside the full save boundary.
@@ -72,7 +89,7 @@ def weekly_values(store,player,now):
     bonus=sum(sum(rows[t]['VomLimit'][:n]) for t,n in store.db.execute('SELECT task_id,claimed FROM endless_tasks WHERE player_id=?',(player,)) if t in rows) if ready else 0
     zero=[INT_PAIR.encode({'Key':0,'Value':0})]
     from .element_compose import cumulative_values
-    progress = cumulative_values(store, player)
+    progress = cumulative_values(store, player, now)
     return {'EndlessWeekVowOfStone':state['light'],'WeeklyRefreshTime':state['week'],
             'EndlessWeekMaxVowOfStone':bonus,'MaxWeeklyRefreshTime':state['week'],
             'EndlessWeekExp':0, **progress, 'PassMission':zero}
@@ -142,7 +159,10 @@ class EndlessService:
         if req.get('profileType') == 2:
             # Both final client seasons point to each other. Original calendar
             # is expired: compatibility keeps the final 2060101 chapter open.
-            values.update(weeklyId=2060101, currentWeek=272, sectionId=2110291, layer=0, heroIds=[])
+            # currentWeek must follow the clock: the client derives the week
+            # countdown from it (see week_number above).
+            values.update(weeklyId=2060101, currentWeek=week_number(self.economy.clock()),
+                          sectionId=2110291, layer=0, heroIds=[])
             row = self.store.db.execute('SELECT * FROM endless_profiles WHERE player_id=?', (player,)).fetchone()
             if row and self.active_run(row['run_id'], player):
                 profile = FIGHT_PROFILE.decode(row['profile'])
