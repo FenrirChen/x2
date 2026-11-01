@@ -311,3 +311,16 @@ def test_sanity_kill_events_feed_both_state_tasks(env):
         economy.dp.report_task_events(1, chapter, 'fan-b', [event(250, param1=4055, param2=4)])
     assert (progress()[650918], progress()[650919]) == (100, 100)
     assert EconomyService(store).chapter_dp(1, chapter) == 6  # 3 DP per state task
+
+
+def test_sanity_wire_rejects_cross_task_state_section_combinations(env):
+    from x2server.messages.battle import CHAPTER_TASK_EVENT
+    _,economy,_=env
+    dp=economy.dp
+    # Independent unions would accidentally accept (state=1, section=4055),
+    # although no configured objective permits that pair.
+    dp.chapters={**dp.chapters,'2010900':{'tasks':[
+        {'completeType':'E_KillMonsterInSan','completeValues1':[1],'completeValues2':[3150]},
+        {'completeType':'E_KillMonsterInSan','completeValues1':[4],'completeValues2':[4055]}]}}
+    raw=CHAPTER_TASK_EVENT.encode({'completeType':95,'param1':1,'param2':4055,'num':20})
+    assert not dp.report_task_events(1,2010900,'bad-combination',[raw])

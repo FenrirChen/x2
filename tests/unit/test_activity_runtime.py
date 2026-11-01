@@ -181,7 +181,7 @@ def test_winter_progress_and_story_protocols_use_current_period(runtime):
 
 
 @pytest.mark.parametrize('group', [7, 33, 13, 99])
-def test_purchase_refreshes_all_activity_shop_stock_caches(runtime, group):
+def test_purchase_receipt_and_requeries_keep_stock_without_rebuilding_shop(runtime, group):
     from tests.unit.test_activity_exchange import open_shop
     from x2server.messages.economy import GOODS
     _, e, ctx, rt, now = runtime
@@ -197,10 +197,19 @@ def test_purchase_refreshes_all_activity_shop_stock_caches(runtime, group):
     response = asyncio.run(rt.exchange.handle(ctx, packet(request, 991, 'C2L_BuyGoods'),
                            'C2L_BuyGoods', request))
     assert response.values['code'] == 10
-    push = next(p for p in response.pushes if p.message_name == 'L2C_ActivityShop')
-    wire = ACTIVITY_SCHEMAS['L2C_ActivityShop'].decode(ACTIVITY_SCHEMAS['L2C_ActivityShop'].encode(push.values))
-    shops = [ACTIVITY_SCHEMAS['ActivityShopGoods'].decode(raw) for raw in wire['goodsList']]
-    row = next(GOODS.decode(raw) for s in shops for raw in s['goods'] if GOODS.decode(raw)['goodsId'] == offer['goodsId'])
+    # The receipt updates the native selected-cell cache; a whole-shop push
+    # rebuilds the list and loses scroll position (PR95). Fresh popup/list queries
+    # must still see the exact sold-out quantity, across all four shop modules.
+    assert response.values['hasBuyTimes'] == offer['canBuyTimes']
+    assert not any(p.message_name == 'L2C_ActivityShop' for p in response.pushes)
+    detail_req = {'goodsId': offer['goodsId']}
+    detail = asyncio.run(rt.exchange.handle(ctx, packet(detail_req, 990, 'C2L_QueryGoodsInfo'),
+                        'C2L_QueryGoodsInfo', detail_req))
+    assert detail.values['code'] == 10
+    assert detail.values['canBuyTimes'] == detail.values['hasBuyTimes']
+    listing = rt.exchange.listing(1, shop['shopId'])
+    row = next(GOODS.decode(raw) for raw in listing['goods']
+               if GOODS.decode(raw)['goodsId'] == offer['goodsId'])
     assert row['canBuyTimes'] - row['hasBuyTimes'] == 0
     rejected = asyncio.run(rt.exchange.handle(ctx, packet(request, 992, 'C2L_BuyGoods'),
                            'C2L_BuyGoods', request))

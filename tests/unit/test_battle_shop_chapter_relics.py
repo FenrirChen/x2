@@ -163,3 +163,11 @@ def test_old_shop_visit_cannot_buy_in_new_run(env):
         {'itemID':item,'itemNum':999999,'sectionId':SECTION},name='C2L_BuyInsideBattleShopItems')))
     assert result.values['result'] == 13
     assert store.db.execute('SELECT COUNT(*) FROM battle_shop_purchases').fetchone()[0] == before
+
+
+def test_default_floor_alias_does_not_offer_a_free_second_roll(env):
+    store,economy,_=env
+    service=BattleShopService(store,economy)
+    floor=service.resolve_floor(SHOP,0)[0]
+    assert service.stock(SHOP,0,'same-run',2010900)==service.stock(SHOP,floor,'same-run',2010900)
+    assert service.stock(SHOP,-1,'same-run',2010900) is None

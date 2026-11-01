@@ -136,7 +136,7 @@ class BattleShopService:
         earlier row rather than answering nothing.
         """
         shop = self.shops.get(str(shop_id))
-        if not shop:
+        if not shop or type(level) is not int or level < 0:
             return None
         floors = {int(key): value for key, value in shop["floors"].items()}
         if not floors:
@@ -213,7 +213,10 @@ class BattleShopService:
             # (SectionTable 2110900 DroopLimit2 lists 20 floors), so keying on the
             # row made every floor past it re-serve one identical stock (tester
             # report 2026-11-01: "全是固定的那几个").
-            roll = random.Random(f"{seed_key}:{shop_id}:{level}:{slot['slot']}")
+            # Zero is the legacy/default request for the first configured floor,
+            # not a second random roll for that same floor.
+            seed_level = floor if level == 0 else level
+            roll = random.Random(f"{seed_key}:{shop_id}:{seed_level}:{slot['slot']}")
             pick = roll.choices(pool, weights=weights, k=1)[0] if weights else roll.choice(pool)
             offers.append({
                 "itemId": pick["itemId"],

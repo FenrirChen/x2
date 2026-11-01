@@ -136,6 +136,22 @@ def test_world_channel_achievement_is_complete_and_claimable(env):
     answer = call(env, 'C2L_AchvReward', {'achvId': 660001})
     assert answer.values['code'] == 10
     assert env[1].achievements.states(1)[660001] == (1, 1)
+    store, economy, ctx = env
+    snapshot = store.get(1)['snapshot']
+    assert call(env, 'C2L_AchvReward', {'achvId': 660001}).values == answer.values
+    assert call(env, 'C2L_AchvReward', {'achvId': 660001}, 2).values['code'] == 13
+    reopened = PlayerStore(store.path)
+    try:
+        restored = EconomyService(reopened)
+        assert restored.achievements.states(1)[660001] == (1, 1)
+        assert call((reopened, restored, ctx), 'C2L_AchvReward',
+                    {'achvId': 660001}, 3).values['code'] == 13
+        assert reopened.get(1)['snapshot'] == snapshot
+        assert reopened.db.execute(
+            "SELECT COUNT(*) FROM economy_grants WHERE source LIKE 'achievement:660001:%'"
+        ).fetchone()[0] == 1
+    finally:
+        reopened.close()
 
 
 def test_reward_failure_rolls_back_claim_and_receipt(env, monkeypatch):

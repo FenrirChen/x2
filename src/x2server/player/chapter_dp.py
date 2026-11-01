@@ -166,13 +166,13 @@ class ChapterDP:
         the in-battle DP page showed the real count.
         """
         from x2server.messages.battle import CHAPTER_TASK_EVENT
-        allowed, san_states, san_sections = {}, set(), set()
+        allowed, san_pairs = {}, set()
         for task in self.chapters.get(str(chapter), {}).get('tasks', []):
             wire_kind = {'E_GetMoneyPer': 39, 'E_GetItemID': 35,
                          'E_KillMonsterInSan': 95}.get(task.get('completeType'))
             if wire_kind == 95:
-                san_states.update(task['completeValues1'])
-                san_sections.update(task['completeValues2'])
+                san_pairs.update((state, section) for state in task['completeValues1']
+                                 for section in task['completeValues2'])
             elif wire_kind is not None:
                 for subject in task['completeValues1']:
                     for scope in task['completeValues2']:
@@ -187,9 +187,9 @@ class ChapterDP:
             if event.get('completeType') == 95:
                 # The two id spaces never overlap (states are small ids such as
                 # 1/4/6/10, sections are 3150+), so either parameter order resolves.
-                if first in san_states and second in san_sections:
+                if (first, second) in san_pairs:
                     state, section = first, second
-                elif second in san_states and first in san_sections:
+                elif (second, first) in san_pairs:
                     state, section = second, first
                 else:
                     continue
