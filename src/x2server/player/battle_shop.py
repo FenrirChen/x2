@@ -164,6 +164,9 @@ class BattleShopService:
         The seed mixes the player and the current run uuid so every battle rolls a
         fresh stock, while re-opening the same shop inside that run keeps the same
         offers (the free re-roll the previous seed-only version permitted is gone).
+        The battle's own ``level`` is part of the seed too, so floors past the last
+        MazeShop row (the endless chapters run deeper than the 10-floor table) each
+        roll their own stock instead of repeating the fallback row's.
 
         ``chapter`` boosts that chapter's recommended relics inside each 圣遗物
         slot, so the stage's own relics are actually offered while the rest of the
@@ -203,9 +206,14 @@ class BattleShopService:
                 hit = [item["itemId"] in recommended for item in pool]
                 if any(hit):
                     weights = [CHAPTER_RELIC_WEIGHT if boost else 1 for boost in hit]
-            # Deterministic per (player, run, shop, floor, slot): re-opening the same
-            # shop in the same battle must show the same stock.
-            roll = random.Random(f"{seed_key}:{shop_id}:{floor}:{slot['slot']}")
+            # Deterministic per (player, run, shop, level, slot): re-opening the same
+            # shop on the same floor must show the same stock. The seed uses the
+            # *requested* level, not the resolved table row: MazeShop stops at floor
+            # 10 (400802 at 15) while an endless chapter like 愚人船 runs deeper
+            # (SectionTable 2110900 DroopLimit2 lists 20 floors), so keying on the
+            # row made every floor past it re-serve one identical stock (tester
+            # report 2026-11-01: "全是固定的那几个").
+            roll = random.Random(f"{seed_key}:{shop_id}:{level}:{slot['slot']}")
             pick = roll.choices(pool, weights=weights, k=1)[0] if weights else roll.choice(pool)
             offers.append({
                 "itemId": pick["itemId"],

@@ -65,6 +65,25 @@ def test_relic_slots_prefer_the_chapters_own_relics(env):
     assert 1004801 in special_rolls  # 临时雇员
 
 
+def test_floors_past_the_shop_table_roll_distinct_stock(env):
+    """愚人船 runs 20 floors but MazeShop stops at floor 10.
+
+    The seed used to key on the resolved table row, so floors 11-20 all resolved
+    to row 10 and re-served its one stock - "全是固定的那几个" (tester report
+    2026-11-01).
+    """
+    store, economy, _ = env
+    service = BattleShopService(store, economy)
+    assert service.resolve_floor(SHOP, 11)[0] == 10
+    assert service.resolve_floor(SHOP, 20)[0] == 10
+    offers = {level: tuple(o["itemId"] for o in service.stock(SHOP, level, "1:run-deep", 2010900))
+              for level in range(11, 21)}
+    assert len(set(offers.values())) == 10
+    # Still stable when the same floor is reopened inside that run.
+    assert service.stock(SHOP, 11, "1:run-deep", 2010900) == service.stock(
+        SHOP, 11, "1:run-deep", 2010900)
+
+
 def test_fool_ship_shop_rolls_the_sanity_relics(env):
     """Tester report 2026-11-01: 愚人船 (2010900) never offered the 理智 relics.
 
