@@ -4,7 +4,9 @@ Tester report 2026-10-04: 黑暗金字塔 (chapter 2010500) never showed its own
 notably 1004635 溜了溜了溜了. The offer used to be seeded with shop+floor only, so
 every player saw the same six items forever, and the 圣遗物 slots were a lottery
 against the whole id block. These cases pin both halves of the fix: the per-run seed
-and the chapter-relic narrowing.
+and the chapter-relic bias - which is a weight boost, not an exclusive pool, because
+tester report 2026-11-01 found 愚人船 could never roll its 理智 relics (named by no
+chapter's RelicRecommend) once the pool was replaced by the chapter set.
 """
 import asyncio
 
@@ -13,6 +15,7 @@ from tests.unit.test_economy import env
 from x2server.player.battle_shop import BattleShopService
 
 SHOP, FLOOR, SECTION = 400201, 4, 2110401  # dark pyramid, a section of chapter 2010500
+SANITY = set(range(1004765, 1004782))      # 理智 relics, all of them relic_big
 
 
 def test_weekly_shop_uses_its_four_recovered_slots_and_stable_stock(env):
@@ -42,21 +45,60 @@ def test_relic_slots_prefer_the_chapters_own_relics(env):
     big_slot = {1004601, 1004631, 1004634, 1004635, 1004639, 1004640, 1004641}
     special_slot = {item["itemId"] for item in
                     next(slot for slot in service.slots if slot["slot"] == 6)["items"]}
-    seen = set()
-    for run in range(200):
+    big_rolls, special_rolls = [], []
+    for run in range(400):
         offers = service.stock(SHOP, FLOOR, f"1:{run}", 2010500)
         assert offers is not None
-        # offers[3] = relic_mid_plus: disjoint from this chapter -> full pool kept.
+        # offers[3] = relic_mid_plus: disjoint from this chapter -> plain uniform roll.
         assert offers[3]["itemId"] not in recommended
-        assert offers[4]["itemId"] in big_slot
-        # offers[5] = relic_special: not chapter-narrowed, so the 召唤/精灵 line is
-        # rollable again (tester report 2026-10-25, 1004801 临时雇员).
+        # offers[5] = relic_special: no chapter bias, so the 召唤/精灵 line stays
+        # rollable (tester report 2026-10-25, 1004801 临时雇员).
         assert offers[5]["itemId"] in special_slot
-        seen.add(offers[4]["itemId"])
-    assert 1004635 in seen  # 溜了溜了溜了 is now reachable
-    special_seen = {service.stock(SHOP, FLOOR, f"special:{run}", 2010500)[5]["itemId"]
-                    for run in range(2000)}
-    assert 1004801 in special_seen  # 临时雇员
+        big_rolls.append(offers[4]["itemId"])
+        special_rolls.append(offers[5]["itemId"])
+    # The stage's own big relics still dominate the slot (uniform would be ~5%) ...
+    assert sum(item in big_slot for item in big_rolls) > len(big_rolls) / 5
+    assert 1004635 in big_rolls  # 溜了溜了溜了 is reachable
+    # ... but the rest of the block is no longer unreachable, as it was while the
+    # chapter set replaced the pool.
+    assert len(set(big_rolls) - big_slot) > 20
+    assert 1004801 in special_rolls  # 临时雇员
+
+
+def test_floors_past_the_shop_table_roll_distinct_stock(env):
+    """愚人船 runs 20 floors but MazeShop stops at floor 10.
+
+    The seed used to key on the resolved table row, so floors 11-20 all resolved
+    to row 10 and re-served its one stock - "全是固定的那几个" (tester report
+    2026-11-01).
+    """
+    store, economy, _ = env
+    service = BattleShopService(store, economy)
+    assert service.resolve_floor(SHOP, 11)[0] == 10
+    assert service.resolve_floor(SHOP, 20)[0] == 10
+    offers = {level: tuple(o["itemId"] for o in service.stock(SHOP, level, "1:run-deep", 2010900))
+              for level in range(11, 21)}
+    assert len(set(offers.values())) == 10
+    # Still stable when the same floor is reopened inside that run.
+    assert service.stock(SHOP, 11, "1:run-deep", 2010900) == service.stock(
+        SHOP, 11, "1:run-deep", 2010900)
+
+
+def test_fool_ship_shop_rolls_the_sanity_relics(env):
+    """Tester report 2026-11-01: 愚人船 (2010900) never offered the 理智 relics.
+
+    No chapter's RelicRecommend names 1004765-1004781 and the shop used to narrow
+    its relic slots to the chapter set, so that whole line - 17 of the 144 entries
+    in ``relic_big`` - was unreachable everywhere, not just on the 愚人船.
+    """
+    store, economy, _ = env
+    service = BattleShopService(store, economy)
+    assert service.chapter_for_section(2110900) == 2010900
+    rolls = [service.stock(SHOP, FLOOR, f"1:{run}", 2010900)[4]["itemId"]
+             for run in range(400)]
+    assert SANITY & set(rolls)
+    # The chapter bias survives the weight change.
+    assert sum(item in service.relic_chapters[2010900] for item in rolls) > len(rolls) / 5
 
 
 def test_chapter_for_section_resolves_the_dark_pyramid(env):

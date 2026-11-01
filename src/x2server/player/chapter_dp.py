@@ -157,24 +157,51 @@ class ChapterDP:
         Item pickups such as arcade big coins are consumed in-stage and are not
         relicList entries or persistent bag items. Credit their explicit type-35
         event; never infer pickups from the generated candidate drop pool.
+
+        Type 95 (E_KillMonsterInSan, 愚人船/第十一章 650918/650919) is the third wire
+        kind. The client counts kills per (理智/疯狂 state, section), so its two
+        parameters are a state and a section rather than the task's subject/scope
+        pair; they are stored as subject=section, scope=state, the shape ``refresh``
+        totals san_kill with. Dropping these rows left the chapter page at 0 while
+        the in-battle DP page showed the real count.
         """
         from x2server.messages.battle import CHAPTER_TASK_EVENT
-        allowed = {}
+        allowed, san_states, san_sections = {}, set(), set()
         for task in self.chapters.get(str(chapter), {}).get('tasks', []):
-            wire_kind = {'E_GetMoneyPer': 39, 'E_GetItemID': 35}.get(task.get('completeType'))
-            if wire_kind is not None:
+            wire_kind = {'E_GetMoneyPer': 39, 'E_GetItemID': 35,
+                         'E_KillMonsterInSan': 95}.get(task.get('completeType'))
+            if wire_kind == 95:
+                san_states.update(task['completeValues1'])
+                san_sections.update(task['completeValues2'])
+            elif wire_kind is not None:
                 for subject in task['completeValues1']:
                     for scope in task['completeValues2']:
                         allowed[wire_kind, subject, scope] = 'money' if wire_kind == 39 else 'item'
         changed = False
         for raw in events[:512]:
             event = CHAPTER_TASK_EVENT.decode(raw)
-            kind = allowed.get((event.get('completeType'), event.get('param1'), event.get('param2', 0)))
-            if not kind or not 0 < event.get('num', 0) <= 10**7:
+            num = event.get('num', 0)
+            if not 0 < num <= 10**7:
+                continue
+            first, second = event.get('param1', 0), event.get('param2', 0)
+            if event.get('completeType') == 95:
+                # The two id spaces never overlap (states are small ids such as
+                # 1/4/6/10, sections are 3150+), so either parameter order resolves.
+                if first in san_states and second in san_sections:
+                    state, section = first, second
+                elif second in san_states and first in san_sections:
+                    state, section = second, first
+                else:
+                    continue
+                self.observe(player, chapter, run, 'san_kill', section, num, state)
+                changed = True
+                continue
+            kind = allowed.get((event.get('completeType'), first, second))
+            if not kind:
                 continue
             # Same run/source as 264: MAX prevents retries, later smaller tallies
             # and overlapping relic/settlement observations from double counting.
-            self.observe(player, chapter, run, kind, event['param1'], event['num'])
+            self.observe(player, chapter, run, kind, first, num)
             changed = True
         if changed:
             self.refresh(player, chapter)

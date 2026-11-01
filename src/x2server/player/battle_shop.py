@@ -39,14 +39,19 @@ never showed up in its shop. Two things were wrong:
   player and the run uuid (``data/economy_runs``), so each battle rolls its own
   stock while re-opening a shop inside that battle stays stable.
 * even a per-run roll is a lottery against the full 圣遗物 block. The relic slots
-  are therefore narrowed first to the current chapter's recommended relics
-  (``data/relic_recommend.json``, built from client table/RelicRecommend) when that
-  intersection is non-empty, which is what makes the stage's own relics appear.
-* the 260-棱镜 special slot (``relic_special``, 1004800-1004969) is excluded from
-  that narrowing (tester report 2026-10-25): RelicRecommend names only 8 of its 164
-  entries for 黑暗金字塔, so narrowing it hid 1004801 临时雇员 and the whole 召唤/
-  精灵 line, which the original shop rolled from the full block. Chapter bias stays
-  on the three cheaper relic slots.
+  therefore weight the current chapter's recommended relics
+  (``data/relic_recommend.json``, built from client table/RelicRecommend) above
+  the rest of the block, which is what makes the stage's own relics appear without
+  hiding everything else.
+* Tester report 2026-11-01 (愚人船 2010900): the 理智 relics (1004765-1004781,
+  ``relic_big``) are named by *no* chapter's RelicRecommend, so the earlier hard
+  narrowing left them - and 105 of the block's other 144 entries - permanently
+  unreachable. The chapter set is now a weight boost, never an exclusive pool.
+* the 260-棱镜 special slot (``relic_special``, 1004800-1004969) keeps no bias at
+  all (tester report 2026-10-25): RelicRecommend names only 8 of its 164 entries
+  for 黑暗金字塔, so narrowing it hid 1004801 临时雇员 and the whole 召唤/精灵
+  line, which the original shop rolled from the full block. Chapter bias stays on
+  the three cheaper relic slots.
 
 Money handling: the in-stage currency is earned and spent *inside* the battle, and
 the client never reports the amount to the server (there is no message for it in
@@ -75,6 +80,12 @@ OK, REFUSED = 10, 13
 # In-stage stock is offered again on every re-open (it is deterministic per
 # player+run+shop+floor), so no purchase cap is invented. See the module docstring.
 UNLIMITED = 999999
+
+# How much likelier a chapter's own relic is than any other entry of the same
+# rarity tier. Weighting (rather than narrowing) keeps the rest of the block -
+# including the 理智 relics no RelicRecommend row names - rollable while the
+# stage's own relics still dominate the slot.
+CHAPTER_RELIC_WEIGHT = 8
 
 
 class BattleShopService:
@@ -153,10 +164,14 @@ class BattleShopService:
         The seed mixes the player and the current run uuid so every battle rolls a
         fresh stock, while re-opening the same shop inside that run keeps the same
         offers (the free re-roll the previous seed-only version permitted is gone).
+        The battle's own ``level`` is part of the seed too, so floors past the last
+        MazeShop row (the endless chapters run deeper than the 10-floor table) each
+        roll their own stock instead of repeating the fallback row's.
 
-        ``chapter`` narrows each 圣遗物 slot to that chapter's recommended relics
-        when it has any, so the stage's own relics are actually offered; a slot
-        whose rarity tier is disjoint from the recommendation keeps its full pool.
+        ``chapter`` boosts that chapter's recommended relics inside each 圣遗物
+        slot, so the stage's own relics are actually offered while the rest of the
+        block - the 理智 relics included - stays rollable; a slot whose rarity tier
+        is disjoint from the recommendation keeps its plain uniform roll.
 
         A shop that names ``slotSets`` replaces the six slots with its own, because
         元素之章 sells neither the generic consumables nor the relics those slots
@@ -181,13 +196,25 @@ class BattleShopService:
             recommended = (self.relic_chapters.get(chapter)
                            if family.startswith("relic") and family != "relic_special"
                            else None)
+            # The chapter's own relics get a weight boost, never an exclusive pool:
+            # RelicRecommend names only ~22 of each block, and the 理智 block
+            # (1004765-1004781) is named by no chapter at all, so replacing the pool
+            # made them unreachable for 愚人船 and every other stage
+            # (tester report 2026-11-01).
+            weights = None
             if recommended:
-                narrowed = [item for item in pool if item["itemId"] in recommended]
-                if narrowed:
-                    pool = narrowed
-            # Deterministic per (player, run, shop, floor, slot): re-opening the same
-            # shop in the same battle must show the same stock.
-            pick = random.Random(f"{seed_key}:{shop_id}:{floor}:{slot['slot']}").choice(pool)
+                hit = [item["itemId"] in recommended for item in pool]
+                if any(hit):
+                    weights = [CHAPTER_RELIC_WEIGHT if boost else 1 for boost in hit]
+            # Deterministic per (player, run, shop, level, slot): re-opening the same
+            # shop on the same floor must show the same stock. The seed uses the
+            # *requested* level, not the resolved table row: MazeShop stops at floor
+            # 10 (400802 at 15) while an endless chapter like 愚人船 runs deeper
+            # (SectionTable 2110900 DroopLimit2 lists 20 floors), so keying on the
+            # row made every floor past it re-serve one identical stock (tester
+            # report 2026-11-01: "全是固定的那几个").
+            roll = random.Random(f"{seed_key}:{shop_id}:{level}:{slot['slot']}")
+            pick = roll.choices(pool, weights=weights, k=1)[0] if weights else roll.choice(pool)
             offers.append({
                 "itemId": pick["itemId"],
                 # 元素之章 sells a crystal by the stack (x2, or x6 with the whole
