@@ -89,6 +89,10 @@ def export():
             rule = {'kind': 'event', 'event': 19}
         elif desc == '累计赠送神格礼物达到 {0} 次':
             rule = {'kind': 'event', 'event': 18}
+        elif desc == '在世界频道发言 {0} 次':
+            # Chat is loopback-only here and delivers no world-channel messages,
+            # so this row has no counter source; mark it complete instead.
+            rule = {'kind': 'completed'}
         elif match := re.fullmatch(r'拥有 \d+ 颗(\d+)★普通宝石', desc):
             rule = {'kind': 'item_count', 'ids': [r['JewelID'] for r in data['JewelBase']
                 if r['StarLevel'] == int(match[1]) and '★' in item_names.get(r['JewelID'], '')]}

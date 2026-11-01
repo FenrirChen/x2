@@ -124,8 +124,18 @@ def test_login_days_unique_and_unknown_conditions_cannot_claim(env):
     economy.clock = lambda: 1790817334 + 86400
     economy.login_event(1)
     assert economy.achievements.states(1)[662000][0] == 2
-    assert call(env, 'C2L_AchvReward', {'achvId': 660001}).values['code'] == 13
+    assert call(env, 'C2L_AchvReward', {'achvId': 660030}).values['code'] == 13
     assert call(env, 'C2L_AchvReward', {'achvId': 123}).values['code'] == 13
+
+
+def test_world_channel_achievement_is_complete_and_claimable(env):
+    states = env[1].achievements.states(1)
+    # The catalog marks the loopback world-channel row complete, so it reaches
+    # full progress without any chat counter or client-supplied progress.
+    assert states[660001] == (1, 0)
+    answer = call(env, 'C2L_AchvReward', {'achvId': 660001})
+    assert answer.values['code'] == 10
+    assert env[1].achievements.states(1)[660001] == (1, 1)
 
 
 def test_reward_failure_rolls_back_claim_and_receipt(env, monkeypatch):
@@ -253,7 +263,9 @@ def test_client_recount_is_only_a_refresh_hint(env):
         'extras': [99999999], 'extra': 99999999})
     assert answer.values == {'code': 10}
     assert [p.message_name for p in answer.pushes] == ['L2C_AchvUpdate']
-    assert env[1].achievements.states(1)[660001] == (0, 0)
+    # 660001 is complete from the catalog alone; the recount neither advances nor
+    # claims it.
+    assert env[1].achievements.states(1)[660001] == (1, 0)
     assert env[0].db.execute("SELECT COUNT(*) FROM economy_grants WHERE source LIKE 'achievement:%'").fetchone()[0] == 0
 
 
