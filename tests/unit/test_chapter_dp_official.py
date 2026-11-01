@@ -270,3 +270,44 @@ def test_arcade_big_coin_pickups_accumulate_once_per_successful_run(env):
     assert economy.chapter_dp(1,2010700)==2
     assert EconomyService(store).chapter_dp(1,2010700)==2
     assert store.db.execute('SELECT quantity FROM inventory WHERE item_id=1107003').fetchone() is None
+
+
+def test_sanity_kill_events_feed_both_state_tasks(env):
+    """愚人船 (2010900) 650918/650919 count kills per 理智/疯狂 state.
+
+    Tester report 2026-11-01: the in-battle DP page showed 83/100 while the same
+    objective stayed at 0 on the chapter page, because the type-95 rows from
+    ChapterAchievement.GetDPDatas were dropped by the money/item whitelist.
+    """
+    from x2server.messages.battle import CHAPTER_TASK_EVENT
+    from x2server.player.economy import EconomyService
+    store, economy, _ = env
+    chapter = 2010900
+    def event(count, **fields):
+        row = dict(completeType=95, param1=1, param2=3150, num=count)  # 理智, section 3150
+        row.update(fields)
+        return CHAPTER_TASK_EVENT.encode(row)
+    def progress():
+        return dict(store.db.execute(
+            'SELECT task_id,progress FROM chapter_objectives WHERE player_id=1 AND chapter_id=?',
+            (chapter,)))
+    with economy.transaction():
+        economy.dp.report_task_events(1, chapter, 'san-a', [event(83)])
+    assert progress()[650918] == 83
+    # 疯狂 kills (state 4) land on 650919; the section/state order resolves either way.
+    with economy.transaction():
+        economy.dp.report_task_events(1, chapter, 'fan-a', [event(40, param1=3155, param2=4)])
+    assert progress()[650919] == 40
+    # Unknown state/section/type rows are ignored, and a smaller retry cannot lower
+    # the per-run mark.
+    with economy.transaction():
+        for change in ({'param1': 999}, {'param2': 999}, {'completeType': 38}, {'num': 0}):
+            assert not economy.dp.report_task_events(1, chapter, 'bad', [event(83, **change)])
+        economy.dp.report_task_events(1, chapter, 'san-a', [event(60)])
+    assert progress()[650918] == 83
+    assert not economy.dp.report_task_events(1, 2010100, 'other', [event(83)])
+    with economy.transaction():
+        economy.dp.report_task_events(1, chapter, 'san-b', [event(250, param2=3155)])
+        economy.dp.report_task_events(1, chapter, 'fan-b', [event(250, param1=4055, param2=4)])
+    assert (progress()[650918], progress()[650919]) == (100, 100)
+    assert EconomyService(store).chapter_dp(1, chapter) == 6  # 3 DP per state task
