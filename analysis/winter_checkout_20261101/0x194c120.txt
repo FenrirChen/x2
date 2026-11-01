@@ -1,0 +1,225 @@
+OsirisActivityModule$$OnHandleActivitySync 0x194c120
+194c120 stp x28, x27, [sp, #-0x60]!
+194c124 stp x26, x25, [sp, #0x10]
+194c128 stp x24, x23, [sp, #0x20]
+194c12c stp x22, x21, [sp, #0x30]
+194c130 stp x20, x19, [sp, #0x40]
+194c134 stp x29, x30, [sp, #0x50]
+194c138 add x29, sp, #0x50
+194c13c sub sp, sp, #0x20
+194c140 adrp x19, #0x5577000
+194c144 ldrb w8, [x19, #0xc6f]
+194c148 mov x20, x1
+194c14c str x0, [sp, #0x18]
+194c150 tbnz w8, #0, #0x194c16c
+194c154 adrp x8, #0x51da000
+194c158 ldr x8, [x8, #0xd0]
+194c15c ldr w0, [x8]
+194c160 bl #0x3f2aed0 ; 
+194c164 mov w8, #1
+194c168 strb w8, [x19, #0xc6f]
+194c16c cbz x20, #0x194c480
+194c170 adrp x26, #0x5300000
+194c174 ldr x26, [x26, #0xfa8]
+194c178 mov x0, x20
+194c17c ldr x1, [x26]
+194c180 bl #0x3d473f8 ; System.Collections.Generic.List<int>$$get_Count
+194c184 cmp w0, #1
+194c188 b.lt #0x194c480
+194c18c adrp x8, #0x51ed000
+194c190 ldr x8, [x8, #0xb60]
+194c194 ldr x0, [x8]
+194c198 ldrb w8, [x0, #0x10a]
+194c19c tbz w8, #0, #0x194c1ac
+194c1a0 ldr w8, [x0, #0xbc]
+194c1a4 cbnz w8, #0x194c1ac
+194c1a8 bl #0x3f3f378 ; 
+194c1ac adrp x8, #0x51d9000
+194c1b0 ldr x8, [x8, #0x618]
+194c1b4 mov x0, xzr
+194c1b8 ldr x1, [x8]
+194c1bc bl #0x2feb968 ; Foundation.Module.ServiceModule<ModuleManager>$$get_Instance
+194c1c0 mov x21, x0
+194c1c4 cbnz x21, #0x194c1cc
+194c1c8 bl #0x3f564f0 ; 
+194c1cc adrp x8, #0x5252000
+194c1d0 ldr x8, [x8, #0xae0]
+194c1d4 mov x0, x21
+194c1d8 ldr x1, [x8]
+194c1dc bl #0x1ce72d4 ; Foundation.Module.ModuleManager$$GetModule<RelicBarModule>
+194c1e0 ldr x1, [x26]
+194c1e4 mov x21, x0
+194c1e8 mov x0, x20
+194c1ec bl #0x3d473f8 ; System.Collections.Generic.List<int>$$get_Count
+194c1f0 cmp w0, #1
+194c1f4 b.lt #0x194c480
+194c1f8 adrp x27, #0x52e6000
+194c1fc adrp x28, #0x525d000
+194c200 ldr x27, [x27, #0x7b0]
+194c204 ldr x28, [x28, #0xb38]
+194c208 mov w19, wzr
+194c20c mov w22, wzr
+194c210 ldr x2, [x27]
+194c214 mov x0, x20
+194c218 mov w1, w22
+194c21c bl #0x3d47400 ; System.Collections.Generic.List<int>$$get_Item
+194c220 mov w23, w0
+194c224 cbnz x21, #0x194c22c
+194c228 bl #0x3f564f0 ; 
+194c22c mov w2, wzr
+194c230 mov x3, xzr
+194c234 mov x0, x21
+194c238 mov w1, w23
+194c23c bl #0x133b778 ; ActivityNoticeModule$$CheckActivityServerOpen
+194c240 ldr x8, [x28]
+194c244 mov w24, w0
+194c248 ldrb w9, [x8, #0x10a]
+194c24c tbz w9, #0, #0x194c260
+194c250 ldr w9, [x8, #0xbc]
+194c254 cbnz w9, #0x194c260
+194c258 mov x0, x8
+194c25c bl #0x3f3f378 ; 
+194c260 mov x0, xzr
+194c264 mov x1, xzr
+194c268 bl #0x17b6608 ; ActivityRealManager$$get_Instance
+194c26c mov x25, x0
+194c270 cbnz x25, #0x194c278
+194c274 bl #0x3f564f0 ; 
+194c278 mov x2, xzr
+194c27c mov x0, x25
+194c280 mov w1, w23
+194c284 bl #0x17b68d8 ; ActivityRealManager$$GetItem
+194c288 mov x25, x0
+194c28c cbz x25, #0x194c420
+194c290 ldr w8, [x25, #0x1c]
+194c294 cmp w8, #0xd
+194c298 b.ne #0x194c420
+194c29c tbz w24, #0, #0x194c300
+194c2a0 cbnz x21, #0x194c2a8
+194c2a4 bl #0x3f564f0 ; 
+194c2a8 mov w2, wzr
+194c2ac mov x3, xzr
+194c2b0 mov x0, x21
+194c2b4 mov w1, w23
+194c2b8 bl #0x133378c ; ActivityNoticeModule$$CheckActivityOpen
+194c2bc tbz w0, #0, #0x194c420
+194c2c0 ldr w8, [x25, #0x18]
+194c2c4 cmp w8, #0x19
+194c2c8 b.le #0x194c330
+194c2cc mov w19, #1
+194c2d0 cmp w8, #0x2b
+194c2d4 b.eq #0x194c3d4
+194c2d8 cmp w8, #0x32
+194c2dc b.ne #0x194c420
+194c2e0 cbz x21, #0x194c3ec
+194c2e4 mov x1, xzr
+194c2e8 mov x0, x21
+194c2ec bl #0x1342bb0 ; ActivityNoticeModule$$SendActivityTowerPassive
+194c2f0 mov x1, xzr
+194c2f4 mov x0, x21
+194c2f8 bl #0x13422b0 ; ActivityNoticeModule$$SendQueryActivityTower
+194c2fc b #0x194c410 ; 
+194c300 ldr w8, [x25, #0x18]
+194c304 cmp w8, #0x2b
+194c308 b.eq #0x194c324
+194c30c cmp w8, #0x19
+194c310 b.ne #0x194c420
+194c314 ldr x0, [sp, #0x18]
+194c318 strb wzr, [x0, #0x12]
+194c31c bl #0x194c628 ; OsirisActivityModule$$RefreshReviewBadge
+194c320 b #0x194c420 ; 
+194c324 ldr x8, [sp, #0x18]
+194c328 strb wzr, [x8, #0x11]
+194c32c b #0x194c420 ; 
+194c330 cmp w8, #0x18
+194c334 b.eq #0x194c3e4
+194c338 cmp w8, #0x19
+194c33c b.ne #0x194c41c
+194c340 bl #0x194c548 ; OsirisActivityModule$$QueryReviewData
+194c344 ldr x8, [sp, #0x18]
+194c348 adrp x19, #0x51d9000
+194c34c str w23, [x8, #0x20]
+194c350 adrp x8, #0x51ed000
+194c354 ldr x8, [x8, #0xb60]
+194c358 ldr x0, [x8]
+194c35c ldrb w8, [x0, #0x10a]
+194c360 ldr x19, [x19, #0x618]
+194c364 tbz w8, #0, #0x194c374
+194c368 ldr w8, [x0, #0xbc]
+194c36c cbnz w8, #0x194c374
+194c370 bl #0x3f3f378 ; 
+194c374 ldr x1, [x19]
+194c378 mov x0, xzr
+194c37c bl #0x2feb968 ; Foundation.Module.ServiceModule<ModuleManager>$$get_Instance
+194c380 mov x23, x0
+194c384 cbnz x23, #0x194c38c
+194c388 bl #0x3f564f0 ; 
+194c38c adrp x8, #0x5279000
+194c390 ldr x8, [x8, #0x8b8]
+194c394 mov x0, x23
+194c398 ldr x1, [x8]
+194c39c bl #0x1ce72d4 ; Foundation.Module.ModuleManager$$GetModule<RelicBarModule>
+194c3a0 mov x23, x0
+194c3a4 cbnz x23, #0x194c3ac
+194c3a8 bl #0x3f564f0 ; 
+194c3ac mov w2, wzr
+194c3b0 mov w3, wzr
+194c3b4 mov w1, #9
+194c3b8 mov x0, x23
+194c3bc mov x4, xzr
+194c3c0 bl #0x13c4508 ; MainModule$$SendGameTask
+194c3c4 ldr x8, [sp, #0x18]
+194c3c8 mov w19, #1
+194c3cc strb w19, [x8, #0x12]
+194c3d0 b #0x194c420 ; 
+194c3d4 ldr x8, [sp, #0x18]
+194c3d8 str w23, [x8, #0x24]
+194c3dc strb w19, [x8, #0x11]
+194c3e0 b #0x194c420 ; 
+194c3e4 bl #0x194c4a0 ; OsirisActivityModule$$QueryPreNoticeData
+194c3e8 b #0x194c41c ; 
+194c3ec bl #0x3f564f0 ; 
+194c3f0 mov x1, xzr
+194c3f4 mov x0, x21
+194c3f8 bl #0x1342bb0 ; ActivityNoticeModule$$SendActivityTowerPassive
+194c3fc bl #0x3f564f0 ; 
+194c400 mov x1, xzr
+194c404 mov x0, x21
+194c408 bl #0x13422b0 ; ActivityNoticeModule$$SendQueryActivityTower
+194c40c bl #0x3f564f0 ; 
+194c410 mov x1, xzr
+194c414 mov x0, x21
+194c418 bl #0x1342ecc ; ActivityNoticeModule$$SendQueryTowerReward
+194c41c mov w19, #1
+194c420 ldr x1, [x26]
+194c424 mov x0, x20
+194c428 add w22, w22, #1
+194c42c bl #0x3d473f8 ; System.Collections.Generic.List<int>$$get_Count
+194c430 cmp w22, w0
+194c434 b.lt #0x194c210
+194c438 tbz w19, #0, #0x194c480
+194c43c ldr x0, [sp, #0x18]
+194c440 bl #0x194c71c ; OsirisActivityModule$$InitBadge
+194c444 mov w1, wzr
+194c448 bl #0x194b658 ; OsirisActivityModule$$CheckPageOpen
+194c44c tbz w0, #0, #0x194c480
+194c450 ldr x19, [sp, #0x18]
+194c454 mov x0, x19
+194c458 bl #0x194c858 ; OsirisActivityModule$$GetLocalBGMPlay
+194c45c mov x0, x19
+194c460 sub sp, x29, #0x50
+194c464 ldp x29, x30, [sp, #0x50]
+194c468 ldp x20, x19, [sp, #0x40]
+194c46c ldp x22, x21, [sp, #0x30]
+194c470 ldp x24, x23, [sp, #0x20]
+194c474 ldp x26, x25, [sp, #0x10]
+194c478 ldp x28, x27, [sp], #0x60
+194c47c b #0x194c9f8 ; OsirisActivityModule$$GetLocalHasPlayPV
+194c480 sub sp, x29, #0x50
+194c484 ldp x29, x30, [sp, #0x50]
+194c488 ldp x20, x19, [sp, #0x40]
+194c48c ldp x22, x21, [sp, #0x30]
+194c490 ldp x24, x23, [sp, #0x20]
+194c494 ldp x26, x25, [sp, #0x10]
+194c498 ldp x28, x27, [sp], #0x60
+194c49c ret 

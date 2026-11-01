@@ -1,0 +1,13 @@
+11-01 23:12:40.813  2695  2936 E Unity   : NullReferenceException: A null value was found where an object instance was required.
+11-01 23:12:40.813  2695  2936 E Unity   :   at OsirisActivityModule.OnHandleActivityMissionNumChange (System.Collections.Generic.List`1 missionPassCount) [0x00000] in <filename unknown>:0 
+11-01 23:12:40.813  2695  2936 E Unity   :   at CommonX2.X2EventManager.FireEvent[T] (Int32 eventType, .T args) [0x00000] in <filename unknown>:0 
+11-01 23:12:40.813  2695  2936 E Unity   :   at ActivityNoticeModule.OnReceiveActivityPassRecordMsg (System.Object arg) [0x00000] in <filename unknown>:0 
+11-01 23:12:40.813  2695  2936 E Unity   :   at MarsNetManager.DispatchMessage (System.Type type, System.Object data, Boolean isLog) [0x00000] in <filename unknown>:0 
+11-01 23:12:40.813  2695  2936 E Unity   :   at MarsNetManager+<>c__DisplayClass84_0`1[T].<Send>b__0 (marsnet.NetMsg rep, UInt32 i) [0x00000] in <filename unknown>:0 
+11-01 23:12:40.813  2695  2936 E Unity   :   at marsnet.MarsNet.TickMsg () [0x00000] in <filename unknown>:0 
+11-01 23:12:40.813  2695  2936 E Unity   :   at marsnet.MarsNet.Tick () [0x00000] in <filename unknown>:0 
+11-01 23:12:40.813  2695  2936 E Unity   :   at marsnet.MarsNet.Update () [0x00000] in <filename unknown>:0 
+11-01 23:12:40.813  2695  2936 E Unity   :   at AppMain.Update () [0x00000] in <filename unknown>:0 
+11-01 23:12:40.813  2695  2936 E Unity   :  
+11-01 23:12:40.813  2695  2936 E Unity   : (Filename: currently not available on il2cpp Line: -1)
+11-01 23:12:40.813  2695  2936 E Unity   : 

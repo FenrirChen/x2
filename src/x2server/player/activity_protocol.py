@@ -59,8 +59,11 @@ def check_request(runtime, player, op, request):
 
 def check_progress(runtime, period, message):
     name, values = message.message_name, message.values
-    if name in {'L2C_SceneGlobalParam', 'L2C_ActivityPassRecord'}:
+    if name == 'L2C_SceneGlobalParam':
         pass
+    elif name == 'L2C_ActivityPassRecord':
+        if period.theme['group'] != 13:
+            raise UnresolvedEconomy('unsolicited pass records enter the Osiris subscriber')
     elif name == 'L2C_ExtraDropData':
         if not runtime.buildings.rows_for(period):
             raise UnresolvedEconomy('building drop progress belongs to another theme')

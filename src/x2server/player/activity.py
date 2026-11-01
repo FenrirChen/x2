@@ -115,11 +115,21 @@ class ActivityService:
         if period is None:
             return {"code": 10, "activityData": head + season_rows}
         rows = []
-        for row in period.theme['activities']:
-            end = self.yuexi_preview_end(period) if period.theme['group'] == 99 and enum(row['ActivityType']) == 1 else period.end
+        current = [(row, True) for row in period.theme['activities']]
+        # The native activity cache merges by ID; absence does not close an old
+        # module. In particular Osiris keeps ShopEnable/mShopActivityId and its
+        # global pass-record subscriber can then dereference stale shop config.
+        # Explicit closed rows reset those subscribers on rotation/reconnect.
+        closed = [(row, False) for theme in self.rotation.themes
+                  if theme['group'] != period.theme['group']
+                  for row in theme['activities']]
+        for row, active in current + closed:
+            end = (self.yuexi_preview_end(period) if period.theme['group'] == 99
+                   and enum(row['ActivityType']) == 1 else period.end) if active else period.start - 1
             values = {'actId': row['ActivityID'], 'state': 1,
                       'activityParentType': enum(row['ActivityParentType']),
-                      'actType': enum(row['ActivityType']), 'startTime': period.start,
+                      'actType': enum(row['ActivityType']),
+                      'startTime': period.start if active else end - 1,
                       'endTime': end, 'openLever': row['OpenLever'],
                       'activityShow': row.get('ActivityShow', 0),
                       'activityGroup': row['ActivityGroup'], 'activityName': row.get('ActivityName', 0),
@@ -128,7 +138,7 @@ class ActivityService:
                       'openType': enum(row.get('OpenType')), 'openParam': row.get('OpenParam', []) or [0],
                       'activityDataItems': [encode('ActivityDataItem', {'index': 0,
                           'itemParams': [encode('ItemData', {'id': 0, 'num': 0})]})]}
-            values['state'] = int(self.economy.clock() < end)
+            values['state'] = int(active and self.economy.clock() < end)
             for index in range(1, 5):
                 values[f'param{index}'] = row.get(f'ActivityParam{index}', []) or [0]
             values['activityReward'] = row.get('ActivityReward', []) or [0]

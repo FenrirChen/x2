@@ -501,7 +501,8 @@ def test_daily_mail_idempotent_reset_and_active_catalog(runtime):
     rt.deliver_daily_mail(1)
     assert store.db.execute('SELECT count(*) FROM player_mail').fetchone()[0] == 2
     rows = rt.a.query_activity(1)['activityData']
-    assert all(ACTIVITY_SCHEMAS['ActivityData'].decode(r)['activityGroup'] == 37 for r in rows)
+    assert all(row['activityGroup'] == 37 for raw in rows
+               if (row := ACTIVITY_SCHEMAS['ActivityData'].decode(raw))['state'])
     now[0] += 86400
     rt.deliver_daily_mail(1)
     assert store.db.execute('SELECT count(*) FROM player_mail').fetchone()[0] == 4
@@ -622,9 +623,13 @@ def test_all_activity_sections_enter_and_settle_in_their_period(runtime, theme_i
             # QueryActivityMissionRecord is a navigation response in YueXi.
             assert 'L2C_QueryActivityMissionRecord' not in updates
             assert 'L2C_SceneGlobalParam' in updates
-            assert 'L2C_ActivityPassRecord' in updates
+            assert ('L2C_ActivityPassRecord' in updates) == (period.theme['group'] == 13)
+            # The shared scene frontier is safe for every theme; a generic
+            # pass-record broadcast also invokes inactive Osiris UI subscribers.
+            frontier = updates['L2C_SceneGlobalParam'].values['sceneSectionParam']
             pairs = [ACTIVITY_SCHEMAS['KeyValuePair_Int32_Int32'].decode(raw)
-                     for raw in updates['L2C_ActivityPassRecord'].values['missionPassCount']]
+                     for group in frontier
+                     for raw in ACTIVITY_SCHEMAS['SceneSectionParam'].decode(group)['sectionParam']]
             assert next(p['Value'] for p in pairs if p['Key'] == sid) == 1
             if period.theme['group'] == 7:
                 assert 'L2C_QueryShuangHanActivity' in updates

@@ -1,0 +1,168 @@
+OsirisActivityModule$$GetLastLockSectionID 0x194d814
+194d814 stp x28, x27, [sp, #-0x60]!
+194d818 stp x26, x25, [sp, #0x10]
+194d81c stp x24, x23, [sp, #0x20]
+194d820 stp x22, x21, [sp, #0x30]
+194d824 stp x20, x19, [sp, #0x40]
+194d828 stp x29, x30, [sp, #0x50]
+194d82c add x29, sp, #0x50
+194d830 adrp x20, #0x5577000
+194d834 ldrb w8, [x20, #0xc82]
+194d838 mov x19, x0
+194d83c tbnz w8, #0, #0x194d858
+194d840 adrp x8, #0x5253000
+194d844 ldr x8, [x8, #0x948]
+194d848 ldr w0, [x8]
+194d84c bl #0x3f2aed0 ; 
+194d850 mov w8, #1
+194d854 strb w8, [x20, #0xc82]
+194d858 ldr x20, [x19, #0x58]
+194d85c cbnz x20, #0x194d864
+194d860 bl #0x3f564f0 ; 
+194d864 adrp x8, #0x52b0000
+194d868 ldr x8, [x8, #0xfe8]
+194d86c mov x0, x20
+194d870 ldr x1, [x8]
+194d874 bl #0x3d456dc ; System.Collections.Generic.List<int>$$Clear
+194d878 adrp x24, #0x51ed000
+194d87c ldr x24, [x24, #0xb60]
+194d880 ldr x0, [x24]
+194d884 ldrb w8, [x0, #0x10a]
+194d888 tbz w8, #0, #0x194d898
+194d88c ldr w8, [x0, #0xbc]
+194d890 cbnz w8, #0x194d898
+194d894 bl #0x3f3f378 ; 
+194d898 adrp x25, #0x51d9000
+194d89c ldr x25, [x25, #0x618]
+194d8a0 mov x0, xzr
+194d8a4 ldr x1, [x25]
+194d8a8 bl #0x2feb968 ; Foundation.Module.ServiceModule<ModuleManager>$$get_Instance
+194d8ac mov x20, x0
+194d8b0 cbnz x20, #0x194d8b8
+194d8b4 bl #0x3f564f0 ; 
+194d8b8 adrp x27, #0x5252000
+194d8bc ldr x27, [x27, #0xae0]
+194d8c0 mov x0, x20
+194d8c4 ldr x1, [x27]
+194d8c8 bl #0x1ce72d4 ; Foundation.Module.ModuleManager$$GetModule<RelicBarModule>
+194d8cc mov x21, x0
+194d8d0 cbnz x21, #0x194d8d8
+194d8d4 bl #0x3f564f0 ; 
+194d8d8 mov x2, xzr
+194d8dc mov w1, #0x19
+194d8e0 mov x0, x21
+194d8e4 bl #0x132e22c ; ActivityNoticeModule$$GetActivityData
+194d8e8 mov x22, x0
+194d8ec mov w20, wzr
+194d8f0 cbz x22, #0x194d9c8
+194d8f4 adrp x28, #0x5300000
+194d8f8 adrp x25, #0x52e6000
+194d8fc adrp x26, #0x51d4000
+194d900 ldr x28, [x28, #0xfa8]
+194d904 ldr x25, [x25, #0x7b0]
+194d908 ldr x26, [x26, #0xd00]
+194d90c b #0x194d914 ; 
+194d910 add w20, w20, #1
+194d914 mov x1, xzr
+194d918 mov x0, x22
+194d91c bl #0x1327fc8 ; ActivityInfo$$get_ActivityParam1
+194d920 mov x23, x0
+194d924 cbnz x23, #0x194d92c
+194d928 bl #0x3f564f0 ; 
+194d92c ldr x1, [x28]
+194d930 mov x0, x23
+194d934 bl #0x3d473f8 ; System.Collections.Generic.List<int>$$get_Count
+194d938 cmp w20, w0
+194d93c b.ge #0x194d9ac
+194d940 mov x1, xzr
+194d944 mov x0, x22
+194d948 bl #0x1327fc8 ; ActivityInfo$$get_ActivityParam1
+194d94c mov x23, x0
+194d950 cbnz x23, #0x194d958
+194d954 bl #0x3f564f0 ; 
+194d958 ldr x2, [x25]
+194d95c mov x0, x23
+194d960 mov w1, w20
+194d964 bl #0x3d47400 ; System.Collections.Generic.List<int>$$get_Item
+194d968 mov w23, w0
+194d96c cbnz x21, #0x194d974
+194d970 bl #0x3f564f0 ; 
+194d974 mov x2, xzr
+194d978 mov x0, x21
+194d97c mov w1, w23
+194d980 bl #0x1336ee0 ; ActivityNoticeModule$$GetActivityChapterConfig
+194d984 cbz x0, #0x194d910
+194d988 ldr x23, [x19, #0x58]
+194d98c ldr x24, [x0, #0x30]
+194d990 cbnz x23, #0x194d998
+194d994 bl #0x3f564f0 ; 
+194d998 ldr x2, [x26]
+194d99c mov x0, x23
+194d9a0 mov x1, x24
+194d9a4 bl #0x3d455bc ; System.Collections.Generic.List<int>$$AddRange
+194d9a8 b #0x194d910 ; 
+194d9ac adrp x24, #0x51ed000
+194d9b0 adrp x25, #0x51d9000
+194d9b4 ldr x24, [x24, #0xb60]
+194d9b8 ldr x25, [x25, #0x618]
+194d9bc mov w20, wzr
+194d9c0 b #0x194d9c8 ; 
+194d9c4 add w20, w20, #1
+194d9c8 ldr x21, [x19, #0x58]
+194d9cc cbnz x21, #0x194d9d4
+194d9d0 bl #0x3f564f0 ; 
+194d9d4 adrp x8, #0x5300000
+194d9d8 ldr x8, [x8, #0xfa8]
+194d9dc mov x0, x21
+194d9e0 ldr x1, [x8]
+194d9e4 bl #0x3d473f8 ; System.Collections.Generic.List<int>$$get_Count
+194d9e8 cmp w20, w0
+194d9ec b.ge #0x194da94
+194d9f0 ldr x0, [x24]
+194d9f4 ldrb w8, [x0, #0x10a]
+194d9f8 tbz w8, #0, #0x194da08
+194d9fc ldr w8, [x0, #0xbc]
+194da00 cbnz w8, #0x194da08
+194da04 bl #0x3f3f378 ; 
+194da08 ldr x1, [x25]
+194da0c mov x0, xzr
+194da10 bl #0x2feb968 ; Foundation.Module.ServiceModule<ModuleManager>$$get_Instance
+194da14 mov x21, x0
+194da18 cbnz x21, #0x194da20
+194da1c bl #0x3f564f0 ; 
+194da20 ldr x1, [x27]
+194da24 mov x0, x21
+194da28 bl #0x1ce72d4 ; Foundation.Module.ModuleManager$$GetModule<RelicBarModule>
+194da2c ldr x22, [x19, #0x58]
+194da30 mov x21, x0
+194da34 cbnz x22, #0x194da3c
+194da38 bl #0x3f564f0 ; 
+194da3c adrp x23, #0x52e6000
+194da40 ldr x23, [x23, #0x7b0]
+194da44 mov x0, x22
+194da48 mov w1, w20
+194da4c ldr x2, [x23]
+194da50 bl #0x3d47400 ; System.Collections.Generic.List<int>$$get_Item
+194da54 mov w22, w0
+194da58 cbnz x21, #0x194da60
+194da5c bl #0x3f564f0 ; 
+194da60 mov x2, xzr
+194da64 mov x0, x21
+194da68 mov w1, w22
+194da6c bl #0x1337cb8 ; ActivityNoticeModule$$GetSectionState
+194da70 cbnz w0, #0x194d9c4
+194da74 ldr x21, [x19, #0x58]
+194da78 cbnz x21, #0x194da80
+194da7c bl #0x3f564f0 ; 
+194da80 ldr x2, [x23]
+194da84 mov x0, x21
+194da88 mov w1, w20
+194da8c bl #0x3d47400 ; System.Collections.Generic.List<int>$$get_Item
+194da90 str w0, [x19, #0x50]
+194da94 ldp x29, x30, [sp, #0x50]
+194da98 ldp x20, x19, [sp, #0x40]
+194da9c ldp x22, x21, [sp, #0x30]
+194daa0 ldp x24, x23, [sp, #0x20]
+194daa4 ldp x26, x25, [sp, #0x10]
+194daa8 ldp x28, x27, [sp], #0x60
+194daac ret 

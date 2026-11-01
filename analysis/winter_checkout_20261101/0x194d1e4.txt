@@ -1,0 +1,239 @@
+OsirisActivityModule$$OnHandleActivityMissionNumChange 0x194d1e4
+194d1e4 stp x28, x27, [sp, #-0x60]!
+194d1e8 stp x26, x25, [sp, #0x10]
+194d1ec stp x24, x23, [sp, #0x20]
+194d1f0 stp x22, x21, [sp, #0x30]
+194d1f4 stp x20, x19, [sp, #0x40]
+194d1f8 stp x29, x30, [sp, #0x50]
+194d1fc add x29, sp, #0x50
+194d200 sub sp, sp, #0x10
+194d204 adrp x20, #0x5577000
+194d208 ldrb w8, [x20, #0xc80]
+194d20c mov x19, x1
+194d210 str x0, [sp, #8]
+194d214 tbnz w8, #0, #0x194d230
+194d218 adrp x8, #0x51fa000
+194d21c ldr x8, [x8, #0xe28]
+194d220 ldr w0, [x8]
+194d224 bl #0x3f2aed0 ; 
+194d228 mov w8, #1
+194d22c strb w8, [x20, #0xc80]
+194d230 ldr x8, [sp, #8]
+194d234 ldrb w8, [x8, #0x11]
+194d238 cbz w8, #0x194d57c
+194d23c adrp x8, #0x51ed000
+194d240 ldr x8, [x8, #0xb60]
+194d244 ldr x0, [x8]
+194d248 ldrb w8, [x0, #0x10a]
+194d24c tbz w8, #0, #0x194d25c
+194d250 ldr w8, [x0, #0xbc]
+194d254 cbnz w8, #0x194d25c
+194d258 bl #0x3f3f378 ; 
+194d25c adrp x8, #0x51d9000
+194d260 ldr x8, [x8, #0x618]
+194d264 mov x0, xzr
+194d268 ldr x1, [x8]
+194d26c bl #0x2feb968 ; Foundation.Module.ServiceModule<ModuleManager>$$get_Instance
+194d270 mov x21, x0
+194d274 cbnz x21, #0x194d27c
+194d278 bl #0x3f564f0 ; 
+194d27c adrp x8, #0x5252000
+194d280 ldr x8, [x8, #0xae0]
+194d284 mov x0, x21
+194d288 ldr x1, [x8]
+194d28c bl #0x1ce72d4 ; Foundation.Module.ModuleManager$$GetModule<RelicBarModule>
+194d290 ldr x8, [sp, #8]
+194d294 mov x21, x0
+194d298 ldr w22, [x8, #0x24]
+194d29c cbnz x21, #0x194d2a4
+194d2a0 bl #0x3f564f0 ; 
+194d2a4 mov x2, xzr
+194d2a8 mov x0, x21
+194d2ac mov w1, w22
+194d2b0 bl #0x1334e5c ; ActivityNoticeModule$$GetActivityConfig
+194d2b4 adrp x20, #0x52b5000
+194d2b8 ldr x20, [x20, #0x990]
+194d2bc mov x22, x0
+194d2c0 mov w23, wzr
+194d2c4 b #0x194d2cc ; 
+194d2c8 add w23, w23, #1
+194d2cc cbnz x22, #0x194d2d4
+194d2d0 bl #0x3f564f0 ; 
+194d2d4 ldr x24, [x22, #0x40]
+194d2d8 cbnz x24, #0x194d2e0
+194d2dc bl #0x3f564f0 ; 
+194d2e0 adrp x8, #0x5300000
+194d2e4 ldr x8, [x8, #0xfa8]
+194d2e8 mov x0, x24
+194d2ec ldr x1, [x8]
+194d2f0 bl #0x3d473f8 ; System.Collections.Generic.List<int>$$get_Count
+194d2f4 cmp w23, w0
+194d2f8 b.ge #0x194d57c
+194d2fc adrp x8, #0x5294000
+194d300 ldr x8, [x8, #0x3f0]
+194d304 ldr x0, [x8]
+194d308 ldrb w8, [x0, #0x10a]
+194d30c tbz w8, #0, #0x194d31c
+194d310 ldr w8, [x0, #0xbc]
+194d314 cbnz w8, #0x194d31c
+194d318 bl #0x3f3f378 ; 
+194d31c mov x0, xzr
+194d320 mov x1, xzr
+194d324 bl #0x1bdfbcc ; ShopConfigManager$$get_Instance
+194d328 mov x24, x0
+194d32c cbnz x22, #0x194d334
+194d330 bl #0x3f564f0 ; 
+194d334 ldr x25, [x22, #0x40]
+194d338 cbnz x25, #0x194d340
+194d33c bl #0x3f564f0 ; 
+194d340 adrp x8, #0x52e6000
+194d344 ldr x8, [x8, #0x7b0]
+194d348 mov x0, x25
+194d34c mov w1, w23
+194d350 ldr x2, [x8]
+194d354 bl #0x3d47400 ; System.Collections.Generic.List<int>$$get_Item
+194d358 mov w25, w0
+194d35c cbnz x24, #0x194d364
+194d360 bl #0x3f564f0 ; 
+194d364 mov x2, xzr
+194d368 mov x0, x24
+194d36c mov w1, w25
+194d370 bl #0x1bdfe9c ; ShopConfigManager$$GetItem
+194d374 mov x24, x0
+194d378 cbnz x24, #0x194d380
+194d37c bl #0x3f564f0 ; 
+194d380 ldr w8, [x24, #0x18]
+194d384 cmp w8, #1
+194d388 b.ne #0x194d2c8
+194d38c ldr x0, [x24, #0x20]
+194d390 cbz x0, #0x194d50c
+194d394 adrp x8, #0x5300000
+194d398 ldr x8, [x8, #0xfa8]
+194d39c ldr x1, [x8]
+194d3a0 bl #0x3d473f8 ; System.Collections.Generic.List<int>$$get_Count
+194d3a4 cbz w0, #0x194d50c
+194d3a8 ldr x25, [x24, #0x20]
+194d3ac cbnz x25, #0x194d3b4
+194d3b0 bl #0x3f564f0 ; 
+194d3b4 adrp x8, #0x52e6000
+194d3b8 ldr x8, [x8, #0x7b0]
+194d3bc mov w1, wzr
+194d3c0 mov x0, x25
+194d3c4 ldr x2, [x8]
+194d3c8 bl #0x3d47400 ; System.Collections.Generic.List<int>$$get_Item
+194d3cc mov w25, w0
+194d3d0 cbnz x21, #0x194d3d8
+194d3d4 bl #0x3f564f0 ; 
+194d3d8 ldr x26, [x21, #0x70]
+194d3dc cbnz x26, #0x194d3e4
+194d3e0 bl #0x3f564f0 ; 
+194d3e4 adrp x8, #0x52b7000
+194d3e8 ldr x8, [x8, #0x4c0]
+194d3ec mov x0, x26
+194d3f0 mov w1, w25
+194d3f4 ldr x2, [x8]
+194d3f8 bl #0x3608cf0 ; System.Collections.Generic.Dictionary<int, int>$$ContainsKey
+194d3fc tbz w0, #0, #0x194d548
+194d400 mov w26, wzr
+194d404 b #0x194d40c ; 
+194d408 add w26, w26, #1
+194d40c cbnz x19, #0x194d414
+194d410 bl #0x3f564f0 ; 
+194d414 adrp x8, #0x5296000
+194d418 ldr x8, [x8, #0xb70]
+194d41c mov x0, x19
+194d420 ldr x1, [x8]
+194d424 bl #0x3d51884 ; System.Collections.Generic.List<IEventSystemHandler>$$get_Count
+194d428 cmp w26, w0
+194d42c b.ge #0x194d2c8
+194d430 cbnz x19, #0x194d438
+194d434 bl #0x3f564f0 ; 
+194d438 ldr x2, [x20]
+194d43c mov x0, x19
+194d440 mov w1, w26
+194d444 bl #0x3d5188c ; System.Collections.Generic.List<IEventSystemHandler>$$get_Item
+194d448 mov x27, x0
+194d44c cbnz x27, #0x194d454
+194d450 bl #0x3f564f0 ; 
+194d454 ldr w28, [x27, #0x10]
+194d458 cbnz x19, #0x194d460
+194d45c bl #0x3f564f0 ; 
+194d460 ldr x2, [x20]
+194d464 mov x0, x19
+194d468 mov w1, w26
+194d46c bl #0x3d5188c ; System.Collections.Generic.List<IEventSystemHandler>$$get_Item
+194d470 mov x27, x0
+194d474 cbnz x27, #0x194d47c
+194d478 bl #0x3f564f0 ; 
+194d47c cmp w28, w25
+194d480 b.ne #0x194d408
+194d484 ldr w28, [x27, #0x14]
+194d488 cbnz x21, #0x194d490
+194d48c bl #0x3f564f0 ; 
+194d490 ldr x27, [x21, #0x70]
+194d494 cbnz x27, #0x194d49c
+194d498 bl #0x3f564f0 ; 
+194d49c adrp x8, #0x51f4000
+194d4a0 ldr x8, [x8, #0x370]
+194d4a4 mov x0, x27
+194d4a8 mov w1, w25
+194d4ac ldr x2, [x8]
+194d4b0 bl #0x3607600 ; System.Collections.Generic.Dictionary<int, int>$$get_Item
+194d4b4 cmp w28, w0
+194d4b8 b.eq #0x194d408
+194d4bc cbnz x24, #0x194d4c4
+194d4c0 bl #0x3f564f0 ; 
+194d4c4 ldr x27, [x24, #0x28]
+194d4c8 cbnz x27, #0x194d4d0
+194d4cc bl #0x3f564f0 ; 
+194d4d0 adrp x8, #0x52e6000
+194d4d4 ldr x8, [x8, #0x7b0]
+194d4d8 mov w1, wzr
+194d4dc mov x0, x27
+194d4e0 ldr x2, [x8]
+194d4e4 bl #0x3d47400 ; System.Collections.Generic.List<int>$$get_Item
+194d4e8 cmp w28, w0
+194d4ec b.ne #0x194d408
+194d4f0 ldr x0, [sp, #8]
+194d4f4 mov w1, #1
+194d4f8 bl #0x194d14c ; OsirisActivityModule$$RefreshShopBadge
+194d4fc cbnz x21, #0x194d504
+194d500 bl #0x3f564f0 ; 
+194d504 str w23, [x21, #0x210]
+194d508 b #0x194d408 ; 
+194d50c adrp x8, #0x52a0000
+194d510 ldr x8, [x8, #0x8b8]
+194d514 ldr x0, [x8]
+194d518 ldrb w8, [x0, #0x10a]
+194d51c tbz w8, #0, #0x194d52c
+194d520 ldr w8, [x0, #0xbc]
+194d524 cbnz w8, #0x194d52c
+194d528 bl #0x3f3f378 ; 
+194d52c adrp x8, #0x526c000
+194d530 ldr x8, [x8, #0xa78]
+194d534 mov x0, xzr
+194d538 mov x2, xzr
+194d53c ldr x1, [x8]
+194d540 bl #0x2d27ccc ; UnityEngine.Debug$$LogError
+194d544 b #0x194d2c8 ; 
+194d548 cbnz x21, #0x194d550
+194d54c bl #0x3f564f0 ; 
+194d550 ldr x24, [x21, #0x70]
+194d554 cbnz x24, #0x194d55c
+194d558 bl #0x3f564f0 ; 
+194d55c adrp x8, #0x5288000
+194d560 ldr x8, [x8, #0x3e0]
+194d564 mov w2, wzr
+194d568 mov x0, x24
+194d56c mov w1, w25
+194d570 ldr x3, [x8]
+194d574 bl #0x360877c ; System.Collections.Generic.Dictionary<int, int>$$Add
+194d578 b #0x194d2c8 ; 
+194d57c sub sp, x29, #0x50
+194d580 ldp x29, x30, [sp, #0x50]
+194d584 ldp x20, x19, [sp, #0x40]
+194d588 ldp x22, x21, [sp, #0x30]
+194d58c ldp x24, x23, [sp, #0x20]
+194d590 ldp x26, x25, [sp, #0x10]
+194d594 ldp x28, x27, [sp], #0x60
+194d598 ret 

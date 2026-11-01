@@ -1,0 +1,173 @@
+ActivityNoticeModule$$OnReceiveActivityPassRecordMsg 0x1336b58
+1336b58 stp x28, x27, [sp, #-0x60]!
+1336b5c stp x26, x25, [sp, #0x10]
+1336b60 stp x24, x23, [sp, #0x20]
+1336b64 stp x22, x21, [sp, #0x30]
+1336b68 stp x20, x19, [sp, #0x40]
+1336b6c stp x29, x30, [sp, #0x50]
+1336b70 add x29, sp, #0x50
+1336b74 sub sp, sp, #0x10
+1336b78 adrp x21, #0x5575000
+1336b7c ldrb w8, [x21, #0x365]
+1336b80 mov x19, x1
+1336b84 mov x20, x0
+1336b88 tbnz w8, #0, #0x1336ba4
+1336b8c adrp x8, #0x5224000
+1336b90 ldr x8, [x8, #0x8e0]
+1336b94 ldr w0, [x8]
+1336b98 bl #0x3f2aed0 ; 
+1336b9c mov w8, #1
+1336ba0 strb w8, [x21, #0x365]
+1336ba4 cbz x19, #0x1336c44
+1336ba8 adrp x9, #0x51f7000
+1336bac ldr x9, [x9, #0x428]
+1336bb0 ldr x8, [x19]
+1336bb4 ldr x1, [x9]
+1336bb8 ldrb w10, [x8, #0x104]
+1336bbc ldrb w9, [x1, #0x104]
+1336bc0 cmp w10, w9
+1336bc4 b.lo #0x1336bdc
+1336bc8 ldr x10, [x8, #0xb0]
+1336bcc add x9, x10, x9, lsl #3
+1336bd0 ldur x9, [x9, #-8]
+1336bd4 cmp x9, x1
+1336bd8 b.eq #0x1336c64
+1336bdc ldr x0, [x8, #0x30]
+1336be0 add x8, sp, #8
+1336be4 bl #0x3f81f90 ; 
+1336be8 ldr x0, [sp, #8]
+1336bec bl #0x3f570a8 ; 
+1336bf0 mov x1, xzr
+1336bf4 bl #0x3f563d4 ; 
+1336bf8 add x0, sp, #8
+1336bfc bl #0x3f8a0d0 ; 
+1336c00 bl #0x3f564f0 ; 
+1336c04 bl #0x3f564f0 ; 
+1336c08 mov w8, #0x10
+1336c0c ldr w21, [x8]
+1336c10 adrp x8, #0x528b000
+1336c14 ldr x8, [x8, #0x2e0]
+1336c18 ldr x0, [x8]
+1336c1c ldrb w8, [x0, #0x10a]
+1336c20 tbz w8, #0, #0x1336c30
+1336c24 ldr w8, [x0, #0xbc]
+1336c28 cbnz w8, #0x1336c30
+1336c2c bl #0x3f3f378 ; 
+1336c30 mov x0, xzr
+1336c34 mov x2, xzr
+1336c38 mov w1, w21
+1336c3c mov x3, xzr
+1336c40 bl #0x1529eb8 ; GameAPI$$ShowErrorCodeBubble
+1336c44 sub sp, x29, #0x50
+1336c48 ldp x29, x30, [sp, #0x50]
+1336c4c ldp x20, x19, [sp, #0x40]
+1336c50 ldp x22, x21, [sp, #0x30]
+1336c54 ldp x24, x23, [sp, #0x20]
+1336c58 ldp x26, x25, [sp, #0x10]
+1336c5c ldp x28, x27, [sp], #0x60
+1336c60 ret 
+1336c64 ldr w21, [x19, #0x10]
+1336c68 cmp w21, #0xa
+1336c6c b.ne #0x1336c10
+1336c70 ldr x21, [x19, #0x18]
+1336c74 cbz x21, #0x1336c44
+1336c78 adrp x8, #0x5210000
+1336c7c ldr x8, [x8, #0xf98]
+1336c80 ldr x0, [x8]
+1336c84 ldrb w8, [x0, #0x10a]
+1336c88 tbz w8, #0, #0x1336c98
+1336c8c ldr w8, [x0, #0xbc]
+1336c90 cbnz w8, #0x1336c98
+1336c94 bl #0x3f3f378 ; 
+1336c98 adrp x8, #0x5270000
+1336c9c ldr x8, [x8, #0x48]
+1336ca0 mov x0, xzr
+1336ca4 mov w1, #0x11a
+1336ca8 mov x2, x21
+1336cac ldr x3, [x8]
+1336cb0 bl #0x221cb74 ; CommonX2.X2EventManager$$FireEvent<L2C_WorldBossLetter>
+1336cb4 adrp x27, #0x5296000
+1336cb8 adrp x28, #0x52b5000
+1336cbc adrp x26, #0x52b7000
+1336cc0 ldr x27, [x27, #0xb70]
+1336cc4 ldr x28, [x28, #0x990]
+1336cc8 ldr x26, [x26, #0x4c0]
+1336ccc mov w21, wzr
+1336cd0 b #0x1336cd8 ; 
+1336cd4 add w21, w21, #1
+1336cd8 ldr x22, [x19, #0x18]
+1336cdc cbnz x22, #0x1336ce4
+1336ce0 bl #0x3f564f0 ; 
+1336ce4 ldr x1, [x27]
+1336ce8 mov x0, x22
+1336cec bl #0x3d51884 ; System.Collections.Generic.List<IEventSystemHandler>$$get_Count
+1336cf0 cmp w21, w0
+1336cf4 b.ge #0x1336dc0
+1336cf8 ldr x22, [x19, #0x18]
+1336cfc cbnz x22, #0x1336d04
+1336d00 bl #0x3f564f0 ; 
+1336d04 ldr x2, [x28]
+1336d08 mov x0, x22
+1336d0c mov w1, w21
+1336d10 bl #0x3d5188c ; System.Collections.Generic.List<IEventSystemHandler>$$get_Item
+1336d14 mov x22, x0
+1336d18 cbnz x22, #0x1336d20
+1336d1c bl #0x3f564f0 ; 
+1336d20 ldr w22, [x22, #0x10]
+1336d24 ldr x23, [x19, #0x18]
+1336d28 cbnz x23, #0x1336d30
+1336d2c bl #0x3f564f0 ; 
+1336d30 ldr x2, [x28]
+1336d34 mov x0, x23
+1336d38 mov w1, w21
+1336d3c bl #0x3d5188c ; System.Collections.Generic.List<IEventSystemHandler>$$get_Item
+1336d40 mov x23, x0
+1336d44 cbnz x23, #0x1336d4c
+1336d48 bl #0x3f564f0 ; 
+1336d4c ldr w23, [x23, #0x14]
+1336d50 ldr x24, [x20, #0x70]
+1336d54 cbnz x24, #0x1336d5c
+1336d58 bl #0x3f564f0 ; 
+1336d5c ldr x2, [x26]
+1336d60 mov x0, x24
+1336d64 mov w1, w22
+1336d68 bl #0x3608cf0 ; System.Collections.Generic.Dictionary<int, int>$$ContainsKey
+1336d6c ldr x24, [x20, #0x70]
+1336d70 mov w25, w0
+1336d74 cbnz x24, #0x1336d7c
+1336d78 bl #0x3f564f0 ; 
+1336d7c tbz w25, #0, #0x1336da0
+1336d80 adrp x8, #0x5277000
+1336d84 ldr x8, [x8, #0x698]
+1336d88 mov x0, x24
+1336d8c mov w1, w22
+1336d90 mov w2, w23
+1336d94 ldr x3, [x8]
+1336d98 bl #0x36078c0 ; System.Collections.Generic.Dictionary<int, int>$$set_Item
+1336d9c b #0x1336cd4 ; 
+1336da0 adrp x8, #0x5288000
+1336da4 ldr x8, [x8, #0x3e0]
+1336da8 mov x0, x24
+1336dac mov w1, w22
+1336db0 mov w2, w23
+1336db4 ldr x3, [x8]
+1336db8 bl #0x360877c ; System.Collections.Generic.Dictionary<int, int>$$Add
+1336dbc b #0x1336cd4 ; 
+1336dc0 adrp x8, #0x5210000
+1336dc4 ldr x8, [x8, #0xf98]
+1336dc8 ldr x0, [x8]
+1336dcc ldrb w8, [x0, #0x10a]
+1336dd0 tbz w8, #0, #0x1336de0
+1336dd4 ldr w8, [x0, #0xbc]
+1336dd8 cbnz w8, #0x1336de0
+1336ddc bl #0x3f3f378 ; 
+1336de0 mov x0, xzr
+1336de4 mov w1, #0x11b
+1336de8 mov x2, xzr
+1336dec bl #0x3e48998 ; CommonX2.X2EventManager$$FireEvent
+1336df0 b #0x1336c44 ; 
+1336df4 mov x19, x0
+1336df8 add x0, sp, #8
+1336dfc bl #0x3f8a0d0 ; 
+1336e00 mov x0, x19
+1336e04 bl #0x113f690 ; 

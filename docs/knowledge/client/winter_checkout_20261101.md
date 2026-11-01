@@ -1,0 +1,9 @@
+# 冬至万物结算卡住与活动旧模块清理（2026-11-01）
+
+约23:20本地关卡2160257结算已经提交、152成功包已生成；客户端仍按8秒周期重连重发887。Unity日志定位为OsirisActivityModule.OnHandleActivityMissionNumChange空引用，调用来自ActivityNoticeModule.OnReceiveActivityPassRecordMsg。原发送序列中914位于152之前，MarsNet.TickMsg遇订阅者异常中断本批消息，导致152未被处理。
+
+反汇编0x194C120：Osiris只处理ActivityGroup=13的目录变化，关闭43类商店行时清除ShopEnable；0x194D1E4先读取该标记及旧mShopActivityId，再无空保护解引用ActivityReal.ActivityParam1和商店配置。之前目录只发送当前主题，缺失的旧行没有显式关闭，客户端可残留旧活动商店标记。对应输出与Unity样例见analysis/winter_checkout_20261101。
+
+本地修补：目录继续先发送当前主题，再补其他主题state=0、结束时间早于本期的完整关闭行，供客户端合并缓存后关闭旧模块；关闭行不会开放旧主题。结算前通用914进度广播仅保留给其Osiris主题，其他主题使用SceneGlobalParam及自身进度消息，冬至仍发送QueryShuangHanActivity。显式C2L_ActivityPassRecord查询保持支持，返回已提交的实时计数；不改通关、奖品或幂等账簿，不改APK。
+
+151项相关本地测试通过（143项既有用例及8项新增），包含所有主题所有活动关卡的首次结算/重放、下一关解锁、跨轮换目录状态、冬至专用进度与显式查询；新增测试初次fixture漏导入已修正后8项通过。本轮没有连接远程服务器，也没有push。

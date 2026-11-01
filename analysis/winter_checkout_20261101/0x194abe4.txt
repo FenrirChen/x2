@@ -1,0 +1,130 @@
+OsirisActivityModule$$InitData 0x194abe4
+194abe4 stp x22, x21, [sp, #-0x30]!
+194abe8 stp x20, x19, [sp, #0x10]
+194abec stp x29, x30, [sp, #0x20]
+194abf0 add x29, sp, #0x20
+194abf4 adrp x20, #0x5577000
+194abf8 ldrb w8, [x20, #0xc69]
+194abfc mov x19, x0
+194ac00 tbnz w8, #0, #0x194ac1c
+194ac04 adrp x8, #0x51d3000
+194ac08 ldr x8, [x8, #0x850]
+194ac0c ldr w0, [x8]
+194ac10 bl #0x3f2aed0 ; 
+194ac14 mov w8, #1
+194ac18 strb w8, [x20, #0xc69]
+194ac1c mov x1, xzr
+194ac20 mov x0, x19
+194ac24 bl #0x144108c ; Foundation.Module.BusinessModule$$InitData
+194ac28 adrp x8, #0x520b000
+194ac2c adrp x9, #0x51d9000
+194ac30 ldr x8, [x8, #0x200]
+194ac34 ldr x9, [x9, #0xec8]
+194ac38 ldr x21, [x8]
+194ac3c ldr x0, [x9]
+194ac40 bl #0x3f6452c ; 
+194ac44 adrp x8, #0x5215000
+194ac48 ldr x8, [x8, #0x2e8]
+194ac4c mov x1, x19
+194ac50 mov x2, x21
+194ac54 mov x20, x0
+194ac58 ldr x3, [x8]
+194ac5c bl #0x262250c ; System.Action<Response<SetValueReply>>$$.ctor
+194ac60 adrp x8, #0x5210000
+194ac64 ldr x8, [x8, #0xf98]
+194ac68 ldr x0, [x8]
+194ac6c ldrb w8, [x0, #0x10a]
+194ac70 tbz w8, #0, #0x194ac80
+194ac74 ldr w8, [x0, #0xbc]
+194ac78 cbnz w8, #0x194ac80
+194ac7c bl #0x3f3f378 ; 
+194ac80 adrp x8, #0x528c000
+194ac84 ldr x8, [x8, #0x220]
+194ac88 mov x0, xzr
+194ac8c mov w1, #0x116
+194ac90 mov x2, x20
+194ac94 ldr x3, [x8]
+194ac98 bl #0x221f598 ; CommonX2.X2EventManager$$RegisterEvent<W2C_WorldBossPlayerAct>
+194ac9c adrp x8, #0x5280000
+194aca0 adrp x9, #0x5232000
+194aca4 ldr x8, [x8, #0x470]
+194aca8 ldr x9, [x9, #0xcc8]
+194acac ldr x20, [x8]
+194acb0 ldr x0, [x9]
+194acb4 bl #0x3f6452c ; 
+194acb8 adrp x8, #0x527d000
+194acbc ldr x8, [x8, #0x378]
+194acc0 mov x1, x19
+194acc4 mov x2, x20
+194acc8 mov x21, x0
+194accc ldr x3, [x8]
+194acd0 bl #0x2621a1c ; System.Action<int>$$.ctor
+194acd4 adrp x8, #0x520d000
+194acd8 ldr x8, [x8, #0x228]
+194acdc mov x0, xzr
+194ace0 mov w1, #0x117
+194ace4 mov x2, x21
+194ace8 ldr x3, [x8]
+194acec bl #0x221e7e8 ; CommonX2.X2EventManager$$RegisterEvent<int>
+194acf0 adrp x8, #0x520f000
+194acf4 adrp x9, #0x52d9000
+194acf8 ldr x8, [x8, #0x6e0]
+194acfc ldr x9, [x9, #0xb18]
+194ad00 ldr x20, [x8]
+194ad04 ldr x0, [x9]
+194ad08 bl #0x3f6452c ; 
+194ad0c adrp x8, #0x52a2000
+194ad10 ldr x8, [x8, #0xb70]
+194ad14 mov x1, x19
+194ad18 mov x2, x20
+194ad1c mov x21, x0
+194ad20 ldr x3, [x8]
+194ad24 bl #0x262250c ; System.Action<Response<SetValueReply>>$$.ctor
+194ad28 adrp x8, #0x51e1000
+194ad2c ldr x8, [x8, #0xcc8]
+194ad30 mov x0, xzr
+194ad34 mov w1, #0x11a
+194ad38 mov x2, x21
+194ad3c ldr x3, [x8]
+194ad40 bl #0x221f598 ; CommonX2.X2EventManager$$RegisterEvent<W2C_WorldBossPlayerAct>
+194ad44 adrp x8, #0x521c000
+194ad48 adrp x9, #0x5263000
+194ad4c ldr x8, [x8, #0xab0]
+194ad50 ldr x9, [x9, #0x430]
+194ad54 ldr x20, [x8]
+194ad58 ldr x0, [x9]
+194ad5c bl #0x3f6452c ; 
+194ad60 mov x3, xzr
+194ad64 mov x1, x19
+194ad68 mov x2, x20
+194ad6c mov x21, x0
+194ad70 bl #0x3e63db4 ; System.Action$$.ctor
+194ad74 mov x0, xzr
+194ad78 mov x3, xzr
+194ad7c mov w1, #0x11b
+194ad80 mov x2, x21
+194ad84 bl #0x3e48670 ; CommonX2.X2EventManager$$RegisterEvent
+194ad88 adrp x8, #0x524c000
+194ad8c ldr x8, [x8, #0xde8]
+194ad90 ldr x0, [x8]
+194ad94 ldrb w8, [x0, #0x10a]
+194ad98 tbz w8, #0, #0x194ada8
+194ad9c ldr w8, [x0, #0xbc]
+194ada0 cbnz w8, #0x194ada8
+194ada4 bl #0x3f3f378 ; 
+194ada8 mov x0, xzr
+194adac mov x1, xzr
+194adb0 bl #0x17e5448 ; BadgeViewMgr$$get_Instance
+194adb4 mov x20, x0
+194adb8 str x20, [x19, #0x38]
+194adbc cbnz x20, #0x194adc4
+194adc0 bl #0x3f564f0 ; 
+194adc4 mov w1, wzr
+194adc8 mov x2, xzr
+194adcc mov x0, x20
+194add0 bl #0x18008fc ; BadgeViewMgr$$CreateBadge
+194add4 str w0, [x19, #0x40]
+194add8 ldp x29, x30, [sp, #0x20]
+194addc ldp x20, x19, [sp, #0x10]
+194ade0 ldp x22, x21, [sp], #0x30
+194ade4 ret 

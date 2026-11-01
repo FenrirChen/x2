@@ -457,9 +457,15 @@ class ActivityRuntime:
         if period is None:
             return ()
         messages = [OutboundMessage('L2C_SceneGlobalParam',
-                    self.operate(player, 'SceneGlobalParam', {}, 'progress')),
-                    OutboundMessage('L2C_ActivityPassRecord',
-                    {'code': 10, 'missionPassCount': self.records(player, period)['missionPassCount']})]
+                    self.operate(player, 'SceneGlobalParam', {}, 'progress'))]
+        # ActivityNotice broadcasts this message into Osiris' shop subscriber.
+        # Do not inject it before another theme's mandatory checkout response:
+        # a stale subscriber exception makes MarsNet drop the rest of the batch.
+        # Other themes get their own frontier below; explicit pass-record queries
+        # remain live and supported after the catalog has closed old modules.
+        if period.theme['group'] == 13:
+            messages.append(OutboundMessage('L2C_ActivityPassRecord',
+                {'code': 10, 'missionPassCount': self.records(player, period)['missionPassCount']}))
         if self.buildings.rows_for(period):
             messages.append(OutboundMessage('L2C_ExtraDropData',
                 self.operate(player, 'ExtraDropData', {}, 'progress')))
