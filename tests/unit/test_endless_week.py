@@ -41,6 +41,26 @@ def test_light_grants_progress_snapshot_cap_and_replay(env):
     assert weekly_values(store,1,economy.clock())['EndlessWeekVowOfStone']==890
 
 
+def test_check_profile_current_week_follows_the_clock(env):
+    """currentWeek 是页面「本周结束」倒计时的唯一来源, 必须是算出来的。
+
+    客户端 ChapterModule_OnConfirmSave (0x16C5B10) 把 L2C_CheckFightProfile 的
+    currentWeek 存进 +0xa8, 再用 ``+0xc0 = currentWeek*604800 + 18000`` 当本周结束
+    时刻, EndlessInfo_RefreshPage 直接和 ServerTime(Unix 秒) 相减显示倒计时。
+    写死常量(旧值 272) -> +0xc0 落在 1975 年 -> 倒计时恒为 0, 且跨周永不变。
+    """
+    store,economy,ctx=env
+    from x2server.player.endless import CLIENT_WEEK_SECONDS,CLIENT_WEEK_SHIFT,week_number
+    stamp=[timestamp('2026-12-08T12:00:00')];economy.clock=lambda:stamp[0]
+    answer=asyncio.run(economy.endless.check_profile(ctx,packet({'profileType':2},name='C2L_CheckFightProfile')))
+    number=answer.values['currentWeek']
+    assert number==week_number(stamp[0])
+    end=number*CLIENT_WEEK_SECONDS+CLIENT_WEEK_SHIFT
+    assert 0<end-stamp[0]<=CLIENT_WEEK_SECONDS
+    # 下周同一时刻必须换一个周序号 (写死常量就做不到)。
+    assert week_number(stamp[0]+7*86400)==number+1
+
+
 def test_weekly_monday_zero_preserves_cap_and_inventory(env):
     store,economy,ctx=env
     stamp=[timestamp('2026-10-18T23:59:59')];economy.clock=lambda:stamp[0]

@@ -11,13 +11,16 @@ account bag never holds, and no client message reports how many were picked. So
 this service trusts the picked formula and count, records a per-run tally, and
 answers with the produced item. The tally is echoed back through
 FightDataProfile (elementExp + formulaCompose) when a mid-battle run is resumed,
-while Weekly carries cumulative counts and experience across runs and weeks.
+while Weekly carries the half-month per-formula tally and the lifetime element
+experience (see COMPOSE_LIMIT_NOTE for why the compose cap resets half-monthly
+while the weekly light reward resets every week).
 """
 from __future__ import annotations
 
 import json
 import hashlib
 import logging
+import time
 from importlib.resources import files
 from functools import lru_cache
 
@@ -26,6 +29,7 @@ from x2server.messages.core import INT_PAIR
 from x2server.messages.element_compose import ELEMENT_COMPOSE_SCHEMAS
 from x2server.network.dispatcher import OutboundMessage
 from x2server.protocol.errors import ProtocolError
+from x2server.player.server_clock import half_month_start
 
 LOGGER = logging.getLogger("x2.battle.element")
 
@@ -48,26 +52,58 @@ def endless_sections():
     return tuple(row['SectionID'] for row in data['sections'] if row['Type'] == 7)
 
 
-def cumulative_values(store, player_id):
-    """Lifetime confirmed compose history; the ledger is part of full saves.
+COMPOSE_LIMIT_NOTE = """\
+ComposeNumLimit 的重置周期是 **半个月**, 不是每周:
+  * 客户端问答表 AnswerConfig 281048: QuestionName 2810482
+    「【乌洛波罗斯】的光能奖励，会按下哪个周期重置？」, AnswerName
+    [2810483 周, 2810484 15日, 2810485 月], RightAnswer = 1 -> 「15 日」。
+  * 实测一致: 周刷新只重置每周光能奖励 (WeeklyDungeon.EndlessWeekVowLimit 880,
+    endless.ensure_week 的 state['light']), 配方页的「可合成次数」按半月重置。
+所以 FormulaComposeAll 只统计**本半月** (北京 1..15 日 / 16 日..月末) 内入场的局,
+而 EndlessWeekVowOfStone 仍按周。"""
 
-    Include the current run exactly once. Native InitData reads allComposeTime
-    from Weekly and singleComposeTime separately from the current profile; it
-    does not add the profile count to the Weekly count again.
+
+def cumulative_values(store, player_id, now=None):
+    """合成历史: FormulaComposeAll 按半月, ElementExpAll 终身累计。
+
+    Native InitData fills FormulaInfo.allComposeTime from
+    ``Weekly.FormulaComposeAll`` and reads the profile's own count as
+    singleComposeTime, then MaxComposeNum = ``numLimit - (all - single)``.
+    ``ComposeNumLimit`` is therefore a recurring cap whose period the server
+    owns; the official one is half a month (see COMPOSE_LIMIT_NOTE). The old
+    lifetime sum left the recipe list at 0 left forever after the first
+    元素之章 refresh (光能本刷新了, 但可合成次数没刷新).
+
+    ElementExpAll stays lifetime: it is 元素经验, used by the cumulative
+    E_ElementExp task and the client's element experience display.
+
+    Include the current run exactly once; the native selector subtracts the
+    profile's singleComposeTime itself.
     """
-    if not store.db.execute("SELECT 1 FROM sqlite_master WHERE name='battle_element_compose'").fetchone():
-        rows = []
-    else:
+    now = int(time.time()) if now is None else int(now)
+    known = formulas()
+    lifetime_rows, period_rows = [], []
+    if store.db.execute("SELECT 1 FROM sqlite_master WHERE name='battle_element_compose'").fetchone():
         sections = endless_sections()
         slots = ','.join('?' for _ in sections)
-        rows = store.db.execute(f"""SELECT c.formula_id, SUM(c.count) FROM battle_element_compose c
+        lifetime_rows = store.db.execute(f"""SELECT c.formula_id, SUM(c.count) FROM battle_element_compose c
             JOIN economy_runs r ON r.uuid=c.run_uuid AND r.player_id=c.player_id
             WHERE c.player_id=? AND c.count BETWEEN 1 AND ? AND r.section_id IN ({slots})
             GROUP BY c.formula_id ORDER BY c.formula_id""", (player_id, MAX_WIRE_INT, *sections)).fetchall()
-    known = formulas()
-    counts = {fid: min(MAX_WIRE_INT, count) for fid, count in rows if fid in known}
-    return {'ElementExpAll': min(MAX_WIRE_INT, sum(known[fid]['exp'] * count for fid, count in counts.items())),
-            'FormulaComposeAll': [INT_PAIR.encode({'Key': fid, 'Value': count}) for fid, count in counts.items()]
+        if store.db.execute("SELECT 1 FROM sqlite_master WHERE name='battle_entries'").fetchone():
+            # battle_entries.created_at 是本局入场时间; 只要开局在本半月内就计入,
+            # 即使它所在的那一周已经翻篇 (周刷新只清周光, 不清合成次数)。
+            period_rows = store.db.execute(f"""SELECT c.formula_id, SUM(c.count) FROM battle_element_compose c
+                JOIN economy_runs r ON r.uuid=c.run_uuid AND r.player_id=c.player_id
+                JOIN battle_entries e ON e.uuid=c.run_uuid AND e.player_id=c.player_id
+                WHERE c.player_id=? AND c.count BETWEEN 1 AND ? AND r.section_id IN ({slots})
+                  AND e.created_at>=?
+                GROUP BY c.formula_id ORDER BY c.formula_id""",
+                (player_id, MAX_WIRE_INT, *sections, half_month_start(now))).fetchall()
+    lifetime = {fid: min(MAX_WIRE_INT, count) for fid, count in lifetime_rows if fid in known}
+    period = {fid: min(MAX_WIRE_INT, count) for fid, count in period_rows if fid in known}
+    return {'ElementExpAll': min(MAX_WIRE_INT, sum(known[fid]['exp'] * count for fid, count in lifetime.items())),
+            'FormulaComposeAll': [INT_PAIR.encode({'Key': fid, 'Value': count}) for fid, count in period.items()]
                 or [INT_PAIR.encode({'Key': 0, 'Value': 0})]}
 
 
@@ -134,15 +170,14 @@ class ElementComposeService:
             LOGGER.info("element compose without an active run formula=%s player=%s",
                         formula_id, player_id)
             return OutboundMessage("L2C_ElementCompose", {"code": REFUSED, "count": 0})
-        # Native MaxComposeNum uses numLimit - (allComposeTime - singleComposeTime).
-        # The current run is already included in Weekly, so subtract it exactly once.
+        # Native MaxComposeNum = numLimit - (allComposeTime - singleComposeTime),
+        # where allComposeTime already contains this run. A run may therefore grow
+        # until the half-month total reaches numLimit, never past it.
         if formula.get('numLimit'):
-            history = {p['Key']: p['Value'] for raw in cumulative_values(self.store, player_id)['FormulaComposeAll']
-                       if (p := INT_PAIR.decode(raw)).get('Key')}
-            current = self.store.db.execute('SELECT count FROM battle_element_compose WHERE player_id=? AND run_uuid=? AND formula_id=?',
-                                           (player_id, run_uuid, formula_id)).fetchone()
-            prior = max(0, history.get(formula_id, 0) - (current[0] if current else 0))
-            if count > max(0, formula['numLimit'] - prior):
+            used = {p['Key']: p['Value']
+                    for raw in cumulative_values(self.store, player_id, self.economy.clock())['FormulaComposeAll']
+                    if (p := INT_PAIR.decode(raw)).get('Key')}.get(formula_id, 0)
+            if used + count > formula['numLimit']:
                 return OutboundMessage('L2C_ElementCompose', {'code': REFUSED, 'count': 0})
         values = {'code': OK, 'count': count,
                   'composeItem': [INT_PAIR.encode({'Key': formula['itemId'], 'Value': count})]}

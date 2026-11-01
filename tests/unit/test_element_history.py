@@ -89,20 +89,26 @@ def test_history_resume_counts_current_run_once_and_preserves_profile(env):
 
 def test_history_legacy_rows_invalid_data_other_players_and_non_element_runs(env):
     store, e, ctx = env
+    # The half-month tally dates a run by its entry, so legacy ledger rows need
+    # their entry rows too (BattleService is what creates that table).
+    BattleService(store, e)
+    now = e.clock()
     with store.db:
         for uid, pid, section in [('old', 1, 2110291), ('story', 1, 2035101), ('foreign', 2, 2110291)]:
             store.db.execute('INSERT INTO economy_runs(uuid,player_id,session_id,section_id,settled) VALUES (?,?,?, ?,1)',
                              (uid, pid, 'old-session', section))
+            store.db.execute('INSERT INTO battle_entries(player_id,request_key,uuid,created_at,response) VALUES (?,?,?,?,?)',
+                             (pid, uid, uid, now - 3600, b''))
         for pid, run, fid, n in [(1,'old',420501,1), (1,'old',420502,2),
                                  (1,'old',999999,100), (1,'old',420503,-1),
                                  (1,'story',420501,8), (2,'foreign',420501,9),
                                  (1,'orphan',420501,100)]:
             store.db.execute('INSERT INTO battle_element_compose VALUES (?,?,?,?)',(pid,run,fid,n))
-    assert counts(cumulative_values(store, 1)) == {420501: 1, 420502: 2}
-    assert cumulative_values(store, 1)['ElementExpAll'] == 90
+    assert counts(cumulative_values(store, 1, now)) == {420501: 1, 420502: 2}
+    assert cumulative_values(store, 1, now)['ElementExpAll'] == 90
     for _ in range(2):
         EconomyService(store)
-        assert cumulative_values(store, 1)['ElementExpAll'] == 90
+        assert cumulative_values(store, 1, now)['ElementExpAll'] == 90
     with store.db:
         store.db.execute("INSERT INTO economy_runs(uuid,player_id,session_id,section_id) VALUES ('live-story',1,'session',2035101)")
     assert compose(e, ctx, 80).values['code'] == 13
@@ -146,16 +152,64 @@ def test_history_full_save_import_and_uuid_remapping(tmp_path):
 def test_history_native_numlimit_excludes_current_run_and_failure_does_not_count(env):
     store, e, ctx = env
     # Formula 420502: numLimit=10, no per-operation roundLimit.
+    BattleService(store, e)
+    now = e.clock()
     with store.db:
         store.db.execute("INSERT INTO economy_runs(uuid,player_id,session_id,section_id,settled) VALUES ('past',1,'past',2110291,1)")
+        store.db.execute("INSERT INTO battle_entries(player_id,request_key,uuid,created_at,response) VALUES (1,'past','past',?,?)",
+                         (now - 3600, b''))
         store.db.execute("INSERT INTO battle_element_compose VALUES (1,'past',420502,9)")
     enter(BattleService(store,e), ctx, 1)
     assert compose(e,ctx,10,420502,2).values['code'] == 13
-    assert counts(cumulative_values(store,1)) == {420502:9}
+    assert counts(cumulative_values(store,1,now)) == {420502:9}
+    # MaxComposeNum = numLimit - (all - single): the current run may only grow
+    # until the half-month total reaches numLimit, so exactly one more fits.
     assert compose(e,ctx,11,420502,1).values['code'] == 10
-    # Current-run singleComposeTime is subtracted by the native selector.
-    assert compose(e,ctx,12,420502,1).values['code'] == 10
-    assert counts(cumulative_values(store,1)) == {420502:11}
+    assert compose(e,ctx,12,420502,1).values['code'] == 13
+    assert counts(cumulative_values(store,1,now)) == {420502:10}
     enter(BattleService(store,e), ctx, 13)
     assert compose(e,ctx,14,420502,1).values['code'] == 13
-    assert counts(cumulative_values(store,1)) == {420502:11}
+    assert counts(cumulative_values(store,1,now)) == {420502:10}
+
+
+def test_half_month_numlimit_survives_weekly_refresh_and_resets_on_the_16th(env):
+    """配方「可合成次数」按半月: 周刷新不清, 跨 16 日才清.
+
+    周期取证: client AnswerConfig 281048 (Question 2810482
+    「【乌洛波罗斯】的光能奖励，会按下哪个周期重置？」, AnswerName
+    [2810483 周, 2810484 15日, 2810485 月], RightAnswer=1 -> 「15 日」).
+    周刷新只重置 WeeklyDungeon.EndlessWeekVowLimit 的周光, 见 endless.ensure_week.
+    """
+    store, e, ctx = env
+    clock = [int(datetime(2026, 12, 8, 12, tzinfo=timezone(timedelta(hours=8))).timestamp())]
+    e.clock = lambda: clock[0]
+    BattleService(store, e)
+    with store.db:
+        store.db.execute("INSERT INTO economy_runs(uuid,player_id,session_id,section_id,settled) VALUES ('last-half',1,'past',2110291,1)")
+        store.db.execute("INSERT INTO battle_entries(player_id,request_key,uuid,created_at,response) VALUES (1,'last-half','last-half',?,?)",
+                         (clock[0] - 10 * 86400, b''))
+        store.db.execute("INSERT INTO battle_element_compose VALUES (1,'last-half',420562,12)")
+    # 420562: numLimit=12, no per-operation roundLimit.
+    assert not counts(cumulative_values(store, 1, clock[0]))
+    first = enter(BattleService(store, e), ctx, 1)
+    with store.db:
+        # 入场时间按测试时钟打点: 生产里 battle_entries.created_at 用的就是同一个墙钟。
+        store.db.execute('UPDATE battle_entries SET created_at=? WHERE uuid=?', (clock[0], first.values['uuid']))
+    for rid in range(10, 22):
+        assert compose(e, ctx, rid, 420562, 1).values['code'] == 10
+    assert compose(e, ctx, 22, 420562, 1).values['code'] == 13
+    assert counts(cumulative_values(store, 1, clock[0])) == {420562: 12}
+    experience = cumulative_values(store, 1, clock[0])['ElementExpAll']
+    # Weekly Monday refresh (12-14) clears 周光 only; the settled run's 12 composes
+    # still count because they were made inside the same half-month.
+    clock[0] += 7 * 86400
+    push = e.endless.refresh_week(1)
+    assert push is not None and WEEKLY.decode(push.values['Weekly'])['EndlessWeekVowOfStone'] == 0
+    assert counts(cumulative_values(store, 1, clock[0])) == {420562: 12}
+    # The Weekly wire the client receives keeps that tally after the weekly push.
+    assert counts(weekly_values(store, 1, clock[0])) == {420562: 12}
+    # Crossing the 16th starts a new half-month: the compose tally resets, the
+    # lifetime element experience does not.
+    clock[0] += 24 * 3600
+    assert not counts(cumulative_values(store, 1, clock[0]))
+    assert cumulative_values(store, 1, clock[0])['ElementExpAll'] == experience
