@@ -149,6 +149,10 @@ class AchievementService:
                     parts = [rule['parts'][str(r[2])] for r in equipment if r[1] == 6 and str(r[2]) in rule['parts']]
                     # Six copies of one slot are not a full set.
                     progress = int(len(set(parts)) == 6) if kind == 'equipment_set' else len(parts)
+                elif kind == 'completed':
+                    # Rows with no counter source in the revival (the loopback chat
+                    # channel has no world-message delivery) are marked complete.
+                    progress = row['targets'][-1]
                 if achv_id not in current:
                     inserts.append((player_id,achv_id))
                 new_progress = min(progress, row['targets'][-1])

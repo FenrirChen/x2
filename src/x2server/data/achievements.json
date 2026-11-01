@@ -374,7 +374,7 @@
       ],
       "description": "在世界频道发言 {0} 次",
       "rule": {
-        "kind": "unsupported"
+        "kind": "completed"
       }
     },
     "660010": {
