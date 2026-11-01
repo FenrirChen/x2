@@ -136,7 +136,7 @@ def test_yuexi_skipped_intro_claim_persists_and_cannot_pay_twice(runtime):
 def test_yuexi_midday_review_closes_only_preview_at_beijing_midnight(runtime):
     _, _, _, rt, now = runtime
     rt.r.anchor += 23 * 3600
-    now[0] = rt.r.bounds(6)[0] + 60
+    now[0] = rt.r.bounds(rt.r.CYCLE_ORDER.index(6))[0] + 60
     period = rt.r.at()
     assert rt.a.yuexi_preview_end(period) == period.start + 3600
     now[0] = period.start + 3600

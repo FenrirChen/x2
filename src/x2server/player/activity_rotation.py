@@ -24,13 +24,13 @@ class ActivityRotation:
 
     FIRST_END = int(datetime(2026,10,19,tzinfo=timezone(timedelta(hours=8))).timestamp())
 
-    # User-approved one-time swap: 2026-10-26 YueXi, 2026-11-23 ZhenXun.
-    FIRST_CYCLE_SWAP = {2: 6, 6: 2}
+    # Fixed user-approved order, including every subsequent seven-event cycle.
+    # Catalog/state slots remain unchanged so existing rewards keep their owner.
+    # E Feng, Sakura, YueXi, Winter, Panorama, ZhuQue, ZhenXun.
+    CYCLE_ORDER = (0, 1, 6, 4, 3, 5, 2)
 
     def theme_slot(self, calendar_index):
-        if self.anchor == self.ANCHOR:
-            return self.FIRST_CYCLE_SWAP.get(calendar_index, calendar_index) % len(self.themes)
-        return calendar_index % len(self.themes)
+        return self.CYCLE_ORDER[calendar_index % len(self.themes)]
 
     def __init__(self, store, clock):
         self.store, self.clock = store, clock
@@ -41,6 +41,8 @@ class ActivityRotation:
         self.catalog = json.loads(files('x2server').joinpath(
             'data/activity_rotation_catalog.json').read_text(encoding='utf-8'))
         self.themes = self.catalog['themes']
+        if sorted(self.CYCLE_ORDER) != list(range(len(self.themes))):
+            raise ValueError('activity order must contain each active theme once')
         # Preserve historical state IDs when a theme is retired from the calendar.
         self.state_cycle_size = self.catalog.get('state_cycle_size', len(self.themes))
         self.state_slots = {t.get('state_slot', i): i for i, t in enumerate(self.themes)}
@@ -139,8 +141,6 @@ class ActivityRotation:
         if state_slot not in self.state_slots:
             raise ValueError('activity is closed')
         slot = self.state_slots[state_slot]
-        calendar_index = cycle * len(self.themes) + slot
-        if self.anchor == self.ANCHOR:
-            calendar_index = self.FIRST_CYCLE_SWAP.get(calendar_index, calendar_index)
+        calendar_index = cycle * len(self.themes) + self.CYCLE_ORDER.index(slot)
         start, end = self.bounds(calendar_index)
         return ActivityPeriod(row['period'], start, end, self.themes[slot])
