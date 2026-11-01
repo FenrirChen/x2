@@ -6,6 +6,7 @@ import asyncio
 from contextlib import closing
 import logging
 import sqlite3
+import threading
 import time
 
 LOGGER = logging.getLogger('x2.diagnostic_retention')
@@ -39,8 +40,13 @@ def condition(table, live):
         return ('EXISTS (SELECT 1 FROM fight_drop_observations o WHERE o.id=t.report_id '
                 'AND ' + age('o.recorded_at') + ' AND ' + settled('o.player_id', 'o.uuid') + ')')
     if table == 'economy_checkouts' and 'battle_entries' in live:
-        return ('EXISTS (SELECT 1 FROM battle_entries e WHERE e.uuid=t.uuid '
-                'AND e.player_id=t.player_id AND ' + age('e.created_at') + ') AND '
+        # LIMIT -1 prevents subquery flattening: select the matching UUID
+        # before owner/age checks. Otherwise SQLite can pick the owner index
+        # and rescan every large battle-entry BLOB for each checkout row.
+        # Keep all UUID matches (not LIMIT 1): legacy UUIDs are not unique.
+        return ('EXISTS (SELECT 1 FROM (SELECT player_id,created_at FROM '
+                'battle_entries WHERE uuid=t.uuid LIMIT -1) e WHERE '
+                'e.player_id=t.player_id AND ' + age('e.created_at') + ') AND '
                 + settled('t.player_id', 't.uuid'))
     return '0'
 
@@ -162,14 +168,45 @@ class DiagnosticRetention:
             return changed, len(rows) < (min(2, self.batch_size) if table == 'fight_drop_observations' else self.batch_size)
 
     async def _step_guarded(self, table):
-        # Publish on the game loop BEFORE submitting the worker. Setting the
-        # maintenance event is separate so completion cannot clear a new save
-        # import writer's flag. Setting only the importing event in the worker
-        # races a synchronous handler's read->write
-        # transaction and can cause SQLITE_BUSY_SNAPSHOT even in WAL mode.
-        self.store.maintenance.set()
+        # Start the worker before publishing the game barrier, so executor
+        # queueing cannot pause players. Never hold the checkpoint guard while
+        # asking the loop to acknowledge: login can synchronously need it.
+        loop = asyncio.get_running_loop()
+        published = False
+
+        def run_ready():
+            # A preflight avoids even a brief barrier for a busy checkpoint.
+            if not self.store.checkpoint_guard.acquire(blocking=False):
+                return 0, False
+            self.store.checkpoint_guard.release()
+            ready = threading.Event()
+            allowed = False
+
+            def publish():
+                nonlocal published, allowed
+                allowed = not (self.store.db.in_transaction or
+                               self.store.importing.is_set() or
+                               self.store.maintenance.is_set())
+                if allowed:
+                    self.store.maintenance.set()
+                    published = True
+                ready.set()
+
+            loop.call_soon_threadsafe(publish)
+            ready.wait()
+            if not allowed:
+                return 0, False
+            # A checkpoint/import may win after the preflight. Do not wait for
+            # it behind the newly published game barrier; retry this cursor.
+            if not self.store.checkpoint_guard.acquire(blocking=False):
+                return 0, False
+            try:
+                return self.step(table)  # import_write re-enters this guard.
+            finally:
+                self.store.checkpoint_guard.release()
+
         try:
-            future = asyncio.get_running_loop().run_in_executor(None, self.step, table)
+            future = loop.run_in_executor(None, run_ready)
             try:
                 return await asyncio.shield(future)
             except asyncio.CancelledError:
@@ -181,7 +218,8 @@ class DiagnosticRetention:
                 future.result()
                 raise
         finally:
-            self.store.maintenance.clear()
+            if published:
+                self.store.maintenance.clear()
 
     async def watch(self, interval=900, pause=.05):
         while True:

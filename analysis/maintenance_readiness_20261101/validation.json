@@ -1,0 +1,15 @@
+{
+  "regression_unique_passed": 79,
+  "source_database_bytes": 1860435968,
+  "original_gate_wait_seconds": 0.941,
+  "fixed_gate_wait_seconds": 0.0,
+  "query_before_seconds": 23.3911,
+  "query_after_seconds": 0.0257,
+  "query_results_identical": true,
+  "save_roundtrip_integrity": "ok",
+  "pushed": false,
+  "remote_source_database_written": false,
+  "real_50_clients_passed": false,
+  "real_50_clients_failure": "ConnectionResetError/WinError 64; full workload did not complete",
+  "original_local_snapshot_unchanged": true
+}
