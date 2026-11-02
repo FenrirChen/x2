@@ -22,11 +22,11 @@ def test_reset_then_increment_save_replay_and_relogin(env):
     with e.transaction():
         e._grant(1, 'talent-test-points', {1291002: 10})
     assert allocate(s, [(tid, 3), (other, 2)], 1).values['code'] == 10
-    before = store.get(1)['snapshot']['crystal']
+    before = store.get(1)['snapshot']['gold']
     reset = call(s, 'BattlePassTalentReset', {'id': tid}, 2)
     assert reset.values['code'] == 10
     assert reset.values['leftPoint'] == 8
-    assert store.get(1)['snapshot']['crystal'] == before - 3 * s.activities[0]['ActivityParam3'][0]
+    assert store.get(1)['snapshot']['gold'] == before - 3 * s.activities[0]['ActivityParam3'][0]
     assert call(s, 'BattlePassTalentReset', {'id': tid}, 2).values == reset.values
     assert s.state(1)['talents'][str(other)] == 2
     assert allocate(s, [(tid, 1)], 3).values['code'] == 10
@@ -74,19 +74,19 @@ def test_reset_new_request_id_is_idempotent_and_refreshes_full_cache(env):
     assert allocate(s,[(tid,2)],101).values['code']==10
     first=call(s,'BattlePassTalentReset',{'id':tid},102)
     assert first.values['code']==10
-    balance=store.get(1)['snapshot']['crystal']
+    balance=store.get(1)['snapshot']['gold']
     state=s.state(1)
     second=call(s,'BattlePassTalentReset',{'id':tid},103)
     assert second.values==first.values
     assert s.state(1)==state
-    assert store.get(1)['snapshot']['crystal']==balance
+    assert store.get(1)['snapshot']['gold']==balance
     info=next(p for p in second.before_response if p.message_name=='L2C_BattlePassTalentInfo')
     assert info.values['leftPoint']==3
     assert next(r for r in map(SEASON_SCHEMAS['TalentInfo'].decode,info.values['info']) if r['id']==tid)['level']==0
     assert allocate(s,[(tid,3)],104).values['code']==10
 
 
-def test_reset_exact_price_and_insufficient_crystal_returns_native_error(env):
+def test_reset_exact_price_and_insufficient_gold_returns_native_error(env):
     store,e,s=env
     tid=min(s.talents)
     cost=2*next(r for r in s.activities if r['ActivityID']==s.ACTIVITY)['ActivityParam3'][0]
@@ -94,23 +94,23 @@ def test_reset_exact_price_and_insufficient_crystal_returns_native_error(env):
         e._grant(1,'reset-afford-points',{1291002:2})
     assert allocate(s,[(tid,2)],111).values['code']==10
     snapshot=store.get(1)['snapshot']
-    e.save_snapshot(1,dict(snapshot,crystal=cost-1))
+    e.save_snapshot(1,dict(snapshot,gold=cost-1))
     state=s.state(1)
     result=call(s,'BattlePassTalentReset',{'id':tid},112)
     assert result.values['code']==36
     assert s.state(1)==state
-    assert store.get(1)['snapshot']['crystal']==cost-1
+    assert store.get(1)['snapshot']['gold']==cost-1
     assert any(p.message_name=='PlayerDataProto' for p in result.before_response)
-    e.save_snapshot(1,dict(snapshot,crystal=cost))
+    e.save_snapshot(1,dict(snapshot,gold=cost))
     assert call(s,'BattlePassTalentReset',{'id':tid},113).values['code']==10
-    assert store.get(1)['snapshot']['crystal']==0
+    assert store.get(1)['snapshot']['gold']==0
     assert s.state(1)['points']==2
 
 
 def test_invalid_talent_reset_never_refunds_or_charges(env):
     store,e,s=env
     state=s.state(1)
-    balance=store.get(1)['snapshot']['crystal']
+    balance=store.get(1)['snapshot']['gold']
     assert call(s,'BattlePassTalentReset',{'id':0},121).values['code']==13
     assert s.state(1)==state
-    assert store.get(1)['snapshot']['crystal']==balance
+    assert store.get(1)['snapshot']['gold']==balance
