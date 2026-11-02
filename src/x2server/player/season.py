@@ -789,11 +789,19 @@ class SeasonService:
                 # A stale page or a retry with a new request id can reset an
                 # already-cleared talent. Return its authoritative zero level;
                 # never charge or refund a second time.
+                #
+                # The charge is 金币 (1237901), not 光辉 (1237902). Native
+                # BattlePassTalentView.OnResetTalent (0x014C4444) builds the
+                # confirmation from language 60050165 ("每重置1点…需要{0}金币")
+                # and its confirm callback (0x014C68A4) gates on
+                # GameAPI_GetCurrencyNum(1) = E_Gold; charging 光辉 makes a
+                # player who passed the client check fail on the server with
+                # 36, i.e. the reset button does nothing.
                 cost = level * next(r for r in self.activities if r['ActivityID'] == self.ACTIVITY)['ActivityParam3'][0]
-                if self.store.get(player)['snapshot'].get('crystal', 0) < cost:
-                    raise SeasonRejected(36, f'talent reset crystal insufficient talent={tid} level={level} cost={cost}')
+                if self.store.get(player)['snapshot'].get('gold', 0) < cost:
+                    raise SeasonRejected(36, f'talent reset gold insufficient talent={tid} level={level} cost={cost}')
                 if level:
-                    self.spend(player, 1237902, cost)
+                    self.spend(player, 1237901, cost)
                     state['points'] += level
                     state['talents'][str(tid)] = 0
                     state['stats']['talent_reset'] = state['stats'].get('talent_reset', 0) + 1

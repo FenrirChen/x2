@@ -9,7 +9,7 @@ def env(tmp_path, monkeypatch):
     monkeypatch.setenv('X2_ORIGIN_SEASON_ENABLED', '1')
     store = PlayerStore(tmp_path / 'season.sqlite3')
     p = store.login('season-test', 1, 0)
-    store.save_snapshot(1, dict(p['snapshot'], level=60, crystal=100000, mobility={'power': 149},
+    store.save_snapshot(1, dict(p['snapshot'], level=60, gold=100000, crystal=100000, mobility={'power': 149},
         heroes=[{'id': 1003, 'state': 2, 'level': 1, 'star': 1}]), p['revision'])
     economy = EconomyService(store)
     yield store, economy, economy.season
