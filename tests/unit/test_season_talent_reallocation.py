@@ -114,3 +114,28 @@ def test_invalid_talent_reset_never_refunds_or_charges(env):
     assert call(s,'BattlePassTalentReset',{'id':0},121).values['code']==13
     assert s.state(1)==state
     assert store.get(1)['snapshot']['gold']==balance
+
+
+@pytest.mark.parametrize('enough_gold', [True, False])
+def test_reset_currency_is_gold_independent_of_crystal(env, enough_gold):
+    store,e,s=env
+    tid=min(s.talents)
+    with e.transaction():
+        e._grant(1,'currency-isolation-points',{1291002:2})
+    assert allocate(s,[(tid,2)],201).values['code']==10
+    cost=2*next(r for r in s.activities if r['ActivityID']==s.ACTIVITY)['ActivityParam3'][0]
+    gold,crystal=(cost,0) if enough_gold else (cost-1,100000)
+    e.save_snapshot(1,dict(store.get(1)['snapshot'],gold=gold,crystal=crystal))
+    before=s.state(1)
+    result=call(s,'BattlePassTalentReset',{'id':tid},202)
+    assert result.values['code']==(10 if enough_gold else 36)
+    snapshot=store.get(1)['snapshot']
+    assert snapshot['gold']==(0 if enough_gold else gold)
+    assert snapshot['crystal']==crystal
+    if enough_gold:
+        assert s.state(1)['points']==2
+        balance=snapshot.copy()
+        assert call(s,'BattlePassTalentReset',{'id':tid},203).values['code']==10
+        assert store.get(1)['snapshot']==balance
+    else:
+        assert s.state(1)==before

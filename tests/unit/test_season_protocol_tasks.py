@@ -29,7 +29,7 @@ def test_real_season_shop_684_685_entry_independent_of_theme_live_gate_and_close
     with store.db:
         store.db.execute('UPDATE season_calendar SET start_sec=? WHERE instance_id=?', (ActivityRotation.ANCHOR, s.instance))
     a = ActivityService(e)
-    a.rotation.anchor = now - theme * ActivityRotation.SECONDS
+    a.rotation.anchor = now - ActivityRotation.CYCLE_ORDER.index(theme) * ActivityRotation.SECONDS
     a.rotation.first_duration = ActivityRotation.SECONDS
     assert a.rotation.at().theme == a.rotation.themes[theme]
     rt = ActivityRuntime(a, MailService(store, e))

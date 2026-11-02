@@ -1,0 +1,97 @@
+BattlePassTalentView.<>c__DisplayClass21_0$$<OnResetTalent>b__0 0x14c68a4
+14c68a4 stp x22, x21, [sp, #-0x30]!
+14c68a8 stp x20, x19, [sp, #0x10]
+14c68ac stp x29, x30, [sp, #0x20]
+14c68b0 add x29, sp, #0x20
+14c68b4 adrp x20, #0x5575000
+14c68b8 ldrb w8, [x20, #0xdf3]
+14c68bc mov x19, x0
+14c68c0 tbnz w8, #0, #0x14c68dc
+14c68c4 adrp x8, #0x52f7000
+14c68c8 ldr x8, [x8, #0xde8]
+14c68cc ldr w0, [x8]
+14c68d0 bl #0x3f2aed0 ;
+14c68d4 mov w8, #1
+14c68d8 strb w8, [x20, #0xdf3]
+14c68dc adrp x8, #0x528b000
+14c68e0 ldr x8, [x8, #0x2e0]
+14c68e4 ldr x0, [x8]
+14c68e8 ldrb w8, [x0, #0x10a]
+14c68ec tbz w8, #0, #0x14c68fc
+14c68f0 ldr w8, [x0, #0xbc]
+14c68f4 cbnz w8, #0x14c68fc
+14c68f8 bl #0x3f3f378 ;
+14c68fc mov x0, xzr
+14c6900 mov w1, #1
+14c6904 mov x2, xzr
+14c6908 bl #0x154933c ; GameAPI$$GetCurrencyNum
+14c690c ldr x21, [x19, #0x10]
+14c6910 mov w20, w0
+14c6914 cbnz x21, #0x14c691c
+14c6918 bl #0x3f564f0 ;
+14c691c ldr w8, [x21, #0xc4]
+14c6920 ldr w9, [x19, #0x18]
+14c6924 mul w8, w9, w8
+14c6928 cmp w20, w8
+14c692c b.ge #0x14c6974
+14c6930 adrp x8, #0x5243000
+14c6934 ldr x8, [x8, #0x7d0]
+14c6938 ldr x0, [x8]
+14c693c ldrb w8, [x0, #0x10a]
+14c6940 tbz w8, #0, #0x14c6950
+14c6944 ldr w8, [x0, #0xbc]
+14c6948 cbnz w8, #0x14c6950
+14c694c bl #0x3f3f378 ;
+14c6950 ldp x29, x30, [sp, #0x20]
+14c6954 ldp x20, x19, [sp, #0x10]
+14c6958 mov w1, #0xc70000
+14c695c mov x0, xzr
+14c6960 movk w1, #0xe491
+14c6964 mov w2, wzr
+14c6968 mov x3, xzr
+14c696c ldp x22, x21, [sp], #0x30
+14c6970 b #0x134790c ; UIAPI$$ShowSingleBubbleMsg
+14c6974 adrp x8, #0x51ed000
+14c6978 ldr x8, [x8, #0xb60]
+14c697c ldr x0, [x8]
+14c6980 ldrb w8, [x0, #0x10a]
+14c6984 tbz w8, #0, #0x14c6994
+14c6988 ldr w8, [x0, #0xbc]
+14c698c cbnz w8, #0x14c6994
+14c6990 bl #0x3f3f378 ;
+14c6994 adrp x8, #0x51d9000
+14c6998 ldr x8, [x8, #0x618]
+14c699c mov x0, xzr
+14c69a0 ldr x1, [x8]
+14c69a4 bl #0x2feb968 ; Foundation.Module.ServiceModule<ModuleManager>$$get_Instance
+14c69a8 mov x20, x0
+14c69ac cbnz x20, #0x14c69b4
+14c69b0 bl #0x3f564f0 ;
+14c69b4 adrp x8, #0x5246000
+14c69b8 ldr x8, [x8, #0xfd8]
+14c69bc mov x0, x20
+14c69c0 ldr x1, [x8]
+14c69c4 bl #0x1ce72d4 ; Foundation.Module.ModuleManager$$GetModule<RelicBarModule>
+14c69c8 ldr x21, [x19, #0x20]
+14c69cc mov x20, x0
+14c69d0 cbnz x21, #0x14c69d8
+14c69d4 bl #0x3f564f0 ;
+14c69d8 ldr w21, [x21, #0x6c]
+14c69dc cbnz x20, #0x14c69e4
+14c69e0 bl #0x3f564f0 ;
+14c69e4 mov x2, xzr
+14c69e8 mov x0, x20
+14c69ec mov w1, w21
+14c69f0 bl #0x185e888 ; BattlePassModule$$SendBattlePassTalentReset
+14c69f4 ldr x20, [x19, #0x10]
+14c69f8 cbnz x20, #0x14c6a00
+14c69fc bl #0x3f564f0 ;
+14c6a00 strb wzr, [x20, #0xc8]
+14c6a04 ldr x19, [x19, #0x10]
+14c6a08 cbnz x19, #0x14c6a10
+14c6a0c bl #0x3f564f0 ;
+14c6a10 mov x0, x19
+14c6a14 ldp x29, x30, [sp, #0x20]
+14c6a18 ldp x20, x19, [sp, #0x10]
+14c6a1c ldp x22, x21, [sp], #0x30
+14c6a20 b #0x14c3528 ; BattlePassTalentView$$RefreshResetState

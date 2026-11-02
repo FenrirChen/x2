@@ -31,7 +31,7 @@
   `BattlePassModule.GetResetTalentCost`（0x01860D38 → ActivityReal.ActivityParam3[0]=500），
   弹窗文案走 Language 60050165「每重置1点已分配的天赋点，需要{0}金币…」。
 - 确认回调 `BattlePassTalentView_c_DisplayClass21_0__OnResetTalent_b__0` 0x014C68A4 内
-  0x014C6924 调用的是 `GameAPI_GetCurrencyNum(1)`，enum 1 = E_Gold → 金币 1237901。
+  0x014C6900设置w1=1，0x014C6908调用的是 `GameAPI_GetCurrencyNum(1)`，enum 1 = E_Gold → 金币 1237901。
 
 修复：`BattlePassTalentReset` 的余额校验与 `self.spend(player, …)` 均改为金币 1237901，
 不足时仍回 36。`tests/unit/test_season_talent_reallocation.py` 的余额断言与「差1」用例
@@ -39,3 +39,7 @@
 
 回归：`tests/unit/test_season_talent_reallocation.py` + `tests/unit/test_origin_season.py`
 共 21 项通过。服务端重置现与客户端同口径：按金币 1237901 扣费，单点价格与失败码不变。
+
+本地独立复核（2026-11-02）：script.json与原APK符号对应的确认回调在0x14C6900设置w1=1，0x14C6908调用GameAPI.GetCurrencyNum；dump.cs的CurrencyTypeECurrencyEnu.E_Gold=1。原先文档把0x14C6924的乘法指令误标为货币调用。反汇编保存于analysis/season_reset_currency_20261102/0x14c68a4.txt。新增金币/光辉隔离测试，确保光辉为零不阻止金币支付、金币不足时不动光辉，清零重试不重复扣款。
+
+本地整合最终回归：天赋重新分配、原赛季闭环、赛季协议任务共37项通过。额外纠正赛季商店测试以活动CYCLE_ORDER推算日期，避免轮换顺序调整后测试误选主题；不改活动业务代码。未推送、未连接远程服务器。
