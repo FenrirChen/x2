@@ -1,0 +1,176 @@
+LogicX2.Property$$GetAtrribIndex 0x1c20314
+1c20314 stp x28, x27, [sp, #-0x60]!
+1c20318 stp x26, x25, [sp, #0x10]
+1c2031c stp x24, x23, [sp, #0x20]
+1c20320 stp x22, x21, [sp, #0x30]
+1c20324 stp x20, x19, [sp, #0x40]
+1c20328 stp x29, x30, [sp, #0x50]
+1c2032c add x29, sp, #0x50
+1c20330 sub sp, sp, #0x10
+1c20334 adrp x19, #0x5578000
+1c20338 ldrb w8, [x19, #0xf82]
+1c2033c mov x20, x1
+1c20340 tbnz w8, #0, #0x1c2035c
+1c20344 adrp x8, #0x52d3000
+1c20348 ldr x8, [x8, #0x1e8]
+1c2034c ldr w0, [x8]
+1c20350 bl #0x3f2aed0 ;
+1c20354 mov w8, #1
+1c20358 strb w8, [x19, #0xf82]
+1c2035c adrp x26, #0x5246000
+1c20360 ldr x26, [x26, #0x8d0]
+1c20364 str wzr, [sp, #0xc]
+1c20368 ldr x0, [x26]
+1c2036c ldrb w8, [x0, #0x10a]
+1c20370 tbnz w8, #0, #0x1c2037c
+1c20374 str x20, [sp]
+1c20378 b #0x1c20390 ;
+1c2037c ldr w8, [x0, #0xbc]
+1c20380 str x20, [sp]
+1c20384 cbnz w8, #0x1c20390
+1c20388 bl #0x3f3f378 ;
+1c2038c ldr x0, [x26]
+1c20390 ldr x8, [x0, #0xa0]
+1c20394 ldr x8, [x8, #8]
+1c20398 cbnz x8, #0x1c20500
+1c2039c adrp x8, #0x5252000
+1c203a0 ldr x8, [x8, #0x7d0]
+1c203a4 ldr x0, [x8]
+1c203a8 bl #0x3f6452c ;
+1c203ac adrp x8, #0x5286000
+1c203b0 ldr x8, [x8, #0xb70]
+1c203b4 mov x20, x0
+1c203b8 ldr x1, [x8]
+1c203bc bl #0x35acc28 ; System.Collections.Generic.Dictionary<object, int>$$.ctor
+1c203c0 ldr x0, [x26]
+1c203c4 ldrb w8, [x0, #0x10a]
+1c203c8 tbz w8, #0, #0x1c203dc
+1c203cc ldr w8, [x0, #0xbc]
+1c203d0 cbnz w8, #0x1c203dc
+1c203d4 bl #0x3f3f378 ;
+1c203d8 ldr x0, [x26]
+1c203dc ldr x8, [x0, #0xa0]
+1c203e0 str x20, [x8, #8]
+1c203e4 adrp x8, #0x51f8000
+1c203e8 ldr x8, [x8, #0x788]
+1c203ec ldr x0, [x8]
+1c203f0 ldrb w8, [x0, #0x10a]
+1c203f4 tbz w8, #0, #0x1c20404
+1c203f8 ldr w8, [x0, #0xbc]
+1c203fc cbnz w8, #0x1c20404
+1c20400 bl #0x3f3f378 ;
+1c20404 mov x0, xzr
+1c20408 mov x1, xzr
+1c2040c bl #0x19822bc ; IndexInfoManager$$get_Instance
+1c20410 mov x20, x0
+1c20414 cbnz x20, #0x1c2041c
+1c20418 bl #0x3f564f0 ;
+1c2041c mov x1, xzr
+1c20420 mov x0, x20
+1c20424 bl #0x1982694 ; IndexInfoManager$$GetAllItem
+1c20428 mov x20, x0
+1c2042c cbnz x20, #0x1c20434
+1c20430 bl #0x3f564f0 ;
+1c20434 ldr x20, [x20, #0x18]
+1c20438 cbnz x20, #0x1c20440
+1c2043c bl #0x3f564f0 ;
+1c20440 adrp x8, #0x528d000
+1c20444 ldr x8, [x8, #0x238]
+1c20448 mov x0, x20
+1c2044c ldr x1, [x8]
+1c20450 bl #0x3d51884 ; System.Collections.Generic.List<IEventSystemHandler>$$get_Count
+1c20454 mov w21, w0
+1c20458 cmp w21, #1
+1c2045c b.lt #0x1c20500
+1c20460 adrp x27, #0x5297000
+1c20464 adrp x19, #0x5275000
+1c20468 ldr x27, [x27, #0xd88]
+1c2046c ldr x19, [x19, #0xe90]
+1c20470 mov w22, wzr
+1c20474 mov w28, #0x18
+1c20478 cbnz x20, #0x1c20480
+1c2047c bl #0x3f564f0 ;
+1c20480 ldr x2, [x27]
+1c20484 mov x0, x20
+1c20488 mov w1, w22
+1c2048c bl #0x3d5188c ; System.Collections.Generic.List<IEventSystemHandler>$$get_Item
+1c20490 ldr x8, [x26]
+1c20494 mov x23, x0
+1c20498 ldrb w9, [x8, #0x10a]
+1c2049c tbz w9, #0, #0x1c204b4
+1c204a0 ldr w9, [x8, #0xbc]
+1c204a4 cbnz w9, #0x1c204b4
+1c204a8 mov x0, x8
+1c204ac bl #0x3f3f378 ;
+1c204b0 ldr x8, [x26]
+1c204b4 ldr x8, [x8, #0xa0]
+1c204b8 ldr x24, [x8, #8]
+1c204bc cbz x23, #0x1c204c8
+1c204c0 ldr x25, [x23, #0x18]
+1c204c4 b #0x1c204d4 ;
+1c204c8 bl #0x3f564f0 ;
+1c204cc ldr x25, [x28]
+1c204d0 bl #0x3f564f0 ;
+1c204d4 ldr w23, [x23, #0x20]
+1c204d8 cbnz x24, #0x1c204e0
+1c204dc bl #0x3f564f0 ;
+1c204e0 ldr x3, [x19]
+1c204e4 mov x0, x24
+1c204e8 mov x1, x25
+1c204ec mov w2, w23
+1c204f0 bl #0x35aefd4 ; System.Collections.Generic.Dictionary<GameObject, int>$$Add
+1c204f4 add w22, w22, #1
+1c204f8 cmp w21, w22
+1c204fc b.ne #0x1c20478
+1c20500 ldr x0, [x26]
+1c20504 str wzr, [sp, #0xc]
+1c20508 ldrb w8, [x0, #0x10a]
+1c2050c tbz w8, #0, #0x1c20520
+1c20510 ldr w8, [x0, #0xbc]
+1c20514 cbnz w8, #0x1c20520
+1c20518 bl #0x3f3f378 ;
+1c2051c ldr x0, [x26]
+1c20520 ldr x8, [x0, #0xa0]
+1c20524 ldr x19, [sp]
+1c20528 ldr x20, [x8, #8]
+1c2052c cbnz x20, #0x1c20534
+1c20530 bl #0x3f564f0 ;
+1c20534 adrp x8, #0x52b8000
+1c20538 ldr x8, [x8, #0xeb8]
+1c2053c add x2, sp, #0xc
+1c20540 mov x0, x20
+1c20544 mov x1, x19
+1c20548 ldr x3, [x8]
+1c2054c bl #0x35b0374 ; System.Collections.Generic.Dictionary<GameObject, int>$$TryGetValue
+1c20550 tbz w0, #0, #0x1c205ac
+1c20554 adrp x8, #0x52df000
+1c20558 ldr x8, [x8, #0xba8]
+1c2055c ldr x0, [x8]
+1c20560 ldrb w8, [x0, #0x10a]
+1c20564 tbz w8, #0, #0x1c20574
+1c20568 ldr w8, [x0, #0xbc]
+1c2056c cbnz w8, #0x1c20574
+1c20570 bl #0x3f3f378 ;
+1c20574 mov x0, xzr
+1c20578 mov x1, xzr
+1c2057c bl #0x215a48c ; AttribTypeManager$$get_Instance
+1c20580 ldr w19, [sp, #0xc]
+1c20584 mov x20, x0
+1c20588 cbnz x20, #0x1c20590
+1c2058c bl #0x3f564f0 ;
+1c20590 mov x2, xzr
+1c20594 mov x0, x20
+1c20598 mov w1, w19
+1c2059c bl #0x215a75c ; AttribTypeManager$$GetItem
+1c205a0 cbz x0, #0x1c205ac
+1c205a4 ldr w0, [x0, #0x20]
+1c205a8 b #0x1c205b0 ;
+1c205ac mov w0, #-1
+1c205b0 sub sp, x29, #0x50
+1c205b4 ldp x29, x30, [sp, #0x50]
+1c205b8 ldp x20, x19, [sp, #0x40]
+1c205bc ldp x22, x21, [sp, #0x30]
+1c205c0 ldp x24, x23, [sp, #0x20]
+1c205c4 ldp x26, x25, [sp, #0x10]
+1c205c8 ldp x28, x27, [sp], #0x60
+1c205cc ret

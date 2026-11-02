@@ -1,0 +1,73 @@
+LogicX2.Unit$$InitProperty 0x1cc9f80
+1cc9f80 stp x22, x21, [sp, #-0x30]!
+1cc9f84 stp x20, x19, [sp, #0x10]
+1cc9f88 stp x29, x30, [sp, #0x20]
+1cc9f8c add x29, sp, #0x20
+1cc9f90 adrp x20, #0x5579000
+1cc9f94 ldrb w8, [x20, #0x5fe]
+1cc9f98 mov x19, x0
+1cc9f9c tbnz w8, #0, #0x1cc9fb8
+1cc9fa0 adrp x8, #0x51cf000
+1cc9fa4 ldr x8, [x8, #0xaa8]
+1cc9fa8 ldr w0, [x8]
+1cc9fac bl #0x3f2aed0 ;
+1cc9fb0 mov w8, #1
+1cc9fb4 strb w8, [x20, #0x5fe]
+1cc9fb8 mov x0, xzr
+1cc9fbc mov x1, xzr
+1cc9fc0 bl #0x18d3144 ; LogicX2.LogicBattle$$get_Current
+1cc9fc4 mov x20, x0
+1cc9fc8 cbnz x20, #0x1cc9fd0
+1cc9fcc bl #0x3f564f0 ;
+1cc9fd0 mov x1, xzr
+1cc9fd4 mov x0, x20
+1cc9fd8 bl #0x18d3194 ; LogicX2.LogicBattle$$get_UnitManager
+1cc9fdc mov x20, x0
+1cc9fe0 cbnz x20, #0x1cc9fe8
+1cc9fe4 bl #0x3f564f0 ;
+1cc9fe8 ldr x20, [x20, #0x98]
+1cc9fec cbnz x20, #0x1cc9ff4
+1cc9ff0 bl #0x3f564f0 ;
+1cc9ff4 adrp x8, #0x525d000
+1cc9ff8 ldr x8, [x8, #0x8d0]
+1cc9ffc mov x0, x20
+1cca000 ldr x1, [x8]
+1cca004 bl #0x2f47f54 ; CommonX2.ObjectPool<MarsNet.Request>$$Get
+1cca008 mov x20, x0
+1cca00c str x20, [x19, #0x3a8]
+1cca010 cbnz x20, #0x1cca018
+1cca014 bl #0x3f564f0 ;
+1cca018 mov x2, xzr
+1cca01c mov x0, x20
+1cca020 mov x1, x19
+1cca024 bl #0x1c1f938 ; LogicX2.Property$$SetUnit
+1cca028 adrp x8, #0x51ea000
+1cca02c ldr x8, [x8, #0x7c8]
+1cca030 ldr x9, [x19]
+1cca034 ldr x8, [x8]
+1cca038 ldrb w11, [x9, #0x104]
+1cca03c ldrb w10, [x8, #0x104]
+1cca040 cmp w11, w10
+1cca044 b.lo #0x1cca064
+1cca048 ldr x9, [x9, #0xb0]
+1cca04c add x9, x9, x10, lsl #3
+1cca050 ldur x9, [x9, #-8]
+1cca054 cmp x9, x8
+1cca058 b.ne #0x1cca064
+1cca05c ldr x8, [x19, #0x6e8]
+1cca060 cbnz x8, #0x1cca084
+1cca064 ldr x20, [x19, #0x3a8]
+1cca068 ldr w21, [x19, #0x4e4]
+1cca06c cbnz x20, #0x1cca074
+1cca070 bl #0x3f564f0 ;
+1cca074 mov x2, xzr
+1cca078 mov x0, x20
+1cca07c mov w1, w21
+1cca080 bl #0x1c21434 ; LogicX2.Property$$AddBaseProperty
+1cca084 ldr x8, [x19]
+1cca088 mov x0, x19
+1cca08c ldp x2, x1, [x8, #0x170]
+1cca090 ldp x29, x30, [sp, #0x20]
+1cca094 ldp x20, x19, [sp, #0x10]
+1cca098 ldp x22, x21, [sp], #0x30
+1cca09c br x2

@@ -1,0 +1,92 @@
+LogicX2.Property$$AddOtherAttributes 0x1c18030
+1c18030 stp x24, x23, [sp, #-0x40]!
+1c18034 stp x22, x21, [sp, #0x10]
+1c18038 stp x20, x19, [sp, #0x20]
+1c1803c stp x29, x30, [sp, #0x30]
+1c18040 add x29, sp, #0x30
+1c18044 sub sp, sp, #0x50
+1c18048 adrp x21, #0x5578000
+1c1804c ldrb w8, [x21, #0xf88]
+1c18050 mov x20, x1
+1c18054 mov x19, x0
+1c18058 tbnz w8, #0, #0x1c18074
+1c1805c adrp x8, #0x52bd000
+1c18060 ldr x8, [x8, #0x9b8]
+1c18064 ldr w0, [x8]
+1c18068 bl #0x3f2aed0 ;
+1c1806c mov w8, #1
+1c18070 strb w8, [x21, #0xf88]
+1c18074 stp xzr, xzr, [sp, #0x40]
+1c18078 str xzr, [sp, #0x38]
+1c1807c cbz x20, #0x1c18184
+1c18080 adrp x8, #0x52ac000
+1c18084 ldr x8, [x8, #0x1e8]
+1c18088 mov x0, x20
+1c1808c ldr x1, [x8]
+1c18090 add x8, sp, #0x38
+1c18094 bl #0x3d50690 ; System.Collections.Generic.List<FutureErrorCallback>$$GetEnumerator
+1c18098 adrp x22, #0x52bc000
+1c1809c adrp x23, #0x523c000
+1c180a0 adrp x24, #0x52f4000
+1c180a4 ldr x22, [x22, #0x450]
+1c180a8 ldr x23, [x23, #0x9f8]
+1c180ac ldr x24, [x24, #0xca0]
+1c180b0 ldr x1, [x22]
+1c180b4 add x0, sp, #0x38
+1c180b8 bl #0x20a0078 ;
+1c180bc and w8, w0, #1
+1c180c0 tbz w8, #0, #0x1c18154
+1c180c4 ldr x1, [x23]
+1c180c8 add x0, sp, #0x38
+1c180cc bl #0x20a0144 ;
+1c180d0 mov x21, x0
+1c180d4 cbz x21, #0x1c180e0
+1c180d8 ldr w20, [x21, #0x14]
+1c180dc b #0x1c180ec ;
+1c180e0 bl #0x3f564f0 ;
+1c180e4 ldr w20, [x21, #0x14]
+1c180e8 bl #0x3f564f0 ;
+1c180ec ldr x0, [x24]
+1c180f0 ldr x21, [x21, #0x18]
+1c180f4 ldrb w8, [x0, #0x10a]
+1c180f8 tbz w8, #0, #0x1c18108
+1c180fc ldr w8, [x0, #0xbc]
+1c18100 cbnz w8, #0x1c18108
+1c18104 bl #0x3f3f378 ;
+1c18108 mov x0, xzr
+1c1810c mov x2, xzr
+1c18110 add x8, sp, #0x20
+1c18114 mov x1, x21
+1c18118 bl #0x3efeb04 ; LogicX2.SmartLong$$op_Implicit
+1c1811c ldr x8, [sp, #0x30]
+1c18120 ldr q0, [sp, #0x20]
+1c18124 str x8, [sp, #0x10]
+1c18128 str q0, [sp]
+1c1812c mov x2, sp
+1c18130 mov x0, x19
+1c18134 mov w1, w20
+1c18138 bl #0x1c20e68 ; LogicX2.Property$$AddWrapper
+1c1813c b #0x1c180b0 ;
+1c18140 bl #0x113fb30 ;
+1c18144 ldr x19, [x0]
+1c18148 bl #0x113f710 ;
+1c1814c mov w20, wzr
+1c18150 b #0x1c1815c ;
+1c18154 mov x19, xzr
+1c18158 mov w20, #1
+1c1815c adrp x8, #0x529f000
+1c18160 ldr x8, [x8, #0x1e8]
+1c18164 add x0, sp, #0x38
+1c18168 ldr x1, [x8]
+1c1816c bl #0x20a0060 ;
+1c18170 tbnz w20, #0, #0x1c18184
+1c18174 cbz x19, #0x1c18184
+1c18178 mov x1, xzr
+1c1817c mov x0, x19
+1c18180 bl #0x3f563d4 ;
+1c18184 sub sp, x29, #0x30
+1c18188 ldp x29, x30, [sp, #0x30]
+1c1818c ldp x20, x19, [sp, #0x20]
+1c18190 ldp x22, x21, [sp, #0x10]
+1c18194 ldp x24, x23, [sp], #0x40
+1c18198 ret

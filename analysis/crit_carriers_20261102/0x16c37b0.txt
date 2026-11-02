@@ -1,0 +1,84 @@
+ChapterModule$$ConvertHeroAttrAdd 0x16c37b0
+16c37b0 stp x28, x27, [sp, #-0x60]!
+16c37b4 stp x26, x25, [sp, #0x10]
+16c37b8 stp x24, x23, [sp, #0x20]
+16c37bc stp x22, x21, [sp, #0x30]
+16c37c0 stp x20, x19, [sp, #0x40]
+16c37c4 stp x29, x30, [sp, #0x50]
+16c37c8 add x29, sp, #0x50
+16c37cc adrp x20, #0x5576000
+16c37d0 ldrb w8, [x20, #0xb74]
+16c37d4 mov x19, x1
+16c37d8 tbnz w8, #0, #0x16c37f4
+16c37dc adrp x8, #0x5253000
+16c37e0 ldr x8, [x8, #0x1c0]
+16c37e4 ldr w0, [x8]
+16c37e8 bl #0x3f2aed0 ;
+16c37ec mov w8, #1
+16c37f0 strb w8, [x20, #0xb74]
+16c37f4 adrp x8, #0x523b000
+16c37f8 ldr x8, [x8, #0x460]
+16c37fc ldr x0, [x8]
+16c3800 bl #0x3f6452c ;
+16c3804 adrp x8, #0x52fe000
+16c3808 ldr x8, [x8, #0x9b0]
+16c380c mov x20, x0
+16c3810 ldr x1, [x8]
+16c3814 bl #0x3d4e3a8 ; System.Collections.Generic.List<FutureErrorCallback>$$.ctor
+16c3818 cbz x19, #0x16c38dc
+16c381c adrp x24, #0x528b000
+16c3820 ldr x24, [x24, #0x5d0]
+16c3824 mov x0, x19
+16c3828 ldr x1, [x24]
+16c382c bl #0x3d51884 ; System.Collections.Generic.List<IEventSystemHandler>$$get_Count
+16c3830 cmp w0, #1
+16c3834 b.lt #0x16c38dc
+16c3838 adrp x25, #0x5223000
+16c383c adrp x26, #0x52ba000
+16c3840 adrp x27, #0x5268000
+16c3844 ldr x25, [x25, #0x100]
+16c3848 ldr x26, [x26, #0x5c0]
+16c384c ldr x27, [x27, #0x9b0]
+16c3850 mov w21, wzr
+16c3854 ldr x0, [x25]
+16c3858 bl #0x3f6452c ;
+16c385c mov x1, xzr
+16c3860 mov x22, x0
+16c3864 bl #0x1c5b254 ; LogicX2Command.HeroAttrAdd$$.ctor
+16c3868 ldr x2, [x26]
+16c386c mov x0, x19
+16c3870 mov w1, w21
+16c3874 bl #0x3d5188c ; System.Collections.Generic.List<IEventSystemHandler>$$get_Item
+16c3878 mov x23, x0
+16c387c cbnz x23, #0x16c3884
+16c3880 bl #0x3f564f0 ;
+16c3884 ldr w28, [x23, #0x10]
+16c3888 cbz x22, #0x16c3898
+16c388c str w28, [x22, #0x14]
+16c3890 ldr x23, [x23, #0x18]
+16c3894 b #0x16c38a8 ;
+16c3898 bl #0x3f564f0 ;
+16c389c str w28, [x22, #0x14]
+16c38a0 ldr x23, [x23, #0x18]
+16c38a4 bl #0x3f564f0 ;
+16c38a8 str x23, [x22, #0x18]
+16c38ac cbnz x20, #0x16c38b4
+16c38b0 bl #0x3f564f0 ;
+16c38b4 ldr x2, [x27]
+16c38b8 mov x0, x20
+16c38bc mov x1, x22
+16c38c0 bl #0x3d4f3b4 ; System.Collections.Generic.List<FutureErrorCallback>$$Add
+16c38c4 ldr x1, [x24]
+16c38c8 mov x0, x19
+16c38cc add w21, w21, #1
+16c38d0 bl #0x3d51884 ; System.Collections.Generic.List<IEventSystemHandler>$$get_Count
+16c38d4 cmp w21, w0
+16c38d8 b.lt #0x16c3854
+16c38dc mov x0, x20
+16c38e0 ldp x29, x30, [sp, #0x50]
+16c38e4 ldp x20, x19, [sp, #0x40]
+16c38e8 ldp x22, x21, [sp, #0x30]
+16c38ec ldp x24, x23, [sp, #0x20]
+16c38f0 ldp x26, x25, [sp, #0x10]
+16c38f4 ldp x28, x27, [sp], #0x60
+16c38f8 ret

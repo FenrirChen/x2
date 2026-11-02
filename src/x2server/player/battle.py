@@ -682,6 +682,11 @@ class BattleService:
             base_values = battle_hero_base()[str(stat_hero["id"])]
             raw_attributes = {r["attrId"]: base_values[r["name"]]
                               for r in catalog()["battle_base_1003"]["attributes"]}
+            # Unit.InitProperty skips AddBaseProperty whenever attrAdd is present
+            # (0x1cca05c). Reproduce its CriticalDamage + CRI_Dmg here; otherwise
+            # the complete server base omits the native 150% (0x1c217a8).
+            from .college_power import rules as power_rules
+            raw_attributes[113] = raw_attributes.get(113, 0) + int(power_rules()[2]['CRI_Dmg'])
             if self.economy:
                 # Account season talents and saved erosion also affect ordinary
                 # combat, as confirmed by the user; expire with the season.
@@ -727,8 +732,8 @@ class BattleService:
         moon_skill = (self.economy.moon.battle_skill(player["id"])
                       if self.economy and entry_context.section_type == 21 else b"")
         # CRIDmg is an extra battle-wide bonus, not the hero's base multiplier.
-        # Leave it at protobuf default 0: the client adds its native CRI_Dmg
-        # base (1500) and each hero's equipment/passive sources, then applies
+        # Leave it at protobuf default 0: attrAdd above includes CRI_Dmg (1500)
+        # because the native fallback is skipped; equipment/passives then apply
         # the attribute-113 cap (8000). Sending 1500 would double the base;
         # the legacy 15000 forced every hero to the cap. See native evidence
         # in analysis/pr87_90_20261027/crit_damage_native.txt.

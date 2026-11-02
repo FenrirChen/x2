@@ -1,0 +1,75 @@
+ChapterModule$$ConvertFightHeroData 0x16c2a24
+16c2a24 stp x26, x25, [sp, #-0x50]!
+16c2a28 stp x24, x23, [sp, #0x10]
+16c2a2c stp x22, x21, [sp, #0x20]
+16c2a30 stp x20, x19, [sp, #0x30]
+16c2a34 stp x29, x30, [sp, #0x40]
+16c2a38 add x29, sp, #0x40
+16c2a3c adrp x20, #0x5576000
+16c2a40 ldrb w8, [x20, #0xb6a]
+16c2a44 mov x19, x1
+16c2a48 tbnz w8, #0, #0x16c2a64
+16c2a4c adrp x8, #0x5267000
+16c2a50 ldr x8, [x8, #0x6f0]
+16c2a54 ldr w0, [x8]
+16c2a58 bl #0x3f2aed0 ;
+16c2a5c mov w8, #1
+16c2a60 strb w8, [x20, #0xb6a]
+16c2a64 adrp x8, #0x5296000
+16c2a68 ldr x8, [x8, #0x200]
+16c2a6c ldr x0, [x8]
+16c2a70 bl #0x3f6452c ;
+16c2a74 adrp x8, #0x5212000
+16c2a78 ldr x8, [x8, #0xc18]
+16c2a7c mov x20, x0
+16c2a80 ldr x1, [x8]
+16c2a84 bl #0x3d4e3a8 ; System.Collections.Generic.List<FutureErrorCallback>$$.ctor
+16c2a88 cbz x19, #0x16c2b30
+16c2a8c adrp x23, #0x51d0000
+16c2a90 ldr x23, [x23, #0xa18]
+16c2a94 mov x0, x19
+16c2a98 ldr x1, [x23]
+16c2a9c bl #0x3d51884 ; System.Collections.Generic.List<IEventSystemHandler>$$get_Count
+16c2aa0 cmp w0, #1
+16c2aa4 b.lt #0x16c2b30
+16c2aa8 adrp x24, #0x5249000
+16c2aac adrp x25, #0x52fb000
+16c2ab0 adrp x26, #0x5272000
+16c2ab4 ldr x24, [x24, #8]
+16c2ab8 ldr x25, [x25, #0x730]
+16c2abc ldr x26, [x26, #0x748]
+16c2ac0 mov w21, wzr
+16c2ac4 ldr x2, [x24]
+16c2ac8 mov x0, x19
+16c2acc mov w1, w21
+16c2ad0 bl #0x3d5188c ; System.Collections.Generic.List<IEventSystemHandler>$$get_Item
+16c2ad4 ldr x8, [x25]
+16c2ad8 mov x22, x0
+16c2adc ldrb w9, [x8, #0x10a]
+16c2ae0 tbz w9, #0, #0x16c2af4
+16c2ae4 ldr w9, [x8, #0xbc]
+16c2ae8 cbnz w9, #0x16c2af4
+16c2aec mov x0, x8
+16c2af0 bl #0x3f3f378 ;
+16c2af4 mov x1, x22
+16c2af8 bl #0x16c2b4c ; ChapterModule$$ConvertSingleFightHeroData
+16c2afc mov x22, x0
+16c2b00 cbnz x20, #0x16c2b08
+16c2b04 bl #0x3f564f0 ;
+16c2b08 ldr x2, [x26]
+16c2b0c mov x0, x20
+16c2b10 mov x1, x22
+16c2b14 bl #0x3d4f3b4 ; System.Collections.Generic.List<FutureErrorCallback>$$Add
+16c2b18 ldr x1, [x23]
+16c2b1c mov x0, x19
+16c2b20 add w21, w21, #1
+16c2b24 bl #0x3d51884 ; System.Collections.Generic.List<IEventSystemHandler>$$get_Count
+16c2b28 cmp w21, w0
+16c2b2c b.lt #0x16c2ac4
+16c2b30 mov x0, x20
+16c2b34 ldp x29, x30, [sp, #0x40]
+16c2b38 ldp x20, x19, [sp, #0x30]
+16c2b3c ldp x22, x21, [sp, #0x20]
+16c2b40 ldp x24, x23, [sp, #0x10]
+16c2b44 ldp x26, x25, [sp], #0x50
+16c2b48 ret

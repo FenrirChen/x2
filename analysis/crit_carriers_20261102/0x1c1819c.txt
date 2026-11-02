@@ -1,0 +1,68 @@
+LogicX2.Property$$AddWrapper 0x1c1819c
+1c1819c stp x22, x21, [sp, #-0x30]!
+1c181a0 stp x20, x19, [sp, #0x10]
+1c181a4 stp x29, x30, [sp, #0x20]
+1c181a8 add x29, sp, #0x20
+1c181ac sub sp, sp, #0x40
+1c181b0 adrp x22, #0x5578000
+1c181b4 ldrb w8, [x22, #0xf7c]
+1c181b8 mov x19, x2
+1c181bc mov x21, x1
+1c181c0 mov x20, x0
+1c181c4 tbnz w8, #0, #0x1c181e0
+1c181c8 adrp x8, #0x52fe000
+1c181cc ldr x8, [x8, #0x880]
+1c181d0 ldr w0, [x8]
+1c181d4 bl #0x3f2aed0 ;
+1c181d8 mov w8, #1
+1c181dc strb w8, [x22, #0xf7c]
+1c181e0 adrp x8, #0x5246000
+1c181e4 ldr x8, [x8, #0x8d0]
+1c181e8 ldr x0, [x8]
+1c181ec ldrb w8, [x0, #0x10a]
+1c181f0 tbz w8, #0, #0x1c18200
+1c181f4 ldr w8, [x0, #0xbc]
+1c181f8 cbnz w8, #0x1c18200
+1c181fc bl #0x3f3f378 ;
+1c18200 mov x1, x21
+1c18204 bl #0x1c20314 ; LogicX2.Property$$GetAtrribIndex
+1c18208 mov w21, w0
+1c1820c cmp w21, #1
+1c18210 b.lt #0x1c18294
+1c18214 ldr x22, [x20, #0x10]
+1c18218 cbnz x22, #0x1c18220
+1c1821c bl #0x3f564f0 ;
+1c18220 ldr w8, [x22, #0x18]
+1c18224 cmp w8, w21
+1c18228 b.le #0x1c18294
+1c1822c ldr x20, [x20, #0x10]
+1c18230 cbnz x20, #0x1c18238
+1c18234 bl #0x3f564f0 ;
+1c18238 ldr w8, [x20, #0x18]
+1c1823c sxtw x22, w21
+1c18240 cmp w21, w8
+1c18244 b.lo #0x1c18254
+1c18248 bl #0x3f570dc ;
+1c1824c mov x1, xzr
+1c18250 bl #0x3f563d4 ;
+1c18254 ldr x8, [x19, #0x10]
+1c18258 add x9, x20, x22, lsl #3
+1c1825c ldr x20, [x9, #0x20]
+1c18260 str x8, [sp, #0x30]
+1c18264 ldr q0, [x19]
+1c18268 str q0, [sp, #0x20]
+1c1826c cbnz x20, #0x1c18274
+1c18270 bl #0x3f564f0 ;
+1c18274 ldr x8, [sp, #0x30]
+1c18278 ldr q0, [sp, #0x20]
+1c1827c mov x2, xzr
+1c18280 mov x1, sp
+1c18284 mov x0, x20
+1c18288 str x8, [sp, #0x10]
+1c1828c str q0, [sp]
+1c18290 bl #0x33ff39c ; ValueCombinerSmartLong$$AddNum
+1c18294 sub sp, x29, #0x20
+1c18298 ldp x29, x30, [sp, #0x20]
+1c1829c ldp x20, x19, [sp, #0x10]
+1c182a0 ldp x22, x21, [sp], #0x30
+1c182a4 ret

@@ -1,0 +1,46 @@
+LogicX2.Property$$AddWrapper 0x1c209f8
+1c209f8 stp x22, x21, [sp, #-0x30]!
+1c209fc stp x20, x19, [sp, #0x10]
+1c20a00 stp x29, x30, [sp, #0x20]
+1c20a04 add x29, sp, #0x20
+1c20a08 sub sp, sp, #0x40
+1c20a0c mov x21, x0
+1c20a10 ldr x22, [x21, #0x10]
+1c20a14 mov x19, x2
+1c20a18 mov w20, w1
+1c20a1c cbnz x22, #0x1c20a24
+1c20a20 bl #0x3f564f0 ;
+1c20a24 ldr w8, [x22, #0x18]
+1c20a28 cmp w8, w20
+1c20a2c b.le #0x1c20a98
+1c20a30 ldr x21, [x21, #0x10]
+1c20a34 cbnz x21, #0x1c20a3c
+1c20a38 bl #0x3f564f0 ;
+1c20a3c ldr w8, [x21, #0x18]
+1c20a40 sxtw x22, w20
+1c20a44 cmp w8, w20
+1c20a48 b.hi #0x1c20a58
+1c20a4c bl #0x3f570dc ;
+1c20a50 mov x1, xzr
+1c20a54 bl #0x3f563d4 ;
+1c20a58 ldr x8, [x19, #0x10]
+1c20a5c add x9, x21, x22, lsl #3
+1c20a60 ldr x20, [x9, #0x20]
+1c20a64 str x8, [sp, #0x30]
+1c20a68 ldr q0, [x19]
+1c20a6c str q0, [sp, #0x20]
+1c20a70 cbnz x20, #0x1c20a78
+1c20a74 bl #0x3f564f0 ;
+1c20a78 ldr x8, [sp, #0x30]
+1c20a7c ldr q0, [sp, #0x20]
+1c20a80 mov x2, xzr
+1c20a84 mov x1, sp
+1c20a88 mov x0, x20
+1c20a8c str x8, [sp, #0x10]
+1c20a90 str q0, [sp]
+1c20a94 bl #0x33ff39c ; ValueCombinerSmartLong$$AddNum
+1c20a98 sub sp, x29, #0x20
+1c20a9c ldp x29, x30, [sp, #0x20]
+1c20aa0 ldp x20, x19, [sp, #0x10]
+1c20aa4 ldp x22, x21, [sp], #0x30
+1c20aa8 ret

@@ -1,0 +1,50 @@
+LogicX2.Property$$AddWrapper 0x1c20e68
+1c20e68 stp x22, x21, [sp, #-0x30]!
+1c20e6c stp x20, x19, [sp, #0x10]
+1c20e70 stp x29, x30, [sp, #0x20]
+1c20e74 add x29, sp, #0x20
+1c20e78 sub sp, sp, #0x20
+1c20e7c adrp x22, #0x5578000
+1c20e80 ldrb w8, [x22, #0xf7a]
+1c20e84 mov x19, x2
+1c20e88 mov w21, w1
+1c20e8c mov x20, x0
+1c20e90 tbnz w8, #0, #0x1c20eac
+1c20e94 adrp x8, #0x524f000
+1c20e98 ldr x8, [x8, #0x508]
+1c20e9c ldr w0, [x8]
+1c20ea0 bl #0x3f2aed0 ;
+1c20ea4 mov w8, #1
+1c20ea8 strb w8, [x22, #0xf7a]
+1c20eac adrp x8, #0x52df000
+1c20eb0 ldr x8, [x8, #0xba8]
+1c20eb4 ldr x0, [x8]
+1c20eb8 ldrb w8, [x0, #0x10a]
+1c20ebc tbz w8, #0, #0x1c20ecc
+1c20ec0 ldr w8, [x0, #0xbc]
+1c20ec4 cbnz w8, #0x1c20ecc
+1c20ec8 bl #0x3f3f378 ;
+1c20ecc mov x0, xzr
+1c20ed0 mov x1, xzr
+1c20ed4 bl #0x215a48c ; AttribTypeManager$$get_Instance
+1c20ed8 mov x22, x0
+1c20edc cbnz x22, #0x1c20ee4
+1c20ee0 bl #0x3f564f0 ;
+1c20ee4 mov x2, xzr
+1c20ee8 mov x0, x22
+1c20eec mov w1, w21
+1c20ef0 bl #0x215a75c ; AttribTypeManager$$GetItem
+1c20ef4 cbz x0, #0x1c20f18
+1c20ef8 ldr x8, [x19, #0x10]
+1c20efc ldr w1, [x0, #0x20]
+1c20f00 mov x2, sp
+1c20f04 mov x0, x20
+1c20f08 str x8, [sp, #0x10]
+1c20f0c ldr q0, [x19]
+1c20f10 str q0, [sp]
+1c20f14 bl #0x1c209f8 ; LogicX2.Property$$AddWrapper
+1c20f18 sub sp, x29, #0x20
+1c20f1c ldp x29, x30, [sp, #0x20]
+1c20f20 ldp x20, x19, [sp, #0x10]
+1c20f24 ldp x22, x21, [sp], #0x30
+1c20f28 ret

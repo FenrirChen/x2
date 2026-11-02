@@ -1,0 +1,364 @@
+LogicX2.Property$$AddBaseProperty 0x1c21434
+1c21434 stp x24, x23, [sp, #-0x40]!
+1c21438 stp x22, x21, [sp, #0x10]
+1c2143c stp x20, x19, [sp, #0x20]
+1c21440 stp x29, x30, [sp, #0x30]
+1c21444 add x29, sp, #0x30
+1c21448 sub sp, sp, #0x360
+1c2144c adrp x21, #0x5578000
+1c21450 ldrb w8, [x21, #0xf83]
+1c21454 mov w20, w1
+1c21458 mov x19, x0
+1c2145c tbnz w8, #0, #0x1c21478
+1c21460 adrp x8, #0x530c000
+1c21464 ldr x8, [x8, #0x178]
+1c21468 ldr w0, [x8]
+1c2146c bl #0x3f2aed0 ;
+1c21470 mov w8, #1
+1c21474 strb w8, [x21, #0xf83]
+1c21478 adrp x22, #0x522b000
+1c2147c ldr x22, [x22, #0x500]
+1c21480 ldr x0, [x22]
+1c21484 ldrb w8, [x0, #0x10a]
+1c21488 tbz w8, #0, #0x1c21498
+1c2148c ldr w8, [x0, #0xbc]
+1c21490 cbnz w8, #0x1c21498
+1c21494 bl #0x3f3f378 ;
+1c21498 mov x0, xzr
+1c2149c mov x1, xzr
+1c214a0 bl #0x1bd8490 ; PlayerAttribManager$$get_Instance
+1c214a4 mov x21, x0
+1c214a8 cbnz x21, #0x1c214b0
+1c214ac bl #0x3f564f0 ;
+1c214b0 mov x2, xzr
+1c214b4 mov x0, x21
+1c214b8 mov w1, w20
+1c214bc bl #0x1bd8760 ; PlayerAttribManager$$GetItem
+1c214c0 mov x20, x0
+1c214c4 cbnz x20, #0x1c21510
+1c214c8 ldr x0, [x22]
+1c214cc ldrb w8, [x0, #0x10a]
+1c214d0 tbz w8, #0, #0x1c214e0
+1c214d4 ldr w8, [x0, #0xbc]
+1c214d8 cbnz w8, #0x1c214e0
+1c214dc bl #0x3f3f378 ;
+1c214e0 mov x0, xzr
+1c214e4 mov x1, xzr
+1c214e8 bl #0x1bd8490 ; PlayerAttribManager$$get_Instance
+1c214ec mov x20, x0
+1c214f0 cbnz x20, #0x1c214f8
+1c214f4 bl #0x3f564f0 ;
+1c214f8 mov x2, xzr
+1c214fc mov w1, #0xbb8
+1c21500 mov x0, x20
+1c21504 bl #0x1bd8760 ; PlayerAttribManager$$GetItem
+1c21508 mov x20, x0
+1c2150c cbz x20, #0x1c219c8
+1c21510 adrp x8, #0x52f4000
+1c21514 ldr x8, [x8, #0xca0]
+1c21518 ldr x21, [x20, #0x50]
+1c2151c add x22, sp, #0xa8
+1c21520 ldr x0, [x8]
+1c21524 ldrb w8, [x0, #0x10a]
+1c21528 tbz w8, #0, #0x1c21538
+1c2152c ldr w8, [x0, #0xbc]
+1c21530 cbnz w8, #0x1c21538
+1c21534 bl #0x3f3f378 ;
+1c21538 mov x0, xzr
+1c2153c mov x2, xzr
+1c21540 sub x8, x29, #0x48
+1c21544 mov x1, x21
+1c21548 bl #0x3efeb04 ; LogicX2.SmartLong$$op_Implicit
+1c2154c adrp x8, #0x51d7000
+1c21550 ldr x8, [x8, #0x170]
+1c21554 ldur x9, [x29, #-0x38]
+1c21558 ldr q0, [x22, #0x2a0]
+1c2155c sub x2, x29, #0x60
+1c21560 ldr x1, [x8]
+1c21564 mov x0, x19
+1c21568 stur x9, [x29, #-0x50]
+1c2156c stur q0, [x29, #-0x60]
+1c21570 bl #0x1c1819c ; LogicX2.Property$$AddWrapper
+1c21574 ldrsw x1, [x20, #0x5c]
+1c21578 mov x0, xzr
+1c2157c mov x2, xzr
+1c21580 sub x8, x29, #0x78
+1c21584 bl #0x3efeb04 ; LogicX2.SmartLong$$op_Implicit
+1c21588 adrp x8, #0x5256000
+1c2158c ldr x8, [x8, #0x150]
+1c21590 ldur x9, [x29, #-0x68]
+1c21594 ldr q0, [x22, #0x270]
+1c21598 sub x2, x29, #0x90
+1c2159c ldr x1, [x8]
+1c215a0 mov x0, x19
+1c215a4 stur x9, [x29, #-0x80]
+1c215a8 stur q0, [x29, #-0x90]
+1c215ac bl #0x1c1819c ; LogicX2.Property$$AddWrapper
+1c215b0 ldrsw x1, [x20, #0x60]
+1c215b4 mov x0, xzr
+1c215b8 mov x2, xzr
+1c215bc sub x8, x29, #0xa8
+1c215c0 bl #0x3efeb04 ; LogicX2.SmartLong$$op_Implicit
+1c215c4 adrp x8, #0x52f9000
+1c215c8 ldr x8, [x8, #0xea0]
+1c215cc ldur x9, [x29, #-0x98]
+1c215d0 ldr q0, [x22, #0x240]
+1c215d4 sub x2, x29, #0xc0
+1c215d8 ldr x1, [x8]
+1c215dc mov x0, x19
+1c215e0 stur x9, [x29, #-0xb0]
+1c215e4 stur q0, [x29, #-0xc0]
+1c215e8 bl #0x1c1819c ; LogicX2.Property$$AddWrapper
+1c215ec ldrsw x1, [x20, #0x64]
+1c215f0 mov x0, xzr
+1c215f4 mov x2, xzr
+1c215f8 sub x8, x29, #0xd8
+1c215fc bl #0x3efeb04 ; LogicX2.SmartLong$$op_Implicit
+1c21600 adrp x8, #0x5249000
+1c21604 ldr x8, [x8, #0x598]
+1c21608 ldur x9, [x29, #-0xc8]
+1c2160c ldr q0, [x22, #0x210]
+1c21610 sub x2, x29, #0xf0
+1c21614 ldr x1, [x8]
+1c21618 mov x0, x19
+1c2161c stur x9, [x29, #-0xe0]
+1c21620 stur q0, [x29, #-0xf0]
+1c21624 bl #0x1c1819c ; LogicX2.Property$$AddWrapper
+1c21628 ldrsw x1, [x20, #0x6c]
+1c2162c mov x0, xzr
+1c21630 mov x2, xzr
+1c21634 add x8, sp, #0x288
+1c21638 bl #0x3efeb04 ; LogicX2.SmartLong$$op_Implicit
+1c2163c adrp x8, #0x52ec000
+1c21640 ldr x8, [x8, #0x838]
+1c21644 ldr x9, [sp, #0x298]
+1c21648 ldr q0, [x22, #0x1e0]
+1c2164c add x2, sp, #0x270
+1c21650 ldr x1, [x8]
+1c21654 mov x0, x19
+1c21658 str x9, [sp, #0x280]
+1c2165c str q0, [sp, #0x270]
+1c21660 bl #0x1c1819c ; LogicX2.Property$$AddWrapper
+1c21664 ldrsw x1, [x20, #0x70]
+1c21668 mov x0, xzr
+1c2166c mov x2, xzr
+1c21670 add x8, sp, #0x258
+1c21674 bl #0x3efeb04 ; LogicX2.SmartLong$$op_Implicit
+1c21678 adrp x8, #0x51c8000
+1c2167c ldr x8, [x8, #0xef8]
+1c21680 ldr x9, [sp, #0x268]
+1c21684 ldr q0, [x22, #0x1b0]
+1c21688 add x2, sp, #0x240
+1c2168c ldr x1, [x8]
+1c21690 mov x0, x19
+1c21694 str x9, [sp, #0x250]
+1c21698 str q0, [sp, #0x240]
+1c2169c bl #0x1c1819c ; LogicX2.Property$$AddWrapper
+1c216a0 ldrsw x1, [x20, #0x74]
+1c216a4 mov x0, xzr
+1c216a8 mov x2, xzr
+1c216ac add x8, sp, #0x228
+1c216b0 bl #0x3efeb04 ; LogicX2.SmartLong$$op_Implicit
+1c216b4 adrp x8, #0x52ef000
+1c216b8 ldr x8, [x8, #0xfb8]
+1c216bc ldr x9, [sp, #0x238]
+1c216c0 ldr q0, [x22, #0x180]
+1c216c4 add x2, sp, #0x210
+1c216c8 ldr x1, [x8]
+1c216cc mov x0, x19
+1c216d0 str x9, [sp, #0x220]
+1c216d4 str q0, [sp, #0x210]
+1c216d8 bl #0x1c1819c ; LogicX2.Property$$AddWrapper
+1c216dc ldrsw x1, [x20, #0x78]
+1c216e0 mov x0, xzr
+1c216e4 mov x2, xzr
+1c216e8 add x8, sp, #0x1f8
+1c216ec bl #0x3efeb04 ; LogicX2.SmartLong$$op_Implicit
+1c216f0 adrp x8, #0x51e8000
+1c216f4 ldr x8, [x8, #0x218]
+1c216f8 ldr x9, [sp, #0x208]
+1c216fc ldr q0, [x22, #0x150]
+1c21700 add x2, sp, #0x1e0
+1c21704 ldr x1, [x8]
+1c21708 mov x0, x19
+1c2170c str x9, [sp, #0x1f0]
+1c21710 str q0, [sp, #0x1e0]
+1c21714 bl #0x1c1819c ; LogicX2.Property$$AddWrapper
+1c21718 ldrsw x1, [x20, #0x7c]
+1c2171c mov x0, xzr
+1c21720 mov x2, xzr
+1c21724 add x8, sp, #0x1c8
+1c21728 bl #0x3efeb04 ; LogicX2.SmartLong$$op_Implicit
+1c2172c adrp x8, #0x527b000
+1c21730 ldr x8, [x8, #0xc38]
+1c21734 ldr x9, [sp, #0x1d8]
+1c21738 ldr q0, [x22, #0x120]
+1c2173c add x2, sp, #0x1b0
+1c21740 ldr x1, [x8]
+1c21744 mov x0, x19
+1c21748 str x9, [sp, #0x1c0]
+1c2174c str q0, [sp, #0x1b0]
+1c21750 bl #0x1c1819c ; LogicX2.Property$$AddWrapper
+1c21754 adrp x8, #0x52c0000
+1c21758 ldr x8, [x8, #0xea8]
+1c2175c ldr w23, [x20, #0x80]
+1c21760 ldr x0, [x8]
+1c21764 ldrb w8, [x0, #0x10a]
+1c21768 tbz w8, #0, #0x1c21778
+1c2176c ldr w8, [x0, #0xbc]
+1c21770 cbnz w8, #0x1c21778
+1c21774 bl #0x3f3f378 ;
+1c21778 mov x0, xzr
+1c2177c mov x1, xzr
+1c21780 bl #0x1b425bc ; LogicX2.TableMgr$$get_Instance
+1c21784 mov x21, x0
+1c21788 cbnz x21, #0x1c21790
+1c2178c bl #0x3f564f0 ;
+1c21790 adrp x8, #0x5277000
+1c21794 ldr x8, [x8, #0xda0]
+1c21798 mov x2, xzr
+1c2179c mov x0, x21
+1c217a0 ldr x1, [x8]
+1c217a4 bl #0x1b42624 ; LogicX2.TableMgr$$GetIntGlobalParam
+1c217a8 add w8, w0, w23
+1c217ac sxtw x1, w8
+1c217b0 mov x0, xzr
+1c217b4 mov x2, xzr
+1c217b8 add x8, sp, #0x198
+1c217bc bl #0x3efeb04 ; LogicX2.SmartLong$$op_Implicit
+1c217c0 adrp x8, #0x5280000
+1c217c4 ldr x8, [x8, #0x860]
+1c217c8 ldr x9, [sp, #0x1a8]
+1c217cc ldr q0, [x22, #0xf0]
+1c217d0 add x2, sp, #0x180
+1c217d4 ldr x1, [x8]
+1c217d8 mov x0, x19
+1c217dc str x9, [sp, #0x190]
+1c217e0 str q0, [sp, #0x180]
+1c217e4 bl #0x1c1819c ; LogicX2.Property$$AddWrapper
+1c217e8 ldrsw x1, [x20, #0x84]
+1c217ec mov x0, xzr
+1c217f0 mov x2, xzr
+1c217f4 add x8, sp, #0x168
+1c217f8 bl #0x3efeb04 ; LogicX2.SmartLong$$op_Implicit
+1c217fc adrp x8, #0x5208000
+1c21800 ldr x8, [x8, #0x900]
+1c21804 ldr x9, [sp, #0x178]
+1c21808 ldr q0, [x22, #0xc0]
+1c2180c add x2, sp, #0x150
+1c21810 ldr x1, [x8]
+1c21814 mov x0, x19
+1c21818 str x9, [sp, #0x160]
+1c2181c str q0, [sp, #0x150]
+1c21820 bl #0x1c1819c ; LogicX2.Property$$AddWrapper
+1c21824 ldrsw x1, [x20, #0x88]
+1c21828 mov x0, xzr
+1c2182c mov x2, xzr
+1c21830 add x8, sp, #0x138
+1c21834 bl #0x3efeb04 ; LogicX2.SmartLong$$op_Implicit
+1c21838 adrp x8, #0x5306000
+1c2183c ldr x8, [x8, #0x210]
+1c21840 ldr x9, [sp, #0x148]
+1c21844 ldr q0, [x22, #0x90]
+1c21848 add x2, sp, #0x120
+1c2184c ldr x1, [x8]
+1c21850 mov x0, x19
+1c21854 str x9, [sp, #0x130]
+1c21858 str q0, [sp, #0x120]
+1c2185c bl #0x1c1819c ; LogicX2.Property$$AddWrapper
+1c21860 ldrsw x1, [x20, #0x8c]
+1c21864 mov x0, xzr
+1c21868 mov x2, xzr
+1c2186c add x8, sp, #0x108
+1c21870 bl #0x3efeb04 ; LogicX2.SmartLong$$op_Implicit
+1c21874 adrp x8, #0x520e000
+1c21878 ldr x8, [x8, #0x2d0]
+1c2187c ldr x9, [sp, #0x118]
+1c21880 ldr q0, [x22, #0x60]
+1c21884 add x2, sp, #0xf0
+1c21888 ldr x1, [x8]
+1c2188c mov x0, x19
+1c21890 str x9, [sp, #0x100]
+1c21894 str q0, [sp, #0xf0]
+1c21898 bl #0x1c1819c ; LogicX2.Property$$AddWrapper
+1c2189c ldrsw x1, [x20, #0x90]
+1c218a0 mov x0, xzr
+1c218a4 mov x2, xzr
+1c218a8 add x8, sp, #0xd8
+1c218ac bl #0x3efeb04 ; LogicX2.SmartLong$$op_Implicit
+1c218b0 adrp x8, #0x5276000
+1c218b4 ldr x8, [x8, #0x190]
+1c218b8 ldr x9, [sp, #0xe8]
+1c218bc ldr q0, [x22, #0x30]
+1c218c0 add x2, sp, #0xc0
+1c218c4 ldr x1, [x8]
+1c218c8 mov x0, x19
+1c218cc str x9, [sp, #0xd0]
+1c218d0 str q0, [sp, #0xc0]
+1c218d4 bl #0x1c1819c ; LogicX2.Property$$AddWrapper
+1c218d8 ldrsw x1, [x20, #0x68]
+1c218dc mov x0, xzr
+1c218e0 mov x2, xzr
+1c218e4 add x8, sp, #0xa8
+1c218e8 bl #0x3efeb04 ; LogicX2.SmartLong$$op_Implicit
+1c218ec adrp x8, #0x5269000
+1c218f0 ldr x8, [x8, #0x5e0]
+1c218f4 ldr x9, [sp, #0xb8]
+1c218f8 ldr q0, [x22]
+1c218fc add x2, sp, #0x90
+1c21900 ldr x1, [x8]
+1c21904 mov x0, x19
+1c21908 str x9, [sp, #0xa0]
+1c2190c str q0, [sp, #0x90]
+1c21910 bl #0x1c1819c ; LogicX2.Property$$AddWrapper
+1c21914 ldrsw x1, [x20, #0x9c]
+1c21918 mov x0, xzr
+1c2191c mov x2, xzr
+1c21920 add x8, sp, #0x78
+1c21924 bl #0x3efeb04 ; LogicX2.SmartLong$$op_Implicit
+1c21928 adrp x8, #0x52a2000
+1c2192c ldr x8, [x8, #0xb30]
+1c21930 ldr x9, [sp, #0x88]
+1c21934 ldur q0, [sp, #0x78]
+1c21938 add x2, sp, #0x60
+1c2193c ldr x1, [x8]
+1c21940 mov x0, x19
+1c21944 str x9, [sp, #0x70]
+1c21948 str q0, [sp, #0x60]
+1c2194c bl #0x1c1819c ; LogicX2.Property$$AddWrapper
+1c21950 ldrsw x1, [x20, #0xa0]
+1c21954 mov x0, xzr
+1c21958 mov x2, xzr
+1c2195c add x8, sp, #0x48
+1c21960 bl #0x3efeb04 ; LogicX2.SmartLong$$op_Implicit
+1c21964 adrp x8, #0x51e1000
+1c21968 ldr x8, [x8, #0x5a8]
+1c2196c ldr x9, [sp, #0x58]
+1c21970 ldur q0, [sp, #0x48]
+1c21974 add x2, sp, #0x30
+1c21978 ldr x1, [x8]
+1c2197c mov x0, x19
+1c21980 str x9, [sp, #0x40]
+1c21984 str q0, [sp, #0x30]
+1c21988 bl #0x1c1819c ; LogicX2.Property$$AddWrapper
+1c2198c ldrsw x1, [x20, #0xa4]
+1c21990 mov x0, xzr
+1c21994 mov x2, xzr
+1c21998 add x8, sp, #0x18
+1c2199c bl #0x3efeb04 ; LogicX2.SmartLong$$op_Implicit
+1c219a0 adrp x8, #0x52b7000
+1c219a4 ldr x8, [x8, #0x7d8]
+1c219a8 ldr x9, [sp, #0x28]
+1c219ac ldur q0, [sp, #0x18]
+1c219b0 mov x2, sp
+1c219b4 ldr x1, [x8]
+1c219b8 mov x0, x19
+1c219bc str x9, [sp, #0x10]
+1c219c0 str q0, [sp]
+1c219c4 bl #0x1c1819c ; LogicX2.Property$$AddWrapper
+1c219c8 sub sp, x29, #0x30
+1c219cc ldp x29, x30, [sp, #0x30]
+1c219d0 ldp x20, x19, [sp, #0x20]
+1c219d4 ldp x22, x21, [sp, #0x10]
+1c219d8 ldp x24, x23, [sp], #0x40
+1c219dc ret

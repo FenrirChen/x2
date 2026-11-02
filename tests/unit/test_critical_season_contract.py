@@ -57,6 +57,7 @@ def test_all_fifteen_talents_allocate_reload_reset_and_reallocate_in_battle(env,
         values.update(missionId=sid, chapter=section['ChapterID'], sceneId=section['Maps'][0])
     battle = BattleService(store, economy)
     _, baseline = entry(battle, values, 1000)
+    assert all(attrs[113] == 1500 for attrs in baseline.values())
     assert len(season.talents) == 15
     changes = [(tid,2) for tid in sorted(season.talents)]
     response = allocate(season, changes, 1001)
@@ -99,3 +100,15 @@ def test_all_fifteen_talents_allocate_reload_reset_and_reallocate_in_battle(env,
     # Ending the occurrence removes temporary attributes and passive carriers.
     economy.clock = lambda: ANCHOR + DURATION
     assert restored.attributes(1) == {} and restored.battle_talents(1) == []
+
+
+def test_full_attradd_carries_native_base_plus_100_percent_season_bonus(env):
+    store,e,s=env
+    tid=6006007
+    with e.transaction():
+        e._grant(1,'crit-full-bonus',{1291002:10})
+    assert allocate(s,[(tid,10)],2001).values['code']==10
+    _,attrs=entry(BattleService(store,e),request(),2002)
+    assert attrs[1003][113]==2500
+    # With an independent equipment bonus of 1062 native units, total is 356.2%.
+    assert (attrs[1003][113]+1062)/10==356.2

@@ -1,0 +1,262 @@
+LogicX2.Property$$Init 0x1c1f524
+1c1f524 stp x28, x27, [sp, #-0x60]!
+1c1f528 stp x26, x25, [sp, #0x10]
+1c1f52c stp x24, x23, [sp, #0x20]
+1c1f530 stp x22, x21, [sp, #0x30]
+1c1f534 stp x20, x19, [sp, #0x40]
+1c1f538 stp x29, x30, [sp, #0x50]
+1c1f53c add x29, sp, #0x50
+1c1f540 sub sp, sp, #0x40
+1c1f544 adrp x19, #0x5578000
+1c1f548 ldrb w8, [x19, #0xf72]
+1c1f54c mov x21, x1
+1c1f550 mov x20, x0
+1c1f554 tbnz w8, #0, #0x1c1f570
+1c1f558 adrp x8, #0x5304000
+1c1f55c ldr x8, [x8, #0x50]
+1c1f560 ldr w0, [x8]
+1c1f564 bl #0x3f2aed0 ;
+1c1f568 mov w8, #1
+1c1f56c strb w8, [x19, #0xf72]
+1c1f570 str xzr, [sp, #0x38]
+1c1f574 ldr x19, [x20, #0x10]
+1c1f578 cbnz x19, #0x1c1f580
+1c1f57c bl #0x3f564f0 ;
+1c1f580 ldr w8, [x19, #0x18]
+1c1f584 cbnz w8, #0x1c1f594
+1c1f588 bl #0x3f570dc ;
+1c1f58c mov x1, xzr
+1c1f590 bl #0x3f563d4 ;
+1c1f594 ldr x8, [x19, #0x20]
+1c1f598 cbnz x8, #0x1c1f914
+1c1f59c mov x0, x20
+1c1f5a0 str x21, [sp]
+1c1f5a4 bl #0x1c1f2f0 ; LogicX2.Property$$get_unit
+1c1f5a8 mov w26, #1
+1c1f5ac cbz x0, #0x1c1f5f8
+1c1f5b0 adrp x8, #0x522c000
+1c1f5b4 ldr x8, [x8, #0x8c0]
+1c1f5b8 ldr x9, [x0]
+1c1f5bc ldr x8, [x8]
+1c1f5c0 ldrb w11, [x9, #0x104]
+1c1f5c4 ldrb w10, [x8, #0x104]
+1c1f5c8 cmp w11, w10
+1c1f5cc b.hs #0x1c1f5d8
+1c1f5d0 mov w26, #1
+1c1f5d4 b #0x1c1f5f8 ;
+1c1f5d8 ldr x9, [x9, #0xb0]
+1c1f5dc cmp x0, #0
+1c1f5e0 add x9, x9, x10, lsl #3
+1c1f5e4 ldur x9, [x9, #-8]
+1c1f5e8 cset w10, eq
+1c1f5ec cmp x9, x8
+1c1f5f0 cset w8, ne
+1c1f5f4 orr w26, w10, w8
+1c1f5f8 adrp x24, #0x52a5000
+1c1f5fc adrp x25, #0x52f4000
+1c1f600 adrp x28, #0x5246000
+1c1f604 adrp x19, #0x52d2000
+1c1f608 ldr x24, [x24, #0xcc0]
+1c1f60c ldr x25, [x25, #0xca0]
+1c1f610 ldr x28, [x28, #0x8d0]
+1c1f614 ldr x19, [x19, #0x248]
+1c1f618 mov w27, wzr
+1c1f61c b #0x1c1f62c ;
+1c1f620 add x8, x22, x23, lsl #3
+1c1f624 add w27, w27, #1
+1c1f628 str x21, [x8, #0x20]
+1c1f62c ldr x0, [x24]
+1c1f630 ldrb w8, [x0, #0x10a]
+1c1f634 tbz w8, #0, #0x1c1f648
+1c1f638 ldr w8, [x0, #0xbc]
+1c1f63c cbnz w8, #0x1c1f648
+1c1f640 bl #0x3f3f378 ;
+1c1f644 ldr x0, [x24]
+1c1f648 ldr x8, [x0, #0xa0]
+1c1f64c ldr w9, [x8]
+1c1f650 cmp w27, w9
+1c1f654 b.ge #0x1c1f82c
+1c1f658 adrp x8, #0x521b000
+1c1f65c ldr x8, [x8, #0xe20]
+1c1f660 ldr x0, [x8]
+1c1f664 bl #0x3f6452c ;
+1c1f668 mov x1, xzr
+1c1f66c mov x21, x0
+1c1f670 bl #0x33fdd4c ; UnitPropertyValueCombinerSmartLong$$.ctor
+1c1f674 cbz x21, #0x1c1f680
+1c1f678 str wzr, [x21, #0x10]
+1c1f67c b #0x1c1f690 ;
+1c1f680 bl #0x3f564f0 ;
+1c1f684 mov w8, #0x10
+1c1f688 str wzr, [x8]
+1c1f68c bl #0x3f564f0 ;
+1c1f690 str w27, [x21, #0xac]
+1c1f694 ldr x0, [x25]
+1c1f698 ldrb w8, [x0, #0x10a]
+1c1f69c tbz w8, #0, #0x1c1f6b0
+1c1f6a0 ldr w8, [x0, #0xbc]
+1c1f6a4 cbnz w8, #0x1c1f6b0
+1c1f6a8 bl #0x3f3f378 ;
+1c1f6ac ldr x0, [x25]
+1c1f6b0 ldr x8, [x0, #0xa0]
+1c1f6b4 add x1, sp, #0x20
+1c1f6b8 mov x0, x21
+1c1f6bc ldr x9, [x8, #0x20]
+1c1f6c0 ldr q0, [x8, #0x10]
+1c1f6c4 adrp x8, #0x52f7000
+1c1f6c8 ldr x8, [x8, #0xa50]
+1c1f6cc str x9, [sp, #0x30]
+1c1f6d0 ldr x2, [x8]
+1c1f6d4 str q0, [sp, #0x20]
+1c1f6d8 bl #0x2cdbab8 ; ValueCombiner<object, SmartLong>$$set_defaultValue
+1c1f6dc ldr x0, [x28]
+1c1f6e0 ldrb w8, [x0, #0x10a]
+1c1f6e4 tbz w8, #0, #0x1c1f6f8
+1c1f6e8 ldr w8, [x0, #0xbc]
+1c1f6ec cbnz w8, #0x1c1f6f8
+1c1f6f0 bl #0x3f3f378 ;
+1c1f6f4 ldr x0, [x28]
+1c1f6f8 ldr x8, [x0, #0xa0]
+1c1f6fc ldr w23, [x21, #0xac]
+1c1f700 ldr x22, [x8]
+1c1f704 cbnz x22, #0x1c1f70c
+1c1f708 bl #0x3f564f0 ;
+1c1f70c ldr x3, [x19]
+1c1f710 add x2, sp, #0x38
+1c1f714 mov x0, x22
+1c1f718 mov w1, w23
+1c1f71c bl #0x3611a20 ; System.Collections.Generic.Dictionary<int, EffectCtrl>$$TryGetValue
+1c1f720 tbz w0, #0, #0x1c1f7dc
+1c1f724 ldr x22, [sp, #0x38]
+1c1f728 cbnz x22, #0x1c1f730
+1c1f72c bl #0x3f564f0 ;
+1c1f730 ldr x1, [x22, #0x38]
+1c1f734 mov x2, xzr
+1c1f738 add x0, sp, #8
+1c1f73c stp xzr, xzr, [sp, #0x10]
+1c1f740 str xzr, [sp, #8]
+1c1f744 bl #0x3efe7cc ;
+1c1f748 cbnz x21, #0x1c1f750
+1c1f74c bl #0x3f564f0 ;
+1c1f750 ldr x8, [sp, #0x18]
+1c1f754 ldur q0, [sp, #8]
+1c1f758 str x8, [x21, #0x80]
+1c1f75c str q0, [x21, #0x70]
+1c1f760 cbz w26, #0x1c1f790
+1c1f764 ldr x22, [sp, #0x38]
+1c1f768 mov x8, x22
+1c1f76c cbnz x22, #0x1c1f77c
+1c1f770 bl #0x3f564f0 ;
+1c1f774 ldr x8, [sp, #0x38]
+1c1f778 cbz x8, #0x1c1f934
+1c1f77c ldr x9, [x22, #0x38]
+1c1f780 ldr x8, [x8, #0x40]
+1c1f784 cmp x9, x8
+1c1f788 cset w22, ne
+1c1f78c b #0x1c1f794 ;
+1c1f790 mov w22, wzr
+1c1f794 cbnz x21, #0x1c1f79c
+1c1f798 bl #0x3f564f0 ;
+1c1f79c strb w22, [x21, #0x88]
+1c1f7a0 ldr x22, [sp, #0x38]
+1c1f7a4 cbnz x22, #0x1c1f7ac
+1c1f7a8 bl #0x3f564f0 ;
+1c1f7ac ldr x1, [x22, #0x40]
+1c1f7b0 mov x2, xzr
+1c1f7b4 add x0, sp, #8
+1c1f7b8 stp xzr, xzr, [sp, #0x10]
+1c1f7bc str xzr, [sp, #8]
+1c1f7c0 bl #0x3efe7cc ;
+1c1f7c4 ldr x8, [sp, #0x18]
+1c1f7c8 ldur q0, [sp, #8]
+1c1f7cc str x8, [x21, #0xa0]
+1c1f7d0 mov w8, #1
+1c1f7d4 str q0, [x21, #0x90]
+1c1f7d8 strb w8, [x21, #0xa8]
+1c1f7dc ldr x22, [x20, #0x10]
+1c1f7e0 cbnz x22, #0x1c1f7e8
+1c1f7e4 bl #0x3f564f0 ;
+1c1f7e8 cbz x21, #0x1c1f80c
+1c1f7ec ldr x8, [x22]
+1c1f7f0 mov x0, x21
+1c1f7f4 ldr x1, [x8, #0x30]
+1c1f7f8 bl #0x3f64744 ;
+1c1f7fc cbnz x0, #0x1c1f80c
+1c1f800 bl #0x3f571fc ;
+1c1f804 mov x1, xzr
+1c1f808 bl #0x3f563d4 ;
+1c1f80c ldr w8, [x22, #0x18]
+1c1f810 sxtw x23, w27
+1c1f814 cmp w27, w8
+1c1f818 b.lo #0x1c1f620
+1c1f81c bl #0x3f570dc ;
+1c1f820 mov x1, xzr
+1c1f824 bl #0x3f563d4 ;
+1c1f828 b #0x1c1f620 ;
+1c1f82c ldrb w9, [x0, #0x10a]
+1c1f830 tbnz w9, #0, #0x1c1f83c
+1c1f834 ldr x27, [sp]
+1c1f838 b #0x1c1f854 ;
+1c1f83c ldr x27, [sp]
+1c1f840 ldr w9, [x0, #0xbc]
+1c1f844 cbnz w9, #0x1c1f854
+1c1f848 bl #0x3f3f378 ;
+1c1f84c ldr x8, [x24]
+1c1f850 ldr x8, [x8, #0xa0]
+1c1f854 ldr x21, [x8, #8]
+1c1f858 cbnz x21, #0x1c1f860
+1c1f85c bl #0x3f564f0 ;
+1c1f860 adrp x8, #0x5300000
+1c1f864 ldr x8, [x8, #0xfa8]
+1c1f868 mov x0, x21
+1c1f86c ldr x1, [x8]
+1c1f870 bl #0x3d473f8 ; System.Collections.Generic.List<int>$$get_Count
+1c1f874 mov w21, w0
+1c1f878 cmp w21, #1
+1c1f87c b.lt #0x1c1f914
+1c1f880 adrp x19, #0x52e6000
+1c1f884 ldr x19, [x19, #0x7b0]
+1c1f888 mov w22, wzr
+1c1f88c ldr x0, [x24]
+1c1f890 ldrb w8, [x0, #0x10a]
+1c1f894 tbz w8, #0, #0x1c1f8a8
+1c1f898 ldr w8, [x0, #0xbc]
+1c1f89c cbnz w8, #0x1c1f8a8
+1c1f8a0 bl #0x3f3f378 ;
+1c1f8a4 ldr x0, [x24]
+1c1f8a8 ldr x8, [x0, #0xa0]
+1c1f8ac ldr x23, [x8, #8]
+1c1f8b0 cbnz x23, #0x1c1f8b8
+1c1f8b4 bl #0x3f564f0 ;
+1c1f8b8 ldr x2, [x19]
+1c1f8bc mov x0, x23
+1c1f8c0 mov w1, w22
+1c1f8c4 bl #0x3d47400 ; System.Collections.Generic.List<int>$$get_Item
+1c1f8c8 ldr x25, [x20, #0x10]
+1c1f8cc mov w23, w0
+1c1f8d0 cbnz x25, #0x1c1f8d8
+1c1f8d4 bl #0x3f564f0 ;
+1c1f8d8 ldr w8, [x25, #0x18]
+1c1f8dc sxtw x26, w23
+1c1f8e0 cmp w23, w8
+1c1f8e4 b.lo #0x1c1f8f4
+1c1f8e8 bl #0x3f570dc ;
+1c1f8ec mov x1, xzr
+1c1f8f0 bl #0x3f563d4 ;
+1c1f8f4 add x8, x25, x26, lsl #3
+1c1f8f8 ldr x23, [x8, #0x20]
+1c1f8fc cbnz x23, #0x1c1f904
+1c1f900 bl #0x3f564f0 ;
+1c1f904 add w22, w22, #1
+1c1f908 str x27, [x23, #0x58]
+1c1f90c cmp w21, w22
+1c1f910 b.ne #0x1c1f88c
+1c1f914 sub sp, x29, #0x50
+1c1f918 ldp x29, x30, [sp, #0x50]
+1c1f91c ldp x20, x19, [sp, #0x40]
+1c1f920 ldp x22, x21, [sp, #0x30]
+1c1f924 ldp x24, x23, [sp, #0x20]
+1c1f928 ldp x26, x25, [sp, #0x10]
+1c1f92c ldp x28, x27, [sp], #0x60
+1c1f930 ret
+1c1f934 bl #0x3f564f0 ;

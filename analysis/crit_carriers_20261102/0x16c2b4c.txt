@@ -1,0 +1,129 @@
+ChapterModule$$ConvertSingleFightHeroData 0x16c2b4c
+16c2b4c stp x22, x21, [sp, #-0x30]!
+16c2b50 stp x20, x19, [sp, #0x10]
+16c2b54 stp x29, x30, [sp, #0x20]
+16c2b58 add x29, sp, #0x20
+16c2b5c adrp x19, #0x5576000
+16c2b60 ldrb w8, [x19, #0xb6b]
+16c2b64 mov x20, x1
+16c2b68 tbnz w8, #0, #0x16c2b84
+16c2b6c adrp x8, #0x52cf000
+16c2b70 ldr x8, [x8, #0xa40]
+16c2b74 ldr w0, [x8]
+16c2b78 bl #0x3f2aed0 ;
+16c2b7c mov w8, #1
+16c2b80 strb w8, [x19, #0xb6b]
+16c2b84 adrp x8, #0x5256000
+16c2b88 ldr x8, [x8, #0x620]
+16c2b8c ldr x0, [x8]
+16c2b90 bl #0x3f6452c ;
+16c2b94 mov x1, xzr
+16c2b98 mov x19, x0
+16c2b9c bl #0x1c5b188 ; LogicX2Command.FightHero$$.ctor
+16c2ba0 cbz x20, #0x16c2d38
+16c2ba4 ldr w21, [x20, #0x10]
+16c2ba8 cbz x19, #0x16c2bc8
+16c2bac str w21, [x19, #0x14]
+16c2bb0 ldr w8, [x20, #0x14]
+16c2bb4 str w8, [x19, #0x18]
+16c2bb8 ldr w8, [x20, #0x18]
+16c2bbc str w8, [x19, #0x1c]
+16c2bc0 ldr w21, [x20, #0x1c]
+16c2bc4 b #0x16c2bf4 ;
+16c2bc8 bl #0x3f564f0 ;
+16c2bcc str w21, [x19, #0x14]
+16c2bd0 ldr w21, [x20, #0x14]
+16c2bd4 bl #0x3f564f0 ;
+16c2bd8 mov w8, #0x18
+16c2bdc str w21, [x8]
+16c2be0 ldr w21, [x20, #0x18]
+16c2be4 bl #0x3f564f0 ;
+16c2be8 str w21, [x19, #0x1c]
+16c2bec ldr w21, [x20, #0x1c]
+16c2bf0 bl #0x3f564f0 ;
+16c2bf4 str w21, [x19, #0x20]
+16c2bf8 adrp x8, #0x52fb000
+16c2bfc ldr x8, [x8, #0x730]
+16c2c00 ldr x21, [x20, #0x20]
+16c2c04 ldr x0, [x8]
+16c2c08 ldrb w8, [x0, #0x10a]
+16c2c0c tbz w8, #0, #0x16c2c1c
+16c2c10 ldr w8, [x0, #0xbc]
+16c2c14 cbnz w8, #0x16c2c1c
+16c2c18 bl #0x3f3f378 ;
+16c2c1c mov x1, x21
+16c2c20 bl #0x16c2d4c ; ChapterModule$$ConvertHeroGodEquip
+16c2c24 str x0, [x19, #0x28]
+16c2c28 ldr x1, [x20, #0x28]
+16c2c2c bl #0x16c31ac ; ChapterModule$$ConvertHeroEquip
+16c2c30 str x0, [x19, #0x30]
+16c2c34 ldr w8, [x20, #0x30]
+16c2c38 str w8, [x19, #0x38]
+16c2c3c ldr x1, [x20, #0x38]
+16c2c40 bl #0x16c3440 ; ChapterModule$$ConvertHeroSkill
+16c2c44 str x0, [x19, #0x40]
+16c2c48 ldr x1, [x20, #0x40]
+16c2c4c bl #0x16c37b0 ; ChapterModule$$ConvertHeroAttrAdd
+16c2c50 str x0, [x19, #0x48]
+16c2c54 ldr w8, [x20, #0x48]
+16c2c58 str w8, [x19, #0x78]
+16c2c5c ldr x1, [x20, #0x50]
+16c2c60 bl #0x16c38fc ; ChapterModule$$ConvertEquipSuitAttr
+16c2c64 str x0, [x19, #0x50]
+16c2c68 ldr x21, [x20, #0x58]
+16c2c6c cbnz x21, #0x16c2c74
+16c2c70 bl #0x3f564f0 ;
+16c2c74 ldr x8, [x21, #0x10]
+16c2c78 str x8, [x19, #0x58]
+16c2c7c ldr x21, [x20, #0x58]
+16c2c80 cbnz x21, #0x16c2c88
+16c2c84 bl #0x3f564f0 ;
+16c2c88 ldr x8, [x21, #0x18]
+16c2c8c str x8, [x19, #0x60]
+16c2c90 ldr x21, [x20, #0x58]
+16c2c94 cbnz x21, #0x16c2c9c
+16c2c98 bl #0x3f564f0 ;
+16c2c9c ldr x8, [x21, #0x20]
+16c2ca0 str x8, [x19, #0x68]
+16c2ca4 ldr x21, [x20, #0x58]
+16c2ca8 cbnz x21, #0x16c2cb0
+16c2cac bl #0x3f564f0 ;
+16c2cb0 ldr x8, [x21, #0x28]
+16c2cb4 str x8, [x19, #0x70]
+16c2cb8 ldr x1, [x20, #0x60]
+16c2cbc bl #0x16c3b1c ; ChapterModule$$ConvertTalentAttr
+16c2cc0 str x0, [x19, #0x80]
+16c2cc4 ldr x1, [x20, #0x68]
+16c2cc8 bl #0x16c3dd0 ; ChapterModule$$ConvertSeasonAttr
+16c2ccc ldr w8, [x19, #0x78]
+16c2cd0 str x0, [x19, #0x88]
+16c2cd4 cbz w8, #0x16c2d38
+16c2cd8 adrp x8, #0x5246000
+16c2cdc ldr x8, [x8, #0xeb8]
+16c2ce0 ldr x0, [x8]
+16c2ce4 ldrb w8, [x0, #0x10a]
+16c2ce8 tbz w8, #0, #0x16c2cf8
+16c2cec ldr w8, [x0, #0xbc]
+16c2cf0 cbnz w8, #0x16c2cf8
+16c2cf4 bl #0x3f3f378 ;
+16c2cf8 mov x0, xzr
+16c2cfc mov x1, xzr
+16c2d00 bl #0x17dda24 ; AppearanceManager$$get_Instance
+16c2d04 ldr w20, [x19, #0x78]
+16c2d08 mov x21, x0
+16c2d0c cbnz x21, #0x16c2d14
+16c2d10 bl #0x3f564f0 ;
+16c2d14 mov x2, xzr
+16c2d18 mov x0, x21
+16c2d1c mov w1, w20
+16c2d20 bl #0x17ddcf4 ; AppearanceManager$$GetItem
+16c2d24 cbz x0, #0x16c2d38
+16c2d28 ldr w20, [x0, #0x70]
+16c2d2c cbnz x19, #0x16c2d34
+16c2d30 bl #0x3f564f0 ;
+16c2d34 str w20, [x19, #0x7c]
+16c2d38 mov x0, x19
+16c2d3c ldp x29, x30, [sp, #0x20]
+16c2d40 ldp x20, x19, [sp, #0x10]
+16c2d44 ldp x22, x21, [sp], #0x30
+16c2d48 ret
