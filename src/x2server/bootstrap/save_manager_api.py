@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import secrets
 import threading
 import time
@@ -66,6 +67,8 @@ class SaveManagerAPI:
         """Return (status, content_type, payload) for a /save-manager/ route."""
         if self._closed.is_set():
             return self._json(503, {'error': 'server_stopping'})
+        if path == ROUTE_PREFIX + 'import' and os.environ.get('X2_SAVE_IMPORT_ENABLED', '0').strip().lower() not in ('1', 'true', 'yes', 'on'):
+            return self._json(503, {'error': 'save_import_disabled', 'message': '存档导入暂时关闭，存档导出仍可正常使用。'})
         job = path.rsplit('/', 1)[-1] in ('export', 'import')
         if job and not self._jobs.acquire(blocking=False):
             return self._json(503, {'error': 'save_manager_busy'})

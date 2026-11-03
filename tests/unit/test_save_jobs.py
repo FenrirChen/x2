@@ -365,3 +365,8 @@ def test_no_cooldown_allows_consecutive_full_exports_and_imports(env, monkeypatc
         assert api.respond('POST','/save-manager/import',b'broken archive',auth(api))[0]==400
     finally:
         api.close()
+
+
+@pytest.fixture(autouse=True)
+def enable_import_for_existing_roundtrip_tests(monkeypatch):
+    monkeypatch.setenv('X2_SAVE_IMPORT_ENABLED', '1')

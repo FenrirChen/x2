@@ -380,3 +380,8 @@ def test_http_busy_returns_retryable_response_instead_of_dropping_transport():
         finally:
             await server.stop()
     asyncio.run(scenario())
+
+
+@pytest.fixture(autouse=True)
+def enable_import_for_existing_roundtrip_tests(monkeypatch):
+    monkeypatch.setenv('X2_SAVE_IMPORT_ENABLED', '1')

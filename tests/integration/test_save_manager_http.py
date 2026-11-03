@@ -221,3 +221,8 @@ def post(url: str, body: bytes, auth: str | None = None, raw: bool = False) -> b
     if raw:
         return payload
     return json.loads(payload)
+
+
+@pytest.fixture(autouse=True)
+def enable_import_for_existing_roundtrip_tests(monkeypatch):
+    monkeypatch.setenv('X2_SAVE_IMPORT_ENABLED', '1')
