@@ -352,6 +352,14 @@ class EconomyService:
         self.extra_activity = ExtraActivityService(self)
         from .season import SeasonService
         self.season = SeasonService(self)
+        # 外观到账推送: 客户端"神格外观"页只在 L2C_HeroSkinAll / L2C_HeroSkinUpdate
+        # 里重读已拥有形象。由 run_server 注入 AppearanceService; 未接线时照常发货,
+        # 只是不推送 (单元测试)。
+        self.appearance = None
+        # 本次请求里 _grant 发出去的外观道具 (ItemType 17)。旧实现只有外观商店和
+        # 活动兑换各自补推, 通行证领奖 / 邮件等其他发货路径全漏: 外观已经进背包,
+        # 页面却一直显示「未获得」。见 pushes() 末尾的 _skin_pushes。
+        self._granted_skins = {}
         from .terminal_wish import TerminalWishService
         self.terminal_wish = TerminalWishService(self)
         from .moon import MoonService
@@ -695,6 +703,10 @@ class EconomyService:
             if type(count) is not int or count <= 0 or item not in self.items:
                 raise UnresolvedEconomy("invalid reward")
             kind = self.items[item].get("ItemType", {}).get("value")
+            if kind == 17:
+                # 只在真正发出去时记; 同一笔发放会在本次请求的 pushes() 里换成
+                # 对应神格的 L2C_HeroSkinUpdate (见 _skin_pushes)。
+                self._granted_skins.setdefault(player_id, set()).add(item)
             if self.season.active(player_id) and item in (self.season.EXP_ITEM, self.season.POINT_ITEM, self.season.ACTIVE_ITEM):
                 continue  # Already consumed by the period-scoped season ledger.
             if kind == 20:
@@ -1746,6 +1758,29 @@ class EconomyService:
             self.save_snapshot(player_id, snapshot)
             self.store.db.execute("UPDATE battle_costs SET refunded=1 WHERE uuid=?", (run_uuid,))
 
+    def _skin_pushes(self, player_id):
+        """本次请求里发出去的外观换成该神格的刷新推送。
+
+        客户端"神格外观"页只从 L2C_HeroSkinAll / L2C_HeroSkinUpdate 重读已拥有
+        形象, 所以通行证领奖这类不经过外观商店的发货路径也要补推, 否则外观已经
+        在背包里却一直显示「未获得」。``appearance`` 由 run_server 注入, 未接线
+        (单元测试) 时照常发货, 只是不推送。
+        """
+        pending = self._granted_skins.pop(player_id, None)
+        if not pending or self.appearance is None:
+            return ()
+        heroes = {self.appearance.skins[item]["hero_id"]
+                  for item in pending if item in self.appearance.skins}
+        if not heroes:
+            return ()
+        from x2server.messages.appearance import HERO_SKIN
+        skin_list = self.appearance.skin_values(player_id)["skinList"]
+        entries = {HERO_SKIN.decode(value)["heroId"]: value for value in skin_list}
+        pushes = [OutboundMessage("L2C_HeroSkinAll", {"skinList": skin_list})]
+        pushes.extend(OutboundMessage("L2C_HeroSkinUpdate", {"skin": entries[hero]})
+                      for hero in sorted(heroes) if hero in entries)
+        return tuple(pushes)
+
     def pushes(self, player_id):
         from .login import LoginService
         self.refresh_stamina(player_id)
@@ -1767,7 +1802,7 @@ class EconomyService:
             *(OutboundMessage("L2C_TaskUpdate", {"type": k, "taskList": self.task_values(player_id, k)["taskList"]}) for k in (1, 2)),
             OutboundMessage("L2C_TaskUpdate", {"type": 3, "taskList": self.challenge_values(player_id)["taskList"]}),
             self.achievements.update(player_id), *self.season.pushes(player_id),
-            *self.terminal_wish.pushes(player_id))
+            *self.terminal_wish.pushes(player_id), *self._skin_pushes(player_id))
 
     # ---- 首充 ------------------------------------------------------------
     #

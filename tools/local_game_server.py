@@ -151,6 +151,9 @@ async def run(database: Path, seconds: float) -> None:
     favor = FavorService(store, economy, clock=clock.now)
     appearance = AppearanceService(store, economy)
     appearance_shop = AppearanceShopService(store, economy, appearance)
+    # 通行证/邮件等任意发货路径拿到外观后, 都要补推该神格的 L2C_HeroSkinUpdate;
+    # 客户端外观页只认这条消息 (见 EconomyService._skin_pushes)。
+    economy.appearance = appearance
     mail = MailService(store, economy, clock=clock.now)
     lobby = LobbyService(clock, college)
     # ActivityRuntime answers C2L_QueryActivity, so hand the lobby in: otherwise
