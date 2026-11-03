@@ -1,0 +1,109 @@
+{
+  "assets/bin/Data/11f10428ab85c83458e81c7c4acc3909": {
+    "label": "立绘",
+    "texture": 1000,
+    "sprite": 1001,
+    "name": "BaoShiJi_2",
+    "image": [
+      688,
+      828
+    ],
+    "source": "baoshiji_2_688x828.png",
+    "bytes": 2819504,
+    "sha256": "43bd88dfc561c9eb3ff0d2b47322a84eee50bd0e6b929c9e9bd579b3ce8258ed"
+  },
+  "assets/bin/Data/2f27eb218a7d46144b76f8574a7912ca": {
+    "label": "横幅",
+    "texture": 1000,
+    "sprite": 1001,
+    "name": "GuangGaoTu_Cover702",
+    "image": [
+      1404,
+      592
+    ],
+    "source": "cover702_1404x592.png",
+    "bytes": 4165496,
+    "sha256": "36795e27ac28abcbcb5906d11b0fb15177ee758f5aa1c88105a04350ca6c69cf"
+  },
+  "assets/bin/Data/83629c106e3c12644a26a22b89a7f24d": {
+    "label": "页签",
+    "texture": 1000,
+    "sprite": 1001,
+    "name": "ChouJiang_Tab702",
+    "image": [
+      220,
+      68
+    ],
+    "source": "tab702_220x68.png",
+    "bytes": 1136840,
+    "sha256": "058d5ee219bbe2de7627ea9ee6ebb51d7a997c037c886b001dcdb8765a194e47"
+  },
+  "assets/bin/Data/globalgamemanagers": {
+    "entries_before": 10049,
+    "entries_after": 10055,
+    "inserted": [
+      {
+        "key": "uialtas/drawing/jewel/baoshiji_2",
+        "index": 7595,
+        "placement": "new",
+        "file_id": 4705,
+        "path_ids": [
+          1000,
+          1001
+        ]
+      },
+      {
+        "key": "uialtas/draw/guanggaotu_cover702",
+        "index": 7479,
+        "placement": "new",
+        "file_id": 4653,
+        "path_ids": [
+          1000,
+          1001
+        ]
+      },
+      {
+        "key": "uialtas/altas/draw",
+        "index": 4590,
+        "placement": "existing",
+        "file_id": 4098,
+        "path_ids": [
+          1000,
+          1001
+        ]
+      }
+    ],
+    "bytes": 21864280,
+    "sha256": "33777f3b22a45e646011943a3a0350a1abc4bcd436f2eab8ad98eb8d4f0f0f3e"
+  },
+  "assets/bin/Data/794cf065a19ef3543aa8ec8dda10e252": {
+    "table": "DrawParam",
+    "edit": "f35 += 1251004 (after f33; f36 left empty)",
+    "encrypted_bytes": [
+      11720,
+      11725
+    ],
+    "bytes": 11864,
+    "sha256": "417027ed7c32a3d1d1e5774940a96c040fc6da027947fd204639a60fc3791498"
+  },
+  "assets/bin/Data/109c23e5b633a7943b46f54df86ab23e": {
+    "table": "DrawRules",
+    "edit": "f3 += 1251004; f5 head += 1251004",
+    "encrypted_bytes": [
+      11986,
+      11994
+    ],
+    "bytes": 12128,
+    "sha256": "2e1a8e86cab67a703c6f5fb843864353b158f2300cc020f5c86e13b3cc3d0f75"
+  },
+  "assets/bin/Data/97f907f95af754641b60175964616b99": {
+    "table": "Gift",
+    "edit": "496/1251004 at head; 52/1251004 at before 1251014 (index 15)",
+    "encrypted_bytes": [
+      355830,
+      355843
+    ],
+    "bytes": 355968,
+    "sha256": "baf39d2ea80c6425d14dabd4fe87d3e9db1fd1766f9379d891fcf1c7217dae7c"
+  }
+}
