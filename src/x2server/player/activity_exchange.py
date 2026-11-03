@@ -205,7 +205,8 @@ class ActivityExchange:
             # router.cpp 买皮肤后两条都推)。只回 L2C_BuyGoods 的话, 货确实进了背包,
             # 但外观页会一直显示「未获得」, 直到重新登录。
             pushed_item = result.get('itemId') if isinstance(result, dict) else None
-            if self.appearance is not None and pushed_item in self.appearance.skins:
+            if (self.appearance is not None and pushed_item in self.appearance.skins
+                    and self.economy.appearance is not self.appearance):
                 from x2server.messages.appearance import HERO_SKIN
                 hero = self.appearance.skins[pushed_item]['hero_id']
                 skin_list = self.appearance.skin_values(player)['skinList']

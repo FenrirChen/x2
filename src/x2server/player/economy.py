@@ -684,7 +684,9 @@ class EconomyService:
         existing = self.store.db.execute("SELECT rewards FROM economy_grants WHERE player_id=? AND source=?",
                                          (player_id, source)).fetchone()
         if existing:
-            return {int(i): n for i, n in json.loads(existing[0]).items()}
+            rewards = {int(i): n for i, n in json.loads(existing[0]).items()}
+            self._remember_skin_grant(player_id, source, rewards)
+            return rewards
         if self.auto_used_items and any(item in self.auto_used_items for item in rewards):
             rewards = self.expand_auto_used(rewards)
         from .daily_pickups import capped_pickups
@@ -703,10 +705,6 @@ class EconomyService:
             if type(count) is not int or count <= 0 or item not in self.items:
                 raise UnresolvedEconomy("invalid reward")
             kind = self.items[item].get("ItemType", {}).get("value")
-            if kind == 17:
-                # 只在真正发出去时记; 同一笔发放会在本次请求的 pushes() 里换成
-                # 对应神格的 L2C_HeroSkinUpdate (见 _skin_pushes)。
-                self._granted_skins.setdefault(player_id, set()).add(item)
             if self.season.active(player_id) and item in (self.season.EXP_ITEM, self.season.POINT_ITEM, self.season.ACTIVE_ITEM):
                 continue  # Already consumed by the period-scoped season ledger.
             if kind == 20:
@@ -755,6 +753,7 @@ class EconomyService:
         if rewards.get(1237917) and getattr(self,'achievements',None):
             self.achievements.record(player_id,'friendcoin:'+source,
                                      self.ACHV_EVENT_FRIEND_COIN,rewards[1237917])
+        self._remember_skin_grant(player_id, source, rewards)
         return rewards
 
     def materialize_equipment(self, player_id, run_uuid, specs):
@@ -1758,27 +1757,36 @@ class EconomyService:
             self.save_snapshot(player_id, snapshot)
             self.store.db.execute("UPDATE battle_costs SET refunded=1 WHERE uuid=?", (run_uuid,))
 
-    def _skin_pushes(self, player_id):
-        """本次请求里发出去的外观换成该神格的刷新推送。
+    def _remember_skin_grant(self, player_id, source, rewards):
+        skins = {item for item, count in rewards.items() if count > 0
+                 and self.items.get(item, {}).get('ItemType', {}).get('value') == 17}
+        if skins:
+            self._granted_skins.setdefault(player_id, {})[source] = skins
 
-        客户端"神格外观"页只从 L2C_HeroSkinAll / L2C_HeroSkinUpdate 重读已拥有
-        形象, 所以通行证领奖这类不经过外观商店的发货路径也要补推, 否则外观已经
-        在背包里却一直显示「未获得」。``appearance`` 由 run_server 注入, 未接线
-        (单元测试) 时照常发货, 只是不推送。
-        """
-        pending = self._granted_skins.pop(player_id, None)
+    def _skin_pushes(self, player_id):
+        # Pending hints are not ownership: verify grant ledger evidence and
+        # current ownership, since an outer transaction may have rolled back.
+        pending = self._granted_skins.get(player_id)
         if not pending or self.appearance is None:
             return ()
-        heroes = {self.appearance.skins[item]["hero_id"]
-                  for item in pending if item in self.appearance.skins}
+        valid = set()
+        for source, items in pending.items():
+            if self.store.db.execute('SELECT 1 FROM economy_grants WHERE player_id=? AND source=?',
+                                     (player_id, source)).fetchone():
+                valid.update(items)
+        valid &= self.appearance._owned_skins(player_id)
+        heroes = {self.appearance.skins[item]['hero_id'] for item in valid}
         if not heroes:
+            self._granted_skins.pop(player_id, None)
             return ()
         from x2server.messages.appearance import HERO_SKIN
-        skin_list = self.appearance.skin_values(player_id)["skinList"]
-        entries = {HERO_SKIN.decode(value)["heroId"]: value for value in skin_list}
-        pushes = [OutboundMessage("L2C_HeroSkinAll", {"skinList": skin_list})]
-        pushes.extend(OutboundMessage("L2C_HeroSkinUpdate", {"skin": entries[hero]})
+        skin_list = self.appearance.skin_values(player_id)['skinList']
+        entries = {HERO_SKIN.decode(value)['heroId']: value for value in skin_list}
+        pushes = [OutboundMessage('L2C_HeroSkinAll', {'skinList': skin_list})]
+        pushes.extend(OutboundMessage('L2C_HeroSkinUpdate', {'skin': entries[hero]})
                       for hero in sorted(heroes) if hero in entries)
+        # Do not consume hints if constructing the authoritative list failed.
+        self._granted_skins.pop(player_id, None)
         return tuple(pushes)
 
     def pushes(self, player_id):

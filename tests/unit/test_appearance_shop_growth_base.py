@@ -1,3 +1,4 @@
+import pytest
 """Full appearance listing and populated White Night Planet entry data."""
 
 import asyncio
@@ -78,11 +79,17 @@ def test_izanagi_skin_can_be_hidden_for_unpatched_clients(env,monkeypatch):
     assert 1980045 not in service.goods
 
 
-def test_izanagi_static_skin_purchase_delivers_once(env):
+@pytest.mark.parametrize('shared', [False, True])
+def test_izanagi_static_skin_purchase_delivers_once(env, shared):
     store,economy,ctx=env
     appearance=AppearanceService(store,economy)
     service=AppearanceShopService(store,economy,appearance)
     row=service.goods[1980045]
+    if shared:
+        economy.appearance=appearance
+        snapshot=store.get(1)['snapshot']
+        snapshot['heroes'].append({'id':appearance.skins[row['itemId']]['hero_id'],'state':2,'level':1,'star':1})
+        economy.save_snapshot(1,snapshot)
     currency=service.CURRENCIES[row['currencyType']]
     with economy.transaction():
         economy._grant(1,'static-skin-funds',{currency:row['price']})
@@ -90,6 +97,6 @@ def test_izanagi_static_skin_purchase_delivers_once(env):
     result=asyncio.run(service.buy(ctx,request))
     assert result.values['code']==10
     assert store.db.execute('SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1223003').fetchone()[0]==1
-    assert any(p.message_name=='L2C_HeroSkinAll' for p in result.pushes)
+    assert sum(p.message_name=='L2C_HeroSkinAll' for p in result.pushes)==1
     assert asyncio.run(service.buy(ctx,request)).values==result.values
     assert store.db.execute('SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1223003').fetchone()[0]==1

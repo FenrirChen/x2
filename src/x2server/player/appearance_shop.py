@@ -110,5 +110,6 @@ class AppearanceShopService:
         return OutboundMessage("L2C_BuyCommercialGoods", result, pushes=(
             OutboundMessage("L2C_CommercialShopGoods", {"code": 10, "shopType": shop_type,
                 "goods": self.listing(player_id)}),
-            OutboundMessage("L2C_HeroSkinAll", self.appearance.skin_values(player_id)),
+            *((OutboundMessage("L2C_HeroSkinAll", self.appearance.skin_values(player_id)),)
+              if self.economy.appearance is not self.appearance else ()),
             *self.economy.pushes(player_id)))

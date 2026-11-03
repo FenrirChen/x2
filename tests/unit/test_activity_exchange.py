@@ -270,7 +270,8 @@ def test_yuexi_complete_pov_chapters_unlock_successive_shop_stages(activity):
             assert service.pov_chapter_rewards(1, chapter['StageID'][-1]) == {}
 
 
-def test_skin_good_delivers_and_pushes_hero_appearance(activity):
+@pytest.mark.parametrize('shared', [False, True])
+def test_skin_good_delivers_and_pushes_hero_appearance(activity, shared):
     """买下皮肤类货品后必须回 L2C_HeroSkinAll / L2C_HeroSkinUpdate。
 
     客户端的外观页只按这两条推送重读某神格的已拥有形象, 只回 L2C_BuyGoods 时货
@@ -281,6 +282,8 @@ def test_skin_good_delivers_and_pushes_hero_appearance(activity):
     snapshot['heroes'].append({'id': 1010, 'state': 2, 'level': 1, 'star': 1})
     store.save_snapshot(1, snapshot, store.get(1)['revision'])
     exchange = ActivityExchange(service, AppearanceService(store, economy))
+    if shared:
+        economy.appearance = exchange.appearance
     index = next(i for i, theme in enumerate(service.rotation.themes) if theme['group'] == 99)
     now[0] = activity_start(index) + 3600
     period = service.period(1)
@@ -295,11 +298,11 @@ def test_skin_good_delivers_and_pushes_hero_appearance(activity):
                            'C2L_BuyGoods', request))
     assert response.values['code'] == 10
     assert store.db.execute('SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1221003').fetchone()[0] == 1
-    pushed = [p.message_name for p in response.pushes]
-    assert 'L2C_HeroSkinAll' in pushed and 'L2C_HeroSkinUpdate' in pushed
+    pushed = [p.message_name for p in response.before_response + response.pushes]
+    assert pushed.count('L2C_HeroSkinAll') == pushed.count('L2C_HeroSkinUpdate') == 1
 
     from x2server.messages.appearance import HERO_SKIN
-    skin_push=next(p for p in response.pushes if p.message_name=='L2C_HeroSkinUpdate')
+    skin_push=next(p for p in response.before_response + response.pushes if p.message_name=='L2C_HeroSkinUpdate')
     assert 1221003 in HERO_SKIN.decode(skin_push.values['skin'])['skinIds']
     replay=asyncio.run(exchange.handle(ctx,packet(request,993,'C2L_BuyGoods'),'C2L_BuyGoods',request))
     assert replay.values==response.values
