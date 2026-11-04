@@ -37,6 +37,7 @@ from x2server.player.server_clock import ServerClock
 from x2server.player.birthday import BirthdayService
 from x2server.player.collection import CollectionService
 from x2server.player.favor import FavorService
+from x2server.player.date import DateService
 from x2server.player.appearance import AppearanceService
 from x2server.player.mail import MailService
 from x2server.player.terminal import TerminalService
@@ -149,6 +150,7 @@ async def run(database: Path, seconds: float) -> None:
     gift_packages = GiftPackageService(store, economy)
     collection = CollectionService(store, economy)
     favor = FavorService(store, economy, clock=clock.now)
+    date = DateService(store, economy, clock=clock.now)
     appearance = AppearanceService(store, economy)
     appearance_shop = AppearanceShopService(store, economy, appearance)
     # 通行证/邮件等任意发货路径拿到外观后, 都要补推该神格的 L2C_HeroSkinUpdate;
@@ -166,7 +168,7 @@ async def run(database: Path, seconds: float) -> None:
                          mail=mail, gift_packages=gift_packages, college=college)
     http = BootstrapHTTPServer(endpoints.bind_host, endpoints.http_port, identity)
     tcp = X2TCPServer(Settings(tcp_host=endpoints.bind_host, tcp_port=endpoints.game_port, read_timeout=120),
-        Dispatcher({**star_chart.handlers(), **lobby.handlers(), **college_flows.handlers(), **TutorialService(store).handlers(), **BirthdayService(store).handlers(), **economy.handlers(), **divination.handlers(), **shop.handlers(), **gift_packages.handlers(), **collection.handlers(), **favor.handlers(), **appearance.handlers(), **appearance_shop.handlers(), **mail.handlers(), **terminal.handlers(), **equipment.handlers(), **equip_plans.handlers(), **wish.handlers(), **ProgressionService(store, economy, appearance).handlers(), **BattleService(store, economy).handlers(), **BattleShopService(store, economy).handlers(), "C2L_HeroAll": HeroService(store, economy).query_all,
+        Dispatcher({**star_chart.handlers(), **lobby.handlers(), **college_flows.handlers(), **TutorialService(store).handlers(), **BirthdayService(store).handlers(), **economy.handlers(), **divination.handlers(), **shop.handlers(), **gift_packages.handlers(), **collection.handlers(), **favor.handlers(), **date.handlers(), **appearance.handlers(), **appearance_shop.handlers(), **mail.handlers(), **terminal.handlers(), **equipment.handlers(), **equip_plans.handlers(), **wish.handlers(), **ProgressionService(store, economy, appearance).handlers(), **BattleService(store, economy).handlers(), **BattleShopService(store, economy).handlers(), "C2L_HeroAll": HeroService(store, economy).query_all,
                     **activity_runtime.handlers(), **social.handlers(), "C2L_Login": login.login, "C2L_ReConnect": login.reconnect,
                     "C2L_ServerTableConfig": login.server_config}, wait_for_database=store.wait_for_import))
     chat = X2TCPServer(Settings(tcp_host=endpoints.bind_host, tcp_port=endpoints.chat_port, read_timeout=120),

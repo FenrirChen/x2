@@ -1,0 +1,14 @@
+{
+ "provenance": "契约形象。来源=客户端明文表 table/Appearance 里 f2==3(契约形象)的行 + table/Picture 里同号+50000 的花嫁头像行(headId)。拥有对应 Item 的神格才会在外观页看到这件形象。",
+ "skins": [
+  {
+   "id": 1221004,
+   "heroId": 1010,
+   "unitBaseId": 1010,
+   "headId": 1271004,
+   "name": "契约形象",
+   "kind": "契约形象",
+   "playable": true
+  }
+ ]
+}
