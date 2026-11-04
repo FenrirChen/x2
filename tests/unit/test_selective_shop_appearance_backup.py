@@ -56,7 +56,7 @@ def test_frames_selection_and_skin_ownership_unchanged(env):
     request = packet({"opt": 2, "values": [1, 1000001, frame]}, name="C2L_Account")
     assert asyncio.run(service.handle(ctx, request)).values["result"] == 10
     assert ICON_INFO.decode(head_icon_info(store.get(1)["snapshot"]))["OrnamentID"] == frame
-    assert len(service._icon_values(1)["headIconList"]) == 155
+    assert len(service._icon_values(1)["headIconList"]) == 156
     assert len(service._icon_values(1)["sceneIconList"]) == 9
     assert service._owned_skins(1) != set(service.skins)
 

@@ -17,6 +17,7 @@ from x2server.messages.progression import PROGRESSION_SCHEMAS
 from x2server.messages.equipment import EQUIPMENT_SCHEMAS
 from x2server.messages.wish import WISH_SCHEMAS
 from x2server.messages.favor import FAVOR_SCHEMAS
+from x2server.messages.date import DATE_SCHEMAS
 from x2server.messages.appearance import APPEARANCE_SCHEMAS
 from x2server.messages.mail import MAIL_SCHEMAS
 from x2server.messages.terminal import TERMINAL_SCHEMAS
@@ -134,6 +135,7 @@ CORE_SCHEMAS.update(PROGRESSION_SCHEMAS)
 CORE_SCHEMAS.update(EQUIPMENT_SCHEMAS)
 CORE_SCHEMAS.update(WISH_SCHEMAS)
 CORE_SCHEMAS.update(FAVOR_SCHEMAS)
+CORE_SCHEMAS.update(DATE_SCHEMAS)
 CORE_SCHEMAS.update(APPEARANCE_SCHEMAS)
 CORE_SCHEMAS.update(MAIL_SCHEMAS)
 CORE_SCHEMAS.update(TERMINAL_SCHEMAS)

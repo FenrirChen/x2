@@ -52,6 +52,102 @@ def favor_state(hero, initial_level=1):
     return hero.get("favor", {"level": initial_level, "exp": 0})
 
 
+def _load_catalog(name):
+    return json.loads(files("x2server").joinpath(f"data/{name}").read_text(encoding="utf-8"))
+
+
+def hero_meta(hero_id):
+    """The hero's ``(InitialLevel, LevelLimit)`` from the official table."""
+    entry = next((row for row in catalog().get("favorabilityhero", ())
+                  if int(row.get("HeroID", 0)) == int(hero_id)), None)
+    if entry is None:
+        return 1, 10
+    return int(entry.get("InitialLevel", 1)), int(entry.get("LevelLimit", 10))
+
+
+_DATE_CATALOG = None
+
+
+def date_catalog():
+    """favor_date_catalog.json: the 约会 rows (IsUse=1) and the 契约 rules.
+
+    A hero with no row here has no 约会 page at all. An unreadable file yields
+    empty structures rather than an exception: the 约会 page is optional, login
+    is not.
+    """
+    global _DATE_CATALOG
+    if _DATE_CATALOG is None:
+        try:
+            _DATE_CATALOG = _load_catalog("favor_date_catalog.json")
+        except Exception as exc:  # noqa: BLE001 - 约会/契约 stay off on a bad catalog
+            LOGGER.error("favor_date_catalog.json unavailable (%s); 约会/契约 stay off", exc)
+            _DATE_CATALOG = {}
+    return _DATE_CATALOG
+
+
+def date_rows(hero_id):
+    """The hero's 约会 rows, ascending by id: id / level / drawing / position / chips."""
+    rows = date_catalog().get("by_hero", {}).get(str(int(hero_id)), ())
+    return [row for row in rows if int(row.get("id", 0)) > 0]
+
+
+def covenant_rules():
+    """The 契约 gates: need_level / need_exp / item_id / item_num / level_cap."""
+    return date_catalog().get("covenant", {})
+
+
+def level_cap(hero_id):
+    """``FavorabilityHero.LevelLimit``, raised to the 契约 ceiling for its heroes."""
+    _initial, limit = hero_meta(hero_id)
+    rules = covenant_rules()
+    if date_rows(hero_id) and rules:
+        limit = max(limit, int(rules.get("level_cap", limit)))
+    return limit
+
+
+def ensure_schema(store):
+    """Create the 约会/契约 tables; safe to call on every start."""
+    with store.db:
+        # One row per (date, option) the player has touched. ``value`` is the count
+        # the client reads: chips are 0 (locked) or 1 (owned), date options are 1
+        # once chosen. "no row" and "row with 0" are the same state.
+        store.db.execute("""CREATE TABLE IF NOT EXISTS hero_date_options (
+            player_id INTEGER NOT NULL, hero_id INTEGER NOT NULL, date_id INTEGER NOT NULL,
+            option_id INTEGER NOT NULL, value INTEGER NOT NULL,
+            updated_at INTEGER NOT NULL,
+            PRIMARY KEY(player_id, hero_id, date_id, option_id))""")
+        # The 契约 itself (the client's HeroDate.skin == 1). One per hero, forever:
+        # the date page has no un-marry flow, and re-granting the appearance would
+        # be a second 契约.
+        store.db.execute("""CREATE TABLE IF NOT EXISTS hero_contracts (
+            player_id INTEGER NOT NULL, hero_id INTEGER NOT NULL, created_at INTEGER NOT NULL,
+            PRIMARY KEY(player_id, hero_id))""")
+
+
+def hero_level(store, player_id, hero_id):
+    """The save's (level, exp) for one hero, floored at the official InitialLevel."""
+    snapshot = store.get(player_id)["snapshot"]
+    hero = next((h for h in snapshot.get("heroes", ())
+                 if int(h.get("id", 0)) == int(hero_id)), None)
+    initial = hero_meta(hero_id)[0]
+    state = favor_state(hero, initial) if hero else {"level": initial, "exp": 0}
+    return int(state.get("level", initial)), int(state.get("exp", 0))
+
+
+def hero_journal_ids(hero_id, level, completed_dates=()):
+    """The 手账 ids unlocked at 好感 ``level``; 约会完成 rows use ``completed_dates``."""
+    ids = []
+    completed = {int(date_id) for date_id in completed_dates}
+    for row in catalog().get("favorabilitydairy", ()):
+        if int(row.get("HeroID", 0)) != int(hero_id):
+            continue
+        trigger = int(row.get("TriggerType", {}).get("value", 0))
+        need = int(row.get("TypeNumber", 0))
+        if trigger == 3 or trigger == 1 and level >= need or trigger == 2 and need in completed:
+            ids.append(int(row["DairyID"]))
+    return ids
+
+
 class FavorService:
     def __init__(self, store, economy, clock=time.time):
         self.store, self.economy, self.clock = store, economy, clock
@@ -141,9 +237,9 @@ class FavorService:
             journal = []
             if hero:
                 level = favor_state(hero, self.heroes[hero_id]["InitialLevel"])["level"]
-                journal = [r["DairyID"] for r in self.dairy if r["HeroID"] == hero_id and
-                    (r["TriggerType"]["value"] == 3 or
-                     r["TriggerType"]["value"] == 1 and level >= r.get("TypeNumber", 1))]
+                from .date import completed_dates
+                journal = hero_journal_ids(hero_id, level,
+                    completed_dates(self.store, player_id, hero_id))
             return OutboundMessage(reply, {"code": 10 if hero else 13,
                 "heroId": hero_id, "journal": journal})
         if name == "C2L_UnlockHeroArchives":
@@ -200,7 +296,7 @@ class FavorService:
             *self.economy.pushes(player_id)))
 
     def _advance(self, hero_id, state, breaks):
-        cap = self.heroes[hero_id]["LevelLimit"]
+        cap = level_cap(hero_id)
         while state["level"] < cap:
             current = state["level"]
             if self.levels[current].get("IsBreak") and current not in breaks:
@@ -232,7 +328,7 @@ class FavorService:
                 continue
             before = favor_state(hero, self.heroes[hid]["InitialLevel"]).copy()
             state = before.copy()
-            maximum = self.levels[self.heroes[hid]["LevelLimit"]]["Exp"]
+            maximum = self.levels[level_cap(hid)]["Exp"]
             added = min(gain, max(0, maximum - state["exp"]))
             state["exp"] += added
             hero["favor"] = self._advance(hid, state, hero.get("favor_breaks", []))
@@ -320,7 +416,7 @@ class FavorService:
                 target = next(h for h in snapshot["heroes"] if h["id"] == target_id and h["state"] == 2)
                 before = favor_state(target, self.heroes[target_id]["InitialLevel"]).copy()
                 state = before.copy()
-                maximum = self.levels[self.heroes[target_id]['LevelLimit']]['Exp']
+                maximum = self.levels[level_cap(target_id)]['Exp']
                 state['exp'] += min(gain, max(0, maximum - state['exp']))
                 target["favor"] = self._advance(target_id, state, target.get("favor_breaks", []))
                 self.economy.save_snapshot(player_id, snapshot)

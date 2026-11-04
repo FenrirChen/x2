@@ -44,7 +44,7 @@ def test_avatar_inventory_and_voice_conditions(env):
     store, economy, context = env
     service = AppearanceService(store, economy)
     icons = invoke(service, context, "SeasonIcon").values
-    assert len(icons["headIconList"]) == 155
+    assert len(icons["headIconList"]) == 156
     assert {1000001, 1270301} <= {SEASON_ICON_DATA.decode(x)["id"] for x in icons["headIconList"]}
     assert invoke(service, context, "PutOnOrPutOffSeasonIcon", {"type": 1,
         "id": 1270301}).values["code"] == 10

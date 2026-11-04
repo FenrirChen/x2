@@ -1,6 +1,6 @@
 {
  "_说明": "神格头像表：标准头像 = 拥有该神格时发放, Q 版头像 = 该神格好感 10 级时发放（PlayerDataProto.favor 的等级）。服务端 LoginService.snapshot_push 用它填 BaseInfo.IconInfo（IconID = 当前佩戴, PictureID = 已发放的头像 id 列表）。",
- "_来源": "work/_tables/all_parsed/Picture.json (客户端本地表 table/Picture 的静态解析, 155 行) + favor_catalog.json 的 39 英雄白名单; 生成器 work/make_head_icons.py",
+ "_来源": "work/_tables/all_parsed/Picture.json (客户端本地表 table/Picture 的静态解析, 155 行) + favor_catalog.json 的 39 英雄白名单; 生成器 work/make_head_icons.py。另: 契约包补回的 Picture 1271004(花嫁头像, 1010)由生成器从 data/covenant_skins.json 的 headId 合并进来 —— 那张表在 2.4 原包里没有。",
  "default": 1000001,
  "by_hero": {
   "1003": {
@@ -58,6 +58,7 @@
    "star": 1271002,
    "skins": [
     1271003,
+    1271004,
     1271005,
     1271006
    ]
@@ -331,6 +332,7 @@
   "1271001": "standard",
   "1271002": "star",
   "1271003": "skin",
+  "1271004": "skin",
   "1271005": "skin",
   "1271006": "skin",
   "1271100": "q",

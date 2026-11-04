@@ -13,6 +13,7 @@ from x2server.messages.chat import CHAT_IDS
 from x2server.messages.economy import ECONOMY_IDS
 from x2server.messages.achievements import ACHIEVEMENT_IDS
 from x2server.messages.favor import FAVOR_IDS
+from x2server.messages.date import DATE_IDS
 from x2server.messages.appearance import APPEARANCE_IDS
 from x2server.messages.mail import MAIL_IDS
 from x2server.messages.terminal import TERMINAL_IDS
@@ -134,7 +135,7 @@ CORE_MESSAGE_REGISTRY = MessageRegistry(
         MessageEntry("L2C_UpLevelBuildingId", 507, Direction.SERVER_TO_CLIENT),
         MessageEntry("L2C_TrainingUpdate", 562, Direction.SERVER_TO_CLIENT),
         MessageEntry("L2C_PrayEnd", 514, Direction.SERVER_TO_CLIENT),
-        *(entry for name, request_id, response_id in (*MOON_IDS, *LOBBY_IDS, *CHAT_IDS, *ECONOMY_IDS, *FAVOR_IDS, *APPEARANCE_IDS, *MAIL_IDS, *TERMINAL_IDS, *ACHIEVEMENT_IDS, *COLLEGE_IDS, *SEASON_IDS, *CLUB_IDS, *SOCIAL_IDS) for entry in (
+        *(entry for name, request_id, response_id in (*MOON_IDS, *LOBBY_IDS, *CHAT_IDS, *ECONOMY_IDS, *FAVOR_IDS, *DATE_IDS, *APPEARANCE_IDS, *MAIL_IDS, *TERMINAL_IDS, *ACHIEVEMENT_IDS, *COLLEGE_IDS, *SEASON_IDS, *CLUB_IDS, *SOCIAL_IDS) for entry in (
             MessageEntry("C2L_" + name, request_id, Direction.CLIENT_TO_SERVER),
             MessageEntry("L2C_" + name, response_id, Direction.SERVER_TO_CLIENT))),
         *(MessageEntry(name, mid, Direction.SERVER_TO_CLIENT) for name, mid in SEASON_PUSH_IDS),
