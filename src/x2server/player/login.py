@@ -221,12 +221,15 @@ class LoginService:
             if college_row:
                 from .college_pray import daily_fields
                 values['Daily'] = values.get('Daily', b'') + daily_fields(json.loads(college_row[0]), stamp)
-        # 降临纪念 (累计登录): Daily.TotalLoginDays (字段 8)。客户端
-        # CumulateLoginModule_RefreshRedPoint 从它判天数够没够, 缺了页面天数恒 0
-        # (「时间出错」)。天数按创号时刻算, 与 player/total_login.py 的领取门槛同源。
-        from .total_login import login_days
-        values["Daily"] = (values.get("Daily") or b"") + LOGIN_DAILY.encode(
-            {"TotalLoginDays": login_days(player.get("created_at"), stamp)})
+        # 降临纪念 (累计登录): Daily.TotalLoginDays (字段 8) + TotalLoginIndex (字段 22)。
+        # 客户端 CumulateLoginModule_RefreshRedPoint 从 f8 判天数够没够 (缺了页面天数恒
+        # 0, 即「时间出错」), 从 f22 判该档位是否已领取 —— 缺了 f22 领取后档位仍显示
+        # 未领取、红点也清不掉。天数按创号时刻算, 与 player/total_login.py 的领取门槛同源;
+        # f22 是已领档位下标 (repeated ContainerIntIntProto, 编码见 total_login.claimed_pairs)。
+        from .total_login import claimed_pairs, login_days
+        daily = {"TotalLoginDays": login_days(player.get("created_at"), stamp),
+                 "TotalLoginIndex": claimed_pairs(store.db if store is not None else None, player["id"])}
+        values["Daily"] = (values.get("Daily") or b"") + LOGIN_DAILY.encode(daily)
         # REVIVAL_COMPAT 2026-10-02: CollegeModule.IsCollegeEnable (0x1AF9FF8)
         # enables the base entry only when PlayerData.ModuleStatus.GrowthBaseStatus
         # == 1; the official server value is unrecoverable, keep the module open.
