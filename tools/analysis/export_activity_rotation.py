@@ -82,6 +82,9 @@ def main():
     if missing:
         raise ValueError(f'Missing required tables: {missing}')
     restore_yuexi_shops(tables)
+    # Only the 70010 chapters are reachable by an activity; the 17 permanent
+    # chapters (no UnlockActiviyID) are restored from data/activity_rotation_extra.json
+    # so a regeneration cannot drop their whole-chapter ClearReward again.
     tables['POVChapterInfo'] = [r for r in tables['POVChapterInfo']
                                if r.get('UnlockActiviyID') == 70010]
     from tools.analysis.export_world_boss import mail_templates
