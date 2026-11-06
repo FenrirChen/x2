@@ -246,6 +246,34 @@ def test_club_help_kv_self_request_and_recorder(social):
         HelpPowerTimePoint=point,TimeValid=0)]
 
 
+def test_npc_help_records_reset_at_midnight(social):
+    # The client's one-click assist skips any member whose recorder rows name
+    # the player, without comparing dates. NPC help requests are re-issued
+    # daily, so yesterday's rows must not hide every member forever.
+    s,ctx,stamp=social
+    target=create(s,ctx)
+    npc=npc_id(1,target)
+    base=s.college.load(1)
+    row=next(r for r in base['buildings'] if r['buildingId']==701)
+    base['build_queue']=dict(buildingId=701,upgradeStartTime=s.clock(),
+        upgradeEndTime=s.clock()+3600,target_level=row['buildingLevel']+1)
+    with s.economy.transaction():
+        s.college.save(1,base)
+    req=dict(helpPower=1,helpPowerSpeedParam=[HELP_POWER_SPEED_PARAM.encode(
+        dict(playerIded=target,buildingId=701,buildingLevel=1))])
+    assert act(s,ctx,'HelpPowerSpeed',req,3).values['code']==10
+    keys=[f'club_speed_{npc}_1_record']
+    data=s.http('/KVStoreService.GetValuesV2',{'users':[str(npc)],'keys':keys},1)
+    assert json.loads(data['Pairs'][0]['pairs'][0]['val'])[0]['playerId']==1
+    stamp[0]+=86400
+    data=s.http('/KVStoreService.GetValuesV2',{'users':[str(npc)],'keys':keys},1)
+    assert all(not r['pairs'] for r in data['Pairs'])
+    # The player's own recorder belongs to the current build and survives midnight.
+    data=s.http('/KVStoreService.GetValuesV2',{'users':['1'],
+        'keys':['club_speed_1_1_record']},1)
+    assert json.loads(data['Pairs'][0]['pairs'][0]['val'])[0]['playerId']==npc
+
+
 def test_club_help_valid_auto_assists_once_per_build(social):
     # Clicking 社团助力 sends 881 (HelpPowerSpeedValid); club members answer at
     # once in single-player, each cutting 60s and leaving a recorder row.
