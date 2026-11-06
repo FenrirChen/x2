@@ -641,6 +641,18 @@ class SocialService:
                         continue
                     if tail:
                         rows=state['help_records'].get(f'{uid}:{slot}')
+                        if uid!=pid and rows:
+                            # NPC construction requests are re-issued every day (the
+                            # rows above disappear at midnight), so their recorder
+                            # history has to restart daily as well. The native
+                            # one-click assist drops any member whose recorder already
+                            # names the player and never compares dates: keeping
+                            # yesterday's rows makes every member look "already
+                            # assisted" forever, so help-all stops sending 879 after
+                            # the first day. The player's own slot (uid==pid) keeps
+                            # its rows for the lifetime of the current build.
+                            rows=[r for r in rows
+                                if day(int(r.get('HelpPowerTimePoint',0))+TO_2018)==state['day']]
                         if rows:
                             bucket(uid)['pairs'].append(
                                 {'key':key,'val':json.dumps(rows,separators=(',',':'))})
