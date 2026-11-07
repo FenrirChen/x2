@@ -1,0 +1,30 @@
+{
+  "inspected_pages": 39,
+  "reference_changes": 331,
+  "null_to_bound": 291,
+  "validated_sprite_targets": 331,
+  "unresolved": [],
+  "added_unity_assets": 386,
+  "added_unity_bytes": 366802596,
+  "added_videos": [
+    "assets/Video/PV_Activity01.mp4",
+    "assets/Video/PV_Activity02.mp4",
+    "assets/Video/PV_Anniversary.mp4",
+    "assets/Video/PV_NewYear.mp4",
+    "assets/Video/PV_Osiris.mp4",
+    "assets/Video/PV_Sakura.mp4",
+    "assets/Video/PV_ZhenXun.mp4",
+    "assets/Video/battlepassMain.mp4",
+    "assets/Video/water.mp4"
+  ],
+  "season_assets": [
+    "assets/bin/Data/x2_season01_0999fa1dc42cb4d46897892076b8ce2a.assets",
+    "assets/bin/Data/x2_season01_15ba7e1140d04b54a9b3bdebc8f7a9d4.assets",
+    "assets/bin/Data/x2_season01_1fe79a207ca2333488af44af04f9aad2.assets",
+    "assets/bin/Data/x2_season01_22aa0286d1843224eaf5b41956d34697.assets",
+    "assets/bin/Data/x2_season01_68a6ec9be8366c6419138ca41becde39.assets",
+    "assets/bin/Data/x2_season01_7b7dd3335b68b2f4db38261bc67b55af.assets",
+    "assets/bin/Data/x2_season01_e179ea22ba03fe245a767a0c51f1a06a.assets",
+    "assets/bin/Data/x2_season01_e3d73408dc35c064cb9dda1e7ab528dc.assets"
+  ]
+}

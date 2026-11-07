@@ -1,0 +1,9 @@
+{
+  "image_reference_changes": 418,
+  "previously_empty": 359,
+  "modified_resource_files": 58,
+  "added_files": 395,
+  "resource_bindings": 88,
+  "archive_unit_tests_passed": 5,
+  "runtime_ui_test": "Not installed; user acceptance pending."
+}

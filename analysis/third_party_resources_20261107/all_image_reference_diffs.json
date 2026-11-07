@@ -1,0 +1,3312 @@
+[
+  {
+    "page": "ui_newyear2_main",
+    "image_id": 573,
+    "object_name": "mask",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_5798a35f3e17ed0418214b01e9ef3823.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_main",
+    "image_id": 594,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_063c3171e9c765f4fb814f0e2cb67968.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_main",
+    "image_id": 612,
+    "object_name": "bg",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_9d47b6f95cf74ce438f3866a86533a57.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_main",
+    "image_id": 629,
+    "object_name": "mImg (2)",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_e06c3133f01753c439cee837e887bfa4.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_main",
+    "image_id": 723,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_9a53aa18298bfd24ba87a9102eeea403.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_main",
+    "image_id": 783,
+    "object_name": "title2_FenXiang",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_52d0d15a73bd22648857b681504dc53b.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_main",
+    "image_id": 788,
+    "object_name": "rightBG",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_f370221a83e81c447883abf9aea4ee80.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_main",
+    "image_id": 790,
+    "object_name": "mImg",
+    "old_null": false,
+    "third_external": "x2_activity09_ui_173347d4d8b6fa74289ee8800c56fe8b.assets",
+    "third_path_id": 2,
+    "local_external": "72e89d711cbf23b46816ff00450c2be7",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_newyear2_main",
+    "image_id": 835,
+    "object_name": "timebg",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_e1a39ad83bd85b142ab87b773bf15423.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_main",
+    "image_id": 940,
+    "object_name": "mImg (2)",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_53e42753e8c523c4dab8b17b1eabe393.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_main",
+    "image_id": 948,
+    "object_name": "mask_FenXiang",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_918e2d850d496954a9c6bfe64b2add52.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_main",
+    "image_id": 964,
+    "object_name": "mImg",
+    "old_null": false,
+    "third_external": "x2_activity09_ui_b5d70a2e1ad2e6a4ea8b4abef3abe71b.assets",
+    "third_path_id": 2,
+    "local_external": "72e89d711cbf23b46816ff00450c2be7",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_newyear2_section",
+    "image_id": 1647,
+    "object_name": "mask",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_eff7ef16bb5edbc479b51f5968e5bec1.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_section",
+    "image_id": 1684,
+    "object_name": "imgBG",
+    "old_null": false,
+    "third_external": "x2_activity09_ui_40b096e104dc00b418a87a81c1ca6811.assets",
+    "third_path_id": 2,
+    "local_external": "72e89d711cbf23b46816ff00450c2be7",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_newyear2_section",
+    "image_id": 1961,
+    "object_name": "di",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_07b39cd7889265d439a23a1e3aaee82d.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_section",
+    "image_id": 1972,
+    "object_name": "BG",
+    "old_null": false,
+    "third_external": "x2_activity09_ui_5798a35f3e17ed0418214b01e9ef3823.assets",
+    "third_path_id": 2,
+    "local_external": "72e89d711cbf23b46816ff00450c2be7",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_newyear2_section",
+    "image_id": 2041,
+    "object_name": "imgExtraDrop",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_8c9d6243b05330e4a91be02efafe4b46.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_shop",
+    "image_id": 725,
+    "object_name": "titleNormal",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_8f22ac5d55b0f014b81f7ca4680f4ca1.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_shop",
+    "image_id": 731,
+    "object_name": "titleSpacial",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_8f22ac5d55b0f014b81f7ca4680f4ca1.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_shop",
+    "image_id": 776,
+    "object_name": "Img",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_ad93a807a3d858c4f94f04caee28e167.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_shop",
+    "image_id": 779,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_d11b66c524b724f419a0dcf195e4aa12.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_shop",
+    "image_id": 789,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_896307e928df43243b7695285e19d1a2.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_shop",
+    "image_id": 808,
+    "object_name": "mImg",
+    "old_null": false,
+    "third_external": "x2_activity09_ui_c8912909573f92946850ed090d81751d.assets",
+    "third_path_id": 2,
+    "local_external": "72e89d711cbf23b46816ff00450c2be7",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_newyear2_shop",
+    "image_id": 817,
+    "object_name": "mImg (2)",
+    "old_null": false,
+    "third_external": "x2_activity09_ui_4cf2ee71a100a3b4483fd45f9678885e.assets",
+    "third_path_id": 2,
+    "local_external": "72e89d711cbf23b46816ff00450c2be7",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_newyear2_shop",
+    "image_id": 899,
+    "object_name": "Img",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_df963615f12f39f43a0f7586bc345a24.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_shop",
+    "image_id": 910,
+    "object_name": "GuiZiL",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_3d1ded0906df1c346a193f0f53d8aec0.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_shop",
+    "image_id": 929,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_961bcff06e9ac8d44b15cdefeb7c6bec.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_task",
+    "image_id": 843,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_c3b5541cb099b1147b9137c572f6b52e.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_task",
+    "image_id": 878,
+    "object_name": "mImgRewardBG",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_dee26aae6c331334dacf7aa3c0b71405.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_task",
+    "image_id": 881,
+    "object_name": "mImgNormalBG",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_61c75597017167a4cb74d45c9eaf93d3.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_main",
+    "image_id": 583,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_c50c55c0159ff54468efcfa9d18f96a0.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_main",
+    "image_id": 585,
+    "object_name": "Image_CanOpen",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_413ebae5a10989744bdc1ca9268c003f.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_main",
+    "image_id": 605,
+    "object_name": "Image_Open",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_4f8164e0abc91a94fb3849027003cf3d.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_main",
+    "image_id": 606,
+    "object_name": "Qian",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_4555be6c80692eb4ab32777c49e261b0.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_main",
+    "image_id": 612,
+    "object_name": "mImg (1)",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_c475d8acc5d3f0147b435f8cbe2efd19.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_main",
+    "image_id": 617,
+    "object_name": "Image_Open",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_4f8164e0abc91a94fb3849027003cf3d.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_main",
+    "image_id": 618,
+    "object_name": "Image_Open",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_4f8164e0abc91a94fb3849027003cf3d.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_main",
+    "image_id": 619,
+    "object_name": "Image_Open",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_4f8164e0abc91a94fb3849027003cf3d.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_main",
+    "image_id": 627,
+    "object_name": "Img",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_413ebae5a10989744bdc1ca9268c003f.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_main",
+    "image_id": 629,
+    "object_name": "Image_Open",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_4f8164e0abc91a94fb3849027003cf3d.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_main",
+    "image_id": 646,
+    "object_name": "Qian (2)",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_4555be6c80692eb4ab32777c49e261b0.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_main",
+    "image_id": 654,
+    "object_name": "Qian_pressed (1)",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_ccd6440c8f2479344b9177857c41019a.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_main",
+    "image_id": 659,
+    "object_name": "Img",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_413ebae5a10989744bdc1ca9268c003f.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_main",
+    "image_id": 671,
+    "object_name": "Qian (1)",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_4555be6c80692eb4ab32777c49e261b0.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_main",
+    "image_id": 676,
+    "object_name": "Image_CanOpen",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_413ebae5a10989744bdc1ca9268c003f.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_main",
+    "image_id": 699,
+    "object_name": "Image_CanOpen",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_413ebae5a10989744bdc1ca9268c003f.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_main",
+    "image_id": 710,
+    "object_name": "Qian (3)",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_4555be6c80692eb4ab32777c49e261b0.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_main",
+    "image_id": 714,
+    "object_name": "Img_WeiKaiQi",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_7177227ec0856f344bd4bf40b4551c89.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_main",
+    "image_id": 737,
+    "object_name": "Qian (4)",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_4555be6c80692eb4ab32777c49e261b0.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_main",
+    "image_id": 739,
+    "object_name": "Img",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_413ebae5a10989744bdc1ca9268c003f.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_main",
+    "image_id": 743,
+    "object_name": "Image_CanOpen",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_413ebae5a10989744bdc1ca9268c003f.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_main",
+    "image_id": 751,
+    "object_name": "Img",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_413ebae5a10989744bdc1ca9268c003f.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_main",
+    "image_id": 754,
+    "object_name": "Qian_pressed (2)",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_ccd6440c8f2479344b9177857c41019a.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_main",
+    "image_id": 760,
+    "object_name": "BG",
+    "old_null": false,
+    "third_external": "x2_activity09_ui_5fd57a3e0c011c046b4f52fa7d59c9f8.assets",
+    "third_path_id": 2,
+    "local_external": "72e89d711cbf23b46816ff00450c2be7",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_newyear2_lantern_main",
+    "image_id": 789,
+    "object_name": "mImg (2)",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_e354fab9ac3505441a4bfe8d550dbba2.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_main",
+    "image_id": 798,
+    "object_name": "Qian_pressed (4)",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_ccd6440c8f2479344b9177857c41019a.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_main",
+    "image_id": 802,
+    "object_name": "Img",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_413ebae5a10989744bdc1ca9268c003f.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_main",
+    "image_id": 806,
+    "object_name": "Image_CanOpen",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_413ebae5a10989744bdc1ca9268c003f.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_main",
+    "image_id": 816,
+    "object_name": "Img",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_e3dd2c563a30f1a4995c6b9480037d5c.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_main",
+    "image_id": 820,
+    "object_name": "Qian_pressed (1)",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_ccd6440c8f2479344b9177857c41019a.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_main",
+    "image_id": 823,
+    "object_name": "Qian_pressed (3)",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_ccd6440c8f2479344b9177857c41019a.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_drawlots",
+    "image_id": 69,
+    "object_name": "Img (1)",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_c9dac6b10dcf9014fb78e3a3bc672c25.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_drawlots",
+    "image_id": 70,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_e9a72c710959ad2409b2887d6fbec8ac.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_drawlots",
+    "image_id": 74,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_b44fab0b0ba58ba48a3b5988a9833cde.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_drawlots",
+    "image_id": 79,
+    "object_name": "Img",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_3d79891d7702cb046a67b943e174a0a1.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_drawlots",
+    "image_id": 80,
+    "object_name": "BG",
+    "old_null": false,
+    "third_external": "x2_activity09_ui_317ec8eb9d82c8f4a8daf0438153cb52.assets",
+    "third_path_id": 2,
+    "local_external": "72e89d711cbf23b46816ff00450c2be7",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_newyear2_lantern_yearlabel",
+    "image_id": 83,
+    "object_name": "Img",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_3d79891d7702cb046a67b943e174a0a1.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_yearlabel",
+    "image_id": 85,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_e9a72c710959ad2409b2887d6fbec8ac.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_yearlabel",
+    "image_id": 97,
+    "object_name": "BG",
+    "old_null": false,
+    "third_external": "x2_activity09_ui_317ec8eb9d82c8f4a8daf0438153cb52.assets",
+    "third_path_id": 2,
+    "local_external": "72e89d711cbf23b46816ff00450c2be7",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_newyear2_lantern_yearlabel",
+    "image_id": 106,
+    "object_name": "Bg",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_3ff579826b59a6b40b540de034791363.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_yearlabel",
+    "image_id": 107,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_5681b3d712599bc489d797274906e3f3.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_question",
+    "image_id": 80,
+    "object_name": "Bg",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_9722009e9177f9f4a81ba856bee57959.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_question",
+    "image_id": 83,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_858e89d793cf3c640afa9c47855a84eb.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_question",
+    "image_id": 99,
+    "object_name": "DengLong",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_1f9abd1c81458044ab6ecb2443deebab.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_question",
+    "image_id": 105,
+    "object_name": "AnwserButton",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_c23b23db7dc311e479bfddc3731747ff.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_lantern_question",
+    "image_id": 109,
+    "object_name": "mImg",
+    "old_null": false,
+    "third_external": "x2_activity09_ui_8139508131ca9e6429a9d3ec278ff00d.assets",
+    "third_path_id": 2,
+    "local_external": "72e89d711cbf23b46816ff00450c2be7",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_newyear_main",
+    "image_id": 386,
+    "object_name": "mask",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_5798a35f3e17ed0418214b01e9ef3823.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_main",
+    "image_id": 394,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_063c3171e9c765f4fb814f0e2cb67968.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_main",
+    "image_id": 406,
+    "object_name": "bg",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_9d47b6f95cf74ce438f3866a86533a57.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_main",
+    "image_id": 447,
+    "object_name": "title",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_ae94baab29e265b4c972f98ad5132085.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_main",
+    "image_id": 453,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_9a53aa18298bfd24ba87a9102eeea403.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_main",
+    "image_id": 486,
+    "object_name": "title2_FenXiang",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_52d0d15a73bd22648857b681504dc53b.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_main",
+    "image_id": 490,
+    "object_name": "rightBG",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_f370221a83e81c447883abf9aea4ee80.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_main",
+    "image_id": 491,
+    "object_name": "mImg",
+    "old_null": false,
+    "third_external": "x2_activity03_ui_bedf35fb61dfe8748ae3a710682b1088.assets",
+    "third_path_id": 2,
+    "local_external": "72e89d711cbf23b46816ff00450c2be7",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_newyear_main",
+    "image_id": 522,
+    "object_name": "timebg",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_e1a39ad83bd85b142ab87b773bf15423.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_main",
+    "image_id": 572,
+    "object_name": "mask_FenXiang",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_918e2d850d496954a9c6bfe64b2add52.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_section",
+    "image_id": 369,
+    "object_name": "mask",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_eff7ef16bb5edbc479b51f5968e5bec1.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_section",
+    "image_id": 382,
+    "object_name": "imgBG",
+    "old_null": false,
+    "third_external": "x2_activity03_ui_7c0ae8009b802294e809b1920cd04bdf.assets",
+    "third_path_id": 2,
+    "local_external": "72e89d711cbf23b46816ff00450c2be7",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_newyear_section",
+    "image_id": 426,
+    "object_name": "des_img",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_ebf96d9f64ce8004a8bbe5997472c6fd.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_section",
+    "image_id": 455,
+    "object_name": "di",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_07b39cd7889265d439a23a1e3aaee82d.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_section",
+    "image_id": 457,
+    "object_name": "BG",
+    "old_null": false,
+    "third_external": "x2_activity03_ui_5798a35f3e17ed0418214b01e9ef3823.assets",
+    "third_path_id": 2,
+    "local_external": "72e89d711cbf23b46816ff00450c2be7",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_newyear_section",
+    "image_id": 470,
+    "object_name": "imgExtraDrop",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_8c9d6243b05330e4a91be02efafe4b46.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_shop",
+    "image_id": 546,
+    "object_name": "Select",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_108ae70186e3b004884870501390dee9.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_shop",
+    "image_id": 663,
+    "object_name": "mImg",
+    "old_null": false,
+    "third_external": "x2_activity03_ui_382dab417e2e90345ac4631ced4fdc1b.assets",
+    "third_path_id": 2,
+    "local_external": "72e89d711cbf23b46816ff00450c2be7",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_newyear_shop",
+    "image_id": 669,
+    "object_name": "Select (3)",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_108ae70186e3b004884870501390dee9.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_shop",
+    "image_id": 670,
+    "object_name": "mImg (2)",
+    "old_null": false,
+    "third_external": "x2_activity03_ui_b026be116b0f4e94888cc818c024c2df.assets",
+    "third_path_id": 2,
+    "local_external": "72e89d711cbf23b46816ff00450c2be7",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_newyear_shop",
+    "image_id": 751,
+    "object_name": "Select (1)",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_108ae70186e3b004884870501390dee9.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_shop",
+    "image_id": 755,
+    "object_name": "GuiZiL",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_e23685599bbf0604daebea777acfc221.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_shop",
+    "image_id": 773,
+    "object_name": "GuiZiR",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_c6e7b63b14494f3479dae129963ce3d6.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_shop",
+    "image_id": 804,
+    "object_name": "Select (2)",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_108ae70186e3b004884870501390dee9.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyearchieftask",
+    "image_id": 716,
+    "object_name": "BG",
+    "old_null": true,
+    "third_external": "x2_feast_ui_15bfcbfcf15271d4cba1119ab278ca81.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyearchieftask",
+    "image_id": 731,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_feast_ui_178388a27803c7043b924e1b03b1a4f2.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 523,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_c50c55c0159ff54468efcfa9d18f96a0.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 525,
+    "object_name": "Image_CanOpen",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_413ebae5a10989744bdc1ca9268c003f.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 544,
+    "object_name": "Image_Open",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_4f8164e0abc91a94fb3849027003cf3d.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 545,
+    "object_name": "Qian",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_4555be6c80692eb4ab32777c49e261b0.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 550,
+    "object_name": "mImg (1)",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_c475d8acc5d3f0147b435f8cbe2efd19.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 555,
+    "object_name": "Image_Open",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_4f8164e0abc91a94fb3849027003cf3d.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 556,
+    "object_name": "Image_Open",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_31cf3f26891ba3244bd9ed2d46f2ee51.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 557,
+    "object_name": "Image_Open",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_4f8164e0abc91a94fb3849027003cf3d.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 559,
+    "object_name": "Img",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_1f9abd1c81458044ab6ecb2443deebab.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 565,
+    "object_name": "Img",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_31cf3f26891ba3244bd9ed2d46f2ee51.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 566,
+    "object_name": "Image_Open",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_4f8164e0abc91a94fb3849027003cf3d.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 583,
+    "object_name": "Qian (2)",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_4555be6c80692eb4ab32777c49e261b0.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 586,
+    "object_name": "Img_pressed",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_816f9760a2b21a64cbba0b18ad38b203.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 590,
+    "object_name": "Qian_pressed (1)",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_ccd6440c8f2479344b9177857c41019a.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 595,
+    "object_name": "Img",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_413ebae5a10989744bdc1ca9268c003f.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 602,
+    "object_name": "Img_pressed",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_d428a40f40ab4494780d4f3babf6bd53.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 607,
+    "object_name": "Qian (1)",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_4555be6c80692eb4ab32777c49e261b0.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 612,
+    "object_name": "Image_CanOpen",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_413ebae5a10989744bdc1ca9268c003f.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 623,
+    "object_name": "Img_pressed",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_e2988fb19891895458b96e2088ae3aee.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 627,
+    "object_name": "Img",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_80b14d3d5065897469f422d710566d86.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 631,
+    "object_name": "Image_CanOpen",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_31cf3f26891ba3244bd9ed2d46f2ee51.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 633,
+    "object_name": "Img_pressed",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_6d7638f6f29f0684e903d3195cb5a28c.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 640,
+    "object_name": "Qian (3)",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_4555be6c80692eb4ab32777c49e261b0.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 644,
+    "object_name": "Img_WeiKaiQi",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_7177227ec0856f344bd4bf40b4551c89.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 665,
+    "object_name": "Qian (4)",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_4555be6c80692eb4ab32777c49e261b0.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 667,
+    "object_name": "Img",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_413ebae5a10989744bdc1ca9268c003f.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 671,
+    "object_name": "Image_CanOpen",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_413ebae5a10989744bdc1ca9268c003f.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 675,
+    "object_name": "Img_pressed",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_194eba1eb47c2ff479204cbc4369c65c.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 677,
+    "object_name": "Img",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_413ebae5a10989744bdc1ca9268c003f.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 680,
+    "object_name": "Qian_pressed (2)",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_ccd6440c8f2479344b9177857c41019a.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 681,
+    "object_name": "Img",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_a8c2390c5cbe64a4a8380cf9f0b77d10.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 685,
+    "object_name": "BG",
+    "old_null": false,
+    "third_external": "x2_activity03_ui_5fd57a3e0c011c046b4f52fa7d59c9f8.assets",
+    "third_path_id": 2,
+    "local_external": "72e89d711cbf23b46816ff00450c2be7",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 688,
+    "object_name": "Img",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_5d68230de89f3184ea5780c671f086c6.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 712,
+    "object_name": "mImg (2)",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_e354fab9ac3505441a4bfe8d550dbba2.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 719,
+    "object_name": "Qian_pressed (4)",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_ccd6440c8f2479344b9177857c41019a.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 723,
+    "object_name": "Img",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_413ebae5a10989744bdc1ca9268c003f.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 726,
+    "object_name": "Img",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_efc086c5f5dc1254aafbc401c976e4fe.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 727,
+    "object_name": "Image_CanOpen",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_413ebae5a10989744bdc1ca9268c003f.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 736,
+    "object_name": "Img",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_e3dd2c563a30f1a4995c6b9480037d5c.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 740,
+    "object_name": "Qian_pressed (1)",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_ccd6440c8f2479344b9177857c41019a.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_main",
+    "image_id": 743,
+    "object_name": "Qian_pressed (3)",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_ccd6440c8f2479344b9177857c41019a.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_drawlots",
+    "image_id": 51,
+    "object_name": "mImg (4)",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_0128bc7f16bfdfe48abc69ec30ca7531.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_drawlots",
+    "image_id": 53,
+    "object_name": "Img (1)",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_c9dac6b10dcf9014fb78e3a3bc672c25.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_drawlots",
+    "image_id": 54,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_e9a72c710959ad2409b2887d6fbec8ac.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_drawlots",
+    "image_id": 55,
+    "object_name": "mImg (3)",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_b42e0d01799396e48bf0770e24acc17b.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_drawlots",
+    "image_id": 58,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_b44fab0b0ba58ba48a3b5988a9833cde.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_drawlots",
+    "image_id": 60,
+    "object_name": "Img",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_3d79891d7702cb046a67b943e174a0a1.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_drawlots",
+    "image_id": 61,
+    "object_name": "BG",
+    "old_null": false,
+    "third_external": "x2_activity03_ui_317ec8eb9d82c8f4a8daf0438153cb52.assets",
+    "third_path_id": 2,
+    "local_external": "72e89d711cbf23b46816ff00450c2be7",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_newyear_lantern_drawlots",
+    "image_id": 66,
+    "object_name": "mImg (2)",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_61936d8c853e8aa4894db308a23d48f6.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_drawlots",
+    "image_id": 67,
+    "object_name": "mImg (1)",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_cdb057485933e494fbb78fbb48cc0e4b.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_drawlots",
+    "image_id": 68,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_57458d01304399d4585db30360716067.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_yearlabel",
+    "image_id": 80,
+    "object_name": "Img",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_3d79891d7702cb046a67b943e174a0a1.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_yearlabel",
+    "image_id": 82,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_e9a72c710959ad2409b2887d6fbec8ac.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_yearlabel",
+    "image_id": 93,
+    "object_name": "BG",
+    "old_null": false,
+    "third_external": "x2_activity03_ui_317ec8eb9d82c8f4a8daf0438153cb52.assets",
+    "third_path_id": 2,
+    "local_external": "72e89d711cbf23b46816ff00450c2be7",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_newyear_lantern_yearlabel",
+    "image_id": 97,
+    "object_name": "Qian",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_cdb057485933e494fbb78fbb48cc0e4b.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_yearlabel",
+    "image_id": 102,
+    "object_name": "Bg",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_3ff579826b59a6b40b540de034791363.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_lantern_yearlabel",
+    "image_id": 103,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_5681b3d712599bc489d797274906e3f3.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_pov",
+    "image_id": 859,
+    "object_name": "bigIcon",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_ee0e56900efc59b488ba2e3f322e9819.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_pov",
+    "image_id": 913,
+    "object_name": "bigIcon",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_66b918ab16d048f4b8607f2dd885ef4c.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_pov",
+    "image_id": 1002,
+    "object_name": "bigIcon",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_1a5ba5176f31a6b4c8e3722f270cf574.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_pov",
+    "image_id": 1061,
+    "object_name": "BG",
+    "old_null": false,
+    "third_external": "x2_activity03_ui_eb6065ba9ca253c49999faaaa1529be2.assets",
+    "third_path_id": 2,
+    "local_external": "72e89d711cbf23b46816ff00450c2be7",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_newyear2_foodfight_main",
+    "image_id": 1358,
+    "object_name": "State_Free",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_c9e8b1cfa2312b94c82d6ed194291c0d.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_foodfight_main",
+    "image_id": 1369,
+    "object_name": "State_Work",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_2e48cdea24ddbb247a62c468bf70e92b.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_foodfight_main",
+    "image_id": 1486,
+    "object_name": "mImg (1)",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_4bd39a27806d37a479a9afe04c1513f7.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_foodfight_main",
+    "image_id": 1494,
+    "object_name": "mImg (1)",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_36cfecd22a57e7e46b99c7af257ec80e.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_foodfight_main",
+    "image_id": 1525,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_610f904747aa8484c84aa1016c4474c1.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_foodfight_main",
+    "image_id": 1533,
+    "object_name": "shop1",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_f912a4ba1d48be34faa9dd7b73b54f1e.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_foodfight_main",
+    "image_id": 1558,
+    "object_name": "State_Work",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_2e48cdea24ddbb247a62c468bf70e92b.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_foodfight_main",
+    "image_id": 1569,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_5da7dba2a4a683d40bc1f7c05680e17b.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_foodfight_main",
+    "image_id": 1581,
+    "object_name": "bg",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_f92b756781dc8904aaab7ee4bd02fc25.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_foodfight_main",
+    "image_id": 1591,
+    "object_name": "bu",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_277450ade27e8934493892684f0dd894.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_foodfight_main",
+    "image_id": 1595,
+    "object_name": "State_Free",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_c9e8b1cfa2312b94c82d6ed194291c0d.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_foodfight_main",
+    "image_id": 1602,
+    "object_name": "shop2",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_5ae59b3e4b476e44f9cb911e9b9f8d4f.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_foodfight_main",
+    "image_id": 1610,
+    "object_name": "State_Free",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_c9e8b1cfa2312b94c82d6ed194291c0d.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_foodfight_main",
+    "image_id": 1617,
+    "object_name": "mImg (1)",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_743e4c1ad178224458441b5e67b5243b.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_foodfight_main",
+    "image_id": 1668,
+    "object_name": "bg",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_934d5dc48ed8b4b47a71177dc5ad2f83.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_foodfight_main",
+    "image_id": 1718,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_1204c52930c755a4fa3cc994edb3ec49.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_foodfight_main",
+    "image_id": 1725,
+    "object_name": "shop3 (1)",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_0d2fb8afaddd3b748a05a7caa68ca5c5.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_foodfight_main",
+    "image_id": 1733,
+    "object_name": "State_Work",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_2e48cdea24ddbb247a62c468bf70e92b.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_foodfight_main",
+    "image_id": 1752,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_27ecc7439cf95024faa16cb31af48d76.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_foodfight_main",
+    "image_id": 1767,
+    "object_name": "Unlock",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_94213cb57f47f9d459248fa4f93d9fd7.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_foodfight_main",
+    "image_id": 1769,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_934d5dc48ed8b4b47a71177dc5ad2f83.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_foodfight_main",
+    "image_id": 1788,
+    "object_name": "shop3",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_998a1ca4c9a4b444b8dd696fc7c71158.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_foodfight_main",
+    "image_id": 1803,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_b988cf76cf6719d4cb94150945f762a9.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_foodfight_main",
+    "image_id": 1826,
+    "object_name": "Unlock",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_94213cb57f47f9d459248fa4f93d9fd7.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_foodfight_main",
+    "image_id": 1861,
+    "object_name": "Unlock",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_48c4e89fc24244645974a0cac6b2a67d.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_foodfight_main",
+    "image_id": 1872,
+    "object_name": "mImg (1)",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_3b2aca5e57627044fb3e2d2630e20cd0.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_foodfight_main",
+    "image_id": 1886,
+    "object_name": "BG",
+    "old_null": false,
+    "third_external": "x2_activity09_ui_fef37e4ac4e89d44f90580ccc10b17ca.assets",
+    "third_path_id": 2,
+    "local_external": "20f6743579ecb364186ba89fbee2db59",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_newyear2_foodfight_main",
+    "image_id": 1891,
+    "object_name": "shop3",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_6ad1d554b6ea8df4785bcf5f87e786c5.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear2_foodfight_main",
+    "image_id": 1898,
+    "object_name": "shop3 (2)",
+    "old_null": true,
+    "third_external": "x2_activity09_ui_55ea6950e6148784a9a8a0c941478770.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_foodfight_main",
+    "image_id": 1328,
+    "object_name": "State_Free",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_c9e8b1cfa2312b94c82d6ed194291c0d.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_foodfight_main",
+    "image_id": 1339,
+    "object_name": "State_Work",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_2e48cdea24ddbb247a62c468bf70e92b.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_foodfight_main",
+    "image_id": 1451,
+    "object_name": "mImg (1)",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_4bd39a27806d37a479a9afe04c1513f7.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_foodfight_main",
+    "image_id": 1459,
+    "object_name": "mImg (1)",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_36cfecd22a57e7e46b99c7af257ec80e.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_foodfight_main",
+    "image_id": 1489,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_610f904747aa8484c84aa1016c4474c1.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_foodfight_main",
+    "image_id": 1497,
+    "object_name": "shop1",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_f912a4ba1d48be34faa9dd7b73b54f1e.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_foodfight_main",
+    "image_id": 1521,
+    "object_name": "State_Work",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_2e48cdea24ddbb247a62c468bf70e92b.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_foodfight_main",
+    "image_id": 1532,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_5da7dba2a4a683d40bc1f7c05680e17b.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_foodfight_main",
+    "image_id": 1544,
+    "object_name": "bg",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_f92b756781dc8904aaab7ee4bd02fc25.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_foodfight_main",
+    "image_id": 1555,
+    "object_name": "bu",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_277450ade27e8934493892684f0dd894.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_foodfight_main",
+    "image_id": 1558,
+    "object_name": "State_Free",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_c9e8b1cfa2312b94c82d6ed194291c0d.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_foodfight_main",
+    "image_id": 1565,
+    "object_name": "shop2",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_5ae59b3e4b476e44f9cb911e9b9f8d4f.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_foodfight_main",
+    "image_id": 1574,
+    "object_name": "State_Free",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_c9e8b1cfa2312b94c82d6ed194291c0d.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_foodfight_main",
+    "image_id": 1581,
+    "object_name": "mImg (1)",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_743e4c1ad178224458441b5e67b5243b.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_foodfight_main",
+    "image_id": 1630,
+    "object_name": "bg",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_934d5dc48ed8b4b47a71177dc5ad2f83.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_foodfight_main",
+    "image_id": 1677,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_1204c52930c755a4fa3cc994edb3ec49.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_foodfight_main",
+    "image_id": 1683,
+    "object_name": "shop3 (1)",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_0d2fb8afaddd3b748a05a7caa68ca5c5.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_foodfight_main",
+    "image_id": 1691,
+    "object_name": "State_Work",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_2e48cdea24ddbb247a62c468bf70e92b.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_foodfight_main",
+    "image_id": 1709,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_27ecc7439cf95024faa16cb31af48d76.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_foodfight_main",
+    "image_id": 1724,
+    "object_name": "Unlock",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_94213cb57f47f9d459248fa4f93d9fd7.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_foodfight_main",
+    "image_id": 1726,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_934d5dc48ed8b4b47a71177dc5ad2f83.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_foodfight_main",
+    "image_id": 1745,
+    "object_name": "shop3",
+    "old_null": true,
+    "third_external": "x2_activity03_business_998a1ca4c9a4b444b8dd696fc7c71158.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_foodfight_main",
+    "image_id": 1760,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_b988cf76cf6719d4cb94150945f762a9.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_foodfight_main",
+    "image_id": 1783,
+    "object_name": "Unlock",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_94213cb57f47f9d459248fa4f93d9fd7.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_foodfight_main",
+    "image_id": 1818,
+    "object_name": "Unlock",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_48c4e89fc24244645974a0cac6b2a67d.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_foodfight_main",
+    "image_id": 1829,
+    "object_name": "mImg (1)",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_3b2aca5e57627044fb3e2d2630e20cd0.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_foodfight_main",
+    "image_id": 1843,
+    "object_name": "BG",
+    "old_null": false,
+    "third_external": "x2_activity03_ui_fef37e4ac4e89d44f90580ccc10b17ca.assets",
+    "third_path_id": 2,
+    "local_external": "20f6743579ecb364186ba89fbee2db59",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_newyear_foodfight_main",
+    "image_id": 1848,
+    "object_name": "shop3",
+    "old_null": true,
+    "third_external": "x2_activity03_business_6ad1d554b6ea8df4785bcf5f87e786c5.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_newyear_foodfight_main",
+    "image_id": 1855,
+    "object_name": "shop3 (2)",
+    "old_null": true,
+    "third_external": "x2_activity03_ui_55ea6950e6148784a9a8a0c941478770.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_sakura_main",
+    "image_id": 313,
+    "object_name": "BG (1)",
+    "old_null": false,
+    "third_external": "x2_activity07_bg_3d97555c2107802488f03d28076d0a62.assets",
+    "third_path_id": 2,
+    "local_external": "ba49c0f7674804d489a9e92678adabf3",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_zhenxun_main",
+    "image_id": 329,
+    "object_name": "Title",
+    "old_null": true,
+    "third_external": "x2_activity05_ui_8d3458c952d672a42b53634c728872b8.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_zhenxun_main",
+    "image_id": 345,
+    "object_name": "Img",
+    "old_null": false,
+    "third_external": "x2_activity05_ui_a76b4353f277b46408e23014d2541fd8.assets",
+    "third_path_id": 2,
+    "local_external": "94add22e19cdaad45b2b40305d50c018",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_zhenxun_section",
+    "image_id": 817,
+    "object_name": "mImg (1)",
+    "old_null": true,
+    "third_external": "x2_activity05_ui_a6466d71c735f474789002646700f011.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_zhenxun_section",
+    "image_id": 860,
+    "object_name": "title",
+    "old_null": true,
+    "third_external": "x2_activity05_ui_a8fb37c72bb0f4d4e8387688eabee1c4.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_zhenxun_section",
+    "image_id": 869,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity05_ui_a6466d71c735f474789002646700f011.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_zhenxun_section",
+    "image_id": 906,
+    "object_name": "BG",
+    "old_null": false,
+    "third_external": "x2_activity05_ui_aa7140c7e2662a8469ddb0227773b1f4.assets",
+    "third_path_id": 2,
+    "local_external": "94add22e19cdaad45b2b40305d50c018",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_zhenxun_section",
+    "image_id": 909,
+    "object_name": "mImg",
+    "old_null": false,
+    "third_external": "x2_activity05_ui_8304d9fc28980d6468f3076eaece3947.assets",
+    "third_path_id": 2,
+    "local_external": "94add22e19cdaad45b2b40305d50c018",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_zhenxun_section",
+    "image_id": 964,
+    "object_name": "mImg (2)",
+    "old_null": true,
+    "third_external": "x2_activity05_ui_a6466d71c735f474789002646700f011.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_zhenxun_shop",
+    "image_id": 569,
+    "object_name": "Ren",
+    "old_null": true,
+    "third_external": "x2_activity05_ui_1dde9fd264adaa54ebe82d79464004cd.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_zhenxun_shop",
+    "image_id": 703,
+    "object_name": "mImg",
+    "old_null": false,
+    "third_external": "x2_activity05_ui_0ec69bea418ace6499eca828b536695a.assets",
+    "third_path_id": 2,
+    "local_external": "94add22e19cdaad45b2b40305d50c018",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_zhenxun_shop",
+    "image_id": 773,
+    "object_name": "bg",
+    "old_null": true,
+    "third_external": "x2_activity05_ui_be8e537ce7ff23f4885ef7d837c5d7fb.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_zhenxun_shop",
+    "image_id": 782,
+    "object_name": "ImgTitle",
+    "old_null": true,
+    "third_external": "x2_activity05_ui_ea85f333b66cd2f458e917ef4332b6c0.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_zhenxun_task",
+    "image_id": 784,
+    "object_name": "mImgNormalBG",
+    "old_null": true,
+    "third_external": "x2_activity05_ui_085c6d0cdeb44b144a06fbb5b84d66ea.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_zhenxun_task",
+    "image_id": 841,
+    "object_name": "mImgRewardBG",
+    "old_null": true,
+    "third_external": "x2_activity05_ui_e39a2f2a5fd9f9d409873be02d7d2691.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_zhenxun_task",
+    "image_id": 842,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity05_ui_4e1ffc9b5caac6f4f9f0027c71e8a1be.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_anniversary_main",
+    "image_id": 728,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity06_bg_35c5572be90092446b698fa21cc1b72f.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_anniversary_main",
+    "image_id": 740,
+    "object_name": "mImg (1)",
+    "old_null": true,
+    "third_external": "x2_activity06_bg_526b0d21d78e84646b7b58f85a091cf8.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_anniversary_main",
+    "image_id": 831,
+    "object_name": "bg",
+    "old_null": true,
+    "third_external": "x2_activity06_bg_d2cf0c23938663a478eebdc1835b6112.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_anniversary_main",
+    "image_id": 841,
+    "object_name": "BGImg",
+    "old_null": false,
+    "third_external": "x2_activity06_bg_26c6575aef9137c41bd2176a660468f5.assets",
+    "third_path_id": 2,
+    "local_external": "91ca85a3140113744847387a2fd4f80e",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_anniversary_section",
+    "image_id": 337,
+    "object_name": "imgExtraDrop",
+    "old_null": true,
+    "third_external": "x2_activity06_bg_dbd6767584e2532498b496ac0fecc612.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_anniversary_section",
+    "image_id": 339,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity06_bg_4866b10b74dca2e49b6f11eee28f643f.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_anniversary_section",
+    "image_id": 343,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity06_bg_327bb5b8bff8476499ed6d8b5eda6417.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_anniversary_section",
+    "image_id": 358,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity06_bg_d2cf0c23938663a478eebdc1835b6112.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_anniversary_section",
+    "image_id": 364,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity06_bg_12fb15f4b4d5fad43982533d5b20a745.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_anniversary_section",
+    "image_id": 375,
+    "object_name": "di",
+    "old_null": true,
+    "third_external": "x2_activity06_ui_07b39cd7889265d439a23a1e3aaee82d.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_anniversary_section",
+    "image_id": 386,
+    "object_name": "BG",
+    "old_null": false,
+    "third_external": "x2_activity06_bg_558f7b6ddfc785a4d90f6d1ace819bf5.assets",
+    "third_path_id": 2,
+    "local_external": "91ca85a3140113744847387a2fd4f80e",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_anniversary_section",
+    "image_id": 421,
+    "object_name": "mask",
+    "old_null": true,
+    "third_external": "x2_activity06_ui_eff7ef16bb5edbc479b51f5968e5bec1.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_anniversary_task",
+    "image_id": 707,
+    "object_name": "mImgNormalBG",
+    "old_null": true,
+    "third_external": "x2_activity06_bg_45702dacdd711204297a190aa5f5b178.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_anniversary_task",
+    "image_id": 750,
+    "object_name": "mImgRewardBG",
+    "old_null": true,
+    "third_external": "x2_activity06_bg_f92d9ddf5b33caf43a511ef457e9d4c3.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_anniversary_task",
+    "image_id": 792,
+    "object_name": "mImgCover",
+    "old_null": true,
+    "third_external": "x2_activity06_bg_709a1d348655c6646ace31d14ed07194.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_anniversary_task",
+    "image_id": 793,
+    "object_name": "Back",
+    "old_null": true,
+    "third_external": "x2_activity06_bg_4cb8453960b28c4469d1489c822a442d.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_anniversary_task",
+    "image_id": 839,
+    "object_name": "bg",
+    "old_null": true,
+    "third_external": "x2_activity06_bg_007567c18cbe23e4d91fae3ab12ae719.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_anniversary_task",
+    "image_id": 843,
+    "object_name": "BGImg",
+    "old_null": false,
+    "third_external": "x2_activity06_bg_48f2610227441ae4d8bc53b92f593bb5.assets",
+    "third_path_id": 2,
+    "local_external": "91ca85a3140113744847387a2fd4f80e",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_anniversary_poolshop",
+    "image_id": 933,
+    "object_name": "bg",
+    "old_null": true,
+    "third_external": "x2_activity06_bg_f8dfab85c4196ef44bccae0314d12571.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_anniversary_poolshop",
+    "image_id": 962,
+    "object_name": "mImg",
+    "old_null": false,
+    "third_external": "x2_activity06_bg_108891d2ce7a1de4b818b1521dde9e5c.assets",
+    "third_path_id": 2,
+    "local_external": "91ca85a3140113744847387a2fd4f80e",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_anniversary_poolshop",
+    "image_id": 1051,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity06_bg_f8e5175fb775f7443b5bf1fe81c5235c.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_anniversary_poolshop",
+    "image_id": 1126,
+    "object_name": "mImg (2)",
+    "old_null": true,
+    "third_external": "x2_activity06_bg_315fba1aa1af2ad4d94a8e7efd289d5e.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_anniversary_poolshop",
+    "image_id": 1140,
+    "object_name": "ImgTitle",
+    "old_null": true,
+    "third_external": "x2_activity06_jp_title_0ac1701f764f683439d50e04a1e7cd4f.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_anniversary_poolshop",
+    "image_id": 1144,
+    "object_name": "mImg",
+    "old_null": false,
+    "third_external": "x2_activity06_bg_8dd5bffc1f4ad4046a7ccd43851442b6.assets",
+    "third_path_id": 2,
+    "local_external": "91ca85a3140113744847387a2fd4f80e",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_anniversary_poolshop",
+    "image_id": 1220,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity06_bg_9c76a0dc98223a041805ca4c35f4b930.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_anniversary_tower_section",
+    "image_id": 559,
+    "object_name": "bg",
+    "old_null": true,
+    "third_external": "x2_activity06_bg_4866b10b74dca2e49b6f11eee28f643f.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_osiris_main",
+    "image_id": 343,
+    "object_name": "Img",
+    "old_null": true,
+    "third_external": "x2_activity04_ui_0.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_osiris_main",
+    "image_id": 374,
+    "object_name": "BG (1)",
+    "old_null": false,
+    "third_external": "x2_activity04_ui_1.assets",
+    "third_path_id": 2,
+    "local_external": "b63cf6f58ed3411419de3d913d8001e7",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_osiris_main",
+    "image_id": 382,
+    "object_name": "mImg (1)",
+    "old_null": true,
+    "third_external": "x2_activity04_ui_2.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_osiris_main",
+    "image_id": 388,
+    "object_name": "mImg (1)",
+    "old_null": true,
+    "third_external": "x2_activity04_ui_3.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_osiris_main",
+    "image_id": 390,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity04_ui_5.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_osiris_main",
+    "image_id": 396,
+    "object_name": "bg",
+    "old_null": true,
+    "third_external": "x2_activity04_ui_4.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_osiris_main",
+    "image_id": 414,
+    "object_name": "Img",
+    "old_null": true,
+    "third_external": "x2_activity04_ui_6.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_osiris_main",
+    "image_id": 446,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity04_ui_7.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_osiris_main",
+    "image_id": 449,
+    "object_name": "mImg (1)",
+    "old_null": false,
+    "third_external": "x2_activity04_ui_8.assets",
+    "third_path_id": 2,
+    "local_external": "b63cf6f58ed3411419de3d913d8001e7",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_osiris_main",
+    "image_id": 456,
+    "object_name": "Img",
+    "old_null": true,
+    "third_external": "x2_activity04_ui_9.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_osiris_main",
+    "image_id": 466,
+    "object_name": "Title",
+    "old_null": true,
+    "third_external": "x2_activity04_ui_10.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_osiris_section",
+    "image_id": 982,
+    "object_name": "Img",
+    "old_null": true,
+    "third_external": "x2_activity04_ui_11.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_osiris_section",
+    "image_id": 1012,
+    "object_name": "BG (1)",
+    "old_null": false,
+    "third_external": "x2_activity04_ui_12.assets",
+    "third_path_id": 2,
+    "local_external": "b63cf6f58ed3411419de3d913d8001e7",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_osiris_section",
+    "image_id": 1014,
+    "object_name": "Img",
+    "old_null": true,
+    "third_external": "x2_activity04_ui_13.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_osiris_section",
+    "image_id": 1026,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity04_ui_17.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_osiris_section",
+    "image_id": 1035,
+    "object_name": "Img",
+    "old_null": true,
+    "third_external": "x2_activity04_ui_14.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_osiris_section",
+    "image_id": 1050,
+    "object_name": "title",
+    "old_null": true,
+    "third_external": "x2_activity04_ui_15.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_osiris_section",
+    "image_id": 1053,
+    "object_name": "mImg (1)",
+    "old_null": true,
+    "third_external": "x2_activity04_ui_16.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_osiris_section",
+    "image_id": 1061,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity04_ui_16.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_osiris_section",
+    "image_id": 1064,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity04_ui_17.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_osiris_section",
+    "image_id": 1065,
+    "object_name": "Img",
+    "old_null": true,
+    "third_external": "x2_activity04_ui_18.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_osiris_section",
+    "image_id": 1090,
+    "object_name": "Img",
+    "old_null": true,
+    "third_external": "x2_activity04_ui_19.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_osiris_shop",
+    "image_id": 303,
+    "object_name": "bg",
+    "old_null": true,
+    "third_external": "x2_activity04_ui_20.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_osiris_shop",
+    "image_id": 322,
+    "object_name": "BG",
+    "old_null": false,
+    "third_external": "x2_activity04_ui_21.assets",
+    "third_path_id": 2,
+    "local_external": "b63cf6f58ed3411419de3d913d8001e7",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_osiris_shop",
+    "image_id": 406,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity04_shop_figure.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_osiris_shop",
+    "image_id": 415,
+    "object_name": "mImg (1)",
+    "old_null": true,
+    "third_external": "x2_activity04_ui_22.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_osiris_shop",
+    "image_id": 417,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity04_shop_mask.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_osiris_task",
+    "image_id": 771,
+    "object_name": "BGImg",
+    "old_null": false,
+    "third_external": "x2_activity04_ui_21.assets",
+    "third_path_id": 2,
+    "local_external": "b63cf6f58ed3411419de3d913d8001e7",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_gonggong_main",
+    "image_id": 203,
+    "object_name": "title",
+    "old_null": true,
+    "third_external": "x2_activity02_ui_f19d9151b8915674988619924ff6d8ee.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_gonggong_main",
+    "image_id": 260,
+    "object_name": "BG",
+    "old_null": false,
+    "third_external": "x2_activity02_ui_9962e414e69eb8a4ca2d2c2babea6629.assets",
+    "third_path_id": 2,
+    "local_external": "576a775f870b7254988c197687142fd0",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_gonggong_main",
+    "image_id": 273,
+    "object_name": "video",
+    "old_null": true,
+    "third_external": "x2_activity02_ui_a5ffc6b668560064da31676edf07d8a6.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_gonggong_section",
+    "image_id": 442,
+    "object_name": "ShuiHua2",
+    "old_null": true,
+    "third_external": "x2_activity02_ui_85bf853ac7818c846815891010061cba.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_gonggong_section",
+    "image_id": 450,
+    "object_name": "BOSS",
+    "old_null": true,
+    "third_external": "x2_activity02_ui_c5bbe15cbd191c1488e4f61fc0c6a382.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_gonggong_section",
+    "image_id": 457,
+    "object_name": "3-1",
+    "old_null": true,
+    "third_external": "x2_activity02_ui_8a53359d1fc375c4cb4b75b10f1dad40.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_gonggong_section",
+    "image_id": 464,
+    "object_name": "2",
+    "old_null": true,
+    "third_external": "x2_activity02_ui_c70b0b9af3ffe554d80028715c883695.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_gonggong_section",
+    "image_id": 468,
+    "object_name": "1-2",
+    "old_null": true,
+    "third_external": "x2_activity02_ui_aded69f05d545464880f8c60305b37b2.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_gonggong_section",
+    "image_id": 475,
+    "object_name": "1-1",
+    "old_null": true,
+    "third_external": "x2_activity02_ui_81dc2a5844dd89e42bc497e60c1f2b0d.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_gonggong_section",
+    "image_id": 481,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity02_ui_a9113f657375ce144b55416c51beaa5c.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_gonggong_section",
+    "image_id": 483,
+    "object_name": "3-1",
+    "old_null": true,
+    "third_external": "x2_activity02_ui_0913d9e2f8946e34cac2c0e1ac0904a8.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_gonggong_section",
+    "image_id": 484,
+    "object_name": "Lang",
+    "old_null": true,
+    "third_external": "x2_activity02_ui_cda3d83b878cbf4478e1a74f86d7d90f.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_gonggong_section",
+    "image_id": 487,
+    "object_name": "3",
+    "old_null": true,
+    "third_external": "x2_activity02_ui_76590f0267d5c09488123ef17d8427fa.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_gonggong_section",
+    "image_id": 498,
+    "object_name": "2-1",
+    "old_null": true,
+    "third_external": "x2_activity02_ui_bccc8f729792ac84ca55c82ee1ceb35b.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_gonggong_section",
+    "image_id": 501,
+    "object_name": "BOSS",
+    "old_null": true,
+    "third_external": "x2_activity02_ui_6809b64208c1f894991ed75728da338a.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_gonggong_section",
+    "image_id": 505,
+    "object_name": "Bar",
+    "old_null": true,
+    "third_external": "x2_activity02_ui_2119a414aa11dd648bb001e490ff93d1.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_gonggong_section",
+    "image_id": 530,
+    "object_name": "ShuiHua1",
+    "old_null": true,
+    "third_external": "x2_activity02_ui_71f5231a2c565604b816f74342bb0711.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_gonggong_section",
+    "image_id": 535,
+    "object_name": "1-1",
+    "old_null": true,
+    "third_external": "x2_activity02_ui_8e519fd97e11fa841a16cbac87888322.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_gonggong_section",
+    "image_id": 537,
+    "object_name": "2",
+    "old_null": true,
+    "third_external": "x2_activity02_ui_1d963d81b6a8a0b43a6d6629e39dc6ac.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_gonggong_section",
+    "image_id": 545,
+    "object_name": "1-2",
+    "old_null": true,
+    "third_external": "x2_activity02_ui_a7bd1f35a4d70384d9dc9742b5cb3ad7.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_gonggong_section",
+    "image_id": 558,
+    "object_name": "2-1",
+    "old_null": true,
+    "third_external": "x2_activity02_ui_f21cc684f9277d24ea39ce00606570aa.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_gonggong_section",
+    "image_id": 562,
+    "object_name": "TITLE",
+    "old_null": true,
+    "third_external": "x2_activity02_ui_84c6fd4719cd1694686ed132040c883b.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_gonggong_section",
+    "image_id": 564,
+    "object_name": "2-2",
+    "old_null": true,
+    "third_external": "x2_activity02_ui_02fb2b5e90f77e84496d52af13e0db97.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_gonggong_section",
+    "image_id": 572,
+    "object_name": "Lang",
+    "old_null": true,
+    "third_external": "x2_activity02_ui_5c4c8b4f400ad1344b4bdeaac1b6b924.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_gonggong_section",
+    "image_id": 586,
+    "object_name": "Lang",
+    "old_null": true,
+    "third_external": "x2_activity02_ui_3bc842207d4f13a46bf6eb394305a0aa.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_gonggong_section",
+    "image_id": 589,
+    "object_name": "TITLE (1)",
+    "old_null": true,
+    "third_external": "x2_activity02_ui_d02ac74c516719043890a775bf4b010f.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_gonggong_section",
+    "image_id": 594,
+    "object_name": "1",
+    "old_null": true,
+    "third_external": "x2_activity02_ui_aa718dd52c9f20347a7b51ce3430e5b6.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_gonggong_section",
+    "image_id": 605,
+    "object_name": "TITLE (2)",
+    "old_null": true,
+    "third_external": "x2_activity02_ui_bf9bf2fa1cb997d42b95ed128131e729.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_gonggong_section",
+    "image_id": 611,
+    "object_name": "TITLE (3)",
+    "old_null": true,
+    "third_external": "x2_activity02_ui_bf9bf2fa1cb997d42b95ed128131e729.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_gonggong_section",
+    "image_id": 612,
+    "object_name": "1-3",
+    "old_null": true,
+    "third_external": "x2_activity02_ui_12a818554ae9317408f14cd013816af3.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_gonggong_section",
+    "image_id": 614,
+    "object_name": "1-3",
+    "old_null": true,
+    "third_external": "x2_activity02_ui_b224ab34fe6108041b6ee4f6914c00f6.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_gonggong_section",
+    "image_id": 625,
+    "object_name": "2-2",
+    "old_null": true,
+    "third_external": "x2_activity02_ui_ea5958cfac5bced4ebb62579f67e812d.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_gonggong_section",
+    "image_id": 626,
+    "object_name": "3",
+    "old_null": true,
+    "third_external": "x2_activity02_ui_ada093098ba7a5c44abc4d0a2ada77dc.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_gonggong_section",
+    "image_id": 632,
+    "object_name": "1",
+    "old_null": true,
+    "third_external": "x2_activity02_ui_371e1e54d7d7b614bb342e1d32d4adc3.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_gonggong_section",
+    "image_id": 637,
+    "object_name": "BG",
+    "old_null": false,
+    "third_external": "x2_activity02_ui_86757b6a78aa5ea4e9f1046e1faf9ad8.assets",
+    "third_path_id": 2,
+    "local_external": "576a775f870b7254988c197687142fd0",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_gonggong_section",
+    "image_id": 638,
+    "object_name": "Bar",
+    "old_null": true,
+    "third_external": "x2_activity02_ui_2119a414aa11dd648bb001e490ff93d1.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_gonggong_shop",
+    "image_id": 312,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity02_ui_c02d44072d5cb2f429dac19e70c0954c.assets",
+    "third_path_id": 2,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_gonggong_shop",
+    "image_id": 332,
+    "object_name": "mImg",
+    "old_null": true,
+    "third_external": "x2_activity02_ui_20478c9e650ef6845b368cc0a3fe461a.assets",
+    "third_path_id": 84,
+    "local_external": null,
+    "local_path_id": 0
+  },
+  {
+    "page": "ui_gonggong_shop",
+    "image_id": 379,
+    "object_name": "BG",
+    "old_null": false,
+    "third_external": "x2_activity02_ui_eec9ad2a0d41a704eac54d925f9647a2.assets",
+    "third_path_id": 2,
+    "local_external": "576a775f870b7254988c197687142fd0",
+    "local_path_id": 2
+  },
+  {
+    "page": "ui_gonggong_task",
+    "image_id": 851,
+    "object_name": "mImg",
+    "old_null": false,
+    "third_external": "x2_activity02_ui_fdb47858c2c971f488b0ab01d05cbcb4.assets",
+    "third_path_id": 2,
+    "local_external": "576a775f870b7254988c197687142fd0",
+    "local_path_id": 2
+  }
+]

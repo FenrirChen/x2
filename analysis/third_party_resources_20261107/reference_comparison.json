@@ -1,0 +1,2860 @@
+{
+  "third_apk": "D:\\demo\\x2\\x2(1).apk",
+  "local_apk": "D:\\demo\\x2\\逆向\\打包\\X2-Revival-Local-signed.apk",
+  "added_files": [
+    "META-INF/ANDROIDD.RSA",
+    "META-INF/ANDROIDD.SF",
+    "assets/Music_Offline_Unravel.bank",
+    "assets/Music_Offline_Unravel_Instrumental.bank",
+    "assets/Video/PV_Activity01.mp4",
+    "assets/Video/PV_Activity02.mp4",
+    "assets/Video/PV_Anniversary.mp4",
+    "assets/Video/PV_NewYear.mp4",
+    "assets/Video/PV_Osiris.mp4",
+    "assets/Video/PV_Sakura.mp4",
+    "assets/Video/PV_ZhenXun.mp4",
+    "assets/Video/battlepassMain.mp4",
+    "assets/Video/water.mp4",
+    "assets/bin/Data/level28",
+    "assets/bin/Data/level29",
+    "assets/bin/Data/level30",
+    "assets/bin/Data/level31",
+    "assets/bin/Data/x2_activity01_banner_atlas.assets",
+    "assets/bin/Data/x2_activity01_banner_sprites.assets",
+    "assets/bin/Data/x2_activity01_draw_tabs.assets",
+    "assets/bin/Data/x2_activity02_draw.assets",
+    "assets/bin/Data/x2_activity02_gifts.assets",
+    "assets/bin/Data/x2_activity02_ui_02fb2b5e90f77e84496d52af13e0db97.assets",
+    "assets/bin/Data/x2_activity02_ui_0913d9e2f8946e34cac2c0e1ac0904a8.assets",
+    "assets/bin/Data/x2_activity02_ui_12a818554ae9317408f14cd013816af3.assets",
+    "assets/bin/Data/x2_activity02_ui_1d963d81b6a8a0b43a6d6629e39dc6ac.assets",
+    "assets/bin/Data/x2_activity02_ui_20478c9e650ef6845b368cc0a3fe461a.assets",
+    "assets/bin/Data/x2_activity02_ui_2119a414aa11dd648bb001e490ff93d1.assets",
+    "assets/bin/Data/x2_activity02_ui_371e1e54d7d7b614bb342e1d32d4adc3.assets",
+    "assets/bin/Data/x2_activity02_ui_3bc842207d4f13a46bf6eb394305a0aa.assets",
+    "assets/bin/Data/x2_activity02_ui_5c4c8b4f400ad1344b4bdeaac1b6b924.assets",
+    "assets/bin/Data/x2_activity02_ui_6809b64208c1f894991ed75728da338a.assets",
+    "assets/bin/Data/x2_activity02_ui_71f5231a2c565604b816f74342bb0711.assets",
+    "assets/bin/Data/x2_activity02_ui_76590f0267d5c09488123ef17d8427fa.assets",
+    "assets/bin/Data/x2_activity02_ui_7e15b80e60a440942b1f2ba64675664e.assets",
+    "assets/bin/Data/x2_activity02_ui_81dc2a5844dd89e42bc497e60c1f2b0d.assets",
+    "assets/bin/Data/x2_activity02_ui_84c6fd4719cd1694686ed132040c883b.assets",
+    "assets/bin/Data/x2_activity02_ui_85bf853ac7818c846815891010061cba.assets",
+    "assets/bin/Data/x2_activity02_ui_86757b6a78aa5ea4e9f1046e1faf9ad8.assets",
+    "assets/bin/Data/x2_activity02_ui_8a53359d1fc375c4cb4b75b10f1dad40.assets",
+    "assets/bin/Data/x2_activity02_ui_8e519fd97e11fa841a16cbac87888322.assets",
+    "assets/bin/Data/x2_activity02_ui_9962e414e69eb8a4ca2d2c2babea6629.assets",
+    "assets/bin/Data/x2_activity02_ui_a5ffc6b668560064da31676edf07d8a6.assets",
+    "assets/bin/Data/x2_activity02_ui_a7bd1f35a4d70384d9dc9742b5cb3ad7.assets",
+    "assets/bin/Data/x2_activity02_ui_a9113f657375ce144b55416c51beaa5c.assets",
+    "assets/bin/Data/x2_activity02_ui_aa718dd52c9f20347a7b51ce3430e5b6.assets",
+    "assets/bin/Data/x2_activity02_ui_ada093098ba7a5c44abc4d0a2ada77dc.assets",
+    "assets/bin/Data/x2_activity02_ui_aded69f05d545464880f8c60305b37b2.assets",
+    "assets/bin/Data/x2_activity02_ui_b224ab34fe6108041b6ee4f6914c00f6.assets",
+    "assets/bin/Data/x2_activity02_ui_b4277255c328d244faadf64790fb20ca.assets",
+    "assets/bin/Data/x2_activity02_ui_bccc8f729792ac84ca55c82ee1ceb35b.assets",
+    "assets/bin/Data/x2_activity02_ui_bf9bf2fa1cb997d42b95ed128131e729.assets",
+    "assets/bin/Data/x2_activity02_ui_c02d44072d5cb2f429dac19e70c0954c.assets",
+    "assets/bin/Data/x2_activity02_ui_c5bbe15cbd191c1488e4f61fc0c6a382.assets",
+    "assets/bin/Data/x2_activity02_ui_c70b0b9af3ffe554d80028715c883695.assets",
+    "assets/bin/Data/x2_activity02_ui_cda3d83b878cbf4478e1a74f86d7d90f.assets",
+    "assets/bin/Data/x2_activity02_ui_d02ac74c516719043890a775bf4b010f.assets",
+    "assets/bin/Data/x2_activity02_ui_ea5958cfac5bced4ebb62579f67e812d.assets",
+    "assets/bin/Data/x2_activity02_ui_eec9ad2a0d41a704eac54d925f9647a2.assets",
+    "assets/bin/Data/x2_activity02_ui_f19d9151b8915674988619924ff6d8ee.assets",
+    "assets/bin/Data/x2_activity02_ui_f21cc684f9277d24ea39ce00606570aa.assets",
+    "assets/bin/Data/x2_activity02_ui_fdb47858c2c971f488b0ab01d05cbcb4.assets",
+    "assets/bin/Data/x2_activity03_business_063e7d6417594cc4985ea994ef38f179.assets",
+    "assets/bin/Data/x2_activity03_business_1e05cf2c2128c96468132c6ddf3b40e4.assets",
+    "assets/bin/Data/x2_activity03_business_1f9abd1c81458044ab6ecb2443deebab.assets",
+    "assets/bin/Data/x2_activity03_business_3ca320a4d6bfc37498d221142b42345d.assets",
+    "assets/bin/Data/x2_activity03_business_5d68230de89f3184ea5780c671f086c6.assets",
+    "assets/bin/Data/x2_activity03_business_6ad1d554b6ea8df4785bcf5f87e786c5.assets",
+    "assets/bin/Data/x2_activity03_business_80b14d3d5065897469f422d710566d86.assets",
+    "assets/bin/Data/x2_activity03_business_858e89d793cf3c640afa9c47855a84eb.assets",
+    "assets/bin/Data/x2_activity03_business_998a1ca4c9a4b444b8dd696fc7c71158.assets",
+    "assets/bin/Data/x2_activity03_business_a8c2390c5cbe64a4a8380cf9f0b77d10.assets",
+    "assets/bin/Data/x2_activity03_business_e20b6cb7e04f14742b067d63b7f1be2b.assets",
+    "assets/bin/Data/x2_activity03_business_e62fc8b2ffcb07f4cb93c4778385ddb8.assets",
+    "assets/bin/Data/x2_activity03_business_e94959c453322c7408436154e5a90505.assets",
+    "assets/bin/Data/x2_activity03_business_efc086c5f5dc1254aafbc401c976e4fe.assets",
+    "assets/bin/Data/x2_activity03_direct_0.assets",
+    "assets/bin/Data/x2_activity03_direct_1.assets",
+    "assets/bin/Data/x2_activity03_draw.assets",
+    "assets/bin/Data/x2_activity03_ui_0128bc7f16bfdfe48abc69ec30ca7531.assets",
+    "assets/bin/Data/x2_activity03_ui_063c3171e9c765f4fb814f0e2cb67968.assets",
+    "assets/bin/Data/x2_activity03_ui_07b39cd7889265d439a23a1e3aaee82d.assets",
+    "assets/bin/Data/x2_activity03_ui_0d2fb8afaddd3b748a05a7caa68ca5c5.assets",
+    "assets/bin/Data/x2_activity03_ui_108ae70186e3b004884870501390dee9.assets",
+    "assets/bin/Data/x2_activity03_ui_1204c52930c755a4fa3cc994edb3ec49.assets",
+    "assets/bin/Data/x2_activity03_ui_194eba1eb47c2ff479204cbc4369c65c.assets",
+    "assets/bin/Data/x2_activity03_ui_1a5ba5176f31a6b4c8e3722f270cf574.assets",
+    "assets/bin/Data/x2_activity03_ui_1f9abd1c81458044ab6ecb2443deebab.assets",
+    "assets/bin/Data/x2_activity03_ui_277450ade27e8934493892684f0dd894.assets",
+    "assets/bin/Data/x2_activity03_ui_27ecc7439cf95024faa16cb31af48d76.assets",
+    "assets/bin/Data/x2_activity03_ui_2e48cdea24ddbb247a62c468bf70e92b.assets",
+    "assets/bin/Data/x2_activity03_ui_317ec8eb9d82c8f4a8daf0438153cb52.assets",
+    "assets/bin/Data/x2_activity03_ui_31cf3f26891ba3244bd9ed2d46f2ee51.assets",
+    "assets/bin/Data/x2_activity03_ui_36cfecd22a57e7e46b99c7af257ec80e.assets",
+    "assets/bin/Data/x2_activity03_ui_382dab417e2e90345ac4631ced4fdc1b.assets",
+    "assets/bin/Data/x2_activity03_ui_3b2aca5e57627044fb3e2d2630e20cd0.assets",
+    "assets/bin/Data/x2_activity03_ui_3d79891d7702cb046a67b943e174a0a1.assets",
+    "assets/bin/Data/x2_activity03_ui_3ff579826b59a6b40b540de034791363.assets",
+    "assets/bin/Data/x2_activity03_ui_413ebae5a10989744bdc1ca9268c003f.assets",
+    "assets/bin/Data/x2_activity03_ui_4555be6c80692eb4ab32777c49e261b0.assets",
+    "assets/bin/Data/x2_activity03_ui_48c4e89fc24244645974a0cac6b2a67d.assets",
+    "assets/bin/Data/x2_activity03_ui_4bd39a27806d37a479a9afe04c1513f7.assets",
+    "assets/bin/Data/x2_activity03_ui_4f8164e0abc91a94fb3849027003cf3d.assets",
+    "assets/bin/Data/x2_activity03_ui_52d0d15a73bd22648857b681504dc53b.assets",
+    "assets/bin/Data/x2_activity03_ui_55ea6950e6148784a9a8a0c941478770.assets",
+    "assets/bin/Data/x2_activity03_ui_5681b3d712599bc489d797274906e3f3.assets",
+    "assets/bin/Data/x2_activity03_ui_57458d01304399d4585db30360716067.assets",
+    "assets/bin/Data/x2_activity03_ui_5798a35f3e17ed0418214b01e9ef3823.assets",
+    "assets/bin/Data/x2_activity03_ui_5ae59b3e4b476e44f9cb911e9b9f8d4f.assets",
+    "assets/bin/Data/x2_activity03_ui_5d68230de89f3184ea5780c671f086c6.assets",
+    "assets/bin/Data/x2_activity03_ui_5da7dba2a4a683d40bc1f7c05680e17b.assets",
+    "assets/bin/Data/x2_activity03_ui_5fd57a3e0c011c046b4f52fa7d59c9f8.assets",
+    "assets/bin/Data/x2_activity03_ui_610f904747aa8484c84aa1016c4474c1.assets",
+    "assets/bin/Data/x2_activity03_ui_61936d8c853e8aa4894db308a23d48f6.assets",
+    "assets/bin/Data/x2_activity03_ui_66b918ab16d048f4b8607f2dd885ef4c.assets",
+    "assets/bin/Data/x2_activity03_ui_6d7638f6f29f0684e903d3195cb5a28c.assets",
+    "assets/bin/Data/x2_activity03_ui_7177227ec0856f344bd4bf40b4551c89.assets",
+    "assets/bin/Data/x2_activity03_ui_743e4c1ad178224458441b5e67b5243b.assets",
+    "assets/bin/Data/x2_activity03_ui_7c0ae8009b802294e809b1920cd04bdf.assets",
+    "assets/bin/Data/x2_activity03_ui_80b14d3d5065897469f422d710566d86.assets",
+    "assets/bin/Data/x2_activity03_ui_816f9760a2b21a64cbba0b18ad38b203.assets",
+    "assets/bin/Data/x2_activity03_ui_8c9d6243b05330e4a91be02efafe4b46.assets",
+    "assets/bin/Data/x2_activity03_ui_918e2d850d496954a9c6bfe64b2add52.assets",
+    "assets/bin/Data/x2_activity03_ui_934d5dc48ed8b4b47a71177dc5ad2f83.assets",
+    "assets/bin/Data/x2_activity03_ui_94213cb57f47f9d459248fa4f93d9fd7.assets",
+    "assets/bin/Data/x2_activity03_ui_9962e414e69eb8a4ca2d2c2babea6629.assets",
+    "assets/bin/Data/x2_activity03_ui_9a53aa18298bfd24ba87a9102eeea403.assets",
+    "assets/bin/Data/x2_activity03_ui_9d47b6f95cf74ce438f3866a86533a57.assets",
+    "assets/bin/Data/x2_activity03_ui_a8c2390c5cbe64a4a8380cf9f0b77d10.assets",
+    "assets/bin/Data/x2_activity03_ui_ae94baab29e265b4c972f98ad5132085.assets",
+    "assets/bin/Data/x2_activity03_ui_b026be116b0f4e94888cc818c024c2df.assets",
+    "assets/bin/Data/x2_activity03_ui_b42e0d01799396e48bf0770e24acc17b.assets",
+    "assets/bin/Data/x2_activity03_ui_b44fab0b0ba58ba48a3b5988a9833cde.assets",
+    "assets/bin/Data/x2_activity03_ui_b988cf76cf6719d4cb94150945f762a9.assets",
+    "assets/bin/Data/x2_activity03_ui_bedf35fb61dfe8748ae3a710682b1088.assets",
+    "assets/bin/Data/x2_activity03_ui_c475d8acc5d3f0147b435f8cbe2efd19.assets",
+    "assets/bin/Data/x2_activity03_ui_c50c55c0159ff54468efcfa9d18f96a0.assets",
+    "assets/bin/Data/x2_activity03_ui_c6e7b63b14494f3479dae129963ce3d6.assets",
+    "assets/bin/Data/x2_activity03_ui_c9dac6b10dcf9014fb78e3a3bc672c25.assets",
+    "assets/bin/Data/x2_activity03_ui_c9e8b1cfa2312b94c82d6ed194291c0d.assets",
+    "assets/bin/Data/x2_activity03_ui_ccd6440c8f2479344b9177857c41019a.assets",
+    "assets/bin/Data/x2_activity03_ui_cdb057485933e494fbb78fbb48cc0e4b.assets",
+    "assets/bin/Data/x2_activity03_ui_d428a40f40ab4494780d4f3babf6bd53.assets",
+    "assets/bin/Data/x2_activity03_ui_e1a39ad83bd85b142ab87b773bf15423.assets",
+    "assets/bin/Data/x2_activity03_ui_e23685599bbf0604daebea777acfc221.assets",
+    "assets/bin/Data/x2_activity03_ui_e2988fb19891895458b96e2088ae3aee.assets",
+    "assets/bin/Data/x2_activity03_ui_e354fab9ac3505441a4bfe8d550dbba2.assets",
+    "assets/bin/Data/x2_activity03_ui_e3dd2c563a30f1a4995c6b9480037d5c.assets",
+    "assets/bin/Data/x2_activity03_ui_e9a72c710959ad2409b2887d6fbec8ac.assets",
+    "assets/bin/Data/x2_activity03_ui_eb6065ba9ca253c49999faaaa1529be2.assets",
+    "assets/bin/Data/x2_activity03_ui_ebf96d9f64ce8004a8bbe5997472c6fd.assets",
+    "assets/bin/Data/x2_activity03_ui_ee0e56900efc59b488ba2e3f322e9819.assets",
+    "assets/bin/Data/x2_activity03_ui_efc086c5f5dc1254aafbc401c976e4fe.assets",
+    "assets/bin/Data/x2_activity03_ui_eff7ef16bb5edbc479b51f5968e5bec1.assets",
+    "assets/bin/Data/x2_activity03_ui_f370221a83e81c447883abf9aea4ee80.assets",
+    "assets/bin/Data/x2_activity03_ui_f912a4ba1d48be34faa9dd7b73b54f1e.assets",
+    "assets/bin/Data/x2_activity03_ui_f92b756781dc8904aaab7ee4bd02fc25.assets",
+    "assets/bin/Data/x2_activity03_ui_fef37e4ac4e89d44f90580ccc10b17ca.assets",
+    "assets/bin/Data/x2_activity04_resource_0.assets",
+    "assets/bin/Data/x2_activity04_shop_figure.assets",
+    "assets/bin/Data/x2_activity04_shop_mask.assets",
+    "assets/bin/Data/x2_activity04_tower_1.assets",
+    "assets/bin/Data/x2_activity04_tower_2.assets",
+    "assets/bin/Data/x2_activity04_tower_3.assets",
+    "assets/bin/Data/x2_activity04_tower_4.assets",
+    "assets/bin/Data/x2_activity04_tower_5.assets",
+    "assets/bin/Data/x2_activity04_ui_0.assets",
+    "assets/bin/Data/x2_activity04_ui_1.assets",
+    "assets/bin/Data/x2_activity04_ui_10.assets",
+    "assets/bin/Data/x2_activity04_ui_11.assets",
+    "assets/bin/Data/x2_activity04_ui_12.assets",
+    "assets/bin/Data/x2_activity04_ui_13.assets",
+    "assets/bin/Data/x2_activity04_ui_14.assets",
+    "assets/bin/Data/x2_activity04_ui_15.assets",
+    "assets/bin/Data/x2_activity04_ui_16.assets",
+    "assets/bin/Data/x2_activity04_ui_17.assets",
+    "assets/bin/Data/x2_activity04_ui_18.assets",
+    "assets/bin/Data/x2_activity04_ui_19.assets",
+    "assets/bin/Data/x2_activity04_ui_2.assets",
+    "assets/bin/Data/x2_activity04_ui_20.assets",
+    "assets/bin/Data/x2_activity04_ui_21.assets",
+    "assets/bin/Data/x2_activity04_ui_22.assets",
+    "assets/bin/Data/x2_activity04_ui_23.assets",
+    "assets/bin/Data/x2_activity04_ui_24.assets",
+    "assets/bin/Data/x2_activity04_ui_25.assets",
+    "assets/bin/Data/x2_activity04_ui_26.assets",
+    "assets/bin/Data/x2_activity04_ui_27.assets",
+    "assets/bin/Data/x2_activity04_ui_28.assets",
+    "assets/bin/Data/x2_activity04_ui_3.assets",
+    "assets/bin/Data/x2_activity04_ui_4.assets",
+    "assets/bin/Data/x2_activity04_ui_5.assets",
+    "assets/bin/Data/x2_activity04_ui_6.assets",
+    "assets/bin/Data/x2_activity04_ui_7.assets",
+    "assets/bin/Data/x2_activity04_ui_8.assets",
+    "assets/bin/Data/x2_activity04_ui_9.assets",
+    "assets/bin/Data/x2_activity05_gift_icons.assets",
+    "assets/bin/Data/x2_activity05_illustration_0.assets",
+    "assets/bin/Data/x2_activity05_illustration_1.assets",
+    "assets/bin/Data/x2_activity05_illustration_2.assets",
+    "assets/bin/Data/x2_activity05_scene_0.assets",
+    "assets/bin/Data/x2_activity05_scene_1.assets",
+    "assets/bin/Data/x2_activity05_scene_3.assets",
+    "assets/bin/Data/x2_activity05_scene_4.assets",
+    "assets/bin/Data/x2_activity05_scene_5.assets",
+    "assets/bin/Data/x2_activity05_scene_6.assets",
+    "assets/bin/Data/x2_activity05_ui_085c6d0cdeb44b144a06fbb5b84d66ea.assets",
+    "assets/bin/Data/x2_activity05_ui_0ec69bea418ace6499eca828b536695a.assets",
+    "assets/bin/Data/x2_activity05_ui_1dde9fd264adaa54ebe82d79464004cd.assets",
+    "assets/bin/Data/x2_activity05_ui_227b93f286bea674286a74dd1c36e1ff.assets",
+    "assets/bin/Data/x2_activity05_ui_4e1ffc9b5caac6f4f9f0027c71e8a1be.assets",
+    "assets/bin/Data/x2_activity05_ui_8304d9fc28980d6468f3076eaece3947.assets",
+    "assets/bin/Data/x2_activity05_ui_8d3458c952d672a42b53634c728872b8.assets",
+    "assets/bin/Data/x2_activity05_ui_a6466d71c735f474789002646700f011.assets",
+    "assets/bin/Data/x2_activity05_ui_a76b4353f277b46408e23014d2541fd8.assets",
+    "assets/bin/Data/x2_activity05_ui_a8fb37c72bb0f4d4e8387688eabee1c4.assets",
+    "assets/bin/Data/x2_activity05_ui_aa7140c7e2662a8469ddb0227773b1f4.assets",
+    "assets/bin/Data/x2_activity05_ui_be8e537ce7ff23f4885ef7d837c5d7fb.assets",
+    "assets/bin/Data/x2_activity05_ui_e39a2f2a5fd9f9d409873be02d7d2691.assets",
+    "assets/bin/Data/x2_activity05_ui_ea85f333b66cd2f458e917ef4332b6c0.assets",
+    "assets/bin/Data/x2_activity06_bg_007567c18cbe23e4d91fae3ab12ae719.assets",
+    "assets/bin/Data/x2_activity06_bg_0149c53bf8cbabb44a94a88881b3ef88.assets",
+    "assets/bin/Data/x2_activity06_bg_028ed3b8af3470f429904d75bed70c03.assets",
+    "assets/bin/Data/x2_activity06_bg_108891d2ce7a1de4b818b1521dde9e5c.assets",
+    "assets/bin/Data/x2_activity06_bg_12fb15f4b4d5fad43982533d5b20a745.assets",
+    "assets/bin/Data/x2_activity06_bg_26c6575aef9137c41bd2176a660468f5.assets",
+    "assets/bin/Data/x2_activity06_bg_315fba1aa1af2ad4d94a8e7efd289d5e.assets",
+    "assets/bin/Data/x2_activity06_bg_327bb5b8bff8476499ed6d8b5eda6417.assets",
+    "assets/bin/Data/x2_activity06_bg_35c5572be90092446b698fa21cc1b72f.assets",
+    "assets/bin/Data/x2_activity06_bg_3dd83bf97d5eee443ba8db409a314b6a.assets",
+    "assets/bin/Data/x2_activity06_bg_45702dacdd711204297a190aa5f5b178.assets",
+    "assets/bin/Data/x2_activity06_bg_4866b10b74dca2e49b6f11eee28f643f.assets",
+    "assets/bin/Data/x2_activity06_bg_48f2610227441ae4d8bc53b92f593bb5.assets",
+    "assets/bin/Data/x2_activity06_bg_4cb8453960b28c4469d1489c822a442d.assets",
+    "assets/bin/Data/x2_activity06_bg_526b0d21d78e84646b7b58f85a091cf8.assets",
+    "assets/bin/Data/x2_activity06_bg_558f7b6ddfc785a4d90f6d1ace819bf5.assets",
+    "assets/bin/Data/x2_activity06_bg_6f8d671fc2b775f4c9e44694c5b7726e.assets",
+    "assets/bin/Data/x2_activity06_bg_709a1d348655c6646ace31d14ed07194.assets",
+    "assets/bin/Data/x2_activity06_bg_8721dadd489da69459d1c71b3d0d92f7.assets",
+    "assets/bin/Data/x2_activity06_bg_8dd5bffc1f4ad4046a7ccd43851442b6.assets",
+    "assets/bin/Data/x2_activity06_bg_9c76a0dc98223a041805ca4c35f4b930.assets",
+    "assets/bin/Data/x2_activity06_bg_bac834adaca2d5346aeb8a9b8afef06b.assets",
+    "assets/bin/Data/x2_activity06_bg_cf39f5e63949ffc44a303bd50fef6bd4.assets",
+    "assets/bin/Data/x2_activity06_bg_d2cf0c23938663a478eebdc1835b6112.assets",
+    "assets/bin/Data/x2_activity06_bg_d42983fefa7c5454b92acd990e5af875.assets",
+    "assets/bin/Data/x2_activity06_bg_dbd6767584e2532498b496ac0fecc612.assets",
+    "assets/bin/Data/x2_activity06_bg_ebb9423697b34b74e981b7763dc4d10d.assets",
+    "assets/bin/Data/x2_activity06_bg_f646cca14e9ad1e46b055344d2ce9d50.assets",
+    "assets/bin/Data/x2_activity06_bg_f8dfab85c4196ef44bccae0314d12571.assets",
+    "assets/bin/Data/x2_activity06_bg_f8e5175fb775f7443b5bf1fe81c5235c.assets",
+    "assets/bin/Data/x2_activity06_bg_f92d9ddf5b33caf43a511ef457e9d4c3.assets",
+    "assets/bin/Data/x2_activity06_help_1a77731cb8f0c1141a6b5b62e8eb412d.assets",
+    "assets/bin/Data/x2_activity06_help_2bf023fb233591045ba73dbef52007cb.assets",
+    "assets/bin/Data/x2_activity06_help_33ed7015d5d5ba2498c2165ed39fab9a.assets",
+    "assets/bin/Data/x2_activity06_help_743dd1ebc658f4349b4c922cd280d8fd.assets",
+    "assets/bin/Data/x2_activity06_help_c6ae4ef4e66ef324aa217aed853b2b2f.assets",
+    "assets/bin/Data/x2_activity06_help_d53a2076dc4330e43af50da3c30cbcee.assets",
+    "assets/bin/Data/x2_activity06_help_e0160138b03b99847a370ad84d62afee.assets",
+    "assets/bin/Data/x2_activity06_help_f39629bf5996b8b4890916085da52076.assets",
+    "assets/bin/Data/x2_activity06_help_f6d99bb75e90d7e479a0e391d5dfa4d5.assets",
+    "assets/bin/Data/x2_activity06_help_fb6c6ad18b6f8e643b00f330969fa33a.assets",
+    "assets/bin/Data/x2_activity06_icons_0.assets",
+    "assets/bin/Data/x2_activity06_icons_1.assets",
+    "assets/bin/Data/x2_activity06_icons_2.assets",
+    "assets/bin/Data/x2_activity06_jp_title_0ac1701f764f683439d50e04a1e7cd4f.assets",
+    "assets/bin/Data/x2_activity06_night_37d94c4e0da33be429cb1985d2e1de82.assets",
+    "assets/bin/Data/x2_activity06_night_3e203af7cf1bafb4ebf8370a4c594d4f.assets",
+    "assets/bin/Data/x2_activity06_night_7d962ffd09c04f54ab82b9dcd2de0d66.assets",
+    "assets/bin/Data/x2_activity06_night_8a3e190a2665107459936e67eb622d01.assets",
+    "assets/bin/Data/x2_activity06_night_bc5ba15df481aa044bfbeedf1be2bafa.assets",
+    "assets/bin/Data/x2_activity06_night_c4b92af32ee4c21468126c99adedc5cd.assets",
+    "assets/bin/Data/x2_activity06_night_ced6e8de5afdb414dbf496cbf7724f5c.assets",
+    "assets/bin/Data/x2_activity06_night_d3eb99a540136fe4d8069336e36a0542.assets",
+    "assets/bin/Data/x2_activity06_night_e0004259f94dd864a8c9711ca7f5c451.assets",
+    "assets/bin/Data/x2_activity06_night_ed2fd06511b1bc34eb0802db1d122e84.assets",
+    "assets/bin/Data/x2_activity06_school_0.assets",
+    "assets/bin/Data/x2_activity06_school_1.assets",
+    "assets/bin/Data/x2_activity06_school_2.assets",
+    "assets/bin/Data/x2_activity06_school_4.assets",
+    "assets/bin/Data/x2_activity06_school_5.assets",
+    "assets/bin/Data/x2_activity06_school_6.assets",
+    "assets/bin/Data/x2_activity06_school_7.assets",
+    "assets/bin/Data/x2_activity06_school_8.assets",
+    "assets/bin/Data/x2_activity06_ui_07b39cd7889265d439a23a1e3aaee82d.assets",
+    "assets/bin/Data/x2_activity06_ui_eff7ef16bb5edbc479b51f5968e5bec1.assets",
+    "assets/bin/Data/x2_activity07_bg_10d65a71013a5ae41bf7c7eac2239713.assets",
+    "assets/bin/Data/x2_activity07_bg_3d97555c2107802488f03d28076d0a62.assets",
+    "assets/bin/Data/x2_activity07_gift_covers_0.assets",
+    "assets/bin/Data/x2_activity09_icons_0.assets",
+    "assets/bin/Data/x2_activity09_icons_1.assets",
+    "assets/bin/Data/x2_activity09_scene_1.assets",
+    "assets/bin/Data/x2_activity09_scene_2.assets",
+    "assets/bin/Data/x2_activity09_scene_3.assets",
+    "assets/bin/Data/x2_activity09_ui_029e1dddbb605ee40928a568b2b8029f.assets",
+    "assets/bin/Data/x2_activity09_ui_063c3171e9c765f4fb814f0e2cb67968.assets",
+    "assets/bin/Data/x2_activity09_ui_07b39cd7889265d439a23a1e3aaee82d.assets",
+    "assets/bin/Data/x2_activity09_ui_0d2fb8afaddd3b748a05a7caa68ca5c5.assets",
+    "assets/bin/Data/x2_activity09_ui_1204c52930c755a4fa3cc994edb3ec49.assets",
+    "assets/bin/Data/x2_activity09_ui_173347d4d8b6fa74289ee8800c56fe8b.assets",
+    "assets/bin/Data/x2_activity09_ui_1f9abd1c81458044ab6ecb2443deebab.assets",
+    "assets/bin/Data/x2_activity09_ui_255ac2ed8641951458b053e026385d0b.assets",
+    "assets/bin/Data/x2_activity09_ui_277450ade27e8934493892684f0dd894.assets",
+    "assets/bin/Data/x2_activity09_ui_27ecc7439cf95024faa16cb31af48d76.assets",
+    "assets/bin/Data/x2_activity09_ui_2e48cdea24ddbb247a62c468bf70e92b.assets",
+    "assets/bin/Data/x2_activity09_ui_317ec8eb9d82c8f4a8daf0438153cb52.assets",
+    "assets/bin/Data/x2_activity09_ui_36cfecd22a57e7e46b99c7af257ec80e.assets",
+    "assets/bin/Data/x2_activity09_ui_3b2aca5e57627044fb3e2d2630e20cd0.assets",
+    "assets/bin/Data/x2_activity09_ui_3d1ded0906df1c346a193f0f53d8aec0.assets",
+    "assets/bin/Data/x2_activity09_ui_3d79891d7702cb046a67b943e174a0a1.assets",
+    "assets/bin/Data/x2_activity09_ui_3ff579826b59a6b40b540de034791363.assets",
+    "assets/bin/Data/x2_activity09_ui_40b096e104dc00b418a87a81c1ca6811.assets",
+    "assets/bin/Data/x2_activity09_ui_413ebae5a10989744bdc1ca9268c003f.assets",
+    "assets/bin/Data/x2_activity09_ui_448a67caacdc35847bded8761899d958.assets",
+    "assets/bin/Data/x2_activity09_ui_4555be6c80692eb4ab32777c49e261b0.assets",
+    "assets/bin/Data/x2_activity09_ui_48c4e89fc24244645974a0cac6b2a67d.assets",
+    "assets/bin/Data/x2_activity09_ui_4bd39a27806d37a479a9afe04c1513f7.assets",
+    "assets/bin/Data/x2_activity09_ui_4ccf69c2aacf19c47af2e5af61759263.assets",
+    "assets/bin/Data/x2_activity09_ui_4cf2ee71a100a3b4483fd45f9678885e.assets",
+    "assets/bin/Data/x2_activity09_ui_4f8164e0abc91a94fb3849027003cf3d.assets",
+    "assets/bin/Data/x2_activity09_ui_52d0d15a73bd22648857b681504dc53b.assets",
+    "assets/bin/Data/x2_activity09_ui_53e42753e8c523c4dab8b17b1eabe393.assets",
+    "assets/bin/Data/x2_activity09_ui_55ea6950e6148784a9a8a0c941478770.assets",
+    "assets/bin/Data/x2_activity09_ui_5681b3d712599bc489d797274906e3f3.assets",
+    "assets/bin/Data/x2_activity09_ui_5798a35f3e17ed0418214b01e9ef3823.assets",
+    "assets/bin/Data/x2_activity09_ui_5ae59b3e4b476e44f9cb911e9b9f8d4f.assets",
+    "assets/bin/Data/x2_activity09_ui_5d48f394489bc2a489f485e3b5f7b5d0.assets",
+    "assets/bin/Data/x2_activity09_ui_5da7dba2a4a683d40bc1f7c05680e17b.assets",
+    "assets/bin/Data/x2_activity09_ui_5fd57a3e0c011c046b4f52fa7d59c9f8.assets",
+    "assets/bin/Data/x2_activity09_ui_610f904747aa8484c84aa1016c4474c1.assets",
+    "assets/bin/Data/x2_activity09_ui_61c75597017167a4cb74d45c9eaf93d3.assets",
+    "assets/bin/Data/x2_activity09_ui_6ad1d554b6ea8df4785bcf5f87e786c5.assets",
+    "assets/bin/Data/x2_activity09_ui_7177227ec0856f344bd4bf40b4551c89.assets",
+    "assets/bin/Data/x2_activity09_ui_743e4c1ad178224458441b5e67b5243b.assets",
+    "assets/bin/Data/x2_activity09_ui_7ce87aea15ee4284ba088243b806f666.assets",
+    "assets/bin/Data/x2_activity09_ui_8139508131ca9e6429a9d3ec278ff00d.assets",
+    "assets/bin/Data/x2_activity09_ui_858e89d793cf3c640afa9c47855a84eb.assets",
+    "assets/bin/Data/x2_activity09_ui_896307e928df43243b7695285e19d1a2.assets",
+    "assets/bin/Data/x2_activity09_ui_8c9d6243b05330e4a91be02efafe4b46.assets",
+    "assets/bin/Data/x2_activity09_ui_8f22ac5d55b0f014b81f7ca4680f4ca1.assets",
+    "assets/bin/Data/x2_activity09_ui_908f8d95e0de43a4a83668152d7bfda4.assets",
+    "assets/bin/Data/x2_activity09_ui_918e2d850d496954a9c6bfe64b2add52.assets",
+    "assets/bin/Data/x2_activity09_ui_934d5dc48ed8b4b47a71177dc5ad2f83.assets",
+    "assets/bin/Data/x2_activity09_ui_94213cb57f47f9d459248fa4f93d9fd7.assets",
+    "assets/bin/Data/x2_activity09_ui_961bcff06e9ac8d44b15cdefeb7c6bec.assets",
+    "assets/bin/Data/x2_activity09_ui_9722009e9177f9f4a81ba856bee57959.assets",
+    "assets/bin/Data/x2_activity09_ui_9962e414e69eb8a4ca2d2c2babea6629.assets",
+    "assets/bin/Data/x2_activity09_ui_998a1ca4c9a4b444b8dd696fc7c71158.assets",
+    "assets/bin/Data/x2_activity09_ui_9a53aa18298bfd24ba87a9102eeea403.assets",
+    "assets/bin/Data/x2_activity09_ui_9d47b6f95cf74ce438f3866a86533a57.assets",
+    "assets/bin/Data/x2_activity09_ui_a00e6205a88ae36478a3d602ffa245b1.assets",
+    "assets/bin/Data/x2_activity09_ui_ad93a807a3d858c4f94f04caee28e167.assets",
+    "assets/bin/Data/x2_activity09_ui_b44fab0b0ba58ba48a3b5988a9833cde.assets",
+    "assets/bin/Data/x2_activity09_ui_b5d70a2e1ad2e6a4ea8b4abef3abe71b.assets",
+    "assets/bin/Data/x2_activity09_ui_b988cf76cf6719d4cb94150945f762a9.assets",
+    "assets/bin/Data/x2_activity09_ui_c23b23db7dc311e479bfddc3731747ff.assets",
+    "assets/bin/Data/x2_activity09_ui_c3b5541cb099b1147b9137c572f6b52e.assets",
+    "assets/bin/Data/x2_activity09_ui_c475d8acc5d3f0147b435f8cbe2efd19.assets",
+    "assets/bin/Data/x2_activity09_ui_c50c55c0159ff54468efcfa9d18f96a0.assets",
+    "assets/bin/Data/x2_activity09_ui_c8912909573f92946850ed090d81751d.assets",
+    "assets/bin/Data/x2_activity09_ui_c9dac6b10dcf9014fb78e3a3bc672c25.assets",
+    "assets/bin/Data/x2_activity09_ui_c9e8b1cfa2312b94c82d6ed194291c0d.assets",
+    "assets/bin/Data/x2_activity09_ui_ca2c24e38162bef46a16f0e3647014d7.assets",
+    "assets/bin/Data/x2_activity09_ui_ccd6440c8f2479344b9177857c41019a.assets",
+    "assets/bin/Data/x2_activity09_ui_d11b66c524b724f419a0dcf195e4aa12.assets",
+    "assets/bin/Data/x2_activity09_ui_dee26aae6c331334dacf7aa3c0b71405.assets",
+    "assets/bin/Data/x2_activity09_ui_df963615f12f39f43a0f7586bc345a24.assets",
+    "assets/bin/Data/x2_activity09_ui_e06c3133f01753c439cee837e887bfa4.assets",
+    "assets/bin/Data/x2_activity09_ui_e1a39ad83bd85b142ab87b773bf15423.assets",
+    "assets/bin/Data/x2_activity09_ui_e354fab9ac3505441a4bfe8d550dbba2.assets",
+    "assets/bin/Data/x2_activity09_ui_e3dd2c563a30f1a4995c6b9480037d5c.assets",
+    "assets/bin/Data/x2_activity09_ui_e9a72c710959ad2409b2887d6fbec8ac.assets",
+    "assets/bin/Data/x2_activity09_ui_e9b99053876ae2d47b84358682e2e2cd.assets",
+    "assets/bin/Data/x2_activity09_ui_eff7ef16bb5edbc479b51f5968e5bec1.assets",
+    "assets/bin/Data/x2_activity09_ui_f370221a83e81c447883abf9aea4ee80.assets",
+    "assets/bin/Data/x2_activity09_ui_f912a4ba1d48be34faa9dd7b73b54f1e.assets",
+    "assets/bin/Data/x2_activity09_ui_f92b756781dc8904aaab7ee4bd02fc25.assets",
+    "assets/bin/Data/x2_activity09_ui_fef37e4ac4e89d44f90580ccc10b17ca.assets",
+    "assets/bin/Data/x2_chujiu_marry_drawing.assets",
+    "assets/bin/Data/x2_chujiu_marry_half.assets",
+    "assets/bin/Data/x2_chujiu_marry_head.assets",
+    "assets/bin/Data/x2_feast_ui_15bfcbfcf15271d4cba1119ab278ca81.assets",
+    "assets/bin/Data/x2_feast_ui_178388a27803c7043b924e1b03b1a4f2.assets",
+    "assets/bin/Data/x2_feast_ui_1b738b144a76464498b1056629851901.assets",
+    "assets/bin/Data/x2_gift_supplement_1.assets",
+    "assets/bin/Data/x2_gift_supplement_2.assets",
+    "assets/bin/Data/x2_gift_supplement_3.assets",
+    "assets/bin/Data/x2_gift_supplement_4.assets",
+    "assets/bin/Data/x2_home_ancient_first_title_sprites.assets",
+    "assets/bin/Data/x2_home_ancient_first_title_texture.assets",
+    "assets/bin/Data/x2_login_city_third.assets",
+    "assets/bin/Data/x2_mogul_drawing.assets",
+    "assets/bin/Data/x2_mogul_icons.assets",
+    "assets/bin/Data/x2_season01_0999fa1dc42cb4d46897892076b8ce2a.assets",
+    "assets/bin/Data/x2_season01_15ba7e1140d04b54a9b3bdebc8f7a9d4.assets",
+    "assets/bin/Data/x2_season01_1fe79a207ca2333488af44af04f9aad2.assets",
+    "assets/bin/Data/x2_season01_22aa0286d1843224eaf5b41956d34697.assets",
+    "assets/bin/Data/x2_season01_68a6ec9be8366c6419138ca41becde39.assets",
+    "assets/bin/Data/x2_season01_7b7dd3335b68b2f4db38261bc67b55af.assets",
+    "assets/bin/Data/x2_season01_e179ea22ba03fe245a767a0c51f1a06a.assets",
+    "assets/bin/Data/x2_season01_e3d73408dc35c064cb9dda1e7ab528dc.assets",
+    "assets/x2/licenses/mbedtls-LICENSE.txt",
+    "lib/arm64-v8a/libswappywrapper.so"
+  ],
+  "added_assets": [
+    "assets/bin/Data/level28",
+    "assets/bin/Data/level29",
+    "assets/bin/Data/level30",
+    "assets/bin/Data/level31",
+    "assets/bin/Data/x2_activity01_banner_atlas.assets",
+    "assets/bin/Data/x2_activity01_banner_sprites.assets",
+    "assets/bin/Data/x2_activity01_draw_tabs.assets",
+    "assets/bin/Data/x2_activity02_draw.assets",
+    "assets/bin/Data/x2_activity02_gifts.assets",
+    "assets/bin/Data/x2_activity02_ui_02fb2b5e90f77e84496d52af13e0db97.assets",
+    "assets/bin/Data/x2_activity02_ui_0913d9e2f8946e34cac2c0e1ac0904a8.assets",
+    "assets/bin/Data/x2_activity02_ui_12a818554ae9317408f14cd013816af3.assets",
+    "assets/bin/Data/x2_activity02_ui_1d963d81b6a8a0b43a6d6629e39dc6ac.assets",
+    "assets/bin/Data/x2_activity02_ui_20478c9e650ef6845b368cc0a3fe461a.assets",
+    "assets/bin/Data/x2_activity02_ui_2119a414aa11dd648bb001e490ff93d1.assets",
+    "assets/bin/Data/x2_activity02_ui_371e1e54d7d7b614bb342e1d32d4adc3.assets",
+    "assets/bin/Data/x2_activity02_ui_3bc842207d4f13a46bf6eb394305a0aa.assets",
+    "assets/bin/Data/x2_activity02_ui_5c4c8b4f400ad1344b4bdeaac1b6b924.assets",
+    "assets/bin/Data/x2_activity02_ui_6809b64208c1f894991ed75728da338a.assets",
+    "assets/bin/Data/x2_activity02_ui_71f5231a2c565604b816f74342bb0711.assets",
+    "assets/bin/Data/x2_activity02_ui_76590f0267d5c09488123ef17d8427fa.assets",
+    "assets/bin/Data/x2_activity02_ui_7e15b80e60a440942b1f2ba64675664e.assets",
+    "assets/bin/Data/x2_activity02_ui_81dc2a5844dd89e42bc497e60c1f2b0d.assets",
+    "assets/bin/Data/x2_activity02_ui_84c6fd4719cd1694686ed132040c883b.assets",
+    "assets/bin/Data/x2_activity02_ui_85bf853ac7818c846815891010061cba.assets",
+    "assets/bin/Data/x2_activity02_ui_86757b6a78aa5ea4e9f1046e1faf9ad8.assets",
+    "assets/bin/Data/x2_activity02_ui_8a53359d1fc375c4cb4b75b10f1dad40.assets",
+    "assets/bin/Data/x2_activity02_ui_8e519fd97e11fa841a16cbac87888322.assets",
+    "assets/bin/Data/x2_activity02_ui_9962e414e69eb8a4ca2d2c2babea6629.assets",
+    "assets/bin/Data/x2_activity02_ui_a5ffc6b668560064da31676edf07d8a6.assets",
+    "assets/bin/Data/x2_activity02_ui_a7bd1f35a4d70384d9dc9742b5cb3ad7.assets",
+    "assets/bin/Data/x2_activity02_ui_a9113f657375ce144b55416c51beaa5c.assets",
+    "assets/bin/Data/x2_activity02_ui_aa718dd52c9f20347a7b51ce3430e5b6.assets",
+    "assets/bin/Data/x2_activity02_ui_ada093098ba7a5c44abc4d0a2ada77dc.assets",
+    "assets/bin/Data/x2_activity02_ui_aded69f05d545464880f8c60305b37b2.assets",
+    "assets/bin/Data/x2_activity02_ui_b224ab34fe6108041b6ee4f6914c00f6.assets",
+    "assets/bin/Data/x2_activity02_ui_b4277255c328d244faadf64790fb20ca.assets",
+    "assets/bin/Data/x2_activity02_ui_bccc8f729792ac84ca55c82ee1ceb35b.assets",
+    "assets/bin/Data/x2_activity02_ui_bf9bf2fa1cb997d42b95ed128131e729.assets",
+    "assets/bin/Data/x2_activity02_ui_c02d44072d5cb2f429dac19e70c0954c.assets",
+    "assets/bin/Data/x2_activity02_ui_c5bbe15cbd191c1488e4f61fc0c6a382.assets",
+    "assets/bin/Data/x2_activity02_ui_c70b0b9af3ffe554d80028715c883695.assets",
+    "assets/bin/Data/x2_activity02_ui_cda3d83b878cbf4478e1a74f86d7d90f.assets",
+    "assets/bin/Data/x2_activity02_ui_d02ac74c516719043890a775bf4b010f.assets",
+    "assets/bin/Data/x2_activity02_ui_ea5958cfac5bced4ebb62579f67e812d.assets",
+    "assets/bin/Data/x2_activity02_ui_eec9ad2a0d41a704eac54d925f9647a2.assets",
+    "assets/bin/Data/x2_activity02_ui_f19d9151b8915674988619924ff6d8ee.assets",
+    "assets/bin/Data/x2_activity02_ui_f21cc684f9277d24ea39ce00606570aa.assets",
+    "assets/bin/Data/x2_activity02_ui_fdb47858c2c971f488b0ab01d05cbcb4.assets",
+    "assets/bin/Data/x2_activity03_business_063e7d6417594cc4985ea994ef38f179.assets",
+    "assets/bin/Data/x2_activity03_business_1e05cf2c2128c96468132c6ddf3b40e4.assets",
+    "assets/bin/Data/x2_activity03_business_1f9abd1c81458044ab6ecb2443deebab.assets",
+    "assets/bin/Data/x2_activity03_business_3ca320a4d6bfc37498d221142b42345d.assets",
+    "assets/bin/Data/x2_activity03_business_5d68230de89f3184ea5780c671f086c6.assets",
+    "assets/bin/Data/x2_activity03_business_6ad1d554b6ea8df4785bcf5f87e786c5.assets",
+    "assets/bin/Data/x2_activity03_business_80b14d3d5065897469f422d710566d86.assets",
+    "assets/bin/Data/x2_activity03_business_858e89d793cf3c640afa9c47855a84eb.assets",
+    "assets/bin/Data/x2_activity03_business_998a1ca4c9a4b444b8dd696fc7c71158.assets",
+    "assets/bin/Data/x2_activity03_business_a8c2390c5cbe64a4a8380cf9f0b77d10.assets",
+    "assets/bin/Data/x2_activity03_business_e20b6cb7e04f14742b067d63b7f1be2b.assets",
+    "assets/bin/Data/x2_activity03_business_e62fc8b2ffcb07f4cb93c4778385ddb8.assets",
+    "assets/bin/Data/x2_activity03_business_e94959c453322c7408436154e5a90505.assets",
+    "assets/bin/Data/x2_activity03_business_efc086c5f5dc1254aafbc401c976e4fe.assets",
+    "assets/bin/Data/x2_activity03_direct_0.assets",
+    "assets/bin/Data/x2_activity03_direct_1.assets",
+    "assets/bin/Data/x2_activity03_draw.assets",
+    "assets/bin/Data/x2_activity03_ui_0128bc7f16bfdfe48abc69ec30ca7531.assets",
+    "assets/bin/Data/x2_activity03_ui_063c3171e9c765f4fb814f0e2cb67968.assets",
+    "assets/bin/Data/x2_activity03_ui_07b39cd7889265d439a23a1e3aaee82d.assets",
+    "assets/bin/Data/x2_activity03_ui_0d2fb8afaddd3b748a05a7caa68ca5c5.assets",
+    "assets/bin/Data/x2_activity03_ui_108ae70186e3b004884870501390dee9.assets",
+    "assets/bin/Data/x2_activity03_ui_1204c52930c755a4fa3cc994edb3ec49.assets",
+    "assets/bin/Data/x2_activity03_ui_194eba1eb47c2ff479204cbc4369c65c.assets",
+    "assets/bin/Data/x2_activity03_ui_1a5ba5176f31a6b4c8e3722f270cf574.assets",
+    "assets/bin/Data/x2_activity03_ui_1f9abd1c81458044ab6ecb2443deebab.assets",
+    "assets/bin/Data/x2_activity03_ui_277450ade27e8934493892684f0dd894.assets",
+    "assets/bin/Data/x2_activity03_ui_27ecc7439cf95024faa16cb31af48d76.assets",
+    "assets/bin/Data/x2_activity03_ui_2e48cdea24ddbb247a62c468bf70e92b.assets",
+    "assets/bin/Data/x2_activity03_ui_317ec8eb9d82c8f4a8daf0438153cb52.assets",
+    "assets/bin/Data/x2_activity03_ui_31cf3f26891ba3244bd9ed2d46f2ee51.assets",
+    "assets/bin/Data/x2_activity03_ui_36cfecd22a57e7e46b99c7af257ec80e.assets",
+    "assets/bin/Data/x2_activity03_ui_382dab417e2e90345ac4631ced4fdc1b.assets",
+    "assets/bin/Data/x2_activity03_ui_3b2aca5e57627044fb3e2d2630e20cd0.assets",
+    "assets/bin/Data/x2_activity03_ui_3d79891d7702cb046a67b943e174a0a1.assets",
+    "assets/bin/Data/x2_activity03_ui_3ff579826b59a6b40b540de034791363.assets",
+    "assets/bin/Data/x2_activity03_ui_413ebae5a10989744bdc1ca9268c003f.assets",
+    "assets/bin/Data/x2_activity03_ui_4555be6c80692eb4ab32777c49e261b0.assets",
+    "assets/bin/Data/x2_activity03_ui_48c4e89fc24244645974a0cac6b2a67d.assets",
+    "assets/bin/Data/x2_activity03_ui_4bd39a27806d37a479a9afe04c1513f7.assets",
+    "assets/bin/Data/x2_activity03_ui_4f8164e0abc91a94fb3849027003cf3d.assets",
+    "assets/bin/Data/x2_activity03_ui_52d0d15a73bd22648857b681504dc53b.assets",
+    "assets/bin/Data/x2_activity03_ui_55ea6950e6148784a9a8a0c941478770.assets",
+    "assets/bin/Data/x2_activity03_ui_5681b3d712599bc489d797274906e3f3.assets",
+    "assets/bin/Data/x2_activity03_ui_57458d01304399d4585db30360716067.assets",
+    "assets/bin/Data/x2_activity03_ui_5798a35f3e17ed0418214b01e9ef3823.assets",
+    "assets/bin/Data/x2_activity03_ui_5ae59b3e4b476e44f9cb911e9b9f8d4f.assets",
+    "assets/bin/Data/x2_activity03_ui_5d68230de89f3184ea5780c671f086c6.assets",
+    "assets/bin/Data/x2_activity03_ui_5da7dba2a4a683d40bc1f7c05680e17b.assets",
+    "assets/bin/Data/x2_activity03_ui_5fd57a3e0c011c046b4f52fa7d59c9f8.assets",
+    "assets/bin/Data/x2_activity03_ui_610f904747aa8484c84aa1016c4474c1.assets",
+    "assets/bin/Data/x2_activity03_ui_61936d8c853e8aa4894db308a23d48f6.assets",
+    "assets/bin/Data/x2_activity03_ui_66b918ab16d048f4b8607f2dd885ef4c.assets",
+    "assets/bin/Data/x2_activity03_ui_6d7638f6f29f0684e903d3195cb5a28c.assets",
+    "assets/bin/Data/x2_activity03_ui_7177227ec0856f344bd4bf40b4551c89.assets",
+    "assets/bin/Data/x2_activity03_ui_743e4c1ad178224458441b5e67b5243b.assets",
+    "assets/bin/Data/x2_activity03_ui_7c0ae8009b802294e809b1920cd04bdf.assets",
+    "assets/bin/Data/x2_activity03_ui_80b14d3d5065897469f422d710566d86.assets",
+    "assets/bin/Data/x2_activity03_ui_816f9760a2b21a64cbba0b18ad38b203.assets",
+    "assets/bin/Data/x2_activity03_ui_8c9d6243b05330e4a91be02efafe4b46.assets",
+    "assets/bin/Data/x2_activity03_ui_918e2d850d496954a9c6bfe64b2add52.assets",
+    "assets/bin/Data/x2_activity03_ui_934d5dc48ed8b4b47a71177dc5ad2f83.assets",
+    "assets/bin/Data/x2_activity03_ui_94213cb57f47f9d459248fa4f93d9fd7.assets",
+    "assets/bin/Data/x2_activity03_ui_9962e414e69eb8a4ca2d2c2babea6629.assets",
+    "assets/bin/Data/x2_activity03_ui_9a53aa18298bfd24ba87a9102eeea403.assets",
+    "assets/bin/Data/x2_activity03_ui_9d47b6f95cf74ce438f3866a86533a57.assets",
+    "assets/bin/Data/x2_activity03_ui_a8c2390c5cbe64a4a8380cf9f0b77d10.assets",
+    "assets/bin/Data/x2_activity03_ui_ae94baab29e265b4c972f98ad5132085.assets",
+    "assets/bin/Data/x2_activity03_ui_b026be116b0f4e94888cc818c024c2df.assets",
+    "assets/bin/Data/x2_activity03_ui_b42e0d01799396e48bf0770e24acc17b.assets",
+    "assets/bin/Data/x2_activity03_ui_b44fab0b0ba58ba48a3b5988a9833cde.assets",
+    "assets/bin/Data/x2_activity03_ui_b988cf76cf6719d4cb94150945f762a9.assets",
+    "assets/bin/Data/x2_activity03_ui_bedf35fb61dfe8748ae3a710682b1088.assets",
+    "assets/bin/Data/x2_activity03_ui_c475d8acc5d3f0147b435f8cbe2efd19.assets",
+    "assets/bin/Data/x2_activity03_ui_c50c55c0159ff54468efcfa9d18f96a0.assets",
+    "assets/bin/Data/x2_activity03_ui_c6e7b63b14494f3479dae129963ce3d6.assets",
+    "assets/bin/Data/x2_activity03_ui_c9dac6b10dcf9014fb78e3a3bc672c25.assets",
+    "assets/bin/Data/x2_activity03_ui_c9e8b1cfa2312b94c82d6ed194291c0d.assets",
+    "assets/bin/Data/x2_activity03_ui_ccd6440c8f2479344b9177857c41019a.assets",
+    "assets/bin/Data/x2_activity03_ui_cdb057485933e494fbb78fbb48cc0e4b.assets",
+    "assets/bin/Data/x2_activity03_ui_d428a40f40ab4494780d4f3babf6bd53.assets",
+    "assets/bin/Data/x2_activity03_ui_e1a39ad83bd85b142ab87b773bf15423.assets",
+    "assets/bin/Data/x2_activity03_ui_e23685599bbf0604daebea777acfc221.assets",
+    "assets/bin/Data/x2_activity03_ui_e2988fb19891895458b96e2088ae3aee.assets",
+    "assets/bin/Data/x2_activity03_ui_e354fab9ac3505441a4bfe8d550dbba2.assets",
+    "assets/bin/Data/x2_activity03_ui_e3dd2c563a30f1a4995c6b9480037d5c.assets",
+    "assets/bin/Data/x2_activity03_ui_e9a72c710959ad2409b2887d6fbec8ac.assets",
+    "assets/bin/Data/x2_activity03_ui_eb6065ba9ca253c49999faaaa1529be2.assets",
+    "assets/bin/Data/x2_activity03_ui_ebf96d9f64ce8004a8bbe5997472c6fd.assets",
+    "assets/bin/Data/x2_activity03_ui_ee0e56900efc59b488ba2e3f322e9819.assets",
+    "assets/bin/Data/x2_activity03_ui_efc086c5f5dc1254aafbc401c976e4fe.assets",
+    "assets/bin/Data/x2_activity03_ui_eff7ef16bb5edbc479b51f5968e5bec1.assets",
+    "assets/bin/Data/x2_activity03_ui_f370221a83e81c447883abf9aea4ee80.assets",
+    "assets/bin/Data/x2_activity03_ui_f912a4ba1d48be34faa9dd7b73b54f1e.assets",
+    "assets/bin/Data/x2_activity03_ui_f92b756781dc8904aaab7ee4bd02fc25.assets",
+    "assets/bin/Data/x2_activity03_ui_fef37e4ac4e89d44f90580ccc10b17ca.assets",
+    "assets/bin/Data/x2_activity04_resource_0.assets",
+    "assets/bin/Data/x2_activity04_shop_figure.assets",
+    "assets/bin/Data/x2_activity04_shop_mask.assets",
+    "assets/bin/Data/x2_activity04_tower_1.assets",
+    "assets/bin/Data/x2_activity04_tower_2.assets",
+    "assets/bin/Data/x2_activity04_tower_3.assets",
+    "assets/bin/Data/x2_activity04_tower_4.assets",
+    "assets/bin/Data/x2_activity04_tower_5.assets",
+    "assets/bin/Data/x2_activity04_ui_0.assets",
+    "assets/bin/Data/x2_activity04_ui_1.assets",
+    "assets/bin/Data/x2_activity04_ui_10.assets",
+    "assets/bin/Data/x2_activity04_ui_11.assets",
+    "assets/bin/Data/x2_activity04_ui_12.assets",
+    "assets/bin/Data/x2_activity04_ui_13.assets",
+    "assets/bin/Data/x2_activity04_ui_14.assets",
+    "assets/bin/Data/x2_activity04_ui_15.assets",
+    "assets/bin/Data/x2_activity04_ui_16.assets",
+    "assets/bin/Data/x2_activity04_ui_17.assets",
+    "assets/bin/Data/x2_activity04_ui_18.assets",
+    "assets/bin/Data/x2_activity04_ui_19.assets",
+    "assets/bin/Data/x2_activity04_ui_2.assets",
+    "assets/bin/Data/x2_activity04_ui_20.assets",
+    "assets/bin/Data/x2_activity04_ui_21.assets",
+    "assets/bin/Data/x2_activity04_ui_22.assets",
+    "assets/bin/Data/x2_activity04_ui_23.assets",
+    "assets/bin/Data/x2_activity04_ui_24.assets",
+    "assets/bin/Data/x2_activity04_ui_25.assets",
+    "assets/bin/Data/x2_activity04_ui_26.assets",
+    "assets/bin/Data/x2_activity04_ui_27.assets",
+    "assets/bin/Data/x2_activity04_ui_28.assets",
+    "assets/bin/Data/x2_activity04_ui_3.assets",
+    "assets/bin/Data/x2_activity04_ui_4.assets",
+    "assets/bin/Data/x2_activity04_ui_5.assets",
+    "assets/bin/Data/x2_activity04_ui_6.assets",
+    "assets/bin/Data/x2_activity04_ui_7.assets",
+    "assets/bin/Data/x2_activity04_ui_8.assets",
+    "assets/bin/Data/x2_activity04_ui_9.assets",
+    "assets/bin/Data/x2_activity05_gift_icons.assets",
+    "assets/bin/Data/x2_activity05_illustration_0.assets",
+    "assets/bin/Data/x2_activity05_illustration_1.assets",
+    "assets/bin/Data/x2_activity05_illustration_2.assets",
+    "assets/bin/Data/x2_activity05_scene_0.assets",
+    "assets/bin/Data/x2_activity05_scene_1.assets",
+    "assets/bin/Data/x2_activity05_scene_3.assets",
+    "assets/bin/Data/x2_activity05_scene_4.assets",
+    "assets/bin/Data/x2_activity05_scene_5.assets",
+    "assets/bin/Data/x2_activity05_scene_6.assets",
+    "assets/bin/Data/x2_activity05_ui_085c6d0cdeb44b144a06fbb5b84d66ea.assets",
+    "assets/bin/Data/x2_activity05_ui_0ec69bea418ace6499eca828b536695a.assets",
+    "assets/bin/Data/x2_activity05_ui_1dde9fd264adaa54ebe82d79464004cd.assets",
+    "assets/bin/Data/x2_activity05_ui_227b93f286bea674286a74dd1c36e1ff.assets",
+    "assets/bin/Data/x2_activity05_ui_4e1ffc9b5caac6f4f9f0027c71e8a1be.assets",
+    "assets/bin/Data/x2_activity05_ui_8304d9fc28980d6468f3076eaece3947.assets",
+    "assets/bin/Data/x2_activity05_ui_8d3458c952d672a42b53634c728872b8.assets",
+    "assets/bin/Data/x2_activity05_ui_a6466d71c735f474789002646700f011.assets",
+    "assets/bin/Data/x2_activity05_ui_a76b4353f277b46408e23014d2541fd8.assets",
+    "assets/bin/Data/x2_activity05_ui_a8fb37c72bb0f4d4e8387688eabee1c4.assets",
+    "assets/bin/Data/x2_activity05_ui_aa7140c7e2662a8469ddb0227773b1f4.assets",
+    "assets/bin/Data/x2_activity05_ui_be8e537ce7ff23f4885ef7d837c5d7fb.assets",
+    "assets/bin/Data/x2_activity05_ui_e39a2f2a5fd9f9d409873be02d7d2691.assets",
+    "assets/bin/Data/x2_activity05_ui_ea85f333b66cd2f458e917ef4332b6c0.assets",
+    "assets/bin/Data/x2_activity06_bg_007567c18cbe23e4d91fae3ab12ae719.assets",
+    "assets/bin/Data/x2_activity06_bg_0149c53bf8cbabb44a94a88881b3ef88.assets",
+    "assets/bin/Data/x2_activity06_bg_028ed3b8af3470f429904d75bed70c03.assets",
+    "assets/bin/Data/x2_activity06_bg_108891d2ce7a1de4b818b1521dde9e5c.assets",
+    "assets/bin/Data/x2_activity06_bg_12fb15f4b4d5fad43982533d5b20a745.assets",
+    "assets/bin/Data/x2_activity06_bg_26c6575aef9137c41bd2176a660468f5.assets",
+    "assets/bin/Data/x2_activity06_bg_315fba1aa1af2ad4d94a8e7efd289d5e.assets",
+    "assets/bin/Data/x2_activity06_bg_327bb5b8bff8476499ed6d8b5eda6417.assets",
+    "assets/bin/Data/x2_activity06_bg_35c5572be90092446b698fa21cc1b72f.assets",
+    "assets/bin/Data/x2_activity06_bg_3dd83bf97d5eee443ba8db409a314b6a.assets",
+    "assets/bin/Data/x2_activity06_bg_45702dacdd711204297a190aa5f5b178.assets",
+    "assets/bin/Data/x2_activity06_bg_4866b10b74dca2e49b6f11eee28f643f.assets",
+    "assets/bin/Data/x2_activity06_bg_48f2610227441ae4d8bc53b92f593bb5.assets",
+    "assets/bin/Data/x2_activity06_bg_4cb8453960b28c4469d1489c822a442d.assets",
+    "assets/bin/Data/x2_activity06_bg_526b0d21d78e84646b7b58f85a091cf8.assets",
+    "assets/bin/Data/x2_activity06_bg_558f7b6ddfc785a4d90f6d1ace819bf5.assets",
+    "assets/bin/Data/x2_activity06_bg_6f8d671fc2b775f4c9e44694c5b7726e.assets",
+    "assets/bin/Data/x2_activity06_bg_709a1d348655c6646ace31d14ed07194.assets",
+    "assets/bin/Data/x2_activity06_bg_8721dadd489da69459d1c71b3d0d92f7.assets",
+    "assets/bin/Data/x2_activity06_bg_8dd5bffc1f4ad4046a7ccd43851442b6.assets",
+    "assets/bin/Data/x2_activity06_bg_9c76a0dc98223a041805ca4c35f4b930.assets",
+    "assets/bin/Data/x2_activity06_bg_bac834adaca2d5346aeb8a9b8afef06b.assets",
+    "assets/bin/Data/x2_activity06_bg_cf39f5e63949ffc44a303bd50fef6bd4.assets",
+    "assets/bin/Data/x2_activity06_bg_d2cf0c23938663a478eebdc1835b6112.assets",
+    "assets/bin/Data/x2_activity06_bg_d42983fefa7c5454b92acd990e5af875.assets",
+    "assets/bin/Data/x2_activity06_bg_dbd6767584e2532498b496ac0fecc612.assets",
+    "assets/bin/Data/x2_activity06_bg_ebb9423697b34b74e981b7763dc4d10d.assets",
+    "assets/bin/Data/x2_activity06_bg_f646cca14e9ad1e46b055344d2ce9d50.assets",
+    "assets/bin/Data/x2_activity06_bg_f8dfab85c4196ef44bccae0314d12571.assets",
+    "assets/bin/Data/x2_activity06_bg_f8e5175fb775f7443b5bf1fe81c5235c.assets",
+    "assets/bin/Data/x2_activity06_bg_f92d9ddf5b33caf43a511ef457e9d4c3.assets",
+    "assets/bin/Data/x2_activity06_help_1a77731cb8f0c1141a6b5b62e8eb412d.assets",
+    "assets/bin/Data/x2_activity06_help_2bf023fb233591045ba73dbef52007cb.assets",
+    "assets/bin/Data/x2_activity06_help_33ed7015d5d5ba2498c2165ed39fab9a.assets",
+    "assets/bin/Data/x2_activity06_help_743dd1ebc658f4349b4c922cd280d8fd.assets",
+    "assets/bin/Data/x2_activity06_help_c6ae4ef4e66ef324aa217aed853b2b2f.assets",
+    "assets/bin/Data/x2_activity06_help_d53a2076dc4330e43af50da3c30cbcee.assets",
+    "assets/bin/Data/x2_activity06_help_e0160138b03b99847a370ad84d62afee.assets",
+    "assets/bin/Data/x2_activity06_help_f39629bf5996b8b4890916085da52076.assets",
+    "assets/bin/Data/x2_activity06_help_f6d99bb75e90d7e479a0e391d5dfa4d5.assets",
+    "assets/bin/Data/x2_activity06_help_fb6c6ad18b6f8e643b00f330969fa33a.assets",
+    "assets/bin/Data/x2_activity06_icons_0.assets",
+    "assets/bin/Data/x2_activity06_icons_1.assets",
+    "assets/bin/Data/x2_activity06_icons_2.assets",
+    "assets/bin/Data/x2_activity06_jp_title_0ac1701f764f683439d50e04a1e7cd4f.assets",
+    "assets/bin/Data/x2_activity06_night_37d94c4e0da33be429cb1985d2e1de82.assets",
+    "assets/bin/Data/x2_activity06_night_3e203af7cf1bafb4ebf8370a4c594d4f.assets",
+    "assets/bin/Data/x2_activity06_night_7d962ffd09c04f54ab82b9dcd2de0d66.assets",
+    "assets/bin/Data/x2_activity06_night_8a3e190a2665107459936e67eb622d01.assets",
+    "assets/bin/Data/x2_activity06_night_bc5ba15df481aa044bfbeedf1be2bafa.assets",
+    "assets/bin/Data/x2_activity06_night_c4b92af32ee4c21468126c99adedc5cd.assets",
+    "assets/bin/Data/x2_activity06_night_ced6e8de5afdb414dbf496cbf7724f5c.assets",
+    "assets/bin/Data/x2_activity06_night_d3eb99a540136fe4d8069336e36a0542.assets",
+    "assets/bin/Data/x2_activity06_night_e0004259f94dd864a8c9711ca7f5c451.assets",
+    "assets/bin/Data/x2_activity06_night_ed2fd06511b1bc34eb0802db1d122e84.assets",
+    "assets/bin/Data/x2_activity06_school_0.assets",
+    "assets/bin/Data/x2_activity06_school_1.assets",
+    "assets/bin/Data/x2_activity06_school_2.assets",
+    "assets/bin/Data/x2_activity06_school_4.assets",
+    "assets/bin/Data/x2_activity06_school_5.assets",
+    "assets/bin/Data/x2_activity06_school_6.assets",
+    "assets/bin/Data/x2_activity06_school_7.assets",
+    "assets/bin/Data/x2_activity06_school_8.assets",
+    "assets/bin/Data/x2_activity06_ui_07b39cd7889265d439a23a1e3aaee82d.assets",
+    "assets/bin/Data/x2_activity06_ui_eff7ef16bb5edbc479b51f5968e5bec1.assets",
+    "assets/bin/Data/x2_activity07_bg_10d65a71013a5ae41bf7c7eac2239713.assets",
+    "assets/bin/Data/x2_activity07_bg_3d97555c2107802488f03d28076d0a62.assets",
+    "assets/bin/Data/x2_activity07_gift_covers_0.assets",
+    "assets/bin/Data/x2_activity09_icons_0.assets",
+    "assets/bin/Data/x2_activity09_icons_1.assets",
+    "assets/bin/Data/x2_activity09_scene_1.assets",
+    "assets/bin/Data/x2_activity09_scene_2.assets",
+    "assets/bin/Data/x2_activity09_scene_3.assets",
+    "assets/bin/Data/x2_activity09_ui_029e1dddbb605ee40928a568b2b8029f.assets",
+    "assets/bin/Data/x2_activity09_ui_063c3171e9c765f4fb814f0e2cb67968.assets",
+    "assets/bin/Data/x2_activity09_ui_07b39cd7889265d439a23a1e3aaee82d.assets",
+    "assets/bin/Data/x2_activity09_ui_0d2fb8afaddd3b748a05a7caa68ca5c5.assets",
+    "assets/bin/Data/x2_activity09_ui_1204c52930c755a4fa3cc994edb3ec49.assets",
+    "assets/bin/Data/x2_activity09_ui_173347d4d8b6fa74289ee8800c56fe8b.assets",
+    "assets/bin/Data/x2_activity09_ui_1f9abd1c81458044ab6ecb2443deebab.assets",
+    "assets/bin/Data/x2_activity09_ui_255ac2ed8641951458b053e026385d0b.assets",
+    "assets/bin/Data/x2_activity09_ui_277450ade27e8934493892684f0dd894.assets",
+    "assets/bin/Data/x2_activity09_ui_27ecc7439cf95024faa16cb31af48d76.assets",
+    "assets/bin/Data/x2_activity09_ui_2e48cdea24ddbb247a62c468bf70e92b.assets",
+    "assets/bin/Data/x2_activity09_ui_317ec8eb9d82c8f4a8daf0438153cb52.assets",
+    "assets/bin/Data/x2_activity09_ui_36cfecd22a57e7e46b99c7af257ec80e.assets",
+    "assets/bin/Data/x2_activity09_ui_3b2aca5e57627044fb3e2d2630e20cd0.assets",
+    "assets/bin/Data/x2_activity09_ui_3d1ded0906df1c346a193f0f53d8aec0.assets",
+    "assets/bin/Data/x2_activity09_ui_3d79891d7702cb046a67b943e174a0a1.assets",
+    "assets/bin/Data/x2_activity09_ui_3ff579826b59a6b40b540de034791363.assets",
+    "assets/bin/Data/x2_activity09_ui_40b096e104dc00b418a87a81c1ca6811.assets",
+    "assets/bin/Data/x2_activity09_ui_413ebae5a10989744bdc1ca9268c003f.assets",
+    "assets/bin/Data/x2_activity09_ui_448a67caacdc35847bded8761899d958.assets",
+    "assets/bin/Data/x2_activity09_ui_4555be6c80692eb4ab32777c49e261b0.assets",
+    "assets/bin/Data/x2_activity09_ui_48c4e89fc24244645974a0cac6b2a67d.assets",
+    "assets/bin/Data/x2_activity09_ui_4bd39a27806d37a479a9afe04c1513f7.assets",
+    "assets/bin/Data/x2_activity09_ui_4ccf69c2aacf19c47af2e5af61759263.assets",
+    "assets/bin/Data/x2_activity09_ui_4cf2ee71a100a3b4483fd45f9678885e.assets",
+    "assets/bin/Data/x2_activity09_ui_4f8164e0abc91a94fb3849027003cf3d.assets",
+    "assets/bin/Data/x2_activity09_ui_52d0d15a73bd22648857b681504dc53b.assets",
+    "assets/bin/Data/x2_activity09_ui_53e42753e8c523c4dab8b17b1eabe393.assets",
+    "assets/bin/Data/x2_activity09_ui_55ea6950e6148784a9a8a0c941478770.assets",
+    "assets/bin/Data/x2_activity09_ui_5681b3d712599bc489d797274906e3f3.assets",
+    "assets/bin/Data/x2_activity09_ui_5798a35f3e17ed0418214b01e9ef3823.assets",
+    "assets/bin/Data/x2_activity09_ui_5ae59b3e4b476e44f9cb911e9b9f8d4f.assets",
+    "assets/bin/Data/x2_activity09_ui_5d48f394489bc2a489f485e3b5f7b5d0.assets",
+    "assets/bin/Data/x2_activity09_ui_5da7dba2a4a683d40bc1f7c05680e17b.assets",
+    "assets/bin/Data/x2_activity09_ui_5fd57a3e0c011c046b4f52fa7d59c9f8.assets",
+    "assets/bin/Data/x2_activity09_ui_610f904747aa8484c84aa1016c4474c1.assets",
+    "assets/bin/Data/x2_activity09_ui_61c75597017167a4cb74d45c9eaf93d3.assets",
+    "assets/bin/Data/x2_activity09_ui_6ad1d554b6ea8df4785bcf5f87e786c5.assets",
+    "assets/bin/Data/x2_activity09_ui_7177227ec0856f344bd4bf40b4551c89.assets",
+    "assets/bin/Data/x2_activity09_ui_743e4c1ad178224458441b5e67b5243b.assets",
+    "assets/bin/Data/x2_activity09_ui_7ce87aea15ee4284ba088243b806f666.assets",
+    "assets/bin/Data/x2_activity09_ui_8139508131ca9e6429a9d3ec278ff00d.assets",
+    "assets/bin/Data/x2_activity09_ui_858e89d793cf3c640afa9c47855a84eb.assets",
+    "assets/bin/Data/x2_activity09_ui_896307e928df43243b7695285e19d1a2.assets",
+    "assets/bin/Data/x2_activity09_ui_8c9d6243b05330e4a91be02efafe4b46.assets",
+    "assets/bin/Data/x2_activity09_ui_8f22ac5d55b0f014b81f7ca4680f4ca1.assets",
+    "assets/bin/Data/x2_activity09_ui_908f8d95e0de43a4a83668152d7bfda4.assets",
+    "assets/bin/Data/x2_activity09_ui_918e2d850d496954a9c6bfe64b2add52.assets",
+    "assets/bin/Data/x2_activity09_ui_934d5dc48ed8b4b47a71177dc5ad2f83.assets",
+    "assets/bin/Data/x2_activity09_ui_94213cb57f47f9d459248fa4f93d9fd7.assets",
+    "assets/bin/Data/x2_activity09_ui_961bcff06e9ac8d44b15cdefeb7c6bec.assets",
+    "assets/bin/Data/x2_activity09_ui_9722009e9177f9f4a81ba856bee57959.assets",
+    "assets/bin/Data/x2_activity09_ui_9962e414e69eb8a4ca2d2c2babea6629.assets",
+    "assets/bin/Data/x2_activity09_ui_998a1ca4c9a4b444b8dd696fc7c71158.assets",
+    "assets/bin/Data/x2_activity09_ui_9a53aa18298bfd24ba87a9102eeea403.assets",
+    "assets/bin/Data/x2_activity09_ui_9d47b6f95cf74ce438f3866a86533a57.assets",
+    "assets/bin/Data/x2_activity09_ui_a00e6205a88ae36478a3d602ffa245b1.assets",
+    "assets/bin/Data/x2_activity09_ui_ad93a807a3d858c4f94f04caee28e167.assets",
+    "assets/bin/Data/x2_activity09_ui_b44fab0b0ba58ba48a3b5988a9833cde.assets",
+    "assets/bin/Data/x2_activity09_ui_b5d70a2e1ad2e6a4ea8b4abef3abe71b.assets",
+    "assets/bin/Data/x2_activity09_ui_b988cf76cf6719d4cb94150945f762a9.assets",
+    "assets/bin/Data/x2_activity09_ui_c23b23db7dc311e479bfddc3731747ff.assets",
+    "assets/bin/Data/x2_activity09_ui_c3b5541cb099b1147b9137c572f6b52e.assets",
+    "assets/bin/Data/x2_activity09_ui_c475d8acc5d3f0147b435f8cbe2efd19.assets",
+    "assets/bin/Data/x2_activity09_ui_c50c55c0159ff54468efcfa9d18f96a0.assets",
+    "assets/bin/Data/x2_activity09_ui_c8912909573f92946850ed090d81751d.assets",
+    "assets/bin/Data/x2_activity09_ui_c9dac6b10dcf9014fb78e3a3bc672c25.assets",
+    "assets/bin/Data/x2_activity09_ui_c9e8b1cfa2312b94c82d6ed194291c0d.assets",
+    "assets/bin/Data/x2_activity09_ui_ca2c24e38162bef46a16f0e3647014d7.assets",
+    "assets/bin/Data/x2_activity09_ui_ccd6440c8f2479344b9177857c41019a.assets",
+    "assets/bin/Data/x2_activity09_ui_d11b66c524b724f419a0dcf195e4aa12.assets",
+    "assets/bin/Data/x2_activity09_ui_dee26aae6c331334dacf7aa3c0b71405.assets",
+    "assets/bin/Data/x2_activity09_ui_df963615f12f39f43a0f7586bc345a24.assets",
+    "assets/bin/Data/x2_activity09_ui_e06c3133f01753c439cee837e887bfa4.assets",
+    "assets/bin/Data/x2_activity09_ui_e1a39ad83bd85b142ab87b773bf15423.assets",
+    "assets/bin/Data/x2_activity09_ui_e354fab9ac3505441a4bfe8d550dbba2.assets",
+    "assets/bin/Data/x2_activity09_ui_e3dd2c563a30f1a4995c6b9480037d5c.assets",
+    "assets/bin/Data/x2_activity09_ui_e9a72c710959ad2409b2887d6fbec8ac.assets",
+    "assets/bin/Data/x2_activity09_ui_e9b99053876ae2d47b84358682e2e2cd.assets",
+    "assets/bin/Data/x2_activity09_ui_eff7ef16bb5edbc479b51f5968e5bec1.assets",
+    "assets/bin/Data/x2_activity09_ui_f370221a83e81c447883abf9aea4ee80.assets",
+    "assets/bin/Data/x2_activity09_ui_f912a4ba1d48be34faa9dd7b73b54f1e.assets",
+    "assets/bin/Data/x2_activity09_ui_f92b756781dc8904aaab7ee4bd02fc25.assets",
+    "assets/bin/Data/x2_activity09_ui_fef37e4ac4e89d44f90580ccc10b17ca.assets",
+    "assets/bin/Data/x2_chujiu_marry_drawing.assets",
+    "assets/bin/Data/x2_chujiu_marry_half.assets",
+    "assets/bin/Data/x2_chujiu_marry_head.assets",
+    "assets/bin/Data/x2_feast_ui_15bfcbfcf15271d4cba1119ab278ca81.assets",
+    "assets/bin/Data/x2_feast_ui_178388a27803c7043b924e1b03b1a4f2.assets",
+    "assets/bin/Data/x2_feast_ui_1b738b144a76464498b1056629851901.assets",
+    "assets/bin/Data/x2_gift_supplement_1.assets",
+    "assets/bin/Data/x2_gift_supplement_2.assets",
+    "assets/bin/Data/x2_gift_supplement_3.assets",
+    "assets/bin/Data/x2_gift_supplement_4.assets",
+    "assets/bin/Data/x2_home_ancient_first_title_sprites.assets",
+    "assets/bin/Data/x2_home_ancient_first_title_texture.assets",
+    "assets/bin/Data/x2_login_city_third.assets",
+    "assets/bin/Data/x2_mogul_drawing.assets",
+    "assets/bin/Data/x2_mogul_icons.assets",
+    "assets/bin/Data/x2_season01_0999fa1dc42cb4d46897892076b8ce2a.assets",
+    "assets/bin/Data/x2_season01_15ba7e1140d04b54a9b3bdebc8f7a9d4.assets",
+    "assets/bin/Data/x2_season01_1fe79a207ca2333488af44af04f9aad2.assets",
+    "assets/bin/Data/x2_season01_22aa0286d1843224eaf5b41956d34697.assets",
+    "assets/bin/Data/x2_season01_68a6ec9be8366c6419138ca41becde39.assets",
+    "assets/bin/Data/x2_season01_7b7dd3335b68b2f4db38261bc67b55af.assets",
+    "assets/bin/Data/x2_season01_e179ea22ba03fe245a767a0c51f1a06a.assets",
+    "assets/bin/Data/x2_season01_e3d73408dc35c064cb9dda1e7ab528dc.assets"
+  ],
+  "pages": [
+    {
+      "page": "ui_newyear2_main",
+      "file": "0fd70f6b429a5a74ea80861669487c80",
+      "different": true,
+      "images": [
+        {
+          "image_id": 790,
+          "third": {
+            "file_id": 27,
+            "path_id": 2,
+            "external": "x2_activity09_ui_173347d4d8b6fa74289ee8800c56fe8b.assets"
+          },
+          "local": {
+            "file_id": 20,
+            "path_id": 2,
+            "external": "72e89d711cbf23b46816ff00450c2be7"
+          }
+        },
+        {
+          "image_id": 964,
+          "third": {
+            "file_id": 28,
+            "path_id": 2,
+            "external": "x2_activity09_ui_b5d70a2e1ad2e6a4ea8b4abef3abe71b.assets"
+          },
+          "local": {
+            "file_id": 20,
+            "path_id": 2,
+            "external": "72e89d711cbf23b46816ff00450c2be7"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "490d48ad0c8e4bc4f96e54d4076f6a59",
+        "2d474dc764a51a5478f1bedf173c425a",
+        "adce06f0f6dd33040aac14beb07fc979",
+        "3983fdd2250ec7e4a8927d86bcbe3a85",
+        "6d492d8cd2c35d84bb8f80eaf735b7d9",
+        "2715d6a659c91784dbf93c33a157be74",
+        "edf1468455ed23c43aa93a9c8ec31df6",
+        "9ec1d0f9ac54f5946863de7b06cff2e1",
+        "c4b690bd65b6de345bad96f6277a680b",
+        "7860cdbaf71fe504f819d528a5adb7bf",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "8c2e887abe5665a459f13f370ebe19ff",
+        "cb222eb5201bb5149813f68424f5e5f3",
+        "88c08541b9c2f2b4eb5fb8ca0784ee91",
+        "697f675376a035b46b8b92bbde2b76d8",
+        "4d7ae93abaaca9c45a9a9ef361787dcf",
+        "b8df4f1e2f29aae4aa2dcdfd87e98cf4",
+        "90b6106981b9f5d489afb79e9fd571b2",
+        "x2_activity09_ui_5798a35f3e17ed0418214b01e9ef3823.assets",
+        "x2_activity09_ui_063c3171e9c765f4fb814f0e2cb67968.assets",
+        "x2_activity09_ui_9d47b6f95cf74ce438f3866a86533a57.assets",
+        "x2_activity09_ui_e06c3133f01753c439cee837e887bfa4.assets",
+        "x2_activity09_ui_9a53aa18298bfd24ba87a9102eeea403.assets",
+        "x2_activity09_ui_52d0d15a73bd22648857b681504dc53b.assets",
+        "x2_activity09_ui_f370221a83e81c447883abf9aea4ee80.assets",
+        "x2_activity09_ui_173347d4d8b6fa74289ee8800c56fe8b.assets",
+        "x2_activity09_ui_b5d70a2e1ad2e6a4ea8b4abef3abe71b.assets",
+        "x2_activity09_ui_e1a39ad83bd85b142ab87b773bf15423.assets",
+        "x2_activity09_ui_53e42753e8c523c4dab8b17b1eabe393.assets",
+        "x2_activity09_ui_918e2d850d496954a9c6bfe64b2add52.assets"
+      ]
+    },
+    {
+      "page": "ui_newyear2_section",
+      "file": "8cb5a774973043543812ca7b58de6beb",
+      "different": true,
+      "images": [
+        {
+          "image_id": 1684,
+          "third": {
+            "file_id": 26,
+            "path_id": 2,
+            "external": "x2_activity09_ui_40b096e104dc00b418a87a81c1ca6811.assets"
+          },
+          "local": {
+            "file_id": 25,
+            "path_id": 2,
+            "external": "72e89d711cbf23b46816ff00450c2be7"
+          }
+        },
+        {
+          "image_id": 1972,
+          "third": {
+            "file_id": 28,
+            "path_id": 2,
+            "external": "x2_activity09_ui_5798a35f3e17ed0418214b01e9ef3823.assets"
+          },
+          "local": {
+            "file_id": 25,
+            "path_id": 2,
+            "external": "72e89d711cbf23b46816ff00450c2be7"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "c5980fd4f08f4eb48b824972d8858c60",
+        "cf4cc22e24f25634496d70f1aced2c57",
+        "428efa587157147498cc557a5741d018",
+        "3f2b985708777b64681b7c2e9d1455b9",
+        "323dcb05f06442f498ab5babd7230da1",
+        "ed1b3cc79b90e124caee5219d322efbf",
+        "1ee5b2e813f2011479c7b9d08335c0c4",
+        "9ec1d0f9ac54f5946863de7b06cff2e1",
+        "edf1468455ed23c43aa93a9c8ec31df6",
+        "3983fdd2250ec7e4a8927d86bcbe3a85",
+        "3d499a77da2344b68a9f8addfcff1d7c",
+        "4547f0d4bfec8244f832725293d59c00",
+        "71c999b79e3bd964889f83f709748155",
+        "83dfbdd39f21407459d4797efbe94b80",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "88c08541b9c2f2b4eb5fb8ca0784ee91",
+        "6b41bbc350b550344b1f487ab1b6a451",
+        "7860cdbaf71fe504f819d528a5adb7bf",
+        "efbe79983d5ca3f4d81f69c53793c8d2",
+        "cb222eb5201bb5149813f68424f5e5f3",
+        "library/unity default resources",
+        "e27e3f9024da0f34b9930012781c31bb",
+        "f26fab2a66f62c548b81d515e7cedf32",
+        "x2_activity09_ui_eff7ef16bb5edbc479b51f5968e5bec1.assets",
+        "x2_activity09_ui_40b096e104dc00b418a87a81c1ca6811.assets",
+        "x2_activity09_ui_07b39cd7889265d439a23a1e3aaee82d.assets",
+        "x2_activity09_ui_5798a35f3e17ed0418214b01e9ef3823.assets",
+        "x2_activity09_ui_8c9d6243b05330e4a91be02efafe4b46.assets"
+      ]
+    },
+    {
+      "page": "ui_newyear2_shop",
+      "file": "e7ff62dff4f9ad048999a34e42d0519c",
+      "different": true,
+      "images": [
+        {
+          "image_id": 808,
+          "third": {
+            "file_id": 21,
+            "path_id": 2,
+            "external": "x2_activity09_ui_c8912909573f92946850ed090d81751d.assets"
+          },
+          "local": {
+            "file_id": 18,
+            "path_id": 2,
+            "external": "72e89d711cbf23b46816ff00450c2be7"
+          }
+        },
+        {
+          "image_id": 817,
+          "third": {
+            "file_id": 23,
+            "path_id": 2,
+            "external": "x2_activity09_ui_4cf2ee71a100a3b4483fd45f9678885e.assets"
+          },
+          "local": {
+            "file_id": 18,
+            "path_id": 2,
+            "external": "72e89d711cbf23b46816ff00450c2be7"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "88c08541b9c2f2b4eb5fb8ca0784ee91",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "8c2e887abe5665a459f13f370ebe19ff",
+        "c4b690bd65b6de345bad96f6277a680b",
+        "9876495eb3c019f419147e4891164366",
+        "35943a802eb6d42409fc2431d916d2d1",
+        "7860cdbaf71fe504f819d528a5adb7bf",
+        "cb222eb5201bb5149813f68424f5e5f3",
+        "ce8ed57d99c208042b47d134d89921dc",
+        "9d13c306500912f4d8e6a89551ef7633",
+        "4d7ae93abaaca9c45a9a9ef361787dcf",
+        "6b41bbc350b550344b1f487ab1b6a451",
+        "bcad2dd9f95ee6e4d9e9f647017315ca",
+        "b66cf7a186d13054989b33a5c90044e4",
+        "7c07a3c7fde730744b545001492d6175",
+        "5ffb4f17e46417a42a6371ba64d41dd4",
+        "x2_activity09_ui_8f22ac5d55b0f014b81f7ca4680f4ca1.assets",
+        "x2_activity09_ui_ad93a807a3d858c4f94f04caee28e167.assets",
+        "x2_activity09_ui_d11b66c524b724f419a0dcf195e4aa12.assets",
+        "x2_activity09_ui_c8912909573f92946850ed090d81751d.assets",
+        "x2_activity09_ui_896307e928df43243b7695285e19d1a2.assets",
+        "x2_activity09_ui_4cf2ee71a100a3b4483fd45f9678885e.assets",
+        "x2_activity09_ui_df963615f12f39f43a0f7586bc345a24.assets",
+        "x2_activity09_ui_3d1ded0906df1c346a193f0f53d8aec0.assets",
+        "x2_activity09_ui_961bcff06e9ac8d44b15cdefeb7c6bec.assets"
+      ]
+    },
+    {
+      "page": "ui_newyear2_task",
+      "file": "b60e10648f5224041bfe7267e5ccd5b6",
+      "different": true,
+      "images": [
+        {
+          "image_id": 719,
+          "third": {
+            "file_id": 39,
+            "path_id": 2,
+            "external": "x2_activity09_ui_7ce87aea15ee4284ba088243b806f666.assets"
+          },
+          "local": {
+            "file_id": 39,
+            "path_id": 2,
+            "external": "72e89d711cbf23b46816ff00450c2be7"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "1ef3c1c91acbc58469a9a853deaa9ce7",
+        "df947abdda86ebd438e73c414975bdc8",
+        "library/unity default resources",
+        "c06482400ecf5b8419fc043d0bf9fa4d",
+        "07f065e52c1411f4d9041a90286728e6",
+        "8582c4d46152d1f4aad64ec147d678ce",
+        "c2efca0ac29b38a44bc0b2946ec31b77",
+        "23eaee5d01cd8734f9aed3f6aa4c11a9",
+        "ee712f0dd8a66ee459755f3ddce57fb9",
+        "d2704c19fd2b91e4f8ec92338727a303",
+        "7113a7da80a049a40a55bea23dc3d37f",
+        "85d4d7e31704ed242aca7923ab06e2a8",
+        "4fde37b0b8d465643b376f1db616d4f9",
+        "1826336d8d988b54e9c2d4bec810e91a",
+        "f566eeb6ed281e8408d10459bbf5640a",
+        "400732613962fa24e928d0d280911800",
+        "75db76b3ab22be64db370e7cbc5412a0",
+        "f55cf111111dacb49b910914a84d2b95",
+        "998d0558ed8da784485a4cffb50f9864",
+        "1c56ec4a9de91b04eba3c83d88cb3f74",
+        "24814de3ba327f94babbb429ddb7e90f",
+        "d150de80cf8fc854d95b1a5213290581",
+        "d76d1ef8011217b46a2e95afee418d7c",
+        "88c08541b9c2f2b4eb5fb8ca0784ee91",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "20478c9e650ef6845b368cc0a3fe461a",
+        "cb222eb5201bb5149813f68424f5e5f3",
+        "625f82ee77759d942bd95e123180ebd8",
+        "ab97da8d31c750a46915078bbcaa2d90",
+        "d6c3ac05fca689444807250e038666ea",
+        "8c2e887abe5665a459f13f370ebe19ff",
+        "35943a802eb6d42409fc2431d916d2d1",
+        "9d13c306500912f4d8e6a89551ef7633",
+        "436ad17b32d6c7d449f9c08811ee9c4f",
+        "0bcd45d3fad1af34ba036073eba9639d",
+        "e65abcdd682d2404bb1c02ed3bd7f2b2",
+        "c0c5713e2dda7f24c96286c2d747909d",
+        "x2_activity09_ui_7ce87aea15ee4284ba088243b806f666.assets",
+        "x2_activity09_ui_c3b5541cb099b1147b9137c572f6b52e.assets",
+        "x2_activity09_ui_dee26aae6c331334dacf7aa3c0b71405.assets",
+        "x2_activity09_ui_61c75597017167a4cb74d45c9eaf93d3.assets"
+      ]
+    },
+    {
+      "page": "ui_newyear2_lantern_main",
+      "file": "5dcb533d05ab4ea4a959ba81346338e1",
+      "different": true,
+      "images": [
+        {
+          "image_id": 760,
+          "third": {
+            "file_id": 24,
+            "path_id": 2,
+            "external": "x2_activity09_ui_5fd57a3e0c011c046b4f52fa7d59c9f8.assets"
+          },
+          "local": {
+            "file_id": 17,
+            "path_id": 2,
+            "external": "72e89d711cbf23b46816ff00450c2be7"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "8582c4d46152d1f4aad64ec147d678ce",
+        "ee712f0dd8a66ee459755f3ddce57fb9",
+        "d2704c19fd2b91e4f8ec92338727a303",
+        "f55cf111111dacb49b910914a84d2b95",
+        "d76d1ef8011217b46a2e95afee418d7c",
+        "23eaee5d01cd8734f9aed3f6aa4c11a9",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "35943a802eb6d42409fc2431d916d2d1",
+        "88c08541b9c2f2b4eb5fb8ca0784ee91",
+        "6b41bbc350b550344b1f487ab1b6a451",
+        "625f82ee77759d942bd95e123180ebd8",
+        "e27e3f9024da0f34b9930012781c31bb",
+        "ce8ed57d99c208042b47d134d89921dc",
+        "20478c9e650ef6845b368cc0a3fe461a",
+        "7860cdbaf71fe504f819d528a5adb7bf",
+        "x2_activity09_ui_c50c55c0159ff54468efcfa9d18f96a0.assets",
+        "x2_activity09_ui_413ebae5a10989744bdc1ca9268c003f.assets",
+        "x2_activity09_ui_4f8164e0abc91a94fb3849027003cf3d.assets",
+        "x2_activity09_ui_4555be6c80692eb4ab32777c49e261b0.assets",
+        "x2_activity09_ui_c475d8acc5d3f0147b435f8cbe2efd19.assets",
+        "x2_activity09_ui_ccd6440c8f2479344b9177857c41019a.assets",
+        "x2_activity09_ui_7177227ec0856f344bd4bf40b4551c89.assets",
+        "x2_activity09_ui_5fd57a3e0c011c046b4f52fa7d59c9f8.assets",
+        "x2_activity09_ui_e354fab9ac3505441a4bfe8d550dbba2.assets",
+        "x2_activity09_ui_e3dd2c563a30f1a4995c6b9480037d5c.assets"
+      ]
+    },
+    {
+      "page": "ui_newyear2_lantern_drawlots",
+      "file": "70eb0817f3a6df04f878558bc033de72",
+      "different": true,
+      "images": [
+        {
+          "image_id": 80,
+          "third": {
+            "file_id": 10,
+            "path_id": 2,
+            "external": "x2_activity09_ui_317ec8eb9d82c8f4a8daf0438153cb52.assets"
+          },
+          "local": {
+            "file_id": 6,
+            "path_id": 2,
+            "external": "72e89d711cbf23b46816ff00450c2be7"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "88c08541b9c2f2b4eb5fb8ca0784ee91",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "5ffb4f17e46417a42a6371ba64d41dd4",
+        "7860cdbaf71fe504f819d528a5adb7bf",
+        "x2_activity09_ui_c9dac6b10dcf9014fb78e3a3bc672c25.assets",
+        "x2_activity09_ui_e9a72c710959ad2409b2887d6fbec8ac.assets",
+        "x2_activity09_ui_b44fab0b0ba58ba48a3b5988a9833cde.assets",
+        "x2_activity09_ui_3d79891d7702cb046a67b943e174a0a1.assets",
+        "x2_activity09_ui_317ec8eb9d82c8f4a8daf0438153cb52.assets"
+      ]
+    },
+    {
+      "page": "ui_newyear2_lantern_yearlabel",
+      "file": "7c4311a246b23414c98ac7386b785615",
+      "different": true,
+      "images": [
+        {
+          "image_id": 97,
+          "third": {
+            "file_id": 9,
+            "path_id": 2,
+            "external": "x2_activity09_ui_317ec8eb9d82c8f4a8daf0438153cb52.assets"
+          },
+          "local": {
+            "file_id": 7,
+            "path_id": 2,
+            "external": "72e89d711cbf23b46816ff00450c2be7"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "5ffb4f17e46417a42a6371ba64d41dd4",
+        "cb222eb5201bb5149813f68424f5e5f3",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "7860cdbaf71fe504f819d528a5adb7bf",
+        "88c08541b9c2f2b4eb5fb8ca0784ee91",
+        "x2_activity09_ui_3d79891d7702cb046a67b943e174a0a1.assets",
+        "x2_activity09_ui_e9a72c710959ad2409b2887d6fbec8ac.assets",
+        "x2_activity09_ui_317ec8eb9d82c8f4a8daf0438153cb52.assets",
+        "x2_activity09_ui_5681b3d712599bc489d797274906e3f3.assets",
+        "x2_activity09_ui_3ff579826b59a6b40b540de034791363.assets"
+      ]
+    },
+    {
+      "page": "ui_newyear2_lantern_question",
+      "file": "f89b02b707d034749bceb0491449f2e6",
+      "different": true,
+      "images": [
+        {
+          "image_id": 109,
+          "third": {
+            "file_id": 13,
+            "path_id": 2,
+            "external": "x2_activity09_ui_8139508131ca9e6429a9d3ec278ff00d.assets"
+          },
+          "local": {
+            "file_id": 9,
+            "path_id": 2,
+            "external": "72e89d711cbf23b46816ff00450c2be7"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "697f675376a035b46b8b92bbde2b76d8",
+        "81ae04b1a1e1b5f4a89d2659b4507e81",
+        "e0e13db6b0099974db327de71e507e8e",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "b66cf7a186d13054989b33a5c90044e4",
+        "7860cdbaf71fe504f819d528a5adb7bf",
+        "6b41bbc350b550344b1f487ab1b6a451",
+        "x2_activity09_ui_9722009e9177f9f4a81ba856bee57959.assets",
+        "x2_activity09_ui_858e89d793cf3c640afa9c47855a84eb.assets",
+        "x2_activity09_ui_1f9abd1c81458044ab6ecb2443deebab.assets",
+        "x2_activity09_ui_c23b23db7dc311e479bfddc3731747ff.assets",
+        "x2_activity09_ui_8139508131ca9e6429a9d3ec278ff00d.assets"
+      ]
+    },
+    {
+      "page": "ui_newyear_main",
+      "file": "b8de9fa15f3d3174bb4f99bb17c786e5",
+      "different": true,
+      "images": [
+        {
+          "image_id": 491,
+          "third": {
+            "file_id": 21,
+            "path_id": 2,
+            "external": "x2_activity03_ui_bedf35fb61dfe8748ae3a710682b1088.assets"
+          },
+          "local": {
+            "file_id": 14,
+            "path_id": 2,
+            "external": "72e89d711cbf23b46816ff00450c2be7"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "459f80eae5f5dcd4a8fed49a837f66f6",
+        "7e8f8a61e120da04db501622d963bf01",
+        "library/unity default resources",
+        "adce06f0f6dd33040aac14beb07fc979",
+        "c4b690bd65b6de345bad96f6277a680b",
+        "7860cdbaf71fe504f819d528a5adb7bf",
+        "cb222eb5201bb5149813f68424f5e5f3",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "697f675376a035b46b8b92bbde2b76d8",
+        "b8df4f1e2f29aae4aa2dcdfd87e98cf4",
+        "90b6106981b9f5d489afb79e9fd571b2",
+        "efbe79983d5ca3f4d81f69c53793c8d2",
+        "x2_activity03_ui_5798a35f3e17ed0418214b01e9ef3823.assets",
+        "x2_activity03_ui_063c3171e9c765f4fb814f0e2cb67968.assets",
+        "x2_activity03_ui_9d47b6f95cf74ce438f3866a86533a57.assets",
+        "x2_activity03_ui_ae94baab29e265b4c972f98ad5132085.assets",
+        "x2_activity03_ui_9a53aa18298bfd24ba87a9102eeea403.assets",
+        "x2_activity03_ui_52d0d15a73bd22648857b681504dc53b.assets",
+        "x2_activity03_ui_f370221a83e81c447883abf9aea4ee80.assets",
+        "x2_activity03_ui_bedf35fb61dfe8748ae3a710682b1088.assets",
+        "x2_activity03_ui_e1a39ad83bd85b142ab87b773bf15423.assets",
+        "x2_activity03_ui_918e2d850d496954a9c6bfe64b2add52.assets"
+      ]
+    },
+    {
+      "page": "ui_newyear_section",
+      "file": "1137af204ca2d2e49bf56421169a227c",
+      "different": true,
+      "images": [
+        {
+          "image_id": 382,
+          "third": {
+            "file_id": 16,
+            "path_id": 2,
+            "external": "x2_activity03_ui_7c0ae8009b802294e809b1920cd04bdf.assets"
+          },
+          "local": {
+            "file_id": 15,
+            "path_id": 2,
+            "external": "72e89d711cbf23b46816ff00450c2be7"
+          }
+        },
+        {
+          "image_id": 457,
+          "third": {
+            "file_id": 19,
+            "path_id": 2,
+            "external": "x2_activity03_ui_5798a35f3e17ed0418214b01e9ef3823.assets"
+          },
+          "local": {
+            "file_id": 15,
+            "path_id": 2,
+            "external": "72e89d711cbf23b46816ff00450c2be7"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "f3f0f3b838d29a84a9dbc994edafaa71",
+        "1d30919df2c8fe843a3b8ebb3715d298",
+        "library/unity default resources",
+        "cf4cc22e24f25634496d70f1aced2c57",
+        "df6701ba0e6dc3841a4a26e60f5e2ee6",
+        "b3de2d0b3dddef4439d2fad606c7f6fd",
+        "7860cdbaf71fe504f819d528a5adb7bf",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "cb222eb5201bb5149813f68424f5e5f3",
+        "e27e3f9024da0f34b9930012781c31bb",
+        "efbe79983d5ca3f4d81f69c53793c8d2",
+        "6b41bbc350b550344b1f487ab1b6a451",
+        "83dfbdd39f21407459d4797efbe94b80",
+        "x2_activity03_ui_eff7ef16bb5edbc479b51f5968e5bec1.assets",
+        "x2_activity03_ui_7c0ae8009b802294e809b1920cd04bdf.assets",
+        "x2_activity03_ui_ebf96d9f64ce8004a8bbe5997472c6fd.assets",
+        "x2_activity03_ui_07b39cd7889265d439a23a1e3aaee82d.assets",
+        "x2_activity03_ui_5798a35f3e17ed0418214b01e9ef3823.assets",
+        "x2_activity03_ui_8c9d6243b05330e4a91be02efafe4b46.assets"
+      ]
+    },
+    {
+      "page": "ui_newyear_shop",
+      "file": "b301944329f74ca4d9a3428e3aa3fe8b",
+      "different": true,
+      "images": [
+        {
+          "image_id": 663,
+          "third": {
+            "file_id": 20,
+            "path_id": 2,
+            "external": "x2_activity03_ui_382dab417e2e90345ac4631ced4fdc1b.assets"
+          },
+          "local": {
+            "file_id": 19,
+            "path_id": 2,
+            "external": "72e89d711cbf23b46816ff00450c2be7"
+          }
+        },
+        {
+          "image_id": 670,
+          "third": {
+            "file_id": 21,
+            "path_id": 2,
+            "external": "x2_activity03_ui_b026be116b0f4e94888cc818c024c2df.assets"
+          },
+          "local": {
+            "file_id": 19,
+            "path_id": 2,
+            "external": "72e89d711cbf23b46816ff00450c2be7"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "3cf0058858e1c4d48a882fd79e6a33ed",
+        "7860cdbaf71fe504f819d528a5adb7bf",
+        "6b41bbc350b550344b1f487ab1b6a451",
+        "bcad2dd9f95ee6e4d9e9f647017315ca",
+        "35943a802eb6d42409fc2431d916d2d1",
+        "83629c106e3c12644a26a22b89a7f24d",
+        "cb222eb5201bb5149813f68424f5e5f3",
+        "c4b690bd65b6de345bad96f6277a680b",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "ce8ed57d99c208042b47d134d89921dc",
+        "9d13c306500912f4d8e6a89551ef7633",
+        "a2e28e1d6fd662b409f8e441cf702206",
+        "b66cf7a186d13054989b33a5c90044e4",
+        "c95b97f613edb33438f96f3f66d182a6",
+        "8d19bf0a0d7a69643b050c159096b413",
+        "9734f2045a9c1f74d956d0573ac8a2f3",
+        "5ffb4f17e46417a42a6371ba64d41dd4",
+        "x2_activity03_ui_108ae70186e3b004884870501390dee9.assets",
+        "x2_activity03_ui_382dab417e2e90345ac4631ced4fdc1b.assets",
+        "x2_activity03_ui_b026be116b0f4e94888cc818c024c2df.assets",
+        "x2_activity03_ui_e23685599bbf0604daebea777acfc221.assets",
+        "x2_activity03_ui_c6e7b63b14494f3479dae129963ce3d6.assets"
+      ]
+    },
+    {
+      "page": "ui_newyearchieftask",
+      "file": "37b9367d2bc98f64782d1bb10d3353d2",
+      "different": true,
+      "images": [
+        {
+          "image_id": 553,
+          "third": {
+            "file_id": 18,
+            "path_id": 2,
+            "external": "x2_feast_ui_1b738b144a76464498b1056629851901.assets"
+          },
+          "local": {
+            "file_id": 18,
+            "path_id": 2,
+            "external": "72e89d711cbf23b46816ff00450c2be7"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "6d492d8cd2c35d84bb8f80eaf735b7d9",
+        "9ec1d0f9ac54f5946863de7b06cff2e1",
+        "ed1b3cc79b90e124caee5219d322efbf",
+        "9a126113638cf0544a67c6db96161e6f",
+        "2715d6a659c91784dbf93c33a157be74",
+        "0ac9a3fd432f0924e89b492e3d7ca8f6",
+        "cb222eb5201bb5149813f68424f5e5f3",
+        "2c849e3594281714083260eb78682dd2",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "990a1e6b28a303548bc3f7d2db4185f7",
+        "420f177d0c0a86d4782088473e5e8c71",
+        "35943a802eb6d42409fc2431d916d2d1",
+        "20478c9e650ef6845b368cc0a3fe461a",
+        "035f562fd4db7bf4f99a1cd5a19cf9f5",
+        "9d13c306500912f4d8e6a89551ef7633",
+        "9fd395d750b20fc43b07c5e9596f38c3",
+        "x2_feast_ui_1b738b144a76464498b1056629851901.assets",
+        "x2_feast_ui_15bfcbfcf15271d4cba1119ab278ca81.assets",
+        "x2_feast_ui_178388a27803c7043b924e1b03b1a4f2.assets"
+      ]
+    },
+    {
+      "page": "ui_newyear_lantern_main",
+      "file": "5ba6c0cdc13e24b4fb850397fe09ac61",
+      "different": true,
+      "images": [
+        {
+          "image_id": 685,
+          "third": {
+            "file_id": 31,
+            "path_id": 2,
+            "external": "x2_activity03_ui_5fd57a3e0c011c046b4f52fa7d59c9f8.assets"
+          },
+          "local": {
+            "file_id": 15,
+            "path_id": 2,
+            "external": "72e89d711cbf23b46816ff00450c2be7"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "8582c4d46152d1f4aad64ec147d678ce",
+        "ee712f0dd8a66ee459755f3ddce57fb9",
+        "d2704c19fd2b91e4f8ec92338727a303",
+        "f55cf111111dacb49b910914a84d2b95",
+        "d76d1ef8011217b46a2e95afee418d7c",
+        "23eaee5d01cd8734f9aed3f6aa4c11a9",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "35943a802eb6d42409fc2431d916d2d1",
+        "625f82ee77759d942bd95e123180ebd8",
+        "e27e3f9024da0f34b9930012781c31bb",
+        "ce8ed57d99c208042b47d134d89921dc",
+        "20478c9e650ef6845b368cc0a3fe461a",
+        "7860cdbaf71fe504f819d528a5adb7bf",
+        "x2_activity03_ui_c50c55c0159ff54468efcfa9d18f96a0.assets",
+        "x2_activity03_ui_413ebae5a10989744bdc1ca9268c003f.assets",
+        "x2_activity03_ui_4f8164e0abc91a94fb3849027003cf3d.assets",
+        "x2_activity03_ui_4555be6c80692eb4ab32777c49e261b0.assets",
+        "x2_activity03_ui_c475d8acc5d3f0147b435f8cbe2efd19.assets",
+        "x2_activity03_ui_31cf3f26891ba3244bd9ed2d46f2ee51.assets",
+        "x2_activity03_ui_1f9abd1c81458044ab6ecb2443deebab.assets",
+        "x2_activity03_ui_816f9760a2b21a64cbba0b18ad38b203.assets",
+        "x2_activity03_ui_ccd6440c8f2479344b9177857c41019a.assets",
+        "x2_activity03_ui_d428a40f40ab4494780d4f3babf6bd53.assets",
+        "x2_activity03_ui_e2988fb19891895458b96e2088ae3aee.assets",
+        "x2_activity03_ui_80b14d3d5065897469f422d710566d86.assets",
+        "x2_activity03_ui_6d7638f6f29f0684e903d3195cb5a28c.assets",
+        "x2_activity03_ui_7177227ec0856f344bd4bf40b4551c89.assets",
+        "x2_activity03_ui_194eba1eb47c2ff479204cbc4369c65c.assets",
+        "x2_activity03_ui_a8c2390c5cbe64a4a8380cf9f0b77d10.assets",
+        "x2_activity03_ui_5fd57a3e0c011c046b4f52fa7d59c9f8.assets",
+        "x2_activity03_ui_5d68230de89f3184ea5780c671f086c6.assets",
+        "x2_activity03_ui_e354fab9ac3505441a4bfe8d550dbba2.assets",
+        "x2_activity03_ui_efc086c5f5dc1254aafbc401c976e4fe.assets",
+        "x2_activity03_ui_e3dd2c563a30f1a4995c6b9480037d5c.assets",
+        "x2_activity03_business_1f9abd1c81458044ab6ecb2443deebab.assets",
+        "x2_activity03_business_a8c2390c5cbe64a4a8380cf9f0b77d10.assets",
+        "x2_activity03_business_5d68230de89f3184ea5780c671f086c6.assets",
+        "x2_activity03_business_efc086c5f5dc1254aafbc401c976e4fe.assets",
+        "x2_activity03_business_80b14d3d5065897469f422d710566d86.assets",
+        "x2_activity03_business_1e05cf2c2128c96468132c6ddf3b40e4.assets"
+      ]
+    },
+    {
+      "page": "ui_newyear_lantern_drawlots",
+      "file": "265f091d51046c24bacfc96cd0eefb12",
+      "different": true,
+      "images": [
+        {
+          "image_id": 61,
+          "third": {
+            "file_id": 12,
+            "path_id": 2,
+            "external": "x2_activity03_ui_317ec8eb9d82c8f4a8daf0438153cb52.assets"
+          },
+          "local": {
+            "file_id": 5,
+            "path_id": 2,
+            "external": "72e89d711cbf23b46816ff00450c2be7"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "5ffb4f17e46417a42a6371ba64d41dd4",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "7860cdbaf71fe504f819d528a5adb7bf",
+        "x2_activity03_ui_0128bc7f16bfdfe48abc69ec30ca7531.assets",
+        "x2_activity03_ui_c9dac6b10dcf9014fb78e3a3bc672c25.assets",
+        "x2_activity03_ui_e9a72c710959ad2409b2887d6fbec8ac.assets",
+        "x2_activity03_ui_b42e0d01799396e48bf0770e24acc17b.assets",
+        "x2_activity03_ui_b44fab0b0ba58ba48a3b5988a9833cde.assets",
+        "x2_activity03_ui_57458d01304399d4585db30360716067.assets",
+        "x2_activity03_ui_3d79891d7702cb046a67b943e174a0a1.assets",
+        "x2_activity03_ui_317ec8eb9d82c8f4a8daf0438153cb52.assets",
+        "x2_activity03_ui_61936d8c853e8aa4894db308a23d48f6.assets",
+        "x2_activity03_ui_cdb057485933e494fbb78fbb48cc0e4b.assets"
+      ]
+    },
+    {
+      "page": "ui_newyear_lantern_yearlabel",
+      "file": "b85c6e436e9fef8429a505e9e57a6cfc",
+      "different": true,
+      "images": [
+        {
+          "image_id": 93,
+          "third": {
+            "file_id": 8,
+            "path_id": 2,
+            "external": "x2_activity03_ui_317ec8eb9d82c8f4a8daf0438153cb52.assets"
+          },
+          "local": {
+            "file_id": 6,
+            "path_id": 2,
+            "external": "72e89d711cbf23b46816ff00450c2be7"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "5ffb4f17e46417a42a6371ba64d41dd4",
+        "cb222eb5201bb5149813f68424f5e5f3",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "7860cdbaf71fe504f819d528a5adb7bf",
+        "x2_activity03_ui_3d79891d7702cb046a67b943e174a0a1.assets",
+        "x2_activity03_ui_e9a72c710959ad2409b2887d6fbec8ac.assets",
+        "x2_activity03_ui_317ec8eb9d82c8f4a8daf0438153cb52.assets",
+        "x2_activity03_ui_cdb057485933e494fbb78fbb48cc0e4b.assets",
+        "x2_activity03_ui_5681b3d712599bc489d797274906e3f3.assets",
+        "x2_activity03_ui_3ff579826b59a6b40b540de034791363.assets"
+      ]
+    },
+    {
+      "page": "ui_newyear_pov",
+      "file": "459d4b06cd50c5c4588c30484f3e0999",
+      "different": true,
+      "images": [
+        {
+          "image_id": 1061,
+          "third": {
+            "file_id": 13,
+            "path_id": 2,
+            "external": "x2_activity03_ui_eb6065ba9ca253c49999faaaa1529be2.assets"
+          },
+          "local": {
+            "file_id": 10,
+            "path_id": 2,
+            "external": "72e89d711cbf23b46816ff00450c2be7"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "cb222eb5201bb5149813f68424f5e5f3",
+        "6b41bbc350b550344b1f487ab1b6a451",
+        "8281f30dbfa6b4341b686850c542e747",
+        "9d13c306500912f4d8e6a89551ef7633",
+        "7c7faff3041ce604e94a2e8fc6b3cbde",
+        "35943a802eb6d42409fc2431d916d2d1",
+        "20478c9e650ef6845b368cc0a3fe461a",
+        "x2_activity03_ui_ee0e56900efc59b488ba2e3f322e9819.assets",
+        "x2_activity03_ui_66b918ab16d048f4b8607f2dd885ef4c.assets",
+        "x2_activity03_ui_1a5ba5176f31a6b4c8e3722f270cf574.assets",
+        "x2_activity03_ui_eb6065ba9ca253c49999faaaa1529be2.assets"
+      ]
+    },
+    {
+      "page": "ui_newyear2_foodfight_main",
+      "file": "932b41216c77456488b991c4731e1ae4",
+      "different": true,
+      "images": [
+        {
+          "image_id": 1886,
+          "third": {
+            "file_id": 45,
+            "path_id": 2,
+            "external": "x2_activity09_ui_fef37e4ac4e89d44f90580ccc10b17ca.assets"
+          },
+          "local": {
+            "file_id": 24,
+            "path_id": 2,
+            "external": "20f6743579ecb364186ba89fbee2db59"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "adce06f0f6dd33040aac14beb07fc979",
+        "7860cdbaf71fe504f819d528a5adb7bf",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "c4b690bd65b6de345bad96f6277a680b",
+        "b66cf7a186d13054989b33a5c90044e4",
+        "cb222eb5201bb5149813f68424f5e5f3",
+        "88c08541b9c2f2b4eb5fb8ca0784ee91",
+        "20478c9e650ef6845b368cc0a3fe461a",
+        "4d7ae93abaaca9c45a9a9ef361787dcf",
+        "ce7be05591b79d8469f6b64746a90d42",
+        "128e72dd12746ff4c8e68f0ad19cebd0",
+        "edacd4ec0a7d0b348860fb1cde99600d",
+        "8d19bf0a0d7a69643b050c159096b413",
+        "9734f2045a9c1f74d956d0573ac8a2f3",
+        "60c105a418738c8459a93908f081bd99",
+        "6b41bbc350b550344b1f487ab1b6a451",
+        "2bfd7893d9383354ebfd7a927e564bd7",
+        "9d13c306500912f4d8e6a89551ef7633",
+        "f11492c7d798e3445b07a031ec88d49b",
+        "0000000000000000f000000000000000",
+        "35943a802eb6d42409fc2431d916d2d1",
+        "e27e3f9024da0f34b9930012781c31bb",
+        "x2_activity09_ui_c9e8b1cfa2312b94c82d6ed194291c0d.assets",
+        "x2_activity09_ui_2e48cdea24ddbb247a62c468bf70e92b.assets",
+        "x2_activity09_ui_4bd39a27806d37a479a9afe04c1513f7.assets",
+        "x2_activity09_ui_36cfecd22a57e7e46b99c7af257ec80e.assets",
+        "x2_activity09_ui_610f904747aa8484c84aa1016c4474c1.assets",
+        "x2_activity09_ui_f912a4ba1d48be34faa9dd7b73b54f1e.assets",
+        "x2_activity09_ui_5da7dba2a4a683d40bc1f7c05680e17b.assets",
+        "x2_activity09_ui_f92b756781dc8904aaab7ee4bd02fc25.assets",
+        "x2_activity09_ui_277450ade27e8934493892684f0dd894.assets",
+        "x2_activity09_ui_5ae59b3e4b476e44f9cb911e9b9f8d4f.assets",
+        "x2_activity09_ui_743e4c1ad178224458441b5e67b5243b.assets",
+        "x2_activity09_ui_934d5dc48ed8b4b47a71177dc5ad2f83.assets",
+        "x2_activity09_ui_1204c52930c755a4fa3cc994edb3ec49.assets",
+        "x2_activity09_ui_0d2fb8afaddd3b748a05a7caa68ca5c5.assets",
+        "x2_activity09_ui_27ecc7439cf95024faa16cb31af48d76.assets",
+        "x2_activity09_ui_94213cb57f47f9d459248fa4f93d9fd7.assets",
+        "x2_activity09_ui_998a1ca4c9a4b444b8dd696fc7c71158.assets",
+        "x2_activity09_ui_6ad1d554b6ea8df4785bcf5f87e786c5.assets",
+        "x2_activity09_ui_b988cf76cf6719d4cb94150945f762a9.assets",
+        "x2_activity09_ui_48c4e89fc24244645974a0cac6b2a67d.assets",
+        "x2_activity09_ui_3b2aca5e57627044fb3e2d2630e20cd0.assets",
+        "x2_activity09_ui_fef37e4ac4e89d44f90580ccc10b17ca.assets",
+        "x2_activity09_ui_55ea6950e6148784a9a8a0c941478770.assets"
+      ]
+    },
+    {
+      "page": "ui_newyear2_foodfight_store",
+      "file": "87f7b4abd3499644c9b1af0b9e24768d",
+      "different": true,
+      "images": [
+        {
+          "image_id": 348,
+          "third": {
+            "file_id": 7,
+            "path_id": 2,
+            "external": "x2_activity09_ui_9962e414e69eb8a4ca2d2c2babea6629.assets"
+          },
+          "local": {
+            "file_id": 7,
+            "path_id": 2,
+            "external": "20f6743579ecb364186ba89fbee2db59"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "0000000000000000f000000000000000",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "cb222eb5201bb5149813f68424f5e5f3",
+        "0bcd45d3fad1af34ba036073eba9639d",
+        "efbe79983d5ca3f4d81f69c53793c8d2",
+        "x2_activity09_ui_9962e414e69eb8a4ca2d2c2babea6629.assets"
+      ]
+    },
+    {
+      "page": "ui_newyear_foodfight_main",
+      "file": "f87dfa4374fda25429e9737688a20a46",
+      "different": true,
+      "images": [
+        {
+          "image_id": 1843,
+          "third": {
+            "file_id": 41,
+            "path_id": 2,
+            "external": "x2_activity03_ui_fef37e4ac4e89d44f90580ccc10b17ca.assets"
+          },
+          "local": {
+            "file_id": 22,
+            "path_id": 2,
+            "external": "20f6743579ecb364186ba89fbee2db59"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "adce06f0f6dd33040aac14beb07fc979",
+        "7860cdbaf71fe504f819d528a5adb7bf",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "c4b690bd65b6de345bad96f6277a680b",
+        "b66cf7a186d13054989b33a5c90044e4",
+        "cb222eb5201bb5149813f68424f5e5f3",
+        "20478c9e650ef6845b368cc0a3fe461a",
+        "ce7be05591b79d8469f6b64746a90d42",
+        "128e72dd12746ff4c8e68f0ad19cebd0",
+        "edacd4ec0a7d0b348860fb1cde99600d",
+        "8d19bf0a0d7a69643b050c159096b413",
+        "9734f2045a9c1f74d956d0573ac8a2f3",
+        "60c105a418738c8459a93908f081bd99",
+        "6b41bbc350b550344b1f487ab1b6a451",
+        "2bfd7893d9383354ebfd7a927e564bd7",
+        "9d13c306500912f4d8e6a89551ef7633",
+        "f11492c7d798e3445b07a031ec88d49b",
+        "0000000000000000f000000000000000",
+        "35943a802eb6d42409fc2431d916d2d1",
+        "e27e3f9024da0f34b9930012781c31bb",
+        "x2_activity03_ui_c9e8b1cfa2312b94c82d6ed194291c0d.assets",
+        "x2_activity03_ui_2e48cdea24ddbb247a62c468bf70e92b.assets",
+        "x2_activity03_ui_4bd39a27806d37a479a9afe04c1513f7.assets",
+        "x2_activity03_ui_36cfecd22a57e7e46b99c7af257ec80e.assets",
+        "x2_activity03_ui_610f904747aa8484c84aa1016c4474c1.assets",
+        "x2_activity03_ui_f912a4ba1d48be34faa9dd7b73b54f1e.assets",
+        "x2_activity03_ui_5da7dba2a4a683d40bc1f7c05680e17b.assets",
+        "x2_activity03_ui_f92b756781dc8904aaab7ee4bd02fc25.assets",
+        "x2_activity03_ui_277450ade27e8934493892684f0dd894.assets",
+        "x2_activity03_ui_5ae59b3e4b476e44f9cb911e9b9f8d4f.assets",
+        "x2_activity03_ui_743e4c1ad178224458441b5e67b5243b.assets",
+        "x2_activity03_ui_934d5dc48ed8b4b47a71177dc5ad2f83.assets",
+        "x2_activity03_ui_1204c52930c755a4fa3cc994edb3ec49.assets",
+        "x2_activity03_ui_0d2fb8afaddd3b748a05a7caa68ca5c5.assets",
+        "x2_activity03_ui_27ecc7439cf95024faa16cb31af48d76.assets",
+        "x2_activity03_ui_94213cb57f47f9d459248fa4f93d9fd7.assets",
+        "x2_activity03_ui_b988cf76cf6719d4cb94150945f762a9.assets",
+        "x2_activity03_ui_48c4e89fc24244645974a0cac6b2a67d.assets",
+        "x2_activity03_ui_3b2aca5e57627044fb3e2d2630e20cd0.assets",
+        "x2_activity03_ui_fef37e4ac4e89d44f90580ccc10b17ca.assets",
+        "x2_activity03_ui_55ea6950e6148784a9a8a0c941478770.assets",
+        "x2_activity03_business_998a1ca4c9a4b444b8dd696fc7c71158.assets",
+        "x2_activity03_business_6ad1d554b6ea8df4785bcf5f87e786c5.assets"
+      ]
+    },
+    {
+      "page": "ui_newyear_foodfight_store",
+      "file": "fda0bd72bc1ebea47b7a62ef9f136e87",
+      "different": true,
+      "images": [
+        {
+          "image_id": 348,
+          "third": {
+            "file_id": 7,
+            "path_id": 2,
+            "external": "x2_activity03_ui_9962e414e69eb8a4ca2d2c2babea6629.assets"
+          },
+          "local": {
+            "file_id": 7,
+            "path_id": 2,
+            "external": "20f6743579ecb364186ba89fbee2db59"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "0000000000000000f000000000000000",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "cb222eb5201bb5149813f68424f5e5f3",
+        "0bcd45d3fad1af34ba036073eba9639d",
+        "efbe79983d5ca3f4d81f69c53793c8d2",
+        "x2_activity03_ui_9962e414e69eb8a4ca2d2c2babea6629.assets"
+      ]
+    },
+    {
+      "page": "ui_sakura_main",
+      "file": "5c6e2b3d805f03d4c95c64eccfb97a7d",
+      "different": true,
+      "images": [
+        {
+          "image_id": 306,
+          "third": {
+            "file_id": 22,
+            "path_id": 2,
+            "external": "x2_activity07_bg_10d65a71013a5ae41bf7c7eac2239713.assets"
+          },
+          "local": {
+            "file_id": 22,
+            "path_id": 2,
+            "external": "ba49c0f7674804d489a9e92678adabf3"
+          }
+        },
+        {
+          "image_id": 313,
+          "third": {
+            "file_id": 23,
+            "path_id": 2,
+            "external": "x2_activity07_bg_3d97555c2107802488f03d28076d0a62.assets"
+          },
+          "local": {
+            "file_id": 22,
+            "path_id": 2,
+            "external": "ba49c0f7674804d489a9e92678adabf3"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "cc8c05f8114c4d4428b94e4ff20f9e7e",
+        "ee7688bbde726154eaa0f6c744b7dc1f",
+        "922ffdc65efa6534eb1eca651113ef09",
+        "10a22cb6977aee144aa5ed04a5ab64f7",
+        "9fc394217e012154392032b6fb0094ba",
+        "73a44b84bbcc3bd448a4a1187ea88643",
+        "c0d297459fc918c4b98816f42df38fed",
+        "e0a18c32beafd1d40a14fd1315123e8d",
+        "342c3501c5bdedc4096bef3b0d243ce7",
+        "8f5a6ad00186f7a4f946cf201de8dc3d",
+        "cb222eb5201bb5149813f68424f5e5f3",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "697f675376a035b46b8b92bbde2b76d8",
+        "efbe79983d5ca3f4d81f69c53793c8d2",
+        "c4b690bd65b6de345bad96f6277a680b",
+        "d6c3ac05fca689444807250e038666ea",
+        "90b6106981b9f5d489afb79e9fd571b2",
+        "c8047d677a77c7641a5e68eaec2135cf",
+        "0f718ef491dd4684c89f95587e5b564a",
+        "59ab5ce8662aa03499e31895e79f92e5",
+        "x2_activity07_bg_10d65a71013a5ae41bf7c7eac2239713.assets",
+        "x2_activity07_bg_3d97555c2107802488f03d28076d0a62.assets"
+      ]
+    },
+    {
+      "page": "ui_zhenxun_main",
+      "file": "f2d3f2262fc78f047879ae3c2fe3f80e",
+      "different": true,
+      "images": [
+        {
+          "image_id": 345,
+          "third": {
+            "file_id": 15,
+            "path_id": 2,
+            "external": "x2_activity05_ui_a76b4353f277b46408e23014d2541fd8.assets"
+          },
+          "local": {
+            "file_id": 14,
+            "path_id": 2,
+            "external": "94add22e19cdaad45b2b40305d50c018"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "f72b9f23d249fb14bb7a91d44049c2a5",
+        "2d474dc764a51a5478f1bedf173c425a",
+        "6d492d8cd2c35d84bb8f80eaf735b7d9",
+        "3db05bf7430389b4ea1091aed6d605cd",
+        "2715d6a659c91784dbf93c33a157be74",
+        "d77fe92ac7d2a9f4294f701d312791fa",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "315327fe0b3f94c4c813bd7cd9d905cc",
+        "697f675376a035b46b8b92bbde2b76d8",
+        "90b6106981b9f5d489afb79e9fd571b2",
+        "cb222eb5201bb5149813f68424f5e5f3",
+        "c4b690bd65b6de345bad96f6277a680b",
+        "x2_activity05_ui_8d3458c952d672a42b53634c728872b8.assets",
+        "x2_activity05_ui_a76b4353f277b46408e23014d2541fd8.assets"
+      ]
+    },
+    {
+      "page": "ui_zhenxun_section",
+      "file": "c12334e156ae52249ba13c0ea2ff2f4b",
+      "different": true,
+      "images": [
+        {
+          "image_id": 906,
+          "third": {
+            "file_id": 15,
+            "path_id": 2,
+            "external": "x2_activity05_ui_aa7140c7e2662a8469ddb0227773b1f4.assets"
+          },
+          "local": {
+            "file_id": 13,
+            "path_id": 2,
+            "external": "94add22e19cdaad45b2b40305d50c018"
+          }
+        },
+        {
+          "image_id": 909,
+          "third": {
+            "file_id": 16,
+            "path_id": 2,
+            "external": "x2_activity05_ui_8304d9fc28980d6468f3076eaece3947.assets"
+          },
+          "local": {
+            "file_id": 13,
+            "path_id": 2,
+            "external": "94add22e19cdaad45b2b40305d50c018"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "cf31fe361ff5a9c41822f65ffd94b3b7",
+        "2d474dc764a51a5478f1bedf173c425a",
+        "60c16e8f24b600e4db42e4e7a3bccd0d",
+        "d77fe92ac7d2a9f4294f701d312791fa",
+        "98a2f70bbdaaa9a4db6f29a01faee05a",
+        "2715d6a659c91784dbf93c33a157be74",
+        "9d451c416ecba8347848964205494ce7",
+        "315327fe0b3f94c4c813bd7cd9d905cc",
+        "6b41bbc350b550344b1f487ab1b6a451",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "cb222eb5201bb5149813f68424f5e5f3",
+        "x2_activity05_ui_a6466d71c735f474789002646700f011.assets",
+        "x2_activity05_ui_a8fb37c72bb0f4d4e8387688eabee1c4.assets",
+        "x2_activity05_ui_aa7140c7e2662a8469ddb0227773b1f4.assets",
+        "x2_activity05_ui_8304d9fc28980d6468f3076eaece3947.assets"
+      ]
+    },
+    {
+      "page": "ui_zhenxun_shop",
+      "file": "e1a50cd1ad967f74495d4f4cfc2c129f",
+      "different": true,
+      "images": [
+        {
+          "image_id": 703,
+          "third": {
+            "file_id": 14,
+            "path_id": 2,
+            "external": "x2_activity05_ui_0ec69bea418ace6499eca828b536695a.assets"
+          },
+          "local": {
+            "file_id": 13,
+            "path_id": 2,
+            "external": "94add22e19cdaad45b2b40305d50c018"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "c4b690bd65b6de345bad96f6277a680b",
+        "7860cdbaf71fe504f819d528a5adb7bf",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "315327fe0b3f94c4c813bd7cd9d905cc",
+        "cb222eb5201bb5149813f68424f5e5f3",
+        "ce8ed57d99c208042b47d134d89921dc",
+        "9d13c306500912f4d8e6a89551ef7633",
+        "6b41bbc350b550344b1f487ab1b6a451",
+        "bcad2dd9f95ee6e4d9e9f647017315ca",
+        "35943a802eb6d42409fc2431d916d2d1",
+        "83629c106e3c12644a26a22b89a7f24d",
+        "x2_activity05_ui_1dde9fd264adaa54ebe82d79464004cd.assets",
+        "x2_activity05_ui_0ec69bea418ace6499eca828b536695a.assets",
+        "x2_activity05_ui_be8e537ce7ff23f4885ef7d837c5d7fb.assets",
+        "x2_activity05_ui_ea85f333b66cd2f458e917ef4332b6c0.assets"
+      ]
+    },
+    {
+      "page": "ui_zhenxun_task",
+      "file": "b7cf5119afc967d4db06fa094f84e355",
+      "different": true,
+      "images": [
+        {
+          "image_id": 755,
+          "third": {
+            "file_id": 37,
+            "path_id": 2,
+            "external": "x2_activity05_ui_227b93f286bea674286a74dd1c36e1ff.assets"
+          },
+          "local": {
+            "file_id": 37,
+            "path_id": 2,
+            "external": "94add22e19cdaad45b2b40305d50c018"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "1ef3c1c91acbc58469a9a853deaa9ce7",
+        "df947abdda86ebd438e73c414975bdc8",
+        "library/unity default resources",
+        "c06482400ecf5b8419fc043d0bf9fa4d",
+        "c2efca0ac29b38a44bc0b2946ec31b77",
+        "23eaee5d01cd8734f9aed3f6aa4c11a9",
+        "ee712f0dd8a66ee459755f3ddce57fb9",
+        "d2704c19fd2b91e4f8ec92338727a303",
+        "f566eeb6ed281e8408d10459bbf5640a",
+        "400732613962fa24e928d0d280911800",
+        "998d0558ed8da784485a4cffb50f9864",
+        "d150de80cf8fc854d95b1a5213290581",
+        "f55cf111111dacb49b910914a84d2b95",
+        "07f065e52c1411f4d9041a90286728e6",
+        "4fde37b0b8d465643b376f1db616d4f9",
+        "d76d1ef8011217b46a2e95afee418d7c",
+        "1c56ec4a9de91b04eba3c83d88cb3f74",
+        "24814de3ba327f94babbb429ddb7e90f",
+        "8582c4d46152d1f4aad64ec147d678ce",
+        "1826336d8d988b54e9c2d4bec810e91a",
+        "75db76b3ab22be64db370e7cbc5412a0",
+        "7113a7da80a049a40a55bea23dc3d37f",
+        "85d4d7e31704ed242aca7923ab06e2a8",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "8c2e887abe5665a459f13f370ebe19ff",
+        "315327fe0b3f94c4c813bd7cd9d905cc",
+        "0bcd45d3fad1af34ba036073eba9639d",
+        "436ad17b32d6c7d449f9c08811ee9c4f",
+        "35943a802eb6d42409fc2431d916d2d1",
+        "cb222eb5201bb5149813f68424f5e5f3",
+        "c0c5713e2dda7f24c96286c2d747909d",
+        "ab97da8d31c750a46915078bbcaa2d90",
+        "9d13c306500912f4d8e6a89551ef7633",
+        "625f82ee77759d942bd95e123180ebd8",
+        "20478c9e650ef6845b368cc0a3fe461a",
+        "x2_activity05_ui_227b93f286bea674286a74dd1c36e1ff.assets",
+        "x2_activity05_ui_085c6d0cdeb44b144a06fbb5b84d66ea.assets",
+        "x2_activity05_ui_e39a2f2a5fd9f9d409873be02d7d2691.assets",
+        "x2_activity05_ui_4e1ffc9b5caac6f4f9f0027c71e8a1be.assets"
+      ]
+    },
+    {
+      "page": "ui_anniversary_main",
+      "file": "2cf79920faf6e8345960e45ea92e4cbc",
+      "different": true,
+      "images": [
+        {
+          "image_id": 652,
+          "third": {
+            "file_id": 44,
+            "path_id": 2,
+            "external": "x2_activity06_bg_558f7b6ddfc785a4d90f6d1ace819bf5.assets"
+          },
+          "local": {
+            "file_id": 44,
+            "path_id": 2,
+            "external": "91ca85a3140113744847387a2fd4f80e"
+          }
+        },
+        {
+          "image_id": 841,
+          "third": {
+            "file_id": 48,
+            "path_id": 2,
+            "external": "x2_activity06_bg_26c6575aef9137c41bd2176a660468f5.assets"
+          },
+          "local": {
+            "file_id": 44,
+            "path_id": 2,
+            "external": "91ca85a3140113744847387a2fd4f80e"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "e3888472a06239744980c6985ae4a49f",
+        "8e7a48c3fa4cfab4780a00395a23d23c",
+        "1651736b66792834d9f45004e029b05b",
+        "936a634c63122324087fd9e6b3f44467",
+        "6cb86f97b383a034b87ac133292f60f1",
+        "c42755b181d312541ac5cc8236d5d9f9",
+        "cf4cc22e24f25634496d70f1aced2c57",
+        "2535a168dedb61545b079094b4aaed23",
+        "library/unity default resources",
+        "44b6da7a333af934bad4763f1ec46a99",
+        "e4f22e247a21b7946bffe216b5b08467",
+        "abe67109460d8354b8b5f78d9d62317e",
+        "35baea078a49d3046ae1ae73ef6b1bcb",
+        "62d0d58579efd5045990861ec60e7c1f",
+        "6d8000d53595a6647b910e9a9b90ca45",
+        "6b6d234d502786d48a9337cbe4e6784d",
+        "fcefc9551ea2bec4394f3e9ecd8d2900",
+        "b35f5347dcb830843b98815cffc7fd41",
+        "2e15229746fcd404ab1bdf651749e5b3",
+        "24814de3ba327f94babbb429ddb7e90f",
+        "8538bb8947b78a14d8c0214fd0680b81",
+        "1f5eb0f56650d444090582698d9c36f3",
+        "0a86d35ce61f4084da43f32b957300de",
+        "10a22cb6977aee144aa5ed04a5ab64f7",
+        "e91f5f02fe8bdec489af8d6fe7c6602a",
+        "cc89a112250480f418cdcf11d0845fa7",
+        "881fca4b489d8d44391135fcc0c367fe",
+        "f82e07950cee5f640bc33ac229d008f3",
+        "436a6b2762c7a9a4b9a88bef953e86cf",
+        "a9dec570edf7be340af0983e48ea1c0f",
+        "9f29e253520583f49a2b84fba82912ed",
+        "df6701ba0e6dc3841a4a26e60f5e2ee6",
+        "622e6b9e901d25d41b22c54c2b82353a",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "4d7ae93abaaca9c45a9a9ef361787dcf",
+        "efbe79983d5ca3f4d81f69c53793c8d2",
+        "c4b690bd65b6de345bad96f6277a680b",
+        "cb222eb5201bb5149813f68424f5e5f3",
+        "387c79f21c83478479b4652f52064925",
+        "6174c075dbeaa87478db03147773ab1a",
+        "697f675376a035b46b8b92bbde2b76d8",
+        "90b6106981b9f5d489afb79e9fd571b2",
+        "x2_activity06_bg_558f7b6ddfc785a4d90f6d1ace819bf5.assets",
+        "x2_activity06_bg_35c5572be90092446b698fa21cc1b72f.assets",
+        "x2_activity06_bg_526b0d21d78e84646b7b58f85a091cf8.assets",
+        "x2_activity06_bg_d2cf0c23938663a478eebdc1835b6112.assets",
+        "x2_activity06_bg_26c6575aef9137c41bd2176a660468f5.assets"
+      ]
+    },
+    {
+      "page": "ui_anniversary_section",
+      "file": "b0f215eed3e403a4faa76e1433745e05",
+      "different": true,
+      "images": [
+        {
+          "image_id": 386,
+          "third": {
+            "file_id": 38,
+            "path_id": 2,
+            "external": "x2_activity06_bg_558f7b6ddfc785a4d90f6d1ace819bf5.assets"
+          },
+          "local": {
+            "file_id": 31,
+            "path_id": 2,
+            "external": "91ca85a3140113744847387a2fd4f80e"
+          }
+        },
+        {
+          "image_id": 403,
+          "third": {
+            "file_id": 0,
+            "path_id": 0,
+            "external": null
+          },
+          "local": {
+            "file_id": 31,
+            "path_id": 2,
+            "external": "91ca85a3140113744847387a2fd4f80e"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "f3f0f3b838d29a84a9dbc994edafaa71",
+        "c42755b181d312541ac5cc8236d5d9f9",
+        "1d30919df2c8fe843a3b8ebb3715d298",
+        "6cb86f97b383a034b87ac133292f60f1",
+        "936a634c63122324087fd9e6b3f44467",
+        "56863e41dd52dbf479d67693d284ea8c",
+        "8e7a48c3fa4cfab4780a00395a23d23c",
+        "2535a168dedb61545b079094b4aaed23",
+        "library/unity default resources",
+        "cf4cc22e24f25634496d70f1aced2c57",
+        "44b6da7a333af934bad4763f1ec46a99",
+        "abe67109460d8354b8b5f78d9d62317e",
+        "b3de2d0b3dddef4439d2fad606c7f6fd",
+        "df6701ba0e6dc3841a4a26e60f5e2ee6",
+        "881fca4b489d8d44391135fcc0c367fe",
+        "f82e07950cee5f640bc33ac229d008f3",
+        "436a6b2762c7a9a4b9a88bef953e86cf",
+        "e91f5f02fe8bdec489af8d6fe7c6602a",
+        "cc89a112250480f418cdcf11d0845fa7",
+        "560936ae2e34b78448c8254beb98f91b",
+        "6174c075dbeaa87478db03147773ab1a",
+        "e27e3f9024da0f34b9930012781c31bb",
+        "cb222eb5201bb5149813f68424f5e5f3",
+        "efbe79983d5ca3f4d81f69c53793c8d2",
+        "6b41bbc350b550344b1f487ab1b6a451",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "83dfbdd39f21407459d4797efbe94b80",
+        "7860cdbaf71fe504f819d528a5adb7bf",
+        "a06e9a0a0dcd5de4bb4c07cffe63102b",
+        "x2_activity06_ui_07b39cd7889265d439a23a1e3aaee82d.assets",
+        "x2_activity06_ui_eff7ef16bb5edbc479b51f5968e5bec1.assets",
+        "x2_activity06_bg_dbd6767584e2532498b496ac0fecc612.assets",
+        "x2_activity06_bg_4866b10b74dca2e49b6f11eee28f643f.assets",
+        "x2_activity06_bg_327bb5b8bff8476499ed6d8b5eda6417.assets",
+        "x2_activity06_bg_d2cf0c23938663a478eebdc1835b6112.assets",
+        "x2_activity06_bg_12fb15f4b4d5fad43982533d5b20a745.assets",
+        "x2_activity06_bg_558f7b6ddfc785a4d90f6d1ace819bf5.assets"
+      ]
+    },
+    {
+      "page": "ui_anniversary_task",
+      "file": "8f9391a0c2910504ebf82dfd4400af6a",
+      "different": true,
+      "images": [
+        {
+          "image_id": 843,
+          "third": {
+            "file_id": 42,
+            "path_id": 2,
+            "external": "x2_activity06_bg_48f2610227441ae4d8bc53b92f593bb5.assets"
+          },
+          "local": {
+            "file_id": 37,
+            "path_id": 2,
+            "external": "91ca85a3140113744847387a2fd4f80e"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "1ef3c1c91acbc58469a9a853deaa9ce7",
+        "df947abdda86ebd438e73c414975bdc8",
+        "library/unity default resources",
+        "c06482400ecf5b8419fc043d0bf9fa4d",
+        "d150de80cf8fc854d95b1a5213290581",
+        "d2704c19fd2b91e4f8ec92338727a303",
+        "f55cf111111dacb49b910914a84d2b95",
+        "ee712f0dd8a66ee459755f3ddce57fb9",
+        "1826336d8d988b54e9c2d4bec810e91a",
+        "8582c4d46152d1f4aad64ec147d678ce",
+        "07f065e52c1411f4d9041a90286728e6",
+        "c2efca0ac29b38a44bc0b2946ec31b77",
+        "23eaee5d01cd8734f9aed3f6aa4c11a9",
+        "1c56ec4a9de91b04eba3c83d88cb3f74",
+        "24814de3ba327f94babbb429ddb7e90f",
+        "75db76b3ab22be64db370e7cbc5412a0",
+        "7113a7da80a049a40a55bea23dc3d37f",
+        "85d4d7e31704ed242aca7923ab06e2a8",
+        "998d0558ed8da784485a4cffb50f9864",
+        "d76d1ef8011217b46a2e95afee418d7c",
+        "4fde37b0b8d465643b376f1db616d4f9",
+        "f566eeb6ed281e8408d10459bbf5640a",
+        "400732613962fa24e928d0d280911800",
+        "6174c075dbeaa87478db03147773ab1a",
+        "cb222eb5201bb5149813f68424f5e5f3",
+        "ab97da8d31c750a46915078bbcaa2d90",
+        "35943a802eb6d42409fc2431d916d2d1",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "8c2e887abe5665a459f13f370ebe19ff",
+        "0bcd45d3fad1af34ba036073eba9639d",
+        "20478c9e650ef6845b368cc0a3fe461a",
+        "625f82ee77759d942bd95e123180ebd8",
+        "9d13c306500912f4d8e6a89551ef7633",
+        "c0c5713e2dda7f24c96286c2d747909d",
+        "436ad17b32d6c7d449f9c08811ee9c4f",
+        "x2_activity06_bg_45702dacdd711204297a190aa5f5b178.assets",
+        "x2_activity06_bg_f92d9ddf5b33caf43a511ef457e9d4c3.assets",
+        "x2_activity06_bg_709a1d348655c6646ace31d14ed07194.assets",
+        "x2_activity06_bg_4cb8453960b28c4469d1489c822a442d.assets",
+        "x2_activity06_bg_007567c18cbe23e4d91fae3ab12ae719.assets",
+        "x2_activity06_bg_48f2610227441ae4d8bc53b92f593bb5.assets"
+      ]
+    },
+    {
+      "page": "ui_anniversary_poolshop",
+      "file": "5078898fab9aa8c4e9857c04ee7a52a2",
+      "different": true,
+      "images": [
+        {
+          "image_id": 962,
+          "third": {
+            "file_id": 20,
+            "path_id": 2,
+            "external": "x2_activity06_bg_108891d2ce7a1de4b818b1521dde9e5c.assets"
+          },
+          "local": {
+            "file_id": 19,
+            "path_id": 2,
+            "external": "91ca85a3140113744847387a2fd4f80e"
+          }
+        },
+        {
+          "image_id": 1144,
+          "third": {
+            "file_id": 21,
+            "path_id": 2,
+            "external": "x2_activity06_bg_8dd5bffc1f4ad4046a7ccd43851442b6.assets"
+          },
+          "local": {
+            "file_id": 19,
+            "path_id": 2,
+            "external": "91ca85a3140113744847387a2fd4f80e"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "6174c075dbeaa87478db03147773ab1a",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "6b41bbc350b550344b1f487ab1b6a451",
+        "a06e9a0a0dcd5de4bb4c07cffe63102b",
+        "cb222eb5201bb5149813f68424f5e5f3",
+        "c4b690bd65b6de345bad96f6277a680b",
+        "9876495eb3c019f419147e4891164366",
+        "7860cdbaf71fe504f819d528a5adb7bf",
+        "35943a802eb6d42409fc2431d916d2d1",
+        "8c2e887abe5665a459f13f370ebe19ff",
+        "315327fe0b3f94c4c813bd7cd9d905cc",
+        "08cd082dce6a69d47b97ff7e75c2f156",
+        "9d13c306500912f4d8e6a89551ef7633",
+        "bcad2dd9f95ee6e4d9e9f647017315ca",
+        "b66cf7a186d13054989b33a5c90044e4",
+        "50479083d014e81468d1b29636275a09",
+        "ce8ed57d99c208042b47d134d89921dc",
+        "x2_activity06_bg_f8dfab85c4196ef44bccae0314d12571.assets",
+        "x2_activity06_bg_108891d2ce7a1de4b818b1521dde9e5c.assets",
+        "x2_activity06_bg_8dd5bffc1f4ad4046a7ccd43851442b6.assets",
+        "x2_activity06_bg_f8e5175fb775f7443b5bf1fe81c5235c.assets",
+        "x2_activity06_bg_315fba1aa1af2ad4d94a8e7efd289d5e.assets",
+        "x2_activity06_bg_9c76a0dc98223a041805ca4c35f4b930.assets",
+        "x2_activity06_jp_title_0ac1701f764f683439d50e04a1e7cd4f.assets"
+      ]
+    },
+    {
+      "page": "ui_anniversary_tower_section",
+      "file": "528809a912d604e44ab5a3a4558ec8c4",
+      "different": true,
+      "images": [
+        {
+          "image_id": 490,
+          "third": {
+            "file_id": 13,
+            "path_id": 2,
+            "external": "x2_activity06_bg_cf39f5e63949ffc44a303bd50fef6bd4.assets"
+          },
+          "local": {
+            "file_id": 13,
+            "path_id": 2,
+            "external": "91ca85a3140113744847387a2fd4f80e"
+          }
+        },
+        {
+          "image_id": 589,
+          "third": {
+            "file_id": 13,
+            "path_id": 2,
+            "external": "x2_activity06_bg_cf39f5e63949ffc44a303bd50fef6bd4.assets"
+          },
+          "local": {
+            "file_id": 13,
+            "path_id": 2,
+            "external": "91ca85a3140113744847387a2fd4f80e"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "cb222eb5201bb5149813f68424f5e5f3",
+        "6174c075dbeaa87478db03147773ab1a",
+        "98989e21c5a01c647b36aa87f04b67ca",
+        "990a1e6b28a303548bc3f7d2db4185f7",
+        "3613a99b380c46b43b4f33e7044b6c29",
+        "35943a802eb6d42409fc2431d916d2d1",
+        "20478c9e650ef6845b368cc0a3fe461a",
+        "6b41bbc350b550344b1f487ab1b6a451",
+        "a06e9a0a0dcd5de4bb4c07cffe63102b",
+        "9d13c306500912f4d8e6a89551ef7633",
+        "x2_activity06_bg_cf39f5e63949ffc44a303bd50fef6bd4.assets",
+        "x2_activity06_bg_4866b10b74dca2e49b6f11eee28f643f.assets"
+      ]
+    },
+    {
+      "page": "ui_osiris_main",
+      "file": "7d7a5408ab0764643921e3530c6127bb",
+      "different": true,
+      "images": [
+        {
+          "image_id": 374,
+          "third": {
+            "file_id": 18,
+            "path_id": 2,
+            "external": "x2_activity04_ui_1.assets"
+          },
+          "local": {
+            "file_id": 17,
+            "path_id": 2,
+            "external": "b63cf6f58ed3411419de3d913d8001e7"
+          }
+        },
+        {
+          "image_id": 449,
+          "third": {
+            "file_id": 25,
+            "path_id": 2,
+            "external": "x2_activity04_ui_8.assets"
+          },
+          "local": {
+            "file_id": 17,
+            "path_id": 2,
+            "external": "b63cf6f58ed3411419de3d913d8001e7"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "5d6986c16b0f4a64d90d8d54bcb8260d",
+        "f6ee0a7d0dc85e84aa2ada473ded7a72",
+        "63e8b8dfa7696b041bfa9e5a0ff50b83",
+        "180950ba76a1b614796797f73b043094",
+        "cf4cc22e24f25634496d70f1aced2c57",
+        "1c96647884d145549af5b28a4b12fcb5",
+        "184817eb0de95a7489c78c79595f09c2",
+        "b3de2d0b3dddef4439d2fad606c7f6fd",
+        "90b6106981b9f5d489afb79e9fd571b2",
+        "cb222eb5201bb5149813f68424f5e5f3",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "697f675376a035b46b8b92bbde2b76d8",
+        "e65abcdd682d2404bb1c02ed3bd7f2b2",
+        "7860cdbaf71fe504f819d528a5adb7bf",
+        "c4b690bd65b6de345bad96f6277a680b",
+        "x2_activity04_ui_0.assets",
+        "x2_activity04_ui_1.assets",
+        "x2_activity04_ui_2.assets",
+        "x2_activity04_ui_3.assets",
+        "x2_activity04_ui_4.assets",
+        "x2_activity04_ui_5.assets",
+        "x2_activity04_ui_6.assets",
+        "x2_activity04_ui_7.assets",
+        "x2_activity04_ui_8.assets",
+        "x2_activity04_ui_9.assets",
+        "x2_activity04_ui_10.assets"
+      ]
+    },
+    {
+      "page": "ui_osiris_section",
+      "file": "aba6dc317858aef4bbb54771424d88a8",
+      "different": true,
+      "images": [
+        {
+          "image_id": 977,
+          "third": {
+            "file_id": 56,
+            "path_id": 2,
+            "external": "x2_activity04_ui_8.assets"
+          },
+          "local": {
+            "file_id": 56,
+            "path_id": 2,
+            "external": "b63cf6f58ed3411419de3d913d8001e7"
+          }
+        },
+        {
+          "image_id": 1012,
+          "third": {
+            "file_id": 58,
+            "path_id": 2,
+            "external": "x2_activity04_ui_12.assets"
+          },
+          "local": {
+            "file_id": 56,
+            "path_id": 2,
+            "external": "b63cf6f58ed3411419de3d913d8001e7"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "cbec1e86ae9eb4e4980eafe3c5d5c5c1",
+        "f2e41663abbcc554ebb742447695aa76",
+        "238261ba374c815478210ff22c22d3db",
+        "f0c737ef925fd73469fbd19082dca884",
+        "e6d99e72c562de8408111d7eb0f71ab4",
+        "3d9e968e1af07dd4a8df5a7048e2be7a",
+        "43dc6f7a4ab2a2e4aa4ef82615c29977",
+        "c35bbb44c82708a438108ac2487b24ff",
+        "9e2139d4201aab74c8d9436d875bb66e",
+        "b962bb3e795ada04290bc13d1c35b612",
+        "f485ae540c44aea418cc5e56b5268ebf",
+        "606cfa4000a86044b8cb7f62b05af279",
+        "10a22cb6977aee144aa5ed04a5ab64f7",
+        "926f4ea1cb984f24990bad6636cd0ca0",
+        "f67e888fd19123748a2465fc686f14cc",
+        "c12e9f7dec8f9d8489e8ad74bf5a750d",
+        "3f2404c7ae9138a449fbd0b5db82646e",
+        "b7469d0fe302c474c8f24d94369472a8",
+        "b5023f82a5c883c49afd9e53e0d2aca6",
+        "5236ee11653b16a449c1902f09765b1a",
+        "7fc055f2f4f29d64eb8bc45400b9b227",
+        "9d204f287ae6a3547b86f8cae5d7a333",
+        "8b168ca30753d5348ba957f93af20f5a",
+        "eaa9c299bd6416a458073dda623187bc",
+        "ba9dcebe323f3f94eba1fa0ee55ed996",
+        "e1c8f0b2224a3bf46b221247b7cc6521",
+        "be402350c1a502645b398155027a8dc4",
+        "8bebe0a043bfacf47a46a9bdc423fb13",
+        "33aab12fc40d5694b9ed21963e17f3f0",
+        "7eb7a784665a8f146b9854dc7752bf9c",
+        "a55fad7ff036f274a9641dd36d03109d",
+        "02ce8daf0646a4543bb0a75daa83b53d",
+        "fc3ebb0e2197059479abc62824470338",
+        "fb348be61ccee18479c68fb582a0e231",
+        "cb873ab7761fcc84caa41ee2340fc8e5",
+        "2124ad0720987ce478acfb8d86fb2a75",
+        "a1310d7745f27a2468e9f5a300401b95",
+        "4726956abce96ba4b8ff441da9df1f45",
+        "590807bce19820b4fb127c4f1d0ec11d",
+        "e8da9ca8edc005b4396f96eb0a128997",
+        "bb27becfa3effa2479990d17158998f0",
+        "53cadc17b3da76d4eb35d43b93aa25a8",
+        "da6ad71f8492ea14c96777075e19a986",
+        "d35ca199bf23edf47b6492cb8418311d",
+        "c05280d183d9cfb44a2b2f65afb42b22",
+        "3575fa1554993b34183659ad334b7639",
+        "99581f06c501e574088c943c88e9bba7",
+        "710b021865ae6e148898c8c4c30adfe6",
+        "ac752f0551f738743b93abc90dac526d",
+        "976d34d761cb12b4cbcea8575e0bb3b2",
+        "a58661aa35ca2544cbb9ee23acaeabc9",
+        "faa8c344f0d930844aa77f4b8ec3195a",
+        "e65abcdd682d2404bb1c02ed3bd7f2b2",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "x2_activity04_ui_8.assets",
+        "x2_activity04_ui_11.assets",
+        "x2_activity04_ui_12.assets",
+        "x2_activity04_ui_13.assets",
+        "x2_activity04_ui_14.assets",
+        "x2_activity04_ui_15.assets",
+        "x2_activity04_ui_16.assets",
+        "x2_activity04_ui_17.assets",
+        "x2_activity04_ui_18.assets",
+        "x2_activity04_ui_19.assets"
+      ]
+    },
+    {
+      "page": "ui_osiris_shop",
+      "file": "704c74ceb866a4a4a8212a6d13f2cc5e",
+      "different": true,
+      "images": [
+        {
+          "image_id": 322,
+          "third": {
+            "file_id": 13,
+            "path_id": 2,
+            "external": "x2_activity04_ui_21.assets"
+          },
+          "local": {
+            "file_id": 12,
+            "path_id": 2,
+            "external": "b63cf6f58ed3411419de3d913d8001e7"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "cb222eb5201bb5149813f68424f5e5f3",
+        "8281f30dbfa6b4341b686850c542e747",
+        "35943a802eb6d42409fc2431d916d2d1",
+        "e65abcdd682d2404bb1c02ed3bd7f2b2",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "c4b690bd65b6de345bad96f6277a680b",
+        "9d13c306500912f4d8e6a89551ef7633",
+        "20478c9e650ef6845b368cc0a3fe461a",
+        "f82da0079c3ceba45936cf5dce508b01",
+        "95fe7600be64077478bb9a945c20a319",
+        "x2_activity04_ui_20.assets",
+        "x2_activity04_ui_21.assets",
+        "x2_activity04_ui_22.assets",
+        "x2_activity04_shop_figure.assets",
+        "x2_activity04_shop_mask.assets"
+      ]
+    },
+    {
+      "page": "ui_osiris_task",
+      "file": "d5306c1d90bc5024c8c49bd3f4b9428f",
+      "different": true,
+      "images": [
+        {
+          "image_id": 692,
+          "third": {
+            "file_id": 37,
+            "path_id": 2,
+            "external": "x2_activity04_ui_23.assets"
+          },
+          "local": {
+            "file_id": 37,
+            "path_id": 2,
+            "external": "b63cf6f58ed3411419de3d913d8001e7"
+          }
+        },
+        {
+          "image_id": 771,
+          "third": {
+            "file_id": 38,
+            "path_id": 2,
+            "external": "x2_activity04_ui_21.assets"
+          },
+          "local": {
+            "file_id": 37,
+            "path_id": 2,
+            "external": "b63cf6f58ed3411419de3d913d8001e7"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "df947abdda86ebd438e73c414975bdc8",
+        "1ef3c1c91acbc58469a9a853deaa9ce7",
+        "library/unity default resources",
+        "c06482400ecf5b8419fc043d0bf9fa4d",
+        "4fde37b0b8d465643b376f1db616d4f9",
+        "d2704c19fd2b91e4f8ec92338727a303",
+        "07f065e52c1411f4d9041a90286728e6",
+        "d76d1ef8011217b46a2e95afee418d7c",
+        "23eaee5d01cd8734f9aed3f6aa4c11a9",
+        "d150de80cf8fc854d95b1a5213290581",
+        "7113a7da80a049a40a55bea23dc3d37f",
+        "85d4d7e31704ed242aca7923ab06e2a8",
+        "8582c4d46152d1f4aad64ec147d678ce",
+        "998d0558ed8da784485a4cffb50f9864",
+        "c2efca0ac29b38a44bc0b2946ec31b77",
+        "f55cf111111dacb49b910914a84d2b95",
+        "ee712f0dd8a66ee459755f3ddce57fb9",
+        "75db76b3ab22be64db370e7cbc5412a0",
+        "1c56ec4a9de91b04eba3c83d88cb3f74",
+        "24814de3ba327f94babbb429ddb7e90f",
+        "f566eeb6ed281e8408d10459bbf5640a",
+        "400732613962fa24e928d0d280911800",
+        "1826336d8d988b54e9c2d4bec810e91a",
+        "e65abcdd682d2404bb1c02ed3bd7f2b2",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "cb222eb5201bb5149813f68424f5e5f3",
+        "35943a802eb6d42409fc2431d916d2d1",
+        "20478c9e650ef6845b368cc0a3fe461a",
+        "8c2e887abe5665a459f13f370ebe19ff",
+        "436ad17b32d6c7d449f9c08811ee9c4f",
+        "9d13c306500912f4d8e6a89551ef7633",
+        "0bcd45d3fad1af34ba036073eba9639d",
+        "625f82ee77759d942bd95e123180ebd8",
+        "ab97da8d31c750a46915078bbcaa2d90",
+        "c0c5713e2dda7f24c96286c2d747909d",
+        "x2_activity04_ui_23.assets",
+        "x2_activity04_ui_21.assets"
+      ]
+    },
+    {
+      "page": "ui_osiris_towerdata",
+      "file": "7ebb466e033033346818eb3694cc57f7",
+      "different": true,
+      "images": [
+        {
+          "image_id": 418,
+          "third": {
+            "file_id": 0,
+            "path_id": 0,
+            "external": null
+          },
+          "local": {
+            "file_id": 13,
+            "path_id": 2,
+            "external": "b63cf6f58ed3411419de3d913d8001e7"
+          }
+        },
+        {
+          "image_id": 448,
+          "third": {
+            "file_id": 13,
+            "path_id": 2,
+            "external": "x2_activity04_ui_25.assets"
+          },
+          "local": {
+            "file_id": 13,
+            "path_id": 2,
+            "external": "b63cf6f58ed3411419de3d913d8001e7"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "cb222eb5201bb5149813f68424f5e5f3",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "e65abcdd682d2404bb1c02ed3bd7f2b2",
+        "35943a802eb6d42409fc2431d916d2d1",
+        "243b36565e7052f4cbc69911285ca3b5",
+        "0fd9b12ba2bd704419cd62ef43aa2418",
+        "c5671ca39b0cce94397fed7f63460bb7",
+        "00fdb31af24950d4f956777c878ea98b",
+        "9d13c306500912f4d8e6a89551ef7633",
+        "7a1ffe1b8ac3f564db90acf5a447014e",
+        "20478c9e650ef6845b368cc0a3fe461a",
+        "x2_activity04_ui_25.assets"
+      ]
+    },
+    {
+      "page": "ui_gonggong_main",
+      "file": "5aaf674fbdc177c43b480ff99e03736e",
+      "different": true,
+      "images": [
+        {
+          "image_id": 260,
+          "third": {
+            "file_id": 11,
+            "path_id": 2,
+            "external": "x2_activity02_ui_9962e414e69eb8a4ca2d2c2babea6629.assets"
+          },
+          "local": {
+            "file_id": 10,
+            "path_id": 2,
+            "external": "576a775f870b7254988c197687142fd0"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "cb222eb5201bb5149813f68424f5e5f3",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "efbe79983d5ca3f4d81f69c53793c8d2",
+        "715b80e429c437e40867928a4e1fc975",
+        "697f675376a035b46b8b92bbde2b76d8",
+        "c4b690bd65b6de345bad96f6277a680b",
+        "bdd57096d55d6094fa50c7af1de57b11",
+        "90b6106981b9f5d489afb79e9fd571b2",
+        "x2_activity02_ui_f19d9151b8915674988619924ff6d8ee.assets",
+        "x2_activity02_ui_9962e414e69eb8a4ca2d2c2babea6629.assets",
+        "x2_activity02_ui_a5ffc6b668560064da31676edf07d8a6.assets"
+      ]
+    },
+    {
+      "page": "ui_gonggong_section",
+      "file": "f61d79b175b081e418b4dac2f22fd691",
+      "different": true,
+      "images": [
+        {
+          "image_id": 637,
+          "third": {
+            "file_id": 37,
+            "path_id": 2,
+            "external": "x2_activity02_ui_86757b6a78aa5ea4e9f1046e1faf9ad8.assets"
+          },
+          "local": {
+            "file_id": 7,
+            "path_id": 2,
+            "external": "576a775f870b7254988c197687142fd0"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "efbe79983d5ca3f4d81f69c53793c8d2",
+        "cb222eb5201bb5149813f68424f5e5f3",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "8c2e887abe5665a459f13f370ebe19ff",
+        "8281f30dbfa6b4341b686850c542e747",
+        "x2_activity02_ui_85bf853ac7818c846815891010061cba.assets",
+        "x2_activity02_ui_c5bbe15cbd191c1488e4f61fc0c6a382.assets",
+        "x2_activity02_ui_8a53359d1fc375c4cb4b75b10f1dad40.assets",
+        "x2_activity02_ui_c70b0b9af3ffe554d80028715c883695.assets",
+        "x2_activity02_ui_aded69f05d545464880f8c60305b37b2.assets",
+        "x2_activity02_ui_81dc2a5844dd89e42bc497e60c1f2b0d.assets",
+        "x2_activity02_ui_a9113f657375ce144b55416c51beaa5c.assets",
+        "x2_activity02_ui_0913d9e2f8946e34cac2c0e1ac0904a8.assets",
+        "x2_activity02_ui_cda3d83b878cbf4478e1a74f86d7d90f.assets",
+        "x2_activity02_ui_76590f0267d5c09488123ef17d8427fa.assets",
+        "x2_activity02_ui_bccc8f729792ac84ca55c82ee1ceb35b.assets",
+        "x2_activity02_ui_6809b64208c1f894991ed75728da338a.assets",
+        "x2_activity02_ui_2119a414aa11dd648bb001e490ff93d1.assets",
+        "x2_activity02_ui_71f5231a2c565604b816f74342bb0711.assets",
+        "x2_activity02_ui_8e519fd97e11fa841a16cbac87888322.assets",
+        "x2_activity02_ui_1d963d81b6a8a0b43a6d6629e39dc6ac.assets",
+        "x2_activity02_ui_a7bd1f35a4d70384d9dc9742b5cb3ad7.assets",
+        "x2_activity02_ui_f21cc684f9277d24ea39ce00606570aa.assets",
+        "x2_activity02_ui_84c6fd4719cd1694686ed132040c883b.assets",
+        "x2_activity02_ui_02fb2b5e90f77e84496d52af13e0db97.assets",
+        "x2_activity02_ui_5c4c8b4f400ad1344b4bdeaac1b6b924.assets",
+        "x2_activity02_ui_3bc842207d4f13a46bf6eb394305a0aa.assets",
+        "x2_activity02_ui_d02ac74c516719043890a775bf4b010f.assets",
+        "x2_activity02_ui_aa718dd52c9f20347a7b51ce3430e5b6.assets",
+        "x2_activity02_ui_bf9bf2fa1cb997d42b95ed128131e729.assets",
+        "x2_activity02_ui_12a818554ae9317408f14cd013816af3.assets",
+        "x2_activity02_ui_b224ab34fe6108041b6ee4f6914c00f6.assets",
+        "x2_activity02_ui_ea5958cfac5bced4ebb62579f67e812d.assets",
+        "x2_activity02_ui_ada093098ba7a5c44abc4d0a2ada77dc.assets",
+        "x2_activity02_ui_371e1e54d7d7b614bb342e1d32d4adc3.assets",
+        "x2_activity02_ui_86757b6a78aa5ea4e9f1046e1faf9ad8.assets"
+      ]
+    },
+    {
+      "page": "ui_gonggong_shop",
+      "file": "d383aad9ef242e248ab294db10288090",
+      "different": true,
+      "images": [
+        {
+          "image_id": 379,
+          "third": {
+            "file_id": 16,
+            "path_id": 2,
+            "external": "x2_activity02_ui_eec9ad2a0d41a704eac54d925f9647a2.assets"
+          },
+          "local": {
+            "file_id": 14,
+            "path_id": 2,
+            "external": "576a775f870b7254988c197687142fd0"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "cb222eb5201bb5149813f68424f5e5f3",
+        "f82da0079c3ceba45936cf5dce508b01",
+        "8c2e887abe5665a459f13f370ebe19ff",
+        "8281f30dbfa6b4341b686850c542e747",
+        "efbe79983d5ca3f4d81f69c53793c8d2",
+        "5901446a6c672994481761e702277ac7",
+        "c4b690bd65b6de345bad96f6277a680b",
+        "35943a802eb6d42409fc2431d916d2d1",
+        "89acc6b212b12104abbea34154367d48",
+        "20478c9e650ef6845b368cc0a3fe461a",
+        "9d13c306500912f4d8e6a89551ef7633",
+        "x2_activity02_ui_c02d44072d5cb2f429dac19e70c0954c.assets",
+        "x2_activity02_ui_20478c9e650ef6845b368cc0a3fe461a.assets",
+        "x2_activity02_ui_eec9ad2a0d41a704eac54d925f9647a2.assets"
+      ]
+    },
+    {
+      "page": "ui_gonggong_task",
+      "file": "7966d47b43ef4574fbb367b1a8c4a71f",
+      "different": true,
+      "images": [
+        {
+          "image_id": 675,
+          "third": {
+            "file_id": 38,
+            "path_id": 2,
+            "external": "x2_activity02_ui_7e15b80e60a440942b1f2ba64675664e.assets"
+          },
+          "local": {
+            "file_id": 38,
+            "path_id": 2,
+            "external": "576a775f870b7254988c197687142fd0"
+          }
+        },
+        {
+          "image_id": 851,
+          "third": {
+            "file_id": 39,
+            "path_id": 2,
+            "external": "x2_activity02_ui_fdb47858c2c971f488b0ab01d05cbcb4.assets"
+          },
+          "local": {
+            "file_id": 38,
+            "path_id": 2,
+            "external": "576a775f870b7254988c197687142fd0"
+          }
+        }
+      ],
+      "third_externals": [
+        "globalgamemanagers.assets",
+        "df947abdda86ebd438e73c414975bdc8",
+        "1ef3c1c91acbc58469a9a853deaa9ce7",
+        "library/unity default resources",
+        "c06482400ecf5b8419fc043d0bf9fa4d",
+        "c2efca0ac29b38a44bc0b2946ec31b77",
+        "23eaee5d01cd8734f9aed3f6aa4c11a9",
+        "7113a7da80a049a40a55bea23dc3d37f",
+        "85d4d7e31704ed242aca7923ab06e2a8",
+        "f55cf111111dacb49b910914a84d2b95",
+        "d150de80cf8fc854d95b1a5213290581",
+        "d2704c19fd2b91e4f8ec92338727a303",
+        "75db76b3ab22be64db370e7cbc5412a0",
+        "1c56ec4a9de91b04eba3c83d88cb3f74",
+        "24814de3ba327f94babbb429ddb7e90f",
+        "f566eeb6ed281e8408d10459bbf5640a",
+        "400732613962fa24e928d0d280911800",
+        "1826336d8d988b54e9c2d4bec810e91a",
+        "4fde37b0b8d465643b376f1db616d4f9",
+        "ee712f0dd8a66ee459755f3ddce57fb9",
+        "8582c4d46152d1f4aad64ec147d678ce",
+        "d76d1ef8011217b46a2e95afee418d7c",
+        "07f065e52c1411f4d9041a90286728e6",
+        "998d0558ed8da784485a4cffb50f9864",
+        "cb222eb5201bb5149813f68424f5e5f3",
+        "f5f916c308319e74b980be2dc94d69f4",
+        "efbe79983d5ca3f4d81f69c53793c8d2",
+        "35943a802eb6d42409fc2431d916d2d1",
+        "89acc6b212b12104abbea34154367d48",
+        "0bcd45d3fad1af34ba036073eba9639d",
+        "9d13c306500912f4d8e6a89551ef7633",
+        "ab97da8d31c750a46915078bbcaa2d90",
+        "8c2e887abe5665a459f13f370ebe19ff",
+        "c0c5713e2dda7f24c96286c2d747909d",
+        "20478c9e650ef6845b368cc0a3fe461a",
+        "625f82ee77759d942bd95e123180ebd8",
+        "436ad17b32d6c7d449f9c08811ee9c4f",
+        "x2_activity02_ui_7e15b80e60a440942b1f2ba64675664e.assets",
+        "x2_activity02_ui_fdb47858c2c971f488b0ab01d05cbcb4.assets"
+      ]
+    }
+  ]
+}
