@@ -809,7 +809,7 @@
    "price": 180,
    "itemRange": [
     1004601,
-    1004796
+    1004799
    ],
    "items": [
     {
@@ -957,6 +957,12 @@
      "star": 3
     },
     {
+     "itemId": 1004625,
+     "name": "地狱火",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
      "itemId": 1004626,
      "name": "BBQ上你和我",
      "quality": "蓝",
@@ -995,6 +1001,12 @@
     {
      "itemId": 1004632,
      "name": "无尽黑卡有点小",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004633,
+     "name": "金钱大于力量",
      "quality": "蓝",
      "star": 3
     },
@@ -1675,6 +1687,24 @@
      "name": "召唤8",
      "quality": "绿",
      "star": 2
+    },
+    {
+     "itemId": 1004797,
+     "name": "召唤9",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004798,
+     "name": "召唤10",
+     "quality": "蓝",
+     "star": 3
+    },
+    {
+     "itemId": 1004799,
+     "name": "召唤11",
+     "quality": "紫",
+     "star": 4
     }
    ]
   },
