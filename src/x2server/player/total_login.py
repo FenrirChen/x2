@@ -14,9 +14,12 @@
 一刻**起算 (``(now - created_at) / 86400 + 1``), 不做任何提前; 已领档位按 0-based
 下标落库, 用来给领取去重。
 
-**不要**把已领档位写进 Daily.f22: 该字段客户端只认 wire type 2 且按
-ContainerIntIntProto 解, 逐元素 varint 会被静默跳过 -> 列表为 null -> RefreshRedPoint
-的 List.Contains 抛 NRE -> 客户端卡在「开始跃迁」进不去游戏。
+已领档位还要写进 Daily.f22 ``TotalLoginIndex``: 客户端 CumulateLoginItem 靠它把档位
+画成「已领取」, CumulateLoginModule_RefreshRedPoint 也靠它清红点。该字段是
+**repeated ContainerIntIntProto (wire type 2)**, 不是 packed int32 —— 按 packed 下发
+会让客户端整条 PlayerDataProto 解码失败并断连。编码由 ``claimed_pairs``; 没有已领
+档位时必须发一个不会命中任何档位的哨兵对 (缺席会留下 null, 客户端 List.Contains 抛
+NRE)。见 messages/core.py 的 LOGIN_DAILY 注释。
 
 奖励组 760121/760122 由 EconomyService 用既有的 gift_contents 展开并真发货
 (原版奖励, 不做任何替换)。
@@ -54,6 +57,24 @@ def claimed_slots(db, player_id):
         return []
     return sorted(int(row[0]) for row in db.execute(
         "SELECT slot FROM player_total_login_claimed WHERE player_id=? ORDER BY slot", (player_id,)))
+
+
+# 没有任何已领档位时下发的哨兵。Daily.TotalLoginIndex 是 repeated
+# ContainerIntIntProto, 写不出「字段在但列表为空」; 缺席时客户端转出来的列表是
+# null, CumulateLoginModule_RefreshRedPoint 拿它调 List.Contains 会抛 NRE。
+# 0x7FFFFFFF 不可能是档位下标, Contains 永远为假。
+_EMPTY_INDEX = 0x7FFFFFFF
+
+
+def claimed_pairs(db, player_id):
+    """Daily.f22 的 repeated ContainerIntIntProto 载荷 (每项是已编码的子消息)。
+
+    Key 与 Value 都写下标: 客户端把 List<ContainerIntIntProto> 摊成运行期
+    List<int32>, 取哪一边没有取证, 同值可保证 Contains(下标) 两种实现都成立。
+    """
+    from x2server.messages.core import INT_PAIR
+    slots = claimed_slots(db, player_id) or [_EMPTY_INDEX]
+    return [INT_PAIR.encode({"Key": slot, "Value": slot}) for slot in slots]
 
 
 def login_days(created_at, now) -> int:

@@ -228,12 +228,21 @@ MODULE_STATUS = ProtoSchema("ModuleStatusProto", (
     ProtoField(6, "ClubStatus", FieldKind.INT32),
 ))
 # DailyProto (PlayerDataProto 成员 3)。上游各模块各声明自己的一小段再拼接
-# (world_boss 13/14, star_chart 18, college_pray 12), 这里只声明降临纪念要下发的
-# TotalLoginDays (字段 8, int64)。客户端 CumulateLoginModule_RefreshRedPoint 从
-# Daily.TotalLoginDays 读累计登录天数判「天数够没够」, 缺了它页面天数恒 0 (即
-# 「时间出错」)。**不要**把已领档位塞进 Daily 的其它字段。
+# (world_boss 13/14, star_chart 18, college_pray 12), 这里声明降临纪念要下发的两个
+# 字段: TotalLoginDays (8, int64) 与 TotalLoginIndex (22)。
+#
+# * f8 供 CumulateLoginModule_RefreshRedPoint 判「天数够没够」; 缺了它页面天数恒 0
+#   (即「时间出错」)。
+# * f22 是 **repeated ContainerIntIntProto**, 不是 packed int32 ——
+#   il2cpp-functions.h:108588 `DailyProto_get_TotalLoginIndex` 返回
+#   `List<ContainerIntIntProto>`, 按 packed 下发会让客户端整条 PlayerDataProto
+#   `ProtocolBufferException: Invalid field id: 0` 解码失败并断连。客户端用它把
+#   已领档位画成「已领取」并清红点; 缺席时该列表是 null, RefreshRedPoint 的
+#   List.Contains 会抛 NRE。编码由 total_login.claimed_pairs 负责 (无档位时发
+#   不会命中任何档位的哨兵)。
 LOGIN_DAILY = ProtoSchema("DailyProto", (
     ProtoField(8, "TotalLoginDays", FieldKind.INT64),
+    ProtoField(22, "TotalLoginIndex", FieldKind.MESSAGE, repeated=True),
 ))
 PLAYER_DATA = ProtoSchema("PlayerDataProto", (
     ProtoField(1, "BaseInfo", FieldKind.MESSAGE),
