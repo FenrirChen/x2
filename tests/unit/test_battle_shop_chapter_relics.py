@@ -42,7 +42,7 @@ def test_relic_slots_prefer_the_chapters_own_relics(env):
     store, economy, _ = env
     service = BattleShopService(store, economy)
     recommended = service.relic_chapters[2010500]
-    big_slot = {1004601, 1004631, 1004634, 1004635, 1004639, 1004640, 1004641}
+    big_slot = {1004601, 1004631, 1004633, 1004634, 1004635, 1004639, 1004640, 1004641}
     special_slot = {item["itemId"] for item in
                     next(slot for slot in service.slots if slot["slot"] == 6)["items"]}
     big_rolls, special_rolls = [], []
