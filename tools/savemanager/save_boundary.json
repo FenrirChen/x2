@@ -1338,6 +1338,47 @@
       "autoincrement": null
     },
     {
+      "table": "hero_contracts",
+      "columns": [
+        "player_id",
+        "hero_id",
+        "created_at"
+      ],
+      "primary_key": [
+        "player_id",
+        "hero_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
+      "table": "hero_date_options",
+      "columns": [
+        "player_id",
+        "hero_id",
+        "date_id",
+        "option_id",
+        "value",
+        "updated_at"
+      ],
+      "primary_key": [
+        "player_id",
+        "hero_id",
+        "date_id",
+        "option_id"
+      ],
+      "owner_column": "player_id",
+      "owner_join": null,
+      "included": true,
+      "blob_columns": [],
+      "json_columns": [],
+      "autoincrement": null
+    },
+    {
       "table": "inventory",
       "columns": [
         "player_id",

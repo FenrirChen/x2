@@ -198,6 +198,8 @@ class DateService:
         self.economy = economy
         self.clock = clock
         ensure_schema(store)
+        from .favor import FavorService
+        self.favor = FavorService(store, economy)
         migrate_legacy_chip_keys(store)
         # Optional injection for deployments that push the login snapshot directly;
         # when absent the economy's own pushes carry the new 外观/头像.
@@ -249,7 +251,9 @@ class DateService:
             if status != DATE_STATUS_UNLOCK and value <= 0:
                 continue
             out.append(KEY_VALUE.encode({"Key": key, "Value": value}))
-        return out
+        # SilentOrbit leaves absent repeated fields null. Locked dates are not
+        # bound to the puzzle, and this nonzero sentinel cannot light a red dot.
+        return out or [KEY_VALUE.encode({"Key": 0, "Value": 1})]
 
     def _push(self, player_id: int) -> tuple[OutboundMessage, ...]:
         out = []
@@ -276,6 +280,8 @@ class DateService:
         request = DATE_SCHEMAS["C2L_QueryHeroDate"].decode(packet.body)
         hero_id = int(request.get("heroId", 0))
         player_id = context.session.player_id
+        if not self._owns(player_id, hero_id) or not date_rows(hero_id):
+            return OutboundMessage("L2C_QueryHeroDate", {"code": 13, "heroId": hero_id})
         level, _exp = hero_level(self.store, player_id, hero_id)
         values = option_values(self.store, player_id, hero_id)
         dates = []
@@ -294,7 +300,7 @@ class DateService:
         return OutboundMessage("L2C_QueryHeroDate", {
             "code": 10,
             "date": dates,
-            "journal": journal,
+            "journal": journal or [0],
             "skin": skin,
             "heroId": hero_id,
         })
@@ -366,6 +372,8 @@ class DateService:
         row = self._date_row(hero_id, date_id)
         if row is None:
             return failure
+        if option_effect_id not in {int(option) for option in row.get("options", ())}:
+            return failure
         # 碎片 Key 是拼图位置 1..18, 不能被当成「约会选项」写进来(否则会白送一枚碎片)。
         if option_effect_id in {int(chip) for chip in row.get("chips", ())}:
             LOGGER.info("date option refused player=%s hero=%s date=%s effect=%s (is a chip)",
@@ -401,9 +409,9 @@ class DateService:
 
         The 信物 spend, the contract row, the 19-level break and the reward all
         happen in one transaction. The contract row is the idempotency key, and the
-        reward is written straight into ``inventory`` because the two 契约 items
-        (1221004 外观 / 1271004 花嫁头像) predate ``economy_catalog.items``; the
-        appearance page reads owned 外观 from the very same inventory table.
+        rewards use the shared economy grant ledger and its appearance pushes.
+        The extra item definitions live in ``covenant_items.json`` so the two
+        covenant rewards follow the same validation as other reward sources.
         """
         if context.session.player_id is None:
             raise ProtocolError("contract before login")
@@ -468,15 +476,16 @@ class DateService:
             breaks = target.setdefault("favor_breaks", [])
             if need_level not in breaks:
                 breaks.append(need_level)
-            for item, count in rewards.items():
-                self.store.db.execute("""INSERT INTO inventory VALUES (?,?,?)
-                    ON CONFLICT(player_id,item_id) DO UPDATE SET quantity=quantity+excluded.quantity""",
-                    (player_id, item, count))
+            target["favor"] = self.favor._advance(
+                hero_id, target["favor"].copy(), breaks)
             self.economy.save_snapshot(player_id, snapshot)
+            self.economy._grant(player_id, f"covenant:{hero_id}", rewards)
         LOGGER.info("contract opened player=%s hero=%s level=%s exp=%s chips=%s reward=%s",
                     player_id, hero_id, level, exp, chips, rewards)
+        from .hero import encode_hero_data
         return OutboundMessage("L2C_OpenContract", {
             "code": 10,
             "heroId": hero_id,
             "rewardData": self.economy.reward_bytes(rewards),
-        }, pushes=self._push(player_id))
+        }, pushes=(OutboundMessage("L2C_HeroUpdate", {"code": 10, "heros": [encode_hero_data(
+            target, season=self.economy.season, player_id=player_id)]}), *self._push(player_id)))

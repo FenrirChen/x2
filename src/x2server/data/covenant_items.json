@@ -1,0 +1,4 @@
+[
+  {"ItemID": 1221004, "ItemType": {"value": 17, "enum": "E_Skin"}, "PileCount": 1},
+  {"ItemID": 1271004, "ItemType": {"value": 22, "enum": "E_HeadIcon"}, "PileCount": 1}
+]

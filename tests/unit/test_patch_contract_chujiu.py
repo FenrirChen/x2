@@ -33,6 +33,25 @@ def table(entries):
     return bytes(out)
 
 
+@pytest.mark.parametrize('padding', [0, 4])
+def test_existing_plaintext_hook_reads_actual_literal_addresses(monkeypatch, padding):
+    import struct
+    monkeypatch.setattr(patch, 'OLD_CAVE', 0)
+    monkeypatch.setattr(patch, 'NEW_CAVE', 0)
+    signatures = [bytes.fromhex(patch.EXPECTED_BASE_SIGS[0])]
+    raw = bytearray(patch.build_payload(signatures))
+    literals = (6 + 9 + 2) * 4
+    if padding:
+        for offset in range(6 * 4, 15 * 4, 4):
+            word = struct.unpack_from('<I', raw, offset)[0]
+            if word & 0xFF00001F == 0x5800000A:
+                struct.pack_into('<I', raw, offset, word + (1 << 5))
+        raw[literals:literals] = struct.pack('<I', 0xD503201F)
+    decoded, used = patch.read_existing_signatures(raw)
+    assert decoded == signatures
+    assert used == len(raw)
+
+
 def test_varint_runs_are_reversible():
     for value in (0, 1, 127, 128, 300, 13430051, 1 << 20, -1, -500):
         encoded = patch.varint(value)

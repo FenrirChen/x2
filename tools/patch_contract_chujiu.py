@@ -1010,6 +1010,9 @@ def patch_global(apk: Path, art: dict[str, bytes]) -> tuple[bytes, list[str]]:
     manager = next((obj for obj in objects(serialized) if obj.class_id == RESOURCE_CLASS), None)
     require(manager is not None, "globalgamemanagers holds no ResourceManager")
     container = list(manager.read_typetree()["m_Container"])
+    # Resource supplementation can append bindings. Restore lookup order while
+    # retaining the order within every same-key group and every pointer.
+    container.sort(key=lambda pair: pair[0])
     keys = [key for key, _ in container]
     require(not any(any(char.isupper() for char in key) for key in keys),
             "base container has uppercase keys")
@@ -1038,6 +1041,14 @@ def patch_global(apk: Path, art: dict[str, bytes]) -> tuple[bytes, list[str]]:
     for entry, groups in ART.items():
         for key, path_ids in groups:
             existing = [value for name, value in container if name == key]
+            if existing and all(value["m_FileID"] > 0 and
+                    serialized.externals[value["m_FileID"] - 1].path in {
+                        "x2_chujiu_marry_head.assets", "x2_chujiu_marry_half.assets",
+                        "x2_chujiu_marry_drawing.assets"} for value in existing):
+                # Replace only the earlier resource-only stand-ins for these
+                # exact keys. Other resources and external IDs stay untouched.
+                container = [(name, value) for name, value in container if name != key]
+                existing = []
             if existing:
                 require(len(existing) == len(path_ids),
                         f"container {key} has {len(existing)} entries, expected {len(path_ids)}")
@@ -1161,18 +1172,36 @@ def build_payload(signatures: list[bytes]) -> bytes:
 
 def read_existing_signatures(native: bytes) -> tuple[list[bytes], int]:
     def word(index: int) -> int:
+        require(0 <= OLD_CAVE + index * 4 <= len(native) - 4,
+                "old cave extends past the native file")
         return struct.unpack_from("<I", native, OLD_CAVE + index * 4)[0]
     require(word(0) & 0xFF000000 == 0xB4000000,
             f"old cave does not hold the expected template: {word(0):08x}")
     index = 6
-    while word(index + 8) == RET:
+    while word(index) != ORIGINAL:
+        require(word(index + 8) == RET, "old cave block does not end in RET")
         index += 9
     require(word(index) == ORIGINAL,
             f"old cave fallback is {word(index):08x}, expected {ORIGINAL:08x}")
     count = (index - 6) // 9
-    literals = OLD_CAVE + (index + 2) * 4
-    signatures = [native[literals + item * 16:literals + (item + 1) * 16] for item in range(count)]
-    used = (index + 2) * 4 + 16 * count
+    # The local release has one prefix and a NOP before its literals; the PR's
+    # reference has two prefixes and no padding. Decode LDR literal targets
+    # instead of mistaking that NOP for the first four signature bytes.
+    literals = []
+    for position in range(6, index):
+        insn = word(position)
+        if insn & 0xFF00001F == 0x5800000A:
+            offset = (insn >> 5) & 0x7FFFF
+            if offset & 0x40000:
+                offset -= 0x80000
+            literals.append(OLD_CAVE + position * 4 + offset * 4)
+    require(len(literals) == count * 2, "old cave literal count mismatch")
+    signatures = []
+    for first, second in zip(literals[::2], literals[1::2]):
+        require(second == first + 8 and first >= OLD_CAVE + (index + 2) * 4,
+                "old cave literal layout mismatch")
+        signatures.append(native[first:second + 8])
+    used = max(literals) + 8 - OLD_CAVE
     return signatures, used
 
 
@@ -1220,7 +1249,8 @@ def patch_native(apk: Path, signatures: list[tuple[str, bytes]]) -> tuple[bytes,
             f"HOOK {HOOK:#x} points at {hook_target:#x}, expected {OLD_CAVE:#x}/{NEW_CAVE:#x}")
 
     old_signatures, old_used = read_existing_signatures(native)
-    require(tuple(signature.hex() for signature in old_signatures) == EXPECTED_BASE_SIGS,
+    require(old_signatures and all(signature.hex() in EXPECTED_BASE_SIGS
+                                   for signature in old_signatures),
             "base libil2cpp hook prefixes do not match this build")
     combined, seen = list(old_signatures), {bytes(signature) for signature in old_signatures}
     for _table, signature in signatures:

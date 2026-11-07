@@ -156,6 +156,7 @@ def prepare(baseline, donor, output):
             tree['m_Container'].append((path, value))
             known.add(normalized)
             bindings.append(normalized)
+        tree['m_Container'].sort(key=lambda pair: pair[0])
         sf.objects[13].save_typetree(tree)
         payload = sf.save()
         reread = next(iter(UnityPy.load(payload).files.values()))

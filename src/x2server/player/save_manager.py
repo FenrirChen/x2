@@ -87,10 +87,12 @@ TABLES_WITH_OWNER_COLUMN = [
 SEASON_ADDED_TABLES = {"season_state", "season_events", "season_receipts", "season_runs"}
 WASHING_ADDED_TABLES = {"college_washing_pending", "college_washing_receipts"}
 TERMINAL_WISH_ADDED_TABLES = {"favor_wish_state", "favor_wish_events", "favor_wish_receipts"}
+CONTRACT_ADDED_TABLES = {"hero_date_options", "hero_contracts"}
 RELEASE_ADDED_TABLES = {
     *SEASON_ADDED_TABLES,
     *WASHING_ADDED_TABLES,
     *TERMINAL_WISH_ADDED_TABLES,
+    *CONTRACT_ADDED_TABLES,
     "activity_exchange_stats", "battle_element_compose", "battle_element_compose_receipts",
     "course_claims", "player_divination", "player_novice_sign", "player_total_login_claimed",
     "recharge_first", "simple_activity_claims", "simple_activity_unlocks",
@@ -472,10 +474,11 @@ class SaveManager:
         if not isinstance(tables_doc, dict):
             raise ValueError('存档表集必须为对象')
         actual = set(tables_doc)
-        optional = WASHING_ADDED_TABLES | TERMINAL_WISH_ADDED_TABLES
+        optional = WASHING_ADDED_TABLES | TERMINAL_WISH_ADDED_TABLES | CONTRACT_ADDED_TABLES
         missing = set(PLAYER_TABLES) - actual
         optional_complete = all(not (missing & group) or group <= missing
-                                for group in (WASHING_ADDED_TABLES, TERMINAL_WISH_ADDED_TABLES))
+                                for group in (WASHING_ADDED_TABLES, TERMINAL_WISH_ADDED_TABLES,
+                                              CONTRACT_ADDED_TABLES))
         legacy = manifest['server_save_schema'] == 'x2-revival/3' and actual == LEGACY_PLAYER_TABLES
         previous = (manifest['server_save_schema'] == 'x2-revival/4'
                     and SEASON_ADDED_TABLES <= missing and missing <= SEASON_ADDED_TABLES | optional

@@ -335,7 +335,11 @@ def patch_container(apk: Path) -> tuple[bytes, dict]:
         values = [value for name, value in container if name == piece.file_id_source]
         if not values:
             raise PatchError(f"container has no {piece.file_id_source!r} entry")
-        file_ids = {value["m_FileID"] for value in values}
+        # Supplemental atlas groups legitimately span multiple files. Resolve
+        # the original carrier by its external path, not by the whole group.
+        file_ids = {value["m_FileID"] for value in values
+                    if value["m_FileID"] > 0 and
+                    serialized.externals[value["m_FileID"] - 1].path == piece.entry}
         if len(file_ids) != 1:
             raise PatchError(f"{piece.file_id_source!r} entries disagree on m_FileID")
         file_id = file_ids.pop()
@@ -344,6 +348,10 @@ def patch_container(apk: Path) -> tuple[bytes, dict]:
         if resolved != piece.entry:
             raise PatchError(f"externals[{file_id - 1}] is {resolved!r}, "
                              f"expected {piece.entry!r}")
+        if piece.container_key == "uialtas/drawing/jewel/baoshiji_2":
+            container = [(key, value) for key, value in container if not (
+                key == piece.container_key and value["m_FileID"] > 0 and
+                serialized.externals[value["m_FileID"] - 1].path == "x2_mogul_drawing.assets")]
         position, placement = insert_container_group(
             container, piece.container_key, file_id, (NEW_TEXTURE_PID, NEW_SPRITE_PID))
         inserted.append({"key": piece.container_key, "index": position,

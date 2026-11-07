@@ -317,7 +317,7 @@ def test_legacy_export_preserves_destination_welfare_claims(env):
     legacy = manager._container_bytes(manifest, document, blobs)
     manager.import_save(alpha, legacy)
     after = manager.canonical_state(alpha)
-    for table in RELEASE_ADDED_TABLES - {'battle_element_compose', 'battle_element_compose_receipts', 'college_washing_pending', 'college_washing_receipts', 'favor_wish_state', 'favor_wish_events', 'favor_wish_receipts'}:
+    for table in RELEASE_ADDED_TABLES - {'battle_element_compose', 'battle_element_compose_receipts', 'college_washing_pending', 'college_washing_receipts', 'favor_wish_state', 'favor_wish_events', 'favor_wish_receipts', 'hero_date_options', 'hero_contracts'}:
         assert after['tables'][table] == before['tables'][table]
     manifest['server_save_schema'] = SERVER_SAVE_SCHEMA
     with pytest.raises(ValueError, match='表集不符'):

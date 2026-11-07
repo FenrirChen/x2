@@ -167,6 +167,7 @@ class EconomyService:
         self.catalog["items"] = battle_rewards["items"] + [row for row in self.catalog["items"]
             if row["ItemID"] not in recovered_items]
         reward_items = json.loads(files("x2server").joinpath("data/reward_items.json").read_text(encoding="utf-8"))
+        reward_items += json.loads(files("x2server").joinpath("data/covenant_items.json").read_text(encoding="utf-8"))
         existing_items = {row["ItemID"] for row in self.catalog["items"]}
         self.catalog["items"].extend(row for row in reward_items if row["ItemID"] not in existing_items)
         # The compact reward_items export omits Item.Used. Restore item-to-Gift

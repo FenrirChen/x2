@@ -1,5 +1,7 @@
 # SAVE_DATA_AUDIT.md — 存档数据边界审计（Account → Save Ownership Graph）
 
+2026-11-07 契约恢复补充：`hero_date_options`（约会选项、拼图碎片）与 `hero_contracts`（契约状态）均按 `player_id` 纳入完整导出、跨账号导入及回滚。此前 schema 5 存档允许同时缺少这两张表，按空状态恢复；只缺其中一张则拒绝。导入备份、注册开关及服务端邮件领取账簿的原有规则保持不变。
+
 2026-10-27 本地并发优化补充：持久化所有权范围与存档格式不变。导入/导出冷却复用全局`server_settings`的`save-limit:`键，不随存档迁移、回滚；后台存档子进程的临时文件会清理，正式覆盖前备份仍每账号仅保留一份。checkpoint改用后台独立连接，维持WAL和FULL同步。详见[并发优化记录](../knowledge/database_optimization_20261027.md)。
 
 任务：存档管理（导出/导入）第一阶段审计产物。

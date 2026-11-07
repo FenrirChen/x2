@@ -153,6 +153,7 @@ def hero_journal_ids(hero_id, level, completed_dates=()):
 class FavorService:
     def __init__(self, store, economy, clock=time.time):
         self.store, self.economy, self.clock = store, economy, clock
+        ensure_schema(store)
         data = catalog()
         self.heroes = {r["HeroID"]: r for r in data["favorabilityhero"]}
         self.levels = {r["FavorLevel"]: r for r in data["favorabilitylevel"]}
@@ -347,6 +348,9 @@ class FavorService:
             return failure
         current = favor_state(hero, self.heroes[hero_id]["InitialLevel"])["level"]
         row = self.levels[current]
+        if date_rows(hero_id) and current >= int(covenant_rules().get("need_level", 99)):
+            # Level 19 is opened by OpenContract, never the ordinary break request.
+            return failure
         if not row.get("IsBreak") or current in hero.get("favor_breaks", []):
             return failure
         costs = list(zip(row.get("BreakItem", []), row.get("BreakItemNum", []), strict=True))
