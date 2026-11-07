@@ -3,7 +3,7 @@ from copy import deepcopy
 import pytest
 from tests.unit.test_economy import env
 from tests.unit.test_battle import packet
-from x2server.player.favor import FavorService, interaction_data, touch_gain
+from x2server.player.favor import FavorService, interaction_data, level_cap, touch_gain
 from x2server.player.appearance import AppearanceService, dubbing_unlocked
 from x2server.messages.appearance import HERO_DUBBING_DATA
 
@@ -58,8 +58,9 @@ def test_touch_account_limit_midnight_and_maximum_exp(env):
     assert send(service, ctx, options[1006], sequence=201).values['code'] == 10
     player = store.get(1)
     h = player['snapshot']['heroes'][0]
-    maximum = service.levels[service.heroes[1003]['LevelLimit']]['Exp']
-    h['favor'] = {'level': service.heroes[1003]['LevelLimit'], 'exp': maximum}
+    cap = level_cap(1003)
+    maximum = service.levels[cap]['Exp']
+    h['favor'] = {'level': cap, 'exp': maximum}
     store.save_snapshot(1, player['snapshot'], player['revision'])
     assert send(service, ctx, sequence=202).values['newExp'] == maximum
 

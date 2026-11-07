@@ -1,0 +1,52 @@
+[
+ {
+  "table": "FavorabilityHero",
+  "entry": "0881faec387c4c54db57d59afa2d2ac7",
+  "sig": "2700000008eb0708ec0708ed0708ee07"
+ },
+ {
+  "table": "FavorabilityLevel",
+  "entry": "8984f6d08589ea045ba79cbaa510bb4b",
+  "sig": "14000000080108020803080408050806"
+ },
+ {
+  "table": "FavorabilityDate",
+  "entry": "5789c0845c7db484797bcc13b60a087e",
+  "sig": "6400000008cd8f0608ce8f0608cf8f06"
+ },
+ {
+  "table": "OptionEffect",
+  "entry": "6efa934c9d8a41546b44787125f9730a",
+  "sig": "4602000008b5820d08b6820d0899830d"
+ },
+ {
+  "table": "Appearance",
+  "entry": "2c6eecbf62e755847898fdb41e07d857",
+  "sig": "e400000008cdbd4a08cebd4a08cfbd4a"
+ },
+ {
+  "table": "Item",
+  "entry": "e49ddfae661db9147b8823552f01df41",
+  "sig": "d40b000008a88c3d08a98c3d08aa8c3d"
+ },
+ {
+  "table": "Picture",
+  "entry": "d83394ef195a71d46a11b5b5f680d7f5",
+  "sig": "9c00000008c1843d089cc44d089dc44d"
+ },
+ {
+  "table": "ExpressionInteractiveArea",
+  "entry": "c5d172aa26318b84cb50ce61b36c684a",
+  "sig": "7d00000008cdbd4a08cebd4a08cfbd4a"
+ },
+ {
+  "table": "UnitBase",
+  "entry": "5c993e6912a40e541be49a4f5ed7abd7",
+  "sig": "7807000008eb0708ec0708ed0708ee07"
+ },
+ {
+  "table": "Language",
+  "entry": "844762d28a77f85408b631eb3f0186bc",
+  "sig": "4871000008e90708f30708fd07088708"
+ }
+]
