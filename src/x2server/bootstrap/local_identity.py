@@ -352,6 +352,9 @@ class LocalIdentityService(RecoveredBootstrapService):
     def ensure_oct25_supply_mail(self, player_id: int, now: int) -> bool:
         return self._accounts.ensure_oct25_supply_mail(player_id, now) if self._accounts is not None else False
 
+    def ensure_nov08_supply_mail(self, player_id: int, now: int) -> bool:
+        return self._accounts.ensure_nov08_supply_mail(player_id, now) if self._accounts is not None else False
+
     def ensure_journey_supply_mail(self, player_id: int, now: int) -> bool:
         return self._accounts.ensure_journey_supply_mail(player_id, now) if self._accounts is not None else False
 

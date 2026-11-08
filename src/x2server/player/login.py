@@ -86,6 +86,7 @@ class LoginService:
             self.identity.ensure_causality_oct13_mail(player["id"], now)
             self.identity.ensure_journey_supply_mail(player["id"], now)
             self.identity.ensure_oct25_supply_mail(player["id"], now)
+            self.identity.ensure_nov08_supply_mail(player["id"], now)
             self._power_refund_mail(player, now)
         context.session.session_id = secrets.token_urlsafe(24)
         context.session.player_id = player["id"]
@@ -282,6 +283,7 @@ class LoginService:
         extra_created = self.identity.ensure_causality_oct13_mail(player["id"], now) if self.mail else False
         journey_created = self.identity.ensure_journey_supply_mail(player["id"], now) if self.mail else False
         oct25_created = self.identity.ensure_oct25_supply_mail(player["id"], now) if self.mail else False
+        nov08_created = self.identity.ensure_nov08_supply_mail(player["id"], now) if self.mail else False
         refund_created = self._power_refund_mail(player, now) if self.mail else False
         daily_granted = self.gift_packages.settle_daily(player["id"]) if self.gift_packages else False
         # Same-process reconnect keeps the authenticated transport session supplied
@@ -290,7 +292,7 @@ class LoginService:
             context.session.session_id = secrets.token_urlsafe(24)
         LOGGER.info("authenticated reconnect player=%s", player["id"])
         pushes = self.economy.pushes(player["id"]) if daily_granted and self.economy else ()
-        if welcome_created or daily_created or choice_created or causality_created or supply_created or extra_created or journey_created or oct25_created or refund_created:
+        if welcome_created or daily_created or choice_created or causality_created or supply_created or extra_created or journey_created or oct25_created or nov08_created or refund_created:
             pushes += (self.mail.list_message(player["id"]),)
         return OutboundMessage("L2C_ReConnect", {"code": 10, "id": player["id"],
             "serverTime": now}, pushes=pushes)

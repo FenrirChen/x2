@@ -69,6 +69,7 @@ def test_old_offline_and_new_accounts_claim_use_delete_restart(tmp_path, deliver
     ('ensure_ultimate_causality_mail', 'ultimate_causality_'),
     ('ensure_revival_supply_mail', 'revival_supply_'),
     ('ensure_oct25_supply_mail', 'oct25_supply_80_200:'),
+    ('ensure_nov08_supply_mail', 'nov08_supply_40_200:'),
 ])
 def test_causality_concurrent_lazy_backfill_and_registration_rollback(tmp_path, ensure, prefix):
     store = PlayerStore(tmp_path / 'causality.db')
@@ -79,7 +80,8 @@ def test_causality_concurrent_lazy_backfill_and_registration_rollback(tmp_path, 
         accounts.db.execute("DELETE FROM player_mail WHERE source_key LIKE ?", (prefix + '%',))
         accounts.db.execute('DELETE FROM system_mail_issues WHERE kind=?',
                             ({'ultimate_causality_':'ultimate_causality', 'revival_supply_':'revival_supply',
-                              'oct25_supply_80_200:':'oct25_supply_80_200'}[prefix],))
+                              'oct25_supply_80_200:':'oct25_supply_80_200',
+                              'nov08_supply_40_200:':'nov08_supply_40_200'}[prefix],))
     other = AccountStore(store)
     with ThreadPoolExecutor(max_workers=2) as pool:
         results = list(pool.map(lambda a: getattr(a, ensure)(player_id, 200), (accounts, other)))

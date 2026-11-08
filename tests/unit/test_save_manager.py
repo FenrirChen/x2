@@ -45,7 +45,8 @@ def test_import_does_not_reissue_once_mail_across_accounts_or_old_archives(tmp_p
         count = store.db.execute('SELECT count(*) FROM player_mail WHERE player_id=?', (new,)).fetchone()[0]
         for ensure in (accounts.ensure_welcome_mail, accounts.ensure_hero_choice_mail,
                        accounts.ensure_ultimate_causality_mail, accounts.ensure_revival_supply_mail, accounts.ensure_causality_oct13_mail,
-                       accounts.ensure_journey_supply_mail, accounts.ensure_oct25_supply_mail):
+                       accounts.ensure_journey_supply_mail, accounts.ensure_oct25_supply_mail,
+                       accounts.ensure_nov08_supply_mail):
             assert ensure(new, 200) is False
         assert store.db.execute('SELECT count(*) FROM player_mail WHERE player_id=?', (new,)).fetchone()[0] == count
         # Even an archive lacking the once-mail rows cannot erase server history.
@@ -58,11 +59,12 @@ def test_import_does_not_reissue_once_mail_across_accounts_or_old_archives(tmp_p
         assert not accounts.ensure_causality_oct13_mail(new, 201)
         assert not accounts.ensure_journey_supply_mail(new, 201)
         assert not accounts.ensure_oct25_supply_mail(new, 201)
-        # These seven campaigns were actually issued; conditional price-refund
+        assert not accounts.ensure_nov08_supply_mail(new, 201)
+        # These eight campaigns were actually issued; conditional price-refund
         # eligibility is covered by test_power_refund_saves, not account signup.
         issued={r[0] for r in store.db.execute('SELECT kind FROM system_mail_issues WHERE player_id=?',(new,))}
         assert issued == {'welcome','hero_choice','ultimate_causality','revival_supply',
-                          'causality_oct13','journey_supply_120_100','oct25_supply_80_200'}
+                          'causality_oct13','journey_supply_120_100','oct25_supply_80_200','nov08_supply_40_200'}
     finally:
         manager.close()
         store.close()
