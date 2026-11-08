@@ -180,6 +180,10 @@ def test_moon_battle_entry_settlement_daily_caps_and_replay(moon):
     values.update(missionId=2111001, chapter=2011000, sceneId=2211001)
     enter = asyncio.run(battle.enter(ctx, packet(values, 80)))
     assert enter.values['result'] == 10
+    from x2server.messages.battle import FIGHT_DATA, FIGHT_GROUP_SKILL
+    group = FIGHT_GROUP_SKILL.decode(FIGHT_DATA.decode(enter.values['data'])['fightGroupSkillData'])
+    assert group['activeSkillId'] == 99361
+    assert group['activeSkillLevel'] == 1 and group['unitId'] == 9914
     assert store.get(1)['snapshot']['mobility']['power'] == 100
     data = {'chapterId': 2011000, 'sectionId': 2111001, 'success': True, 'fightTime': 60,
         'outsideItems': [OUTSIDE_ITEM.encode({'id': i, 'num': n}) for i, n in [(1120001, 500), (1120002, 20)]]}

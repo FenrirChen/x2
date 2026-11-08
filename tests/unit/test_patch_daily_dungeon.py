@@ -74,3 +74,13 @@ def test_splice_keeps_length_and_refuses_an_ambiguous_payload():
         patch.splice(b"payload" * 2, b"payload", b"PAYLOAD")
     with pytest.raises(patch.PatchError):
         patch.splice(b"head\n", b"head", b"h")
+
+
+def test_packed_weekdays_are_patched_and_decoded_without_changing_other_fields():
+    record = patch.varint(8) + patch.varint(2030500) + bytes([66, 7, 1, 0, 1, 0, 1, 0, 1])
+    plain = (1).to_bytes(4, 'little') + bytes([8]) + patch.varint(2030500) + bytes([18]) + patch.varint(len(record)) + record
+    repaired, hits = patch.patch_plaintext(plain)
+    assert len(hits) == 3
+    row = next(v.value for v in patch.parse_message(repaired, 4)[0] if v.field == 2)
+    assert patch.open_time(row) == [1] * 7
+    assert len(repaired) == len(plain)

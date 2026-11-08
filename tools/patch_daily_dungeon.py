@@ -85,7 +85,24 @@ def xor_table(blob: bytes) -> bytes:
 
 def open_time(record: bytes) -> list[int]:
     values, _ = parse_message(record)
-    return [v.value for v in values if v.field == 8 and v.wire == 0]
+    result = []
+    for value in values:
+        if value.field != 8:
+            continue
+        if value.wire == 0:
+            result.append(value.value)
+        elif value.wire == 2:
+            number = shift = 0
+            for byte in value.value:
+                number |= (byte & 127) << shift
+                if byte & 128:
+                    shift += 7
+                else:
+                    result.append(number)
+                    number = shift = 0
+            if shift:
+                raise PatchError('truncated packed OpenTime')
+    return result
 
 
 def open_time_zero_offsets(plain: bytes) -> list[tuple[int, int]]:
@@ -230,7 +247,8 @@ def patch(apk: Path, output: Path) -> dict:
             target = output / Path(entry).name
             target.write_bytes(result)
             manifest[entry] = str(target.resolve())
-            audit[entry]["sha256"] = hashlib.sha256(source).hexdigest()
+            audit[entry]["source_sha256"] = hashlib.sha256(source).hexdigest()
+            audit[entry]["output_sha256"] = hashlib.sha256(result).hexdigest()
     if not manifest:
         raise PatchError("every DailyDungeon copy is already fully open")
     (output / "patches.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
