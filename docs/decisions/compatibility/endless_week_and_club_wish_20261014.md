@@ -8,6 +8,6 @@
 
 社团每天只能成功发起一次祈愿，与材料种类无关；领取后仍保持 wishingCount=1，午夜恢复0。原有 wish_counts 迁移保留当日已使用状态。回应、重放和午夜同步均下发 L2C_ClubWishingCount，避免界面重新出现可祈愿入口。
 
-降临试炼：当前服务端 DAILY_COMPAT.schedule 已为 always_open。客户端 ChapterModule.CheckDailyChapterTime 0x16bad64 在0x16bae84取DayOfWeek，在0x16bae88读取本地DailyDungeon.OpenTime，再在0x16baed4检查当日值>0。2030500/2030600/2030700/2031200的轮日限制不能靠服务端开放字段取消。用户此前要求暂不改客户端，本轮已请示是否允许仅更新两份APK配置表；获准前不改安装包，不能宣称客户端每日全开已完成。
+降临试炼：当前服务端 DAILY_COMPAT.schedule 已为 always_open。客户端 ChapterModule.CheckDailyChapterTime 0x16bad64 在0x16bae84取DayOfWeek，在0x16bae88读取本地DailyDungeon.OpenTime，再在0x16baed4检查当日值>0。2030500/2030600/2030700/2031200的轮日限制不能靠服务端开放字段取消。用户此前要求暂不改客户端，本轮已请示是否允许更新客户端配置表；该请示已于 2026-10-17 获准并落地，见 daily_dungeon_weekday_gate_20261017.md。
 
 测试覆盖光能发奖/重放、上限领取与真实wire、周一00点刷新、上限与货币保留、历史补回、同日换材料拒绝、祈愿领取后次数和次日恢复，并回归登录、奖励与完整存档。
