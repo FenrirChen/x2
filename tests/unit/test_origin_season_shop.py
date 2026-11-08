@@ -31,6 +31,37 @@ def level(e, s, value):
         s.write(1, state)
 
 
+def test_purification_achievement_counts_actual_fair_tickets_and_repairs_history(env):
+    store, e, s = env
+    service, ctx = ShopService(store, e), context()
+    def achievement():
+        return next(row for row in s.achievement_values(1) if row['achvId'] == 6007123)
+    assert s.shop.currency == 1237998  # 游园奖券 / 净化点数, same native item.
+    ticket = next(r for r in s.shop.goods.values() if r['stage'] == 1 and r['price'] == 40)
+    extra = next(r for r in s.shop.goods.values() if r['stage'] == 1 and r['price'] == 10)
+    assert buy(service, ctx, ticket['goodsId'], rid=710).values['code'] == 13
+    assert achievement()['achvProgress'] == 0
+    with e.transaction():
+        e._grant(1, 'test:fair-tickets', {1237998: 50})
+    paid = buy(service, ctx, ticket['goodsId'], rid=711)
+    assert paid.values['code'] == 10
+    assert achievement()['achvProgress'] == 40
+    assert buy(service, ctx, ticket['goodsId'], rid=711).values == paid.values
+    assert achievement()['achvProgress'] == 40
+    assert buy(service, ctx, extra['goodsId'], rid=712).values['code'] == 10
+    # An older instance never wrote stats.shop_spent; durable counts suffice
+    # after service recreation, without replaying purchases or doubling credit.
+    assert s.state(1)['stats'].get('shop_spent', 0) == 0
+    s = SeasonService(e, enabled=True)
+    assert achievement()['achvProgress'] == 50
+    assert achievement()['status'] == 1
+    with e.transaction():
+        result = s.operate(1, 'SeasonAchvReward', {'achvId': 6007123}, 'fair-claim')
+    assert result['code'] == 10 and achievement()['status'] == 2
+    with pytest.raises(ValueError), e.transaction():
+        s.operate(1, 'SeasonAchvReward', {'achvId': 6007123}, 'fair-claim-again')
+
+
 def test_origin_identity_activity_config_sections_and_ticket_all_match(env):
     _, _, s = env
     activities = [ACTIVITY_SCHEMAS['ActivityData'].decode(raw) for raw in s.activity_values()]

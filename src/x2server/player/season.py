@@ -642,6 +642,13 @@ class SeasonService:
                 progress = int(0 < seconds <= rule['seconds'])
             elif kind == 'chapter_layer':
                 progress = int(state['chapter_layers'].get(rule['chapter'], 0) >= rule['layer'])
+            elif kind == 'shop_spent':
+                # Item1237998 is 游园奖券 in Chinese, 净化點數 in ChineseFT.
+                # Successful purchase counts are atomic with payment and scoped
+                # to this season; derive consumption to repair past purchases too.
+                spent = sum(row['price'] * state.get('shop_counts', {}).get(str(gid), 0)
+                            for gid, row in self.shop.goods.items())
+                progress = max(state['stats'].get(kind, 0), spent)
             else:
                 progress = state['stats'].get(kind, 0) if kind != 'unsupported' else 0
             progress = max(progress, state['achievement_floors'].get(str(aid), 0))
