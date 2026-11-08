@@ -236,7 +236,8 @@ def test_midnight_preserves_progress_equipment_and_resets_quota(moon):
 def test_moon_equipment_team_caster_uses_original_skill_variant(moon):
     from x2server.messages.battle import FIGHT_GROUP_SKILL
     complete(moon)
-    assert moon[3].battle_skill(1) == b''
+    skill = FIGHT_GROUP_SKILL.decode(moon[3].battle_skill(1))
+    assert skill['activeSkillId'] == 99361 and skill['unitId'] == 9914
     send(moon, 'MoonEquipPutOnOrOff', 210, operate=1, moonEquipId=111001, slotIndex=0)
     skill = FIGHT_GROUP_SKILL.decode(moon[3].battle_skill(1))
     assert skill['activeSkillId'] == 99141 and skill['activeSkillLevel'] == 1

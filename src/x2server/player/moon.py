@@ -437,7 +437,11 @@ class MoonService:
         state = self.load(pid)
         eid = state['slots'].get('special:0', 0)
         if eid not in self.equips or not self.equip_level(pid, state, eid):
-            return b''
+            # 月之荒庭/月之暗面·新月的剧情关还没有可用的月之装备时，官方仍会通过团队技能
+            # 下发【净化模块】提供的净化力场（99361，载具 9914）。此前这里返回空载荷，
+            # 客户端不出现净化按钮，剧情关的净化目标无法完成。
+            return FIGHT_GROUP_SKILL.encode({'activeSkillId': 99361,
+                'activeSkillLevel': 1, 'unitId': 9914, 'passiveIds': []})
         row, variant, passives = self.equips[eid], 1, []
         for key, normal_id in state['slots'].items():
             if not key.startswith('normal:') or normal_id not in self.equips or not self.equip_level(pid, state, normal_id):
