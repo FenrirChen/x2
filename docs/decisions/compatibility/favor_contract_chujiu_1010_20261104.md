@@ -2,7 +2,7 @@
 Document-Type: Compatibility Decision
 Domain: Favorability / Appearance
 Status: ACTIVE
-Updated: 2026-11-04
+Updated: 2026-11-08
 ---
 # Decision
 把 2.4 客户端关掉的「契约(花嫁)」系统整条恢复，并与服务端
@@ -35,12 +35,15 @@ Updated: 2026-11-04
 - 1.0 包里的 5 个美术 bundle 没有注册进 `globalgamemanagers` 的
   `ResourceManager.m_Container`，即使表里写了资源键也只会拿到空引用。
 - 表会从「128 B RSA 头 + 密文尾部」变成明文，长度也变了；客户端
-  `LogicX2.Resources.ConvertDataBytes` 必须旁路这 10 张表，否则解析失败。
+  `LogicX2.Resources.ConvertDataBytes` 必须旁路这 11 张表，否则解析失败。
+- FunctionOpen 21946（FunctionType 36 = 约会）的 `OpenLevel` 还是 999。客户端
+  `FavorDateTab_OnCheckTabOpen` 直接 `GameAPI.IsClientFunctionClose(21946)`，
+  所以整个约会页签灰掉，点一下只弹「解神者等级到达 999 级开放」。
 
 # Scope
 工具只读参考 APK，把所有产物写到 `--output`，不回写输入。
 
-## A. 表补丁（10 张 TextAsset）
+## A. 表补丁（11 张 TextAsset）
 明文写入 `m_Script`，保留 TextAsset 原有的 `m_Name` 头；每张表写完都回读校验行数 /
   行内容 / 16 B 前缀 sig。
 
@@ -56,6 +59,7 @@ Updated: 2026-11-04
 | `ExpressionInteractiveArea` | 克隆 1221003 热区 -> 1221004 |
 | `UnitBase` | 1010 的 `f48 AppearanceList` 追加 1221004 |
 | `Language` | 补 13430051..13430054 四条契约说明页文案 |
+| `FunctionOpen` | 21946（约会）`f4 OpenLevel` 999 -> 1，约会页签不再锁死；约会内容仍由好感 12/14 把关 |
 
 ## B. 美术注入（5 个 bundle + globalgamemanagers）
 - `05a68fcc…`（`uialtas/altas/chujiu_marry`，19 条：1 贴图 + 18 碎片小图）
@@ -72,12 +76,12 @@ Updated: 2026-11-04
 ## C. libil2cpp.so（固定偏移 + 原指令断言）
 | 偏移 | 改动 |
 | --- | --- |
-| `0x1B4A0C4` | `b OLD_CAVE` -> `b 0x42B3AD8`，前缀明文旁路 payload（2 条基包 sig + 10 张表 sig，共 12 条） |
+| `0x1B4A0C4` | `b OLD_CAVE` -> `b 0x42B3AD8`，前缀明文旁路 payload（2 条基包 sig + 11 张表 sig，共 13 条） |
 | `0x1AAA334` | 完成度 `bl 0x1AA5AE0` -> `bl 0x1AA59EC`（按已收集碎片 / 碎片总数） |
 | `0x1AA811C` / `0x1AA87C0` | `bl CheckMarried` -> 辅助函数；仅 1010 返回真值，其余 24 神格不再显示契约拼图页 |
 
 每个点都先读原指令并断言；偏移处不是预期指令时直接报错，不会静默写坏 .so。工具还会
-重解析 payload、校验 12 条前缀、bl/b 目标、零区与辅助函数尾部，并保留重复运行不叠加的
+重解析 payload、校验 13 条前缀、bl/b 目标、零区与辅助函数尾部，并保留重复运行不叠加的
 语义（已在补丁后的表 / .so 上回放验证，产物逐字节相同）。
 
 # Official
@@ -96,7 +100,7 @@ python tools\patch_contract_chujiu.py --apk <reference.apk> --output <dir> --mar
 
 输出目录中是可替换同名 zip 条目的文件（文件名 = 原条目名 + `.bin`）：
 
-- `assets/bin/Data/` 下 10 张表、5 个美术 bundle、`globalgamemanagers.bin`
+- `assets/bin/Data/` 下 11 张表、5 个美术 bundle、`globalgamemanagers.bin`
 - `libil2cpp.so.bin`
 - `patches.json`（zip 条目 -> 产物路径）与 `audit.json`（每处改动明细）
 
@@ -114,7 +118,7 @@ python tools\patch_contract_chujiu.py --apk <reference.apk> --output <dir> --mar
   | `5f3a0a68a4b8e7943a375fb814d67fc2.bin` | 71,092 B | `bdd6b84c3521a9954bf0c92b50aa271466c8b6b07c8c84b71900cc590db49c7c` | 旧包 `assets/bin/Data/5f3a0a68…` |
   | `d3b1e7dd001810a408e1412ab4903fa2.bin` | 133,660 B | `ced9d94fa52d4fdbe990b4c3041f2c80b7bbb1f1221e09d31b80b2a36c592d27` | 旧包 `assets/bin/Data/d3b1e7dd…` |
   | `06d6762cd0bf8914c8b140e93fc5d846.bin` | 3,858,220 B | `c703fdeaee687ba1dde887164a1502f5dd68338989f1efa2fc77e1ff0807d97a` | 旧包 `assets/bin/Data/06d6762c…`（原始花嫁 bundle；详情立绘与 0.66 缩放在工具里现场生成） |
-  | `table_sigs.json` | 1,306 B | `60be936102a8c9c11e2ce4b4562841ce8864435c43f1f866f39b71d34f34ebf6` | 参考包补丁后 10 张表的 16 B 前缀 sig；用于校验 APK 版本 |
+  | `table_sigs.json` | 1,380 B | `d2b484b6e9733b035d7d0ab7f577888ba0e24d64f5de9639ca2c67320163730b` | 参考包补丁后 11 张表的 16 B 前缀 sig；用于校验 APK 版本 |
   | `language_13430051_54.json` | 1,210 B | `8816da88514fee15505b749655ea1f12c27592eb06891bf9c999a5160d6170fa` | 旧包 `Language.bin` 的 13430051..54 中文列 |
 
 - 参考包上产出的 5 个美术 bundle / `globalgamemanagers` / `libil2cpp.so` SHA-256（默认
@@ -128,7 +132,7 @@ python tools\patch_contract_chujiu.py --apk <reference.apk> --output <dir> --mar
   | `d3b1e7dd…` | 133,660 B | `ced9d94fa52d4fdbe990b4c3041f2c80b7bbb1f1221e09d31b80b2a36c592d27` |
   | `06d6762c…` | 15,929,896 B | `a0bb13f414885e1a7e80ae9d750508c5039d088d0abc3efd1183f498bdba2d05` |
   | `globalgamemanagers` | 21,866,256 B | `18a6bcd9bf2deab986aa03b9d974ca9233f60dcd1e98b4a135876ec8487e456e` |
-  | `libil2cpp.so` | 88,855,552 B | `9af10c003efffb1ba836c88925c8ae4dc9a5200af5ba317065225082b1b68977` |
+  | `libil2cpp.so` | 88,855,552 B | `4db6ec1f96ebb6ab8939664ed3746b550799afdd7ee0f2804c5ada9aa91cf65f` |
 
 - 工具必须以含上述摘要的参考基包为输入。`table_sigs.json` 的 16 B 前缀与
   `EXPECTED_BASE_SIGS` 是版本闸门：表结构或 .so 布局不符会明确报错。
@@ -139,4 +143,6 @@ python tools\patch_contract_chujiu.py --apk <reference.apk> --output <dir> --mar
   304x512。默认 0.66 与现役私服产物逐字节一致。
 - 服务端改动（20 级上限、约会目录、契约道具、1010 外观）必须同时生效；只打客户端补丁
   不会放开等级或发放契约形象。
+- 2026-11-08 追加 `FunctionOpen` 21946（约会）`OpenLevel` 999 -> 1：首版工具只补了表与
+  美术，约会页签仍被客户端功能开关锁死，点击只弹「解神者等级到达 999 级开放」。
 - 不提交 `.bin` 产物（表 + 美术 + .so 合计约 130 MB）到 Git；工具 + 素材足以复现。
