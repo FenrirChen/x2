@@ -1402,8 +1402,16 @@ class EconomyService:
                 first = not self.store.db.execute('SELECT 1 FROM season_runs WHERE player_id=? AND instance_id=? AND section_id=? AND success=1', (player_id, self.season.instance, section)).fetchone()
             if activity_period:
                 first = not activity.rotation.get(player_id, activity_period, 'clear', section, 0)
+            first_groups = profile["first_reward"] if first else []
+            if (activity_period and section_type == 19 and
+                    activity.runtime.tower.owns(section)):
+                # The tower task page owns first-clear rewards (929/930).
+                # Commit eligibility with settlement, rather than pay twice.
+                if first:
+                    activity.rotation.put(player_id, activity_period, 'tower-reward-pending', section, True)
+                first_groups = []
             for source, groups in (("NORMAL_CLEAR_FIXED", profile["normal_reward"]),
-                                   ("FIRST_CLEAR_FIXED", profile["first_reward"] if first else [])):
+                                   ("FIRST_CLEAR_FIXED", first_groups)):
                 for group in groups:
                     local_pending = Counter()
                     try:

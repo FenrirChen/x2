@@ -78,7 +78,11 @@
     "L2C_ExtraDropData": 861,
     "C2L_ExtraDropData": 860,
     "L2C_SceneGlobalParam": 1039,
-    "C2L_SceneGlobalParam": 1038
+    "C2L_SceneGlobalParam": 1038,
+    "L2C_ReceiveTowerReward": 930,
+    "C2L_ReceiveTowerReward": 929,
+    "L2C_QueryTowerReward": 928,
+    "C2L_QueryTowerReward": 927
   },
   "schemas": {
     "L2C_ActivityBuildingUpgrade": {
@@ -3110,6 +3114,84 @@
     "C2L_SceneGlobalParam": {
       "fields": [],
       "native_serialize": 60917656,
+      "native_tags": [],
+      "verified": true
+    },
+    "L2C_ReceiveTowerReward": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "received",
+          "type": "int",
+          "repeated": true,
+          "native_offset": "0x18"
+        },
+        {
+          "number": 3,
+          "name": "rewardData",
+          "type": "RewardData",
+          "repeated": false,
+          "native_offset": "0x20"
+        }
+      ],
+      "native_serialize": 57890440,
+      "native_tags": [
+        8,
+        16,
+        26
+      ],
+      "verified": true
+    },
+    "C2L_ReceiveTowerReward": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "sectionId",
+          "type": "int",
+          "repeated": false,
+          "native_offset": "0x10"
+        }
+      ],
+      "native_serialize": 63742328,
+      "native_tags": [
+        8
+      ],
+      "verified": true
+    },
+    "L2C_QueryTowerReward": {
+      "fields": [
+        {
+          "number": 1,
+          "name": "code",
+          "type": "GameLogicErrCode",
+          "repeated": false,
+          "native_offset": "0x10"
+        },
+        {
+          "number": 2,
+          "name": "received",
+          "type": "int",
+          "repeated": true,
+          "native_offset": "0x18"
+        }
+      ],
+      "native_serialize": 53033728,
+      "native_tags": [
+        8,
+        16
+      ],
+      "verified": true
+    },
+    "C2L_QueryTowerReward": {
+      "fields": [],
+      "native_serialize": 63665876,
       "native_tags": [],
       "verified": true
     }

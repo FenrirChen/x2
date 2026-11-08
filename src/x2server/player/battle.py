@@ -749,6 +749,15 @@ class BattleService:
         values = {"result": 10, "uuid": str(uuid.uuid4()), "sign": secrets.token_bytes(32),
                   "data": data, "fightDataProfile": profile, "playerLevel": snapshot["level"],
                   "monsterInitLevel": self.monster_levels.get(scene, 0)}
+        if activity and entry_context.section_type == 19 and activity.runtime.tower.owns(section):
+            try:
+                with self.economy.transaction():
+                    values.update(activity.runtime.tower.entry(player['id'], section,
+                                                               request.get('selectedTowerList', [])))
+            except UnresolvedEconomy as exc:
+                logging.getLogger('x2.activity').info('tower entry denied player=%s section=%s reason=%s',
+                                                       player['id'], section, exc)
+                return reject
         if request.get('assistData') and self.economy and getattr(self.economy,'social',None):
             try:
                 assist=self.economy.social.assist(player['id'],request['assistData'],section_config)

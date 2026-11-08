@@ -15,6 +15,7 @@ from .activity import enum
 from .activity_cafe import ActivityCafe
 from .activity_buildings import ActivityBuildings
 from .activity_exchange import ActivityExchange
+from .activity_tower import ActivityTower
 from .economy import UnresolvedEconomy
 
 
@@ -27,7 +28,7 @@ LIVE_QUERIES = frozenset({
     'LanternShowQueryData', 'ExtraDropData', 'AccountBuffData',
     'ActivityReissueState', 'QueryShuangHanActivity', 'ActivityPreNoticInfo',
     'ActivityDialogReciveInfo', 'QueryActivityTower', 'ActivityTowerPassive',
-    'ActivityShop', 'ActivityBuilding',
+    'ActivityShop', 'ActivityBuilding', 'QueryTowerReward',
 })
 
 
@@ -37,6 +38,7 @@ class ActivityRuntime:
         activity.runtime = self
         self.cafe, self.exchange = ActivityCafe(activity), ActivityExchange(activity, appearance)
         self.buildings = ActivityBuildings(activity)
+        self.tower = ActivityTower(activity)
         self.buff_rows = {r['AccountBuffID']: r for r in activity.tables['AccountBuff']}
 
     def handlers(self):
@@ -227,20 +229,11 @@ class ActivityRuntime:
             return self.cafe.handle(player, op, req, token)
         if op.startswith('LanternShow'):
             return self.lantern(player, op, req, token)
-        if op in ('QueryActivityTower', 'ActivityTowerPassive'):
+        if op in self.tower.OPERATIONS:
+            return self.tower.handle(player, op, req, token)
+        if op == 'ActivityTowerPassive':
             if self.r.of_type(50, period) is None:
                 raise UnresolvedEconomy('tower defense is not open')
-            if op == 'QueryActivityTower':
-                towers = self.a.tables['Tower']
-                owned = self.r.get(player, period, 'tower', 'owned', [])
-                balance = self.a.store.db.execute('SELECT quantity FROM inventory '
-                    'WHERE player_id=? AND item_id=?', (player, towers[0]['CostItem'])).fetchone()
-                # Native 0x13424D4 dereferences the list; TowerManager.GetItem(0)
-                # is checked and skipped at 0x134256C. Represent no owned towers
-                # without granting the six paid level-one towers for free.
-                return {'code': 10, 'towerInfo': [encode('ActivityTowerInfo', {'id': tid})
-                        for tid in owned] or [encode('ActivityTowerInfo', {})],
-                        'towerPoint': balance['quantity'] if balance else 0}
             # Full-view Rift chooses its passives once per section and period.
             passives = []
             for rank in self.a.tables['TowerRank']:
@@ -441,12 +434,15 @@ class ActivityRuntime:
                    'QueryActivityMissionRecord', 'ActivityMissionData', 'ActivityRewardPoolInfo',
                    'CafeStoreInfo', 'CafeStoreUpdate', 'LanternShowQueryData',
                    'QueryFoodMissionReward', 'ActivityPreNoticInfo', 'ActivityReissueState',
-                   'QueryActivityTower', 'ActivityTowerPassive',
+                   'QueryActivityTower', 'ActivityTowerPassive', 'QueryTowerReward',
                    'QueryShuangHanActivity', 'PlayShuangHanPV',
                    'ActivityDialogReciveInfo', 'ActivityShop', 'AccountBuffData', 'AccountBuffAutoStop',
                    'ActivityBuilding'}
         queries.add('ActivityMissionSelBranch')  # Only branch state changes, no inventory/player snapshot.
         before = self.e.pushes(player) if name[4:] not in queries else ()
+        if name == 'C2L_ReceiveTowerReward':
+            before += (OutboundMessage('L2C_QueryActivityTower',
+                self.tower.handle(player, 'QueryActivityTower', {}, token)),)
         if name == 'C2L_ActivityBuildingUpgrade':
             before += (OutboundMessage('L2C_ExtraDropData',
                 self.operate(player, 'ExtraDropData', {}, token)),)

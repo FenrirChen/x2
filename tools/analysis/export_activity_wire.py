@@ -22,7 +22,8 @@ OPERATIONS = (
     'LanternShowQueryData', 'LanternShowRecBox', 'ActivityMissionData',
     'ActivityMissionSelBranch', 'QueryFoodMissionReward', 'ReceiveFoodMissionReward',
     'ActivityPassRecord', 'QueryActivityTower', 'ActivityTowerLevelUp',
-    'ActivityTowerPassive', 'ActivityBuilding', 'ActivityBuildingUpgrade',
+    'ActivityTowerPassive', 'QueryTowerReward', 'ReceiveTowerReward',
+    'ActivityBuilding', 'ActivityBuildingUpgrade',
 )
 
 

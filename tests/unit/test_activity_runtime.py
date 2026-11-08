@@ -86,7 +86,7 @@ def test_tower_entry_queries_use_real_catalog_and_stable_passives(runtime, theme
         assert not response.before_response
     infos = rt.operate(1, 'QueryActivityTower', {}, 'tower-info')['towerInfo']
     ids = [ACTIVITY_SCHEMAS['ActivityTowerInfo'].decode(raw).get('id', 0) for raw in infos]
-    assert ids == [0]  # Native skips ID 0; no paid tower is unlocked for free.
+    assert ids == [0]  # Towers unlock through the original first-clear reward items.
     first = rt.operate(1, 'ActivityTowerPassive', {}, 'passive-a')
     assert rt.operate(1, 'ActivityTowerPassive', {}, 'passive-b') == first
     assert first['passives']

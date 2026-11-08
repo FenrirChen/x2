@@ -13,9 +13,10 @@ GLOBAL_ROUTES = {'QueryActivity', 'EntryidStatus'}
 BUILDING_ROUTES = {'ActivityBuilding', 'ActivityBuildingUpgrade'}
 SHARED_ROUTES = {'SceneGlobalParam', 'ActivityPassRecord', 'ExtraDropData',
                  'AccountBuffData', 'AccountBuffAutoStop', 'ActivityReissueState'}
-UNSUPPORTED_ROUTES = {'ActivityTowerLevelUp', 'ActivityReissue'}
+UNSUPPORTED_ROUTES = {'ActivityReissue'}
 REQUIRED_KINDS = {
     'QueryActivityTower': {50}, 'ActivityTowerPassive': {50},
+    'ActivityTowerLevelUp': {50}, 'QueryTowerReward': {50}, 'ReceiveTowerReward': {50},
     'QueryShuangHanActivity': {13}, 'PlayShuangHanPV': {13},
     'ActivityPreNotic': {1, 15, 24}, 'ActivityPreNoticInfo': {1, 15, 24},
     'ActivityShop': {3, 14, 43},

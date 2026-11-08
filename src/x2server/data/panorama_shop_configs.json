@@ -1,0 +1,99 @@
+{
+  "provenance": "REVIVAL_COMPAT: missing ShopConfig rows synthesized from the user-approved exchange catalog and existing common-shop metadata. Purchase gates remain server-authoritative.",
+  "shops": [
+    {
+      "ShopID": 876,
+      "ShopType": {
+        "value": 6,
+        "enum": "E_ActivityShopCommon"
+      },
+      "ShopParam1": 72032,
+      "ShopName": 8761,
+      "ShopNameChina": "一阶段",
+      "ShopIcon": "DynamicActivity/GongGong_ShangDian_YiHao",
+      "UIPrefabID": 1,
+      "ShopRank": 1,
+      "ShopResourceType": [
+        982
+      ]
+    },
+    {
+      "ShopID": 877,
+      "ShopType": {
+        "value": 6,
+        "enum": "E_ActivityShopCommon"
+      },
+      "ShopParam1": 72032,
+      "ShopName": 8771,
+      "ShopNameChina": "二阶段",
+      "ShopIcon": "DynamicActivity/GongGong_ShangDian_ErHao",
+      "UIPrefabID": 1,
+      "ShopRank": 2,
+      "ShopResourceType": [
+        982
+      ],
+      "UnlockType": {
+        "value": 1,
+        "enum": "E_SectionUnlock"
+      },
+      "ShopParam2": [
+        2160513
+      ],
+      "ShopParam3": [
+        1
+      ]
+    },
+    {
+      "ShopID": 878,
+      "ShopType": {
+        "value": 6,
+        "enum": "E_ActivityShopCommon"
+      },
+      "ShopParam1": 72032,
+      "ShopName": 8781,
+      "ShopNameChina": "三阶段",
+      "ShopIcon": "DynamicActivity/GongGong_ShangDian_SanHao",
+      "UIPrefabID": 1,
+      "ShopRank": 3,
+      "ShopResourceType": [
+        982
+      ],
+      "UnlockType": {
+        "value": 1,
+        "enum": "E_SectionUnlock"
+      },
+      "ShopParam2": [
+        2160523
+      ],
+      "ShopParam3": [
+        1
+      ]
+    },
+    {
+      "ShopID": 879,
+      "ShopType": {
+        "value": 6,
+        "enum": "E_ActivityShopCommon"
+      },
+      "ShopParam1": 72032,
+      "ShopName": 8791,
+      "ShopNameChina": "四阶段",
+      "ShopIcon": "DynamicActivity/GongGong_ShangDian_SiHao",
+      "UIPrefabID": 1,
+      "ShopRank": 4,
+      "ShopResourceType": [
+        982
+      ],
+      "UnlockType": {
+        "value": 1,
+        "enum": "E_SectionUnlock"
+      },
+      "ShopParam2": [
+        2160533
+      ],
+      "ShopParam3": [
+        1
+      ]
+    }
+  ]
+}
