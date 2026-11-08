@@ -655,7 +655,10 @@ class SeasonService:
             state['achievement_floors'][str(aid)] = min(progress, target)
             wire_target = row.get('wire_target', target)
             wire_progress = min(progress, wire_target) if wire_target == target else wire_target if progress >= target else 0
-            result.append({'achvId': aid, 'achvProgress': wire_progress, 'stage': int(aid in state['achievements_claimed']),
+            # Native InitAchievement indexes row.GiftGroup[stage] even when
+            # already claimed. All 75 Origin rows have one reward tier; status
+            # alone carries claim state. stage=1 throws after creating a UI row.
+            result.append({'achvId': aid, 'achvProgress': wire_progress, 'stage': 0,
                            'status': 2 if aid in state['achievements_claimed'] else 1 if progress >= target else 0})
         self.write(player, state)
         return result
