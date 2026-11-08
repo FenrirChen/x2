@@ -1455,7 +1455,7 @@ class EconomyService:
                     reason='resource activity 71004 +100%'))
                 sources['EXTRA_DROP'].append({'item_id':item,'quantity':count})
             if activity:
-                chapter_rewards = activity.pov_chapter_rewards(player_id, section)
+                chapter_rewards = activity.pov_chapter_rewards(player_id, section, activity_period)
                 for item, count in chapter_rewards.items():
                     grant = RewardGrant('FIRST_CLEAR_FIXED', section, run_uuid, item, count,
                                         reason='POVChapterInfo.ClearReward')

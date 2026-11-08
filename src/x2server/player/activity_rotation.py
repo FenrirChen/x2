@@ -24,7 +24,7 @@ class ActivityRotation:
 
     FIRST_END = int(datetime(2026,10,19,tzinfo=timezone(timedelta(hours=8))).timestamp())
 
-    # Fixed user-approved order, including every subsequent seven-event cycle.
+    # Fixed user-approved order, including every subsequent eight-event cycle.
     # Catalog/state slots remain unchanged so existing rewards keep their owner.
     # E Feng, Sakura, YueXi, Winter, Panorama, ZhuQue, ZhenXun, Treasure.
     # Append Treasure so every already scheduled first-cycle week stays put.
@@ -46,6 +46,19 @@ class ActivityRotation:
             raise ValueError('activity order must contain each active theme once')
         # Preserve historical state IDs when a theme is retired from the calendar.
         self.state_cycle_size = self.catalog.get('state_cycle_size', len(self.themes))
+        # Restore permanent POV rows without overwriting generated activity data
+        # or altering the approved calendar and historical state slots.
+        extra = self._supplement()
+        if extra:
+            if set(extra.get('tables', {})) - {'POVChapterInfo'} or extra.get('themes') or 'state_cycle_size' in extra:
+                raise ValueError('POV supplement must not alter other tables or calendar')
+            rows = {row['ChapterID']: row for row in self.catalog['tables'].get('POVChapterInfo', [])}
+            for row in extra.get('tables', {}).get('POVChapterInfo', []):
+                key = row['ChapterID']
+                if key in rows and rows[key] != row:
+                    raise ValueError(f'conflicting POV chapter {key}')
+                rows[key] = row
+            self.catalog['tables']['POVChapterInfo'] = sorted(rows.values(), key=lambda row: row['ChapterID'])
         self.state_slots = {t.get('state_slot', i): i for i, t in enumerate(self.themes)}
         self.section_groups = {sid: t['group'] for t in self.themes for sid in t['section_ids']}
         if len(self.section_groups) != sum(len(t['section_ids']) for t in self.themes):
@@ -72,6 +85,21 @@ class ActivityRotation:
                 player_id INTEGER NOT NULL, request_key TEXT NOT NULL, period INTEGER NOT NULL,
                 message TEXT NOT NULL, response BLOB NOT NULL,
                 PRIMARY KEY(player_id,request_key))''')
+
+    @staticmethod
+    def _supplement():
+        """Load the hand-maintained permanent POV chapter supplement.
+
+        Kept next to the generated catalog so a regeneration never loses it.
+        Missing file = no supplement, which is what a fresh checkout of an older
+        revision has.
+        """
+        try:
+            raw = files('x2server').joinpath(
+                'data/activity_rotation_extra.json').read_text(encoding='utf-8')
+        except (FileNotFoundError, ModuleNotFoundError):
+            return None
+        return json.loads(raw)
 
     @property
     def first_end(self):
