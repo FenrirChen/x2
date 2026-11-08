@@ -20,7 +20,7 @@ def ctx():
     return DispatchContext('test', 'local', SessionState('test', 'season-protocol', player_id=1))
 
 
-@pytest.mark.parametrize('theme', range(7))
+@pytest.mark.parametrize('theme', range(8))
 def test_real_season_shop_684_685_entry_independent_of_theme_live_gate_and_closed(env, theme):
     store, e, s = env
     from x2server.player.season_schedule import ANCHOR

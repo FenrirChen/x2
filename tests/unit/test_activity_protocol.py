@@ -20,7 +20,7 @@ def test_every_registered_route_has_an_explicit_contract(runtime):
     assert {name[4:] for name in rt.handlers()} == ALL_ROUTES
 
 
-@pytest.mark.parametrize('theme', range(7))
+@pytest.mark.parametrize('theme', range(8))
 def test_every_route_in_every_theme_returns_a_valid_owned_response(runtime, theme):
     _, _, ctx, rt, now = runtime
     now[0] = activity_start(theme) + 3600
@@ -64,7 +64,7 @@ def test_query_replay_rechecks_theme_and_reads_next_occurrence(runtime):
     assert asyncio.run(rt.handle(ctx, query)).values['code'] == 10
     now[0] = rt.r.at().end
     assert asyncio.run(rt.handle(ctx, query)).values['code'] == 13
-    now[0] += 6 * ActivityRotation.SECONDS
+    now[0] += (len(ActivityRotation.CYCLE_ORDER) - 1) * ActivityRotation.SECONDS
     assert rt.r.at().theme['group'] == 37
     # A query describes the current occurrence; old query receipts must not
     # block it when its owning theme comes back. Foreign themes still reject.

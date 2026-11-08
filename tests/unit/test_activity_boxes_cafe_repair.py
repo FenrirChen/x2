@@ -15,7 +15,7 @@ def claim_tasks(rt, aid, count):
         rt.r.put(1, period, rt.a.task_namespace(task), tid, {'progress': 999999, 'claimed': True})
 
 
-@pytest.mark.parametrize('theme', range(7))
+@pytest.mark.parametrize('theme', range(8))
 def test_box_static_query_ids_native_claim_index_and_open_state(runtime, theme):
     store, e, ctx, rt, now = runtime
     e.activity = rt.a

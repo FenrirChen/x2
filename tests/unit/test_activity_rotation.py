@@ -1,5 +1,5 @@
 from tests.activity_calendar_helpers import activity_start
-"""Event calendar and reward state must be isolated across all seven periods."""
+"""Event calendar and reward state must be isolated across all eight periods."""
 import pytest
 
 from tests.unit.test_economy import env, rewards
@@ -11,7 +11,7 @@ from x2server.messages.economy import TASK
 
 
 ORDER = ['阏逢敛遗', '伪生樱之岛', '斟鄩之邑', '全景裂隙',
-         '冬至万物', '珠雀绮馔', '日月盈仄']
+         '冬至万物', '珠雀绮馔', '日月盈仄', '秘宝之海']
 
 
 @pytest.fixture
@@ -29,7 +29,7 @@ def test_calendar_exact_boundaries_and_full_cycle(activity):
     for index in range(17):
         start, end = rotation.bounds(index)
         period = rotation.at(start)
-        assert period.index == (1_000_000 if index else 0) + (index // 7) * 8 + [0, 1, 2, 4, 5, 6, 7][rotation.theme_slot(index)]
+        assert period.index == (1_000_000 if index else 0) + (index // 8) * 8 + [0, 1, 2, 4, 5, 6, 7, 3][rotation.theme_slot(index)]
         assert period.theme['title'] == ORDER[rotation.theme_slot(index)]
         assert period.start == start and period.end == end
         assert rotation.at(period.end - 1) == period
@@ -49,24 +49,29 @@ def test_local_review_calendar_keeps_game_clock_and_default_anchor(activity, mon
     assert ActivityRotation(store, economy.clock).at().index == 0
 
 
-def test_retired_sections_and_old_runs_are_closed_without_deleting_progress(activity):
+def test_treasure_restored_with_original_state_slot_and_only_admitted_when_open(activity):
     store, economy, service, now = activity
-    assert all(t['group'] != 17 for t in service.rotation.themes)
-    assert len(service.rotation.catalog['closed_section_ids']) == 33
-    for sid in service.rotation.catalog['closed_section_ids']:
+    rotation = service.rotation
+    treasure = next(t for t in rotation.themes if t['group'] == 17)
+    assert treasure['state_slot'] == 3 and len(treasure['section_ids']) == 33
+    assert not set(treasure['section_ids']) & set(rotation.catalog['closed_section_ids'])
+    for sid in treasure['section_ids']:
         with pytest.raises(UnresolvedEconomy, match='not open'):
             service.admission(1, sid)
-        with pytest.raises(ValueError, match='closed'):
-            service.rotation.bind_run(1, sid, f'closed-{sid}')
-    store.db.execute('INSERT INTO activity_runs VALUES (?,?,?,?,?,0)',
-                     ('retired-run', 1, 3, 2160911, now[0]))
-    with pytest.raises(ValueError, match='closed'):
-        service.rotation.run_period(1, 'retired-run')
+    # Retained historic state must not become this weekly occurrence's progress.
+    store.db.execute("INSERT INTO activity_state VALUES (1,3,'clear','2160911','1')")
+    now[0] = activity_start(7)
+    period = service.period(1)
+    assert period.theme['group'] == 17 and period.index == 1_000_003
+    assert rotation.get(1, period, 'clear', 2160911, 0) == 0
+    service.admission(1, 2160911)
+    rotation.bind_run(1, 2160911, 'restored-treasure')
+    assert rotation.run_period(1, 'restored-treasure') == period
     now[0] = activity_start(3)
     period = service.period(1)
     assert period.theme['group'] == 13 and period.index == 1_000_004
     with economy.transaction():
-        service.rotation.put(1, period, 'task', 'keep-existing', {'claimed': True})
+        rotation.put(1, period, 'task', 'keep-existing', {'claimed': True})
     assert ActivityService(economy).rotation.get(1, period, 'task', 'keep-existing')['claimed']
 
 
@@ -77,7 +82,7 @@ def test_period_reset_preserves_inventory_and_previous_audit(activity):
         service.rotation.put(1, period, 'task', 123, {'claimed': True})
         economy._grant(1, 'test:keep', {1237902: 100})
     snapshot = store.get(1)
-    now[0] = service.rotation.bounds(7)[0]
+    now[0] = service.rotation.bounds(len(ActivityRotation.CYCLE_ORDER))[0]
     second = service.period(1)
     assert second.theme['title'] == period.theme['title']
     assert service.rotation.get(1, second, 'task', 123) is None
@@ -90,7 +95,7 @@ def test_period_reset_preserves_inventory_and_previous_audit(activity):
 
 def test_all_themes_wire_has_current_dates_and_only_current_group(activity):
     _, _, service, now = activity
-    for index in range(7):
+    for index in range(8):
         now[0] = service.rotation.bounds(index)[0]
         period = service.period(1)
         rows = [ACTIVITY_SCHEMAS['ActivityData'].decode(raw)
@@ -125,7 +130,7 @@ def test_tasks_only_active_event_deduplicate_and_reset(activity):
     account = store.get(1)
     assert service.claim_task(1, tid, 9, task['ActivityID'])['code'] == 13
     assert store.get(1) == account
-    now[0] = service.rotation.bounds(7)[0]
+    now[0] = service.rotation.bounds(len(ActivityRotation.CYCLE_ORDER))[0]
     state = next(r for r in map(TASK.decode, service.task_values(1, 9)['taskList']) if r['taskId'] == tid)
     assert state['taskProgress'] == 0 and state['taskStatus'] == 2
 
@@ -176,7 +181,7 @@ def test_pool_cost_stock_and_failed_delivery_rollback(activity, monkeypatch):
     assert not store.db.execute("SELECT 1 FROM activity_events WHERE event_key='pool-draw:draw-fail'").fetchone()
 
 
-@pytest.mark.parametrize('theme_index', [0, 2, 5])
+@pytest.mark.parametrize('theme_index', [0, 2, 5, 7])
 def test_pool_wire_opens_stages_in_order_and_resets_each_period(activity, theme_index):
     store, economy, service, now = activity
     now[0] = activity_start(theme_index)
@@ -210,7 +215,7 @@ def test_pool_wire_opens_stages_in_order_and_resets_each_period(activity, theme_
         assert [info['rewardPoolId'] for info in visible()] == ids[:index + 2]
     reopened = ActivityService(economy)
     assert reopened.unlocked_pools(1, period, row) == ids
-    now[0] = activity_start(theme_index + 7)
+    now[0] = activity_start(theme_index + len(ActivityRotation.CYCLE_ORDER))
     assert [info['rewardPoolId'] for info in visible()] == ids[:1]
 
 
@@ -264,7 +269,7 @@ def test_preview_claim_once_and_again_next_cycle(activity):
     again = service.pre_notice(1, 3, claim=True)
     assert again['code'] == 10 and again['lastPreNoticSec'] == now[0]
     assert not again.get('rewardData')
-    now[0] = service.rotation.bounds(7)[0]
+    now[0] = service.rotation.bounds(len(ActivityRotation.CYCLE_ORDER))[0]
     assert service.pre_notice(1, 3)['lastPreNoticSec'] == 0
     assert service.pre_notice(1, 3, claim=True)['code'] == 10
 
@@ -292,7 +297,7 @@ def test_oct26_yuexi_swap_keeps_current_and_future_periods_and_run_bounds(activi
     assert rotation.at(ts(2026,10,25)).theme['group'] == 33
     assert rotation.at(ts(2026,10,26)-1).theme['group'] == 33
     for start,group in [(ts(2026,10,26),99),(ts(2026,11,2),7),(ts(2026,11,9),13),
-                        (ts(2026,11,23),15),(ts(2026,12,7),33)]:
+                        (ts(2026,11,23),15),(ts(2026,11,30),17),(ts(2026,12,14),33)]:
         period=rotation.at(start)
         assert period.theme['group']==group
         assert period.start==start and period.end==start+7*86400
@@ -309,12 +314,12 @@ def test_fixed_approved_order_repeats_with_stable_state_keys(activity):
     _, _, service, _ = activity
     rotation = service.rotation
     expected = ['阏逢敛遗','伪生樱之岛','日月盈仄','冬至万物',
-                '全景裂隙','珠雀绮馔','斟鄩之邑']
-    state_slots = [0,1,7,5,4,6,2]
+                '全景裂隙','珠雀绮馔','斟鄩之邑','秘宝之海']
+    state_slots = [0,1,7,5,4,6,2,3]
     for index in range(21):
         period=rotation.at(rotation.bounds(index)[0])
-        assert period.theme['title'] == expected[index % 7]
-        assert period.index == (1_000_000 if index else 0) + index//7*8 + state_slots[index % 7]
+        assert period.theme['title'] == expected[index % 8]
+        assert period.index == (1_000_000 if index else 0) + index//8*8 + state_slots[index % 8]
 
 
 @pytest.mark.parametrize('calendar_index',range(14))

@@ -13,8 +13,9 @@ THEMES = (
     (15, '斟鄩之邑', 13430301),
     (13, '全景裂隙', 13430231), (7, '冬至万物', 13430091),
     (10, '珠雀绮馔', 13430111), (99, '日月盈仄', 50009023),
+    (17, '秘宝之海', 50009033),
 )
-STATE_SLOTS = {37: 0, 33: 1, 15: 2, 13: 4, 7: 5, 10: 6, 99: 7}
+STATE_SLOTS = {37: 0, 33: 1, 15: 2, 13: 4, 7: 5, 10: 6, 99: 7, 17: 3}
 
 
 def restore_yuexi_shops(tables):
@@ -44,29 +45,36 @@ def restore_yuexi_shops(tables):
                                 if key not in existing)
 
 
-def retire_disabled_theme(data):
-    """Remove playable configuration, retaining only IDs needed to deny entry."""
-    tables = data['tables']
-    retired = [r for r in tables['ActivityReal'] if r['ActivityGroup'] == 17]
-    aids = {r['ActivityID'] for r in retired}
-    chapters = {r['ID']: r for r in tables['ActivityDungeon'] + tables['DailyDungeon']}
-    chapter_ids = {v for r in retired for v in r.get('ActivityParam1', []) if v in chapters}
-    section_ids = {v for cid in chapter_ids for key in ('SectionID', 'ChallengeLevel')
-                   for v in chapters[cid].get(key, [])}
-    section_catalog = {r['SectionID'] for r in tables['SectionTable']}
-    section_ids.update(v for r in retired for key in ('ActivityParam1', 'ActivityParam3', 'ActivityParam4')
-                       for v in r.get(key, []) if v in section_catalog)
-    section_ids.discard(0)
-    data['closed_section_ids'] = sorted(set(data.get('closed_section_ids', [])) | section_ids)
+def restore_treasure_theme(data, source):
+    """Append the original group without overwriting subsequent local repairs."""
+    activities = [r for r in source['ActivityReal'] if r.get('ActivityGroup') == 17]
+    if not activities:
+        raise ValueError('missing original Treasure activity rows')
+    aids = {r['ActivityID'] for r in activities}
+    chapters = {r['ID']: r for r in source['ActivityDungeon'] + source['DailyDungeon']}
+    chapter_ids = {v for r in activities for v in r.get('ActivityParam1', []) if v in chapters}
+    section_ids = {sid for cid in chapter_ids for key in ('SectionID', 'ChallengeLevel')
+                   for sid in chapters[cid].get(key, []) if sid}
+    all_sections = {r['SectionID'] for r in source['SectionTable']}
+    section_ids.update(v for r in activities for key in ('ActivityParam1', 'ActivityParam3', 'ActivityParam4')
+                       for v in r.get(key, []) if v and v in all_sections)
+    for name, rows in source.items():
+        if name not in data['tables'] or not rows:
+            continue
+        chosen = [r for r in rows if r.get('ActivityID') in aids
+                  or name in ('ActivityDungeon', 'DailyDungeon') and r['ID'] in chapter_ids
+                  or name == 'SectionTable' and r['SectionID'] in section_ids]
+        if not chosen:
+            continue
+        primary = next(iter(rows[0]))
+        existing = {r[primary] for r in data['tables'][name]}
+        data['tables'][name].extend(r for r in chosen if r[primary] not in existing)
+    data['themes'] = [t for t in data['themes'] if t['group'] != 17] + [{
+        'group': 17, 'title': '秘宝之海', 'title_key': 50009033,
+        'activities': activities, 'chapter_ids': sorted(chapter_ids),
+        'section_ids': sorted(section_ids), 'state_slot': 3}]
     data['state_cycle_size'] = 8
-    data['themes'] = [t for t in data['themes'] if t['group'] != 17]
-    for theme in data['themes']:
-        theme['state_slot'] = STATE_SLOTS[theme['group']]
-    for name, rows in tables.items():
-        tables[name] = [r for r in rows if r.get('ActivityID') not in aids]
-    for name in ('ActivityDungeon', 'DailyDungeon'):
-        tables[name] = [r for r in tables[name] if r['ID'] not in chapter_ids]
-    tables['SectionTable'] = [r for r in tables['SectionTable'] if r['SectionID'] not in section_ids]
+    data['closed_section_ids'] = sorted(set(data.get('closed_section_ids', [])) - section_ids)
     return data
 
 
@@ -110,15 +118,12 @@ def main():
     tables['ActivityReal'] = [r for r in tables['ActivityReal'] if r['ActivityID'] in selected_ids]
     tables['SectionTable'] = [r for r in tables['SectionTable'] if r['SectionID'] in section_ids]
     tables['Language'] = []  # Native texts remain in the APK; no duplicate full dictionary.
-    data = {'anchor': '2026-10-10T00:00:00+08:00', 'period_days': 5,
+    data = {'anchor': '2026-10-10T00:00:00+08:00', 'period_days': 7,
             'reset_each_period': True, 'themes': themes, 'source': meta, 'tables': tables}
-    # Collect closed sections before narrowing ActivityReal/SectionTable on export.
-    full_tables, _, _ = read_tables(['ActivityReal', 'SectionTable'])
-    data['tables']['ActivityReal'] = full_tables['ActivityReal']
-    data['tables']['SectionTable'] = full_tables['SectionTable']
-    retire_disabled_theme(data)
-    data['tables']['ActivityReal'] = [r for r in data['tables']['ActivityReal'] if r['ActivityID'] in selected_ids]
-    data['tables']['SectionTable'] = [r for r in data['tables']['SectionTable'] if r['SectionID'] in section_ids]
+    data['state_cycle_size'] = 8
+    data['closed_section_ids'] = []
+    for theme in data['themes']:
+        theme['state_slot'] = STATE_SLOTS[theme['group']]
     path = ROOT / 'src/x2server/data/activity_rotation_catalog.json'
     path.write_text(json.dumps(data, ensure_ascii=False, separators=(',', ':')) + '\n', encoding='utf-8')
     print('Themes:', [(t['title'], len(t['section_ids'])) for t in themes])

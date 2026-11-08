@@ -9,7 +9,7 @@ from tests.unit.test_battle import packet
 from x2server.messages.activity import ACTIVITY_SCHEMAS
 
 
-@pytest.mark.parametrize('theme', range(7))
+@pytest.mark.parametrize('theme', range(8))
 def test_activity_catalog_seeds_only_current_unlocked_pools(runtime, theme):
     _, _, context, rt, now = runtime
     now[0] = activity_start(theme) + 3600

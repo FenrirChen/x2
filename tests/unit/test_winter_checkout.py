@@ -32,7 +32,7 @@ def test_rotation_explicitly_closes_previously_open_modules(runtime):
             assert old_shops and all(r['state']==0 for r in old_shops)
 
 
-@pytest.mark.parametrize('slot',range(7))
+@pytest.mark.parametrize('slot',range(8))
 def test_unsolicited_pass_records_only_go_to_the_osiris_activity(runtime,slot):
     _,_,ctx,rt,now=runtime
     now[0]=activity_start(slot)+3600

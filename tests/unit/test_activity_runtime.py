@@ -92,13 +92,13 @@ def test_tower_entry_queries_use_real_catalog_and_stable_passives(runtime, theme
     assert first['passives']
 
 
-def test_retired_activity_battle_entry_and_query_are_rejected(runtime):
+def test_treasure_activity_battle_entry_and_query_are_rejected_outside_period(runtime):
     from x2server.player.battle import BattleService
     from x2server.messages.battle import PROFILE_HERO
     _, e, ctx, rt, _ = runtime
     e.activity = rt.a
     battle = BattleService(rt.a.store, e)
-    for sid in rt.r.catalog['closed_section_ids']:
+    for sid in next(t for t in rt.r.themes if t['group'] == 17)['section_ids']:
         entry = asyncio.run(battle.enter(ctx, packet({'missionId': sid,
             'heros': [PROFILE_HERO.encode({'heroId': 1003, 'leader': 1})]})))
         assert entry.values['result'] == 13
@@ -254,7 +254,7 @@ def test_activity_protocol_error_rolls_back_and_returns_error_not_disconnect(run
     assert not store.db.execute('SELECT 1 FROM activity_receipts').fetchone()
 
 
-@pytest.mark.parametrize('theme_index', range(7))
+@pytest.mark.parametrize('theme_index', range(8))
 def test_every_activity_route_returns_encodable_response_in_every_period(runtime, theme_index):
     from x2server.messages.lobby import LOBBY_SCHEMAS
     _, _, ctx, rt, now = runtime
@@ -265,7 +265,7 @@ def test_every_activity_route_returns_encodable_response_in_every_period(runtime
         schema.encode(response.values)
 
 
-@pytest.mark.parametrize('theme_index', range(7))
+@pytest.mark.parametrize('theme_index', range(8))
 def test_all_theme_login_scene_parameters_and_real_shop_requests(runtime, theme_index):
     _, _, ctx, rt, now = runtime
     from x2server.protocol.registry import CORE_MESSAGE_REGISTRY
@@ -424,7 +424,7 @@ def test_cafe_retained_recipe_unlocks_next_occurrence(runtime):
         assert rt.operate(1, 'CafeStoreCooking', {'storeType': 7, 'recipeID': 25}, 'next-cook')['code'] == 10
 
 
-@pytest.mark.parametrize('theme_index', range(7))
+@pytest.mark.parametrize('theme_index', range(8))
 def test_activity_currency_snapshot_balances_follow_inventory(runtime, theme_index):
     from x2server.messages.core import BASE_INFO
     from x2server.player.login import LoginService, SHOP_CURRENCY_FIELDS
@@ -598,7 +598,7 @@ def test_first_theme_all_sections_enter_settle_replay_with_real_rewards(runtime)
     assert not store.db.execute('SELECT 1 FROM battle_unresolved_rewards WHERE reward_group>0').fetchone()
 
 
-@pytest.mark.parametrize('theme_index', range(7))
+@pytest.mark.parametrize('theme_index', range(8))
 def test_all_activity_sections_enter_and_settle_in_their_period(runtime, theme_index):
     from x2server.player.battle import BattleService
     from x2server.messages.battle import CHECKOUT, PROFILE_HERO, FIGHT_PROFILE
@@ -620,8 +620,13 @@ def test_all_activity_sections_enter_and_settle_in_their_period(runtime, theme_i
                 continue
             hero = (next(h for h in row['AssistParam'] if h > 0)
                     if row.get('AssistType', {}).get('value') == 1 else 1003)
+            tower_team = {}
+            if rt.tower.owns(sid) and rt.tower.ranks[sid].get('TowerNumber', 0):
+                tower_team['selectedTowerList'] = list(rt.tower.owned(1, period).values())[
+                    :rt.tower.ranks[sid]['TowerNumber']]
             entry = asyncio.run(battle.enter(ctx, packet({'missionId': sid, 'chapter': row['ChapterID'],
-                'sceneId': row['Maps'][0], 'heros': [PROFILE_HERO.encode({'heroId': hero, 'leader': 1})]}, 10000 + count)))
+                'sceneId': row['Maps'][0], **tower_team,
+                'heros': [PROFILE_HERO.encode({'heroId': hero, 'leader': 1})]}, 10000 + count)))
             assert entry.values['result'] == 10, (period.theme['title'], sid, entry.values)
             assert FIGHT_PROFILE.decode(entry.values['fightDataProfile'])['sceneId'] == row['Maps'][0]
             checkout = packet({'checkout': CHECKOUT.encode({'chapterId': row['ChapterID'],
@@ -646,6 +651,10 @@ def test_all_activity_sections_enter_and_settle_in_their_period(runtime, theme_i
                 if push.message_name in ACTIVITY_SCHEMAS:
                     ACTIVITY_SCHEMAS[push.message_name].encode(push.values)
             assert rt.r.get(1, period, 'clear', sid) == 1
+            if rt.tower.owns(sid):
+                with e.transaction():
+                    claim = rt.operate(1, 'ReceiveTowerReward', {'sectionId': sid}, f'first-clear:{sid}')
+                assert claim['code'] == 10
             replay = asyncio.run(battle.checkout(ctx, checkout))
             assert replay.values == result.values
             assert 'L2C_QueryActivityMissionRecord' not in {p.message_name for p in replay.before_response + replay.pushes}

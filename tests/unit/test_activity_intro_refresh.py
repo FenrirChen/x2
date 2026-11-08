@@ -19,7 +19,7 @@ def native_refresh_after(timestamp):
     return timestamp + 86400 - ((timestamp - 18000) % 86400)
 
 
-@pytest.mark.parametrize('theme_index', range(7))
+@pytest.mark.parametrize('theme_index', range(8))
 def test_all_theme_intros_survive_native_refresh_query_replay_and_restart(runtime, theme_index):
     store, economy, context, rt, now = runtime
     now[0] = activity_start(theme_index) + 8 * 3600
@@ -65,7 +65,7 @@ def test_all_theme_intros_survive_native_refresh_query_replay_and_restart(runtim
     acknowledgement = restored.a.pre_notice(1, family, claim=True)
     assert acknowledgement['code'] == 10 and not acknowledgement.get('rewardData')
     assert now[0] < native_refresh_after(acknowledgement['lastPreNoticSec'])
-    now[0] = second_period.start + 49 * 86400 + 8 * 3600
+    now[0] = next_activity_cycle(second_period.start) + 8 * 3600
     assert restored.a.pre_notice(1, family)['lastPreNoticSec'] == 0
     third = asyncio.run(restored.handle(context, packet({'activityType': family}, 1322,
                                                       'C2L_ActivityPreNotic')))

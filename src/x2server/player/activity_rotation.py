@@ -26,8 +26,9 @@ class ActivityRotation:
 
     # Fixed user-approved order, including every subsequent seven-event cycle.
     # Catalog/state slots remain unchanged so existing rewards keep their owner.
-    # E Feng, Sakura, YueXi, Winter, Panorama, ZhuQue, ZhenXun.
-    CYCLE_ORDER = (0, 1, 6, 4, 3, 5, 2)
+    # E Feng, Sakura, YueXi, Winter, Panorama, ZhuQue, ZhenXun, Treasure.
+    # Append Treasure so every already scheduled first-cycle week stays put.
+    CYCLE_ORDER = (0, 1, 6, 4, 3, 5, 2, 7)
 
     def theme_slot(self, calendar_index):
         return self.CYCLE_ORDER[calendar_index % len(self.themes)]
