@@ -156,6 +156,28 @@ def test_customer_handoff_real_payment_replay_and_restart(game):
     restored.close()
 
 
+def test_chip_customer_delivers_three_god_chips(game):
+    """type==1 (PURCHASECHIPTASK): 交付材料发 CollegeQuest.AwardGroup 的神格碎片, 不发金币。"""
+    store, _, _, service, _ = game
+    slot = next(pos for pos in range(5)
+                if service._customer_for(1, pos)['type'] == CollegeService.ALCHEMY_CHIP)
+    customer = service._customer_for(1, slot)
+    item, count = customer['itemId'][0], customer['itemNum'][0]
+    meta = service.alchemy._customer_meta(customer['questId'])
+    chips = dict(service.economy.gifts([meta['chipAwardGroup']]))
+    assert chips
+    gold = store.get(1)['snapshot']['gold']
+    with store.db:
+        store.db.execute('INSERT INTO inventory VALUES (?,?,?)', (1, item, count))
+    result = send(game, 'AlchemyFinish', type=1, posIndex=slot)
+    assert result.values['code'] == 10 and result.values['alchemyType'] == 1
+    from x2server.messages.economy import REWARD, REWARD_ITEM
+    reward = {r['itemId']: r['itemNum'] for r in map(
+        REWARD_ITEM.decode, REWARD.decode(result.values['rewardData']).get('rewardItem', []))}
+    assert reward == chips
+    assert store.get(1)['snapshot']['gold'] == gold
+
+
 def test_customer_refusal_rotation_replay_query_and_restart(game):
     store, clock, repo, service, context = game
     repo.growth_base(1)

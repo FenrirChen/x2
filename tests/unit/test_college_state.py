@@ -164,7 +164,9 @@ def test_college_flow_chain_answers(tmp_path):
                    if n == "CustomerInfo") if False else None
     from x2server.messages.lobby import CUSTOMER_INFO
     info = CUSTOMER_INFO.decode(customer)
-    assert info["questId"] >= 35303 and info["type"] == 2  # AlchemyType.TRANSACTION
+    # AlchemyType: 1=PURCHASECHIPTASK (CollegeQuest 35003 起 + 感叹号), 2=TRANSACTION (35303 起)。
+    assert info["type"] in (1, 2)
+    assert info["questId"] < 35303 if info["type"] == 1 else info["questId"] >= 35303
     assert len(info["itemId"]) == 1 and info["adviseItemId"] > 0
     # Independent native-wire assertions: CustomerInfo.Serialize 0x38f05a8
     # uses fields 3=type, 4=advisor, 5=param, 6=result, 7=quantity.
@@ -178,11 +180,18 @@ def test_college_flow_chain_answers(tmp_path):
             fields.setdefault(tag >> 3, []).append(value)
         return fields
     native = native_customer(customer)
-    assert native[3] == [2] and native[7] == [1]
+    assert native[3] == [info['type']] and native[7] == [1]
     assert native[4] == [info['adviseItemId']]
     main = asyncio.run(flows.dispatch(ctx, packet({}, 20, 'C2L_AlchemyMainData')))
-    assert all(native_customer(raw)[3] == [2] and native_customer(raw)[7] == [1]
-               for raw in main.values['customeres'])
+    rows = [CUSTOMER_INFO.decode(raw) for raw in main.values['customeres']]
+    # 每个槽都发真顾客, 类型只能是 1/2, 且按委托号区分; 5 个槽里至少有一位碎片委托,
+    # 客户端才会画 LianJin_GanTanHao 感叹号。
+    assert all(row['type'] in (1, 2) for row in rows)
+    assert any(row['type'] == 1 for row in rows)
+    for row in rows:
+        assert row['questId'] < 35303 if row['type'] == 1 else row['questId'] >= 35303
+    assert all(native_customer(raw)[3] == [row['type']] and native_customer(raw)[7] == [1]
+               for raw, row in zip(main.values['customeres'], rows))
     # Deterministic per (player, slot): repeat and relogin answer identically.
     again = asyncio.run(flows.dispatch(ctx, packet({"posIndex": 2}, 2, "C2L_SingleCustomerInfo")))
     assert again.values["customere"] == customer

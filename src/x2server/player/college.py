@@ -326,6 +326,7 @@ class CollegeService:
 
     # 882 type==3 sends the client down its own refresh chain (0x1B06160).
     ASSIST_UNAVAILABLE = 3
+    ALCHEMY_CHIP = 1  # AlchemyType.PURCHASECHIPTASK, deliver materials for god chips.
     ALCHEMY_TRANSACTION = 2  # AlchemyType.TRANSACTION, the standard sell order.
 
     def __init__(self, college: CollegeStateRepository | None = None, clock=None, economy=None):
@@ -507,6 +508,15 @@ class CollegeService:
     def _customer_count(self, player_id):
         return 5  # MAX_CUSTOMER_NUM and GlobalParamString.AlchemyCustomerNum
 
+    def _customer_quest(self, row: dict) -> tuple[int, int]:
+        # 学院顾客在官方同时挂着 E_Chip(交材料换神格碎片) 与 E_Sell(金币交易) 两类委托。
+        # 按委托号固定分出约 2/5 的碎片委托: 客户端对 type=1 画 LianJin_GanTanHao 感叹号 +
+        # QuestionPanel, 交付后发 CollegeQuest.AwardGroup 的 3 个神格碎片; 其余是金币交易。
+        # 拒绝/换客会换一位顾客, 委托类型也跟着换, 不会某个位置永远只有一种委托。
+        if int(row['chipQuestId']) % 5 in (1, 3):
+            return int(row['chipQuestId']), self.ALCHEMY_CHIP
+        return int(row['sellQuestId']), self.ALCHEMY_TRANSACTION
+
     def _customer_for(self, player_id: int, pos_index: int, state=None) -> dict:
         if state is None and self.college:
             with self.college.transaction():
@@ -529,7 +539,10 @@ class CollegeService:
                 alchemy['customer_orders'] = {}
             alchemy['customer_day'] = day
         positions = alchemy.setdefault('customer_positions', {})
-        by_quest = {r['sellQuestId']: r for r in customers}
+        by_quest = {}
+        for r in customers:
+            by_quest[r['sellQuestId']] = r
+            by_quest[r['chipQuestId']] = r
         used, valid = set(), {}
         # Reserve unchanged positions before replacing any one customer. Later
         # positions must keep the orders the client is currently displaying.
@@ -542,8 +555,10 @@ class CollegeService:
             row = by_quest.get(saved.get('questId'))
             if (row and saved.get('rotation') == rotation
                     and row['heroId'] not in used):
-                valid[key] = {**saved, 'questId': row['sellQuestId'], 'rotation': rotation}
-                used.add(row['heroId'])
+                quest_id, _ = self._customer_quest(row)
+                if saved.get('questId') == quest_id:
+                    valid[key] = {**saved, 'questId': quest_id, 'rotation': rotation}
+                    used.add(row['heroId'])
         for pos in range(self._customer_count(player_id)):
             key = str(pos)
             if key in valid:
@@ -554,12 +569,16 @@ class CollegeService:
                 candidate = (base + offset) % len(customers)
                 row = customers[candidate]
                 if row['heroId'] not in used:
-                    valid[key] = {'questId': row['sellQuestId'],
+                    quest_id, _ = self._customer_quest(row)
+                    valid[key] = {'questId': quest_id,
                                   'rotation': int(rotations.get(key, 0))}
                     used.add(row['heroId'])
                     break
         alchemy['customer_positions'] = valid
-        row = by_quest[valid[str(pos_index)]['questId']]
+        quest_id = valid[str(pos_index)]['questId']
+        row = by_quest[quest_id]
+        quest_type = (self.ALCHEMY_CHIP if quest_id == row['chipQuestId']
+                      else self.ALCHEMY_TRANSACTION)
         rotation = int(rotations.get(str(pos_index), 0))
         # An entry in the UI's recipe table is not an unlock. Use exactly the
         # non-negative proficiency closure accepted by AlchemyService._make.
@@ -571,7 +590,7 @@ class CollegeService:
         pinned = valid[str(pos_index)]
         suggested = alchemy.get('customer_orders', {}).get(str(pos_index), {})
         for saved in (pinned, suggested):
-            if (saved.get('rotation') == rotation and saved.get('questId') == row['sellQuestId']
+            if (saved.get('rotation') == rotation and saved.get('questId') == quest_id
                     and len(saved.get('itemId', [])) == 1):
                 candidate = by_item.get(saved['itemId'][0])
                 if candidate and saved.get('itemNum') == [candidate['productNum']]:
@@ -582,14 +601,14 @@ class CollegeService:
         # product. A successful suggestion remains a reversible, persisted swap.
         advised = None
         for saved in (pinned, suggested):
-            if (saved.get('rotation') == rotation and saved.get('questId') == row['sellQuestId']
+            if (saved.get('rotation') == rotation and saved.get('questId') == quest_id
                     and saved.get('adviseItemId') in by_item
                     and saved['adviseItemId'] != primary['productId']):
                 advised = by_item[saved['adviseItemId']]
         if advised is None:
             advised = self._choose_customer_product(owned, highest, primary['productId'])
-        customer = {'questId': row['sellQuestId'], 'itemId': [primary['productId']],
-                    'itemNum': [primary['productNum']], 'type': self.ALCHEMY_TRANSACTION,
+        customer = {'questId': quest_id, 'itemId': [primary['productId']],
+                    'itemNum': [primary['productNum']], 'type': quest_type,
                     'adviseItemId': advised['productId'], 'param': int(row['heroId']), 'result': 0}
         pinned.update({k: customer[k] for k in ('itemId', 'itemNum', 'adviseItemId')})
         return customer
