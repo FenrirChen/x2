@@ -73,6 +73,24 @@ def test_all_stages_visible_before_unlock_but_purchase_gates_remain(activity, gr
         assert exchange.listing(1, shop['shopId'])['code'] == 10
 
 
+@pytest.mark.parametrize('group', [7, 33, 13, 99])
+def test_wrong_activity_family_still_lists_current_theme(activity, group):
+    """客户端 family 与当前主题不一致时不能整包失败。
+
+    失败会让客户端一直停在上一个主题缓存的店铺里, 玩家看到的每个商品点下去都
+    只会得到「操作失败」。服务端仍应按当前主题下发, 保持 UI 与状态一致。
+    """
+    _, _, service, now = activity
+    exchange = ActivityExchange(service)
+    index = next(i for i, theme in enumerate(service.rotation.themes) if theme['group'] == group)
+    now[0] = activity_start(index)
+    family = 2 if group == 7 else 1 if group == 99 else 3
+    result = exchange.activity_listing(1, family + 1)
+    rows = [ACTIVITY_SCHEMAS['ActivityShopGoods'].decode(wire) for wire in result['goodsList']]
+    expected = {s['shopId'] for s in exchange.shops.values() if s['group'] == group}
+    assert {row['shopId'] for row in rows} == expected
+
+
 @pytest.mark.parametrize('shop_id', [860, 861, 862, 871, 872, 873, 874, 876, 877, 878, 879, 887, 888, 889, 890])
 def test_purchase_details_use_exact_wire_contract(activity, shop_id):
     _, economy, service, now = activity
@@ -178,7 +196,67 @@ def test_locked_wrong_theme_and_mismatched_goods_rejected(activity):
         exchange.listing(1, 860)
     offer = exchange.shops[871]['goods'][0]
     with pytest.raises(UnresolvedEconomy, match='mismatched'):
-        exchange.buy(1, 872, offer['goodsId'], 1, 'wrong-shop')
+        exchange.buy(1, 999999, offer['goodsId'], 1, 'wrong-shop')
+
+
+def group_slot(service, group, first=0):
+    """找到主题 group 对应的活动周期起点。"""
+    for index in range(first, first + 14):
+        start = activity_start(index)
+        period = service.rotation.at(start)
+        if period is not None and period.theme['group'] == group:
+            return start, period, index
+    raise AssertionError(f'group {group} not scheduled')
+
+
+def test_buy_tolerates_sibling_stage_shop_id_inside_same_theme(activity):
+    """客户端对恢复出来的店没有本地表, 回传的 shopId 可能落到同主题的另一阶段。"""
+    _, economy, service, now = activity
+    exchange = ActivityExchange(service)
+    start, period, _ = group_slot(service, 13)
+    now[0] = start
+    economy._grant(1, 'test:shop-currency', {1237982: 100000})
+    offer = exchange.shops[876]['goods'][0]
+    result = exchange.buy(1, 877, offer['goodsId'], 1, 'sibling-stage')
+    assert result['code'] == 10 and result['shopId'] == 876
+
+
+def test_buy_rejects_shop_id_from_another_theme(activity):
+    _, economy, service, now = activity
+    exchange = ActivityExchange(service)
+    start, period, _ = group_slot(service, 13)
+    now[0] = start
+    economy._grant(1, 'test:shop-currency', {1237982: 100000})
+    offer = exchange.shops[876]['goods'][0]
+    with pytest.raises(UnresolvedEconomy, match='mismatched'):
+        exchange.buy(1, 860, offer['goodsId'], 1, 'other-theme')
+
+
+def test_chapter_pass_shop_stays_unlocked_after_period_rotation(activity):
+    """通关记录按周期隔离; 新周期一到不能把已经开过的店整店锁死。"""
+    _, economy, service, now = activity
+    exchange = ActivityExchange(service)
+    start, period, index = group_slot(service, 13)
+    now[0] = start
+    shop = exchange.shops[877]
+    assert shop['group'] == period.theme['group']
+    assert not exchange.unlocked(1, period, shop)
+    open_shop(service, economy, shop, period)
+    assert exchange.unlocked(1, period, shop)
+    later_start, later, _ = group_slot(service, 13, index + 1)
+    now[0] = later_start
+    assert later.index != period.index
+    assert exchange.unlocked(1, later, shop)
+
+
+def test_buy_goods_is_owned_even_when_client_shop_id_is_unknown(activity):
+    _, _, service, _ = activity
+    exchange = ActivityExchange(service)
+    goods = next(iter(exchange.goods))
+    assert exchange.owns('C2L_BuyGoods', {'shopId': 0, 'goodsId': goods})
+    assert not exchange.owns('C2L_BuyGoods', {'shopId': 0, 'goodsId': 1})
+    assert exchange.owns('C2L_ShopGoods', {'shopId': 876})
+    assert not exchange.owns('C2L_ShopGoods', {'shopId': 0})
 
 
 def test_winter_fallback_cost_and_moon_typo_use_unit_price(activity):
