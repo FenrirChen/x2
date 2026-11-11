@@ -71,6 +71,8 @@ class AlchemyService:
     # USER_DECISION 2026-10-02: one proficiency point per collected item.
     # The official Exp vector supplies thresholds, not the gain amount.
     EXPERIENCE_PER_ITEM = 1
+    ALCHEMY_CHIP = 1  # AlchemyType.PURCHASECHIPTASK, deliver materials for god chips.
+    ALCHEMY_TRANSACTION = 2  # AlchemyType.TRANSACTION, the standard sell order.
 
     def __init__(self, repository, economy, snapshot):
         self.repo, self.economy, self.snapshot = repository, economy, snapshot
@@ -262,22 +264,24 @@ class AlchemyService:
     def _trade(self, player_id, state, request):
         pos, action = request.get('posIndex', 0), request.get('type', 0)
         values = {'code': 13, 'type': action, 'posIndex': pos}
-        # OnSendTransaction sends action=1, distinct from CustomerInfo.type=2.
+        # OnSendTransaction sends action=1, distinct from CustomerInfo.type (1=碎片委托, 2=金币交易).
         if not 0 <= pos < self.customer_count(player_id):
             return values
+        customer = self.customer(player_id, pos, state)
         if action == 2:
             # OnSendRegist (0x1ba6fec) sends type=2 and may carry stale price
             # toggles. Refusal charges nothing; 599 triggers a fresh 592 query.
             rotations = state['alchemy'].setdefault('customer_rotations', {})
             rotations[str(pos)] = int(rotations.get(str(pos), 0)) + 1
             state['alchemy'].setdefault('customer_orders', {}).pop(str(pos), None)
-            return dict(values, code=10, alchemyType=2, rewardData='')
+            return dict(values, code=10, alchemyType=customer['type'], rewardData='')
         plus, discount = request.get('plusPrice', False), request.get('discountPrice', False)
         if action != 1 or (plus and discount):
             return values
-        customer = self.customer(player_id, pos, state)
-        if customer['type'] != 2:
+        if customer['type'] not in (1, 2):
             return values
+        if customer['type'] == self.ALCHEMY_CHIP:
+            plus = discount = False  # 碎片委托面板没有加价/打折, 不能扣星能
         exp = self.recipe_exp(state)
         products = {r['ProductID']: r for r in self.recipes.values()}
         costs, gold, base_gold = Counter(), 0, 0
@@ -294,7 +298,7 @@ class AlchemyService:
                 price = int(f32(f32(price) * f32(1 + f32(f32(bonus[0]) * f32(0.001)))))
             gold += price * (quantity // recipe['ProductNum'])
             base_gold += recipe['Gold'] * (quantity // recipe['ProductNum'])
-        if not costs or gold <= 0:
+        if not costs or (customer['type'] == self.ALCHEMY_TRANSACTION and gold <= 0):
             return values
         params = rules()['params']
         energy = self.price_param(base_gold, 'AlchemyPriceParam') if plus else 0
@@ -311,12 +315,19 @@ class AlchemyService:
         if code != 10:
             return dict(values, code=code)
         state['star_energy'] -= energy
-        reward = {1237901: gold}
+        if customer['type'] == self.ALCHEMY_CHIP:
+            # E_Chip 委托的奖励来自 CollegeQuest.AwardGroup (782xxx Gift = 3 个神格碎片),
+            # 不按金币结算; 金币交易仍走原来的 CollegeRecipe.Gold 价格。
+            meta = self._customer_meta(customer['questId'])
+            reward = dict(self.economy.gifts([meta['chipAwardGroup']]))
+        else:
+            reward = {1237901: gold}
         source = 'college-trade:' + uuid.uuid4().hex
         self.economy._grant(player_id, source, reward)
-        # 每日/周常 炼金任务: 本服务端顾客一律是 CustomerInfo.type==2 的普通交易委托, 一次
-        # 成交同时满足「交易」与「完成 1 次委托」两种读法 (与 economy 里「一次购买既算
-        # E_BuyGood 又算 E_BuyGold」同一设计), 对应 630027/630028(日) 与 630113/630114(周)。
+        # 每日/周常 炼金任务: 金币交易(CustomerInfo.type==2)与碎片委托(type==1)都是
+        # 一次炼金委托, 同时满足「交易」与「完成 1 次委托」两种读法 (与 economy 里
+        # 「一次购买既算 E_BuyGood 又算 E_BuyGold」同一设计), 对应 630027/630028(日)
+        # 与 630113/630114(周)。
         # A recurring customer is a new trade. Transport retries are already
         # protected by the College receipt; share this trade's unique grant key.
         self.economy.record_event(
@@ -326,7 +337,7 @@ class AlchemyService:
         # 成就 662300「在炼金实验室中，收获金币数量达到 N」按**金币数量**累计 (不是次数):
         # 记本单实际发出的金币 (加价/打折后的值)。source 是本单的唯一 grant 键, 重放/重发
         # 同一笔成交不会重复累加。
-        if gold > 0:
+        if customer['type'] == self.ALCHEMY_TRANSACTION and gold > 0:
             self.economy.achievements.record(
                 player_id, source + ':gold', self.economy.ACHV_EVENT_ALCHEMY_GOLD, gold)
         change = self.discount_favor(player_id, customer, favor_gain)
@@ -336,7 +347,7 @@ class AlchemyService:
         pinned = state['alchemy'].get('customer_positions', {}).get(str(pos), {})
         for field in ('itemId', 'itemNum', 'adviseItemId'):
             pinned.pop(field, None)
-        result = dict(values, code=10, alchemyType=2,
+        result = dict(values, code=10, alchemyType=customer['type'],
                       rewardData=self.economy.reward_bytes(reward).hex())
         if change:
             result['_favor_change'] = change.hex()
@@ -390,13 +401,18 @@ class AlchemyService:
         # Item[result] to draw its icon and read Used[0] for the energy price.
         return dict(values, code=10, result=customer['itemId'][0], param=0)
 
+    @staticmethod
+    def _customer_meta(quest_id):
+        customer_meta = json.loads(files('x2server').joinpath('data/college_alchemy_catalog.json').read_text(encoding='utf8'))
+        return next((r for r in customer_meta['customers']
+                     if quest_id in (r['sellQuestId'], r['chipQuestId'])), None)
+
     def discount_favor(self, player_id, customer, gain):
         if gain <= 0:
             return None
         from .favor import catalog, favor_state
         from x2server.messages.favor import FAVOR_CHANGE_INFO
-        customer_meta = json.loads(files('x2server').joinpath('data/college_alchemy_catalog.json').read_text(encoding='utf8'))
-        meta = next((r for r in customer_meta['customers'] if r['sellQuestId'] == customer['questId']), None)
+        meta = self._customer_meta(customer['questId'])
         player = self.repo.store.get(player_id)
         hero = next((h for h in player['snapshot']['heroes'] if meta and h['id'] == meta['heroId'] and h['state'] == 2), None)
         data = catalog()

@@ -5,229 +5,305 @@
    "customerId": 38001,
    "heroId": 1003,
    "likes": [991, 992],
-   "sellQuestId": 35303
+   "sellQuestId": 35303,
+   "chipQuestId": 35003,
+   "chipAwardGroup": 782003
   },
   {
    "customerId": 38002,
    "heroId": 1004,
    "likes": [991, 993],
-   "sellQuestId": 35304
+   "sellQuestId": 35304,
+   "chipQuestId": 35004,
+   "chipAwardGroup": 782004
   },
   {
    "customerId": 38003,
    "heroId": 1005,
    "likes": [991, 994],
-   "sellQuestId": 35305
+   "sellQuestId": 35305,
+   "chipQuestId": 35005,
+   "chipAwardGroup": 782005
   },
   {
    "customerId": 38004,
    "heroId": 1006,
    "likes": [991, 995],
-   "sellQuestId": 35306
+   "sellQuestId": 35306,
+   "chipQuestId": 35006,
+   "chipAwardGroup": 782006
   },
   {
    "customerId": 38005,
    "heroId": 1007,
    "likes": [991, 996],
-   "sellQuestId": 35307
+   "sellQuestId": 35307,
+   "chipQuestId": 35007,
+   "chipAwardGroup": 782007
   },
   {
    "customerId": 38006,
    "heroId": 1008,
    "likes": [992, 993],
-   "sellQuestId": 35308
+   "sellQuestId": 35308,
+   "chipQuestId": 35008,
+   "chipAwardGroup": 782008
   },
   {
    "customerId": 38007,
    "heroId": 1009,
    "likes": [992, 994],
-   "sellQuestId": 35309
+   "sellQuestId": 35309,
+   "chipQuestId": 35009,
+   "chipAwardGroup": 782009
   },
   {
    "customerId": 38008,
    "heroId": 1010,
    "likes": [992, 995],
-   "sellQuestId": 35310
+   "sellQuestId": 35310,
+   "chipQuestId": 35010,
+   "chipAwardGroup": 782010
   },
   {
    "customerId": 38009,
    "heroId": 1011,
    "likes": [992, 996],
-   "sellQuestId": 35311
+   "sellQuestId": 35311,
+   "chipQuestId": 35011,
+   "chipAwardGroup": 782011
   },
   {
    "customerId": 38010,
    "heroId": 1012,
    "likes": [993, 994],
-   "sellQuestId": 35312
+   "sellQuestId": 35312,
+   "chipQuestId": 35012,
+   "chipAwardGroup": 782012
   },
   {
    "customerId": 38011,
    "heroId": 1013,
    "likes": [993, 995],
-   "sellQuestId": 35313
+   "sellQuestId": 35313,
+   "chipQuestId": 35013,
+   "chipAwardGroup": 782013
   },
   {
    "customerId": 38012,
    "heroId": 1014,
    "likes": [993, 996],
-   "sellQuestId": 35314
+   "sellQuestId": 35314,
+   "chipQuestId": 35014,
+   "chipAwardGroup": 782014
   },
   {
    "customerId": 38013,
    "heroId": 1015,
    "likes": [994, 995],
-   "sellQuestId": 35315
+   "sellQuestId": 35315,
+   "chipQuestId": 35015,
+   "chipAwardGroup": 782015
   },
   {
    "customerId": 38014,
    "heroId": 1016,
    "likes": [994, 996],
-   "sellQuestId": 35316
+   "sellQuestId": 35316,
+   "chipQuestId": 35016,
+   "chipAwardGroup": 782016
   },
   {
    "customerId": 38015,
    "heroId": 1017,
    "likes": [995, 996],
-   "sellQuestId": 35317
+   "sellQuestId": 35317,
+   "chipQuestId": 35017,
+   "chipAwardGroup": 782017
   },
   {
    "customerId": 38016,
    "heroId": 1018,
    "likes": [991, 992],
-   "sellQuestId": 35318
+   "sellQuestId": 35318,
+   "chipQuestId": 35018,
+   "chipAwardGroup": 782018
   },
   {
    "customerId": 38017,
    "heroId": 1019,
    "likes": [991, 993],
-   "sellQuestId": 35319
+   "sellQuestId": 35319,
+   "chipQuestId": 35019,
+   "chipAwardGroup": 782019
   },
   {
    "customerId": 38018,
    "heroId": 1020,
    "likes": [991, 994],
-   "sellQuestId": 35320
+   "sellQuestId": 35320,
+   "chipQuestId": 35020,
+   "chipAwardGroup": 782020
   },
   {
    "customerId": 38019,
    "heroId": 1021,
    "likes": [991, 995],
-   "sellQuestId": 35321
+   "sellQuestId": 35321,
+   "chipQuestId": 35021,
+   "chipAwardGroup": 782021
   },
   {
    "customerId": 38020,
    "heroId": 1022,
    "likes": [991, 996],
-   "sellQuestId": 35322
+   "sellQuestId": 35322,
+   "chipQuestId": 35022,
+   "chipAwardGroup": 782022
   },
   {
    "customerId": 38021,
    "heroId": 1023,
    "likes": [992, 994],
-   "sellQuestId": 35323
+   "sellQuestId": 35323,
+   "chipQuestId": 35023,
+   "chipAwardGroup": 782023
   },
   {
    "customerId": 38025,
    "heroId": 1025,
    "likes": [993, 994],
-   "sellQuestId": 35325
+   "sellQuestId": 35325,
+   "chipQuestId": 35025,
+   "chipAwardGroup": 782025
   },
   {
    "customerId": 38026,
    "heroId": 1026,
    "likes": [993, 994],
-   "sellQuestId": 35326
+   "sellQuestId": 35326,
+   "chipQuestId": 35026,
+   "chipAwardGroup": 782026
   },
   {
    "customerId": 38027,
    "heroId": 1027,
    "likes": [992, 996],
-   "sellQuestId": 35327
+   "sellQuestId": 35327,
+   "chipQuestId": 35027,
+   "chipAwardGroup": 782027
   },
   {
    "customerId": 38028,
    "heroId": 1028,
    "likes": [992, 995],
-   "sellQuestId": 35328
+   "sellQuestId": 35328,
+   "chipQuestId": 35028,
+   "chipAwardGroup": 782028
   },
   {
    "customerId": 38029,
    "heroId": 1029,
    "likes": [993, 994],
-   "sellQuestId": 35329
+   "sellQuestId": 35329,
+   "chipQuestId": 35029,
+   "chipAwardGroup": 782029
   },
   {
    "customerId": 38030,
    "heroId": 1030,
    "likes": [992, 995],
-   "sellQuestId": 35330
+   "sellQuestId": 35330,
+   "chipQuestId": 35030,
+   "chipAwardGroup": 782030
   },
   {
    "customerId": 38031,
    "heroId": 1031,
    "likes": [993, 996],
-   "sellQuestId": 35331
+   "sellQuestId": 35331,
+   "chipQuestId": 35031,
+   "chipAwardGroup": 782031
   },
   {
    "customerId": 38032,
    "heroId": 1032,
    "likes": [992, 996],
-   "sellQuestId": 35332
+   "sellQuestId": 35332,
+   "chipQuestId": 35032,
+   "chipAwardGroup": 782032
   },
   {
    "customerId": 38033,
    "heroId": 1033,
    "likes": [993, 994],
-   "sellQuestId": 35333
+   "sellQuestId": 35333,
+   "chipQuestId": 35033,
+   "chipAwardGroup": 782033
   },
   {
    "customerId": 38034,
    "heroId": 1034,
    "likes": [994, 996],
-   "sellQuestId": 35334
+   "sellQuestId": 35334,
+   "chipQuestId": 35034,
+   "chipAwardGroup": 782034
   },
   {
    "customerId": 38035,
    "heroId": 1035,
    "likes": [994, 996],
-   "sellQuestId": 35335
+   "sellQuestId": 35335,
+   "chipQuestId": 35035,
+   "chipAwardGroup": 782035
   },
   {
    "customerId": 38036,
    "heroId": 1036,
    "likes": [991, 993],
-   "sellQuestId": 35336
+   "sellQuestId": 35336,
+   "chipQuestId": 35036,
+   "chipAwardGroup": 782036
   },
   {
    "customerId": 38039,
    "heroId": 1039,
    "likes": [992, 996],
-   "sellQuestId": 35339
+   "sellQuestId": 35339,
+   "chipQuestId": 35039,
+   "chipAwardGroup": 782039
   },
   {
    "customerId": 38040,
    "heroId": 1040,
    "likes": [992, 993],
-   "sellQuestId": 35340
+   "sellQuestId": 35340,
+   "chipQuestId": 35040,
+   "chipAwardGroup": 782040
   },
   {
    "customerId": 38197,
    "heroId": 1197,
    "likes": [992, 995],
-   "sellQuestId": 35497
+   "sellQuestId": 35497,
+   "chipQuestId": 35197,
+   "chipAwardGroup": 782197
   },
   {
    "customerId": 38198,
    "heroId": 1198,
    "likes": [992, 996],
-   "sellQuestId": 35498
+   "sellQuestId": 35498,
+   "chipQuestId": 35198,
+   "chipAwardGroup": 782198
   },
   {
    "customerId": 38199,
    "heroId": 1199,
    "likes": [993, 994],
-   "sellQuestId": 35499
+   "sellQuestId": 35499,
+   "chipQuestId": 35199,
+   "chipAwardGroup": 782199
   }
  ],
  "recipes": {
