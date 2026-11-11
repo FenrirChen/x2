@@ -317,7 +317,8 @@ class BattleService:
                         self.economy.season.completed(player_id, row['uuid'], request.get('success', False),
                             fight_seconds, [HERO_EQUIP.decode(b) for b in reward_equips],
                             [item['id'] for item in map(OUTSIDE_ITEM.decode, request.get('mazeItems', []))
-                             if item.get('num', 0) > 0 and self.economy.items.get(item.get('id'), {}).get('ItemType', {}).get('value') == 4])
+                             if item.get('num', 0) > 0 and self.economy.items.get(item.get('id'), {}).get('ItemType', {}).get('value') == 4],
+                            npc_events=request.get('npcEventOnNumber', []))
                     if request.get('success', False) and section_type != 5:
                         from x2server.messages.equipment import HERO_EQUIP
                         self.economy.season.loot(player_id, row['uuid'], [HERO_EQUIP.decode(raw) for raw in reward_equips],

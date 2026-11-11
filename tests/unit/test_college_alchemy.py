@@ -178,6 +178,38 @@ def test_chip_customer_delivers_three_god_chips(game):
     assert store.get(1)['snapshot']['gold'] == gold
 
 
+def test_chip_commission_replay_energy_and_atomic_rollback(game, monkeypatch):
+    store, _, repo, service, _ = game
+    slot = next(pos for pos in range(5) if service._customer_for(1, pos)['type'] == 1)
+    customer = service._customer_for(1, slot)
+    item, count = customer['itemId'][0], customer['itemNum'][0]
+    meta = service.alchemy._customer_meta(customer['questId'])
+    chips = dict(service.economy.gifts([meta['chipAwardGroup']]))
+    def balance(item):
+        row = store.db.execute('SELECT quantity FROM inventory WHERE player_id=1 AND item_id=?', (item,)).fetchone()
+        return row[0] if row else 0
+    assert sum(chips.values()) == 3
+    before_chips = {i: balance(i) for i in chips}
+    with store.db:
+        store.db.execute('INSERT INTO inventory VALUES (?,?,?)', (1, item, count))
+    energy = repo.load(1)['star_energy']
+    original = repo.save
+    with monkeypatch.context() as failure:
+        failure.setattr(repo, 'save', lambda *a: (_ for _ in ()).throw(RuntimeError('disk')))
+        with pytest.raises(RuntimeError, match='disk'):
+            send(game, 'AlchemyFinish', type=1, posIndex=slot, plusPrice=True)
+    assert balance(item) == count
+    assert all(balance(i) == before_chips[i] for i in chips)
+    assert repo.save == original
+    result = send(game, 'AlchemyFinish', type=1, posIndex=slot, plusPrice=True)
+    assert result.values['code'] == 10
+    assert balance(item) == 0
+    assert repo.load(1)['star_energy'] == energy
+    assert all(balance(i) == before_chips[i] + n for i, n in chips.items())
+    assert send(game, 'AlchemyFinish', type=1, posIndex=slot, plusPrice=True).values == result.values
+    assert all(balance(i) == before_chips[i] + n for i, n in chips.items())
+
+
 def test_customer_refusal_rotation_replay_query_and_restart(game):
     store, clock, repo, service, context = game
     repo.growth_base(1)

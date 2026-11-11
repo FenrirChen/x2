@@ -82,18 +82,8 @@ class ActivityExchange:
         return self.rotation.get(player, period, 'shop-count', goods, 0)
 
     def cleared(self, player, period, section):
-        """章节通关记录是否满足商店门槛。
-
-        `clear` 状态按活动周期隔离, 新周期一到就全部归零; 若商店门槛只看本周期,
-        已经通关过的店会整店重新锁死, 而客户端照样显示全部商品可买, 玩家点下去
-        只会拿到「操作失败」。门槛按「曾经通关」判定, 跨周期仍然有效。
-        """
-        if self.rotation.get(player, period, 'clear', section, 0):
-            return True
-        return self.store.db.execute(
-            "SELECT 1 FROM activity_state WHERE player_id=? AND namespace='clear'"
-            " AND state_key=? AND period<=? LIMIT 1",
-            (player, str(section), period.index)).fetchone() is not None
+        """Each event occurrence owns its unlock progress, matching the approved reset policy."""
+        return bool(self.rotation.get(player, period, 'clear', section, 0))
 
     def stock(self, offer, bought=0):
         """单件商品的库存上限; 不限购的商品返回大正数 (见 UNLIMITED_ITEM_IDS)。"""

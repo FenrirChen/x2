@@ -10,10 +10,17 @@
 """
 import argparse
 import os
-import shutil
+import sqlite3
 import sys
 import tempfile
 from pathlib import Path
+
+
+def snapshot_database(source, target):
+    """Include committed WAL data while leaving the inspected source read-only."""
+    with sqlite3.connect(Path(source).resolve().as_uri() + '?mode=ro', uri=True) as origin:
+        with sqlite3.connect(target) as destination:
+            origin.backup(destination)
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'src'))
@@ -51,7 +58,7 @@ def main():
         raise SystemExit(f'missing db: {source}')
     workdir = Path(tempfile.mkdtemp(prefix='shop-probe-'))
     copy = workdir / source.name
-    shutil.copy2(source, copy)
+    snapshot_database(source, copy)
     print(f'copy: {copy}')
 
     store = PlayerStore(copy)

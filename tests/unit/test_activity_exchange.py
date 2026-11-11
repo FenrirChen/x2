@@ -232,8 +232,8 @@ def test_buy_rejects_shop_id_from_another_theme(activity):
         exchange.buy(1, 860, offer['goodsId'], 1, 'other-theme')
 
 
-def test_chapter_pass_shop_stays_unlocked_after_period_rotation(activity):
-    """通关记录按周期隔离; 新周期一到不能把已经开过的店整店锁死。"""
+def test_chapter_pass_shop_resets_unlock_after_period_rotation(activity):
+    """每期重置商店门槛，不使用历史周期的通关记录。"""
     _, economy, service, now = activity
     exchange = ActivityExchange(service)
     start, period, index = group_slot(service, 13)
@@ -246,7 +246,7 @@ def test_chapter_pass_shop_stays_unlocked_after_period_rotation(activity):
     later_start, later, _ = group_slot(service, 13, index + 1)
     now[0] = later_start
     assert later.index != period.index
-    assert exchange.unlocked(1, later, shop)
+    assert not exchange.unlocked(1, later, shop)
 
 
 def test_buy_goods_is_owned_even_when_client_shop_id_is_unknown(activity):

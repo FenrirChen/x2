@@ -34,6 +34,9 @@ class SeasonRejected(UnresolvedEconomy):
 
 
 class SeasonService:
+    # Original UnitBase E_LieXi AutoEvents have SubEndEvents 68712/68912.
+    # These are completion markers; starts, door-closing and transport do not seal rifts.
+    RIFT_NPC_EVENTS = frozenset({68712, 68912})
     ACTIVITY = 74001
     CONFIG = 10000
     GROUP = 16
@@ -532,7 +535,7 @@ class SeasonService:
         self.store.db.execute('INSERT INTO season_runs VALUES (?,?,?,?,?,0,0)',
             (uuid, player, self.instance, config['ID'], section))
 
-    def completed(self, player, uuid, success, seconds, equipment=(), relics=()):
+    def completed(self, player, uuid, success, seconds, equipment=(), relics=(), npc_events=()):
         run = self.store.db.execute('SELECT * FROM season_runs WHERE uuid=? AND player_id=?', (uuid, player)).fetchone()
         if not run:
             return
@@ -557,6 +560,20 @@ class SeasonService:
         logging.getLogger('x2.season').info(
             'tower clear player=%s floor=%s seconds=%s skipped=%s unlocked=%s',
             player, config['Level'], seconds, skipped, state['unlocked_layer'])
+        # Preserve previously credited progress once, then count actual rift
+        # interactions from checkout field 30. The settled run owns idempotence.
+        from x2server.messages.core import INT_PAIR
+        rifts = {}
+        for raw in npc_events[:512]:
+            report = INT_PAIR.decode(raw)
+            event, count = report.get('Key', 0), report.get('Value', 0)
+            if event in self.RIFT_NPC_EVENTS and type(count) is int and 0 < count <= 1000:
+                rifts[event] = max(rifts.get(event, 0), count)
+        old_rifts = state['stats'].get('sealed_rifts', state['stats'].get('passes', 0))
+        state['stats']['sealed_rifts'] = old_rifts + sum(rifts.values())
+        logging.getLogger('x2.season').info(
+            'sealed rifts player=%s run=%s delta=%s total=%s',
+            player, uuid, sum(rifts.values()), state['stats']['sealed_rifts'])
         state['stats']['passes'] = state['stats'].get('passes', 0) + 1
         state['stats']['pass_time'] = state['stats'].get('pass_time', 0) + max(0, seconds)
         chapter = self.sections[run['section_id']].get('NumerChina', '')
@@ -608,6 +625,7 @@ class SeasonService:
 
     def achievement_values(self, player):
         state = self.state(player)
+        state['stats'].setdefault('sealed_rifts', state['stats'].get('passes', 0))
         for hero in self.store.get(player)['snapshot'].get('heroes', []):
             baseline = state['baseline_heroes'].get(str(hero['id']), {})
             observed = {'level': hero.get('level', 1), 'star': hero.get('star', 1),
