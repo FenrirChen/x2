@@ -1,6 +1,7 @@
 """Atomic, period-limited purchases from the user-recovered themed shops."""
 import hashlib
 import json
+import logging
 from importlib.resources import files
 
 from x2server.messages.activity import encode
@@ -8,6 +9,11 @@ from x2server.messages.economy import ECONOMY_SCHEMAS, GOODS
 from x2server.network.dispatcher import OutboundMessage
 from x2server.protocol.errors import ProtocolError
 from .economy import UnresolvedEconomy
+
+# 客户端只把 code != 10 显示成「操作失败」, 不区分价格/库存/锁定/ID 不匹配。
+# 恢复出来的活动商店 (876-879 等) 在客户端没有本地表, 出问题时必须能从日志
+# 里直接读到拒绝原因, 否则只能靠猜。
+LOGGER = logging.getLogger('x2.activity_exchange')
 
 
 class ActivityExchange:
@@ -39,8 +45,12 @@ class ActivityExchange:
                 raise ValueError('invalid activity shop offer')
 
     def owns(self, name, request):
-        return (request.get('shopId') in self.shops or
-                name == 'C2L_QueryGoodsInfo' and request.get('goodsId') in self.goods)
+        # 客户端的活动商店 ID 来自本地 ShopConfig; 恢复出来的店 (876-879 等) 在
+        # 客户端没有对应行, 回传的 shopId 可能是同主题的另一个阶段甚至 0。
+        # 只要 goodsId 属于活动兑换目录, 购买/详情就必须由这里应答, 不能被
+        # 普通补给商店接走后再失败。
+        return (request.get('shopId') in self.shops
+                or name in ('C2L_QueryGoodsInfo', 'C2L_BuyGoods') and request.get('goodsId') in self.goods)
 
     def unlocked(self, player, period, shop):
         if shop['group'] != period.theme['group']:
@@ -54,7 +64,7 @@ class ActivityExchange:
             return all(self.rotation.get(player, period, 'obtained-item', i, 0) > 0 for i in rule['items'])
         if rule['kind'] == 'chapter_pass':
             sections = self.activity.chapters[rule['chapter']].get('SectionID', [])
-            return bool(sections) and all(self.rotation.get(player, period, 'clear', s, 0) > 0 for s in sections)
+            return bool(sections) and all(self.cleared(player, period, s) for s in sections)
         if rule['kind'] == 'item_count':
             # Native YueXiModule.GetHaveChipNum counts distinct owned IDs;
             # duplicates and period receipt counters are not extra souls.
@@ -71,11 +81,48 @@ class ActivityExchange:
     def count(self, player, period, goods):
         return self.rotation.get(player, period, 'shop-count', goods, 0)
 
+    def cleared(self, player, period, section):
+        """章节通关记录是否满足商店门槛。
+
+        `clear` 状态按活动周期隔离, 新周期一到就全部归零; 若商店门槛只看本周期,
+        已经通关过的店会整店重新锁死, 而客户端照样显示全部商品可买, 玩家点下去
+        只会拿到「操作失败」。门槛按「曾经通关」判定, 跨周期仍然有效。
+        """
+        if self.rotation.get(player, period, 'clear', section, 0):
+            return True
+        return self.store.db.execute(
+            "SELECT 1 FROM activity_state WHERE player_id=? AND namespace='clear'"
+            " AND state_key=? AND period<=? LIMIT 1",
+            (player, str(section), period.index)).fetchone() is not None
+
     def stock(self, offer, bought=0):
         """单件商品的库存上限; 不限购的商品返回大正数 (见 UNLIMITED_ITEM_IDS)。"""
         if offer['itemId'] in self.UNLIMITED_ITEM_IDS:
             return min(2147483647, bought + self.UNLIMITED_STOCK)
         return offer['canBuyTimes']
+
+    def resolve(self, player, period, shop_id, goods_id):
+        """按 goodsId 解析货品, 客户端 shopId 只当提示。
+
+        恢复出来的活动商店在客户端没有 ShopConfig 行, 回传的 shopId 可能属于同主题
+        的另一个阶段, 也可能干脆是 0; 直接丢弃整笔购买就会表现为「只有前面几个能
+        买」。货品归属、主题归属与解锁条件仍以目录为准, 只有"两边都属于当前主题"
+        时才接受纠正, 跨主题照旧拒绝。
+        """
+        match = self.goods.get(goods_id)
+        if match is None:
+            raise UnresolvedEconomy(f'unknown goods {goods_id}')
+        shop, offer = match
+        if not shop_id or shop_id == shop['shopId']:
+            return shop, offer
+        requested = self.shops.get(shop_id)
+        if (requested is None or requested['group'] != period.theme['group']
+                or shop['group'] != period.theme['group']):
+            raise UnresolvedEconomy(
+                f'mismatched shop: client={shop_id} catalog={shop["shopId"]} goods={goods_id}')
+        LOGGER.warning('activity shop id drift player=%s client=%s catalog=%s goods=%s',
+                       player, shop_id, shop['shopId'], goods_id)
+        return shop, offer
 
     def goods_values(self, player, period, row):
         bought = self.count(player, period, row['goodsId'])
@@ -98,7 +145,13 @@ class ActivityExchange:
         period = self.activity.period(player)
         family = 2 if period.theme['group'] == 7 else 1 if period.theme['group'] == 99 else 3
         if activity_type != family:
-            raise UnresolvedEconomy('wrong activity family')
+            # 客户端按 activityType family 分页请求; 恢复出来的主题没有本地
+            # 活动配置, 请求的 family 不一定是当前主题应当归属的那个。直接失败
+            # 会让客户端一直停在上一个主题缓存的店铺 (标题、商品全是旧的), 玩家
+            # 看到的每个商品点下去都只会得到「操作失败」。这里只记日志, 仍按
+            # 服务端当前主题下发, 让 UI 与服务端状态保持一致。
+            LOGGER.warning('activity family drift player=%s client=%s current=%s group=%s',
+                           player, activity_type, family, period.theme['group'])
         # The native shop navigation needs locked stages too. Listing is a
         # preview; querying purchasable details and buying still enforce gates.
         rows = [self.listing(player, s['shopId'], preview=True)
@@ -120,15 +173,17 @@ class ActivityExchange:
             if cached['message'] != 'L2C_BuyGoods':
                 raise UnresolvedEconomy('receipt belongs to another operation')
             return ECONOMY_SCHEMAS['L2C_BuyGoods'].decode(cached['response'])
-        match = self.goods.get(goods_id)
-        if (match is None or match[0]['shopId'] != shop_id or type(count) is not int
-                or not 1 <= count <= 9999 or not self.unlocked(player, period, match[0])):
-            raise UnresolvedEconomy('unknown, locked or mismatched offer')
-        _, offer = match
+        match = self.resolve(player, period, shop_id, goods_id)
+        if type(count) is not int or not 1 <= count <= 9999:
+            raise UnresolvedEconomy(f'invalid buy count {count!r}')
+        shop, offer = match
+        if not self.unlocked(player, period, shop):
+            raise UnresolvedEconomy(f'activity shop locked {shop["shopId"]}')
         with self.economy.transaction():
             bought = self.count(player, period, goods_id)
-            if offer['itemId'] not in self.UNLIMITED_ITEM_IDS and bought + count > self.stock(offer):
-                raise UnresolvedEconomy('activity stock exhausted')
+            if offer['itemId'] not in self.UNLIMITED_ITEM_IDS and bought + count > self.stock(offer, bought):
+                raise UnresolvedEconomy(
+                    f'activity stock exhausted bought={bought}+{count}>{self.stock(offer, bought)}')
             self.activity.spend(player, period, offer['currencyItemId'], offer['price'] * count,
                                 f'shop-spend:{request_key}')
             rewards = {offer['itemId']: offer['num'] * count}
@@ -137,7 +192,7 @@ class ActivityExchange:
             if kind == 11:
                 from .progression import jewel_ids
                 if offer['itemId'] not in jewel_ids():
-                    raise UnresolvedEconomy('unrecognized jewel')
+                    raise UnresolvedEconomy(f'unrecognized jewel {offer["itemId"]}')
             rewards = self.economy._grant(player,
                 self.activity.source(period, 'shop', request_key), rewards,
                 stackable_types=(11,) if kind == 11 else ())
@@ -147,9 +202,9 @@ class ActivityExchange:
             # This prefix excludes supply-shop-only achievement counters.
             event_key = f'activity-shop-buy:{request_key}'
             if getattr(self.economy, 'activity', None) is not self.activity:
-                self.activity.event(player, event_key, 24, goods_id, count, shop_id, period=period)
-            self.economy._event(player, event_key, 24, goods_id, count, shop_id)
-            result = {'code': 10, 'shopId': shop_id, 'goodsId': goods_id,
+                self.activity.event(player, event_key, 24, goods_id, count, shop['shopId'], period=period)
+            self.economy._event(player, event_key, 24, goods_id, count, shop['shopId'])
+            result = {'code': 10, 'shopId': shop['shopId'], 'goodsId': goods_id,
                 'itemId': offer['itemId'], 'itemNum': offer['num'] * count, 'buyNum': count,
                 'price': offer['price'], 'originalPrice': offer['price'], 'hasBuyTimes': bought + count,
                 'rewardData': self.economy.reward_bytes(rewards)}
@@ -166,13 +221,10 @@ class ActivityExchange:
             if name == 'C2L_ShopGoods':
                 result = self.listing(player, request.get('shopId', 0))
             elif name == 'C2L_QueryGoodsInfo':
-                match = self.goods.get(request.get('goodsId'))
-                if match is None:
-                    raise UnresolvedEconomy('unknown goods')
-                shop, offer = match
                 period = self.activity.period(player)
+                shop, offer = self.resolve(player, period, request.get('shopId'), request.get('goodsId'))
                 if not self.unlocked(player, period, shop):
-                    raise UnresolvedEconomy('shop locked')
+                    raise UnresolvedEconomy(f'activity shop locked {shop["shopId"]}')
                 values = self.goods_values(player, period, offer)
                 result = {'code': 10, 'shopId': shop['shopId'], 'itemNum': offer['num'],
                     **{key: values[key] for key in ('goodsId', 'price', 'originalPrice',
@@ -184,7 +236,10 @@ class ActivityExchange:
                                   request.get('buyNum', 0), key)
             else:
                 raise UnresolvedEconomy('activity stock refresh is not supported')
-        except UnresolvedEconomy:
+        except UnresolvedEconomy as exc:
+            LOGGER.warning('activity shop refused player=%s name=%s shop=%s goods=%s num=%s reason=%s',
+                           player, name, request.get('shopId'), request.get('goodsId'),
+                           request.get('buyNum'), exc)
             return OutboundMessage(response, {'code': 13, **request})
         pushes = ()
         if name == 'C2L_BuyGoods':
