@@ -5809,7 +5809,7 @@
     {
      "taskId": 650810,
      "describeId": 6508101,
-     "text": "一局游戏中累积获得4500棱镜",
+     "text": "一局游戏中累积获得3500棱镜",
      "conditionId": 603801,
      "conditionType": 2,
      "completionLimit": 1,
@@ -5824,7 +5824,7 @@
      "completeType": "E_GetMoneyPer",
      "completeValue1": 903,
      "completeValue2": 0,
-     "completeNum": 4500,
+     "completeNum": 3500,
      "completeValues1": [
       903
      ],
@@ -5832,7 +5832,7 @@
       0
      ],
      "completeNums": [
-      4500
+      3500
      ]
     },
     {
