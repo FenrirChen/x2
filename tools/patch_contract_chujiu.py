@@ -18,9 +18,10 @@ and ``favor.py``) has a matching client:
 
 Three independent blocks, each self-checking:
 
-  A. 表补丁  TextAsset ``m_Script`` is written as plaintext.  10 tables:
+  A. 表补丁  TextAsset ``m_Script`` is written as plaintext.  11 tables:
      FavorabilityHero / FavorabilityLevel / FavorabilityDate / OptionEffect /
-     Appearance / Item / Picture / ExpressionInteractiveArea / UnitBase / Language.
+     Appearance / Item / Picture / ExpressionInteractiveArea / UnitBase / Language /
+     FunctionOpen (约会页签 OpenLevel 999 -> 1, 否则整个页签灰掉)。
      Every table keeps its original RSA head in ``m_Script`` but the payload is
      plain; the libil2cpp hook below lets ``ConvertDataBytes`` pass it through.
   B. 美术注入  The five bundles are byte-copies of the 1.0 package (same Unity
@@ -99,6 +100,8 @@ ITEM_HEAD = 1271004
 PICTURE = 1271004
 COVENANT_ITEM = 1204011
 COVENANT_LEVEL_LIMIT = 20
+DATE_FUNCTION_ID = 21946                     # FunctionOpen: FunctionType 36 = 约会
+DATE_OPEN_LEVEL = 1                          # 约会页签开放等级; 内容仍由好感等级把关
 TEMPLATE_APPEARANCE = 1221005
 TEMPLATE_EIA = 1221003
 
@@ -113,6 +116,7 @@ TABLE_ENTRIES = {
     "ExpressionInteractiveArea": "c5d172aa26318b84cb50ce61b36c684a",
     "UnitBase": "5c993e6912a40e541be49a4f5ed7abd7",
     "Language": "844762d28a77f85408b631eb3f0186bc",
+    "FunctionOpen": "1b9954217ea8b6f44b8a31c89cf9edd7",
 }
 
 # 1.0 包里的美术文件 -> 要注册的容器键 / pathID。文件内容逐字节搬用, 不重序列化。
@@ -383,6 +387,27 @@ def edit_level(keys: list[int], rows: list[bytes]) -> tuple[list[int], list[byte
             f"FavorabilityLevel 19 already has f6={covenant} f7={items}")
     rows[index] = row + f_int(6, 1) + f_int(7, COVENANT_ITEM) + f_int(7, 1)
     return keys, rows, "FavorabilityLevel Lv19: IsCovenant=1, CovenantItem=[1204011,1]"
+
+
+def edit_function_open(keys: list[int], rows: list[bytes]) -> tuple[list[int], list[bytes], str]:
+    """FunctionOpen 21946 (FunctionType 36 = 约会): OpenLevel 999 -> 1。
+
+    ``FavorDateTab_OnCheckTabOpen`` 里就是 ``GameAPI.IsClientFunctionClose(21946)``,
+    OpenLevel 仍是 999 时整个约会页签灰掉, 点一下只弹「解神者等级到达 999 级开放」。
+    约会本身的开放条件(好感 12/14)在 FavorabilityDate 里, 不受这个总开关影响。
+    """
+    require(DATE_FUNCTION_ID in keys, "FunctionOpen lacks row 21946 (约会)")
+    index = keys.index(DATE_FUNCTION_ID)
+    data = message_dict(rows[index])
+    current = data.get(4)
+    if current == [DATE_OPEN_LEVEL]:
+        return keys, rows, f"FunctionOpen 21946 约会已开放 (OpenLevel={DATE_OPEN_LEVEL})"
+    require(current == [999], f"FunctionOpen 21946 OpenLevel is {current}, expected 999")
+    out = bytearray()
+    for number, value in message_fields(rows[index]):
+        out += encode_field(number, DATE_OPEN_LEVEL if number == 4 else value)
+    rows[index] = bytes(out)
+    return keys, rows, f"FunctionOpen 21946 约会 OpenLevel 999 -> {DATE_OPEN_LEVEL}"
 
 
 def _date_row(date_id: int, hero: int, level: int, talk: int, cg: str,
@@ -702,6 +727,7 @@ def patch_tables(apk: Path, assets: Path) -> tuple[
         ("ExpressionInteractiveArea", edit_eia),
         ("UnitBase", edit_unitbase),
         ("Language", edit_language),
+        ("FunctionOpen", edit_function_open),
     ]
     for table, edit in plan:
         entry = TABLE_ENTRIES[table]

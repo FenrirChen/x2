@@ -197,6 +197,27 @@ def test_hero_and_level_edits_are_idempotent():
     assert patch.message_dict(patched)[7] == [1204011, 1]
 
 
+def test_function_open_opens_the_date_tab_idempotently():
+    row = (patch.f_int(1, 21946) + patch.f_int(2, 36) + patch.f_int(3, 13100640)
+           + patch.f_int(4, 999) + patch.f_int(6, 1))
+    keys, rows = [21946], [row]
+    patch.edit_function_open(keys, rows)
+    patched = rows[0]
+    patch.edit_function_open(keys, rows)
+    assert rows[0] == patched
+    data = patch.message_dict(patched)
+    assert data[4] == [patch.DATE_OPEN_LEVEL]
+    assert data[2] == [36] and data[3] == [13100640] and data[6] == [1]
+
+
+def test_function_open_rejects_missing_or_wrong_rows():
+    with pytest.raises(patch.PatchError):
+        patch.edit_function_open([], [])
+    keys, rows = [21946], [patch.f_int(1, 21946) + patch.f_int(4, 20)]
+    with pytest.raises(patch.PatchError):
+        patch.edit_function_open(keys, rows)
+
+
 def test_make_detail_image_pads_and_crops_to_the_sheet_size():
     Image = pytest.importorskip("PIL.Image")
     wide = Image.new("RGBA", (600, 800), (10, 20, 30, 255))
