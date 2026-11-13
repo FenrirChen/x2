@@ -272,6 +272,24 @@ def test_customer_write_failure_rolls_back_goods_gold_and_receipt(game, monkeypa
     assert store.db.execute('SELECT count(*) FROM college_alchemy_receipts').fetchone()[0] == 0
 
 
+def test_completed_trade_blocked_after_daily_commission_cap(game):
+    store, _, repo, service, _ = game
+    customer = service._customer_for(1, 0)
+    item, count = customer['itemId'][0], customer['itemNum'][0]
+    with store.db:
+        store.db.execute('INSERT INTO inventory VALUES (?,?,?)', (1, item, count))
+    state = repo.load(1)
+    state['alchemy']['commission_day'] = service.alchemy._commission_day()
+    state['alchemy']['commission_count'] = service.alchemy.DAILY_COMMISSIONS
+    repo.save(1, state)
+    before = store.get(1)['snapshot']
+    result = send(game, 'AlchemyFinish', type=1, posIndex=0)
+    assert result.values['code'] == 13
+    assert quantity(store, item) == count
+    assert store.get(1)['snapshot'] == before
+    assert repo.load(1)['alchemy']['commission_count'] == service.alchemy.DAILY_COMMISSIONS
+
+
 def test_card_window_gate_and_consumption(game):
     assert send(game, 'HelpPowerSpeedValid', type=1).values == {'code': 13, 'type': 1}
     upgrade(game, 'BuildingUpgrade')

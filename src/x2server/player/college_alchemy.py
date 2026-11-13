@@ -73,6 +73,10 @@ class AlchemyService:
     EXPERIENCE_PER_ITEM = 1
     ALCHEMY_CHIP = 1  # AlchemyType.PURCHASECHIPTASK, deliver materials for god chips.
     ALCHEMY_TRANSACTION = 2  # AlchemyType.TRANSACTION, the standard sell order.
+    # 炼金委托每日次数: 完成与拒绝都算一次 (拒绝 = 顾客离场), 用完当日不能再交易/拒绝。
+    # 客户端 592/593 的 transactionNum 不参与 UI 判定 (只被存档合并读取), 所以这里
+    # 由服务端独立记账; 5 对应 GlobalParamString.AlchemyCustomerNum (顾客槽位数)。
+    DAILY_COMMISSIONS = 5
 
     def __init__(self, repository, economy, snapshot):
         self.repo, self.economy, self.snapshot = repository, economy, snapshot
@@ -261,6 +265,28 @@ class AlchemyService:
                 for rid, positions in sorted(groups.items())]
         return values
 
+    def _commission_day(self):
+        from .task_calendar import task_period
+        return int(task_period(1, self.repo.clock.now())[0])
+
+    def _commission_room(self, state, consume=False):
+        """每日委托次数闸门: 完成与拒绝共用同一份当日配额。
+
+        返回 False = 今日次数已用完 (完成/拒绝都回 13); consume=True 时占用 1 次。
+        跨日按 task_period(1) 的日界自动归零, 与炼金买元素的 buyTimesDay 同一口径。
+        """
+        day = self._commission_day()
+        alchemy = state.setdefault('alchemy', {})
+        if int(alchemy.get('commission_day', -1)) != day:
+            alchemy['commission_day'] = day
+            alchemy['commission_count'] = 0
+        count = int(alchemy.get('commission_count', 0))
+        if count >= self.DAILY_COMMISSIONS:
+            return False
+        if consume:
+            alchemy['commission_count'] = count + 1
+        return True
+
     def _trade(self, player_id, state, request):
         pos, action = request.get('posIndex', 0), request.get('type', 0)
         values = {'code': 13, 'type': action, 'posIndex': pos}
@@ -271,6 +297,9 @@ class AlchemyService:
         if action == 2:
             # OnSendRegist (0x1ba6fec) sends type=2 and may carry stale price
             # toggles. Refusal charges nothing; 599 triggers a fresh 592 query.
+            # 拒绝同样消耗当日委托次数 (官方: 拒绝一次算完成一次), 用完就拒绝不了。
+            if not self._commission_room(state, consume=True):
+                return dict(values, code=13)
             rotations = state['alchemy'].setdefault('customer_rotations', {})
             rotations[str(pos)] = int(rotations.get(str(pos), 0)) + 1
             state['alchemy'].setdefault('customer_orders', {}).pop(str(pos), None)
@@ -279,6 +308,9 @@ class AlchemyService:
         if action != 1 or (plus and discount):
             return values
         if customer['type'] not in (1, 2):
+            return values
+        # 次数用完就整单拒绝 (不扣产物/星能), 与拒绝同一份当日配额。
+        if not self._commission_room(state):
             return values
         if customer['type'] == self.ALCHEMY_CHIP:
             plus = discount = False  # 碎片委托面板没有加价/打折, 不能扣星能
@@ -315,6 +347,8 @@ class AlchemyService:
         if code != 10:
             return dict(values, code=code)
         state['star_energy'] -= energy
+        # 扣费成功后才占次数, 避免产物不足/星能不足的失败请求白吃一次委托。
+        self._commission_room(state, consume=True)
         if customer['type'] == self.ALCHEMY_CHIP:
             # E_Chip 委托的奖励来自 CollegeQuest.AwardGroup (782xxx Gift = 3 个神格碎片),
             # 不按金币结算; 金币交易仍走原来的 CollegeRecipe.Gold 价格。
