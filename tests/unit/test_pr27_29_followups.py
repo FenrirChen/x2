@@ -20,9 +20,9 @@ def progress(economy, task):
         'SELECT progress FROM economy_tasks WHERE player_id=1 AND task_id=?', (task,)).fetchone()[0]
 
 
-def test_customer_refusals_leave_all_other_positions_and_orders_unchanged(game):
-    _, _, repo, service, _ = game
-    for sequence in range(1, 46):
+def test_customer_refusals_are_daily_capped_and_leave_other_positions(game):
+    _, clock, repo, service, _ = game
+    for sequence in range(1, 6):
         before = orders(service)
         pos = sequence % 5
         assert send(game, 'AlchemyFinish', seq=sequence, type=2, posIndex=pos).values['code'] == 10
@@ -31,6 +31,13 @@ def test_customer_refusals_leave_all_other_positions_and_orders_unchanged(game):
         assert before[pos]['questId'] != after[pos]['questId']
         assert len({r['param'] for r in after}) == 5
         assert orders(CollegeService(repo, economy=service.alchemy.economy)) == after
+    # 5 次用完: 第 6 次拒绝被拒, 顾客与订单都不动。
+    exhausted = orders(service)
+    assert send(game, 'AlchemyFinish', seq=6, type=2, posIndex=0).values['code'] == 13
+    assert orders(service) == exhausted
+    # 跨日重置后可继续拒绝。
+    clock.value += 86400
+    assert send(game, 'AlchemyFinish', seq=7, type=2, posIndex=0).values['code'] == 10
 
 
 def test_customer_suggestion_persists_across_main_queries_and_expires_next_day(game):
