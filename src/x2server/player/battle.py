@@ -17,6 +17,14 @@ from .economy import UnresolvedEconomy
 from .battle_entry import BattleEntryCatalog, EntryDenied
 
 
+# 月之荒庭(2011000)之外，月之暗面(2011100)与月之暗面·现世残响(2034100)同样在
+# 「残余蚀界能量」里作战，需要【净化模块】提供的净化力场(99361，载具 9914)。这三章的
+# 关卡分别是 SectionType 21 / 普通 / 专家 / 日常，Type 不是共同特征，章节号才是；
+# 客户端只靠 FightData.fightGroupSkillData 建立 TeamCaster(净化按钮)，不下发就没有
+# 净化入口，剧情/挑战里的净化目标无法完成。
+MOON_CLEANSE_CHAPTERS = frozenset({2011000, 2011100, 2034100})
+
+
 class BattleService:
     def __init__(self, store, economy=None):
         self.store = store
@@ -731,7 +739,9 @@ class BattleService:
         if entry_context.section_type == 5:
             drop_values = [0] * len(drop_values)
         moon_skill = (self.economy.moon.battle_skill(player["id"])
-                      if self.economy and entry_context.section_type == 21 else b"")
+                      if self.economy and (entry_context.section_type == 21
+                                           or chapter in MOON_CLEANSE_CHAPTERS)
+                      else b"")
         # CRIDmg is an extra battle-wide bonus, not the hero's base multiplier.
         # Leave it at protobuf default 0: attrAdd above includes CRI_Dmg (1500)
         # because the native fallback is skipped; equipment/passives then apply
