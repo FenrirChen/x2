@@ -7,7 +7,8 @@ from tests.unit.test_battle import packet, request
 from x2server.messages.core import CORE_SCHEMAS
 from x2server.messages.moon import MOON_IDS, MOON_SCHEMAS as S
 from x2server.messages.economy import FINISH_REQUEST, FINISH_RESULT, REWARD, REWARD_ITEM
-from x2server.messages.battle import OUTSIDE_ITEM, CHECKOUT, FIGHT_PROFILE
+from x2server.messages.battle import (OUTSIDE_ITEM, CHECKOUT, FIGHT_PROFILE, FIGHT_DATA,
+    FIGHT_GROUP_SKILL)
 from x2server.player.battle import BattleService
 from x2server.player.moon import PARAMETERS, catalog
 
@@ -194,6 +195,30 @@ def test_moon_battle_entry_settlement_daily_caps_and_replay(moon):
     assert service.quantity(1, 1120002) == 6
     assert asyncio.run(battle.checkout(ctx, pkt)).values == result.values
     assert service.quantity(1, 1120001) == 300
+
+
+def test_dark_moon_stages_receive_the_cleanse_team_skill(moon):
+    """月之暗面(2011100)不是 SectionType 21, 也要拿到【净化模块】的净化力场。
+
+    客户端只在 FightData.fightGroupSkillData 上建立 TeamCaster(净化按钮), 老实现只对
+    Type 21 下发, 于是月之暗面/现世残响的战斗里没有净化入口。普通关必须保持空载荷。
+    """
+    store, _, economy, _, ctx = moon
+    player = store.get(1)
+    store.save_snapshot(1, dict(player['snapshot'], mobility={'power': 100},
+        heroes=[{'id': 1003, 'state': 2, 'level': 1, 'star': 1}]), player['revision'])
+    battle = BattleService(store, economy)
+    values = request()
+    values.update(missionId=2111101, chapter=2011100, sceneId=2211101)
+    enter = asyncio.run(battle.enter(ctx, packet(values, 90)))
+    assert enter.values['result'] == 10
+    group = FIGHT_GROUP_SKILL.decode(FIGHT_DATA.decode(enter.values['data'])['fightGroupSkillData'])
+    assert group['activeSkillId'] == 99361
+    assert group['activeSkillLevel'] == 1 and group['unitId'] == 9914
+    control = dict(values, missionId=2110101, chapter=2010200, sceneId=2210101)
+    plain = asyncio.run(battle.enter(ctx, packet(control, 91)))
+    assert plain.values['result'] == 10
+    assert 'fightGroupSkillData' not in FIGHT_DATA.decode(plain.values['data'])
 
 
 @pytest.mark.parametrize('kind', [16, 17, 18, 19])
