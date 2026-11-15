@@ -365,3 +365,48 @@ def test_finished_commission_cannot_be_reaccepted_to_bypass_daily_limit(moon):
     assert moon[3].claim_task(1, mid, 18)['code'] == 10
     assert send(moon, 'MoonMissionGroupAcceptedSync', 1103, moonMissionGroup=group).values['code'] == 13
     assert moon[3].load(1)['accepted'] == 1
+
+
+@pytest.mark.parametrize('section', [2111001, 2111051, *range(2111101, 2111107),
+    *range(2111151, 2111161), *range(2134101, 2134111)])
+def test_all_purification_chapters_receive_skill_on_real_entry(moon, section):
+    store, _, economy, _, ctx = moon
+    player = store.get(1)
+    store.save_snapshot(1, dict(player['snapshot'], mobility={'power': 5000},
+        heroes=[{'id': 1003, 'state': 2, 'level': 1, 'star': 1}]), player['revision'])
+    battle = BattleService(store, economy)
+    row = battle.catalog.sections[section]
+    with store.db:
+        # Fulfil existing stage prerequisites; the patch must not bypass them.
+        for candidate in battle.catalog.sections.values():
+            if candidate['ChapterID'] == row['ChapterID'] or candidate['SectionID'] == row.get('OpenParam'):
+                store.db.execute('INSERT OR IGNORE INTO economy_clears VALUES (?,?,?)',
+                    (1, candidate['SectionID'], 'test:prerequisites'))
+    values = request()
+    values.update(missionId=section, chapter=row['ChapterID'], sceneId=row['Maps'][0])
+    response = asyncio.run(battle.enter(ctx, packet(values, 400)))
+    assert response.values['result'] == 10
+    data = FIGHT_DATA.decode(response.values['data'])
+    group = FIGHT_GROUP_SKILL.decode(data['fightGroupSkillData'])
+    assert group['activeSkillId'] == 99361 and group['unitId'] == 9914
+    assert group['activeSkillLevel'] == 1
+
+
+def test_dark_moon_resonance_keeps_owned_equipment_skill_and_entry_gates(moon):
+    store, _, economy, _, ctx = moon
+    complete(moon)
+    assert send(moon, 'MoonEquipPutOnOrOff', 401, operate=1, moonEquipId=111001, slotIndex=0).values['code'] == 10
+    player = store.get(1)
+    store.save_snapshot(1, dict(player['snapshot'], mobility={'power': 5000},
+        heroes=[{'id': 1003, 'state': 2, 'level': 1, 'star': 1}]), player['revision'])
+    battle = BattleService(store, economy)
+    row = battle.catalog.sections[2134101]
+    values = request()
+    values.update(missionId=2134101, chapter=2034100, sceneId=row['Maps'][0])
+    assert asyncio.run(battle.enter(ctx, packet(values, 402))).values['result'] != 10
+    with store.db:
+        store.db.execute('INSERT INTO economy_clears VALUES (?,?,?)', (1, 2111151, 'test:prerequisite'))
+    response = asyncio.run(battle.enter(ctx, packet(values, 403)))
+    assert response.values['result'] == 10
+    group = FIGHT_GROUP_SKILL.decode(FIGHT_DATA.decode(response.values['data'])['fightGroupSkillData'])
+    assert group['activeSkillId'] == 99141 and group['unitId'] == 9914
