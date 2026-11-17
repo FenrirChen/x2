@@ -1,11 +1,65 @@
 {
- "provenance": "Item.FunctionEff == E_AutoUsed(7): Item.EffData names the Gift group the row converts into the moment it is acquired (the client opens it automatically). These are the receipts the red packet (Item 1203021 -> Gift 776193) can draw, restored as data because reward_items.json omits FunctionEff/EffData. 2026-10-20: added the club shop's (807) two E_AutoUsed receipts, 社团宝箱 1203022 -> 776053 and 6★随机兽主 1203023 -> 776054 (client Item: FunctionEff 7, EffData, no Used). The client can never open either one, so storing the receipt is what made a completed club purchase look like it delivered nothing.",
+ "provenance": "Item.FunctionEff == E_AutoUsed(7): Item.EffData names the Gift group the row converts into the moment it is acquired (the client opens it automatically). These are the receipts the red packet (Item 1203021 -> Gift 776193) can draw, restored as data because reward_items.json omits FunctionEff/EffData. 2026-10-20: added the club shop's (807) two E_AutoUsed receipts, 社团宝箱 1203022 -> 776053 and 6★随机兽主 1203023 -> 776054 (client Item: FunctionEff 7, EffData, no Used). The client can never open either one, so storing the receipt is what made a completed club purchase look like it delivered nothing. 2026-11-17: added the 无限池's (ActivityBox 904, 珠雀绮馔) 18 兽主 receipts 1241181-1241186 / 1242181-1242186 / 1243181-1243186; the pool granted the receipt itself, so the 6★兽主 never reached the player.",
  "items": {
   "1203022": [
    776053
   ],
   "1203023": [
    776054
+  ],
+  "1241181": [
+   725108
+  ],
+  "1241182": [
+   725109
+  ],
+  "1241183": [
+   725110
+  ],
+  "1241184": [
+   725111
+  ],
+  "1241185": [
+   725112
+  ],
+  "1241186": [
+   725113
+  ],
+  "1242181": [
+   725296
+  ],
+  "1242182": [
+   725297
+  ],
+  "1242183": [
+   725298
+  ],
+  "1242184": [
+   725299
+  ],
+  "1242185": [
+   725300
+  ],
+  "1242186": [
+   725301
+  ],
+  "1243181": [
+   725496
+  ],
+  "1243182": [
+   725497
+  ],
+  "1243183": [
+   725498
+  ],
+  "1243184": [
+   725499
+  ],
+  "1243185": [
+   725500
+  ],
+  "1243186": [
+   725501
   ],
   "1290177": [
    776226
@@ -18,7 +72,25 @@
   ]
  },
  "stars": {
-  "1203023": 6
+  "1203023": 6,
+  "1241181": 4,
+  "1241182": 4,
+  "1241183": 4,
+  "1241184": 4,
+  "1241185": 4,
+  "1241186": 4,
+  "1242181": 5,
+  "1242182": 5,
+  "1242183": 5,
+  "1242184": 5,
+  "1242185": 5,
+  "1242186": 5,
+  "1243181": 6,
+  "1243182": 6,
+  "1243183": 6,
+  "1243184": 6,
+  "1243185": 6,
+  "1243186": 6
  },
- "starsProvenance": "The star a receipt's own text promises, for receipts whose Gift only names part-level equib type_ids. 6★随机兽主 1203023: the client Item row reads that opening it surely grants a 6-star 兽主, and 807's shelf price row for it is the 6★ slot; Gift 776054 lists 48 part type_ids and carries no star of its own, so the instance star has to come from the receipt."
+ "starsProvenance": "The star a receipt's own text promises, for receipts whose Gift only names part-level equib type_ids. 6★随机兽主 1203023: the client Item row reads that opening it surely grants a 6-star 兽主, and 807's shelf price row for it is the 6★ slot; Gift 776054 lists 48 part type_ids and carries no star of its own, so the instance star has to come from the receipt. 2026-11-17: 无限池 (ActivityBox 904, 珠雀绮馔) 也发 E_AutoUsed 兽主凭据 1241181-1241186 / 1242181-1242186 / 1243181-1243186, 星级就是凭据自身的 4/5/6 品质; 它们的 Gift 同样只给部位 type_id, 之前入库成死凭据, 所以 6★兽主看起来没发。"
 }

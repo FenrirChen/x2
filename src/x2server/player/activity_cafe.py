@@ -1,4 +1,7 @@
 """Period-scoped food businesses: staffing, paid cooking, sales and upgrades."""
+from importlib.resources import files
+import json
+
 from .activity import enum
 from .economy import UnresolvedEconomy
 from x2server.messages.activity import encode
@@ -9,6 +12,13 @@ class ActivityCafe:
         self.a, self.e, self.r = activity, activity.economy, activity.rotation
         self.levels = {(r['Type'], r['Level']): r for r in activity.tables['NewYearCafe']}
         self.recipes = {r['RecipeID']: r for r in activity.tables['NewYearFood']}
+        # 当前客户端表只为 7/8/9 号店 (阏逢敛遗) 保留了 NewYearCafeBuff, 珠雀绮馔的
+        # 1/2/3 号店在后续版本里把 1-29 行裁掉了。补回旧版客户端表 (table_410) 的
+        # 32 行, 否则食品店员工永远没有价格/经验/时间加成。
+        self.buffs = list(activity.tables['NewYearCafeBuff'])
+        legacy = files('x2server').joinpath('data/activity_cafe_legacy_buffs.json')
+        if legacy.is_file():
+            self.buffs.extend(json.loads(legacy.read_text(encoding='utf-8')))
 
     def context(self, player, store_type):
         period = self.a.period(player)
@@ -64,7 +74,7 @@ class ActivityCafe:
 
     def buff(self, store_type, state, kind):
         value = 0
-        for r in self.a.tables['NewYearCafeBuff']:
+        for r in self.buffs:
             if (enum(r['EffectType']) == kind and store_type in r['EffectParam2']
                     and state['employees'].get(str(r['EffectParam1'])) == r['UnitID']):
                 value += r['EffectParam4']

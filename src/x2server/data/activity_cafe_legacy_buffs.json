@@ -1,0 +1,642 @@
+[
+ {
+  "ID": 1001,
+  "UnitID": 1003,
+  "Name": 10031,
+  "EffectType": {
+   "value": 5,
+   "enum": "E_CafeTimeReduce"
+  },
+  "EffectParam1": 2,
+  "EffectParam2": [
+   3
+  ],
+  "EffectParam3": {
+   "value": 1,
+   "enum": "E_Percentage"
+  },
+  "EffectParam4": 100,
+  "Desc": 6002000,
+  "DescSimple": 6002200
+ },
+ {
+  "ID": 1002,
+  "UnitID": 1004,
+  "Name": 10041,
+  "EffectType": {
+   "value": 3,
+   "enum": "E_CafePriceAdd"
+  },
+  "EffectParam1": 1,
+  "EffectParam2": [
+   1
+  ],
+  "EffectParam3": {
+   "value": 1,
+   "enum": "E_Percentage"
+  },
+  "EffectParam4": 100,
+  "Desc": 6002001,
+  "DescSimple": 6002201
+ },
+ {
+  "ID": 1003,
+  "UnitID": 1005,
+  "Name": 10051,
+  "EffectType": {
+   "value": 5,
+   "enum": "E_CafeTimeReduce"
+  },
+  "EffectParam1": 2,
+  "EffectParam2": [
+   1
+  ],
+  "EffectParam3": {
+   "value": 1,
+   "enum": "E_Percentage"
+  },
+  "EffectParam4": 150,
+  "Desc": 6002002,
+  "DescSimple": 6002202
+ },
+ {
+  "ID": 1004,
+  "UnitID": 1006,
+  "Name": 10061,
+  "EffectType": {
+   "value": 3,
+   "enum": "E_CafePriceAdd"
+  },
+  "EffectParam1": 1,
+  "EffectParam2": [
+   2
+  ],
+  "EffectParam3": {
+   "value": 1,
+   "enum": "E_Percentage"
+  },
+  "EffectParam4": 100,
+  "Desc": 6002003,
+  "DescSimple": 6002203
+ },
+ {
+  "ID": 1005,
+  "UnitID": 1007,
+  "Name": 10071,
+  "EffectType": {
+   "value": 5,
+   "enum": "E_CafeTimeReduce"
+  },
+  "EffectParam1": 2,
+  "EffectParam2": [
+   2
+  ],
+  "EffectParam3": {
+   "value": 1,
+   "enum": "E_Percentage"
+  },
+  "EffectParam4": 100,
+  "Desc": 6002004,
+  "DescSimple": 6002204
+ },
+ {
+  "ID": 1006,
+  "UnitID": 1008,
+  "Name": 10081,
+  "EffectType": {
+   "value": 5,
+   "enum": "E_CafeTimeReduce"
+  },
+  "EffectParam1": 2,
+  "EffectParam2": [
+   3
+  ],
+  "EffectParam3": {
+   "value": 1,
+   "enum": "E_Percentage"
+  },
+  "EffectParam4": 200,
+  "Desc": 6002005,
+  "DescSimple": 6002205
+ },
+ {
+  "ID": 1007,
+  "UnitID": 1009,
+  "Name": 10091,
+  "EffectType": {
+   "value": 5,
+   "enum": "E_CafeTimeReduce"
+  },
+  "EffectParam1": 2,
+  "EffectParam2": [
+   1
+  ],
+  "EffectParam3": {
+   "value": 1,
+   "enum": "E_Percentage"
+  },
+  "EffectParam4": 100,
+  "Desc": 6002006,
+  "DescSimple": 6002206
+ },
+ {
+  "ID": 1008,
+  "UnitID": 1010,
+  "Name": 10101,
+  "EffectType": {
+   "value": 5,
+   "enum": "E_CafeTimeReduce"
+  },
+  "EffectParam1": 2,
+  "EffectParam2": [
+   1
+  ],
+  "EffectParam3": {
+   "value": 1,
+   "enum": "E_Percentage"
+  },
+  "EffectParam4": 100,
+  "Desc": 6002007,
+  "DescSimple": 6002207
+ },
+ {
+  "ID": 1009,
+  "UnitID": 1011,
+  "Name": 10111,
+  "EffectType": {
+   "value": 4,
+   "enum": "E_CafeExpAdd"
+  },
+  "EffectParam1": 3,
+  "EffectParam2": [
+   3
+  ],
+  "EffectParam3": {
+   "value": 1,
+   "enum": "E_Percentage"
+  },
+  "EffectParam4": 100,
+  "Desc": 6002008,
+  "DescSimple": 6002208
+ },
+ {
+  "ID": 1010,
+  "UnitID": 1012,
+  "Name": 10121,
+  "EffectType": {
+   "value": 5,
+   "enum": "E_CafeTimeReduce"
+  },
+  "EffectParam1": 2,
+  "EffectParam2": [
+   2
+  ],
+  "EffectParam3": {
+   "value": 1,
+   "enum": "E_Percentage"
+  },
+  "EffectParam4": 150,
+  "Desc": 6002009,
+  "DescSimple": 6002209
+ },
+ {
+  "ID": 1011,
+  "UnitID": 1013,
+  "Name": 10131,
+  "EffectType": {
+   "value": 4,
+   "enum": "E_CafeExpAdd"
+  },
+  "EffectParam1": 3,
+  "EffectParam2": [
+   2
+  ],
+  "EffectParam3": {
+   "value": 1,
+   "enum": "E_Percentage"
+  },
+  "EffectParam4": 100,
+  "Desc": 6002010,
+  "DescSimple": 6002210
+ },
+ {
+  "ID": 1012,
+  "UnitID": 1014,
+  "Name": 10141,
+  "EffectType": {
+   "value": 5,
+   "enum": "E_CafeTimeReduce"
+  },
+  "EffectParam1": 2,
+  "EffectParam2": [
+   1
+  ],
+  "EffectParam3": {
+   "value": 1,
+   "enum": "E_Percentage"
+  },
+  "EffectParam4": 200,
+  "Desc": 6002011,
+  "DescSimple": 6002211
+ },
+ {
+  "ID": 1013,
+  "UnitID": 1015,
+  "Name": 10151,
+  "EffectType": {
+   "value": 3,
+   "enum": "E_CafePriceAdd"
+  },
+  "EffectParam1": 1,
+  "EffectParam2": [
+   2
+  ],
+  "EffectParam3": {
+   "value": 1,
+   "enum": "E_Percentage"
+  },
+  "EffectParam4": 200,
+  "Desc": 6002012,
+  "DescSimple": 6002212
+ },
+ {
+  "ID": 1014,
+  "UnitID": 1016,
+  "Name": 10161,
+  "EffectType": {
+   "value": 5,
+   "enum": "E_CafeTimeReduce"
+  },
+  "EffectParam1": 2,
+  "EffectParam2": [
+   2
+  ],
+  "EffectParam3": {
+   "value": 1,
+   "enum": "E_Percentage"
+  },
+  "EffectParam4": 200,
+  "Desc": 6002013,
+  "DescSimple": 6002213
+ },
+ {
+  "ID": 1015,
+  "UnitID": 1017,
+  "Name": 10171,
+  "EffectType": {
+   "value": 4,
+   "enum": "E_CafeExpAdd"
+  },
+  "EffectParam1": 3,
+  "EffectParam2": [
+   1
+  ],
+  "EffectParam3": {
+   "value": 1,
+   "enum": "E_Percentage"
+  },
+  "EffectParam4": 100,
+  "Desc": 6002014,
+  "DescSimple": 6002214
+ },
+ {
+  "ID": 1016,
+  "UnitID": 1018,
+  "Name": 10181,
+  "EffectType": {
+   "value": 5,
+   "enum": "E_CafeTimeReduce"
+  },
+  "EffectParam1": 2,
+  "EffectParam2": [
+   3
+  ],
+  "EffectParam3": {
+   "value": 1,
+   "enum": "E_Percentage"
+  },
+  "EffectParam4": 150,
+  "Desc": 6002015,
+  "DescSimple": 6002215
+ },
+ {
+  "ID": 1017,
+  "UnitID": 1019,
+  "Name": 10191,
+  "EffectType": {
+   "value": 4,
+   "enum": "E_CafeExpAdd"
+  },
+  "EffectParam1": 3,
+  "EffectParam2": [
+   1
+  ],
+  "EffectParam3": {
+   "value": 1,
+   "enum": "E_Percentage"
+  },
+  "EffectParam4": 200,
+  "Desc": 6002016,
+  "DescSimple": 6002216
+ },
+ {
+  "ID": 1018,
+  "UnitID": 1020,
+  "Name": 10201,
+  "EffectType": {
+   "value": 4,
+   "enum": "E_CafeExpAdd"
+  },
+  "EffectParam1": 3,
+  "EffectParam2": [
+   3
+  ],
+  "EffectParam3": {
+   "value": 1,
+   "enum": "E_Percentage"
+  },
+  "EffectParam4": 300,
+  "Desc": 6002017,
+  "DescSimple": 6002217
+ },
+ {
+  "ID": 1019,
+  "UnitID": 1021,
+  "Name": 10211,
+  "EffectType": {
+   "value": 3,
+   "enum": "E_CafePriceAdd"
+  },
+  "EffectParam1": 1,
+  "EffectParam2": [
+   1
+  ],
+  "EffectParam3": {
+   "value": 1,
+   "enum": "E_Percentage"
+  },
+  "EffectParam4": 250,
+  "Desc": 6002018,
+  "DescSimple": 6002218
+ },
+ {
+  "ID": 1020,
+  "UnitID": 1022,
+  "Name": 10221,
+  "EffectType": {
+   "value": 3,
+   "enum": "E_CafePriceAdd"
+  },
+  "EffectParam1": 1,
+  "EffectParam2": [
+   1
+  ],
+  "EffectParam3": {
+   "value": 1,
+   "enum": "E_Percentage"
+  },
+  "EffectParam4": 200,
+  "Desc": 6002019,
+  "DescSimple": 6002219
+ },
+ {
+  "ID": 1021,
+  "UnitID": 1023,
+  "Name": 10231,
+  "EffectType": {
+   "value": 4,
+   "enum": "E_CafeExpAdd"
+  },
+  "EffectParam1": 3,
+  "EffectParam2": [
+   2
+  ],
+  "EffectParam3": {
+   "value": 1,
+   "enum": "E_Percentage"
+  },
+  "EffectParam4": 200,
+  "Desc": 6002020,
+  "DescSimple": 6002220
+ },
+ {
+  "ID": 1022,
+  "UnitID": 1025,
+  "Name": 10251,
+  "EffectType": {
+   "value": 4,
+   "enum": "E_CafeExpAdd"
+  },
+  "EffectParam1": 3,
+  "EffectParam2": [
+   2
+  ],
+  "EffectParam3": {
+   "value": 1,
+   "enum": "E_Percentage"
+  },
+  "EffectParam4": 300,
+  "Desc": 6002021,
+  "DescSimple": 6002221
+ },
+ {
+  "ID": 1023,
+  "UnitID": 1034,
+  "Name": 10341,
+  "EffectType": {
+   "value": 3,
+   "enum": "E_CafePriceAdd"
+  },
+  "EffectParam1": 1,
+  "EffectParam2": [
+   2
+  ],
+  "EffectParam3": {
+   "value": 1,
+   "enum": "E_Percentage"
+  },
+  "EffectParam4": 250,
+  "Desc": 6002022,
+  "DescSimple": 6002222
+ },
+ {
+  "ID": 1024,
+  "UnitID": 1027,
+  "Name": 10271,
+  "EffectType": {
+   "value": 3,
+   "enum": "E_CafePriceAdd"
+  },
+  "EffectParam1": 1,
+  "EffectParam2": [
+   3
+  ],
+  "EffectParam3": {
+   "value": 1,
+   "enum": "E_Percentage"
+  },
+  "EffectParam4": 200,
+  "Desc": 6002023,
+  "DescSimple": 6002223
+ },
+ {
+  "ID": 1025,
+  "UnitID": 1028,
+  "Name": 10281,
+  "EffectType": {
+   "value": 4,
+   "enum": "E_CafeExpAdd"
+  },
+  "EffectParam1": 3,
+  "EffectParam2": [
+   1
+  ],
+  "EffectParam3": {
+   "value": 1,
+   "enum": "E_Percentage"
+  },
+  "EffectParam4": 300,
+  "Desc": 6002024,
+  "DescSimple": 6002224
+ },
+ {
+  "ID": 1026,
+  "UnitID": 1031,
+  "Name": 10311,
+  "EffectType": {
+   "value": 3,
+   "enum": "E_CafePriceAdd"
+  },
+  "EffectParam1": 1,
+  "EffectParam2": [
+   3
+  ],
+  "EffectParam3": {
+   "value": 1,
+   "enum": "E_Percentage"
+  },
+  "EffectParam4": 250,
+  "Desc": 6002025,
+  "DescSimple": 6002225
+ },
+ {
+  "ID": 1027,
+  "UnitID": 1197,
+  "Name": 11971,
+  "EffectType": {
+   "value": 4,
+   "enum": "E_CafeExpAdd"
+  },
+  "EffectParam1": 3,
+  "EffectParam2": [
+   3
+  ],
+  "EffectParam3": {
+   "value": 1,
+   "enum": "E_Percentage"
+  },
+  "EffectParam4": 200,
+  "Desc": 6002026,
+  "DescSimple": 6002226
+ },
+ {
+  "ID": 1028,
+  "UnitID": 1198,
+  "Name": 11981,
+  "EffectType": {
+   "value": 4,
+   "enum": "E_CafeExpAdd"
+  },
+  "EffectParam1": 3,
+  "EffectParam2": [
+   1
+  ],
+  "EffectParam3": {
+   "value": 1,
+   "enum": "E_Percentage"
+  },
+  "EffectParam4": 100,
+  "Desc": 6002027,
+  "DescSimple": 6002227
+ },
+ {
+  "ID": 1029,
+  "UnitID": 1199,
+  "Name": 11991,
+  "EffectType": {
+   "value": 3,
+   "enum": "E_CafePriceAdd"
+  },
+  "EffectParam1": 1,
+  "EffectParam2": [
+   3
+  ],
+  "EffectParam3": {
+   "value": 1,
+   "enum": "E_Percentage"
+  },
+  "EffectParam4": 100,
+  "Desc": 6002028,
+  "DescSimple": 6002228
+ },
+ {
+  "ID": 1030,
+  "UnitID": 1032,
+  "Name": 10321,
+  "EffectType": {
+   "value": 3,
+   "enum": "E_CafePriceAdd"
+  },
+  "EffectParam1": 1,
+  "EffectParam2": [
+   2
+  ],
+  "EffectParam3": {
+   "value": 1,
+   "enum": "E_Percentage"
+  },
+  "EffectParam4": 250,
+  "Desc": 6002022,
+  "DescSimple": 6002218
+ },
+ {
+  "ID": 1031,
+  "UnitID": 1033,
+  "Name": 10331,
+  "EffectType": {
+   "value": 4,
+   "enum": "E_CafeExpAdd"
+  },
+  "EffectParam1": 3,
+  "EffectParam2": [
+   3
+  ],
+  "EffectParam3": {
+   "value": 1,
+   "enum": "E_Percentage"
+  },
+  "EffectParam4": 300,
+  "Desc": 6002017,
+  "DescSimple": 6002217
+ },
+ {
+  "ID": 1032,
+  "UnitID": 1035,
+  "Name": 10351,
+  "EffectType": {
+   "value": 5,
+   "enum": "E_CafeTimeReduce"
+  },
+  "EffectParam1": 2,
+  "EffectParam2": [
+   3
+  ],
+  "EffectParam3": {
+   "value": 1,
+   "enum": "E_Percentage"
+  },
+  "EffectParam4": 100,
+  "Desc": 6002000,
+  "DescSimple": 6002200
+ }
+]

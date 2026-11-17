@@ -664,11 +664,35 @@ class ActivityService:
                 goods = self.box_goods[gid]
                 rewards[goods['ItemID']] += goods['ItemNum']
             self.spend(player, period, box['CostID'], box['CostNum'] * count, f'pool-cost:{key}')
-            rewards = self.economy._grant(player, self.source(period, 'draw', key), dict(rewards))
-            self.obtained(player, period, rewards, self.source(period, 'draw', key))
+            source = self.source(period, 'draw', key)
+            # 无限池的高星兽主是 E_AutoUsed 凭据 (ItemType 13, FunctionEff 7): 凭据本身
+            # 没有 Item.Used, 客户端永远打不开, 直接进背包就是「抽到了却没给」。它的
+            # Gift 只写部位 type_id (ItemType 10), 必须按凭据星级落地成实例再经
+            # rewardData.rewardEquip 下发, 和活动中心/社团商店同一条路。
+            receipts, plain = Counter(), Counter()
+            for item, amount in rewards.items():
+                (receipts if item in self.economy.auto_used_items else plain)[item] += amount
+            granted = Counter()
+            equips = []
+            if plain:
+                granted.update(self.economy._grant(player, source, dict(plain)))
+            unverified = {item: amount for item, amount in receipts.items()
+                          if type(self.economy.receipt_stars.get(item)) is not int}
+            if unverified:
+                # 没有星级证据的凭据原样保留, 交给登录补开, 不猜星级。
+                granted.update(self.economy._grant(player, f'{source}:receipt-unverified', unverified))
+            for star in sorted({self.economy.receipt_stars[item] for item in receipts
+                                if item not in unverified}):
+                opened, opened_equips = self.economy.grant_auto_used_receipt(
+                    player, f'{source}:receipt:{star}',
+                    {item: amount for item, amount in receipts.items()
+                     if item not in unverified and self.economy.receipt_stars[item] == star}, star)
+                granted.update(opened)
+                equips.extend(opened_equips)
+            self.obtained(player, period, granted, source)
             self.rotation.put(player, period, 'pool', pool_id, counts)
             return {**self.pool_values(player, activity), 'rewardPoolId': pool_id,
-                    'rewardData': self.economy.reward_bytes(rewards)}
+                    'rewardData': self.economy.reward_bytes(granted, tuple(equips))}
 
     def pre_notice(self, player, activity_type, claim=False):
         period = self.period(player)
