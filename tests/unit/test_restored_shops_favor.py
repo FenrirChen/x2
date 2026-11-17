@@ -76,7 +76,7 @@ def test_ticket_five_rounds_exact_batch_cost_hidden_future_and_replay(env):
     assert buy(service,ctx,805,1905305,rid=400).values['code']==13
 
 
-@pytest.mark.parametrize('sid,currency,size', [(803, 1237918, 14), (806, 1237905, 17)])
+@pytest.mark.parametrize('sid,currency,size', [(803, 1237918, 14), (806, 1237905, 29)])
 def test_catalog_debit_delivery_limit_and_rejection_rollback(env, sid, currency, size):
     store, e, ctx = env
     service = ShopService(store, e)
@@ -92,6 +92,31 @@ def test_catalog_debit_delivery_limit_and_rejection_rollback(env, sid, currency,
         before = store.db.execute('SELECT quantity FROM inventory WHERE player_id=1 AND item_id=?', (result.values['changeItemID'],)).fetchone()[0]
         assert buy(service, ctx, sid, good['goodsId'], rid=500 + index).values['code'] == 13
         assert store.db.execute('SELECT quantity FROM inventory WHERE player_id=1 AND item_id=?', (result.values['changeItemID'],)).fetchone()[0] == before
+
+
+def test_gem_shop_restores_every_jewel_maiden_with_monthly_quota(env):
+    store, e, ctx = env
+    now = [int(datetime(2026, 11, 17, 12, 0, tzinfo=timezone(timedelta(hours=8))).timestamp())]
+    e.clock = lambda: now[0]
+    service = ShopService(store, e)
+    jewels = [g for g in listing(service, ctx, 806) if g['currencyType'] == 905]
+    assert {g['itemId'] for g in jewels} == {
+        1251000, 1251010, 1251020, 1251030, 1251040, 1251050, 1251060, 1251070,
+        1251080, 1251090, 1251100, 1251110, 1251120, 1251130, 1251140, 1251150,
+        1251160, 1251170, 1251180,
+    }
+    assert all(g['limited'] == 1 for g in jewels)  # E_Month
+    singles = [g for g in jewels if g['goodsId'] < 1915000]
+    bundles = [g for g in jewels if g['goodsId'] >= 1915000]
+    assert len(singles) == 11 and all(g['num'] == 1 and g['price'] == 6 for g in singles)
+    assert len(bundles) == 8 and all(g['num'] == 50 and g['price'] == 300 for g in bundles)
+    fund(store, 1237905, 10000)
+    assert buy(service, ctx, 806, 1911101, quantity=50, rid=600).values['code'] == 10
+    assert store.db.execute('SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1251010').fetchone()[0] == 50
+    assert buy(service, ctx, 806, 1911101, rid=601).values['code'] == 13
+    now[0] += 31 * 86400  # 次月恢复额度
+    assert next(g for g in listing(service, ctx, 806) if g['goodsId'] == 1911101)['hasBuyTimes'] == 0
+    assert buy(service, ctx, 806, 1911101, quantity=50, rid=602).values['code'] == 10
 
 
 def test_battle_favor_persisted_from_authoritative_team_replay_does_not_double(env):
