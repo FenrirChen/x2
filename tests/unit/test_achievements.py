@@ -124,7 +124,7 @@ def test_login_days_unique_and_unknown_conditions_cannot_claim(env):
     economy.clock = lambda: 1790817334 + 86400
     economy.login_event(1)
     assert economy.achievements.states(1)[662000][0] == 2
-    assert call(env, 'C2L_AchvReward', {'achvId': 660030}).values['code'] == 13
+    assert call(env, 'C2L_AchvReward', {'achvId': 660010}).values['code'] == 13
     assert call(env, 'C2L_AchvReward', {'achvId': 123}).values['code'] == 13
 
 

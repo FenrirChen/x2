@@ -93,6 +93,10 @@ def export():
             # Chat is loopback-only here and delivers no world-channel messages,
             # so this row has no counter source; mark it complete instead.
             rule = {'kind': 'completed'}
+        elif re.fullmatch(r'拥有友情级别\d+级的好友 \d+ 个', desc):
+            # Friend friendship levels are not tracked by this server, so these
+            # rows have no counter source either; mark them complete.
+            rule = {'kind': 'completed'}
         elif match := re.fullmatch(r'拥有 \d+ 颗(\d+)★普通宝石', desc):
             rule = {'kind': 'item_count', 'ids': [r['JewelID'] for r in data['JewelBase']
                 if r['StarLevel'] == int(match[1]) and '★' in item_names.get(r['JewelID'], '')]}
