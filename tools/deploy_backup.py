@@ -10,8 +10,10 @@ import threading
 import time
 
 
-def backup_database(source, destination, *, timeout=600.0, interval=5.0, log=print):
+def backup_database(source, destination, *, timeout=1800.0, interval=5.0, check="quick_check", log=print):
     """Publish only a fully checked backup; never modify or replace the source."""
+    if check not in ("quick_check", "integrity_check"):
+        raise ValueError("check must be quick_check or integrity_check")
     if timeout <= 0 or interval <= 0:
         raise ValueError("timeout and interval must be positive")
     source = Path(source).resolve(strict=True)
@@ -62,13 +64,13 @@ def backup_database(source, destination, *, timeout=600.0, interval=5.0, log=pri
             with closing(sqlite3.connect(partial)) as target:
                 source_db.backup(target, pages=256, progress=progress, sleep=.1)
                 check_deadline()
-                status['stage'] = 'integrity_check'
+                status.update(stage=check, remaining=None)
                 log(f"BACKUP_COPY_DONE elapsed={time.monotonic() - started:.1f}s")
-                log("BACKUP_CHECK_START type=integrity_check")
+                log(f"BACKUP_CHECK_START type={check}")
                 target.set_progress_handler(lambda: int(time.monotonic() >= deadline), 10000)
-                rows = target.execute("PRAGMA integrity_check").fetchall()
+                rows = target.execute(f"PRAGMA {check}").fetchall()
                 if rows != [("ok",)]:
-                    raise sqlite3.DatabaseError("backup integrity_check failed")
+                    raise sqlite3.DatabaseError(f"backup {check} failed: {rows[:5]!r}")
                 check_deadline()
                 log(f"BACKUP_CHECK_OK elapsed={time.monotonic() - started:.1f}s")
         status['stage'] = 'publish'
@@ -104,10 +106,11 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--source', required=True)
     parser.add_argument('--destination', required=True)
-    parser.add_argument('--timeout', type=float, default=600)
+    parser.add_argument('--timeout', type=float, default=1800)
+    parser.add_argument('--check', choices=('quick_check', 'integrity_check'), default='quick_check')
     args = parser.parse_args()
     try:
-        backup_database(args.source, args.destination, timeout=args.timeout,
+        backup_database(args.source, args.destination, timeout=args.timeout, check=args.check,
                         log=lambda message: print(message, flush=True))
     except (OSError, sqlite3.Error, ValueError, TimeoutError) as exc:
         print(f"BACKUP_FAILED type={type(exc).__name__}: {exc}", flush=True)

@@ -13,18 +13,20 @@ def make_db(path):
     return path
 
 
-def test_verified_copy_keeps_all_rows_and_reports_stages(tmp_path):
+@pytest.mark.parametrize("check", ["quick_check", "integrity_check"])
+def test_verified_copy_keeps_all_rows_and_reports_stages(tmp_path, check):
     source = make_db(tmp_path / 'player.sqlite3')
     original = source.read_bytes()
     messages = []
     target = tmp_path / 'predeploy.bak'
-    assert backup_database(source, target, log=messages.append) == target
+    assert backup_database(source, target, check=check, log=messages.append) == target
     assert source.read_bytes() == original
     with closing(sqlite3.connect(source)) as a, closing(sqlite3.connect(target)) as b:
         assert a.execute('SELECT * FROM archive').fetchall() == b.execute('SELECT * FROM archive').fetchall()
         assert b.execute('PRAGMA integrity_check').fetchone()[0] == 'ok'
     assert not target.with_name(target.name + '.partial').exists()
     assert any('BACKUP_COPY_DONE' in m for m in messages)
+    assert f'BACKUP_CHECK_START type={check}' in messages
     assert any('BACKUP_CHECK_OK' in m for m in messages)
     assert any(m == f'DB_BACKUP={target}' for m in messages)
 
@@ -93,7 +95,8 @@ def test_same_file_and_missing_source_are_rejected(tmp_path):
     assert source.read_bytes() == original
 
 
-def test_integrity_failure_after_copy_never_publishes_backup(tmp_path):
+@pytest.mark.parametrize("check", ["quick_check", "integrity_check"])
+def test_integrity_failure_after_copy_never_publishes_backup(tmp_path, check):
     source = make_db(tmp_path / 'player.sqlite3')
     with closing(sqlite3.connect(source)) as db, db:
         db.execute('CREATE TABLE constrained(amount INTEGER CHECK(amount>=0))')
@@ -103,9 +106,32 @@ def test_integrity_failure_after_copy_never_publishes_backup(tmp_path):
     target = tmp_path / 'invalid.bak'
     messages = []
     with pytest.raises(sqlite3.DatabaseError):
-        backup_database(source, target, log=messages.append)
+        backup_database(source, target, check=check, log=messages.append)
     assert any('BACKUP_COPY_DONE' in m for m in messages)
     assert not any(m.startswith('DB_BACKUP=') for m in messages)
     assert not target.exists()
     assert not target.with_name(target.name + '.partial').exists()
     assert source.read_bytes() == original
+
+
+def test_check_timeout_discards_partial_and_keeps_original(tmp_path, monkeypatch):
+    from tools import deploy_backup
+    source = make_db(tmp_path / 'player.sqlite3')
+    original = source.read_bytes()
+    target = tmp_path / 'expired.bak'
+    now = [0.0]
+    monkeypatch.setattr(deploy_backup.time, 'monotonic', lambda: now[0])
+    def log(message):
+        if message.startswith('BACKUP_CHECK_START'):
+            now[0] = 20.0
+    with pytest.raises(TimeoutError):
+        backup_database(source, target, timeout=10, log=log)
+    assert not target.exists() and not target.with_name(target.name+'.partial').exists()
+    assert source.read_bytes() == original
+
+
+def test_invalid_check_is_rejected_without_creating_output(tmp_path):
+    source = make_db(tmp_path / 'player.sqlite3')
+    with pytest.raises(ValueError, match='check must be'):
+        backup_database(source, tmp_path/'bad.bak', check='invalid')
+    assert not (tmp_path/'bad.bak.partial').exists()

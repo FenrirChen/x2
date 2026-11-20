@@ -5,16 +5,53 @@ REPO_URL=https://github.com/FenrirChen/x2.git
 BRANCH=main
 STAGE=preflight
 phase() { STAGE=$1; printf '\n[%s] %s\n' "$(date '+%F %T %z')" "$STAGE"; }
+RECOVER_SERVICE=0
+health_check() {
+  local limit=$1 attempt
+  for ((attempt=1; attempt<=limit; attempt++)); do
+    if "${SYSTEMCTL[@]}" is-active --quiet x2server.service && \
+       X2_CHECK_PORTS="$HTTP_PORT,$GAME_PORT,$CHAT_PORT" python3 - <<'PY'
+import os, socket, sys
+for port in map(int, os.environ["X2_CHECK_PORTS"].split(",")):
+    try:
+        with socket.create_connection(("127.0.0.1", port), timeout=1):
+            pass
+    except OSError:
+        sys.exit(1)
+PY
+    then return 0; fi
+    echo "Waiting for service ports (attempt $attempt/$limit)..."
+    sleep 1
+  done
+  return 1
+}
 failed() {
   local result=$1 line=$2
-  trap - ERR
+  trap - ERR INT TERM
+  set +e
   echo "Deployment failed: stage=$STAGE line=$line exit=$result PREVIOUS_COMMIT=${PREVIOUS_COMMIT:-unknown}" >&2
-  echo "No automatic code rollback, database restore, or service recovery was attempted. Inspect systemctl status and this error before manual recovery." >&2
+  if [[ "$RECOVER_SERVICE" == 1 ]]; then
+    echo "RECOVERY_START: restoring service availability using the installed checkout; no database restore or Git rollback." >&2
+    if timeout --foreground --kill-after=10 120 "${SYSTEMCTL[@]}" start x2server.service && health_check "$HEALTH_ATTEMPTS"; then
+      echo "RECOVERY_OK: service ports are ready; deployment still failed (exit=$result)." >&2
+    else
+      echo "RECOVERY_FAILED: inspect journalctl -u x2server.service; database and old backups were not replaced." >&2
+      "${SYSTEMCTL[@]}" status x2server.service --no-pager -l >&2
+    fi
+  else
+    echo "No previously running service was stopped by this deployment; no automatic start attempted." >&2
+  fi
   exit "$result"
 }
 trap 'failed "$?" "$LINENO"' ERR
+trap 'failed 130 "$LINENO"' INT
+trap 'failed 143 "$LINENO"' TERM
 phase preflight
 HEALTH_ATTEMPTS=${X2_HEALTH_ATTEMPTS:-180}
+BACKUP_TIMEOUT=${X2_BACKUP_TIMEOUT:-1800}
+BACKUP_CHECK=${X2_BACKUP_CHECK:-quick_check}
+[[ "$BACKUP_TIMEOUT" =~ ^[1-9][0-9]*$ && "$BACKUP_TIMEOUT" -le 86400 ]] || { echo "Invalid X2_BACKUP_TIMEOUT" >&2; exit 1; }
+[[ "$BACKUP_CHECK" == quick_check || "$BACKUP_CHECK" == integrity_check ]] || { echo "Invalid X2_BACKUP_CHECK" >&2; exit 1; }
 [[ "$HEALTH_ATTEMPTS" =~ ^[1-9][0-9]*$ && "$HEALTH_ATTEMPTS" -le 600 ]] || { echo "Invalid X2_HEALTH_ATTEMPTS" >&2; exit 1; }
 if [[ "$(id -u)" == 0 ]]; then
   ROOT=${X2_DEPLOY_ROOT:-/opt/x2}
@@ -110,10 +147,17 @@ EOF
   if [[ "$(id -u)" == 0 ]]; then chown "$SERVICE_USER:$SERVICE_USER" "$ENV_FILE"; fi
 fi
 
+# Read non-secret listener ports from the private EnvironmentFile.
+HTTP_PORT=$(sed -n 's/^X2_HTTP_PORT=//p' "$ENV_FILE" | tail -1)
+GAME_PORT=$(sed -n 's/^X2_GAME_PORT=//p' "$ENV_FILE" | tail -1)
+CHAT_PORT=$(sed -n 's/^X2_CHAT_PORT=//p' "$ENV_FILE" | tail -1)
+HTTP_PORT=${HTTP_PORT:-18080}; GAME_PORT=${GAME_PORT:-29000}; CHAT_PORT=${CHAT_PORT:-29001}
+
 phase stop-service
 # Stop only after installation has succeeded; systemd closes its DB connections.
 if "${SYSTEMCTL[@]}" cat x2server.service >/dev/null 2>&1; then
-  timeout --foreground 120 "${SYSTEMCTL[@]}" stop x2server.service
+  if "${SYSTEMCTL[@]}" is-active --quiet x2server.service; then RECOVER_SERVICE=1; fi
+  timeout --foreground --kill-after=10 120 "${SYSTEMCTL[@]}" stop x2server.service
   ACTIVE=$("${SYSTEMCTL[@]}" show x2server.service -p ActiveState --value)
   MAIN_PID=$("${SYSTEMCTL[@]}" show x2server.service -p MainPID --value)
   if [[ "$ACTIVE" != inactive && "$ACTIVE" != failed ]] || [[ "$MAIN_PID" != 0 ]]; then
@@ -136,8 +180,8 @@ if [[ -f "$DB_PATH" ]]; then
   BACKUP="$DB_PATH.predeploy.$(date -u +%Y%m%dT%H%M%SZ).$$.bak"
   # Python has cooperative deadlines for SQLite work; timeout also bounds the
   # whole process. Kernel D-state I/O cannot be forcibly bounded by user space.
-  timeout --foreground --kill-after=10 660 .venv/bin/python -u tools/deploy_backup.py \
-    --source "$DB_PATH" --destination "$BACKUP" --timeout 600
+  timeout --foreground --kill-after=10 "$((BACKUP_TIMEOUT + 60))" .venv/bin/python -u tools/deploy_backup.py \
+    --source "$DB_PATH" --destination "$BACKUP" --timeout "$BACKUP_TIMEOUT" --check "$BACKUP_CHECK"
 else
   echo "No existing database; first installation has no archive to back up."
 fi
@@ -153,34 +197,13 @@ sed -e "s|@SERVICE_USER@|$SERVICE_USER|g" \
 phase start-service
 "${SYSTEMCTL[@]}" start x2server.service
 
-# Read non-secret listener ports from the private EnvironmentFile.
-HTTP_PORT=$(sed -n 's/^X2_HTTP_PORT=//p' "$ENV_FILE" | tail -1)
-GAME_PORT=$(sed -n 's/^X2_GAME_PORT=//p' "$ENV_FILE" | tail -1)
-CHAT_PORT=$(sed -n 's/^X2_CHAT_PORT=//p' "$ENV_FILE" | tail -1)
-HTTP_PORT=${HTTP_PORT:-18080}; GAME_PORT=${GAME_PORT:-29000}; CHAT_PORT=${CHAT_PORT:-29001}
 phase health-check
-HEALTH=0
-for attempt in $(seq 1 "$HEALTH_ATTEMPTS"); do
-  if "${SYSTEMCTL[@]}" is-active --quiet x2server.service && \
-     X2_CHECK_PORTS="$HTTP_PORT,$GAME_PORT,$CHAT_PORT" python3 - <<'PY'
-import os, socket, sys
-ports = [int(p) for p in os.environ["X2_CHECK_PORTS"].split(",")]
-for port in ports:
-    try:
-        with socket.create_connection(("127.0.0.1", port), timeout=1):
-            pass
-    except OSError:
-        sys.exit(1)
-PY
-  then HEALTH=1; break; fi
-  echo "Waiting for service ports (attempt $attempt/$HEALTH_ATTEMPTS)..."
-  sleep 1
-done
-if [[ "$HEALTH" != 1 ]]; then
+if ! health_check "$HEALTH_ATTEMPTS"; then
   echo "Service health check failed. PREVIOUS_COMMIT=$PREVIOUS_COMMIT" >&2
-  "${SYSTEMCTL[@]}" status x2server.service --no-pager || true
+  "${SYSTEMCTL[@]}" status x2server.service --no-pager -l || true
   false
 fi
+RECOVER_SERVICE=0
 phase complete
 echo "Deployment healthy at commit $(git rev-parse HEAD)"
 echo "Open inbound TCP ports: $HTTP_PORT (HTTP login), $GAME_PORT (game), $CHAT_PORT (chat)."

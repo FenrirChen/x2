@@ -55,6 +55,7 @@ case "$name" in
       if [[ -f "$HARNESS_STATE" && "$(cat "$HARNESS_STATE")" == running ]]; then
         echo 'ERROR backup ran before service stopped'; exit 99
       fi
+      if [[ "${TEST_BACKUP_INTERRUPTED:-0}" == 1 ]]; then kill -TERM "$PPID"; exit 143; fi
       if [[ "${TEST_BACKUP_FAILED:-0}" == 1 ]]; then exit 9; fi
       while [[ "$1" != --destination ]]; do shift; done
       printf 'verified fake backup' > "$2"
@@ -76,7 +77,7 @@ case "$name" in
           if [[ "$(cat "$HARNESS_STATE")" == running ]]; then echo 77; else echo 0; fi
         fi
         ;;
-      start) echo running > "$HARNESS_STATE" ;;
+      start) if [[ "${TEST_START_FAILED:-0}" == 1 ]]; then exit 7; fi; echo running > "$HARNESS_STATE" ;;
       is-active) [[ "$(cat "$HARNESS_STATE")" == running ]] ;;
     esac
     ;;
@@ -111,7 +112,7 @@ def execute(tmp_path, **flags):
     python.chmod(0o755)
     envfile.write_text('X2_DB_PATH=' + (shell_path(base / 'wrong.sqlite3') if flags.get('TEST_DB_MISMATCH') else shell_path(db)) + '\n')
     if not flags.get('TEST_NEW_INSTALL'):
-        state.write_text('running')
+        state.write_text('stopped' if flags.get('TEST_INITIALLY_STOPPED') else 'running')
     env = os.environ.copy()
     env.update({
         'X2_HEALTH_ATTEMPTS': '3',
@@ -140,17 +141,60 @@ def test_actual_deploy_script_installs_then_stops_backs_up_and_starts(tmp_path):
     assert 'Deployment healthy' in result.stdout
 
 
-@pytest.mark.parametrize('flag', ('TEST_BACKUP_FAILED', 'TEST_STOP_FAILED', 'TEST_STOP_STUCK'))
-def test_failed_stop_or_backup_never_starts_service_or_claims_success(tmp_path, flag):
+@pytest.mark.parametrize('flag', ('TEST_BACKUP_FAILED', 'TEST_STOP_FAILED', 'TEST_STOP_STUCK', 'TEST_BACKUP_INTERRUPTED'))
+def test_stop_or_backup_failure_restores_previously_running_service(tmp_path, flag):
     result, events, state = execute(tmp_path, **{flag: 1})
     assert result.returncode != 0
-    assert 'systemctl --user start' not in events
+    assert 'systemctl --user start' in events
     assert 'Deployment healthy' not in result.stdout
-    if flag != 'TEST_BACKUP_FAILED':
+    assert state.read_text().strip() == 'running'
+    assert 'RECOVERY_OK' in result.stderr
+    if flag in ('TEST_STOP_FAILED', 'TEST_STOP_STUCK'):
         assert 'python -u tools/deploy_backup.py' not in events
     else:
-        assert state.read_text().strip() == 'stopped'
         assert 'stage=backup-and-verify' in result.stderr
+
+
+@pytest.mark.parametrize('flag', ['TEST_INITIALLY_STOPPED', 'TEST_NEW_INSTALL'])
+def test_backup_failure_does_not_start_intentionally_stopped_or_missing_service(tmp_path, flag):
+    result, events, state = execute(tmp_path, TEST_BACKUP_FAILED=1, **{flag:1})
+    assert result.returncode != 0
+    assert 'systemctl --user start' not in events
+    assert 'RECOVERY_START' not in result.stderr
+    assert not state.exists() or state.read_text().strip() == 'stopped'
+
+
+def test_recovery_start_failure_is_visible_and_keeps_original_error(tmp_path):
+    result, events, state = execute(tmp_path, TEST_BACKUP_FAILED=1, TEST_START_FAILED=1)
+    assert result.returncode == 9
+    assert state.read_text().strip() == 'stopped'
+    assert 'RECOVERY_FAILED' in result.stderr and 'RECOVERY_OK' not in result.stderr
+    assert 'systemctl --user status' in events
+
+
+def test_recovery_checks_ports_and_does_not_confuse_running_with_healthy(tmp_path):
+    result, _, state = execute(tmp_path, TEST_BACKUP_FAILED=1, TEST_HEALTH_FAILED=1)
+    assert result.returncode == 9
+    assert state.read_text().strip() == 'running'
+    assert 'RECOVERY_FAILED' in result.stderr and 'RECOVERY_OK' not in result.stderr
+
+
+def test_default_and_explicit_backup_policy_are_forwarded(tmp_path):
+    result, events, _ = execute(tmp_path)
+    assert result.returncode == 0
+    assert '--timeout 1800 --check quick_check' in events
+    result, events, _ = execute(tmp_path / 'full', X2_BACKUP_TIMEOUT=3600, X2_BACKUP_CHECK='integrity_check')
+    assert result.returncode == 0
+    assert '--timeout 3600 --check integrity_check' in events
+    assert 'timeout --foreground --kill-after=10 3660' in events
+
+
+@pytest.mark.parametrize('flags', [dict(X2_BACKUP_TIMEOUT='0'), dict(X2_BACKUP_TIMEOUT='bad'), dict(X2_BACKUP_CHECK='invalid')])
+def test_bad_backup_settings_rejected_before_stopping_service(tmp_path, flags):
+    result, events, state = execute(tmp_path, **flags)
+    assert result.returncode != 0
+    assert 'systemctl --user stop' not in events
+    assert state.read_text() == 'running'
 
 
 @pytest.mark.parametrize('flag', ('TEST_LOCK_BUSY', 'TEST_DB_MISMATCH', 'TEST_DIRTY', 'TEST_INSTALL_FAILED', 'TEST_HELPER_MISSING'))

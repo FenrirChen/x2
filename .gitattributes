@@ -1,0 +1,2 @@
+# Keep deployment scripts executable on Linux after Windows checkouts.
+*.sh text eol=lf

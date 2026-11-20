@@ -1,4 +1,6 @@
-# 部署备份流程优化（2026-10-17）
+# 部署备份流程优化（2026-10-17；2026-11-20更新）
+
+> 当前行为以文末2026-11-20修订为准，前面的600秒完整校验及失败保持停服是历史设计。
 
 旧脚本在 pip 成功后静默执行 chown -R、在线一次性全库备份和 integrity_check，最后才重启服务。慢磁盘下的整库读锁可阻塞游戏提交，并触发已在 f22c86e 修复的事务泄漏。128MiB 临时库实验中，整库复制产生 6 次并发写入超时；分块复制允许写入但出现 4 次进度回退，因此本次采用先停服再备份。
 
@@ -46,3 +48,31 @@ sudo bash /opt/x2/deploy/deploy_server.sh
 补充保护：更新代码后、安装依赖和停服前检查 tools/deploy_backup.py 存在，缺失时提前失败并保留原服务运行；实际 Bash 缺工具回归已纳入。
 
 停服前工具检查补修验证：21 项通过（50.02s），本地于 2026-10-17 21:26:44 备份并重启，connectInfo 返回 local。
+
+
+## 2026-11-20：避免重复校验超时，失败恢复运行服务
+
+- 常规部署采用 SQLite `quick_check`，备份与校验总时限默认1800秒，可通过 `X2_BACKUP_TIMEOUT` 调整（正整数，最大86400）。外层进程超时同步设为该值加60秒，另有10秒强杀宽限。
+- `quick_check`仍扫描数据库结构和检查约束，但省去完整校验的 UNIQUE 检查和索引/表内容对应检查。SQLite文档说明其为O(N)，完整 `integrity_check` 为O(N log N)。需要深度检查时指定 `X2_BACKUP_CHECK=integrity_check`。来源：https://www.sqlite.org/pragma.html#pragma_quick_check 。这不承诺慢云盘或内核不可中断I/O一定在指定期限内退出。
+- 继续只读打开源库，SQLite backup保留已提交WAL内容，目标在校验、fsync成功后才原子发布；不删除旧备份，不压缩、替换或回滚玩家数据库。
+- 校验阶段 remaining_pages 改为None，避免把复制完成的0页误认为完整性校验完成；日志明确标识 quick_check 或 integrity_check。
+- 记录停服前服务是否运行。若本次停服后失败（含备份超时、停服异常、安装服务失败、健康检查失败）或收到INT/TERM，尝试启动已安装目录中的服务，再检查三个端口。恢复成功打印RECOVERY_OK，失败打印RECOVERY_FAILED和systemd状态，保留原失败退出码，绝不冒充部署成功。
+- 恢复是重新启动当前checkout，**不是回滚到旧提交**，也不会恢复旧数据库。首次安装或本次开始时人为停服的服务不自动启动。
+- SIGKILL、主机断电及内核I/O卡死无法由Bash错误处理保证恢复。
+- `.gitattributes` 为 `.sh` 固定LF换行，避免Windows复制后Linux shebang出现CRLF解析问题。
+
+默认更新（推送后使用仓库中的脚本，旧的/root副本不会自动变新）：
+
+```bash
+cd /opt/x2
+git pull --ff-only
+sudo bash /opt/x2/deploy/deploy_server.sh
+```
+
+完整深度校验且允许更长耗时：
+
+```bash
+sudo env X2_BACKUP_CHECK=integrity_check X2_BACKUP_TIMEOUT=3600 bash /opt/x2/deploy/deploy_server.sh
+```
+
+本轮只在本地测试、提交，不连接部署服务器。验证：备份与实际Bash隔离部署编排32项通过，部署配置2项通过，共34项；Bash语法和git diff --check通过。涵盖备份失败、停止失败、停服假成功、TERM中断、恢复启动失败、恢复端口失败，以及首次安装/原先停服不自动启动、WAL内容、两种校验、超时和旧备份保护。
