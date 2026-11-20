@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+- Restored every 宝石姬 in shop 806: the four unused single-stone rows
+  (1911701/1911901/1912001/1912701) and the 8 absent families
+  (莫格尔祖母绿/蓝色晨曦猎豹/德古拉的情人/荷鲁斯之眼/琅玕玉树/希望之光/贵霜的余晖/乘雷之玉)
+  now fill the client's group-150 rows as 50-stone bundles (300 魂石源质, the
+  same 6/stone as the single slots); all gem slots switched from a 50-stone
+  lifetime cap to an E_Month 50-stone quota so a player can keep exchanging
+  after the first 4★.
+
 - Fixed the 购买因果 (134/137) overcharge: the page prices purchases from the
   client's own `ServerData.PowerPrice` / `PowerTimesInterval` (factory defaults
   `[60,60,60,60,60]` and `{1,2,4,6,10}`), which this server never published, so
