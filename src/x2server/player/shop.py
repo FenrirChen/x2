@@ -211,6 +211,10 @@ class ShopService:
         tomorrow = (local + timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
         if shop in (802,805,810):
             return int(tomorrow.timestamp())  # Daily goods refresh; ticket-shop quotas remain weekly.
+        if shop == 806:
+            # Jewel-maiden quotas reset monthly; expose the same boundary to UI.
+            return int((local.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+                        + timedelta(days=32)).replace(day=1).timestamp())
         if shop in (803, 807):
             return int((tomorrow + timedelta(days=(7 - tomorrow.weekday()) % 7)).timestamp())
         return 0

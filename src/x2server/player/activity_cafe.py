@@ -18,7 +18,18 @@ class ActivityCafe:
         self.buffs = list(activity.tables['NewYearCafeBuff'])
         legacy = files('x2server').joinpath('data/activity_cafe_legacy_buffs.json')
         if legacy.is_file():
-            self.buffs.extend(json.loads(legacy.read_text(encoding='utf-8')))
+            # Legacy IDs were rebased by 1000 to avoid unrelated active rows.
+            # Match the actual hero/position/shop effect, so later table exports
+            # cannot apply the same old buff twice under its original ID.
+            def key(row, shop):
+                return (row['UnitID'], enum(row['EffectType']),
+                        row['EffectParam1'], shop, enum(row['EffectParam3']))
+            known = {key(row, shop) for row in self.buffs for shop in row['EffectParam2']}
+            for row in json.loads(legacy.read_text(encoding='utf-8')):
+                shops = [shop for shop in row['EffectParam2'] if key(row, shop) not in known]
+                if shops:
+                    self.buffs.append(dict(row, EffectParam2=shops))
+                    known.update(key(row, shop) for shop in shops)
 
     def context(self, player, store_type):
         period = self.a.period(player)

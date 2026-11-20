@@ -345,3 +345,22 @@ def test_daily_touch_occurrence_keys_stay_distinct_and_rollback_is_atomic(env):
             economy.record_event(1, 'college-train:rolled-back', 17, 0, 1)
             raise RuntimeError('abort reward transaction')
     assert economy.achievements.states(1)[662320][0] == 0
+
+
+def test_npc_friendship_compatibility_chain_requires_previous_claim_and_is_once(env):
+    store, economy, _ = env
+    service = economy.achievements
+    states = service.states(1)
+    for aid in range(660030, 660040):
+        assert states[aid][0] == service.rows[aid]['targets'][-1]
+    # Completion does not bypass the original previous-achievement claim gate.
+    assert call(env, 'C2L_AchvReward', {'achvId':660031}, 3400).values['code'] == 13
+    for offset, aid in enumerate(range(660030,660040)):
+        request = {'achvId':aid}
+        response = call(env,'C2L_AchvReward',request,3410+offset)
+        assert response.values['code'] == 10
+        grants = store.db.execute('SELECT COUNT(*) FROM economy_grants').fetchone()[0]
+        assert call(env,'C2L_AchvReward',request,3410+offset).values == response.values
+        assert call(env,'C2L_AchvReward',request,3510+offset).values['code'] == 13
+        assert store.db.execute('SELECT COUNT(*) FROM economy_grants').fetchone()[0] == grants
+    assert all(service.value(aid, service.states(1)[aid])['status'] == 2 for aid in range(660030,660040))
