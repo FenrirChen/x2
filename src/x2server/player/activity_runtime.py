@@ -7,6 +7,7 @@ import secrets
 from collections import Counter
 
 from x2server.messages.activity import ACTIVITY_SCHEMAS, encode
+from x2server.messages.economy import REWARD
 from x2server.messages.lobby import LOBBY_SCHEMAS, MISSION_PAIR
 from x2server.network.dispatcher import OutboundMessage
 from x2server.protocol.errors import ProtocolError
@@ -446,6 +447,12 @@ class ActivityRuntime:
         if name == 'C2L_ActivityBuildingUpgrade':
             before += (OutboundMessage('L2C_ExtraDropData',
                 self.operate(player, 'ExtraDropData', {}, token)),)
+        if name == 'C2L_ActivityRewardPoolDraw':
+            # 无限池兽主是落地实例: rewardData.rewardEquip 只驱动奖励窗, 背包
+            # AllEquipDataDic 还要一条 L2C_EquipUpdate, 否则要重登才看得到。
+            equips = REWARD.decode(values.get('rewardData') or b'').get('rewardEquip', [])
+            if equips:
+                before += (OutboundMessage('L2C_EquipUpdate', {'code': 10, 'equip': equips}),)
         return OutboundMessage(response, values, before_response=before)
 
     def progress_messages(self, player, *, allow_navigation=True):
