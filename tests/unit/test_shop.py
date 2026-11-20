@@ -79,17 +79,28 @@ def test_ticket_shop_805_lists_client_goods_and_purchases(env):
     assert listing.values["code"] == 10
     goods = {row["goodsId"]: row for row in map(GOODS.decode, listing.values["goods"])}
     # User catalog: one rotating 3-star hero, one 2-star hero, plus the
-    # existing sequential wish-coin offer. Extra PR48 shelves are retired.
-    assert set(goods) == {1905101, 1905201, 1905301}
+    # existing sequential wish-coin offer and the 默契度突破 items. Extra PR48
+    # shelves are retired.
+    assert set(goods) == {1905101, 1905201, 1905301, 1906301, 1906401, 1906402}
     assert (goods[1905101]['price'], goods[1905201]['price']) == (200, 50)
+    assert {gid: (row['itemId'], row['price'], row['canBuyTimes'])
+            for gid, row in goods.items() if gid in (1906301, 1906401, 1906402)} == {
+        1906301: (1283001, 2, 40),
+        1906401: (1283002, 8, 10),
+        1906402: (1283003, 8, 5)}
     with store.db:
         store.db.execute("INSERT INTO inventory VALUES (?,?,?)", (1, 1237915, 400))
     for rid, gid in enumerate(range(1905102,1905113),40):
         purchase = packet({"shopId": 805, "goodsId": gid, "buyNum": 1},
                           request_id=rid, name="C2L_BuyGoods")
         assert asyncio.run(service.handle(ctx, purchase)).values['code'] == 13
+    favor = packet({"shopId": 805, "goodsId": 1906402, "buyNum": 1},
+                   request_id=60, name="C2L_BuyGoods")
+    assert asyncio.run(service.handle(ctx, favor)).values['code'] == 10
     assert store.db.execute(
-        "SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1237915").fetchone()[0] == 400
+        "SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1283003").fetchone()[0] == 1
+    assert store.db.execute(
+        "SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1237915").fetchone()[0] == 392
 
 
 
@@ -103,13 +114,18 @@ def test_friend_shop_802_lists_client_goods_and_purchases(env):
     # The client ShopConfig(802)/ShopGoodsGroup groups 31-36 only fix goodsId, group,
     # currency and ItemPrice; the shelf itself (which of the duplicated acceleration
     # tiers showed, and the strikethrough prices) comes from the screenshot.
-    assert set(goods) == {1903101, 1903201, 1903301, 1903403, 1903501, 1903601}
+    assert set(goods) == {1903101, 1903201, 1903301, 1903401, 1903402, 1903403,
+                          1903404, 1903501, 1903601}
     assert {row["currencyType"] for row in goods.values()} == {917}
     # Quotas reset at the local midnight: 因果/金币 three times a day, the four
     # discounted rows once.
     assert {row["limited"] for row in goods.values()} == {3}
     assert {gid: row["canBuyTimes"] for gid, row in goods.items()} == {
-        1903101: 3, 1903201: 3, 1903301: 1, 1903403: 1, 1903501: 1, 1903601: 1}
+        1903101: 3, 1903201: 3, 1903301: 1, 1903401: 5, 1903402: 3,
+        1903403: 1, 1903404: 1, 1903501: 1, 1903601: 1}
+    assert {(gid, row["itemId"], row["price"]) for gid, row in goods.items()
+            if gid in (1903401, 1903402, 1903404)} == {
+        (1903401, 1283001, 120), (1903402, 1283002, 240), (1903404, 1283003, 960)}
     assert (goods[1903101]["itemId"], goods[1903101]["num"]) == (1237900, 20)
     assert (goods[1903201]["itemId"], goods[1903201]["num"]) == (1237901, 5000)
     assert (goods[1903301]["itemId"], goods[1903301]["price"],
@@ -135,6 +151,13 @@ def test_friend_shop_802_lists_client_goods_and_purchases(env):
     assert second.values["code"] == 13
     assert store.db.execute(
         "SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1237917").fetchone()[0] == 2292
+    favor = packet({"shopId": 802, "goodsId": 1903404, "buyNum": 1},
+                   request_id=52, name="C2L_BuyGoods")
+    assert asyncio.run(service.handle(ctx, favor)).values['code'] == 10
+    assert store.db.execute(
+        "SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1283003").fetchone()[0] == 1
+    assert store.db.execute(
+        "SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1237917").fetchone()[0] == 1332
 
 
 def test_divine_letter_shop_810_lists_daily_tracks(env):
