@@ -164,15 +164,23 @@ class ChapterDP:
         pair; they are stored as subject=section, scope=state, the shape ``refresh``
         totals san_kill with. Dropping these rows left the chapter page at 0 while
         the in-battle DP page showed the real count.
+
+        Type 27 (E_NPCInteraction, 月之暗面 651106 净化控制水晶 64475, 651108 祭坛,
+        651109 宝箱) is the fourth wire kind. 264 ``npcData`` also carries these
+        events, but exploration runs report them again in 316. The two paths share
+        the same run uuid, so ``observe``'s MAX keeps them from double counting.
         """
         from x2server.messages.battle import CHAPTER_TASK_EVENT
-        allowed, san_pairs = {}, set()
+        allowed, san_pairs, npc_ids = {}, set(), set()
         for task in self.chapters.get(str(chapter), {}).get('tasks', []):
             wire_kind = {'E_GetMoneyPer': 39, 'E_GetItemID': 35,
-                         'E_KillMonsterInSan': 95}.get(task.get('completeType'))
+                         'E_KillMonsterInSan': 95,
+                         'E_NPCInteraction': 27}.get(task.get('completeType'))
             if wire_kind == 95:
                 san_pairs.update((state, section) for state in task['completeValues1']
                                  for section in task['completeValues2'])
+            elif wire_kind == 27:
+                npc_ids.update(task['completeValues1'])
             elif wire_kind is not None:
                 for subject in task['completeValues1']:
                     for scope in task['completeValues2']:
@@ -184,6 +192,15 @@ class ChapterDP:
             if not 0 < num <= 10**7:
                 continue
             first, second = event.get('param1', 0), event.get('param2', 0)
+            if event.get('completeType') == 27:
+                # param1 is the NpcEvent id; accept either order in case the client
+                # swaps it with the unused param2.
+                subject = first if first in npc_ids else second if second in npc_ids else 0
+                if not subject:
+                    continue
+                self.observe(player, chapter, run, 'npc', subject, num)
+                changed = True
+                continue
             if event.get('completeType') == 95:
                 # The two id spaces never overlap (states are small ids such as
                 # 1/4/6/10, sections are 3150+), so either parameter order resolves.
