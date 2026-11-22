@@ -32,6 +32,11 @@ class UnresolvedEconomy(ValueError):
 class EconomyService:
     CAUSALITY_CARDS = {1202010: 10, 1202011: 20, 1202012: 30,
                        1202013: 60, 1202014: 100}  # Item.Used -> Gift.Num
+    # 月之荒庭 2111001 首通霜王女掉落的「不化冰」: SectionTable 里 2111101
+    # (月之暗面第一关) 的 OpenType=4 / OpenParam=1110265 要求持有它。客户端正常会把
+    # 局内拾取放进 outsideItems, 这里再兜底补一件, 避免老客户端/直接结算漏发。
+    MOON_UNLOCK_SECTION = 2111001
+    MOON_UNLOCK_ITEM = 1110265
     # 神格碎片「转化」的兑出货币: Item.Return[0] is a table/CurrencyType TpyeId and
     # that row's ItemID is the item that actually lands in the bag. Only the
     # currency this route really pays is listed; an unknown type is refused rather
@@ -458,6 +463,7 @@ class EconomyService:
         # 登录时按凭据自己的礼包内容补开一次 (幂等)。equipAll/itemAll 都在本调用之后
         # 取值, 所以补出来的实例和道具会照常出现在本次登录响应里。
         self.repair_parked_receipts(player_id)
+        self.repair_moon_unlock_item(player_id)
         self.achievements.login(player_id)
         self.refresh_stamina(player_id)
         self.ensure_periods(player_id)
@@ -679,6 +685,25 @@ class EconomyService:
             logging.getLogger("x2.economy").info(
                 "parked receipt repaired player=%s item=%s x%s rewards=%s equips=%s",
                 player_id, item_id, quantity, dict(opened), len(equips))
+
+    def repair_moon_unlock_item(self, player_id):
+        """老存档补发「不化冰」: 已首通月之荒庭却没有 1110265 的账号。
+
+        2111101 (月之暗面第一关) 要求持有 1110265。历史上先打了 2111001、但客户端
+        没把局内拾取上报 or 直接结算的存档会永远停在门外。补发按固定 source 幂等,
+        只补一次; 已有道具时不写盘。
+        """
+        owns = self.store.db.execute(
+            "SELECT 1 FROM inventory WHERE player_id=? AND item_id=?",
+            (player_id, self.MOON_UNLOCK_ITEM)).fetchone()
+        cleared = self.store.db.execute(
+            "SELECT 1 FROM economy_clears WHERE player_id=? AND section_id=?",
+            (player_id, self.MOON_UNLOCK_SECTION)).fetchone()
+        if owns or not cleared:
+            return
+        with self.transaction():
+            self._grant(player_id, f"moon-unlock-backfill:{player_id}",
+                        {self.MOON_UNLOCK_ITEM: 1})
 
     def _grant(self, player_id, source, rewards, *, stackable_types=()):
         """Called inside the owner's transaction; never commits independently."""
@@ -1402,6 +1427,18 @@ class EconomyService:
                 first = not self.store.db.execute('SELECT 1 FROM season_runs WHERE player_id=? AND instance_id=? AND section_id=? AND success=1', (player_id, self.season.instance, section)).fetchone()
             if activity_period:
                 first = not activity.rotation.get(player_id, activity_period, 'clear', section, 0)
+            if success and first and section == self.MOON_UNLOCK_SECTION:
+                # 首通月之荒庭补发「不化冰」: 客户端没上报这条 outsideItems 时
+                # (老客户端/直接结算) 仍要拿到月之暗面的解锁道具。已经拥有或本局
+                # 已经通过 outsideItems 结算过就不重复发。
+                owned = self.store.db.execute(
+                    "SELECT 1 FROM inventory WHERE player_id=? AND item_id=?",
+                    (player_id, self.MOON_UNLOCK_ITEM)).fetchone()
+                reported = any(grant.item_id == self.MOON_UNLOCK_ITEM for grant in grants)
+                if not owned and not reported:
+                    grants.append(RewardGrant('FIRST_CLEAR_FIXED', section, run_uuid,
+                        self.MOON_UNLOCK_ITEM, 1,
+                        reason='SectionTable.DroopLimit 1110265 月之暗面解锁道具'))
             first_groups = profile["first_reward"] if first else []
             if (activity_period and section_type == 19 and
                     activity.runtime.tower.owns(section)):

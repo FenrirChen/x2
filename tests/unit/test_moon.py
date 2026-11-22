@@ -221,6 +221,49 @@ def test_dark_moon_stages_receive_the_cleanse_team_skill(moon):
     assert 'fightGroupSkillData' not in FIGHT_DATA.decode(plain.values['data'])
 
 
+def test_moon_garden_first_clear_grants_dark_moon_unlock_item(moon):
+    """首通月之荒庭 2111001 必须拿到「不化冰」1110265, 否则月之暗面 2111101 进不去。
+
+    客户端正常会上报局内拾取; 若老客户端/直接结算没上报, 服务端按首通兜底补一件,
+    并且重放结算不能重复发。
+    """
+    store, _, economy, service, ctx = moon
+    player = store.get(1)
+    store.save_snapshot(1, dict(player['snapshot'], mobility={'power': 100},
+        heroes=[{'id': 1003, 'state': 2, 'level': 1, 'star': 1}]), player['revision'])
+    battle = BattleService(store, economy)
+    values = request()
+    values.update(missionId=2111001, chapter=2011000, sceneId=2211001)
+    assert asyncio.run(battle.enter(ctx, packet(values, 92))).values['result'] == 10
+    data = {'chapterId': 2011000, 'sectionId': 2111001, 'success': True, 'fightTime': 60,
+        'outsideItems': [OUTSIDE_ITEM.encode({'id': i, 'num': n}) for i, n in [(1120001, 500), (1120002, 20)]]}
+    pkt = packet({'checkout': CHECKOUT.encode(data)}, 93, 'C2L_CheckoutMainMissionSign')
+    result = asyncio.run(battle.checkout(ctx, pkt))
+    assert result.values['result'] == 10
+    assert service.quantity(1, economy.MOON_UNLOCK_ITEM) == 1
+    assert asyncio.run(battle.checkout(ctx, pkt)).values == result.values
+    assert service.quantity(1, economy.MOON_UNLOCK_ITEM) == 1
+
+
+def test_moon_unlock_item_backfill_for_old_save(moon):
+    """老存档已首通 2111001 却没有 1110265 时, 登录补发一次且不重复。"""
+    store, _, economy, service, _ = moon
+    with store.db:
+        store.db.execute('INSERT OR IGNORE INTO economy_clears VALUES (?,?,?)',
+                         (1, 2111001, 'test:old-clear'))
+    assert service.quantity(1, 1110265) == 0
+    economy.repair_moon_unlock_item(1)
+    assert service.quantity(1, 1110265) == 1
+    economy.repair_moon_unlock_item(1)
+    assert service.quantity(1, 1110265) == 1
+    # 没打过 2111001 的账号不补。
+    with store.db:
+        store.db.execute('DELETE FROM economy_clears WHERE player_id=?', (1,))
+        store.db.execute('DELETE FROM inventory WHERE player_id=? AND item_id=?', (1, 1110265))
+    economy.repair_moon_unlock_item(1)
+    assert service.quantity(1, 1110265) == 0
+
+
 @pytest.mark.parametrize('kind', [16, 17, 18, 19])
 def test_generic_task_query_is_delegated(moon, kind):
     response = asyncio.run(moon[2].handle(moon[4], packet({'type': kind}, 100, 'C2L_GameTask')))
