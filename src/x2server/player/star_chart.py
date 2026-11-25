@@ -63,14 +63,40 @@ def snapshot_fields(store, player_id, snapshot, now):
         'Daily': STAR_DAILY.encode({'AddAIPointCount': current['charge_count']})}
 
 
+@lru_cache(maxsize=1)
+def activity_section_siblings():
+    """section -> the other section of the same ActivityDungeon chapter.
+
+    An activity chapter lists its story stage in SectionID and its repeatable
+    challenge stage in ChallengeLevel. Only the challenge row carries
+    IsAutoFightMode/ContinueFightConsume, but the client keeps offering the
+    auto/continuation battle from the chapter node and records the chapter
+    clear on whichever of the two rows was last played, so the auto-battle
+    rule has to resolve the pair instead of one exact section id.
+    """
+    data = json.loads(files('x2server').joinpath(
+        'data/activity_rotation_catalog.json').read_text(encoding='utf-8'))
+    siblings = {}
+    for chapter in data['tables'].get('ActivityDungeon', []):
+        sections = list(dict.fromkeys(
+            list(chapter.get('SectionID') or []) + list(chapter.get('ChallengeLevel') or [])))
+        for section in sections:
+            others = [s for s in sections if s != section]
+            if others:
+                siblings[section] = others
+    return siblings
+
+
 def consume_battle_ai(economy, player_id, section):
     """Consume canonical ContinueFightConsume inside a battle receipt transaction.
 
     Revival charges at entry when requested, or at checkout if auto battle was
     enabled during the fight. Replayed entry/checkout receipts never spend again.
     """
-    row = catalog()['auto_sections'].get(str(section))
-    if not row:
+    candidates = [section, *activity_section_siblings().get(section, [])]
+    auto_sections = catalog()['auto_sections']
+    row = next((auto_sections[str(s)] for s in candidates if str(s) in auto_sections), None)
+    if row is None:
         raise UnresolvedEconomy('section has no auto battle')
     cost = row['cost']
     if cost == 0:
@@ -80,9 +106,9 @@ def consume_battle_ai(economy, player_id, section):
     current = state(snapshot, int(economy.clock()))
     if 39400 not in unlocked(store, player_id):
         raise UnresolvedEconomy('AI ability locked')
-    if row['condition'] == 2 and not store.db.execute(
+    if row['condition'] == 2 and not any(store.db.execute(
             'SELECT 1 FROM economy_clears WHERE player_id=? AND section_id=?',
-            (player_id, section)).fetchone():
+            (player_id, candidate)).fetchone() for candidate in candidates):
         raise UnresolvedEconomy('auto battle requires a previous clear')
     if current['points'] < cost:
         raise UnresolvedEconomy('insufficient AI points')
