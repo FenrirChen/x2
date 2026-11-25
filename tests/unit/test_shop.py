@@ -79,9 +79,12 @@ def test_ticket_shop_805_lists_client_goods_and_purchases(env):
     assert listing.values["code"] == 10
     goods = {row["goodsId"]: row for row in map(GOODS.decode, listing.values["goods"])}
     # User catalog: one rotating 3-star hero, one 2-star hero, plus the
-    # existing sequential wish-coin offer and the 默契度突破 items. Extra PR48
+    # existing sequential wish-coin offer, the 默契度突破 items and the
+    # 2026-11-26 research shelves (日月之轨/研构原能/高级神权拓本). Extra PR48
     # shelves are retired.
-    assert set(goods) == {1905101, 1905201, 1905301, 1906301, 1906401, 1906402}
+    assert set(goods) == {1905101, 1905201, 1905301, 1906301, 1906401, 1906402,
+                          1905107, 1906403, 1906404, 1906405, 1906406, 1906407,
+                          1906408, 1906409}
     assert (goods[1905101]['price'], goods[1905201]['price']) == (200, 50)
     assert {gid: (row['itemId'], row['price'], row['canBuyTimes'])
             for gid, row in goods.items() if gid in (1906301, 1906401, 1906402)} == {
@@ -90,7 +93,8 @@ def test_ticket_shop_805_lists_client_goods_and_purchases(env):
         1906402: (1283003, 8, 5)}
     with store.db:
         store.db.execute("INSERT INTO inventory VALUES (?,?,?)", (1, 1237915, 400))
-    for rid, gid in enumerate(range(1905102,1905113),40):
+    # 1905107 is the 2026-11-26 日月之轨 shelf; every other PR48 extra shelf stays retired.
+    for rid, gid in enumerate(sorted(set(range(1905102, 1905113)) - {1905107}), 40):
         purchase = packet({"shopId": 805, "goodsId": gid, "buyNum": 1},
                           request_id=rid, name="C2L_BuyGoods")
         assert asyncio.run(service.handle(ctx, purchase)).values['code'] == 13
@@ -166,8 +170,11 @@ def test_divine_letter_shop_810_lists_daily_tracks(env):
     listing = asyncio.run(service.handle(ctx, packet({"shopId": 810}, name="C2L_ShopGoods")))
     assert listing.values["code"] == 10
     goods = {row["goodsId"]: row for row in map(GOODS.decode, listing.values["goods"])}
-    # User catalog: four distinct daily hero tracks and two universal tracks.
-    assert set(goods) == {1918101, 1918201, 1918301, 1918401, 1918501}
+    # User catalog: four distinct daily hero tracks, the universal track and
+    # the 2026-11-26 research shelves (研构原能/高级神权拓本).
+    assert set(goods) == {1918101, 1918201, 1918301, 1918401, 1918501,
+                          1918701, 1918801, 1918901, 1919001,
+                          1919101, 1919201, 1918402}
     assert {row["currencyType"] for row in goods.values()} == {927}
     assert {row["limited"] for row in goods.values()} == {3}
     track = goods[1918201]
