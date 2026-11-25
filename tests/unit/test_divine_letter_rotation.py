@@ -14,12 +14,19 @@ def test_daily_tracks_delivery_limits_replay_and_midnight(env):
     service = ShopService(store, economy)
     fund(store, 1237927, 100000)
     goods = listing(service, ctx, 810)
-    tracks = [g for g in goods if g['itemId'] != 1206000]
-    assert len(goods) == 5 and len(tracks) == 4
+    track_slots = {1918101, 1918301, 1918401, 1918501}
+    tracks = [g for g in goods if g['goodsId'] in track_slots]
+    research = [g for g in goods if g['goodsId'] not in track_slots and g['itemId'] != 1206000]
+    assert len(goods) == 12 and len(tracks) == 4 and len(research) == 7
     assert len({g['itemId'] for g in tracks}) == 4
     assert all(g['itemId'] in service.divine_track_pool for g in tracks)
-    assert all(g['price'] == 270 and g['num'] == 1 and g['limited'] == 3 for g in goods)
+    assert all(g['price'] == 270 and g['num'] == 1 and g['limited'] == 3 for g in tracks)
     assert all(g['canBuyTimes'] == 10 for g in tracks)
+    assert {g['goodsId']: g['itemId'] for g in research} == {
+        1918701: 1202086, 1918801: 1202087, 1918901: 1202088, 1919001: 1202089,
+        1919101: 1237807, 1919201: 1237808, 1918402: 1237809,
+    }
+    assert all(g['num'] == 1 and g['limited'] == 3 for g in research)
     assert next(g for g in goods if g['itemId'] == 1206000)['canBuyTimes'] == 2
     assert listing(ShopService(store, economy), ctx, 810) == goods
     assert service._next_refresh(810) == now[0] + 60
@@ -40,6 +47,22 @@ def test_daily_tracks_delivery_limits_replay_and_midnight(env):
     assert all(g['hasBuyTimes'] == 0 for g in refreshed)
     assert [g['itemId'] for g in refreshed] != [g['itemId'] for g in goods]
     assert buy(service, ctx, 810, 1918201, 2, rid=3000).values['code'] == 10
+
+
+def test_ticket_shop_research_items_listed_and_delivered(env):
+    store, economy, ctx = env
+    service = ShopService(store, economy)
+    fund(store, 1237915, 10000)
+    expected = {1905107: 1206000, 1906403: 1237807, 1906404: 1237808, 1906405: 1237809,
+                1906406: 1202086, 1906407: 1202087, 1906408: 1202088, 1906409: 1202089}
+    goods = {g['goodsId']: g for g in listing(service, ctx, 805)}
+    for goods_id, item_id in expected.items():
+        assert goods[goods_id]['itemId'] == item_id
+        assert goods[goods_id]['price'] == (200 if goods_id == 1905107 else 8)
+        result = buy(service, ctx, 805, goods_id, rid=6000 + goods_id % 1000)
+        assert result.values['code'] == 10 and result.values['itemId'] == item_id
+        assert store.db.execute('SELECT quantity FROM inventory WHERE player_id=1 AND item_id=?',
+                                (item_id,)).fetchone()[0] == 1
 
 
 def test_ticket_rounds_reset_monday(env):
