@@ -422,7 +422,9 @@ class ActivityRuntime:
             # must roll back and answer the request, never disconnect/retry it.
             if isinstance(exc, (KeyError, TypeError, IndexError)):
                 logging.getLogger('x2.activity').exception('activity protocol rejected %s player=%s', name, player)
-            logging.getLogger('x2.activity').info('activity denied %s player=%s reason=%s', name, player, exc)
+            logging.getLogger('x2.activity').info('activity denied %s player=%s reason=%s request=%s',
+                name, player, exc,
+                {key: req[key] for key in ('activityId', 'rewardPoolId', 'drawCount', 'activityType') if key in req})
             fields = {f.name for f in response_schema.fields}
             values = {key: value for key, value in req.items() if key in fields}
             if 'code' in fields:
