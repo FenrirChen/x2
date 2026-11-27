@@ -324,3 +324,32 @@ def test_sanity_wire_rejects_cross_task_state_section_combinations(env):
         {'completeType':'E_KillMonsterInSan','completeValues1':[4],'completeValues2':[4055]}]}}
     raw=CHAPTER_TASK_EVENT.encode({'completeType':95,'param1':1,'param2':4055,'num':20})
     assert not dp.report_task_events(1,2010900,'bad-combination',[raw])
+
+
+def test_npc_interaction_events_feed_crystal_task_without_double_count(env):
+    """月之暗面 651106 净化控制水晶 64475: 316 (type 27) and 264 npcData share the
+    run uuid, so the task must take the per-run high-water instead of summing both."""
+    from x2server.messages.battle import CHAPTER_TASK_EVENT
+    store, economy, _ = env
+    chapter = 2011100
+
+    def event(num, p1=64475, p2=0):
+        return CHAPTER_TASK_EVENT.encode(
+            {'completeType': 27, 'param1': p1, 'param2': p2, 'num': num})
+
+    def progress():
+        return dict(store.db.execute(
+            'SELECT task_id,progress FROM chapter_objectives '
+            'WHERE player_id=1 AND chapter_id=?', (chapter,))).get(651106, 0)
+
+    assert progress() == 0
+    assert economy.dp.report_task_events(1, chapter, 'crystal-a', [event(20)])
+    assert progress() == 20
+    economy.dp.report(1, chapter, 'crystal-a', {
+        'npcData': [DROP_REPORT_NPC.encode({'id': 64475, 'count': 35})]})
+    assert progress() == 35
+    economy.dp.report_task_events(1, chapter, 'crystal-a', [event(12)])
+    assert progress() == 35
+    economy.dp.report_task_events(1, chapter, 'crystal-b', [event(10, p1=0, p2=64475)])
+    assert progress() == 45
+    assert not economy.dp.report_task_events(1, 2010100, 'crystal-b', [event(99)])
