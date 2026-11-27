@@ -8,11 +8,11 @@ from tests.unit.test_battle import packet, request
 from x2server.messages.core import PLAYER_DATA, BASE_INFO
 from x2server.messages.star_chart import STAR_MAP, STAR_PAIR, STAR_DAILY
 from x2server.messages.battle import CHECKOUT, FIGHT_DATA, DROP_DATA, OUTSIDE_ITEM
-from x2server.player.star_chart import StarChartService, catalog, state, unlocked
+from x2server.player.star_chart import StarChartService, catalog, consume_battle_ai, state, unlocked
 from x2server.player.login import LoginService
 from x2server.player.battle import BattleService
 from x2server.player.store import PlayerStore
-from x2server.player.economy import EconomyService
+from x2server.player.economy import EconomyService, UnresolvedEconomy
 
 
 def seed(store, economy, abilities=(39000,), gold=100000, points=100):
@@ -193,6 +193,31 @@ def test_ai_insufficient_entry_rolls_back_stamina_and_run(env):
     assert asyncio.run(battle.enter(ctx, packet(values))).values['result'] == 13
     assert store.get(1)['snapshot']['mobility']['power'] == 149
     assert not store.db.execute('SELECT 1 FROM economy_runs').fetchone()
+
+
+def test_activity_auto_battle_resolves_chapter_story_and_challenge_pair(env):
+    store, economy, ctx = env
+    seed(store, economy, (39400,))
+    service = StarChartService(store, economy)
+    assert send(service, ctx, 'C2L_AddAIPoint').values['code'] == 10
+    # 2160833 is the chapter's story stage (SectionID), 2160834 its challenge
+    # stage (ChallengeLevel). The client offers 连续战斗 from the chapter node
+    # after the story clear, so neither direction may demand the other row's clear.
+    store.db.execute("INSERT INTO economy_clears VALUES (1,2160833,'test')")
+    store.db.commit()
+    assert consume_battle_ai(economy, 1, 2160834) == 12
+    assert state(store.get(1)['snapshot'], int(economy.clock()))['points'] == 88
+    assert consume_battle_ai(economy, 1, 2160833) == 12
+    assert state(store.get(1)['snapshot'], int(economy.clock()))['points'] == 76
+
+
+def test_activity_auto_battle_still_requires_the_chapter_clear(env):
+    store, economy, ctx = env
+    seed(store, economy, (39400,))
+    service = StarChartService(store, economy)
+    assert send(service, ctx, 'C2L_AddAIPoint').values['code'] == 10
+    with pytest.raises(UnresolvedEconomy, match='previous clear'):
+        consume_battle_ai(economy, 1, 2160834)
 
 
 def test_chapter_clear_unlock_arrives_before_checkout_callback(env):
