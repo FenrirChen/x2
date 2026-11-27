@@ -357,3 +357,25 @@ def test_club_shop_807_lists_and_purchases_with_guild_score(env):
         "SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1237924").fetchone()[0] == 350
     assert store.db.execute(
         "SELECT quantity FROM inventory WHERE player_id=1 AND item_id=1283201").fetchone()[0] == 1
+
+
+def test_research_shelves_delivery_quota_and_replay(env):
+    from tests.unit.test_restored_shops_favor import fund,buy,listing
+    store,economy,ctx = env
+    service = ShopService(store,economy)
+    for shop,currency,ids in [(805,1237915,{1905107,*range(1906403,1906410)}),
+                              (810,1237927,{1918402,*range(1918701,1919202,100)})]:
+        fund(store,currency,100000)
+        goods = [g for g in listing(service,ctx,shop) if g['goodsId'] in ids]
+        assert len(goods) == len(ids)
+        for n,g in enumerate(goods):
+            count = g['canBuyTimes']
+            request_id=4000+shop*100+n
+            paid=buy(service,ctx,shop,g['goodsId'],count,request_id)
+            assert paid.values['code']==10
+            assert paid.values['itemId']==g['itemId']
+            assert paid.values['itemNum']==g['num']*count
+            balance=store.db.execute('SELECT quantity FROM inventory WHERE player_id=1 AND item_id=?',(currency,)).fetchone()[0]
+            assert buy(service,ctx,shop,g['goodsId'],count,request_id).values==paid.values
+            assert buy(service,ctx,shop,g['goodsId'],1,request_id+50).values['code']==13
+            assert store.db.execute('SELECT quantity FROM inventory WHERE player_id=1 AND item_id=?',(currency,)).fetchone()[0]==balance

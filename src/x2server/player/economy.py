@@ -694,7 +694,7 @@ class EconomyService:
         只补一次; 已有道具时不写盘。
         """
         owns = self.store.db.execute(
-            "SELECT 1 FROM inventory WHERE player_id=? AND item_id=?",
+            "SELECT 1 FROM inventory WHERE player_id=? AND item_id=? AND quantity>0",
             (player_id, self.MOON_UNLOCK_ITEM)).fetchone()
         cleared = self.store.db.execute(
             "SELECT 1 FROM economy_clears WHERE player_id=? AND section_id=?",
@@ -1432,7 +1432,7 @@ class EconomyService:
                 # (老客户端/直接结算) 仍要拿到月之暗面的解锁道具。已经拥有或本局
                 # 已经通过 outsideItems 结算过就不重复发。
                 owned = self.store.db.execute(
-                    "SELECT 1 FROM inventory WHERE player_id=? AND item_id=?",
+                    "SELECT 1 FROM inventory WHERE player_id=? AND item_id=? AND quantity>0",
                     (player_id, self.MOON_UNLOCK_ITEM)).fetchone()
                 reported = any(grant.item_id == self.MOON_UNLOCK_ITEM for grant in grants)
                 if not owned and not reported:

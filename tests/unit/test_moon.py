@@ -453,3 +453,14 @@ def test_dark_moon_resonance_keeps_owned_equipment_skill_and_entry_gates(moon):
     assert response.values['result'] == 10
     group = FIGHT_GROUP_SKILL.decode(FIGHT_DATA.decode(response.values['data'])['fightGroupSkillData'])
     assert group['activeSkillId'] == 99141 and group['unitId'] == 9914
+
+
+def test_unlock_backfill_repairs_zero_quantity_row_and_login_replay(moon):
+    store, _, economy, service, _ = moon
+    with store.db:
+        store.db.execute('INSERT OR IGNORE INTO economy_clears VALUES (1,2111001,?)', ('old-clear',))
+        store.db.execute('INSERT INTO inventory VALUES (1,1110265,0)')
+    economy.login_event(1)
+    assert service.quantity(1,1110265) == 1
+    economy.login_event(1)
+    assert service.quantity(1,1110265) == 1

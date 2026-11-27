@@ -255,3 +255,36 @@ def test_ability_wire_merges_as_native_indexed_list_not_dictionary(env):
         native = [value for value in native if value != -1]
         assert native == [39000, 39100]
         assert all(value in {r['ID'] for r in catalog()['abilities']} for value in native)
+
+
+def test_activity_siblings_pair_only_the_matching_node():
+    from x2server.player.star_chart import activity_section_siblings
+    pairs = activity_section_siblings()
+    assert pairs[2160211] == [2160214]
+    assert 2160212 not in pairs[2160211]
+    assert 2160401 not in pairs  # same rows in both arrays are not siblings
+
+
+def test_activity_ai_requires_current_occurrence_clear(env):
+    from tests.activity_calendar_helpers import activity_start, next_activity_cycle
+    from x2server.player.activity import ActivityService
+    store, economy, ctx = env
+    activity = ActivityService(economy)
+    slot = next(i for i,t in enumerate(activity.rotation.themes) if 2160834 in t['section_ids'])
+    now = [activity_start(slot)+3600]
+    economy.clock = lambda: now[0]
+    activity.rotation.clock = economy.clock
+    economy.activity = activity
+    seed(store,economy,(39400,))
+    service = StarChartService(store,economy)
+    assert send(service,ctx,'C2L_AddAIPoint').values['code'] == 10
+    with store.db:
+        store.db.execute("INSERT OR IGNORE INTO economy_clears VALUES (1,2160833,'old-cycle')")
+    with pytest.raises(UnresolvedEconomy,match='previous clear'):
+        consume_battle_ai(economy,1,2160834)
+    with economy.transaction():
+        activity.rotation.put(1,activity.period(1),'clear',2160833,1)
+        assert consume_battle_ai(economy,1,2160834) == 12
+    now[0] = next_activity_cycle(now[0])
+    with pytest.raises(UnresolvedEconomy,match='previous clear'):
+        consume_battle_ai(economy,1,2160834)
