@@ -483,6 +483,45 @@ def test_pool_transaction_receipts_and_invalid_offer_no_charge(runtime):
     assert store.get(1) == balance
 
 
+def test_pool_draw_zero_count_counts_as_one_single_draw(runtime):
+    store, e, ctx, rt, now = runtime
+    box = rt.a.boxes[923]
+    seed(rt, {box['CostID']: box['CostNum'] * 5})
+    # AncientBoxView clamps the request to its own remaining stock and still sends
+    # 0 when that cache is empty; the tap means "single draw", not "nothing".
+    p = packet({'activityId': 72042, 'rewardPoolId': 923, 'drawCount': 0},
+               name='C2L_ActivityRewardPoolDraw')
+    response = asyncio.run(rt.handle(ctx, p))
+    assert response.values['code'] == 10
+    counts = rt.r.get(1, rt.r.at(), 'pool', 923, {})
+    assert sum(counts.values()) == 1
+    balance = store.db.execute('SELECT quantity FROM inventory WHERE player_id=1 AND item_id=?',
+                               (box['CostID'],)).fetchone()[0]
+    assert balance == box['CostNum'] * 4
+    for invalid in (-1, 101):
+        with pytest.raises(UnresolvedEconomy), e.transaction():
+            rt.operate(1, 'ActivityRewardPoolDraw',
+                       {'activityId': 72042, 'rewardPoolId': 923, 'drawCount': invalid}, f'bad-{invalid}')
+
+
+def test_pool_draw_refusal_logs_request_context(runtime, caplog):
+    store, e, ctx, rt, now = runtime
+    p = packet({'activityId': 72042, 'rewardPoolId': 927, 'drawCount': 1},
+               name='C2L_ActivityRewardPoolDraw')
+    with caplog.at_level('INFO', logger='x2.activity'):
+        assert asyncio.run(rt.handle(ctx, p)).values['code'] == 13
+    denied = [r.getMessage() for r in caplog.records if 'activity denied' in r.getMessage()]
+    assert denied and 'reward pool is locked' in denied[-1]
+    assert "'rewardPoolId': 927" in denied[-1] and "'drawCount': 1" in denied[-1]
+    # 远端服只有这条日志能定位「操作失败」, 必须带报价/余额/已解锁阶段/剩余库存。
+    refused = [r.getMessage() for r in caplog.records if 'pool draw refused' in r.getMessage()]
+    assert refused
+    line = refused[-1]
+    assert 'reason=reward pool is locked' in line
+    assert 'activity=72042' in line and 'pool=927' in line and 'count=1' in line
+    assert 'cost=1237984x100 held=' in line and 'unlocked=[923]' in line and 'stock={' in line
+
+
 def test_extra_daily_cap_period_binding_and_ordinary_stage_isolation(runtime):
     store, e, ctx, rt, now = runtime
     with e.transaction():

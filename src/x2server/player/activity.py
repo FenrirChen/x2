@@ -1,6 +1,7 @@
 """Recovered activity gameplay; mutations share the economy transaction."""
 from collections import Counter
 import json
+import logging
 import secrets
 
 from x2server.messages.activity import encode
@@ -640,6 +641,46 @@ class ActivityService:
 
     def draw_pool(self, player, activity, pool_id, count, key):
         period, row = self.require(player, activity, 26)
+        # AncientBoxView.StartDrawOnce/TenTimes 先把请求数钳到自己算出的剩余库存
+        # (min(GetRemainNumber(pool), 请求数)) 再发 C2L_ActivityRewardPoolDraw。奖池
+        # 信息缺项或阶段刚换期时它会算成 0, 仍然照发请求; 以前这里直接判非法、回 13,
+        # 客户端只弹「操作失败」。点抽一次就是抽一次, 库存/解锁/扣费下面都会再校验,
+        # 所以把 0 兜底成一次单抽。
+        if type(count) is int and count == 0:
+            count = 1
+        try:
+            return self._draw_pool(player, activity, period, row, pool_id, count, key)
+        except UnresolvedEconomy as exc:
+            # 客户端失败时只显示「操作失败」(code 13), 原因只有服务端知道; 一条日志把
+            # 现场打全, 远端服(老大那边)复现一次就能定因。
+            logging.getLogger('x2.activity').info(
+                'pool draw refused player=%s activity=%s period=%s pool=%s count=%s reason=%s detail=%s',
+                player, activity, period.index, pool_id, count, exc,
+                self.pool_draw_detail(player, period, row, pool_id))
+            raise
+
+    def pool_draw_detail(self, player, period, row, pool_id):
+        """抽奖被拒时的现场快照: 报价/余额/已解锁阶段/各档剩余库存(无限档略)。"""
+        try:
+            box = self.boxes.get(pool_id)
+            if box is None:
+                return f'pool not in this theme pools={list(row["ActivityParam1"])}'
+            counts = self.rotation.get(player, period, 'pool', pool_id, {})
+            stock = {gid: self.box_goods[gid]['BuyTimes'] - counts.get(str(gid), 0)
+                     for gid in box['GoodsGroupId'] if self.box_goods[gid]['BuyTimes'] < 1000}
+            field = self.economy.CURRENCIES.get(box['CostID'])
+            if field:
+                held = self.store.get(player)['snapshot'].get(field, 0)
+            else:
+                bag = self.store.db.execute('SELECT quantity FROM inventory WHERE player_id=? AND item_id=?',
+                                            (player, box['CostID'])).fetchone()
+                held = bag[0] if bag else 0
+            return (f'cost={box["CostID"]}x{box["CostNum"]} held={held} '
+                    f'unlocked={self.unlocked_pools(player, period, row)} stock={stock}')
+        except Exception as exc:  # 诊断失败不能盖掉原始拒绝原因
+            return f'<detail unavailable: {exc!r}>'
+
+    def _draw_pool(self, player, activity, period, row, pool_id, count, key):
         if type(count) is not int or not 1 <= count <= 100 or pool_id not in row['ActivityParam1']:
             raise UnresolvedEconomy('invalid draw count or pool')
         box = self.boxes[pool_id]
