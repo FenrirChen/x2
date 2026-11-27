@@ -156,8 +156,25 @@ def test_customer_handoff_real_payment_replay_and_restart(game):
     restored.close()
 
 
-def test_chip_customer_delivers_three_god_chips(game):
-    """type==1 (PURCHASECHIPTASK): 交付材料发 CollegeQuest.AwardGroup 的神格碎片, 不发金币。"""
+def sale_gold(service, customer):
+    """交付产物按 CollegeRecipe.Gold 结算的售价 (与 _trade 同口径, 含 kind2 加成)。"""
+    state = service.alchemy.repo.load(1)
+    exp = service.alchemy.recipe_exp(state)
+    products = {r['ProductID']: r for r in service.alchemy.recipes.values()}
+    total = 0
+    for item, quantity in zip(customer['itemId'], customer['itemNum'], strict=True):
+        recipe = products[item]
+        bonus = service.alchemy.effects(recipe, exp.get(recipe['RecipeID'], 0), 2)
+        price = recipe['Gold']
+        if bonus:
+            f32 = service.alchemy.f32
+            price = int(f32(f32(price) * f32(1 + f32(f32(bonus[0]) * f32(0.001)))))
+        total += price * (quantity // recipe['ProductNum'])
+    return total
+
+
+def test_chip_customer_delivers_three_god_chips_and_sale_gold(game):
+    """type==1 (PURCHASECHIPTASK): 交付材料发 CollegeQuest.AwardGroup 的神格碎片, 并结算产物售价。"""
     store, _, _, service, _ = game
     slot = next(pos for pos in range(5)
                 if service._customer_for(1, pos)['type'] == CollegeService.ALCHEMY_CHIP)
@@ -174,8 +191,10 @@ def test_chip_customer_delivers_three_god_chips(game):
     from x2server.messages.economy import REWARD, REWARD_ITEM
     reward = {r['itemId']: r['itemNum'] for r in map(
         REWARD_ITEM.decode, REWARD.decode(result.values['rewardData']).get('rewardItem', []))}
-    assert reward == chips
-    assert store.get(1)['snapshot']['gold'] == gold
+    expected_gold = sale_gold(service, customer)
+    assert expected_gold > 0
+    assert reward == {**chips, 1237901: expected_gold}
+    assert store.get(1)['snapshot']['gold'] == gold + expected_gold
 
 
 def test_chip_commission_replay_energy_and_atomic_rollback(game, monkeypatch):
@@ -190,6 +209,8 @@ def test_chip_commission_replay_energy_and_atomic_rollback(game, monkeypatch):
         return row[0] if row else 0
     assert sum(chips.values()) == 3
     before_chips = {i: balance(i) for i in chips}
+    expected_gold = sale_gold(service, customer)
+    before_gold = store.get(1)['snapshot']['gold']
     with store.db:
         store.db.execute('INSERT INTO inventory VALUES (?,?,?)', (1, item, count))
     energy = repo.load(1)['star_energy']
@@ -200,14 +221,17 @@ def test_chip_commission_replay_energy_and_atomic_rollback(game, monkeypatch):
             send(game, 'AlchemyFinish', type=1, posIndex=slot, plusPrice=True)
     assert balance(item) == count
     assert all(balance(i) == before_chips[i] for i in chips)
+    assert store.get(1)['snapshot']['gold'] == before_gold
     assert repo.save == original
     result = send(game, 'AlchemyFinish', type=1, posIndex=slot, plusPrice=True)
     assert result.values['code'] == 10
     assert balance(item) == 0
     assert repo.load(1)['star_energy'] == energy
     assert all(balance(i) == before_chips[i] + n for i, n in chips.items())
+    assert store.get(1)['snapshot']['gold'] == before_gold + expected_gold
     assert send(game, 'AlchemyFinish', type=1, posIndex=slot, plusPrice=True).values == result.values
     assert all(balance(i) == before_chips[i] + n for i, n in chips.items())
+    assert store.get(1)['snapshot']['gold'] == before_gold + expected_gold
 
 
 def test_customer_refusal_rotation_replay_query_and_restart(game):

@@ -316,10 +316,13 @@ class AlchemyService:
             return dict(values, code=code)
         state['star_energy'] -= energy
         if customer['type'] == self.ALCHEMY_CHIP:
-            # E_Chip 委托的奖励来自 CollegeQuest.AwardGroup (782xxx Gift = 3 个神格碎片),
-            # 不按金币结算; 金币交易仍走原来的 CollegeRecipe.Gold 价格。
+            # E_Chip 委托的奖励来自 CollegeQuest.AwardGroup (782xxx Gift = 3 个神格碎片);
+            # 交付的产物本身仍按 CollegeRecipe.Gold 结算售价 (与金币交易同一口径)。
+            # 旧实现只发碎片、不算售价, 玩家交了一堆产物却拿不到金币。
             meta = self._customer_meta(customer['questId'])
             reward = dict(self.economy.gifts([meta['chipAwardGroup']]))
+            if gold > 0:
+                reward[1237901] = reward.get(1237901, 0) + gold
         else:
             reward = {1237901: gold}
         source = 'college-trade:' + uuid.uuid4().hex
@@ -337,7 +340,8 @@ class AlchemyService:
         # 成就 662300「在炼金实验室中，收获金币数量达到 N」按**金币数量**累计 (不是次数):
         # 记本单实际发出的金币 (加价/打折后的值)。source 是本单的唯一 grant 键, 重放/重发
         # 同一笔成交不会重复累加。
-        if customer['type'] == self.ALCHEMY_TRANSACTION and gold > 0:
+        if gold > 0:
+            # 金币交易与碎片委托都会发出产物售价, 成就按实际到手金币累计。
             self.economy.achievements.record(
                 player_id, source + ':gold', self.economy.ACHV_EVENT_ALCHEMY_GOLD, gold)
         change = self.discount_favor(player_id, customer, favor_gain)
